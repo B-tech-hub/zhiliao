@@ -5,11 +5,12 @@ out
 
 # 本地数据与配置（通过卷挂载与环境变量注入，严禁进镜像层）
 data
+data-demo
 .env
 .env.*
 
 # 开发与文档产物
-scripts/mock-llm.mjs
+# 注意：scripts/mock-llm.mjs 不能排除——运行阶段要把它拷进镜像供一键体验（docker-compose.demo.yml）使用
 .playwright-mcp
 .spec-workflow
 .claude
