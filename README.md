@@ -1,6 +1,6 @@
 # 知了（zhiliao）
 
-[![CI](https://github.com/BAIBAI/zhiliao/actions/workflows/ci.yml/badge.svg)](https://github.com/BAIBAI/zhiliao/actions/workflows/ci.yml)
+[![CI](https://github.com/B-tech-hub/zhiliao/actions/workflows/ci.yml/badge.svg)](https://github.com/B-tech-hub/zhiliao/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Node](https://img.shields.io/badge/node-%E2%89%A522-339933?logo=node.js&logoColor=white)](Dockerfile)
 
