@@ -8,6 +8,8 @@
 |---|---|
 | [DESIGN.md](DESIGN.md) | 设计规范：Apple 画廊风 token 体系、组件语法、响应式规则；文末附录为暗色模式 token 对照表与裸色类使用规则 |
 | [部署手册-tailscale.md](部署手册-tailscale.md) | 面向零部署经验读者的自托管全流程（Windows 主线，Linux/NAS 备注）：装 Docker → 下载代码 → 写配置 → 启动 → 配 AI → Tailscale 组网拿 HTTPS → 手机安装 PWA → 日常维护与按症状排查的 FAQ |
+| [备份与恢复.md](备份与恢复.md) | 每日自动备份的内容与位置、异地备份建议、数据库/图片的完整恢复步骤（含 WAL 文件处理的关键坑） |
+| [演示GIF录制清单.md](演示GIF录制清单.md) | 维护者材料：README 首屏演示 GIF 的录制环境、分镜与体积控制 |
 
 ## 架构决策记录（ADR）
 

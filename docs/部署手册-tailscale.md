@@ -197,27 +197,29 @@ PORT=3000
 
 ## 第 4 章：启动应用
 
-> 这一步在干什么：让 Docker 照着代码构建应用，并让它在后台常驻运行。
+> 这一步在干什么：让 Docker 拉取应用的预构建镜像，并让它在后台常驻运行。
 
 ### 4.1 执行主命令
 
 确认 PowerShell 还在项目文件夹里（不确定就重新 `cd D:\apps\zhiliao-main`），执行：
 
 ```powershell
-docker compose -f docker-compose.yml -f docker-compose.win.yml up -d --build
+docker compose -f docker-compose.yml -f docker-compose.win.yml up -d
 ```
 
-这是**全手册的主命令**，以后升级、改配置都会再见到它。拆开看每一段的意思：
+这是**全手册的主命令**，以后改配置还会再见到它。拆开看每一段的意思：
 
 - `-f docker-compose.yml -f docker-compose.win.yml`：叠加两份配置——基础配置 + Windows 专用补丁；
-- `up`：启动；`-d`：后台运行（关掉 PowerShell 窗口也不影响）；`--build`：启动前先照图纸构建。
+- `up`：启动；`-d`：后台运行（关掉 PowerShell 窗口也不影响）。
+
+启动时会自动从 ghcr.io 下载现成的应用镜像（amd64/arm64 都有），**不需要在你的电脑上编译代码**。想从源码自己构建的进阶做法见 README「部署（Docker）」一节。
 
 > **原理：Windows 为什么要叠第二个文件？**
 > 应用的数据库（SQLite）需要一种"共享内存"能力，而 Windows 和容器内 Linux 之间共享文件夹时恰好不支持它（强行用会报 `SQLITE_IOERR_SHMOPEN`）。所以 Windows 上让数据住进 Docker 自己管理的两个"**命名卷**"里：`kb_db`（数据库）和 `kb_uploads`（图片）。
 >
 > 直接后果：**你的数据不在项目文件夹的 `data` 子目录里**，而在 Docker 内部（这也是"文件夹名不能改"的原因——命名卷按"文件夹名"归属）。想导出数据做备份，见 8.3。
 
-首次执行要下载和编译不少东西，**几分钟到十几分钟都正常**，等它跑完，最后看到 `Started` 或 `Running` 字样即可。
+首次执行要下载镜像，**几分钟属于正常**（取决于网速），等它跑完，最后看到 `Started` 或 `Running` 字样即可。
 
 ### 4.2 确认容器在跑
 
@@ -241,7 +243,7 @@ docker logs --tail 50 zhiliao
 
 > **名词解释**：`localhost` 意思是"这台电脑自己"，`3000` 是应用的"门牌号"（端口）。所以这个地址**只有这台电脑自己打得开，手机现在还打不开——是正常的**，第 6、7 章就是解决这件事。
 
-> **Linux/NAS 备注**：不需要 Windows 补丁文件，直接 `docker compose up -d --build`；数据落在项目文件夹 `./data/` 里。
+> **Linux/NAS 备注**：不需要 Windows 补丁文件，直接 `docker compose up -d`；数据落在项目文件夹 `./data/` 里。
 
 ---
 
@@ -410,18 +412,17 @@ https://<你的电脑名>.<tailnet名>.ts.net/
 > ⚠️ **先看这个大坑**：Docker 按"文件夹名"归属数据。把新版本解压到**另一个名字的文件夹**里启动，会挂上一套全新的空数据，看起来就像"笔记全没了"（数据其实还在，自救见 FAQ Q9）。
 > 所以记住一条：**升级永远是覆盖回原来那个文件夹，文件夹名保持不变。**
 
-步骤：
-
-1. 从仓库页面下载新版 ZIP；
-2. 解压后把内容**覆盖**到原文件夹（本手册例中的 `D:\apps\zhiliao-main`）。你的 `.env` 不在 ZIP 里，不会被覆盖；
-3. 在原文件夹重跑主命令：
+步骤（使用预构建镜像，一般**不需要**重新下载代码）：
 
 ```powershell
 cd D:\apps\zhiliao-main
-docker compose -f docker-compose.yml -f docker-compose.win.yml up -d --build
+docker compose -f docker-compose.yml -f docker-compose.win.yml pull
+docker compose -f docker-compose.yml -f docker-compose.win.yml up -d
 ```
 
 数据库结构升级会在启动时自动完成；重建容器**不丢数据**，也不丢没处理完的 AI 任务。
+
+> 若某次版本说明（GitHub Release Notes）提到 compose 或配置文件有变化，再从仓库页面下载新版 ZIP，把内容**覆盖**到原文件夹（你的 `.env` 不在 ZIP 里，不会被覆盖），然后执行上面两条命令。
 
 > 如果你不小心在新文件夹里执行了启动命令，会先看到报错"容器名 zhiliao 已被占用（already in use）"——**这是保护信号，不要照网上偏方删除旧容器**，关掉窗口、回原文件夹操作即可。
 
@@ -429,8 +430,10 @@ docker compose -f docker-compose.yml -f docker-compose.win.yml up -d --build
 
 你的全部数据在 Docker 的两个命名卷里：
 
-- `kb_db`：数据库 + 应用自动做的**每日备份**（保留最近 7 份）；
+- `kb_db`：数据库 + 应用自动做的**每日备份**（数据库快照与图片快照各保留最近 7 份）；
 - `kb_uploads`：笔记里的图片。
+
+想从某份备份**恢复数据**，完整步骤（含关键的 WAL 文件处理）见 [备份与恢复.md](备份与恢复.md)。
 
 Windows 下它们实际藏在 WSL2 的虚拟磁盘里，不方便直接翻文件夹。想导出到普通目录，用命令：
 
@@ -476,7 +479,8 @@ docker compose -f docker-compose.yml -f docker-compose.win.yml up -d
 |---|---|
 | 看应用是否在跑 | `docker ps` |
 | 看应用日志（排错用） | `docker logs --tail 50 zhiliao` |
-| 启动 / 升级 | `docker compose -f docker-compose.yml -f docker-compose.win.yml up -d --build` |
+| 启动 | `docker compose -f docker-compose.yml -f docker-compose.win.yml up -d` |
+| 升级到新版本 | 先 `docker compose -f docker-compose.yml -f docker-compose.win.yml pull` 再执行上面的启动命令 |
 | 改 `.env` 后使之生效 | `docker compose -f docker-compose.yml -f docker-compose.win.yml up -d` |
 | 停止应用 | `docker compose -f docker-compose.yml -f docker-compose.win.yml down`（**绝不要加 `-v`**） |
 | 看 HTTPS 转发配置 | `tailscale serve status` |
