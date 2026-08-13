@@ -10,9 +10,7 @@ Single-user by design. Next.js 15 + SQLite, PWA-ready, works with any OpenAI-com
 
 Full documentation is in Simplified Chinese — see [README.md](README.md). This page covers just enough to get you running.
 
-<!-- TODO(maintainer): uncomment after recording the demo GIF
-![30s demo: jot a note → AI files it → topic suggestions](docs/screenshots/demo.gif)
--->
+![Demo: jot a note → AI files it → topic suggestions](docs/screenshots/demo.gif)
 
 ## Features
 
