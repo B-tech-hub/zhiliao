@@ -1,0 +1,13 @@
+# Windows Docker Desktop 本地验证专用：
+# Windows 绑定挂载不支持 SQLite WAL 所需的共享内存 mmap（SQLITE_IOERR_SHMOPEN），
+# 本地测试改用 Docker 命名卷。Linux 服务器直接用 docker-compose.yml 的 ./data 绑定挂载即可。
+# 用法: docker compose -f docker-compose.yml -f docker-compose.win.yml up -d
+services:
+  app:
+    volumes:
+      - kb_db:/data/db
+      - kb_uploads:/data/uploads
+
+volumes:
+  kb_db:
+  kb_uploads:

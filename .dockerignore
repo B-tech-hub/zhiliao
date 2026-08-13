@@ -1,0 +1,26 @@
+# 依赖与构建产物（容器内重新安装/构建，本机的 win32 二进制不能进 Linux 镜像）
+node_modules
+.next
+out
+
+# 本地数据与配置（通过卷挂载与环境变量注入，严禁进镜像层）
+data
+.env
+.env.*
+
+# 开发与文档产物
+scripts/mock-llm.mjs
+.playwright-mcp
+.spec-workflow
+.claude
+.next-verify
+*.log
+*.png
+README.md
+docs
+.github
+Dockerfile
+docker-compose.yml
+docker-compose.win.yml
+.git
+.gitignore

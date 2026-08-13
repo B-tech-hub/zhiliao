@@ -1,0 +1,111 @@
+@import "tailwindcss";
+/* Inter 变量字体（自托管，docs/DESIGN.md 推荐的 SF Pro 替代；拉丁/数字生效，中文回退系统字体） */
+@import "@fontsource-variable/inter";
+
+/* 暗色模式采用 class 策略：next-themes 在 <html> 上切换 .dark（决策见 docs/adr/0005） */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Apple 设计规范 token（见 docs/DESIGN.md，暗色对照表见其附录）：
+   单一 Action Blue 交互色，白/羊皮纸双底色，明暗瓷砖交替，无装饰阴影 */
+@theme {
+  --color-action: #0066cc;
+  --color-action-focus: #0071e3;
+  --color-ink: #1d1d1f;
+  --color-ink-80: #333333;
+  --color-ink-48: #7a7a7a;
+  --color-parchment: #f5f5f7;
+  --color-pearl: #fafafc;
+  --color-hairline: #e0e0e0;
+  --color-divider: #f0f0f0;
+
+  /* 卡片/纸面（白卡）；登录页整页画布 */
+  --color-surface: #ffffff;
+  --color-canvas: #ffffff;
+  /* 面上填充：chip、代码块、气泡、工具钮激活底（卡面上比 surface 深一档） */
+  --color-fill: #f5f5f7;
+  /* 暗色 chrome 背景：侧栏、AI 对话 FAB——两种模式同值的"主题不变面" */
+  --color-chrome: #1d1d1f;
+  /* 危险红与危险浅底（删除、失败态） */
+  --color-danger: #ff3b30;
+  --color-danger-tint: #fff2f1;
+  /* 骨架屏薄纱基色，配 /5、/10 透明度使用 */
+  --color-veil: #000000;
+
+  /* 暗面瓷砖（surface-tile 语法）：内容区唯一暗色焦点 + 暗色 chrome */
+  --color-tile: #272729;
+  --color-tile-2: #2a2a2c;
+  --color-sky: #2997ff; /* primary-on-dark：暗面上的链接蓝 */
+  --color-dark-muted: #cccccc; /* body-muted：暗面辅文 */
+
+  --font-sans: "Inter Variable", system-ui, -apple-system, "SF Pro Text",
+    "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+
+  --radius-card: 18px;
+  --radius-utility: 8px;
+
+  /* 页面进场动画：导航时内容区整体淡入上移（用于 template.tsx） */
+  --animate-page-in: page-in 240ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  @keyframes page-in {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+/* 暗色两套值：Apple 暗色分层规范（#000 页底 / #1c1c1e 卡面 / #2c2c2e 填充 / #38383a 分隔）。
+   注意：本块必须保持"未分层"（不得移入 @layer），且 .dark 类由 next-themes 挂在 <html> 上，
+   两者共同保证覆盖 @layer theme 里 :root 的默认值——前提约束见 docs/adr/0005 */
+.dark {
+  --color-action: #2997ff; /* Action Blue 在暗底上会沉没，与 sky 收敛 */
+  --color-action-focus: #409cff;
+  --color-ink: #f5f5f7;
+  --color-ink-80: #d1d1d6;
+  --color-ink-48: #98989d;
+  --color-parchment: #000000;
+  --color-pearl: #2c2c2e;
+  --color-hairline: #38383a;
+  --color-divider: #2c2c2e;
+  --color-surface: #1c1c1e;
+  --color-canvas: #000000;
+  --color-fill: #2c2c2e;
+  --color-danger: #ff453a;
+  --color-danger-tint: rgba(255, 69, 58, 0.16);
+  --color-veil: #ffffff; /* 暗色下骨架用白纱 */
+  /* chrome / tile / tile-2 / sky / dark-muted 不覆盖 = 主题不变面 */
+}
+
+/* 原生控件（select 下拉、滚动条）配色跟随主题 */
+html {
+  color-scheme: light;
+}
+html.dark {
+  color-scheme: dark;
+}
+
+body {
+  background: var(--color-parchment);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  /* Apple 正文规范：17px / 400 / 1.47 / 轻微负字距 */
+  font-size: 17px;
+  line-height: 1.47;
+  letter-spacing: -0.2px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 移动端点按高亮去除 */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* 标题统一负字距（Apple tight） */
+h1,
+h2,
+h3 {
+  letter-spacing: -0.374px;
+}

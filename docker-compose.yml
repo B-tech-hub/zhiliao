@@ -1,0 +1,20 @@
+services:
+  app:
+    build: .
+    container_name: zhiliao
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      # 必填：登录密码与会话密钥
+      APP_PASSWORD: ${APP_PASSWORD:?请在 .env 中设置 APP_PASSWORD}
+      SESSION_SECRET: ${SESSION_SECRET:?请在 .env 中设置 SESSION_SECRET}
+      # LLM（OpenAI 兼容格式，可切换 DeepSeek / 通义 / Claude 兼容端点等）
+      LLM_BASE_URL: ${LLM_BASE_URL:-}
+      LLM_API_KEY: ${LLM_API_KEY:-}
+      LLM_MODEL: ${LLM_MODEL:-}
+      LLM_TIMEOUT_MS: ${LLM_TIMEOUT_MS:-60000}
+      AI_CONFIDENCE_THRESHOLD: ${AI_CONFIDENCE_THRESHOLD:-0.6}
+    volumes:
+      - ./data/db:/data/db
+      - ./data/uploads:/data/uploads

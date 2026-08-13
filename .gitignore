@@ -1,0 +1,32 @@
+# dependencies
+/node_modules
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# local data (SQLite 数据库与上传图片)
+/data/
+
+# env
+.env
+.env.local
+.env*.local
+
+# misc
+.DS_Store
+*.tsbuildinfo
+next-env.d.ts
+
+# playwright mcp 产物
+.playwright-mcp/
+
+# 备用构建目录（NEXT_DIST_DIR 规避 Windows 句柄锁死时的产物）
+.next-verify/
+
+# 本地 AI 协作工具配置（含本机权限白名单等，不进仓库）
+.claude/
+.spec-workflow/
