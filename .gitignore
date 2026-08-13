@@ -11,6 +11,9 @@
 # local data (SQLite 数据库与上传图片)
 /data/
 
+# 一键体验模式的演示数据（npm run demo）
+/data-demo/
+
 # env
 .env
 .env.local

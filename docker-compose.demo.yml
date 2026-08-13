@@ -1,0 +1,42 @@
+# 知了 · 一键体验（无需 API Key，数据与正式部署完全隔离）
+# 用法：docker compose -f docker-compose.demo.yml up -d
+# 访问 http://localhost:3210 ，登录密码 demo
+# 结束体验：docker compose -f docker-compose.demo.yml down -v（-v 一并清空演示数据）
+services:
+  app:
+    image: ghcr.io/b-tech-hub/zhiliao:latest
+    # 想本地构建镜像时，注释掉上面 image 行并取消下一行注释：
+    # build: .
+    container_name: zhiliao-demo
+    restart: unless-stopped
+    depends_on:
+      - mockllm
+    ports:
+      - "3210:3000"
+    environment:
+      DEMO_MODE: "1"
+      APP_PASSWORD: ${DEMO_PASSWORD:-demo}
+      # 仅演示用固定密钥；正式部署必须自行生成随机值
+      SESSION_SECRET: zhiliao-demo-session-secret-0123
+      LLM_BASE_URL: http://mockllm:8787/v1
+      LLM_API_KEY: demo
+      LLM_MODEL: mock
+    volumes:
+      # 命名卷：兼顾 Windows（SQLite WAL 不支持绑定挂载）与演示数据隔离
+      - demo_db:/data/db
+      - demo_uploads:/data/uploads
+
+  # 本地 mock LLM：复用同一镜像内置的零依赖脚本，模拟分类/聚类结果
+  mockllm:
+    image: ghcr.io/b-tech-hub/zhiliao:latest
+    # build: .
+    container_name: zhiliao-demo-mockllm
+    restart: unless-stopped
+    command: ["node", "scripts/mock-llm.mjs"]
+    healthcheck:
+      # 镜像默认 HEALTHCHECK 探测的是应用端口，对 mock 服务不适用
+      disable: true
+
+volumes:
+  demo_db:
+  demo_uploads:

@@ -18,6 +18,8 @@ ENV NODE_ENV=production
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/public ./public
+# 一键体验（docker-compose.demo.yml）需要镜像内含 mock LLM 脚本（零依赖，仅用 node:http）
+COPY --from=builder /app/scripts/mock-llm.mjs ./scripts/
 
 # 数据目录（挂卷）：数据库 /data/db，图片 /data/uploads
 RUN mkdir -p /data/db /data/uploads && chown -R node:node /data /app
