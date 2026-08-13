@@ -1,0 +1,16 @@
+import path from "node:path";
+import { defineConfig } from "vitest/config";
+
+// pool: "forks"：better-sqlite3 / @node-rs/jieba 为原生模块，子进程池比线程池稳；
+// 且每个测试文件独占进程 → 独享 globalThis 单例与 :memory: 数据库，天然隔离
+export default defineConfig({
+  test: {
+    environment: "node",
+    pool: "forks",
+    setupFiles: ["tests/setup.ts"],
+    include: ["tests/**/*.test.ts"],
+  },
+  resolve: {
+    alias: { "@": path.resolve(__dirname, "src") },
+  },
+});

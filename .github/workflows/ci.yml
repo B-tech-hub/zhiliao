@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    name: Lint 与构建
+    name: Lint、测试与构建
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -22,6 +22,9 @@ jobs:
 
       - name: 代码检查（ESLint）
         run: npm run lint
+
+      - name: 单元测试（Vitest）
+        run: npm test
 
       - name: 构建（含 TypeScript 严格类型检查）
         run: npm run build
