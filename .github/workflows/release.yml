@@ -136,6 +136,8 @@ jobs:
       - name: 发布 Release
         uses: softprops/action-gh-release@v2
         with:
+          # 含 -rc / -beta / -alpha 的 tag 自动标记为预发布，不会成为仓库的 Latest
+          prerelease: ${{ contains(github.ref_name, '-rc') || contains(github.ref_name, '-beta') || contains(github.ref_name, '-alpha') }}
           generate_release_notes: true
           body: |
             变更明细见 [CHANGELOG.md](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md)。
