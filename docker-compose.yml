@@ -1,6 +1,8 @@
 services:
   app:
-    build: .
+    # 默认使用预构建镜像（amd64/arm64）；想本地构建时注释掉 image 行、取消 build 行注释
+    image: ghcr.io/b-tech-hub/zhiliao:latest
+    # build: .
     container_name: zhiliao
     restart: unless-stopped
     ports:

@@ -1,0 +1,147 @@
+name: Release
+
+# 推送版本 tag（如 v0.1.1）时：构建多架构镜像推送 ghcr.io 并创建 GitHub Release。
+# 发布流程见 CONTRIBUTING.md「发布流程」。
+# 注意：首次发布后需到 GitHub Packages 把包设为 public 并关联仓库，否则匿名 docker pull 会 401。
+
+on:
+  push:
+    tags: ["v*.*.*"]
+
+env:
+  REGISTRY: ghcr.io
+  # ghcr 镜像名必须全小写
+  IMAGE_NAME: b-tech-hub/zhiliao
+
+jobs:
+  build:
+    # 双平台均用原生 runner，不用 QEMU：next build 的 SWC 与原生模块（better-sqlite3/@node-rs/jieba）
+    # 在 QEMU 模拟下极慢且有崩溃前科。若 ubuntu-24.04-arm 排队异常，可临时删除 arm64 条目单平台发布。
+    name: 构建镜像 ${{ matrix.platform }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: linux/amd64
+            runner: ubuntu-latest
+          - platform: linux/arm64
+            runner: ubuntu-24.04-arm
+    runs-on: ${{ matrix.runner }}
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 准备平台标识
+        run: |
+          platform="${{ matrix.platform }}"
+          echo "PLATFORM_PAIR=${platform//\//-}" >> "$GITHUB_ENV"
+
+      - uses: docker/setup-buildx-action@v3
+
+      - name: 登录 ghcr.io
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 镜像元数据（OCI 标签）
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          labels: |
+            org.opencontainers.image.title=zhiliao
+            org.opencontainers.image.description=知了：随手记笔记，AI 自动归类到主题的个人知识库
+            org.opencontainers.image.licenses=MIT
+
+      - name: 构建并按 digest 推送
+        id: build
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          platforms: ${{ matrix.platform }}
+          labels: ${{ steps.meta.outputs.labels }}
+          outputs: type=image,name=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }},push-by-digest=true,name-canonical=true,push=true
+          cache-from: type=gha,scope=${{ env.PLATFORM_PAIR }}
+          cache-to: type=gha,mode=max,scope=${{ env.PLATFORM_PAIR }}
+
+      - name: 导出 digest
+        run: |
+          mkdir -p "${{ runner.temp }}/digests"
+          digest="${{ steps.build.outputs.digest }}"
+          touch "${{ runner.temp }}/digests/${digest#sha256:}"
+
+      - name: 上传 digest
+        uses: actions/upload-artifact@v4
+        with:
+          name: digests-${{ env.PLATFORM_PAIR }}
+          path: ${{ runner.temp }}/digests/*
+          if-no-files-found: error
+          retention-days: 1
+
+  merge:
+    name: 合并多架构 manifest
+    runs-on: ubuntu-latest
+    needs: [build]
+    permissions:
+      packages: write
+    steps:
+      - name: 下载 digests
+        uses: actions/download-artifact@v4
+        with:
+          path: ${{ runner.temp }}/digests
+          pattern: digests-*
+          merge-multiple: true
+
+      - uses: docker/setup-buildx-action@v3
+
+      - name: 镜像元数据（tag 规则：语义化版本 + latest）
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+
+      - name: 登录 ghcr.io
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 创建 manifest 并推送
+        working-directory: ${{ runner.temp }}/digests
+        run: |
+          docker buildx imagetools create \
+            $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
+            $(printf '${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@sha256:%s ' *)
+
+      - name: 校验多架构清单
+        run: docker buildx imagetools inspect ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.version }}
+
+  release:
+    name: 创建 GitHub Release
+    runs-on: ubuntu-latest
+    needs: [merge]
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 发布 Release
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          body: |
+            变更明细见 [CHANGELOG.md](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md)。
+
+            Docker 镜像（amd64 / arm64）：
+
+            ```bash
+            docker pull ghcr.io/b-tech-hub/zhiliao:latest
+            ```
