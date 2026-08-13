@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { SESSION_COOKIE, verifySessionToken } from "@/lib/auth";
 
-// 无需登录即可访问的路径
-const PUBLIC_PATHS = ["/login", "/api/auth/login"];
+// 无需登录即可访问的路径（healthz 供容器健康检查与外部监控探活）
+const PUBLIC_PATHS = ["/login", "/api/auth/login", "/api/healthz"];
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;

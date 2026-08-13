@@ -28,5 +28,9 @@ ENV UPLOAD_DIR=/data/uploads
 ENV PORT=3000
 EXPOSE 3000
 
+# 容器健康检查：slim 镜像无 curl/wget，用 Node 22 自带 fetch 探测；compose 未显式定义时自动继承
+HEALTHCHECK --interval=60s --timeout=5s --start-period=20s --retries=3 \
+  CMD node -e "fetch('http://127.0.0.1:'+(process.env.PORT||3000)+'/api/healthz').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
+
 # 迁移在应用启动时自动执行（src/db/index.ts），无需单独迁移步骤
 CMD ["node", "server.js"]
