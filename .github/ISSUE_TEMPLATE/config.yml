@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: 先在一键体验模式里复现
+    url: https://github.com/B-tech-hub/zhiliao#%E4%B8%80%E9%94%AE%E4%BD%93%E9%AA%8C%E6%97%A0%E9%9C%80-api-key
+    about: 报 bug 前可用一键体验模式确认问题是否与本地配置有关

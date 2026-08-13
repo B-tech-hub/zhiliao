@@ -1,0 +1,53 @@
+name: Bug 反馈
+description: 应用行为异常、报错、崩溃
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢反馈！提交前可先用一键体验模式（README「一键体验」一节）复现一次，排除本地配置因素。
+  - type: textarea
+    id: what
+    attributes:
+      label: 现象描述
+      description: 发生了什么？与预期有什么不同？
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: 复现步骤
+      placeholder: |
+        1. 打开 …
+        2. 点击 …
+        3. 出现 …
+    validations:
+      required: true
+  - type: dropdown
+    id: deploy
+    attributes:
+      label: 部署方式
+      options:
+        - Docker（docker-compose.yml）
+        - Docker 一键体验（docker-compose.demo.yml）
+        - 本地开发（npm run dev）
+        - 一键体验（npm run demo）
+        - 其他（请在补充信息中说明）
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: 版本
+      description: 见 GitHub Release 或镜像 tag（如 0.1.1）
+  - type: input
+    id: env
+    attributes:
+      label: 操作系统与浏览器
+      placeholder: 例如 Windows 11 + Edge / 群晖 DSM 7 + iOS Safari
+  - type: textarea
+    id: logs
+    attributes:
+      label: 相关日志
+      description: Docker 部署可用 `docker logs zhiliao` 获取
+      render: shell
