@@ -8,6 +8,7 @@
 //   其他     -> inbox conf 0.4
 // 请求含 stream:true 时按 SSE 分片返回 delta（AI 对话与视觉测试走流式，非流式会读不到任何内容）
 // 请求含 tools 时返回工具调用；arguments 故意切成多片发送，用于验证客户端的分片合并
+// 同一轮只调一次工具：消息里出现 role:"tool" 后改回文本，模拟"拿到结果就总结"
 // 环境变量 MOCK_IGNORE_TOOLS=1 -> 收到 tools 也当没看见，模拟"静默忽略工具参数"的劣质供应商
 import http from "node:http";
 
@@ -107,10 +108,40 @@ function sendStream(res, content) {
   res.on("close", () => clearInterval(timer));
 }
 
-// 工具调用模拟：优先挑 user 消息里点名的工具，没点名就用第一个
+// 工具调用模拟：优先挑 user 消息里点名的工具，没点名就按意图猜
 function pickTool(tools, user) {
   const named = tools.find((t) => t?.function?.name && user.includes(t.function.name));
-  return named ?? tools[0];
+  if (named) return named;
+  const has = (name) => tools.find((t) => t?.function?.name === name);
+  if (/https?:\/\//.test(user)) return has("fetch_url") ?? tools[0];
+  if (/删/.test(user)) return has("delete_note") ?? tools[0];
+  if (/记一条|记录|新建|写一条/.test(user)) return has("create_note") ?? tools[0];
+  if (/主题|分类/.test(user)) return has("list_topics") ?? tools[0];
+  return has("search_notes") ?? tools[0];
+}
+
+/* 按工具名生成能通过 zod 校验的参数。
+   这不是锦上添花——助手的循环拿到「参数不合法」会把错误回灌给模型让它重试，
+   若 mock 恒发 {}，写工具永远失败，循环会一路空转到 8 轮上限才停。 */
+function mockArgs(name, user) {
+  const noteId = user.match(/\b[a-z0-9]{20,32}\b/)?.[0] ?? "mock-note-id";
+  switch (name) {
+    case "create_note":
+      return JSON.stringify({ content: user.slice(0, 200) || "来自 mock 的笔记" });
+    case "append_to_note":
+      return JSON.stringify({ noteId, text: "mock 追加的一段" });
+    case "update_meta":
+      return JSON.stringify({ noteId, title: "mock 改的标题" });
+    case "delete_note":
+    case "read_note":
+      return JSON.stringify({ noteId });
+    case "search_notes":
+      return JSON.stringify({ query: user.replace(/[^一-龥a-zA-Z0-9]/g, "").slice(0, 8) || "笔记" });
+    case "fetch_url":
+      return JSON.stringify({ url: user.match(/https?:\/\/\S+/)?.[0] ?? "https://example.com" });
+    default:
+      return "{}";
+  }
 }
 
 // 把 arguments 切成几片，模拟真实供应商的分片下发（客户端必须能拼回完整 JSON）
@@ -156,12 +187,16 @@ const server = http.createServer((req, res) => {
     const withImage = hasImagePart(lastUser?.content);
     const isChat = system.includes("个人知识库的 AI 助手") || withImage;
 
-    // 工具调用优先。MOCK_IGNORE_TOOLS=1 时故意无视 tools 直接回文本，
-    // 用于验证客户端能否识破"静默忽略工具参数"的供应商
+    /* 工具调用优先，但只在这一轮里调一次：消息里已经有 tool 结果时改回文本，
+       模拟真实模型「拿到结果就总结」的行为。否则每轮都发新调用，
+       助手的循环会一路跑到轮次上限，端到端验证永远看不到收尾文本。
+       MOCK_IGNORE_TOOLS=1 时故意无视 tools 直接回文本，
+       用于验证客户端能否识破"静默忽略工具参数"的供应商 */
     const tools = Array.isArray(payload.tools) ? payload.tools : [];
-    if (tools.length && process.env.MOCK_IGNORE_TOOLS !== "1") {
+    const answered = payload.messages?.some?.((m) => m.role === "tool");
+    if (tools.length && !answered && process.env.MOCK_IGNORE_TOOLS !== "1") {
       const name = pickTool(tools, user)?.function?.name ?? "unknown_tool";
-      const args = "{}";
+      const args = mockArgs(name, user);
       console.log("[mock-llm]", payload.stream ? "tool_call(stream)" : "tool_call", "->", name, args);
       if (payload.stream) {
         sendToolCallStream(res, name, args);

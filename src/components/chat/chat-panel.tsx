@@ -129,17 +129,24 @@ export function ChatPanel({
                   问点关于这{scopeType === "note" ? "篇笔记" : "个主题"}的问题吧
                 </p>
               )}
-              {chat.msgs.map((m, i) => (
-                <div key={i} className={m.role === "user" ? "flex justify-end" : "flex justify-start"}>
-                  <div
-                    className={`max-w-[85%] whitespace-pre-wrap rounded-[14px] px-3.5 py-2 text-[14px] leading-[1.5] ${
-                      m.role === "user" ? "bg-action text-white" : "bg-fill text-ink-80"
-                    }`}
-                  >
-                    {m.content || (chat.streaming && i === chat.msgs.length - 1 ? "…" : "")}
+              {chat.msgs.map((m, i) =>
+                // 工具执行的提示行：不属于对话本身，弱化成居中小字
+                m.role === "notice" ? (
+                  <p key={i} className="text-center text-[12px] leading-[1.5] text-ink-48">
+                    {m.content}
+                  </p>
+                ) : (
+                  <div key={i} className={m.role === "user" ? "flex justify-end" : "flex justify-start"}>
+                    <div
+                      className={`max-w-[85%] whitespace-pre-wrap rounded-[14px] px-3.5 py-2 text-[14px] leading-[1.5] ${
+                        m.role === "user" ? "bg-action text-white" : "bg-fill text-ink-80"
+                      }`}
+                    >
+                      {m.content || (chat.streaming ? "…" : "")}
+                    </div>
                   </div>
-                </div>
-              ))}
+                ),
+              )}
               {chat.error && <p className="text-[12px] text-danger">{chat.error}</p>}
               <div ref={bottomRef} />
             </div>
