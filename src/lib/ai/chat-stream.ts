@@ -4,7 +4,7 @@
 
 import { eq } from "drizzle-orm";
 import type { DB } from "@/db";
-import { conversations, messages } from "@/db/schema";
+import { conversations, messages, notes } from "@/db/schema";
 import { newId } from "@/lib/ids";
 import type { LlmMessage } from "@/lib/llm";
 import {
@@ -110,19 +110,20 @@ export function createChatSseResponse(params: ChatStreamParams): Response {
             }
 
             case "pending_confirm": {
+              const summary = describeConfirm(db, ev.call.args);
               const messageId = insert("tool", "（等待用户确认）", {
                 kind: "pending",
                 callId: ev.call.id,
                 name: ev.call.name,
                 args: ev.call.args,
-                summary: describeConfirm(ev.call.args),
+                summary,
               });
               send({
                 confirm_required: {
                   id: ev.call.id,
                   name: ev.call.name,
                   args: ev.call.args,
-                  summary: describeConfirm(ev.call.args),
+                  summary,
                   messageId,
                   conversationId: convId,
                 },
@@ -180,11 +181,15 @@ export function createChatSseResponse(params: ChatStreamParams): Response {
   });
 }
 
-// 确认卡片上的一句话。参数是模型给的原始 JSON，解析失败时原样展示
-function describeConfirm(args: string): string {
+// 确认卡片上的一句话。参数是模型给的原始 JSON，解析失败时给通用文案。
+// 特意查一次标题：只显示 id 的话，用户根本无从判断该不该点「允许」
+function describeConfirm(db: DB, args: string): string {
   try {
     const v = JSON.parse(args) as { noteId?: string };
-    return v.noteId ? `删除笔记 ${v.noteId}` : "删除笔记";
+    if (!v.noteId) return "删除笔记";
+    const row = db.select({ title: notes.title }).from(notes).where(eq(notes.id, v.noteId)).get();
+    if (!row) return `删除笔记 ${v.noteId}`;
+    return `删除笔记「${row.title || "（无标题）"}」`;
   } catch {
     return "删除笔记";
   }

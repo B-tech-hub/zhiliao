@@ -87,7 +87,7 @@ export function purgeNotes(db: DB, noteIds: string[]): number {
 // 全局孤儿扫描（顺路还清旧版物理删除欠下的历史孤儿）：
 // - 图片：不被任何笔记（含回收站——可恢复的引用绝不能删）正文引用、且过了上传宽限期
 //   → 删记录 + 删文件；文件缺失时删记录不报错
-// - 会话：scope 指向已不存在的笔记/主题 → 删（消息级联）
+// - 会话：scope 指向已不存在的笔记/主题 → 删（消息级联）；全局会话没有 scope 对象，永不删
 export function purgeOrphans(db: DB): { images: number; conversations: number } {
   const wanted = new Set<string>();
   for (const row of db.select({ content: notes.content }).from(notes).all()) {
@@ -114,7 +114,15 @@ export function purgeOrphans(db: DB): { images: number; conversations: number } 
     .select({ id: conversations.id, scopeType: conversations.scopeType, scopeId: conversations.scopeId })
     .from(conversations)
     .all()) {
-    const alive = c.scopeType === "note" ? noteIds.has(c.scopeId) : topicIds.has(c.scopeId);
+    /* 全局会话必须单独放行：它的 scopeId 是空串，落到 note/topic 任一分支都查不到对象，
+       会被判成孤儿——每天清扫一次，用户的全部助手会话连同撤销载荷就没了。
+       （注释别以 global 开头，那是 ESLint 的全局变量声明指令） */
+    const alive =
+      c.scopeType === "global"
+        ? true
+        : c.scopeType === "note"
+          ? noteIds.has(c.scopeId)
+          : topicIds.has(c.scopeId);
     if (alive) continue;
     db.delete(conversations).where(eq(conversations.id, c.id)).run();
     removedConversations++;

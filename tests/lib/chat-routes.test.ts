@@ -4,10 +4,11 @@ import { asc, eq } from "drizzle-orm";
 import { getDb } from "@/db";
 import { conversations, messages, notes } from "@/db/schema";
 import { POST as confirmPost } from "@/app/api/chat/confirm/route";
+import { GET as conversationsGet } from "@/app/api/chat/conversations/route";
 import { POST as undoPost } from "@/app/api/chat/undo/route";
 import { parseToolPayload, type ToolPayload } from "@/lib/ai/chat-loop";
 import { runTool, type ToolContext, type UndoPayload } from "@/lib/ai/tools";
-import { wipeData } from "../helpers/db";
+import { insertNote, insertTopic, wipeData } from "../helpers/db";
 
 const CONV = "conv-confirm";
 
@@ -304,5 +305,67 @@ describe("POST /api/chat/undo", () => {
   it("消息不存在返回 404", async () => {
     const res = await post(undoPost, "http://x/api/chat/undo", { messageId: "无此消息" });
     expect(res.status).toBe(404);
+  });
+});
+
+describe("GET /api/chat/conversations", () => {
+  function seedConversation(id: string, scopeType: string, scopeId: string, updatedAt: number) {
+    getDb()
+      .insert(conversations)
+      .values({ id, scopeType, scopeId, title: `会话 ${id}`, createdAt: updatedAt, updatedAt })
+      .run();
+  }
+
+  /* 助手已是全局的，会话列表若仍按 scope 过滤，用户在首页就一条历史也看不见。 */
+  it("不带参数列出全部会话，按最近更新倒序", async () => {
+    const now = Date.now();
+    seedConversation("c-old", "note", "n1", now - 2000);
+    seedConversation("c-new", "global", "", now);
+    seedConversation("c-mid", "topic", "t1", now - 1000);
+
+    const res = await conversationsGet();
+    expect(res.status).toBe(200);
+    const data = (await res.json()) as { conversations: { id: string }[] };
+    expect(data.conversations.map((c) => c.id)).toEqual(["c-new", "c-mid", "c-old"]);
+  });
+
+  // 列表里同时躺着全局会话与旧的笔记/主题会话，得有标签区分「这条是围绕什么聊的」
+  it("带出 scope 标签：笔记标题、主题名，全局会话没有", async () => {
+    const now = Date.now();
+    insertNote("n1", "正文", { title: "跑步计划" });
+    insertTopic("t1", "健身");
+    seedConversation("c1", "note", "n1", now);
+    seedConversation("c2", "topic", "t1", now - 1000);
+    seedConversation("c3", "global", "", now - 2000);
+
+    const res = await conversationsGet();
+    const data = (await res.json()) as {
+      conversations: { id: string; scopeType: string; scopeLabel?: string }[];
+    };
+    const byId = new Map(data.conversations.map((c) => [c.id, c]));
+    expect(byId.get("c1")?.scopeLabel).toBe("跑步计划");
+    expect(byId.get("c2")?.scopeLabel).toBe("健身");
+    expect(byId.get("c3")?.scopeLabel).toBeUndefined();
+    expect(byId.get("c3")?.scopeType).toBe("global");
+  });
+
+  // 笔记进了回收站，围绕它的会话仍在列表里；标题查得到就照常显示
+  it("指向回收站笔记的会话仍列出且保留标题", async () => {
+    insertNote("n1", "正文", { title: "旧笔记", deletedAt: Date.now() });
+    seedConversation("c1", "note", "n1", Date.now());
+
+    const res = await conversationsGet();
+    const data = (await res.json()) as { conversations: { scopeLabel?: string }[] };
+    expect(data.conversations).toHaveLength(1);
+    expect(data.conversations[0].scopeLabel).toBe("旧笔记");
+  });
+
+  it("无标题笔记给出占位标签，而不是空字符串", async () => {
+    insertNote("n1", "正文");
+    seedConversation("c1", "note", "n1", Date.now());
+
+    const res = await conversationsGet();
+    const data = (await res.json()) as { conversations: { scopeLabel?: string }[] };
+    expect(data.conversations[0].scopeLabel).toBe("（无标题笔记）");
   });
 });

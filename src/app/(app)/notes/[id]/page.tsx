@@ -3,8 +3,7 @@ import { and, asc, eq, isNull } from "drizzle-orm";
 import { getDb } from "@/db";
 import { notes, topics } from "@/db/schema";
 import { getTagsForNotes } from "@/lib/notes";
-import { isVisionConfigured } from "@/lib/llm-config";
-import { ChatPanel } from "@/components/chat/chat-panel";
+import { ChatScopeBinder } from "@/components/chat/chat-scope";
 import { NoteEditor } from "./note-editor";
 
 export const dynamic = "force-dynamic";
@@ -36,12 +35,12 @@ export default async function NotePage({ params }: { params: Promise<{ id: strin
   return (
     <>
       <NoteEditor note={note} tags={tagMap.get(id) ?? []} topics={topicRows} backHref={backHref} />
-      <ChatPanel
-        scopeType="note"
-        scopeId={note.id}
-        contextTitle={note.title || "（无标题笔记）"}
+      {/* 把这条笔记登记为助手的上下文附件；助手面板本身挂在 (app)/layout */}
+      <ChatScopeBinder
+        type="note"
+        id={note.id}
+        title={note.title || "（无标题笔记）"}
         hasImages={hasImages}
-        visionAvailable={isVisionConfigured()}
       />
     </>
   );

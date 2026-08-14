@@ -6,7 +6,7 @@ import { notes, topics } from "@/db/schema";
 import { getTagsForNotes } from "@/lib/notes";
 import { BackButton } from "@/components/back-button";
 import { EmptyNotes } from "@/components/note-card";
-import { ChatPanel } from "@/components/chat/chat-panel";
+import { ChatScopeBinder } from "@/components/chat/chat-scope";
 import { TopicNotes } from "./topic-notes";
 
 export const dynamic = "force-dynamic";
@@ -49,7 +49,8 @@ export default async function TopicPage({ params }: { params: Promise<{ id: stri
       ) : (
         <TopicNotes notes={rows.map((n) => ({ ...n, tags: tagMap.get(n.id) ?? [] }))} />
       )}
-      <ChatPanel scopeType="topic" scopeId={topic.id} contextTitle={topic.name} />
+      {/* 把这个主题登记为助手的上下文附件；助手面板本身挂在 (app)/layout */}
+      <ChatScopeBinder type="topic" id={topic.id} title={topic.name} />
     </div>
   );
 }

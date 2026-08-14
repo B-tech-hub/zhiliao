@@ -34,7 +34,7 @@ function insertImage(id: string, filename: string, createdAt: number) {
     .run();
 }
 
-function insertConversation(id: string, scopeType: "note" | "topic", scopeId: string) {
+function insertConversation(id: string, scopeType: "note" | "topic" | "global", scopeId: string) {
   const now = Date.now();
   getDb()
     .insert(conversations)
@@ -235,6 +235,20 @@ describe("trash 彻底删除与孤儿清理", () => {
     expect(left).toEqual(["c1", "c3"]);
     const msgs = getDb().select({ id: messages.id }).from(messages).all().map((m) => m.id).sort();
     expect(msgs).toEqual(["c1-m1", "c3-m1"]);
+  });
+
+  // 全局助手的会话没有 scope 对象，scopeId 为空串。若按「scopeId 查不到对象即孤儿」
+  // 判定，每天的清扫会把用户全部助手会话连同撤销载荷删光
+  it("purgeOrphans 保留全局会话——scopeId 为空不算孤儿", () => {
+    fakeUploads();
+    insertConversation("c1", "global", "");
+    insertConversation("c2", "note", "ghost-note");
+
+    const r = purgeOrphans(getDb());
+    expect(r.conversations).toBe(1);
+    const left = getDb().select({ id: conversations.id }).from(conversations).all().map((c) => c.id);
+    expect(left).toEqual(["c1"]);
+    expect(getDb().select({ id: messages.id }).from(messages).all().map((m) => m.id)).toEqual(["c1-m1"]);
   });
 
   it("sweepTrash 清除满 30 天的回收站笔记，29 天的保留", () => {

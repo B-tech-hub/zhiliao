@@ -1,196 +1,194 @@
 "use client";
 
-// AI 对话状态与 SSE 消费逻辑
+// 助手对话的状态容器：SSE 消费、会话切换、确认与撤销动作。
+// 条目形态的判定全在 chat-state.ts，这里只管副作用与生命周期。
 
 import { useCallback, useEffect, useRef, useState } from "react";
-
-export interface ChatMsg {
-  // notice 是本地生成的提示行（工具执行状态等），不落库、不参与上下文
-  role: "user" | "assistant" | "notice";
-  content: string;
-}
+import {
+  applyEvent,
+  markUndo,
+  pumpSseEvents,
+  rebuildItems,
+  type ChatItem,
+  type HistoryMessage,
+  type ToolItem,
+} from "./chat-state";
 
 export interface ConversationSummary {
   id: string;
   title: string;
   updatedAt: number;
+  scopeType: string;
+  // 会话创建时所围绕的笔记标题 / 主题名；全局会话没有
+  scopeLabel?: string;
 }
 
-// 工具名到中文说明，用于兜底提示行
-const TOOL_LABELS: Record<string, string> = {
-  search_notes: "检索笔记",
-  read_note: "读取笔记",
-  list_topics: "查看主题",
-  create_note: "新建笔记",
-  append_to_note: "追加内容",
-  update_meta: "修改分类",
-  delete_note: "删除笔记",
-  fetch_url: "抓取网页",
-};
+export type ChatScopeType = "note" | "topic" | "global";
 
-export function useChat(scopeType: "note" | "topic", scopeId: string) {
+export function useChat(scopeType: ChatScopeType, scopeId: string) {
   const [conversationId, setConversationId] = useState<string | null>(null);
   const [conversationList, setConversationList] = useState<ConversationSummary[]>([]);
-  const [msgs, setMsgs] = useState<ChatMsg[]>([]);
+  const [items, setItems] = useState<ChatItem[]>([]);
   const [streaming, setStreaming] = useState(false);
+  // 正在撤销的操作卡片 messageId，防止连点发出两次反向操作
+  const [undoing, setUndoing] = useState<string | null>(null);
   const [error, setError] = useState("");
   const abortRef = useRef<AbortController | null>(null);
 
-  // 文本增量并到最后一条 assistant 上；若中间插过提示行则另起一条
-  const appendDelta = useCallback((delta: string) => {
-    setMsgs((prev) => {
-      const next = [...prev];
-      const last = next[next.length - 1];
-      if (last?.role === "assistant") {
-        next[next.length - 1] = { role: "assistant", content: last.content + delta };
-      } else {
-        next.push({ role: "assistant", content: delta });
-      }
-      return next;
-    });
-  }, []);
-
-  const pushNotice = useCallback((content: string) => {
-    setMsgs((prev) => [...prev, { role: "notice", content }]);
-  }, []);
-
   const loadConversations = useCallback(async () => {
     try {
-      const res = await fetch(`/api/chat/conversations?scopeType=${scopeType}&scopeId=${scopeId}`);
+      const res = await fetch("/api/chat/conversations");
       if (res.ok) {
-        const data = await res.json();
+        const data = (await res.json()) as { conversations?: ConversationSummary[] };
         setConversationList(data.conversations ?? []);
       }
     } catch {
       // 列表加载失败不阻塞对话
     }
-  }, [scopeType, scopeId]);
-
-  useEffect(() => {
-    void loadConversations();
-  }, [loadConversations]);
-
-  const openConversation = useCallback(async (id: string | null) => {
-    abortRef.current?.abort();
-    setConversationId(id);
-    setError("");
-    if (!id) {
-      setMsgs([]);
-      return;
-    }
-    try {
-      const res = await fetch(`/api/chat/conversations/${id}`);
-      if (res.ok) {
-        const data = await res.json();
-        // 工具消息与只带 tool_calls 的空 assistant 消息不直接展示，
-        // 操作卡片的渲染在批次 D
-        setMsgs(
-          (data.messages ?? [])
-            .filter((m: { role: string; content: string }) => m.role !== "tool" && m.content)
-            .map((m: { role: string; content: string }) => ({
-              role: m.role as "user" | "assistant",
-              content: m.content,
-            })),
-        );
-      }
-    } catch {
-      setError("加载会话失败");
-    }
   }, []);
+
+  const loadMessages = useCallback(async (id: string) => {
+    const res = await fetch(`/api/chat/conversations/${id}`);
+    if (!res.ok) throw new Error("加载会话失败");
+    const data = (await res.json()) as { messages?: HistoryMessage[] };
+    setItems(rebuildItems(data.messages ?? []));
+  }, []);
+
+  const openConversation = useCallback(
+    async (id: string | null) => {
+      abortRef.current?.abort();
+      setConversationId(id);
+      setError("");
+      if (!id) {
+        setItems([]);
+        return;
+      }
+      try {
+        await loadMessages(id);
+      } catch {
+        setError("加载会话失败");
+      }
+    },
+    [loadMessages],
+  );
 
   const removeConversation = useCallback(
     async (id: string) => {
       await fetch(`/api/chat/conversations/${id}`, { method: "DELETE" }).catch(() => {});
       if (id === conversationId) {
         setConversationId(null);
-        setMsgs([]);
+        setItems([]);
       }
       void loadConversations();
     },
     [conversationId, loadConversations],
   );
 
+  /* 一轮 SSE：/api/chat 与 /api/chat/confirm 的响应结构相同，共用这段。
+     确认与拒绝都会续跑一轮（模型要对结果作出回应），所以拒绝同样得把流读完。 */
+  const runStream = useCallback(async (url: string, body: unknown) => {
+    setError("");
+    setStreaming(true);
+    const controller = new AbortController();
+    abortRef.current = controller;
+    try {
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+        signal: controller.signal,
+      });
+      if (!res.ok || !res.body) {
+        const data = await res.json().catch(() => ({}) as { error?: string });
+        // 带上状态码：调用方要靠 409 区分「这条确认已被处理过」
+        const err = new Error(data.error || `请求失败 HTTP ${res.status}`) as Error & {
+          status?: number;
+        };
+        err.status = res.status;
+        throw err;
+      }
+      await pumpSseEvents(res.body, (ev) => {
+        setItems((prev) => applyEvent(prev, ev));
+        if ("error" in ev) setError(ev.error);
+        if ("done" in ev) setConversationId(ev.conversationId);
+      });
+    } catch (e) {
+      if (!controller.signal.aborted) {
+        setError(e instanceof Error ? e.message : "网络错误");
+      }
+      throw e;
+    } finally {
+      setStreaming(false);
+      abortRef.current = null;
+      void loadConversations();
+    }
+  }, [loadConversations]);
+
   const send = useCallback(
     async (text: string, useVision: boolean) => {
       const message = text.trim();
       if (!message || streaming) return;
-      setError("");
-      setMsgs((prev) => [...prev, { role: "user", content: message }, { role: "assistant", content: "" }]);
-      setStreaming(true);
-      const controller = new AbortController();
-      abortRef.current = controller;
+      setItems((prev) => [...prev, { kind: "text", role: "user", content: message }]);
+      await runStream("/api/chat", {
+        conversationId: conversationId ?? undefined,
+        scopeType,
+        // 全局助手没有作用域对象，服务端要求此时不传 scopeId
+        scopeId: scopeType === "global" ? undefined : scopeId,
+        message,
+        useVision,
+      }).catch(() => {});
+    },
+    [conversationId, scopeType, scopeId, streaming, runStream],
+  );
+
+  /* 确认卡片的两个按钮打同一个端点，只差 approve。
+     重复确认服务端返回 409——此时本地状态已过期，重新拉一次会话对齐。 */
+  const respondConfirm = useCallback(
+    async (item: ToolItem, approve: boolean) => {
+      if (streaming || !item.messageId || !item.conversationId) return;
+      const convId = item.conversationId;
       try {
-        const res = await fetch("/api/chat", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ conversationId: conversationId ?? undefined, scopeType, scopeId, message, useVision }),
-          signal: controller.signal,
+        await runStream("/api/chat/confirm", {
+          conversationId: convId,
+          messageId: item.messageId,
+          approve,
         });
-        if (!res.ok || !res.body) {
-          const data = await res.json().catch(() => ({}));
-          throw new Error(data.error || `请求失败 HTTP ${res.status}`);
-        }
-        const reader = res.body.getReader();
-        const decoder = new TextDecoder();
-        let buffer = "";
-        for (;;) {
-          const { done, value } = await reader.read();
-          if (done) break;
-          buffer += decoder.decode(value, { stream: true });
-          const events = buffer.split("\n\n");
-          buffer = events.pop() ?? "";
-          for (const ev of events) {
-            const line = ev.trim();
-            if (!line.startsWith("data:")) continue;
-            let payload: {
-              delta?: string;
-              done?: boolean;
-              conversationId?: string;
-              error?: string;
-              tool_start?: { name: string };
-              tool_end?: { name: string; ok: boolean; summary: string };
-              confirm_required?: { summary: string };
-            };
-            try {
-              payload = JSON.parse(line.slice(5).trim());
-            } catch {
-              continue;
-            }
-            if (payload.delta) appendDelta(payload.delta);
-            /* 批次 C 的兜底：工具事件先渲染成一行文字，操作卡片与确认按钮在批次 D。
-               不处理的话，助手请求删除时这一轮 SSE 直接结束，
-               用户看到的是「发了消息但毫无回应」。 */
-            if (payload.tool_start) {
-              pushNotice(`正在执行 ${TOOL_LABELS[payload.tool_start.name] ?? payload.tool_start.name}…`);
-            }
-            if (payload.tool_end) {
-              const { ok, summary, name } = payload.tool_end;
-              pushNotice(`${ok ? "✓" : "✗"} ${summary || TOOL_LABELS[name] || name}`);
-            }
-            if (payload.confirm_required) {
-              pushNotice(
-                `⚠ 助手请求${payload.confirm_required.summary}，需要你确认。当前版本尚不能在此确认，操作未执行。`,
-              );
-            }
-            if (payload.error) setError(payload.error);
-            if (payload.done && payload.conversationId) {
-              setConversationId(payload.conversationId);
-            }
-          }
-        }
       } catch (e) {
-        if (!controller.signal.aborted) {
-          setError(e instanceof Error ? e.message : "网络错误");
+        // 409 表示这条确认已被处理过，本地状态过期了，拉一次会话对齐
+        if ((e as { status?: number }).status === 409) {
+          await loadMessages(convId).catch(() => {});
         }
-      } finally {
-        setStreaming(false);
-        abortRef.current = null;
-        // 清掉空的 assistant 占位。可能不在末尾——工具提示行会插到它后面
-        setMsgs((prev) => prev.filter((m) => m.role !== "assistant" || m.content));
-        void loadConversations();
       }
     },
-    [conversationId, scopeType, scopeId, streaming, loadConversations, appendDelta, pushNotice],
+    [streaming, runStream, loadMessages],
+  );
+
+  /* 撤销。服务端用 409 区分「笔记已被改动」与成功，两者都要让按钮置灰：
+     前者再点还是会被拒，reason 是给用户看的原文。 */
+  const undo = useCallback(
+    async (messageId: string) => {
+      if (undoing) return;
+      setUndoing(messageId);
+      try {
+        const res = await fetch("/api/chat/undo", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ messageId }),
+        });
+        const data = (await res.json().catch(() => ({}))) as {
+          ok?: boolean;
+          reason?: string;
+          error?: string;
+        };
+        const ok = res.ok && data.ok !== false;
+        setItems((prev) => markUndo(prev, messageId, { ok, reason: data.reason ?? data.error }));
+      } catch {
+        setItems((prev) => markUndo(prev, messageId, { ok: false, reason: "网络错误，撤销未完成" }));
+      } finally {
+        setUndoing(null);
+      }
+    },
+    [undoing],
   );
 
   const stop = useCallback(() => abortRef.current?.abort(), []);
@@ -200,11 +198,15 @@ export function useChat(scopeType: "note" | "topic", scopeId: string) {
   return {
     conversationId,
     conversationList,
-    msgs,
+    items,
     streaming,
+    undoing,
     error,
     send,
     stop,
+    undo,
+    respondConfirm,
+    loadConversations,
     openConversation,
     removeConversation,
   };
