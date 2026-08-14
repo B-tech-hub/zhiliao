@@ -1,66 +1,32 @@
 import fs from "node:fs";
 import path from "node:path";
 import { NextRequest, NextResponse } from "next/server";
-import { and, desc, eq, isNull } from "drizzle-orm";
+import { and, desc, eq } from "drizzle-orm";
 import { z } from "zod";
 import { getDb } from "@/db";
-import { conversations, messages, notes, topics } from "@/db/schema";
+import { conversations, messages } from "@/db/schema";
+import { buildSystemMessage } from "@/lib/ai/chat-context";
+import { buildLlmMessages, type ToolLoopDeps } from "@/lib/ai/chat-loop";
+import { createChatSseResponse } from "@/lib/ai/chat-stream";
+import { extractUrls } from "@/lib/ai/fetch-url";
+import { getTool, runTool, toolDefs, type ToolContext } from "@/lib/ai/tools";
 import { newId } from "@/lib/ids";
-import { extractImageFilenames } from "@/lib/image-refs";
-import { chatStream, type ChatContentPart, type MultiModalChatMessage } from "@/lib/llm";
-import { getVisionConfig, isVisionConfigured } from "@/lib/llm-config";
+import { chatStream, type ChatContentPart, type LlmMessage } from "@/lib/llm";
+import { getToolSupport, getVisionConfig, isVisionConfigured } from "@/lib/llm-config";
 
 export const dynamic = "force-dynamic";
 
-// 上下文注入上限（字符），超出截断并在 prompt 中说明
-const MAX_CONTEXT_CHARS = 12000;
 const MAX_HISTORY = 20;
 const MAX_IMAGES = 4;
 
 const bodySchema = z.object({
   conversationId: z.string().optional(),
-  scopeType: z.enum(["note", "topic"]),
-  scopeId: z.string().min(1),
+  scopeType: z.enum(["note", "topic", "global"]),
+  // 全局助手没有作用域对象；note/topic 必填，在下方校验
+  scopeId: z.string().optional(),
   message: z.string().min(1),
   useVision: z.boolean().optional(),
 });
-
-// 拼装围绕笔记/主题的上下文文本
-function buildContext(scopeType: "note" | "topic", scopeId: string): { context: string; truncated: boolean; imageFiles: string[] } {
-  const db = getDb();
-  if (scopeType === "note") {
-    const note = db
-      .select()
-      .from(notes)
-      .where(and(eq(notes.id, scopeId), isNull(notes.deletedAt)))
-      .get();
-    if (!note) return { context: "", truncated: false, imageFiles: [] };
-    const full = `# ${note.title || "（无标题笔记）"}\n\n${note.content}`;
-    const truncated = full.length > MAX_CONTEXT_CHARS;
-    // 提取笔记中引用的本地图片文件名，供视觉模型读取
-    const imageFiles = extractImageFilenames(note.content);
-    return { context: truncated ? full.slice(0, MAX_CONTEXT_CHARS) : full, truncated, imageFiles };
-  }
-  const topic = db.select().from(topics).where(eq(topics.id, scopeId)).get();
-  if (!topic) return { context: "", truncated: false, imageFiles: [] };
-  const rows = db
-    .select({ title: notes.title, summary: notes.summary, content: notes.content })
-    .from(notes)
-    .where(and(eq(notes.topicId, scopeId), isNull(notes.deletedAt)))
-    .orderBy(desc(notes.updatedAt))
-    .all();
-  let context = `主题：${topic.name}\n共 ${rows.length} 条笔记：\n\n`;
-  let truncated = false;
-  for (const n of rows) {
-    const piece = `- ${n.title || "（无标题）"}：${n.summary || n.content.slice(0, 200).replace(/\n/g, " ")}\n`;
-    if (context.length + piece.length > MAX_CONTEXT_CHARS) {
-      truncated = true;
-      break;
-    }
-    context += piece;
-  }
-  return { context, truncated, imageFiles: [] };
-}
 
 // 将本地图片文件读为 data URL（视觉模型输入）
 function loadImagesAsDataUrls(filenames: string[]): string[] {
@@ -79,13 +45,19 @@ function loadImagesAsDataUrls(filenames: string[]): string[] {
   return urls;
 }
 
-// AI 对话：SSE 流式返回，assistant 消息在流结束时一次性落库（避免逐 token 同步写阻塞事件循环）
+/* AI 助手对话：SSE 流式返回。
+   模型可在多轮里调用工具，每轮的 assistant 文本与工具结果都即时落库——
+   用户中途关闭页面时已执行的写操作必须留下操作卡片，否则无从撤销。 */
 export async function POST(req: NextRequest) {
   const parsed = bodySchema.safeParse(await req.json().catch(() => null));
   if (!parsed.success) {
     return NextResponse.json({ error: "参数不合法" }, { status: 400 });
   }
-  const { scopeType, scopeId, message, useVision } = parsed.data;
+  const { scopeType, message, useVision } = parsed.data;
+  const scopeId = parsed.data.scopeId ?? "";
+  if (scopeType !== "global" && !scopeId) {
+    return NextResponse.json({ error: "缺少 scopeId" }, { status: 400 });
+  }
   const db = getDb();
   const now = Date.now();
 
@@ -100,36 +72,45 @@ export async function POST(req: NextRequest) {
       .values({ id: conversationId, scopeType, scopeId, title: message.slice(0, 30), createdAt: now, updatedAt: now })
       .run();
   }
+  const convId = conversationId;
 
   const history = db
     .select()
     .from(messages)
-    .where(eq(messages.conversationId, conversationId))
+    .where(eq(messages.conversationId, convId))
     .orderBy(desc(messages.createdAt))
     .limit(MAX_HISTORY)
     .all()
     .reverse();
 
+  /* fetch_url 的白名单取自全部历史 user 消息，而非上面截断过的 20 条：
+     用户在第 3 条消息里给的链接，第 30 条才让助手打开是完全正常的用法。
+     漏填会让 fetch_url 100% 被拒，且错误信息看起来像是模型用错了工具。 */
+  const userUrls = db
+    .select({ content: messages.content })
+    .from(messages)
+    .where(and(eq(messages.conversationId, convId), eq(messages.role, "user")))
+    .all()
+    .flatMap((m) => extractUrls(m.content))
+    .concat(extractUrls(message));
+
+  /* 落库时间戳严格递增，起点须大于会话已有消息的最大 createdAt。
+     同毫秒内落多条时若都用 Date.now()，按 createdAt 排序会乱序，
+     重建历史时 tool_calls 与结果配对错位。 */
+  const startSeq = Math.max(now, (history.at(-1)?.createdAt ?? 0) + 1);
+
   // 用户消息先落库，流失败也不丢
   db.insert(messages)
-    .values({ id: newId(), conversationId, role: "user", content: message, createdAt: now })
+    .values({ id: newId(), conversationId: convId, role: "user", content: message, createdAt: now })
     .run();
-  db.update(conversations).set({ updatedAt: now }).where(eq(conversations.id, conversationId)).run();
+  db.update(conversations).set({ updatedAt: now }).where(eq(conversations.id, convId)).run();
 
-  const { context, truncated, imageFiles } = buildContext(scopeType, scopeId);
+  const { system, imageFiles } = buildSystemMessage(scopeType, scopeId);
   const wantVision = Boolean(useVision) && imageFiles.length > 0 && isVisionConfigured();
 
-  const system =
-    "你是个人知识库的 AI 助手。以下是用户当前正在查看的" +
-    (scopeType === "note" ? "笔记" : "主题") +
-    "内容，请基于这些内容回答问题；内容之外的信息如需推测请说明。" +
-    (truncated ? "（注意：内容过长已被截断）" : "") +
-    "\n\n---\n" +
-    context;
-
-  const chatMessages: MultiModalChatMessage[] = [
+  const chatMessages: LlmMessage[] = [
     { role: "system", content: system },
-    ...history.map((m) => ({ role: m.role as "user" | "assistant", content: m.content })),
+    ...buildLlmMessages(history),
   ];
   if (wantVision) {
     const parts: ChatContentPart[] = [
@@ -154,50 +135,25 @@ export async function POST(req: NextRequest) {
       }
     : { signal: req.signal };
 
-  const encoder = new TextEncoder();
-  const convId = conversationId;
-  const stream = new ReadableStream<Uint8Array>({
-    async start(controller) {
-      const send = (obj: unknown) => controller.enqueue(encoder.encode(`data: ${JSON.stringify(obj)}\n\n`));
-      let assistantText = "";
-      try {
-        // 批次 A 只消费文本增量；工具调用的执行循环在批次 C 接入
-        for await (const chunk of chatStream(chatMessages, llmOpts)) {
-          if (chunk.type !== "text") continue;
-          assistantText += chunk.text;
-          send({ delta: chunk.text });
-        }
-        send({ done: true, conversationId: convId });
-      } catch (e) {
-        // 客户端中止不算错误；其余错误告知前端
-        if (!req.signal.aborted) {
-          send({ error: e instanceof Error ? e.message : String(e) });
-        }
-      } finally {
-        // 已生成的部分（含中途停止）一次性落库
-        if (assistantText) {
-          const t = Date.now();
-          db.insert(messages)
-            .values({ id: newId(), conversationId: convId, role: "assistant", content: assistantText, createdAt: t })
-            .run();
-          db.update(conversations).set({ updatedAt: t }).where(eq(conversations.id, convId)).run();
-        }
-        try {
-          controller.close();
-        } catch {
-          // 已关闭则忽略
-        }
-      }
-    },
-  });
+  /* 两种情况不发 tools：探测确认过供应商不支持（发了会 400），
+     以及走视觉端点时（视觉模型普遍不支持 function calling，
+     且看图问答本就不需要写库）。getToolSupport() 为 null 表示从未探测过，
+     此时照常发送——多数供应商是支持的，不该因为没测过就降级。 */
+  const tools = getToolSupport() === false || wantVision ? [] : toolDefs();
 
-  return new Response(stream, {
-    headers: {
-      "Content-Type": "text/event-stream; charset=utf-8",
-      "Cache-Control": "no-cache, no-transform",
-      Connection: "keep-alive",
-      // 反向代理（nginx 等）禁用缓冲，保证流式到达
-      "X-Accel-Buffering": "no",
-    },
+  const toolCtx: ToolContext = { db, userUrls, signal: req.signal };
+  const deps: ToolLoopDeps = {
+    stream: (msgs) => chatStream(msgs, { ...llmOpts, tools }),
+    execute: (call) => runTool(call.name, call.args, toolCtx),
+    requiresConfirm: (name) => Boolean(getTool(name)?.requiresConfirm),
+  };
+
+  return createChatSseResponse({
+    db,
+    conversationId: convId,
+    startSeq,
+    signal: req.signal,
+    initial: chatMessages,
+    deps,
   });
 }
