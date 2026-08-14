@@ -20,8 +20,10 @@
 |---|---|
 | [0001](adr/0001-llm-config-in-db.md) | LLM 配置存数据库，环境变量兜底 |
 | [0002](adr/0002-image-attrs-inline-html.md) | 图片宽度/对齐属性以内嵌 HTML 序列化进 Markdown |
-| [0003](adr/0003-chat-context-injection.md) | AI 对话的笔记/主题上下文注入方式 |
+| [0003](adr/0003-chat-context-injection.md) | AI 对话的笔记/主题上下文注入方式（作用域前提已被 0008 取代） |
 | [0004](adr/0004-table-gfm-markdown.md) | 表格以 GFM Markdown 存储，不支持合并单元格与列宽 |
 | [0005](adr/0005-dark-mode-class-next-themes.md) | 暗色模式：next-themes class 策略 + `.dark {}` 直接覆盖 token |
 | [0006](adr/0006-pwa-offline-shell.md) | PWA 采用"纯离线壳"Service Worker，不做业务缓存 |
 | [0007](adr/0007-soft-delete-trash.md) | 回收站采用软删除（30 天），清扫挂备份之后、孤儿以正文引用判定；不做版本历史 |
+| [0008](adr/0008-assistant-tool-calling.md) | AI 助手采用工具调用；禁止正文覆盖；仅删除需确认，其余靠操作卡片与撤销兜底 |
+| [0009](adr/0009-fetch-url-safety.md) | `fetch_url` 以「只抓用户提过的网址」为第一层防护，防的是外泄而非仅 SSRF |

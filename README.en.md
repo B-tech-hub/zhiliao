@@ -18,7 +18,7 @@ Full documentation is in Simplified Chinese — see [README.md](README.md). This
 - AI pipeline: one call per note → topic + title + tags + summary, with retry/backoff; fields you edit manually are never overwritten
 - Topic suggestions: AI clusters inbox notes and proposes new topics
 - Chinese full-text search (jieba segmentation + SQLite FTS5)
-- AI chat scoped to a note or a topic (SSE streaming, optional vision model)
+- AI assistant over the whole library: it can search, read, create, append to, re-file and delete notes, and fetch URLs you have pasted. Every write leaves an undoable card in the conversation; deletions require your confirmation (SSE streaming, optional vision model)
 - Your data stays yours: one-click zip export (Markdown + images, Obsidian-friendly), manual backup button, and a trash bin — deleted notes are recoverable for 30 days
 - PWA, dark mode, daily backups (database + images, 7 copies each)
 

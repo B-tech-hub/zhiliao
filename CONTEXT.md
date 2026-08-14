@@ -40,8 +40,26 @@
 ### 视觉模型（Vision）
 AI 读图专用的第二组 LLM 配置（`vision_base_url` / `vision_api_key` / `vision_model`）。接入点与 Key 留空时回落文本模型配置；仅在显式配置了视觉模型名时"AI 看图"功能才可用。
 
-### AI 对话（Chat）
-围绕**当前笔记或主题**的问答会话：上下文（笔记全文 / 主题下笔记摘要列表）直接注入 prompt，不做全库检索。会话与消息持久化，回答走 SSE 流式。相关决策见 [docs/adr/0003-chat-context-injection.md](docs/adr/0003-chat-context-injection.md)。
+### AI 助手（Assistant）
+全局的对话式入口：任意页面右下角均可唤起，面向整个知识库，可通过**工具调用**检索与改写笔记。当前打开的笔记/主题以**上下文附件**形式带入，可随时摘除。会话与消息持久化，回答走 SSE 流式；模型不支持工具调用时自动降级为纯问答。相关决策见 [docs/adr/0008-assistant-tool-calling.md](docs/adr/0008-assistant-tool-calling.md)（上下文注入时期的决策见 [docs/adr/0003-chat-context-injection.md](docs/adr/0003-chat-context-injection.md)）。
+
+### 工具调用（Tool Calling）
+助手读写知识库的唯一途径，共 8 个：检索笔记、读取全文、列出主题、新建笔记、追加内容、修改元数据、删除笔记、抓取网页。**不存在覆盖正文的工具**——项目不做版本历史，正文覆盖是唯一不可恢复的操作。单次对话最多 8 轮、每轮最多 20 个调用。`fetch_url` 只能抓取用户消息中出现过的网址，相关决策见 [docs/adr/0009-fetch-url-safety.md](docs/adr/0009-fetch-url-safety.md)。
+
+### 上下文附件（Context Attachment）
+挂在助手面板顶部的一份当前材料：用户正在看的笔记或主题。摘除后助手面向全库。它是**会话创建时的上下文快照**，不再是会话的归属维度——会话列表按最近更新倒序列出全部，不按附件切分，旧会话标注「围绕 XX」。
+
+### 操作卡片（Action Card）
+助手每执行一次写操作，在对话中留下的一张卡片：写明改动内容，并提供撤销按钮。重开会话时按落库的撤销载荷重建。撤销失败（笔记已被改动、已不存在）时按钮置灰并显示原因。
+
+### 确认卡片（Confirmation Card）
+执行前必须由用户点「允许 / 拒绝」的卡片，**仅用于删除笔记**——其余写操作直接执行、事后撤销。卡片上写的是笔记标题而非 id。拒绝后助手会接着回应，不留悬空调用。
+
+### 状态指纹（Fingerprint）
+撤销时的乐观锁判据：对该工具真正改动过的字段做哈希，与写入时的值比对，不一致即视为「笔记已被改动」，撤销按钮置灰。**不能用 `updatedAt` 代替**——后台 AI 处理完成时会自行刷新它，助手新建的笔记几秒后就会永远撤销不了。
+
+### 引用溯源（Citation）
+助手在结论后标注的 `[^noteId]`，渲染为可跳转对应笔记的上标链接。**只有工具真的返回过的 id 才渲染成链接**，模型编造的 id 保持纯文本，不生成打不开的死链。
 
 ### 富文本图片属性
 笔记中调整过宽度/对齐/说明的图片，以内嵌 HTML `<img>` 形式存于 Markdown 正文，与纯 Markdown 图片 `![alt](url)` 混存。相关决策见 [docs/adr/0002-image-attrs-inline-html.md](docs/adr/0002-image-attrs-inline-html.md)。

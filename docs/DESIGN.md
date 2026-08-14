@@ -589,7 +589,7 @@ The structural breakpoints that matter for agents: 1440px (content lock), 1068px
 
 | Token | 值 | 用途 |
 |---|---|---|
-| `--color-chrome` | `#1d1d1f` | 侧栏、AI 对话 FAB 背景 |
+| `--color-chrome` | `#1d1d1f` | 侧栏、AI 助手 FAB 背景 |
 | `--color-tile` / `--color-tile-2` | `#272729` / `#2a2a2c` | 暗面瓷砖（内容区暗色焦点） |
 | `--color-sky` | `#2997ff` | 暗面上的链接蓝 |
 | `--color-dark-muted` | `#cccccc` | 暗面辅文 |
