@@ -23,10 +23,25 @@ export type ChatContentPart =
   | { type: "text"; text: string }
   | { type: "image_url"; image_url: { url: string } };
 
-export interface MultiModalChatMessage {
-  role: "system" | "user" | "assistant";
-  content: string | ChatContentPart[];
+// 模型发出的工具调用（OpenAI 线格式）。回灌历史时 assistant 消息要原样带上，
+// 否则模型无法把 tool 结果对回自己的调用
+export interface ToolCallRequest {
+  id: string;
+  type: "function";
+  function: { name: string; arguments: string };
 }
+
+/* 对话消息。工具回合需要两种额外形态：带 tool_calls 的 assistant 消息，
+   与带 tool_call_id 的 tool 消息。两者必须成对出现——只发其中一种，
+   供应商会以 400 拒绝整个请求。 */
+export type LlmMessage =
+  | { role: "system"; content: string }
+  | { role: "user"; content: string | ChatContentPart[] }
+  | { role: "assistant"; content: string | ChatContentPart[] | null; tool_calls?: ToolCallRequest[] }
+  | { role: "tool"; tool_call_id: string; content: string };
+
+// 旧名保留：视觉链路等既有调用点仍在使用
+export type MultiModalChatMessage = LlmMessage;
 
 // 工具定义（OpenAI function calling 格式）
 export interface ToolDef {
@@ -128,7 +143,7 @@ async function* decodeStream(body: ReadableStream<Uint8Array>): AsyncGenerator<s
 
 // 流式对话：产出文本增量与工具调用。可传入独立端点配置（如视觉模型），缺省用文本模型配置。
 export async function* chatStream(
-  msgs: MultiModalChatMessage[],
+  msgs: LlmMessage[],
   opts?: {
     baseUrl?: string | null;
     apiKey?: string | null;
