@@ -130,10 +130,22 @@ function DataSection({ lastBackupAt }: { lastBackupAt: number | null }) {
             </span>
           )}
         </div>
-        <p className="mt-3 text-[12px] text-ink-48">
+        <p className="mt-2 text-[12px] text-ink-48">
           备份数据库与图片到数据目录的 backups 文件夹；每日自动执行，各保留最近 7
           份，手动备份覆盖当天快照
         </p>
+        {/* 原生 a 标签而非 next/link：Link 的 prefetch 会在 hover 时预执行导出请求 */}
+        <div className="mt-4 flex flex-wrap items-center gap-3 border-t border-divider pt-4">
+          <a
+            href="/api/export"
+            className="rounded-full border border-action px-[22px] py-[8px] text-[14px] text-action transition-transform active:scale-95"
+          >
+            导出全部数据
+          </a>
+          <span className="text-[12px] text-ink-48">
+            Markdown + 图片打包为 zip，可导入 Obsidian 等工具
+          </span>
+        </div>
       </div>
     </section>
   );

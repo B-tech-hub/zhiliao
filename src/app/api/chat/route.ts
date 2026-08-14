@@ -6,6 +6,7 @@ import { z } from "zod";
 import { getDb } from "@/db";
 import { conversations, messages, notes, topics } from "@/db/schema";
 import { newId } from "@/lib/ids";
+import { extractImageFilenames } from "@/lib/image-refs";
 import { chatStream, type ChatContentPart, type MultiModalChatMessage } from "@/lib/llm";
 import { getVisionConfig, isVisionConfigured } from "@/lib/llm-config";
 
@@ -33,7 +34,7 @@ function buildContext(scopeType: "note" | "topic", scopeId: string): { context: 
     const full = `# ${note.title || "（无标题笔记）"}\n\n${note.content}`;
     const truncated = full.length > MAX_CONTEXT_CHARS;
     // 提取笔记中引用的本地图片文件名，供视觉模型读取
-    const imageFiles = [...note.content.matchAll(/\/api\/images\/([\w.-]+)/g)].map((m) => m[1]);
+    const imageFiles = extractImageFilenames(note.content);
     return { context: truncated ? full.slice(0, MAX_CONTEXT_CHARS) : full, truncated, imageFiles };
   }
   const topic = db.select().from(topics).where(eq(topics.id, scopeId)).get();
