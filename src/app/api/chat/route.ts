@@ -143,7 +143,16 @@ export async function POST(req: NextRequest) {
     chatMessages.push({ role: "user", content: message });
   }
 
-  const llmOpts = wantVision ? { ...getVisionConfig(), signal: req.signal } : { signal: req.signal };
+  // 只取端点三元组：sources/hasDbConfig 是设置页展示用字段，不能带进 LLM 调用
+  const visionCfg = wantVision ? getVisionConfig() : null;
+  const llmOpts = visionCfg
+    ? {
+        baseUrl: visionCfg.baseUrl,
+        apiKey: visionCfg.apiKey,
+        model: visionCfg.model,
+        signal: req.signal,
+      }
+    : { signal: req.signal };
 
   const encoder = new TextEncoder();
   const convId = conversationId;

@@ -59,10 +59,16 @@ export function getLlmConfig(): LlmConfig {
   };
 }
 
+// 视觉配置比文本配置多一个来源态：fallback = 未显式配置，回落文本模型
+export type VisionConfigSource = LlmConfigSource | "fallback";
+
 export interface VisionConfig {
   baseUrl: string | null;
   apiKey: string | null;
   model: string | null;
+  sources: { baseUrl: VisionConfigSource; apiKey: VisionConfigSource; model: VisionConfigSource };
+  // settings 表中存在任一视觉配置项
+  hasDbConfig: boolean;
 }
 
 // 视觉模型配置：settings 表优先、VISION_* 环境变量次之，baseUrl/apiKey 缺省回落文本模型
@@ -74,14 +80,37 @@ export function getVisionConfig(): VisionConfig {
     .where(inArray(settings.key, Object.values(VISION_SETTING_KEYS)))
     .all();
   const dbMap = new Map(rows.map((r) => [r.key, r.value]));
-  const pick = (key: string, envName: string) =>
-    dbMap.get(key)?.trim() || process.env[envName]?.trim() || null;
+
+  function resolve(key: string, envName: string): { value: string | null; source: LlmConfigSource } {
+    const fromDb = dbMap.get(key)?.trim();
+    if (fromDb) return { value: fromDb, source: "db" };
+    const fromEnv = process.env[envName]?.trim();
+    if (fromEnv) return { value: fromEnv, source: "env" };
+    return { value: null, source: "none" };
+  }
 
   const text = getLlmConfig();
+  const baseUrl = resolve(VISION_SETTING_KEYS.baseUrl, "VISION_BASE_URL");
+  const apiKey = resolve(VISION_SETTING_KEYS.apiKey, "VISION_API_KEY");
+  const model = resolve(VISION_SETTING_KEYS.model, "VISION_MODEL");
+
+  // 未显式配置时回落文本模型，来源标 fallback；文本模型也没有才是 none
+  const inherit = (
+    own: { value: string | null; source: LlmConfigSource },
+    inherited: string | null,
+  ): VisionConfigSource => (own.source !== "none" ? own.source : inherited ? "fallback" : "none");
+
   return {
-    baseUrl: pick(VISION_SETTING_KEYS.baseUrl, "VISION_BASE_URL") ?? text.baseUrl,
-    apiKey: pick(VISION_SETTING_KEYS.apiKey, "VISION_API_KEY") ?? text.apiKey,
-    model: pick(VISION_SETTING_KEYS.model, "VISION_MODEL"),
+    baseUrl: baseUrl.value ?? text.baseUrl,
+    apiKey: apiKey.value ?? text.apiKey,
+    // 模型名不回落：只有显式配置了视觉模型名，AI 读图才可用
+    model: model.value,
+    sources: {
+      baseUrl: inherit(baseUrl, text.baseUrl),
+      apiKey: inherit(apiKey, text.apiKey),
+      model: model.source,
+    },
+    hasDbConfig: dbMap.size > 0,
   };
 }
 

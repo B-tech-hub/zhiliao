@@ -15,6 +15,8 @@ interface TopicRow {
 }
 
 type LlmSource = "db" | "env" | "none";
+// 视觉配置多一态：未显式填写时回落文本模型配置
+type VisionSource = LlmSource | "fallback";
 
 interface LlmInfo {
   configured: boolean;
@@ -31,6 +33,11 @@ const SOURCE_LABEL: Record<LlmSource, string> = {
   none: "未配置",
 };
 
+const VISION_SOURCE_LABEL: Record<VisionSource, string> = {
+  ...SOURCE_LABEL,
+  fallback: "回落文本模型",
+};
+
 interface QueueInfo {
   pending: number;
   running: number;
@@ -42,6 +49,7 @@ interface VisionInfo {
   model: string;
   baseUrl: string;
   apiKeyMasked: string;
+  sources: { baseUrl: VisionSource; apiKey: VisionSource; model: VisionSource };
 }
 
 const THEME_OPTIONS = [
@@ -199,6 +207,8 @@ export function SettingsPanel({
   const [visionApiKey, setVisionApiKey] = useState("");
   const [visionSaving, setVisionSaving] = useState(false);
   const [visionResult, setVisionResult] = useState("");
+  const [visionTesting, setVisionTesting] = useState(false);
+  const [visionTestResult, setVisionTestResult] = useState("");
 
   async function saveVision() {
     const body: Record<string, string> = {};
@@ -280,17 +290,24 @@ export function SettingsPanel({
     }
   }
 
-  async function testLlm() {
-    setTesting(true);
-    setTestResult("");
+  // 两组配置共用一个测试入口，target 决定打哪个端点
+  async function testLlm(target: "text" | "vision") {
+    const setBusy = target === "vision" ? setVisionTesting : setTesting;
+    const setResult = target === "vision" ? setVisionTestResult : setTestResult;
+    setBusy(true);
+    setResult("");
     try {
-      const res = await fetch("/api/llm/test", { method: "POST" });
+      const res = await fetch("/api/llm/test", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ target }),
+      });
       const data = await res.json();
-      setTestResult(data.ok ? `✓ ${data.message}` : `✕ ${data.message}`);
+      setResult(data.ok ? `✓ ${data.message}` : `✕ ${data.message}`);
     } catch {
-      setTestResult("✕ 请求失败");
+      setResult("✕ 请求失败");
     } finally {
-      setTesting(false);
+      setBusy(false);
     }
   }
 
@@ -454,7 +471,7 @@ export function SettingsPanel({
               {llmSaving ? "保存中…" : "保存"}
             </button>
             <button
-              onClick={testLlm}
+              onClick={() => testLlm("text")}
               disabled={testing}
               className="rounded-full border border-action px-4 py-1.5 text-[14px] text-action transition-transform active:scale-95 disabled:opacity-40"
             >
@@ -482,19 +499,16 @@ export function SettingsPanel({
           )}
         </div>
 
+        {/* 字段顺序与上方文本模型保持一致：接入点 → 模型 → API Key */}
         <div className="mt-3 space-y-4 rounded-[18px] bg-surface p-6 text-[14px]">
           <p className="font-semibold tracking-[-0.224px]">视觉模型（AI 读图，可选）</p>
           <div>
-            <label className="mb-1 block text-ink-48">模型</label>
-            <input
-              value={visionModel}
-              onChange={(e) => setVisionModel(e.target.value)}
-              placeholder="如 qwen-vl-plus / gpt-4o；留空表示不启用 AI 读图"
-              className="h-[40px] w-full rounded-full border border-hairline bg-surface px-5 text-[14px] outline-none focus:border-action-focus"
-            />
-          </div>
-          <div>
-            <label className="mb-1 block text-ink-48">接入点（留空复用上方文本模型接入点）</label>
+            <label className="mb-1 flex items-center justify-between">
+              <span className="text-ink-48">接入点</span>
+              <span className="text-[12px] text-ink-48">
+                {VISION_SOURCE_LABEL[vision.sources.baseUrl]}
+              </span>
+            </label>
             <input
               value={visionBaseUrl}
               onChange={(e) => setVisionBaseUrl(e.target.value)}
@@ -503,17 +517,46 @@ export function SettingsPanel({
             />
           </div>
           <div>
-            <label className="mb-1 block text-ink-48">API Key（留空复用上方 API Key）</label>
+            <label className="mb-1 flex items-center justify-between">
+              <span className="text-ink-48">模型</span>
+              <span className="text-[12px] text-ink-48">
+                {VISION_SOURCE_LABEL[vision.sources.model]}
+              </span>
+            </label>
+            <input
+              value={visionModel}
+              onChange={(e) => setVisionModel(e.target.value)}
+              placeholder="如 qwen-vl-plus / gpt-4o；留空表示不启用 AI 读图"
+              className="h-[40px] w-full rounded-full border border-hairline bg-surface px-5 text-[14px] outline-none focus:border-action-focus"
+            />
+          </div>
+          <div>
+            <label className="mb-1 flex items-center justify-between">
+              <span className="text-ink-48">API Key</span>
+              <span className="text-[12px] text-ink-48">
+                {VISION_SOURCE_LABEL[vision.sources.apiKey]}
+              </span>
+            </label>
             <input
               type="password"
               value={visionApiKey}
               onChange={(e) => setVisionApiKey(e.target.value)}
-              placeholder={`当前 ${vision.apiKeyMasked}，留空则不修改`}
+              placeholder={
+                vision.sources.apiKey === "none"
+                  ? "sk-…"
+                  : vision.sources.apiKey === "fallback"
+                    ? `复用上方 ${vision.apiKeyMasked}`
+                    : `当前 ${vision.apiKeyMasked}，留空则不修改`
+              }
               autoComplete="off"
               className="h-[40px] w-full rounded-full border border-hairline bg-surface px-5 text-[14px] outline-none focus:border-action-focus"
             />
           </div>
-          <div className="flex items-center gap-3 pt-1">
+          {/* 与文本模型的语义差异：这里留空是"回落文本模型"，不是"不修改" */}
+          <p className="text-[12px] text-ink-48">
+            只填模型名即可启用；接入点与 API Key 留空会自动复用上方文本模型的配置
+          </p>
+          <div className="flex flex-wrap items-center gap-3 pt-1">
             <button
               onClick={saveVision}
               disabled={visionSaving}
@@ -521,12 +564,26 @@ export function SettingsPanel({
             >
               {visionSaving ? "保存中…" : "保存"}
             </button>
-            {visionResult && (
-              <p className={`text-[12px] ${visionResult.startsWith("✕") ? "text-danger" : "text-ink-80"}`}>
-                {visionResult}
-              </p>
-            )}
+            <button
+              onClick={() => testLlm("vision")}
+              disabled={visionTesting}
+              className="rounded-full border border-action px-4 py-1.5 text-[14px] text-action transition-transform active:scale-95 disabled:opacity-40"
+            >
+              {visionTesting ? "测试中…" : "测试连接"}
+            </button>
           </div>
+          {visionResult && (
+            <p className={`text-[12px] ${visionResult.startsWith("✕") ? "text-danger" : "text-ink-80"}`}>
+              {visionResult}
+            </p>
+          )}
+          {visionTestResult && (
+            <p
+              className={`text-[12px] ${visionTestResult.startsWith("✓") ? "text-ink-80" : "text-danger"}`}
+            >
+              {visionTestResult}
+            </p>
+          )}
         </div>
 
         <div className="mt-3 rounded-[18px] bg-surface p-6 text-[14px]">

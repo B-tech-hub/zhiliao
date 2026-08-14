@@ -1,7 +1,7 @@
 // LLM 抽象层：OpenAI 兼容 Chat Completions 格式。
 // 配置读取 DB 优先、环境变量兜底（见 llm-config.ts）；LLM_TIMEOUT_MS 仅走环境变量。
 
-import { getLlmConfig } from "@/lib/llm-config";
+import { getLlmConfig, getVisionConfig } from "@/lib/llm-config";
 
 export class LlmConfigError extends Error {}
 export class LlmRequestError extends Error {
@@ -184,6 +184,49 @@ export async function testConnection(): Promise<{ ok: boolean; message: string }
       { role: "user", content: '输出 {"pong":true}' },
     ]);
     return { ok: true, message: `连接成功（${getLlmConfig().model}）` };
+  } catch (e) {
+    return { ok: false, message: e instanceof Error ? e.message : String(e) };
+  }
+}
+
+// 1×1 像素 PNG，仅用于探测端点是否接受多模态消息，不校验模型答了什么
+const ONE_PIXEL_PNG =
+  "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==";
+
+// 视觉模型连通性测试：走视觉配置发一条带图消息，验证多模态链路可用
+export async function testVisionConnection(): Promise<{ ok: boolean; message: string }> {
+  const cfg = getVisionConfig();
+  if (!cfg.model) {
+    return { ok: false, message: "未配置视觉模型名，AI 读图未启用" };
+  }
+  if (!cfg.baseUrl || !cfg.apiKey) {
+    return { ok: false, message: "缺少接入点或 API Key：请填写，或先配置好上方文本模型以便回落" };
+  }
+  try {
+    let text = "";
+    for await (const delta of chatStream(
+      [
+        {
+          role: "user",
+          content: [
+            { type: "text", text: "用一个词描述这张图片。" },
+            { type: "image_url", image_url: { url: `data:image/png;base64,${ONE_PIXEL_PNG}` } },
+          ],
+        },
+      ],
+      {
+        baseUrl: cfg.baseUrl,
+        apiKey: cfg.apiKey,
+        model: cfg.model,
+        signal: AbortSignal.timeout(30000),
+      },
+    )) {
+      text += delta;
+    }
+    if (!text.trim()) {
+      return { ok: false, message: "视觉模型无响应内容（端点可能未按 OpenAI 多模态格式返回）" };
+    }
+    return { ok: true, message: `连接成功（${cfg.model}）` };
   } catch (e) {
     return { ok: false, message: e instanceof Error ? e.message : String(e) };
   }

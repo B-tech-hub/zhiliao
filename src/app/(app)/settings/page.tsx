@@ -32,6 +32,7 @@ export default function SettingsPage() {
     model: visionConfig.model ?? "",
     baseUrl: visionConfig.baseUrl ?? "",
     apiKeyMasked: maskKey(visionConfig.apiKey),
+    sources: visionConfig.sources,
   };
 
   return (
