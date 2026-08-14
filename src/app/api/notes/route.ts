@@ -2,10 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { and, desc, eq, isNull, lt } from "drizzle-orm";
 import { z } from "zod";
 import { getDb } from "@/db";
-import { INBOX_TOPIC_ID, notes, topics } from "@/db/schema";
-import { newId } from "@/lib/ids";
-import { enqueueNoteProcess, getTagsForNotes } from "@/lib/notes";
-import { refreshNoteFts } from "@/lib/search";
+import { notes } from "@/db/schema";
+import { createNote, NoteWriteError } from "@/lib/note-write";
+import { getTagsForNotes } from "@/lib/notes";
 
 // 列表：?topicId=&cursor=&limit=，按 updated_at 倒序，cursor 为上一页最后一条的 updated_at
 export async function GET(req: NextRequest) {
@@ -47,34 +46,14 @@ export async function POST(req: NextRequest) {
   if (!parsed.success) {
     return NextResponse.json({ error: "内容不能为空" }, { status: 400 });
   }
-  const db = getDb();
-  const now = Date.now();
-  const id = newId();
-
-  // 指定了主题则视为用户手动归类（锁定主题），否则进未分类等 AI 处理
-  let topicId = INBOX_TOPIC_ID;
-  let topicLocked = 0;
-  if (parsed.data.topicId) {
-    const topic = db.select().from(topics).where(eq(topics.id, parsed.data.topicId)).get();
-    if (!topic) return NextResponse.json({ error: "主题不存在" }, { status: 400 });
-    topicId = topic.id;
-    if (topic.id !== INBOX_TOPIC_ID) topicLocked = 1;
+  try {
+    // 写入路径统一走 note-write，与 AI 助手工具共用（FTS 同步 / 主题锁 / AI 入队）
+    const { id } = createNote(getDb(), parsed.data);
+    return NextResponse.json({ id }, { status: 201 });
+  } catch (e) {
+    if (e instanceof NoteWriteError) {
+      return NextResponse.json({ error: e.message }, { status: 400 });
+    }
+    throw e;
   }
-
-  db.insert(notes)
-    .values({
-      id,
-      topicId,
-      title: "",
-      content: parsed.data.content,
-      aiStatus: "pending",
-      topicLocked,
-      createdAt: now,
-      updatedAt: now,
-    })
-    .run();
-  refreshNoteFts(db, id);
-  enqueueNoteProcess(db, id);
-
-  return NextResponse.json({ id }, { status: 201 });
 }
