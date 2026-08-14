@@ -29,7 +29,10 @@ export async function GET() {
 
   zip.outputStream.on("error", (e) => console.error("[export] 打包中断:", e));
 
-  return new Response(Readable.toWeb(zip.outputStream) as unknown as ReadableStream<Uint8Array>, {
+  // @types/yazl 把 outputStream 声明为 NodeJS.ReadableStream 接口，
+  // 而 toWeb 需要具体的 Readable 类；运行时实际是 PassThrough，断言安全
+  const nodeStream = zip.outputStream as Readable;
+  return new Response(Readable.toWeb(nodeStream) as unknown as ReadableStream<Uint8Array>, {
     headers: {
       "Content-Type": "application/zip",
       "Content-Disposition": `attachment; filename="${exportZipName()}"`,
