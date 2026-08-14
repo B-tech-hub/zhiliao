@@ -129,4 +129,12 @@ ALTER TABLE notes ADD COLUMN deleted_at INTEGER;
 CREATE INDEX IF NOT EXISTS idx_notes_deleted_at ON notes(deleted_at) WHERE deleted_at IS NOT NULL;
 `,
   },
+  {
+    // AI 助手工具调用：messages 增加工具调用载荷。
+    // conversations.scope_type 新增 'global' 取值属值层面变化，无需 DDL。
+    id: "0006_assistant_tools",
+    sql: `
+ALTER TABLE messages ADD COLUMN tool_payload TEXT;
+`,
+  },
 ];

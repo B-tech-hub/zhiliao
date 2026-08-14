@@ -115,12 +115,13 @@ export const settings = sqliteTable("settings", {
   updatedAt: integer("updated_at").notNull(),
 });
 
-// AI 对话会话：围绕某篇笔记或某个主题（scope_type + scope_id，不加硬外键以兼容两态）
+// AI 助手会话。scope 是「会话创建时的上下文快照」而非归属维度：
+// 'global' 表示未附带上下文（不加硬外键以兼容多态 scope_id）
 export const conversations = sqliteTable(
   "conversations",
   {
     id: text("id").primaryKey(),
-    // 'note' | 'topic'
+    // 'note' | 'topic' | 'global'
     scopeType: text("scope_type").notNull(),
     scopeId: text("scope_id").notNull(),
     title: text("title").notNull().default(""),
@@ -137,9 +138,12 @@ export const messages = sqliteTable(
     conversationId: text("conversation_id")
       .notNull()
       .references(() => conversations.id, { onDelete: "cascade" }),
-    // 'user' | 'assistant'
+    // 'user' | 'assistant' | 'tool'
     role: text("role").notNull(),
     content: text("content").notNull(),
+    // 工具调用载荷（JSON）：工具名、参数、结果与撤销所需的 before 快照。
+    // 仅 role='tool' 的行有值，重开会话时据此重建操作卡片
+    toolPayload: text("tool_payload"),
     createdAt: integer("created_at").notNull(),
   },
   (t) => [index("idx_messages_conv").on(t.conversationId, t.createdAt)],
