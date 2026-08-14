@@ -1,7 +1,7 @@
 // LLM 配置合并层：settings 表优先，环境变量兜底。
 // worker 与 API 路由同进程共享同一 SQLite 连接，每次现读即天然保证"保存后立即生效"，无需缓存。
 
-import { inArray } from "drizzle-orm";
+import { eq, inArray } from "drizzle-orm";
 import { getDb } from "@/db";
 import { settings } from "@/db/schema";
 
@@ -118,4 +118,24 @@ export function getVisionConfig(): VisionConfig {
 export function isVisionConfigured(): boolean {
   const c = getVisionConfig();
   return Boolean(c.baseUrl && c.apiKey && c.model);
+}
+
+// 当前模型是否支持工具调用：由「测试连接」探测后写入，助手据此决定是否降级为纯问答
+export const TOOL_SUPPORT_KEY = "llm_supports_tools";
+
+export function saveToolSupport(supported: boolean): void {
+  const db = getDb();
+  const now = Date.now();
+  const value = supported ? "1" : "0";
+  db.insert(settings)
+    .values({ key: TOOL_SUPPORT_KEY, value, updatedAt: now })
+    .onConflictDoUpdate({ target: settings.key, set: { value, updatedAt: now } })
+    .run();
+}
+
+// null = 从未探测过（与"探测过且不支持"区分：前者应提示用户去测一次）
+export function getToolSupport(): boolean | null {
+  const db = getDb();
+  const row = db.select().from(settings).where(eq(settings.key, TOOL_SUPPORT_KEY)).get();
+  return row ? row.value === "1" : null;
 }

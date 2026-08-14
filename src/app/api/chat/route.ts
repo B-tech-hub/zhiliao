@@ -161,9 +161,11 @@ export async function POST(req: NextRequest) {
       const send = (obj: unknown) => controller.enqueue(encoder.encode(`data: ${JSON.stringify(obj)}\n\n`));
       let assistantText = "";
       try {
-        for await (const delta of chatStream(chatMessages, llmOpts)) {
-          assistantText += delta;
-          send({ delta });
+        // 批次 A 只消费文本增量；工具调用的执行循环在批次 C 接入
+        for await (const chunk of chatStream(chatMessages, llmOpts)) {
+          if (chunk.type !== "text") continue;
+          assistantText += chunk.text;
+          send({ delta: chunk.text });
         }
         send({ done: true, conversationId: convId });
       } catch (e) {

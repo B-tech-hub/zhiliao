@@ -28,11 +28,115 @@ export interface MultiModalChatMessage {
   content: string | ChatContentPart[];
 }
 
-// 流式对话：SSE 逐 delta 产出文本。可传入独立端点配置（如视觉模型），缺省用文本模型配置。
+// 工具定义（OpenAI function calling 格式）
+export interface ToolDef {
+  type: "function";
+  function: {
+    name: string;
+    description: string;
+    parameters: Record<string, unknown>;
+  };
+}
+
+export interface ToolCallPart {
+  id: string;
+  name: string;
+  // 原始 JSON 字符串，由调用方负责解析与校验
+  args: string;
+}
+
+// 流式产出：文本增量逐个到达，工具调用累积完整后在流末尾一次性给出
+export type StreamChunk =
+  | { type: "text"; text: string }
+  | { type: "tool_call"; call: ToolCallPart };
+
+interface DeltaToolCall {
+  index?: number;
+  id?: string;
+  function?: { name?: string; arguments?: string };
+}
+
+interface StreamDelta {
+  content?: string;
+  tool_calls?: DeltaToolCall[];
+}
+
+/* SSE 解析：与网络层解耦，便于直接喂字符串做单测。
+   工具调用在流中是分片到达的——同一次调用的 arguments 会被切成多个 chunk，
+   且多个并发调用靠 index 区分，必须累积到流末尾才完整。 */
+export async function* parseSseStream(
+  source: AsyncIterable<string>,
+): AsyncGenerator<StreamChunk> {
+  const pending = new Map<number, ToolCallPart>();
+  let buffer = "";
+
+  outer: for await (const piece of source) {
+    buffer += piece;
+    const lines = buffer.split("\n");
+    buffer = lines.pop() ?? "";
+    for (const line of lines) {
+      const trimmed = line.trim();
+      if (!trimmed.startsWith("data:")) continue;
+      const payload = trimmed.slice(5).trim();
+      if (payload === "[DONE]") break outer;
+
+      let delta: StreamDelta | undefined;
+      try {
+        delta = (JSON.parse(payload) as { choices?: { delta?: StreamDelta }[] })?.choices?.[0]
+          ?.delta;
+      } catch {
+        continue; // 忽略无法解析的心跳/注释行
+      }
+
+      if (typeof delta?.content === "string" && delta.content) {
+        yield { type: "text", text: delta.content };
+      }
+      if (Array.isArray(delta?.tool_calls)) {
+        for (const tc of delta.tool_calls) {
+          // index 缺省视为 0：部分供应商单工具调用时不带 index
+          const idx = typeof tc.index === "number" ? tc.index : 0;
+          const cur = pending.get(idx) ?? { id: "", name: "", args: "" };
+          if (tc.id) cur.id = tc.id;
+          if (tc.function?.name) cur.name = tc.function.name;
+          if (typeof tc.function?.arguments === "string") cur.args += tc.function.arguments;
+          pending.set(idx, cur);
+        }
+      }
+    }
+  }
+
+  // 按 index 升序给出，保证工具执行顺序与模型意图一致；没拿到名字的丢弃
+  for (const [, call] of [...pending.entries()].sort((a, b) => a[0] - b[0])) {
+    if (call.name) yield { type: "tool_call", call };
+  }
+}
+
+// 字节流转文本片段流
+async function* decodeStream(body: ReadableStream<Uint8Array>): AsyncGenerator<string> {
+  const reader = body.getReader();
+  const decoder = new TextDecoder();
+  try {
+    for (;;) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      yield decoder.decode(value, { stream: true });
+    }
+  } finally {
+    reader.releaseLock();
+  }
+}
+
+// 流式对话：产出文本增量与工具调用。可传入独立端点配置（如视觉模型），缺省用文本模型配置。
 export async function* chatStream(
   msgs: MultiModalChatMessage[],
-  opts?: { baseUrl?: string | null; apiKey?: string | null; model?: string | null; signal?: AbortSignal },
-): AsyncGenerator<string> {
+  opts?: {
+    baseUrl?: string | null;
+    apiKey?: string | null;
+    model?: string | null;
+    signal?: AbortSignal;
+    tools?: ToolDef[];
+  },
+): AsyncGenerator<StreamChunk> {
   const fallback = getLlmConfig();
   const baseUrl = opts?.baseUrl ?? fallback.baseUrl;
   const apiKey = opts?.apiKey ?? fallback.apiKey;
@@ -49,7 +153,14 @@ export async function* chatStream(
       "Content-Type": "application/json",
       Authorization: `Bearer ${apiKey}`,
     },
-    body: JSON.stringify({ model, messages: msgs, temperature: 0.5, stream: true }),
+    body: JSON.stringify({
+      model,
+      messages: msgs,
+      temperature: 0.5,
+      stream: true,
+      // 无工具时不发 tools 字段：避免不支持的供应商直接 400
+      ...(opts?.tools?.length ? { tools: opts.tools } : {}),
+    }),
     signal: AbortSignal.any(signals),
   }).catch((e) => {
     throw new LlmRequestError(`网络错误: ${e?.message ?? e}`, true);
@@ -61,37 +172,49 @@ export async function* chatStream(
     throw new LlmRequestError(`LLM 请求失败 HTTP ${res.status}: ${text.slice(0, 300)}`, retryable);
   }
 
-  const reader = res.body.getReader();
-  const decoder = new TextDecoder();
-  let buffer = "";
-  try {
-    for (;;) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      buffer += decoder.decode(value, { stream: true });
-      const lines = buffer.split("\n");
-      buffer = lines.pop() ?? "";
-      for (const line of lines) {
-        const trimmed = line.trim();
-        if (!trimmed.startsWith("data:")) continue;
-        const payload = trimmed.slice(5).trim();
-        if (payload === "[DONE]") return;
-        try {
-          const delta = JSON.parse(payload)?.choices?.[0]?.delta?.content;
-          if (typeof delta === "string" && delta) yield delta;
-        } catch {
-          // 忽略无法解析的心跳/注释行
-        }
-      }
-    }
-  } finally {
-    reader.releaseLock();
-  }
+  yield* parseSseStream(decodeStream(res.body));
 }
 
 export function isLlmConfigured(): boolean {
   const c = getLlmConfig();
   return Boolean(c.baseUrl && c.apiKey && c.model);
+}
+
+// 探测用工具：无参数，模型只要"愿意调"就说明 tools 参数被真正处理了
+const PROBE_TOOL: ToolDef = {
+  type: "function",
+  function: {
+    name: "probe_ping",
+    description: "探测用占位工具。收到指令时必须调用它，不要用文字回答。",
+    parameters: { type: "object", properties: {}, required: [] },
+  },
+};
+
+/* 工具调用能力探测。三种失败模式都判为不支持，其中最危险的是"静默忽略"——
+   供应商不报错、直接丢掉 tools 参数返回文本，助手会声称"已帮你创建笔记"
+   但实际什么都没发生。所以判据是"有没有真的收到 tool_call"，而非"有没有报错"。 */
+export async function probeToolSupport(): Promise<{ supported: boolean; message: string }> {
+  try {
+    let sawToolCall = false;
+    let text = "";
+    for await (const chunk of chatStream(
+      [{ role: "user", content: "请调用 probe_ping 工具，不要用文字回答。" }],
+      { tools: [PROBE_TOOL], signal: AbortSignal.timeout(60000) },
+    )) {
+      if (chunk.type === "tool_call") sawToolCall = true;
+      else text += chunk.text;
+    }
+    if (sawToolCall) return { supported: true, message: "支持工具调用" };
+    const tail = text.trim() ? `，只回了文字「${text.trim().slice(0, 20)}」` : "";
+    return { supported: false, message: `不支持工具调用（模型忽略了 tools 参数${tail}）` };
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e);
+    // 供应商明确拒绝 tools 参数（通常是 400）
+    if (/tool|function/i.test(msg)) {
+      return { supported: false, message: `不支持工具调用：${msg.slice(0, 120)}` };
+    }
+    return { supported: false, message: `工具调用探测失败：${msg.slice(0, 120)}` };
+  }
 }
 
 // 是否已探测到当前供应商不支持 response_format（进程内缓存）
@@ -204,7 +327,7 @@ export async function testVisionConnection(): Promise<{ ok: boolean; message: st
   }
   try {
     let text = "";
-    for await (const delta of chatStream(
+    for await (const chunk of chatStream(
       [
         {
           role: "user",
@@ -221,7 +344,7 @@ export async function testVisionConnection(): Promise<{ ok: boolean; message: st
         signal: AbortSignal.timeout(30000),
       },
     )) {
-      text += delta;
+      if (chunk.type === "text") text += chunk.text;
     }
     if (!text.trim()) {
       return { ok: false, message: "视觉模型无响应内容（端点可能未按 OpenAI 多模态格式返回）" };

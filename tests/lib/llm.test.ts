@@ -118,3 +118,107 @@ describe("llm", () => {
     }
   });
 });
+
+/* 工具调用在流中是分片到达的：同一次调用的 arguments 被切成多个 chunk，
+   多个并发调用靠 index 区分。这里直接喂字符串，绕开网络层。 */
+describe("parseSseStream", () => {
+  async function* feed(...pieces: string[]) {
+    for (const p of pieces) yield p;
+  }
+
+  async function collect(...pieces: string[]) {
+    const { parseSseStream } = await freshLlm();
+    const out = [];
+    for await (const chunk of parseSseStream(feed(...pieces))) out.push(chunk);
+    return out;
+  }
+
+  const sse = (obj: unknown) => `data: ${JSON.stringify(obj)}\n\n`;
+  const textDelta = (t: string) => sse({ choices: [{ delta: { content: t } }] });
+  const toolDelta = (...calls: unknown[]) => sse({ choices: [{ delta: { tool_calls: calls } }] });
+  const DONE = "data: [DONE]\n\n";
+
+  it("文本增量按序产出", async () => {
+    expect(await collect(textDelta("你"), textDelta("好"), DONE)).toEqual([
+      { type: "text", text: "你" },
+      { type: "text", text: "好" },
+    ]);
+  });
+
+  it("单个工具调用的 arguments 分片被拼回完整 JSON", async () => {
+    const out = await collect(
+      toolDelta({ index: 0, id: "call_1", function: { name: "search_notes", arguments: "" } }),
+      toolDelta({ index: 0, function: { arguments: '{"query":' } }),
+      toolDelta({ index: 0, function: { arguments: '"跑步"}' } }),
+      DONE,
+    );
+    expect(out).toEqual([
+      { type: "tool_call", call: { id: "call_1", name: "search_notes", args: '{"query":"跑步"}' } },
+    ]);
+  });
+
+  it("多个并发工具调用按 index 归组，且按 index 升序产出", async () => {
+    const out = await collect(
+      // 故意让 index 1 先到，验证输出顺序由 index 决定而非到达顺序
+      toolDelta({ index: 1, id: "call_b", function: { name: "read_note", arguments: '{"id"' } }),
+      toolDelta({ index: 0, id: "call_a", function: { name: "list_topics", arguments: "{" } }),
+      toolDelta({ index: 1, function: { arguments: ':"n1"}' } }, { index: 0, function: { arguments: "}" } }),
+      DONE,
+    );
+    expect(out).toEqual([
+      { type: "tool_call", call: { id: "call_a", name: "list_topics", args: "{}" } },
+      { type: "tool_call", call: { id: "call_b", name: "read_note", args: '{"id":"n1"}' } },
+    ]);
+  });
+
+  it("文本与工具调用混合时，文本即时产出、工具调用在末尾", async () => {
+    const out = await collect(
+      textDelta("我来查一下"),
+      toolDelta({ index: 0, id: "c1", function: { name: "search_notes", arguments: "{}" } }),
+      textDelta("稍等"),
+      DONE,
+    );
+    expect(out).toEqual([
+      { type: "text", text: "我来查一下" },
+      { type: "text", text: "稍等" },
+      { type: "tool_call", call: { id: "c1", name: "search_notes", args: "{}" } },
+    ]);
+  });
+
+  it("SSE 事件被网络分片从中间切断也能正确解析", async () => {
+    const line = textDelta("hello");
+    const cut = Math.floor(line.length / 2);
+    expect(await collect(line.slice(0, cut), line.slice(cut), DONE)).toEqual([
+      { type: "text", text: "hello" },
+    ]);
+  });
+
+  it("index 缺省视为 0（部分供应商单工具调用不带 index）", async () => {
+    const out = await collect(
+      toolDelta({ id: "c1", function: { name: "create_note", arguments: '{"a":1}' } }),
+      DONE,
+    );
+    expect(out).toEqual([
+      { type: "tool_call", call: { id: "c1", name: "create_note", args: '{"a":1}' } },
+    ]);
+  });
+
+  it("未发 [DONE] 直接断流时，已累积的工具调用仍被产出", async () => {
+    const out = await collect(
+      toolDelta({ index: 0, id: "c1", function: { name: "list_topics", arguments: "{}" } }),
+    );
+    expect(out).toEqual([
+      { type: "tool_call", call: { id: "c1", name: "list_topics", args: "{}" } },
+    ]);
+  });
+
+  it("忽略心跳与非法 JSON 行，不影响后续解析", async () => {
+    const out = await collect(": keep-alive\n\n", "data: {坏JSON\n\n", textDelta("ok"), DONE);
+    expect(out).toEqual([{ type: "text", text: "ok" }]);
+  });
+
+  it("只有 arguments 没有函数名的残缺调用被丢弃", async () => {
+    const out = await collect(toolDelta({ index: 0, function: { arguments: '{"a":1}' } }), DONE);
+    expect(out).toEqual([]);
+  });
+});

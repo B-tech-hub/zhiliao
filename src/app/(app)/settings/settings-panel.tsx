@@ -303,7 +303,9 @@ export function SettingsPanel({
         body: JSON.stringify({ target }),
       });
       const data = await res.json();
-      setResult(data.ok ? `✓ ${data.message}` : `✕ ${data.message}`);
+      // 连得上但不支持工具调用属"能力受限"而非失败，用 ⚠ 与成功区分，避免扫一眼误判为正常
+      const mark = !data.ok ? "✕" : data.supportsTools === false ? "⚠" : "✓";
+      setResult(`${mark} ${data.message}`);
     } catch {
       setResult("✕ 请求失败");
     } finally {
@@ -493,7 +495,7 @@ export function SettingsPanel({
             </p>
           )}
           {testResult && (
-            <p className={`text-[12px] ${testResult.startsWith("✓") ? "text-ink-80" : "text-danger"}`}>
+            <p className={`text-[12px] ${testResult.startsWith("✕") ? "text-danger" : "text-ink-80"}`}>
               {testResult}
             </p>
           )}
@@ -579,7 +581,7 @@ export function SettingsPanel({
           )}
           {visionTestResult && (
             <p
-              className={`text-[12px] ${visionTestResult.startsWith("✓") ? "text-ink-80" : "text-danger"}`}
+              className={`text-[12px] ${visionTestResult.startsWith("✕") ? "text-danger" : "text-ink-80"}`}
             >
               {visionTestResult}
             </p>
