@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { eq, inArray } from "drizzle-orm";
+import { and, eq, inArray, isNull } from "drizzle-orm";
 import { z } from "zod";
 import { getDb } from "@/db";
 import { notes, topicSuggestions, topics } from "@/db/schema";
@@ -56,7 +56,7 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string
       }
       tx.update(notes)
         .set({ topicId: topicId!, topicLocked: 1, updatedAt: now })
-        .where(inArray(notes.id, targetNoteIds))
+        .where(and(inArray(notes.id, targetNoteIds), isNull(notes.deletedAt)))
         .run();
       // 该建议整体标记已处理（其余建议项一并失效，避免笔记归属冲突）
       tx.update(topicSuggestions).set({ status: "accepted" }).where(eq(topicSuggestions.id, id)).run();

@@ -1,9 +1,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { eq } from "drizzle-orm";
-import { getDb } from "@/db";
+import { getDb, getSqlite } from "@/db";
 import { notes } from "@/db/schema";
 import { markNoteFailed, processNote } from "@/lib/ai/process-note";
 import { getTagsForNotes } from "@/lib/notes";
+import { trashNotes } from "@/lib/trash";
 import { insertNote, insertTopic, wipeData } from "../helpers/db";
 
 // 构造 OpenAI 兼容响应：choices[0].message.content 为 JSON 字符串
@@ -112,5 +113,45 @@ describe("processNote", () => {
     insertNote("n1", "正文", { title: "原标题" });
     markNoteFailed(getDb(), "n1");
     expect(getNote("n1").title).toBe("原标题");
+  });
+
+  it("回收站笔记直接跳过，不调用 LLM 也不改状态", async () => {
+    insertNote("n1", "内容", { deletedAt: Date.now() });
+    const fetchMock = vi.fn();
+    vi.stubGlobal("fetch", fetchMock);
+    await processNote(getDb(), "n1");
+    expect(fetchMock).not.toHaveBeenCalled();
+    expect(getNote("n1").aiStatus).toBe("pending");
+  });
+
+  it("LLM 在途期间笔记被移入回收站时不回写任何字段，FTS 不复活", async () => {
+    insertTopic("t1", "羽毛球");
+    insertNote("n1", "今晚羽毛球多球训练");
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => {
+        // 模拟 LLM 调用期间用户把笔记移入回收站
+        trashNotes(getDb(), ["n1"]);
+        return llmResponse({ topicId: "t1", confidence: 0.9, title: "AI标题", tags: ["AI"], summary: null });
+      }),
+    );
+    await processNote(getDb(), "n1");
+    const note = getNote("n1");
+    expect(note.deletedAt).toBeTruthy();
+    expect(note.title).toBe("");
+    expect(note.topicId).toBe("inbox");
+    expect(getTagsForNotes(getDb(), ["n1"]).get("n1")).toBeUndefined();
+    const fts = getSqlite()
+      .prepare("SELECT COUNT(*) AS c FROM notes_fts WHERE note_id = ?")
+      .get("n1") as { c: number };
+    expect(fts.c).toBe(0);
+  });
+
+  it("markNoteFailed 对回收站笔记不回写", () => {
+    insertNote("n1", "第一行内容", { deletedAt: Date.now() });
+    markNoteFailed(getDb(), "n1");
+    const note = getNote("n1");
+    expect(note.aiStatus).toBe("pending");
+    expect(note.title).toBe("");
   });
 });

@@ -2,6 +2,7 @@ import { getDb } from "@/db";
 import { getTopicsWithCounts } from "@/lib/topics";
 import { getQueueStats } from "@/lib/ai/worker";
 import { getLastBackupAt } from "@/lib/backup";
+import { getTrashCount } from "@/lib/trash";
 import { getLlmConfig, getVisionConfig } from "@/lib/llm-config";
 import { SettingsPanel } from "./settings-panel";
 
@@ -40,6 +41,7 @@ export default function SettingsPage() {
       vision={vision}
       queue={getQueueStats(db)}
       lastBackupAt={getLastBackupAt()}
+      trashCount={getTrashCount(db)}
     />
   );
 }

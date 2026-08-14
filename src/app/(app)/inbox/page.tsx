@@ -1,4 +1,4 @@
-import { asc, desc, eq } from "drizzle-orm";
+import { and, asc, desc, eq, isNull } from "drizzle-orm";
 import { getDb } from "@/db";
 import { INBOX_TOPIC_ID, notes, topicSuggestions, topics } from "@/db/schema";
 import { getTagsForNotes } from "@/lib/notes";
@@ -12,7 +12,7 @@ export default function InboxPage() {
   const rows = db
     .select()
     .from(notes)
-    .where(eq(notes.topicId, INBOX_TOPIC_ID))
+    .where(and(eq(notes.topicId, INBOX_TOPIC_ID), isNull(notes.deletedAt)))
     .orderBy(desc(notes.updatedAt))
     .limit(200)
     .all();

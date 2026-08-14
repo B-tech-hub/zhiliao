@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { asc, eq } from "drizzle-orm";
+import { and, asc, eq, isNull } from "drizzle-orm";
 import { getDb } from "@/db";
 import { notes, topics } from "@/db/schema";
 import { getTagsForNotes } from "@/lib/notes";
@@ -12,7 +12,12 @@ export const dynamic = "force-dynamic";
 export default async function NotePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const db = getDb();
-  const note = db.select().from(notes).where(eq(notes.id, id)).get();
+  // 回收站中的笔记不可访问详情页，恢复后自动恢复访问
+  const note = db
+    .select()
+    .from(notes)
+    .where(and(eq(notes.id, id), isNull(notes.deletedAt)))
+    .get();
   if (!note) notFound();
 
   const tagMap = getTagsForNotes(db, [id]);

@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { NextRequest, NextResponse } from "next/server";
-import { desc, eq } from "drizzle-orm";
+import { and, desc, eq, isNull } from "drizzle-orm";
 import { z } from "zod";
 import { getDb } from "@/db";
 import { conversations, messages, notes, topics } from "@/db/schema";
@@ -29,7 +29,11 @@ const bodySchema = z.object({
 function buildContext(scopeType: "note" | "topic", scopeId: string): { context: string; truncated: boolean; imageFiles: string[] } {
   const db = getDb();
   if (scopeType === "note") {
-    const note = db.select().from(notes).where(eq(notes.id, scopeId)).get();
+    const note = db
+      .select()
+      .from(notes)
+      .where(and(eq(notes.id, scopeId), isNull(notes.deletedAt)))
+      .get();
     if (!note) return { context: "", truncated: false, imageFiles: [] };
     const full = `# ${note.title || "（无标题笔记）"}\n\n${note.content}`;
     const truncated = full.length > MAX_CONTEXT_CHARS;
@@ -42,7 +46,7 @@ function buildContext(scopeType: "note" | "topic", scopeId: string): { context: 
   const rows = db
     .select({ title: notes.title, summary: notes.summary, content: notes.content })
     .from(notes)
-    .where(eq(notes.topicId, scopeId))
+    .where(and(eq(notes.topicId, scopeId), isNull(notes.deletedAt)))
     .orderBy(desc(notes.updatedAt))
     .all();
   let context = `主题：${topic.name}\n共 ${rows.length} 条笔记：\n\n`;

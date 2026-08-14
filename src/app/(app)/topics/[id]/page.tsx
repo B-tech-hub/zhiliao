@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { desc, eq } from "drizzle-orm";
+import { and, desc, eq, isNull } from "drizzle-orm";
 import { getDb } from "@/db";
 import { notes, topics } from "@/db/schema";
 import { getTagsForNotes } from "@/lib/notes";
@@ -20,7 +20,7 @@ export default async function TopicPage({ params }: { params: Promise<{ id: stri
   const rows = db
     .select()
     .from(notes)
-    .where(eq(notes.topicId, id))
+    .where(and(eq(notes.topicId, id), isNull(notes.deletedAt)))
     .orderBy(desc(notes.updatedAt))
     .limit(200)
     .all();

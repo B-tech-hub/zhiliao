@@ -1,4 +1,4 @@
-import { and, desc, eq, inArray, sql } from "drizzle-orm";
+import { and, desc, eq, inArray, isNull, sql } from "drizzle-orm";
 import type { DB } from "@/db";
 import { INBOX_TOPIC_ID, aiJobs, notes, topicSuggestions, topics } from "@/db/schema";
 import { chatJson } from "@/lib/llm";
@@ -31,7 +31,7 @@ export function maybeEnqueueSuggestTopics(db: DB) {
     db
       .select({ c: sql<number>`COUNT(*)` })
       .from(notes)
-      .where(eq(notes.topicId, INBOX_TOPIC_ID))
+      .where(and(eq(notes.topicId, INBOX_TOPIC_ID), isNull(notes.deletedAt)))
       .get()?.c ?? 0;
   if (inboxCount < MIN_INBOX_NOTES) return;
 
@@ -65,7 +65,7 @@ export async function runSuggestTopics(db: DB): Promise<void> {
   const inboxNotes = db
     .select({ id: notes.id, title: notes.title, content: notes.content })
     .from(notes)
-    .where(eq(notes.topicId, INBOX_TOPIC_ID))
+    .where(and(eq(notes.topicId, INBOX_TOPIC_ID), isNull(notes.deletedAt)))
     .orderBy(desc(notes.updatedAt))
     .limit(50)
     .all();

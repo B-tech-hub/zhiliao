@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
-import { getSqlite } from "@/db";
+import { getDb, getSqlite } from "@/db";
+import { sweepTrash } from "@/lib/trash";
 
 const g = globalThis as unknown as {
   __kbBackupStarted?: boolean;
@@ -10,12 +11,25 @@ const g = globalThis as unknown as {
 const KEEP_COUNT = 7;
 const DAY_MS = 24 * 3600 * 1000;
 
-// 每日备份：SQLite 快照 + uploads 图片目录快照，各保留最近 7 份
+// 每日备份：SQLite 快照 + uploads 图片目录快照，各保留最近 7 份。
+// 回收站清扫只挂在备份成功之后：被清数据必然存在于刚完成的当天备份里，
+// 备份失败当天不清扫（无快照不销毁）；手动 POST /api/backup 不触发清扫
 export function startDailyBackup() {
   if (g.__kbBackupStarted) return;
   g.__kbBackupStarted = true;
   const run = () => {
-    void doBackup().catch((e) => console.error("[backup] 备份失败:", e));
+    void doBackup()
+      .then(() => {
+        try {
+          const r = sweepTrash(getDb());
+          if (r.purged || r.images || r.conversations) {
+            console.log(`[trash] 清扫完成：笔记 ${r.purged}、孤儿图片 ${r.images}、孤儿会话 ${r.conversations}`);
+          }
+        } catch (e) {
+          console.error("[trash] 清扫失败:", e);
+        }
+      })
+      .catch((e) => console.error("[backup] 备份失败:", e));
   };
   // 启动 5 分钟后先做一次，之后每天一次
   setTimeout(run, 5 * 60 * 1000);

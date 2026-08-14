@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { eq } from "drizzle-orm";
-import { getDb } from "@/db";
+import { getDb, getSqlite } from "@/db";
 import { notes } from "@/db/schema";
-import { makeExcerpt, refreshNoteFts, searchNoteIds, segment } from "@/lib/search";
+import { makeExcerpt, rebuildFtsIfNeeded, refreshNoteFts, searchNoteIds, segment } from "@/lib/search";
 import { insertNote, wipeData } from "../helpers/db";
 
 describe("search", () => {
@@ -47,6 +47,26 @@ describe("search", () => {
     expect(() => refreshNoteFts(getDb(), "n1")).not.toThrow();
     const { ids } = searchNoteIds("临时内容");
     expect(ids).toEqual([]);
+  });
+
+  it("refreshNoteFts 对回收站笔记只删行不重建", () => {
+    insertNote("n1", "量子计算入门", { deletedAt: Date.now() });
+    refreshNoteFts(getDb(), "n1");
+    expect(searchNoteIds("量子").ids).toEqual([]);
+  });
+
+  it("rebuildFtsIfNeeded 以未删除笔记数为基准，重建后不含回收站笔记", () => {
+    insertNote("n1", "深度学习笔记");
+    insertNote("n2", "量子计算入门", { deletedAt: Date.now() });
+    refreshNoteFts(getDb(), "n1");
+    // 存活 1 条 == FTS 1 行：判据成立不应重建；若误用全量计数会触发重建并把回收站笔记也建进去
+    rebuildFtsIfNeeded(getDb());
+    expect(searchNoteIds("量子").ids).toEqual([]);
+    // 人为清空制造失步：重建后只含存活笔记
+    getSqlite().prepare("DELETE FROM notes_fts").run();
+    rebuildFtsIfNeeded(getDb());
+    expect(searchNoteIds("深度学习").ids).toEqual(["n1"]);
+    expect(searchNoteIds("量子").ids).toEqual([]);
   });
 
   it("makeExcerpt 围绕命中词截取上下文", () => {

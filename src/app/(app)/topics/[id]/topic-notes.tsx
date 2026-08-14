@@ -61,8 +61,10 @@ export function TopicNotes({ notes }: { notes: TopicNote[] }) {
       ))}
       <ConfirmDialog
         open={pending !== null}
-        title={pending ? `删除「${noteDisplayTitle(pending)}」？` : ""}
-        message="删除后不可恢复"
+        title={pending ? `把「${noteDisplayTitle(pending)}」移入回收站？` : ""}
+        message="30 天内可在 设置 → 回收站 恢复"
+        confirmText="移入"
+        danger={false}
         busy={busy}
         onConfirm={confirmDelete}
         onCancel={() => setPending(null)}

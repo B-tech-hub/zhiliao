@@ -14,7 +14,7 @@ export async function GET() {
       name: topics.name,
       isSystem: topics.isSystem,
       sortOrder: topics.sortOrder,
-      noteCount: sql<number>`(SELECT COUNT(*) FROM notes WHERE notes.topic_id = topics.id)`,
+      noteCount: sql<number>`(SELECT COUNT(*) FROM notes WHERE notes.topic_id = topics.id AND notes.deleted_at IS NULL)`,
     })
     .from(topics)
     .orderBy(asc(topics.sortOrder), asc(topics.createdAt))

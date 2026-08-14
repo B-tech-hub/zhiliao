@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { inArray } from "drizzle-orm";
+import { and, inArray, isNull } from "drizzle-orm";
 import { getDb } from "@/db";
 import { notes, topics } from "@/db/schema";
 import { getTagsForNotes } from "@/lib/notes";
@@ -15,7 +15,12 @@ export async function GET(req: NextRequest) {
   const { ids, terms } = searchNoteIds(q, 50);
   if (ids.length === 0) return NextResponse.json({ results: [], terms });
 
-  const rows = db.select().from(notes).where(inArray(notes.id, ids)).all();
+  // 回表时排除回收站：FTS 命中理论上不含已删笔记，此处是第二道防线
+  const rows = db
+    .select()
+    .from(notes)
+    .where(and(inArray(notes.id, ids), isNull(notes.deletedAt)))
+    .all();
   const topicRows = db.select({ id: topics.id, name: topics.name }).from(topics).all();
   const topicName = new Map(topicRows.map((t) => [t.id, t.name]));
   const tagMap = getTagsForNotes(db, ids);

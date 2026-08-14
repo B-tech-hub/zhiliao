@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
@@ -84,8 +85,8 @@ function AppearanceSection() {
   );
 }
 
-/* 数据区块：数据信任功能的聚合入口——手动备份（导出与回收站入口后续接入此区块） */
-function DataSection({ lastBackupAt }: { lastBackupAt: number | null }) {
+/* 数据区块：数据信任功能的聚合入口——手动备份、导出、回收站 */
+function DataSection({ lastBackupAt, trashCount }: { lastBackupAt: number | null; trashCount: number }) {
   const [backedUpAt, setBackedUpAt] = useState(lastBackupAt);
   const [backingUp, setBackingUp] = useState(false);
   const [backupResult, setBackupResult] = useState("");
@@ -146,6 +147,17 @@ function DataSection({ lastBackupAt }: { lastBackupAt: number | null }) {
             Markdown + 图片打包为 zip，可导入 Obsidian 等工具
           </span>
         </div>
+        <div className="mt-4 border-t border-divider pt-4">
+          <Link
+            href="/trash"
+            prefetch={true}
+            className="flex items-center justify-between text-[14px] transition-opacity active:opacity-70"
+          >
+            <span>回收站</span>
+            <span className="text-ink-48">{trashCount > 0 ? `${trashCount} 条 ›` : "›"}</span>
+          </Link>
+          <p className="mt-1 text-[12px] text-ink-48">删除的笔记保留 30 天，期间可随时恢复</p>
+        </div>
       </div>
     </section>
   );
@@ -157,12 +169,14 @@ export function SettingsPanel({
   vision,
   queue,
   lastBackupAt,
+  trashCount,
 }: {
   topics: TopicRow[];
   llm: LlmInfo;
   vision: VisionInfo;
   queue: QueueInfo;
   lastBackupAt: number | null;
+  trashCount: number;
 }) {
   const router = useRouter();
   const [newName, setNewName] = useState("");
@@ -532,7 +546,7 @@ export function SettingsPanel({
         </div>
       </section>
 
-      <DataSection lastBackupAt={lastBackupAt} />
+      <DataSection lastBackupAt={lastBackupAt} trashCount={trashCount} />
 
       <section>
         <h2 className="mb-3 text-[21px] font-semibold tracking-[-0.374px]">账号</h2>

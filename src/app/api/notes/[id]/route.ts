@@ -1,15 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
-import { eq } from "drizzle-orm";
+import { and, eq, isNull } from "drizzle-orm";
 import { z } from "zod";
 import { getDb } from "@/db";
-import { aiJobs, notes, topics } from "@/db/schema";
+import { notes, topics } from "@/db/schema";
 import { enqueueNoteProcess, getTagsForNotes, replaceNoteTags } from "@/lib/notes";
-import { refreshNoteFts, removeNoteFts } from "@/lib/search";
+import { refreshNoteFts } from "@/lib/search";
+import { trashNotes } from "@/lib/trash";
 
 export async function GET(_req: NextRequest, ctx: { params: Promise<{ id: string }> }) {
   const { id } = await ctx.params;
   const db = getDb();
-  const note = db.select().from(notes).where(eq(notes.id, id)).get();
+  const note = db
+    .select()
+    .from(notes)
+    .where(and(eq(notes.id, id), isNull(notes.deletedAt)))
+    .get();
   if (!note) return NextResponse.json({ error: "笔记不存在" }, { status: 404 });
   const tagMap = getTagsForNotes(db, [id]);
   return NextResponse.json({ note: { ...note, tags: tagMap.get(id) ?? [] } });
@@ -26,7 +31,11 @@ const patchSchema = z.object({
 export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: string }> }) {
   const { id } = await ctx.params;
   const db = getDb();
-  const note = db.select().from(notes).where(eq(notes.id, id)).get();
+  const note = db
+    .select()
+    .from(notes)
+    .where(and(eq(notes.id, id), isNull(notes.deletedAt)))
+    .get();
   if (!note) return NextResponse.json({ error: "笔记不存在" }, { status: 404 });
 
   const parsed = patchSchema.safeParse(await req.json().catch(() => null));
@@ -67,15 +76,10 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
   return NextResponse.json({ ok: true });
 }
 
+// 删除 = 移入回收站（30 天后随每日清扫彻底删除），恢复入口在 设置 → 回收站
 export async function DELETE(_req: NextRequest, ctx: { params: Promise<{ id: string }> }) {
   const { id } = await ctx.params;
-  const db = getDb();
-  const note = db.select().from(notes).where(eq(notes.id, id)).get();
-  if (!note) return NextResponse.json({ error: "笔记不存在" }, { status: 404 });
-  db.transaction((tx) => {
-    tx.delete(notes).where(eq(notes.id, id)).run();
-    tx.delete(aiJobs).where(eq(aiJobs.noteId, id)).run();
-    removeNoteFts(id);
-  });
+  const trashed = trashNotes(getDb(), [id]);
+  if (trashed === 0) return NextResponse.json({ error: "笔记不存在" }, { status: 404 });
   return NextResponse.json({ ok: true });
 }

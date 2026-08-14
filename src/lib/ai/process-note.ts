@@ -1,4 +1,4 @@
-import { asc, eq } from "drizzle-orm";
+import { and, asc, eq, isNull } from "drizzle-orm";
 import { z } from "zod";
 import type { DB } from "@/db";
 import { INBOX_TOPIC_ID, notes, tags, topics } from "@/db/schema";
@@ -27,8 +27,12 @@ function confidenceThreshold(): number {
 
 // 一次 LLM 调用完成：选主题 + 起标题 + 打标签 + 摘要
 export async function processNote(db: DB, noteId: string): Promise<void> {
-  const note = db.select().from(notes).where(eq(notes.id, noteId)).get();
-  if (!note) return; // 笔记已被删除，任务作废
+  const note = db
+    .select()
+    .from(notes)
+    .where(and(eq(notes.id, noteId), isNull(notes.deletedAt)))
+    .get();
+  if (!note) return; // 笔记已被删除或在回收站，任务作废
 
   db.update(notes).set({ aiStatus: "processing" }).where(eq(notes.id, noteId)).run();
 
@@ -82,8 +86,13 @@ export async function processNote(db: DB, noteId: string): Promise<void> {
     targetTopic = INBOX_TOPIC_ID;
   }
 
-  // 回写前重读锁字段，用户手动改过的字段跳过
-  const fresh = db.select().from(notes).where(eq(notes.id, noteId)).get();
+  // 回写前重读锁字段，用户手动改过的字段跳过；LLM 调用在途期间
+  // 笔记可能已被移入回收站——此时放弃回写，避免改写用户看不到的内容
+  const fresh = db
+    .select()
+    .from(notes)
+    .where(and(eq(notes.id, noteId), isNull(notes.deletedAt)))
+    .get();
   if (!fresh) return;
 
   db.transaction((tx) => {
@@ -106,7 +115,11 @@ export async function processNote(db: DB, noteId: string): Promise<void> {
 
 // 处理最终失败：留在原地（通常是未分类），标记 failed，标题回退为内容首行
 export function markNoteFailed(db: DB, noteId: string): void {
-  const note = db.select().from(notes).where(eq(notes.id, noteId)).get();
+  const note = db
+    .select()
+    .from(notes)
+    .where(and(eq(notes.id, noteId), isNull(notes.deletedAt)))
+    .get();
   if (!note) return;
   const patch: Partial<typeof notes.$inferInsert> = { aiStatus: "failed" };
   if (!note.title && !note.titleLocked) {

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { and, desc, eq, lt } from "drizzle-orm";
+import { and, desc, eq, isNull, lt } from "drizzle-orm";
 import { z } from "zod";
 import { getDb } from "@/db";
 import { INBOX_TOPIC_ID, notes, topics } from "@/db/schema";
@@ -15,14 +15,14 @@ export async function GET(req: NextRequest) {
   const cursor = Number(sp.get("cursor")) || null;
   const limit = Math.min(Number(sp.get("limit")) || 20, 100);
 
-  const conds = [];
+  const conds = [isNull(notes.deletedAt)];
   if (topicId) conds.push(eq(notes.topicId, topicId));
   if (cursor) conds.push(lt(notes.updatedAt, cursor));
 
   const rows = db
     .select()
     .from(notes)
-    .where(conds.length ? and(...conds) : undefined)
+    .where(and(...conds))
     .orderBy(desc(notes.updatedAt))
     .limit(limit + 1)
     .all();

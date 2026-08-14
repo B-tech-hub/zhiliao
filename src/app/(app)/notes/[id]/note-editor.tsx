@@ -216,8 +216,10 @@ export function NoteEditor({
       </div>
       <ConfirmDialog
         open={confirmingDelete}
-        title="删除这条笔记？"
-        message="删除后不可恢复"
+        title="把这条笔记移入回收站？"
+        message="30 天内可在 设置 → 回收站 恢复"
+        confirmText="移入"
+        danger={false}
         busy={deleting}
         onConfirm={remove}
         onCancel={() => setConfirmingDelete(false)}

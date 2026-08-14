@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { and, eq, isNull } from "drizzle-orm";
 import { Jieba } from "@node-rs/jieba";
 import { dict } from "@node-rs/jieba/dict";
 import { getSqlite, type DB } from "@/db";
@@ -21,10 +21,14 @@ export function segment(text: string): string {
   return getJieba().cutForSearch(text, true).join(" ");
 }
 
-// 重写某条笔记的 FTS 行；笔记不存在则仅删除对应行
+// 重写某条笔记的 FTS 行；笔记不存在或在回收站则仅删除对应行
 export function refreshNoteFts(db: DB, noteId: string): void {
   const sqlite = getSqlite();
-  const note = db.select().from(notes).where(eq(notes.id, noteId)).get();
+  const note = db
+    .select()
+    .from(notes)
+    .where(and(eq(notes.id, noteId), isNull(notes.deletedAt)))
+    .get();
   sqlite.prepare("DELETE FROM notes_fts WHERE note_id = ?").run(noteId);
   if (!note) return;
   const tagNames = getTagsForNotes(db, [noteId]).get(noteId) ?? [];
@@ -37,15 +41,20 @@ export function removeNoteFts(noteId: string): void {
   getSqlite().prepare("DELETE FROM notes_fts WHERE note_id = ?").run(noteId);
 }
 
-// 全量重建（迁移后补建 / 修复失步）：FTS 行数与笔记数不一致时执行
+// 全量重建（迁移后补建 / 修复失步）：FTS 行数与未删除笔记数不一致时执行。
+// 基准必须排除回收站笔记（它们不在 FTS 里），否则恒等式永久破缺、每次启动都重建
 export function rebuildFtsIfNeeded(db: DB): void {
   const sqlite = getSqlite();
   const ftsCount = (sqlite.prepare("SELECT COUNT(*) AS c FROM notes_fts").get() as { c: number }).c;
-  const noteCount = (sqlite.prepare("SELECT COUNT(*) AS c FROM notes").get() as { c: number }).c;
+  const noteCount = (
+    sqlite.prepare("SELECT COUNT(*) AS c FROM notes WHERE deleted_at IS NULL").get() as { c: number }
+  ).c;
   if (ftsCount === noteCount) return;
   console.log(`[fts] 重建索引：notes=${noteCount} fts=${ftsCount}`);
   sqlite.prepare("DELETE FROM notes_fts").run();
-  const ids = (sqlite.prepare("SELECT id FROM notes").all() as { id: string }[]).map((r) => r.id);
+  const ids = (
+    sqlite.prepare("SELECT id FROM notes WHERE deleted_at IS NULL").all() as { id: string }[]
+  ).map((r) => r.id);
   for (const id of ids) {
     refreshNoteFts(db, id);
   }
@@ -82,12 +91,12 @@ export function searchNoteIds(query: string, limit = 50): { ids: string[]; terms
   }
 
   if (ids.length === 0) {
-    // 降级：LIKE 扫标题与正文（个人量级可接受）
+    // 降级：LIKE 扫标题与正文（个人量级可接受）；OR 必须括号包裹再排除回收站
     const like = `%${q}%`;
     ids = (
       sqlite
         .prepare(
-          `SELECT id FROM notes WHERE title LIKE ? OR content LIKE ?
+          `SELECT id FROM notes WHERE (title LIKE ? OR content LIKE ?) AND deleted_at IS NULL
            ORDER BY updated_at DESC LIMIT ?`,
         )
         .all(like, like, limit) as { id: string }[]
