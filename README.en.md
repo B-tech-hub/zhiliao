@@ -19,6 +19,7 @@ Full documentation is in Simplified Chinese — see [README.md](README.md). This
 - Topic suggestions: AI clusters inbox notes and proposes new topics
 - Chinese full-text search (jieba segmentation + SQLite FTS5)
 - AI chat scoped to a note or a topic (SSE streaming, optional vision model)
+- Your data stays yours: one-click zip export (Markdown + images, Obsidian-friendly), manual backup button, and a trash bin — deleted notes are recoverable for 30 days
 - PWA, dark mode, daily backups (database + images, 7 copies each)
 
 ## Try it in 1 minute (no API key)
