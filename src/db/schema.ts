@@ -5,6 +5,7 @@ import {
   sqliteTable,
   text,
 } from "drizzle-orm/sqlite-core";
+import { sql } from "drizzle-orm";
 
 // 系统内置“未分类”主题的固定 id
 export const INBOX_TOPIC_ID = "inbox";
@@ -37,12 +38,16 @@ export const notes = sqliteTable(
     topicLocked: integer("topic_locked").notNull().default(0),
     titleLocked: integer("title_locked").notNull().default(0),
     tagsLocked: integer("tags_locked").notNull().default(0),
+    // 移入回收站的时间（unix 毫秒）；NULL = 正常笔记。彻底删除才物理删行
+    deletedAt: integer("deleted_at"),
     createdAt: integer("created_at").notNull(),
     updatedAt: integer("updated_at").notNull(),
   },
   (t) => [
     index("idx_notes_topic_updated").on(t.topicId, t.updatedAt),
     index("idx_notes_ai_status").on(t.aiStatus),
+    // 局部索引只覆盖回收站行，不膨胀主查询
+    index("idx_notes_deleted_at").on(t.deletedAt).where(sql`deleted_at IS NOT NULL`),
   ],
 );
 

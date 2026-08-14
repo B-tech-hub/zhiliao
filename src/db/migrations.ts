@@ -122,4 +122,11 @@ CREATE TABLE IF NOT EXISTS messages (
 CREATE INDEX IF NOT EXISTS idx_messages_conv ON messages(conversation_id, created_at);
 `,
   },
+  {
+    id: "0005_soft_delete",
+    sql: `
+ALTER TABLE notes ADD COLUMN deleted_at INTEGER;
+CREATE INDEX IF NOT EXISTS idx_notes_deleted_at ON notes(deleted_at) WHERE deleted_at IS NOT NULL;
+`,
+  },
 ];
