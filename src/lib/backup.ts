@@ -2,7 +2,10 @@ import fs from "node:fs";
 import path from "node:path";
 import { getSqlite } from "@/db";
 
-const g = globalThis as unknown as { __kbBackupStarted?: boolean };
+const g = globalThis as unknown as {
+  __kbBackupStarted?: boolean;
+  __kbBackupInFlight?: Promise<string> | null;
+};
 
 const KEEP_COUNT = 7;
 const DAY_MS = 24 * 3600 * 1000;
@@ -19,7 +22,31 @@ export function startDailyBackup() {
   setInterval(run, DAY_MS);
 }
 
-export async function doBackup(): Promise<string> {
+// 最近一次备份完成时间（备份文件名只有天粒度，精确时间取自 mtime）；从未备份返回 null
+export function getLastBackupAt(): number | null {
+  const dbPath = process.env.DATABASE_PATH || "./data/db/app.db";
+  const backupDir = path.join(path.dirname(dbPath), "backups");
+  if (!fs.existsSync(backupDir)) return null;
+  let latest: number | null = null;
+  for (const e of fs.readdirSync(backupDir, { withFileTypes: true })) {
+    if (!e.isFile() || !e.name.startsWith("app-") || !e.name.endsWith(".db")) continue;
+    const { mtimeMs } = fs.statSync(path.join(backupDir, e.name));
+    if (latest === null || mtimeMs > latest) latest = mtimeMs;
+  }
+  return latest;
+}
+
+// 进行中的备份被后续调用复用，防设置页连点、防手动备份与每日定时撞车
+export function doBackup(): Promise<string> {
+  if (g.__kbBackupInFlight) return g.__kbBackupInFlight;
+  const p = runBackup().finally(() => {
+    g.__kbBackupInFlight = null;
+  });
+  g.__kbBackupInFlight = p;
+  return p;
+}
+
+async function runBackup(): Promise<string> {
   const dbPath = process.env.DATABASE_PATH || "./data/db/app.db";
   const backupDir = path.join(path.dirname(dbPath), "backups");
   fs.mkdirSync(backupDir, { recursive: true });

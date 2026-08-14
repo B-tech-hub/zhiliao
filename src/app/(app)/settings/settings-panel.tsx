@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
 import { ConfirmDialog } from "@/components/confirm-dialog";
+import { formatTime } from "@/components/note-card";
 
 interface TopicRow {
   id: string;
@@ -83,16 +84,73 @@ function AppearanceSection() {
   );
 }
 
+/* 数据区块：数据信任功能的聚合入口——手动备份（导出与回收站入口后续接入此区块） */
+function DataSection({ lastBackupAt }: { lastBackupAt: number | null }) {
+  const [backedUpAt, setBackedUpAt] = useState(lastBackupAt);
+  const [backingUp, setBackingUp] = useState(false);
+  const [backupResult, setBackupResult] = useState("");
+
+  async function backupNow() {
+    setBackingUp(true);
+    setBackupResult("");
+    try {
+      const res = await fetch("/api/backup", { method: "POST" });
+      const data = await res.json().catch(() => ({}));
+      if (res.ok) {
+        setBackedUpAt(data.backedUpAt);
+        setBackupResult("✓ 已备份");
+      } else {
+        setBackupResult(`✕ ${data.error || "备份失败"}`);
+      }
+    } catch {
+      setBackupResult("✕ 网络错误");
+    } finally {
+      setBackingUp(false);
+    }
+  }
+
+  return (
+    <section>
+      <h2 className="mb-3 text-[21px] font-semibold tracking-[-0.374px]">数据</h2>
+      <div className="rounded-[18px] bg-surface p-6 text-[14px]">
+        <div className="flex flex-wrap items-center gap-3">
+          <button
+            onClick={backupNow}
+            disabled={backingUp}
+            className="rounded-full bg-action px-[22px] py-[8px] text-[14px] text-white transition-transform active:scale-95 disabled:opacity-40"
+          >
+            {backingUp ? "备份中…" : "立即备份"}
+          </button>
+          <span className="text-ink-48">
+            最近备份：{backedUpAt ? formatTime(backedUpAt) : "从未备份"}
+          </span>
+          {backupResult && (
+            <span className={backupResult.startsWith("✕") ? "text-danger" : "text-ink-80"}>
+              {backupResult}
+            </span>
+          )}
+        </div>
+        <p className="mt-3 text-[12px] text-ink-48">
+          备份数据库与图片到数据目录的 backups 文件夹；每日自动执行，各保留最近 7
+          份，手动备份覆盖当天快照
+        </p>
+      </div>
+    </section>
+  );
+}
+
 export function SettingsPanel({
   topics,
   llm,
   vision,
   queue,
+  lastBackupAt,
 }: {
   topics: TopicRow[];
   llm: LlmInfo;
   vision: VisionInfo;
   queue: QueueInfo;
+  lastBackupAt: number | null;
 }) {
   const router = useRouter();
   const [newName, setNewName] = useState("");
@@ -461,6 +519,8 @@ export function SettingsPanel({
           )}
         </div>
       </section>
+
+      <DataSection lastBackupAt={lastBackupAt} />
 
       <section>
         <h2 className="mb-3 text-[21px] font-semibold tracking-[-0.374px]">账号</h2>
