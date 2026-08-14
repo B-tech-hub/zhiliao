@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { NoteWriteError, createNote } from "@/lib/note-write";
-import { ToolError, defineTool } from "./types";
+import { ToolError, defineTool, fingerprint } from "./types";
 
 const schema = z.object({
   content: z.string().min(1).describe("笔记正文，Markdown 格式"),
@@ -24,7 +24,14 @@ export const createNoteTool = defineTool({
         content: `已创建笔记，noteId: ${id}。标题与标签将由后台自动生成。`,
         noteIds: [id],
         summary: `新建笔记「${content.trim().slice(0, 20)}」`,
-        undo: { tool: "create_note", noteId: id, before: {}, afterUpdatedAt: createdAt },
+        undo: {
+          tool: "create_note",
+          noteId: id,
+          before: {},
+          afterUpdatedAt: createdAt,
+          // 撤销 = 软删除，只要正文没被用户改写过就允许
+          afterFingerprint: fingerprint(content.trim()),
+        },
       };
     } catch (e) {
       if (e instanceof NoteWriteError) throw new ToolError(e.message);

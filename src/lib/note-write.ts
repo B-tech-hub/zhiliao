@@ -108,3 +108,48 @@ export function updateNote(db: DB, noteId: string, patch: NotePatch): { updatedA
   }
   return { updatedAt: now };
 }
+
+export interface NoteRestore {
+  content?: string;
+  aiStatus?: string;
+  topicId?: string;
+  title?: string;
+  tags?: string[];
+  topicLocked?: number;
+  titleLocked?: number;
+  tagsLocked?: number;
+}
+
+/* 按快照回写，供助手操作的撤销使用。与 updateNote 有两处刻意的不同：
+   一是不置锁——锁位由快照原样恢复，否则撤销一次就永久剥夺该字段的 AI 自动整理；
+   二是正文变更不重新入队 AI——撤销是「回到原状」而非一次新编辑，
+   原状此前已被处理过，再跑一遍只会白耗额度并可能改掉用户已接受的标题。 */
+export function restoreNote(db: DB, noteId: string, snap: NoteRestore): boolean {
+  const note = db.select().from(notes).where(eq(notes.id, noteId)).get();
+  if (!note) return false;
+
+  /* 快照里的主题可能已被用户删除。notes.topicId 有外键约束且
+     foreign_keys=ON，直接写回会抛 FOREIGN KEY constraint failed，
+     撤销按钮变成一个 500。此时跳过主题这一项，其余字段照常恢复——
+     把笔记留在当前主题，比强行挪去「未分类」更少惊扰。 */
+  let topicId = snap.topicId;
+  if (topicId !== undefined) {
+    const exists = db.select({ id: topics.id }).from(topics).where(eq(topics.id, topicId)).get();
+    if (!exists) topicId = undefined;
+  }
+
+  db.transaction((tx) => {
+    const values: Partial<typeof notes.$inferInsert> = { updatedAt: Date.now() };
+    if (snap.content !== undefined) values.content = snap.content;
+    if (snap.aiStatus !== undefined) values.aiStatus = snap.aiStatus;
+    if (topicId !== undefined) values.topicId = topicId;
+    if (snap.title !== undefined) values.title = snap.title;
+    if (snap.topicLocked !== undefined) values.topicLocked = snap.topicLocked;
+    if (snap.titleLocked !== undefined) values.titleLocked = snap.titleLocked;
+    if (snap.tagsLocked !== undefined) values.tagsLocked = snap.tagsLocked;
+    tx.update(notes).set(values).where(eq(notes.id, noteId)).run();
+    if (snap.tags !== undefined) replaceNoteTags(tx as never, noteId, snap.tags);
+  });
+  refreshNoteFts(db, noteId);
+  return true;
+}

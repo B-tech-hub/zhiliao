@@ -37,9 +37,9 @@ export const deleteNoteTool = defineTool({
         tool: "delete_note",
         noteId,
         before: {},
-        // trashNotes 刻意不改 updatedAt（保持真实编辑时间），
-        // 所以乐观锁基准沿用删除前的值
+        // trashNotes 刻意不改 updatedAt（保持真实编辑时间），沿用删除前的值
         afterUpdatedAt: note.updatedAt,
+        // 不带指纹：反向操作是从回收站恢复，不覆盖任何内容，无损可随时执行
       },
     };
   },

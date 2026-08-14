@@ -2,7 +2,7 @@ import { and, eq, isNull } from "drizzle-orm";
 import { z } from "zod";
 import { notes } from "@/db/schema";
 import { NoteWriteError, updateNote } from "@/lib/note-write";
-import { ToolError, defineTool } from "./types";
+import { ToolError, defineTool, fingerprint } from "./types";
 
 const schema = z.object({
   noteId: z.string().min(1).describe("要追加内容的笔记 id"),
@@ -36,9 +36,12 @@ export const appendToNoteTool = defineTool({
         undo: {
           tool: "append_to_note",
           noteId,
-          // 撤销 = 把正文截回追加前的长度；乐观锁保证期间正文未被他人改动
+          // 撤销 = 把正文截回追加前的长度
           before: { contentLength: note.content.trimEnd().length, aiStatus: note.aiStatus },
           afterUpdatedAt: updatedAt,
+          // 唯一会毁掉用户编辑的反向操作，指纹比对必须严格：
+          // 正文一旦与助手写入时不同，就不能再截断
+          afterFingerprint: fingerprint(appended),
         },
       };
     } catch (e) {

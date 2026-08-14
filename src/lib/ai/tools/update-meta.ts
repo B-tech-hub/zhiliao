@@ -3,7 +3,7 @@ import { z } from "zod";
 import { notes } from "@/db/schema";
 import { NoteWriteError, updateNote } from "@/lib/note-write";
 import { getTagsForNotes } from "@/lib/notes";
-import { ToolError, defineTool } from "./types";
+import { ToolError, defineTool, metaFingerprint } from "./types";
 
 const schema = z.object({
   noteId: z.string().min(1).describe("要修改的笔记 id"),
@@ -41,6 +41,10 @@ export const updateMetaTool = defineTool({
         title !== undefined ? "标题" : "",
         tags !== undefined ? "标签" : "",
       ].filter(Boolean);
+      // 指纹按写入后读回的实际值算：标签经 replaceNoteTags 会去重与规范化，
+      // 直接用入参算出的指纹与撤销时读回的值对不上，撤销会永远判为「已被修改」
+      const after = db.select().from(notes).where(eq(notes.id, noteId)).get();
+      const afterTags = getTagsForNotes(db, [noteId]).get(noteId) ?? [];
       return {
         content: `已更新笔记 ${noteId} 的${changed.join("、")}。`,
         noteIds: [noteId],
@@ -58,6 +62,9 @@ export const updateMetaTool = defineTool({
             tagsLocked: note.tagsLocked,
           },
           afterUpdatedAt: updatedAt,
+          afterFingerprint: after
+            ? metaFingerprint(after.topicId, after.title, afterTags)
+            : undefined,
         },
       };
     } catch (e) {

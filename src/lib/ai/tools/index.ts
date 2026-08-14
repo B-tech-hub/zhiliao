@@ -12,7 +12,7 @@ import { updateMetaTool } from "./update-meta";
 import { ToolError, type AssistantTool, type ToolContext, type ToolOutcome } from "./types";
 
 export type { AssistantTool, ToolContext, ToolOutcome, UndoPayload } from "./types";
-export { ToolError } from "./types";
+export { ToolError, fingerprint, metaFingerprint } from "./types";
 
 // 单个工具结果回灌上限：多轮工具调用累积起来会撑爆上下文
 export const MAX_TOOL_RESULT_CHARS = 8000;
