@@ -2,9 +2,10 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { NextRequest } from "next/server";
 import { asc, eq } from "drizzle-orm";
 import { getDb } from "@/db";
-import { conversations, messages, notes } from "@/db/schema";
+import { conversations, conversationSources, messages, notes } from "@/db/schema";
 import { POST as confirmPost } from "@/app/api/chat/confirm/route";
 import { GET as conversationsGet } from "@/app/api/chat/conversations/route";
+import { PUT as sourcesPut } from "@/app/api/chat/conversations/[id]/sources/route";
 import { POST as undoPost } from "@/app/api/chat/undo/route";
 import { parseToolPayload, type ToolPayload } from "@/lib/ai/chat-loop";
 import { runTool, type ToolContext, type UndoPayload } from "@/lib/ai/tools";
@@ -367,5 +368,78 @@ describe("GET /api/chat/conversations", () => {
     const res = await conversationsGet();
     const data = (await res.json()) as { conversations: { scopeLabel?: string }[] };
     expect(data.conversations[0].scopeLabel).toBe("（无标题笔记）");
+  });
+
+  /* 来源问答的 scopeId 是空串，没有单一 scope 对象。
+     不特判的话它在列表里和普通对话一模一样，用户分不出哪次是接地问答 */
+  it("来源问答标出来源条数", async () => {
+    insertNote("n1", "正文", { title: "笔记一" });
+    insertTopic("t1", "主题一");
+    seedConversation("c1", "sources", "", Date.now());
+    getDb()
+      .insert(conversationSources)
+      .values([
+        { conversationId: "c1", sourceType: "note", sourceId: "n1", createdAt: 1 },
+        { conversationId: "c1", sourceType: "topic", sourceId: "t1", createdAt: 2 },
+      ])
+      .run();
+
+    const res = await conversationsGet();
+    const data = (await res.json()) as { conversations: { scopeLabel?: string }[] };
+    expect(data.conversations[0].scopeLabel).toBe("来源问答（2 个来源）");
+  });
+});
+
+describe("PUT /api/chat/conversations/[id]/sources", () => {
+  const params = (id: string) => ({ params: Promise.resolve({ id }) });
+
+  function put(id: string, body: unknown) {
+    return sourcesPut(
+      new NextRequest(`http://x/api/chat/conversations/${id}/sources`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      }),
+      params(id),
+    );
+  }
+
+  function seedSourcesConv(id: string) {
+    const now = Date.now();
+    getDb()
+      .insert(conversations)
+      .values({ id, scopeType: "sources", scopeId: "", title: "", createdAt: now, updatedAt: now })
+      .run();
+  }
+
+  it("覆盖式更新来源集并回带标签", async () => {
+    insertNote("n1", "正文", { title: "笔记一" });
+    insertNote("n2", "正文", { title: "笔记二" });
+    seedSourcesConv("c1");
+    getDb()
+      .insert(conversationSources)
+      .values({ conversationId: "c1", sourceType: "note", sourceId: "n1", createdAt: 1 })
+      .run();
+
+    const res = await put("c1", { sources: [{ type: "note", id: "n2" }] });
+    expect(res.status).toBe(200);
+    const data = (await res.json()) as { sources: { id: string; label: string }[] };
+    expect(data.sources).toEqual([{ type: "note", id: "n2", label: "笔记二", deleted: false }]);
+  });
+
+  it("普通对话不能挂来源集", async () => {
+    const now = Date.now();
+    getDb()
+      .insert(conversations)
+      .values({ id: "c1", scopeType: "global", scopeId: "", title: "", createdAt: now, updatedAt: now })
+      .run();
+
+    const res = await put("c1", { sources: [] });
+    expect(res.status).toBe(400);
+  });
+
+  it("会话不存在返回 404", async () => {
+    const res = await put("无此会话", { sources: [] });
+    expect(res.status).toBe(404);
   });
 });

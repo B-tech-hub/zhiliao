@@ -17,7 +17,11 @@ export const readNoteTool = defineTool({
     "读取一条笔记的完整内容（标题、主题、标签、正文）。" +
     "需要引用原文细节时使用；只想知道有哪些相关笔记时用 search_notes 即可。",
   schema,
-  run: ({ noteId }, { db }) => {
+  run: ({ noteId }, { db, allowedNoteIds }) => {
+    // 限域会话里越界读取直接拒绝，不透露该笔记是否存在
+    if (allowedNoteIds && !allowedNoteIds.has(noteId)) {
+      throw new ToolError(`笔记 ${noteId} 不在本次对话的来源集内，无法读取`);
+    }
     const row = db
       .select({
         id: notes.id,

@@ -16,11 +16,12 @@ export const searchNotesTool = defineTool({
     "在用户的知识库中按关键词搜索笔记，返回匹配笔记的 id、标题、所属主题与摘录。" +
     "回答任何与用户已有记录相关的问题前都应先搜索。不会返回回收站中的笔记。",
   schema,
-  run: ({ query, limit }, { db }) => {
+  run: ({ query, limit }, { db, allowedNoteIds }) => {
     const max = limit ?? 8;
-    const { ids, terms } = searchNoteIds(query, max);
+    const { ids, terms } = searchNoteIds(query, max, allowedNoteIds);
     if (ids.length === 0) {
-      return { content: `没有找到与「${query}」相关的笔记。`, noteIds: [] };
+      const scope = allowedNoteIds ? "来源集中" : "";
+      return { content: `${scope}没有找到与「${query}」相关的笔记。`, noteIds: [] };
     }
 
     const rows = db

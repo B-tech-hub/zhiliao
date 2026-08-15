@@ -63,7 +63,20 @@ export async function POST(req: NextRequest) {
     .all()
     .flatMap((m) => extractUrls(m.content));
 
-  const toolCtx: ToolContext = { db, userUrls, signal: req.signal };
+  const scopeType = conv.scopeType as ChatScope;
+  const grounded = scopeType === "sources";
+  const { system, allowedNoteIds, sourcesMode } = buildSystemMessage(
+    scopeType,
+    conv.scopeId,
+    conversationId,
+  );
+
+  const toolCtx: ToolContext = {
+    db,
+    userUrls,
+    allowedNoteIds: grounded ? new Set(allowedNoteIds ?? []) : undefined,
+    signal: req.signal,
+  };
   const outcome = approve
     ? await runTool(pending.name, pending.args, toolCtx)
     : { content: REJECTED, summary: "已取消删除", error: true };
@@ -100,13 +113,12 @@ export async function POST(req: NextRequest) {
     .all()
     .reverse();
 
-  const { system } = buildSystemMessage(conv.scopeType as ChatScope, conv.scopeId);
   const initial: LlmMessage[] = [
     { role: "system", content: system },
     ...buildLlmMessages(history),
   ];
 
-  const tools = getToolSupport() === false ? [] : toolDefs();
+  const tools = getToolSupport() === false ? [] : toolDefs({ grounded });
   const deps: ToolLoopDeps = {
     stream: (msgs) => chatStream(msgs, { signal: req.signal, tools }),
     execute: (call) => runTool(call.name, call.args, toolCtx),
@@ -122,6 +134,9 @@ export async function POST(req: NextRequest) {
     deps,
     // 执行发生在流之前，补发一条结果事件让前端把确认卡片换成操作卡片
     prelude: [
+      ...(grounded
+        ? [{ grounding: { noteIds: allowedNoteIds ?? [], mode: sourcesMode ?? "empty" } }]
+        : []),
       {
         tool_end: {
           id: pending.callId,

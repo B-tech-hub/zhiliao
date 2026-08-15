@@ -34,8 +34,18 @@ export interface ConfirmInfo extends ToolCallInfo {
   summary: string;
 }
 
+/* 来源问答的接地信息，开流前先发一条。
+   noteIds 是本轮真正生效的来源笔记（主题已展开），前端拿它做引用白名单——
+   全文注入模式下模型引用的笔记没经过任何工具，不给白名单就会被降级成纯文本。 */
+export interface GroundingInfo {
+  noteIds: string[];
+  // full = 来源全文已注入；digest = 超预算只给了清单；empty = 没有可用来源
+  mode: "full" | "digest" | "empty";
+}
+
 export type ChatSseEvent =
   | { delta: string }
+  | { grounding: GroundingInfo }
   | { tool_start: ToolCallInfo }
   | { tool_end: ToolEndInfo }
   | { confirm_required: ConfirmInfo }

@@ -62,16 +62,23 @@ export function rebuildFtsIfNeeded(db: DB): void {
 
 // 关键词搜索：分词后 MATCH，bm25 加权（标题 > 标签 > 正文）；
 // 1 字查询或 MATCH 无结果时降级 LIKE。返回有序 noteId 与查询词（供前端高亮）。
-export function searchNoteIds(query: string, limit = 50): { ids: string[]; terms: string[] } {
+// allowedIds 限定候选范围（来源问答）：先多取再过滤，避免前 limit 条恰好都在范围外时颗粒无收。
+export function searchNoteIds(
+  query: string,
+  limit = 50,
+  allowedIds?: Set<string>,
+): { ids: string[]; terms: string[] } {
   const sqlite = getSqlite();
   const q = query.trim();
   if (!q) return { ids: [], terms: [] };
+  if (allowedIds?.size === 0) return { ids: [], terms: [q] };
 
   const terms = getJieba()
     .cutForSearch(q, true)
     .map((t) => t.trim())
     .filter((t) => t && !/^[\s\p{P}]+$/u.test(t));
 
+  const fetchLimit = allowedIds ? Math.max(limit * 10, 200) : limit;
   let ids: string[] = [];
   if (q.length > 1 && terms.length > 0) {
     // 每个词加引号防 FTS 语法注入，AND 连接要求全部命中
@@ -83,11 +90,12 @@ export function searchNoteIds(query: string, limit = 50): { ids: string[]; terms
             `SELECT note_id FROM notes_fts WHERE notes_fts MATCH ?
              ORDER BY bm25(notes_fts, 0, 5.0, 1.0, 3.0) LIMIT ?`,
           )
-          .all(match, limit) as { note_id: string }[]
+          .all(match, fetchLimit) as { note_id: string }[]
       ).map((r) => r.note_id);
     } catch {
       ids = [];
     }
+    if (allowedIds) ids = ids.filter((id) => allowedIds.has(id));
   }
 
   if (ids.length === 0) {
@@ -99,9 +107,11 @@ export function searchNoteIds(query: string, limit = 50): { ids: string[]; terms
           `SELECT id FROM notes WHERE (title LIKE ? OR content LIKE ?) AND deleted_at IS NULL
            ORDER BY updated_at DESC LIMIT ?`,
         )
-        .all(like, like, limit) as { id: string }[]
+        .all(like, like, fetchLimit) as { id: string }[]
     ).map((r) => r.id);
+    if (allowedIds) ids = ids.filter((id) => allowedIds.has(id));
   }
+  if (allowedIds) ids = ids.slice(0, limit);
 
   // 高亮词按长度降序，避免长词被短词拆散
   const highlightTerms = [...new Set([q, ...terms])].sort((a, b) => b.length - a.length);

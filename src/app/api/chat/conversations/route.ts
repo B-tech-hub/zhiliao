@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import { desc, inArray } from "drizzle-orm";
+import { desc, inArray, sql } from "drizzle-orm";
 import { getDb } from "@/db";
-import { conversations, notes, topics } from "@/db/schema";
+import { conversations, conversationSources, notes, topics } from "@/db/schema";
 
 export const dynamic = "force-dynamic";
 
@@ -51,6 +51,24 @@ export async function GET() {
     }
   }
 
+  /* 来源问答的 scopeId 是空串，标签取来源条数——
+     否则它在列表里和普通对话长得一模一样，用户分不出哪次是接地问答。 */
+  const sourceConvIds = rows.filter((r) => r.scopeType === "sources").map((r) => r.id);
+  const sourceCounts = new Map<string, number>();
+  if (sourceConvIds.length > 0) {
+    for (const s of db
+      .select({
+        conversationId: conversationSources.conversationId,
+        n: sql<number>`COUNT(*)`,
+      })
+      .from(conversationSources)
+      .where(inArray(conversationSources.conversationId, sourceConvIds))
+      .groupBy(conversationSources.conversationId)
+      .all()) {
+      sourceCounts.set(s.conversationId, s.n);
+    }
+  }
+
   return NextResponse.json({
     conversations: rows.map((r) => ({
       id: r.id,
@@ -58,7 +76,10 @@ export async function GET() {
       updatedAt: r.updatedAt,
       scopeType: r.scopeType,
       // 对象已被彻底删除时留空，前端只显示会话标题
-      scopeLabel: labels.get(`${r.scopeType}:${r.scopeId}`),
+      scopeLabel:
+        r.scopeType === "sources"
+          ? `来源问答（${sourceCounts.get(r.id) ?? 0} 个来源）`
+          : labels.get(`${r.scopeType}:${r.scopeId}`),
     })),
   });
 }

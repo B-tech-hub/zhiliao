@@ -52,6 +52,10 @@ export interface ToolContext {
   db: DB;
   // 本会话用户消息中出现过的 URL，fetch_url 的白名单
   userUrls: string[];
+  /* 来源问答的限域白名单：只有这些笔记允许被检索与读取。
+     undefined = 不限域（普通对话）；空数组 = 限域且当前一条来源都没有。
+     两者语义不同，判空要用 !== undefined 而非 length。 */
+  allowedNoteIds?: Set<string>;
   signal?: AbortSignal;
 }
 

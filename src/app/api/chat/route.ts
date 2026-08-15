@@ -4,8 +4,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { and, desc, eq } from "drizzle-orm";
 import { z } from "zod";
 import { getDb } from "@/db";
-import { conversations, messages } from "@/db/schema";
-import { buildSystemMessage } from "@/lib/ai/chat-context";
+import { conversations, conversationSources, messages } from "@/db/schema";
+import { buildSystemMessage, type ChatScope } from "@/lib/ai/chat-context";
 import { buildLlmMessages, type ToolLoopDeps } from "@/lib/ai/chat-loop";
 import { createChatSseResponse } from "@/lib/ai/chat-stream";
 import { extractUrls } from "@/lib/ai/fetch-url";
@@ -21,9 +21,13 @@ const MAX_IMAGES = 4;
 
 const bodySchema = z.object({
   conversationId: z.string().optional(),
-  scopeType: z.enum(["note", "topic", "global"]),
-  // 全局助手没有作用域对象；note/topic 必填，在下方校验
+  scopeType: z.enum(["note", "topic", "global", "sources"]),
+  // 全局助手与来源问答没有作用域对象；note/topic 必填，在下方校验
   scopeId: z.string().optional(),
+  // 来源问答新建会话时携带的来源集；续聊时忽略（以会话已存的为准）
+  sources: z
+    .array(z.object({ type: z.enum(["note", "topic"]), id: z.string().min(1) }))
+    .optional(),
   message: z.string().min(1),
   useVision: z.boolean().optional(),
 });
@@ -53,24 +57,44 @@ export async function POST(req: NextRequest) {
   if (!parsed.success) {
     return NextResponse.json({ error: "参数不合法" }, { status: 400 });
   }
-  const { scopeType, message, useVision } = parsed.data;
-  const scopeId = parsed.data.scopeId ?? "";
-  if (scopeType !== "global" && !scopeId) {
+  const { message, useVision } = parsed.data;
+  const reqScopeType = parsed.data.scopeType;
+  const reqScopeId = parsed.data.scopeId ?? "";
+  // 只有 note/topic 有作用域对象；global 与 sources 的 scopeId 本就是空串
+  if ((reqScopeType === "note" || reqScopeType === "topic") && !reqScopeId) {
     return NextResponse.json({ error: "缺少 scopeId" }, { status: 400 });
   }
   const db = getDb();
   const now = Date.now();
 
-  // 会话：给定则校验存在，否则新建（标题取首条消息前 30 字）
+  /* 会话：给定则校验存在，否则新建（标题取首条消息前 30 字）。
+     续聊时 scope 一律以会话自己存的为准，不用请求里的——
+     请求里的 scope 跟着当前页面走，从历史里打开一个来源问答会话再发言时，
+     用请求的 scope 会静默丢掉整个来源集，助手答非所问且毫无提示。 */
   let conversationId = parsed.data.conversationId ?? null;
+  let scopeType: ChatScope = reqScopeType;
+  let scopeId = reqScopeId;
   if (conversationId) {
     const conv = db.select().from(conversations).where(eq(conversations.id, conversationId)).get();
     if (!conv) return NextResponse.json({ error: "会话不存在" }, { status: 404 });
+    scopeType = conv.scopeType as ChatScope;
+    scopeId = conv.scopeId;
   } else {
     conversationId = newId();
-    db.insert(conversations)
-      .values({ id: conversationId, scopeType, scopeId, title: message.slice(0, 30), createdAt: now, updatedAt: now })
-      .run();
+    const newConvId = conversationId;
+    const sources = parsed.data.sources ?? [];
+    db.transaction((tx) => {
+      tx.insert(conversations)
+        .values({ id: newConvId, scopeType, scopeId, title: message.slice(0, 30), createdAt: now, updatedAt: now })
+        .run();
+      if (scopeType === "sources" && sources.length > 0) {
+        for (const s of sources) {
+          tx.insert(conversationSources)
+            .values({ conversationId: newConvId, sourceType: s.type, sourceId: s.id, createdAt: now })
+            .run();
+        }
+      }
+    });
   }
   const convId = conversationId;
 
@@ -105,7 +129,11 @@ export async function POST(req: NextRequest) {
     .run();
   db.update(conversations).set({ updatedAt: now }).where(eq(conversations.id, convId)).run();
 
-  const { system, imageFiles } = buildSystemMessage(scopeType, scopeId);
+  const { system, imageFiles, allowedNoteIds, sourcesMode } = buildSystemMessage(
+    scopeType,
+    scopeId,
+    convId,
+  );
   const wantVision = Boolean(useVision) && imageFiles.length > 0 && isVisionConfigured();
 
   const chatMessages: LlmMessage[] = [
@@ -139,9 +167,15 @@ export async function POST(req: NextRequest) {
      以及走视觉端点时（视觉模型普遍不支持 function calling，
      且看图问答本就不需要写库）。getToolSupport() 为 null 表示从未探测过，
      此时照常发送——多数供应商是支持的，不该因为没测过就降级。 */
-  const tools = getToolSupport() === false || wantVision ? [] : toolDefs();
+  const grounded = scopeType === "sources";
+  const tools = getToolSupport() === false || wantVision ? [] : toolDefs({ grounded });
 
-  const toolCtx: ToolContext = { db, userUrls, signal: req.signal };
+  const toolCtx: ToolContext = {
+    db,
+    userUrls,
+    allowedNoteIds: grounded ? new Set(allowedNoteIds ?? []) : undefined,
+    signal: req.signal,
+  };
   const deps: ToolLoopDeps = {
     stream: (msgs) => chatStream(msgs, { ...llmOpts, tools }),
     execute: (call) => runTool(call.name, call.args, toolCtx),
@@ -155,5 +189,9 @@ export async function POST(req: NextRequest) {
     signal: req.signal,
     initial: chatMessages,
     deps,
+    // 来源问答：先告知前端本轮生效的来源笔记，供引用溯源放行
+    prelude: grounded
+      ? [{ grounding: { noteIds: allowedNoteIds ?? [], mode: sourcesMode ?? "empty" } }]
+      : undefined,
   });
 }

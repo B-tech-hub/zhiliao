@@ -30,8 +30,16 @@ export const ASSISTANT_TOOLS: AssistantTool[] = [
 
 const BY_NAME = new Map(ASSISTANT_TOOLS.map((t) => [t.name, t]));
 
-export function toolDefs(): ToolDef[] {
-  return ASSISTANT_TOOLS.map((t) => t.def);
+/* 来源问答不提供的工具：抓来的网页内容不属于来源集，
+   放行等于让「只依据来源回答」这条保证失效，顺带也少一个提示注入面。
+   写工具照常保留——写操作不影响回答的接地性，且「把结论存成笔记」是高频需求。 */
+export const GROUNDED_BLOCKED_TOOLS = new Set(["fetch_url"]);
+
+export function toolDefs(opts: { grounded?: boolean } = {}): ToolDef[] {
+  const list = opts.grounded
+    ? ASSISTANT_TOOLS.filter((t) => !GROUNDED_BLOCKED_TOOLS.has(t.name))
+    : ASSISTANT_TOOLS;
+  return list.map((t) => t.def);
 }
 
 export function getTool(name: string): AssistantTool | undefined {
@@ -50,6 +58,11 @@ export async function runTool(
   const tool = BY_NAME.get(name);
   if (!tool) {
     return { content: `不存在名为 ${name} 的工具，可用工具：${[...BY_NAME.keys()].join("、")}`, error: true };
+  }
+  /* 限域会话里模型仍可能凭记忆调用没发给它的工具（尤其是多轮之后），
+     执行层必须自己拦一道，不能只靠 toolDefs 不发。 */
+  if (ctx.allowedNoteIds !== undefined && GROUNDED_BLOCKED_TOOLS.has(name)) {
+    return { content: `来源问答模式下不能使用 ${name}，只能依据来源集中的笔记回答。`, error: true };
   }
 
   let args: unknown = {};
