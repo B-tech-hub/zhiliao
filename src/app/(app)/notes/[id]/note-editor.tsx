@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { Note } from "@/db/schema";
 import { BackButton } from "@/components/back-button";
+import { AskWithSourcesButton } from "@/components/chat/ask-with-sources";
 import { ConfirmDialog } from "@/components/confirm-dialog";
 
 // TipTap 体积较大，懒加载拆出主包；占位与编辑区等高避免布局跳动
@@ -173,6 +174,12 @@ export function NoteEditor({
             <span className={`text-[12px] ${saveState === "error" ? "text-danger" : "text-ink-48"}`}>
               {saveText}
             </span>
+            <AskWithSourcesButton
+              type="note"
+              id={note.id}
+              label={title || "（无标题笔记）"}
+              className="text-[12px] text-ink-48 transition-colors hover:text-action active:scale-95"
+            />
             <button
               onClick={() => setConfirmingDelete(true)}
               className="text-[12px] text-ink-48 transition-colors hover:text-danger active:scale-95"

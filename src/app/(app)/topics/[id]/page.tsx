@@ -7,6 +7,7 @@ import { getTagsForNotes } from "@/lib/notes";
 import { BackButton } from "@/components/back-button";
 import { EmptyNotes } from "@/components/note-card";
 import { ChatScopeBinder } from "@/components/chat/chat-scope";
+import { AskWithSourcesButton } from "@/components/chat/ask-with-sources";
 import { TopicNotes } from "./topic-notes";
 
 export const dynamic = "force-dynamic";
@@ -37,12 +38,20 @@ export default async function TopicPage({ params }: { params: Promise<{ id: stri
           </h1>
           <p className="mt-2 text-[14px] text-ink-48">{rows.length} 条笔记</p>
         </header>
-        <Link
-          href={`/notes/new?topic=${topic.id}`}
-          className="shrink-0 rounded-full bg-action px-4 py-1.5 text-[14px] text-white transition-transform active:scale-95"
-        >
-          新笔记
-        </Link>
+        <div className="flex shrink-0 items-center gap-3">
+          <AskWithSourcesButton
+            type="topic"
+            id={topic.id}
+            label={topic.name}
+            className="rounded-full border border-hairline px-4 py-1.5 text-[14px] text-ink-48 transition-colors hover:text-action active:scale-95"
+          />
+          <Link
+            href={`/notes/new?topic=${topic.id}`}
+            className="rounded-full bg-action px-4 py-1.5 text-[14px] text-white transition-transform active:scale-95"
+          >
+            新笔记
+          </Link>
+        </div>
       </div>
       {rows.length === 0 ? (
         <EmptyNotes hint="这个主题下还没有笔记" />

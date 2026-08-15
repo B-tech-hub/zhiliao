@@ -6,6 +6,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { BodyPortal } from "@/components/body-portal";
+import type { SourceItem } from "@/lib/ai/sources";
+import { onAskWithSources } from "./ask-with-sources";
 import { useChatScope } from "./chat-scope";
 import {
   collectNoteIds,
@@ -13,6 +15,7 @@ import {
   toolLabel,
   type ToolItem,
 } from "./chat-state";
+import { SourcePicker } from "./source-picker";
 import { useChat } from "./use-chat";
 
 export function ChatPanel({
@@ -27,6 +30,9 @@ export function ChatPanel({
   const [input, setInput] = useState("");
   const [useVision, setUseVision] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
+  // 来源选择器：null 关闭，数组是打开时的初始选中（新建为空，改来源时是当前来源集）
+  const [picking, setPicking] = useState<SourceItem[] | null>(null);
+  const [showSources, setShowSources] = useState(false);
   // 用户手动摘除了上下文附件（本次页面停留期间有效）
   const [detached, setDetached] = useState(false);
   const { scope } = useChatScope();
@@ -35,8 +41,9 @@ export function ChatPanel({
   // 换了笔记/主题就重新附上——新页面带来的是另一份上下文
   useEffect(() => setDetached(false), [scope?.id]);
 
-  const attached = scope && !detached ? scope : null;
-  const chat = useChat(attached?.type ?? "global", attached?.id ?? "");
+  const chat = useChat(scope && !detached ? scope.type : "global", scope?.id ?? "");
+  // 来源问答期间不显示页面附件：来源集是唯一的知识边界，两条上下文同时挂着只会让人搞不清 AI 看得见什么
+  const attached = scope && !detached && !chat.grounded ? scope : null;
 
   // 面板打开时才拉会话列表，避免每次翻页都白白请求一次
   const { loadConversations } = chat;
@@ -48,12 +55,28 @@ export function ChatPanel({
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [chat.items]);
 
-  /* 引用溯源的白名单：工具真的返回过的笔记，加上当前附件那条
-     （它是直接注入 system prompt 的，没经过工具，但引用它同样正当）。 */
-  const validNoteIds = useMemo(
-    () => collectNoteIds(chat.items, attached?.type === "note" ? attached.id : undefined),
-    [chat.items, attached],
+  /* 笔记页/主题页的「以此为来源提问」：直接开面板并预填来源，
+     不弹选择器——用户已经表达了要问哪一份，再让他勾一次是多余的一步。 */
+  const { startGrounded } = chat;
+  useEffect(
+    () =>
+      onAskWithSources((picked) => {
+        startGrounded(picked);
+        setPicking(null);
+        setShowHistory(false);
+        setOpen(true);
+      }),
+    [startGrounded],
   );
+
+  /* 引用溯源的白名单：工具真的返回过的笔记，加上当前附件那条
+     （它是直接注入 system prompt 的，没经过工具，但引用它同样正当）。
+     来源问答同理——来源全文直接进 system，服务端会回报展开后的笔记 id。 */
+  const validNoteIds = useMemo(() => {
+    const ids = collectNoteIds(chat.items, attached?.type === "note" ? attached.id : undefined);
+    for (const id of chat.sourceNoteIds) ids.add(id);
+    return ids;
+  }, [chat.items, attached, chat.sourceNoteIds]);
 
   const submit = () => {
     if (!input.trim() || chat.streaming) return;
@@ -86,13 +109,27 @@ export function ChatPanel({
             className="flex h-full w-full max-w-[420px] flex-col bg-surface shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
+            {picking !== null ? (
+              <SourcePicker
+                initial={picking}
+                onCancel={() => setPicking(null)}
+                onConfirm={(items) => {
+                  // 已有会话时是改来源（落库，下条消息生效），否则开一场新的来源问答
+                  if (chat.grounded && chat.conversationId) void chat.updateSources(items);
+                  else chat.startGrounded(items);
+                  setPicking(null);
+                  setShowHistory(false);
+                }}
+              />
+            ) : (
+              <>
             {/* 头部 */}
             <div className="flex items-center justify-between border-b border-divider px-5 py-4">
               <p className="text-[14px] font-semibold tracking-[-0.224px]">AI 助手</p>
-              <div className="flex shrink-0 items-center gap-2">
+              <div className="flex shrink-0 items-center gap-1">
                 <button
                   onClick={() => setShowHistory((v) => !v)}
-                  className="rounded-full px-2.5 py-1 text-[12px] text-ink-48 hover:bg-fill"
+                  className="rounded-full px-2 py-1 text-[12px] text-ink-48 hover:bg-fill"
                 >
                   历史
                 </button>
@@ -101,9 +138,19 @@ export function ChatPanel({
                     void chat.openConversation(null);
                     setShowHistory(false);
                   }}
-                  className="rounded-full px-2.5 py-1 text-[12px] text-action hover:bg-fill"
+                  className="rounded-full px-2 py-1 text-[12px] text-action hover:bg-fill"
                 >
                   新对话
+                </button>
+                <button
+                  onClick={() => {
+                    setPicking([]);
+                    setShowHistory(false);
+                  }}
+                  className="rounded-full px-2 py-1 text-[12px] text-action hover:bg-fill"
+                  title="选几条笔记或主题作为来源，AI 只依据它们回答"
+                >
+                  来源问答
                 </button>
                 <button
                   onClick={() => setOpen(false)}
@@ -114,6 +161,43 @@ export function ChatPanel({
                 </button>
               </div>
             </div>
+
+            {/* 来源集条：接地会话的知识边界，必须一直看得见 */}
+            {chat.grounded && (
+              <div className="border-b border-divider bg-action/[0.06] px-5 py-2">
+                <div className="flex items-center gap-2">
+                  <span className="shrink-0 text-[12px] font-medium text-action">来源问答</span>
+                  <button
+                    onClick={() => setShowSources((v) => !v)}
+                    className="min-w-0 flex-1 truncate text-left text-[12px] text-ink-48 hover:text-ink-80"
+                  >
+                    {chat.sources.length} 个来源
+                    {chat.sources.length > 0 && `：${chat.sources.map((s) => s.label).join("、")}`}
+                  </button>
+                  <button
+                    onClick={() => setPicking(chat.sources)}
+                    className="shrink-0 rounded-full px-2 py-0.5 text-[12px] text-action hover:bg-fill"
+                  >
+                    改来源
+                  </button>
+                </div>
+                {showSources && (
+                  <ul className="mt-1.5 space-y-0.5">
+                    {chat.sources.map((s) => (
+                      <li key={`${s.type}:${s.id}`} className="flex items-center gap-1.5 text-[12px]">
+                        <span className="shrink-0 text-ink-48">{s.type === "topic" ? "主题" : "笔记"}</span>
+                        <span className="min-w-0 truncate">{s.label}</span>
+                        {s.deleted && <span className="shrink-0 text-ink-48">（在回收站，暂不参与回答）</span>}
+                        {s.missing && <span className="shrink-0 text-ink-48">（已删除）</span>}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                <p className="mt-1 text-[11px] leading-[1.5] text-ink-48">
+                  AI 只依据这些来源回答，来源里没有的会直说没有。
+                </p>
+              </div>
+            )}
 
             {/* 上下文附件条：摘除后助手只面向整个知识库 */}
             {attached && (
@@ -139,6 +223,15 @@ export function ChatPanel({
               >
                 ＋ 把当前{scope.type === "note" ? "笔记" : "主题"}加回上下文
               </button>
+            )}
+
+            {/* 来源超预算：正文没进 prompt，靠工具按需取；没有工具就真看不全 */}
+            {chat.sourcesTruncated && (
+              <p className="border-b border-divider bg-fill/40 px-5 py-2 text-[12px] leading-[1.5] text-ink-48">
+                {toolSupport === false
+                  ? "来源集过大，只有标题与摘要进入了上下文，且当前模型不支持工具调用，正文不可见。建议减少来源。"
+                  : "来源集过大，正文未全部载入，AI 会按需检索来源内容。"}
+              </p>
             )}
 
             {/* 工具能力降级提示 */}
@@ -200,7 +293,9 @@ export function ChatPanel({
             <div className="min-h-0 flex-1 space-y-3 overflow-y-auto px-5 py-4">
               {chat.items.length === 0 && (
                 <p className="pt-8 text-center text-[13px] leading-[1.6] text-ink-48">
-                  问点什么，或让我帮你记一条、找一找、归归类。
+                  {chat.grounded
+                    ? "问点什么，我只从选中的来源里找答案。"
+                    : "问点什么，或让我帮你记一条、找一找、归归类。"}
                 </p>
               )}
               {chat.items.map((item, i) =>
@@ -295,6 +390,8 @@ export function ChatPanel({
                 )}
               </div>
             </div>
+              </>
+            )}
           </div>
         </div>
       )}

@@ -4,6 +4,7 @@
 // 条目形态的判定全在 chat-state.ts，这里只管副作用与生命周期。
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import type { SourceItem, SourceRef } from "@/lib/ai/sources";
 import {
   applyEvent,
   markUndo,
@@ -19,11 +20,11 @@ export interface ConversationSummary {
   title: string;
   updatedAt: number;
   scopeType: string;
-  // 会话创建时所围绕的笔记标题 / 主题名；全局会话没有
+  // 会话创建时所围绕的笔记标题 / 主题名；全局会话没有，来源问答显示来源条数
   scopeLabel?: string;
 }
 
-export type ChatScopeType = "note" | "topic" | "global";
+export type ChatScopeType = "note" | "topic" | "global" | "sources";
 
 export function useChat(scopeType: ChatScopeType, scopeId: string) {
   const [conversationId, setConversationId] = useState<string | null>(null);
@@ -33,6 +34,14 @@ export function useChat(scopeType: ChatScopeType, scopeId: string) {
   // 正在撤销的操作卡片 messageId，防止连点发出两次反向操作
   const [undoing, setUndoing] = useState<string | null>(null);
   const [error, setError] = useState("");
+  /* 来源问答态。grounded 为真时整条会话都严格接地，与页面上下文附件互斥——
+     附件跟着页面走，来源集是用户显式挑的，两者同时生效只会让人搞不清 AI 到底看得见什么。 */
+  const [grounded, setGrounded] = useState(false);
+  const [sources, setSources] = useState<SourceItem[]>([]);
+  // 服务端回报的本轮生效来源笔记，供引用溯源放行
+  const [sourceNoteIds, setSourceNoteIds] = useState<string[]>([]);
+  // 来源超预算：只有清单进了 prompt，正文靠工具取；无工具模型下要提醒用户
+  const [sourcesTruncated, setSourcesTruncated] = useState(false);
   const abortRef = useRef<AbortController | null>(null);
 
   const loadConversations = useCallback(async () => {
@@ -50,8 +59,19 @@ export function useChat(scopeType: ChatScopeType, scopeId: string) {
   const loadMessages = useCallback(async (id: string) => {
     const res = await fetch(`/api/chat/conversations/${id}`);
     if (!res.ok) throw new Error("加载会话失败");
-    const data = (await res.json()) as { messages?: HistoryMessage[] };
+    const data = (await res.json()) as {
+      conversation?: { scopeType?: string };
+      messages?: HistoryMessage[];
+      sources?: SourceItem[];
+      sourceNoteIds?: string[];
+    };
     setItems(rebuildItems(data.messages ?? []));
+    // 接地与否由会话自己说了算，不看当前页面——从历史里打开一次来源问答仍是来源问答
+    const isGrounded = data.conversation?.scopeType === "sources";
+    setGrounded(isGrounded);
+    setSources(isGrounded ? (data.sources ?? []) : []);
+    setSourceNoteIds(isGrounded ? (data.sourceNoteIds ?? []) : []);
+    setSourcesTruncated(false);
   }, []);
 
   const openConversation = useCallback(
@@ -61,6 +81,10 @@ export function useChat(scopeType: ChatScopeType, scopeId: string) {
       setError("");
       if (!id) {
         setItems([]);
+        setGrounded(false);
+        setSources([]);
+        setSourceNoteIds([]);
+        setSourcesTruncated(false);
         return;
       }
       try {
@@ -70,6 +94,43 @@ export function useChat(scopeType: ChatScopeType, scopeId: string) {
       }
     },
     [loadMessages],
+  );
+
+  /* 开一个新的来源问答。会话行要等首条消息才建（沿用惰性创建），
+     所以来源集先只存在前端，随首条消息一起提交。 */
+  const startGrounded = useCallback((picked: SourceItem[]) => {
+    abortRef.current?.abort();
+    setConversationId(null);
+    setItems([]);
+    setError("");
+    setGrounded(true);
+    setSources(picked);
+    setSourceNoteIds([]);
+    setSourcesTruncated(false);
+  }, []);
+
+  /* 改来源集。会话已建则落库（下一条消息生效），未建则只改前端。
+     已经产生的回答不追溯重算——用户看到的历史仍是当时那批来源的产物。 */
+  const updateSources = useCallback(
+    async (picked: SourceItem[]) => {
+      setSources(picked);
+      if (!conversationId) return;
+      const refs: SourceRef[] = picked.map((s) => ({ type: s.type, id: s.id }));
+      try {
+        const res = await fetch(`/api/chat/conversations/${conversationId}/sources`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ sources: refs }),
+        });
+        if (res.ok) {
+          const data = (await res.json()) as { sources?: SourceItem[] };
+          setSources(data.sources ?? picked);
+        }
+      } catch {
+        setError("来源集保存失败，请重试");
+      }
+    },
+    [conversationId],
   );
 
   const removeConversation = useCallback(
@@ -109,6 +170,10 @@ export function useChat(scopeType: ChatScopeType, scopeId: string) {
       }
       await pumpSseEvents(res.body, (ev) => {
         setItems((prev) => applyEvent(prev, ev));
+        if ("grounding" in ev) {
+          setSourceNoteIds(ev.grounding.noteIds);
+          setSourcesTruncated(ev.grounding.mode === "digest");
+        }
         if ("error" in ev) setError(ev.error);
         if ("done" in ev) setConversationId(ev.conversationId);
       });
@@ -129,16 +194,23 @@ export function useChat(scopeType: ChatScopeType, scopeId: string) {
       const message = text.trim();
       if (!message || streaming) return;
       setItems((prev) => [...prev, { kind: "text", role: "user", content: message }]);
+      // 接地会话不带页面上下文附件：来源集是唯一的知识边界
+      const effectiveScope: ChatScopeType = grounded ? "sources" : scopeType;
       await runStream("/api/chat", {
         conversationId: conversationId ?? undefined,
-        scopeType,
-        // 全局助手没有作用域对象，服务端要求此时不传 scopeId
-        scopeId: scopeType === "global" ? undefined : scopeId,
+        scopeType: effectiveScope,
+        // 只有 note/topic 有作用域对象，其余不传
+        scopeId: effectiveScope === "note" || effectiveScope === "topic" ? scopeId : undefined,
+        // 来源集随首条消息落库；续聊时服务端以会话已存的为准
+        sources:
+          grounded && !conversationId
+            ? sources.map((s) => ({ type: s.type, id: s.id }))
+            : undefined,
         message,
         useVision,
       }).catch(() => {});
     },
-    [conversationId, scopeType, scopeId, streaming, runStream],
+    [conversationId, scopeType, scopeId, streaming, runStream, grounded, sources],
   );
 
   /* 确认卡片的两个按钮打同一个端点，只差 approve。
@@ -202,12 +274,18 @@ export function useChat(scopeType: ChatScopeType, scopeId: string) {
     streaming,
     undoing,
     error,
+    grounded,
+    sources,
+    sourceNoteIds,
+    sourcesTruncated,
     send,
     stop,
     undo,
     respondConfirm,
     loadConversations,
     openConversation,
+    startGrounded,
+    updateSources,
     removeConversation,
   };
 }
