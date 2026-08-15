@@ -2,6 +2,12 @@
 
 本项目遵循 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/) 与[语义化版本](https://semver.org/lang/zh-CN/)。
 
+## [0.3.1] - 2026-08-15
+
+### 修复
+
+- 容器健康检查始终为 unhealthy：镜像缺少 `HOSTNAME=0.0.0.0`，Next standalone 因此绑定到 Docker 默认设置的容器 ID 主机名，容器内 `127.0.0.1` 不可达，而 HEALTHCHECK 探的正是它。服务对外一直正常，只是探针连不上自己——该缺陷自 v0.1.1 引入健康检查起就存在
+
 ## [0.3.0] - 2026-08-15
 
 ### 新增
@@ -78,7 +84,8 @@
 - PWA、深浅色主题、图片上传
 - 单密码登录 + JWT 会话；Docker 部署；每日自动备份数据库
 
-[未发布]: https://github.com/B-tech-hub/zhiliao/compare/v0.3.0...HEAD
+[未发布]: https://github.com/B-tech-hub/zhiliao/compare/v0.3.1...HEAD
+[0.3.1]: https://github.com/B-tech-hub/zhiliao/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/B-tech-hub/zhiliao/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/B-tech-hub/zhiliao/compare/v0.1.1...v0.2.0
 [0.1.1]: https://github.com/B-tech-hub/zhiliao/compare/v0.1.0...v0.1.1
