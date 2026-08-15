@@ -116,12 +116,13 @@ export const settings = sqliteTable("settings", {
 });
 
 // AI 助手会话。scope 是「会话创建时的上下文快照」而非归属维度：
-// 'global' 表示未附带上下文（不加硬外键以兼容多态 scope_id）
+// 'global' 表示未附带上下文，'sources' 表示来源问答（来源集另存 conversation_sources）
+// （不加硬外键以兼容多态 scope_id）
 export const conversations = sqliteTable(
   "conversations",
   {
     id: text("id").primaryKey(),
-    // 'note' | 'topic' | 'global'
+    // 'note' | 'topic' | 'global' | 'sources'
     scopeType: text("scope_type").notNull(),
     scopeId: text("scope_id").notNull(),
     title: text("title").notNull().default(""),
@@ -129,6 +130,26 @@ export const conversations = sqliteTable(
     updatedAt: integer("updated_at").notNull(),
   },
   (t) => [index("idx_conversations_scope").on(t.scopeType, t.scopeId, t.updatedAt)],
+);
+
+// 来源问答的来源集：勾选的笔记与主题。主题是「活引用」——
+// 只存主题 id，提问时现查其下笔记，后续新增的笔记自动进入来源范围。
+// source_id 同为多态列，不加外键（悬垂行由 trash.ts 清理）
+export const conversationSources = sqliteTable(
+  "conversation_sources",
+  {
+    conversationId: text("conversation_id")
+      .notNull()
+      .references(() => conversations.id, { onDelete: "cascade" }),
+    // 'note' | 'topic'
+    sourceType: text("source_type").notNull(),
+    sourceId: text("source_id").notNull(),
+    createdAt: integer("created_at").notNull(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.conversationId, t.sourceType, t.sourceId] }),
+    index("idx_conversation_sources_src").on(t.sourceType, t.sourceId),
+  ],
 );
 
 export const messages = sqliteTable(
@@ -155,4 +176,5 @@ export type Tag = typeof tags.$inferSelect;
 export type AiJob = typeof aiJobs.$inferSelect;
 export type TopicSuggestion = typeof topicSuggestions.$inferSelect;
 export type Conversation = typeof conversations.$inferSelect;
+export type ConversationSource = typeof conversationSources.$inferSelect;
 export type ChatMessageRow = typeof messages.$inferSelect;

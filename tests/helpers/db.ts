@@ -6,6 +6,7 @@ import { notes, topics } from "@/db/schema";
 export function wipeData() {
   getSqlite().exec(`
     DELETE FROM messages;
+    DELETE FROM conversation_sources;
     DELETE FROM conversations;
     DELETE FROM note_tags;
     DELETE FROM notes_fts;

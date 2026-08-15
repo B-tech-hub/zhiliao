@@ -137,4 +137,21 @@ CREATE INDEX IF NOT EXISTS idx_notes_deleted_at ON notes(deleted_at) WHERE delet
 ALTER TABLE messages ADD COLUMN tool_payload TEXT;
 `,
   },
+  {
+    // 来源问答：会话的来源集。
+    // conversations.scope_type 新增 'sources' 取值属值层面变化，无需 DDL。
+    // source_id 不加外键，与 conversations.scope_id 同为多态列（可指向笔记或主题），
+    // 悬垂行由 trash.ts 的 purgeNoteRows / purgeOrphans 清理。
+    id: "0007_conversation_sources",
+    sql: `
+CREATE TABLE IF NOT EXISTS conversation_sources (
+  conversation_id TEXT NOT NULL REFERENCES conversations(id) ON DELETE CASCADE,
+  source_type TEXT NOT NULL,
+  source_id TEXT NOT NULL,
+  created_at INTEGER NOT NULL,
+  PRIMARY KEY (conversation_id, source_type, source_id)
+);
+CREATE INDEX IF NOT EXISTS idx_conversation_sources_src ON conversation_sources(source_type, source_id);
+`,
+  },
 ];

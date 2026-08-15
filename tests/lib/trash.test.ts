@@ -4,7 +4,7 @@ import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { and, eq } from "drizzle-orm";
 import { getDb, getSqlite } from "@/db";
-import { aiJobs, conversations, images, messages, notes, topics } from "@/db/schema";
+import { aiJobs, conversations, conversationSources, images, messages, notes, topics } from "@/db/schema";
 import { replaceNoteTags } from "@/lib/notes";
 import { refreshNoteFts, searchNoteIds } from "@/lib/search";
 import {
@@ -34,7 +34,11 @@ function insertImage(id: string, filename: string, createdAt: number) {
     .run();
 }
 
-function insertConversation(id: string, scopeType: "note" | "topic" | "global", scopeId: string) {
+function insertConversation(
+  id: string,
+  scopeType: "note" | "topic" | "global" | "sources",
+  scopeId: string,
+) {
   const now = Date.now();
   getDb()
     .insert(conversations)
@@ -44,6 +48,22 @@ function insertConversation(id: string, scopeType: "note" | "topic" | "global", 
     .insert(messages)
     .values({ id: `${id}-m1`, conversationId: id, role: "user", content: "hi", createdAt: now })
     .run();
+}
+
+function insertSource(conversationId: string, sourceType: "note" | "topic", sourceId: string) {
+  getDb()
+    .insert(conversationSources)
+    .values({ conversationId, sourceType, sourceId, createdAt: Date.now() })
+    .run();
+}
+
+function listSources(): string[] {
+  return getDb()
+    .select()
+    .from(conversationSources)
+    .all()
+    .map((s) => `${s.conversationId}:${s.sourceType}:${s.sourceId}`)
+    .sort();
 }
 
 function getNote(id: string) {
@@ -249,6 +269,65 @@ describe("trash 彻底删除与孤儿清理", () => {
     const left = getDb().select({ id: conversations.id }).from(conversations).all().map((c) => c.id);
     expect(left).toEqual(["c1"]);
     expect(getDb().select({ id: messages.id }).from(messages).all().map((m) => m.id)).toEqual(["c1-m1"]);
+  });
+
+  // 来源问答会话的来源在 conversation_sources 里，scopeId 同为空串。
+  // 与全局会话同理：漏一个分支，每天的清扫就会把用户的来源问答记录删光
+  it("purgeOrphans 保留来源问答会话——scopeId 为空不算孤儿", () => {
+    fakeUploads();
+    insertNote("n1", "来源内容");
+    insertConversation("c1", "sources", "");
+    insertSource("c1", "note", "n1");
+    insertConversation("c2", "note", "ghost-note");
+
+    const r = purgeOrphans(getDb());
+    expect(r.conversations).toBe(1);
+    const left = getDb().select({ id: conversations.id }).from(conversations).all().map((c) => c.id);
+    expect(left).toEqual(["c1"]);
+    expect(listSources()).toEqual(["c1:note:n1"]);
+  });
+
+  // 来源被删光不等于会话失效：历史问答与撤销载荷仍要留着
+  it("purgeOrphans 保留来源已全部失效的来源问答会话，只清悬垂引用行", () => {
+    fakeUploads();
+    insertConversation("c1", "sources", "");
+    insertSource("c1", "note", "ghost-note");
+    insertSource("c1", "topic", "ghost-topic");
+
+    const r = purgeOrphans(getDb());
+    expect(r.conversations).toBe(0);
+    expect(r.sources).toBe(2);
+    expect(getDb().select({ id: conversations.id }).from(conversations).all().map((c) => c.id)).toEqual(["c1"]);
+    expect(getDb().select({ id: messages.id }).from(messages).all().map((m) => m.id)).toEqual(["c1-m1"]);
+    expect(listSources()).toEqual([]);
+  });
+
+  it("purgeNotes 连带清除来源集中指向该笔记的引用行，会话本身不动", () => {
+    fakeUploads();
+    insertNote("n1", "要删的");
+    insertNote("n2", "保留的");
+    insertConversation("c1", "sources", "");
+    insertSource("c1", "note", "n1");
+    insertSource("c1", "note", "n2");
+
+    trashNotes(getDb(), ["n1"]);
+    expect(purgeNotes(getDb(), ["n1"])).toBe(1);
+
+    expect(listSources()).toEqual(["c1:note:n2"]);
+    expect(getDb().select({ id: conversations.id }).from(conversations).all().map((c) => c.id)).toEqual(["c1"]);
+  });
+
+  it("软删除笔记不动来源引用行（恢复后来源要还在）", () => {
+    fakeUploads();
+    insertNote("n1", "内容");
+    insertConversation("c1", "sources", "");
+    insertSource("c1", "note", "n1");
+
+    trashNotes(getDb(), ["n1"]);
+    expect(listSources()).toEqual(["c1:note:n1"]);
+    // 笔记行还在，孤儿扫描也不该动它
+    expect(purgeOrphans(getDb()).sources).toBe(0);
+    expect(listSources()).toEqual(["c1:note:n1"]);
   });
 
   it("sweepTrash 清除满 30 天的回收站笔记，29 天的保留", () => {

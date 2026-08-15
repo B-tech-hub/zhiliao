@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { and, eq, inArray, isNotNull, isNull, lte, sql } from "drizzle-orm";
 import type { DB } from "@/db";
-import { aiJobs, conversations, images, notes, topics } from "@/db/schema";
+import { aiJobs, conversations, conversationSources, images, notes, topics } from "@/db/schema";
 import { extractImageFilenames } from "@/lib/image-refs";
 import { enqueueNoteProcess } from "@/lib/notes";
 import { refreshNoteFts, removeNoteFts } from "@/lib/search";
@@ -65,6 +65,16 @@ function purgeNoteRows(db: DB, ids: string[]): void {
     tx.delete(conversations)
       .where(and(eq(conversations.scopeType, "note"), inArray(conversations.scopeId, ids)))
       .run(); // messages 靠外键级联
+    // 来源集里指向这些笔记的引用行（source_id 无外键，级联不会自动发生）。
+    // 只删引用行，不删会话——来源被删光的来源问答会话仍要保留历史消息
+    tx.delete(conversationSources)
+      .where(
+        and(
+          eq(conversationSources.sourceType, "note"),
+          inArray(conversationSources.sourceId, ids),
+        ),
+      )
+      .run();
     for (const id of ids) removeNoteFts(id);
   });
 }
@@ -87,8 +97,9 @@ export function purgeNotes(db: DB, noteIds: string[]): number {
 // 全局孤儿扫描（顺路还清旧版物理删除欠下的历史孤儿）：
 // - 图片：不被任何笔记（含回收站——可恢复的引用绝不能删）正文引用、且过了上传宽限期
 //   → 删记录 + 删文件；文件缺失时删记录不报错
-// - 会话：scope 指向已不存在的笔记/主题 → 删（消息级联）；全局会话没有 scope 对象，永不删
-export function purgeOrphans(db: DB): { images: number; conversations: number } {
+// - 会话：scope 指向已不存在的笔记/主题 → 删（消息级联）；没有 scope 对象的会话永不删
+// - 来源引用：指向已不存在的笔记/主题 → 只删引用行，不动会话
+export function purgeOrphans(db: DB): { images: number; conversations: number; sources: number } {
   const wanted = new Set<string>();
   for (const row of db.select({ content: notes.content }).from(notes).all()) {
     for (const f of extractImageFilenames(row.content)) wanted.add(path.basename(f));
@@ -114,25 +125,44 @@ export function purgeOrphans(db: DB): { images: number; conversations: number } 
     .select({ id: conversations.id, scopeType: conversations.scopeType, scopeId: conversations.scopeId })
     .from(conversations)
     .all()) {
-    /* 全局会话必须单独放行：它的 scopeId 是空串，落到 note/topic 任一分支都查不到对象，
-       会被判成孤儿——每天清扫一次，用户的全部助手会话连同撤销载荷就没了。
+    /* 只有 note / topic 两种 scope 有对应实体，其余一律放行，未知取值同样放行：
+       宁可留孤儿，也不能因为漏了一个分支就删数据。全局会话与来源问答会话的 scopeId
+       都是空串，落到 note/topic 任一分支都查不到对象——早期这里写成三元兜底，
+       每天清扫一次就把用户的全部助手会话连同撤销载荷删光了。
+       来源问答的来源在 conversation_sources 里，来源被删光也不算孤儿，历史消息要留。
        （注释别以 global 开头，那是 ESLint 的全局变量声明指令） */
-    const alive =
-      c.scopeType === "global"
-        ? true
-        : c.scopeType === "note"
-          ? noteIds.has(c.scopeId)
-          : topicIds.has(c.scopeId);
+    let alive = true;
+    if (c.scopeType === "note") alive = noteIds.has(c.scopeId);
+    else if (c.scopeType === "topic") alive = topicIds.has(c.scopeId);
     if (alive) continue;
     db.delete(conversations).where(eq(conversations.id, c.id)).run();
     removedConversations++;
   }
-  return { images: removedImages, conversations: removedConversations };
+
+  // 来源引用的悬垂行：笔记走 purgeNoteRows 已清，这里兜住主题删除与历史遗留
+  let removedSources = 0;
+  for (const s of db.select().from(conversationSources).all()) {
+    const alive = s.sourceType === "note" ? noteIds.has(s.sourceId) : topicIds.has(s.sourceId);
+    if (alive) continue;
+    db.delete(conversationSources)
+      .where(
+        and(
+          eq(conversationSources.conversationId, s.conversationId),
+          eq(conversationSources.sourceType, s.sourceType),
+          eq(conversationSources.sourceId, s.sourceId),
+        ),
+      )
+      .run();
+    removedSources++;
+  }
+  return { images: removedImages, conversations: removedConversations, sources: removedSources };
 }
 
 // 每日清扫：彻底删除满 30 天的回收站笔记 + 一轮全局孤儿扫描。
 // 只在每日备份成功后被调用（先备份后销毁，见 backup.ts）
-export function sweepTrash(db: DB): { purged: number; images: number; conversations: number } {
+export function sweepTrash(
+  db: DB,
+): { purged: number; images: number; conversations: number; sources: number } {
   const cutoff = Date.now() - TRASH_RETENTION_DAYS * 24 * 3600 * 1000;
   const expired = db
     .select({ id: notes.id })
