@@ -231,7 +231,13 @@ export function ChatPanel({
               )}
               {waiting && (
                 <div className="flex justify-start">
-                  <div className="rounded-[14px] bg-fill px-3.5 py-2 text-[14px] text-ink-48">…</div>
+                  <div
+                    role="status"
+                    className="flex items-center gap-2 rounded-[14px] bg-fill px-3.5 py-2 text-[14px] text-ink-48"
+                  >
+                    <Spinner className="text-action" />
+                    思考中…
+                  </div>
                 </div>
               )}
               {chat.error && <p className="text-[12px] text-danger">{chat.error}</p>}
@@ -273,8 +279,9 @@ export function ChatPanel({
                 {chat.streaming ? (
                   <button
                     onClick={chat.stop}
-                    className="h-9 shrink-0 rounded-full border border-hairline px-4 text-[13px] text-ink-48 active:scale-95"
+                    className="flex h-9 shrink-0 items-center gap-1.5 rounded-full border border-hairline px-4 text-[13px] text-ink-48 active:scale-95"
                   >
+                    <Spinner className="text-action" />
                     停止
                   </button>
                 ) : (
@@ -330,6 +337,27 @@ function Citations({
 
 const CARD_BASE = "rounded-[12px] border px-3 py-2 text-[13px] leading-[1.5]";
 
+/* 思考中的字符动画。原先等待首个字符只有一个静态「…」，模型想十几秒
+   与卡死没有区别——用户会以为功能坏了，实际它正在调工具或组织语言。
+   字符序列是「绽放—收缩」的循环，同 Claude Code 的 spinner 一个路数。 */
+const SPIN_FRAMES = ["✻", "✽", "✻", "∗", "✳", "✢", "·", "✢", "✳", "∗"];
+
+function Spinner({ className = "" }: { className?: string }) {
+  const [frame, setFrame] = useState(0);
+  useEffect(() => {
+    // 尊重系统的「减弱动效」偏好：此时停在第一帧，不做定时切换
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const timer = setInterval(() => setFrame((v) => (v + 1) % SPIN_FRAMES.length), 110);
+    return () => clearInterval(timer);
+  }, []);
+  // 各帧字宽不等，固定宽度并居中，否则相邻文字会跟着左右抖
+  return (
+    <span aria-hidden className={`inline-block w-[1em] shrink-0 text-center ${className}`}>
+      {SPIN_FRAMES[frame]}
+    </span>
+  );
+}
+
 // 操作卡片与确认卡片。六种状态在 chat-state 里判定好了，这里只负责画
 function ToolCard({
   item,
@@ -369,16 +397,19 @@ function ToolCard({
     );
   }
 
-  const icon = item.status === "running" ? "○" : item.status === "ok" ? "✓" : "✗";
   const title =
     item.status === "running" ? `正在${toolLabel(item.name)}…` : item.summary || toolLabel(item.name);
 
   return (
     <div className={`${CARD_BASE} border-hairline bg-fill/40`}>
       <div className="flex items-start gap-1.5">
-        <span aria-hidden className={item.status === "ok" ? "text-action" : "text-ink-48"}>
-          {icon}
-        </span>
+        {item.status === "running" ? (
+          <Spinner className="text-action" />
+        ) : (
+          <span aria-hidden className={item.status === "ok" ? "text-action" : "text-ink-48"}>
+            {item.status === "ok" ? "✓" : "✗"}
+          </span>
+        )}
         <span className={`min-w-0 flex-1 ${item.status === "failed" ? "text-ink-48" : ""}`}>
           {title}
         </span>

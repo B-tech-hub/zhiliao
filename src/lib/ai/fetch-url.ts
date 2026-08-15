@@ -25,13 +25,18 @@ const USER_AGENT = "zhiliao-assistant/0.3 (+https://github.com/B-tech-hub/zhilia
 
 /* ---------- 层 1：用户消息白名单 ---------- */
 
-// 结尾的中西文标点不属于 URL，需要剥掉；括号同理（中文语境常见「（链接）」）
-const URL_RE = /https?:\/\/[^\s<>"'`）)】\]}，。；！？、]+/gi;
+/* URL 只认 RFC 3986 允许的 ASCII 字符，任何非 ASCII（汉字、假名、全角标点）
+   都自然终止匹配。原先用「排除标点」的黑名单写法，汉字不在黑名单里，
+   「https://a.com/x这个网址上的内容」会被整段吞成 URL，与模型请求的干净
+   地址比对必然落空——用户明明给了链接却被判「未在对话中出现」。
+   代价是未经 percent 编码的中文路径会被截断，但浏览器复制出来的地址
+   本就已编码，比中文紧跟 URL 这种写法罕见得多。 */
+const URL_RE = /https?:\/\/[A-Za-z0-9\-._~:/?#[\]@!$&'()*+,;=%]+/gi;
 
 export function extractUrls(text: string): string[] {
   const out: string[] = [];
   for (const m of text.matchAll(URL_RE)) {
-    const cleaned = m[0].replace(/[.,;:!?'"）)】\]]+$/, "");
+    const cleaned = m[0].replace(/[.,;:!?'")\]]+$/, "");
     if (cleaned) out.push(cleaned);
   }
   return [...new Set(out)];
@@ -55,7 +60,13 @@ export function normalizeUrl(raw: string): string | null {
 /* ---------- 层 2：地址黑名单 ---------- */
 
 // [网段, 前缀长度]。除 RFC1918 私网外，还挡住云元数据（169.254）、
-// CGNAT/Tailscale（100.64）、文档与基准测试网段、组播与保留段
+// CGNAT/Tailscale（100.64）、文档网段、组播与保留段。
+//
+// 刻意不含 198.18.0.0/15：它虽是 RFC 2544 基准测试网段、公网上不该有服务，
+// 但 Clash / sing-box / Surge 的 TUN 模式默认拿它做 fake-IP。封了它，
+// 走代理的机器上每个域名都解析到 198.18.x.x，fetch_url 对这类用户直接报废，
+// 而那些地址实际由代理转发到真实公网，并非内网。层 1 的用户白名单才是主防线，
+// 这一层是纵深防御，不值得用「整个功能不可用」去换。
 const V4_BLOCKS: [string, number][] = [
   ["0.0.0.0", 8],
   ["10.0.0.0", 8],
@@ -66,7 +77,6 @@ const V4_BLOCKS: [string, number][] = [
   ["192.0.0.0", 24],
   ["192.0.2.0", 24],
   ["192.168.0.0", 16],
-  ["198.18.0.0", 15],
   ["198.51.100.0", 24],
   ["203.0.113.0", 24],
   ["224.0.0.0", 4],
@@ -140,7 +150,9 @@ async function assertPublicHost(hostname: string): Promise<void> {
   if (records.length === 0) throw new FetchUrlError(`无法解析域名：${hostname}`);
   for (const r of records) {
     if (isBlockedAddress(r.address)) {
-      throw new FetchUrlError(`不允许访问内网或私有地址：${hostname} → ${r.address}`);
+      throw new FetchUrlError(
+        `不允许访问内网或私有地址：${hostname} → ${r.address}（若你在用代理，这可能是它的虚拟 IP）`,
+      );
     }
   }
 }

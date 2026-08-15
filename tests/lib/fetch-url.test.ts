@@ -64,6 +64,18 @@ describe("URL 提取与规范化", () => {
     expect(extractUrls("没有链接的消息")).toEqual([]);
   });
 
+  /* 中文里贴链接常常不留空格。汉字若被吞进 URL，白名单比对必然落空，
+     表现为「用户明明给了链接，助手却说没在对话中出现过」。 */
+  it("URL 后紧跟中文时不吞汉字", () => {
+    expect(
+      extractUrls("帮我查看 https://linux.do/t/topic/2756925这个网址上的内容，总结成笔记"),
+    ).toEqual(["https://linux.do/t/topic/2756925"]);
+    expect(extractUrls("见https://example.com/a和https://example.com/b两处")).toEqual([
+      "https://example.com/a",
+      "https://example.com/b",
+    ]);
+  });
+
   it("规范化：去 fragment、主机小写、默认端口省略", () => {
     expect(normalizeUrl("https://EXAMPLE.com:443/a?x=1#frag")).toBe("https://example.com/a?x=1");
     expect(normalizeUrl("https://example.com/")).toBe("https://example.com");
@@ -141,6 +153,18 @@ describe("层 2 · 地址黑名单", () => {
     await expect(fetchUrlSafely("https://nx.test/x", ["https://nx.test/x"])).rejects.toThrow(
       FetchUrlError,
     );
+  });
+
+  /* 198.18.0.0/15 虽是 RFC 2544 基准测试网段，却被 Clash / sing-box / Surge
+     的 TUN 模式默认拿来做 fake-IP。封它等于让所有走代理的用户彻底用不了
+     fetch_url，而那些地址实际由代理转发到真实公网，并非内网。 */
+  it("代理 fake-IP 网段 198.18.0.0/15 放行", async () => {
+    dnsTable["linux.do"] = ["198.18.0.38"];
+    routes["https://linux.do/t/topic/2756925"] = () => html("<p>正文</p>");
+    const r = await fetchUrlSafely("https://linux.do/t/topic/2756925", [
+      "https://linux.do/t/topic/2756925",
+    ]);
+    expect(r.text).toContain("正文");
   });
 });
 
