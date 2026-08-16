@@ -7,6 +7,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type { SourceItem, SourceRef } from "@/lib/ai/sources";
 import {
   applyEvent,
+  finalizeStream,
   markUndo,
   pumpSseEvents,
   rebuildItems,
@@ -168,15 +169,27 @@ export function useChat(scopeType: ChatScopeType, scopeId: string) {
         err.status = res.status;
         throw err;
       }
+      let sawDone = false;
+      let sawError = false;
       await pumpSseEvents(res.body, (ev) => {
         setItems((prev) => applyEvent(prev, ev));
         if ("grounding" in ev) {
           setSourceNoteIds(ev.grounding.noteIds);
           setSourcesTruncated(ev.grounding.mode === "digest");
         }
-        if ("error" in ev) setError(ev.error);
-        if ("done" in ev) setConversationId(ev.conversationId);
+        if ("error" in ev) {
+          sawError = true;
+          setError(ev.error);
+        }
+        if ("done" in ev) {
+          sawDone = true;
+          setConversationId(ev.conversationId);
+        }
       });
+      // 流自然结束却没见到 done：把最后那段话标成可能不完整
+      setItems((prev) =>
+        finalizeStream(prev, { sawDone, sawError, aborted: controller.signal.aborted }),
+      );
     } catch (e) {
       if (!controller.signal.aborted) {
         setError(e instanceof Error ? e.message : "网络错误");

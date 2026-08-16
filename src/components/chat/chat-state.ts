@@ -36,6 +36,8 @@ export interface TextItem {
   kind: "text";
   role: "user" | "assistant";
   content: string;
+  // 流没走到 done 就断了：气泡尾部要挂一句「回答可能不完整」
+  truncated?: boolean;
 }
 
 export interface ToolItem {
@@ -141,6 +143,22 @@ export function applyEvent(items: ChatItem[], ev: ChatSseEvent): ChatItem[] {
   if ("confirm_required" in ev) return [...items, pendingCard(ev.confirm_required)];
   // done / error 由调用方处理，不改动条目
   return items;
+}
+
+/* 流读完了却没收到 done：后端进程被杀、反代超时、上游断流都会这样，
+   而气泡里已吐出的半段话看上去和完整回答毫无区别。用户自己点停止不算——
+   那是他的意图，提示反而多余；出错也不算，错误条已经说明情况了。
+   末尾不是文本气泡时（比如断在工具卡片上）不硬加提示：那会多出一个空气泡。 */
+export function finalizeStream(
+  items: ChatItem[],
+  flags: { sawDone: boolean; sawError: boolean; aborted: boolean },
+): ChatItem[] {
+  if (flags.sawDone || flags.sawError || flags.aborted) return items;
+  const last = items[items.length - 1];
+  if (last?.kind !== "text" || last.role !== "assistant") return items;
+  const next = [...items];
+  next[next.length - 1] = { ...last, truncated: true };
+  return next;
 }
 
 export function markUndo(items: ChatItem[], messageId: string, result: UndoResult): ChatItem[] {

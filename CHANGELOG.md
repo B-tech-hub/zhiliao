@@ -2,6 +2,28 @@
 
 本项目遵循 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/) 与[语义化版本](https://semver.org/lang/zh-CN/)。
 
+## [0.5.0] - 2026-08-16
+
+### 新增
+
+- **AI 画图**：助手第 9 个工具 `generate_image`，生成结果以卡片呈现，可「插入当前笔记」或「存为新笔记」，模型也可自行调 `append_to_note`。只做 OpenAI 兼容的同步接口（`url` 与 `b64_json` 两种返回一律当场取字节落盘，图片类型按魔数嗅探）；**不设确认卡片**，改以每条用户消息最多 2 张封顶且失败也计数；来源问答中禁用（取舍见 [ADR-0011](docs/adr/0011-image-generation.md)）
+- 设置页第三组「图像模型」（`image_base_url` / `image_api_key` / `image_model`，回落语义同视觉模型）；「测试连接」会真实生成一张最小尺寸图，按钮旁注明消耗一次额度
+- 新端点 `POST /api/notes/[id]/append`（服务端读改写，避免客户端覆盖竞态）
+- **Mermaid 图表**：笔记编辑器里语言标为 `mermaid` 的代码块渲染成图，光标移入变回源码、移开重新出图，渲染失败显示源码与错误行；跟随深浅色重渲染。存储与导出形态不变，仍是原生 Markdown 代码块（Obsidian 直接可读）；mermaid 走动态 import，不进首屏 bundle
+- **每周回顾**：每周一凌晨把上一自然周新建的笔记梳理成一篇回顾，存入自动创建的「每周回顾」主题（`aiStatus=skipped` 且主题/标题双锁，不再被 AI 流水线整理）。默认开启，设置页可关，另有「立即生成上周回顾」手动补；空周不产报告（取舍见 [ADR-0012](docs/adr/0012-weekly-review.md)）
+- 新端点 `/api/review`：`PATCH` 开关、`POST` 手动入队
+- 环境变量新增 `IMAGE_BASE_URL` / `IMAGE_API_KEY` / `IMAGE_MODEL` / `IMAGE_TIMEOUT_MS`（默认 180 秒）与 `TZ`
+
+### 变更
+
+- **聊天界面重设计**：一体化输入卡（多行自增高输入 + chips 控件行 + 发送 pill），上下文附件、来源集、读图开关从顶部横条收进输入卡 chips；空态按会话形态给三套文案与建议动作 chips；气泡与卡片圆角统一为 18px
+- 助手提示词补充：写笔记涉及流程/结构/时间线时用 mermaid 代码块，聊天回答里不输出（那里不渲染）
+- AI 任务队列遇到未知任务类型改为显式抛错并重试，不再静默标记完成——新增任务类型忘了接线时不会再无声无息地消失
+
+### 修复
+
+- SSE 流未收到结束事件就断开时（后端进程被杀、反代超时），气泡尾部显示「回答可能不完整」；用户主动点停止或流内已报错时不提示
+
 ## [0.4.0] - 2026-08-15
 
 ### 新增
@@ -105,7 +127,9 @@
 - PWA、深浅色主题、图片上传
 - 单密码登录 + JWT 会话；Docker 部署；每日自动备份数据库
 
-[未发布]: https://github.com/B-tech-hub/zhiliao/compare/v0.3.1...HEAD
+[未发布]: https://github.com/B-tech-hub/zhiliao/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/B-tech-hub/zhiliao/compare/v0.4.0...v0.5.0
+[0.4.0]: https://github.com/B-tech-hub/zhiliao/compare/v0.3.1...v0.4.0
 [0.3.1]: https://github.com/B-tech-hub/zhiliao/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/B-tech-hub/zhiliao/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/B-tech-hub/zhiliao/compare/v0.1.1...v0.2.0

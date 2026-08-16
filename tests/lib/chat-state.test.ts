@@ -3,6 +3,7 @@ import type { ChatItem, HistoryMessage, ToolItem } from "@/components/chat/chat-
 import {
   applyEvent,
   collectNoteIds,
+  finalizeStream,
   markUndo,
   pumpSseEvents,
   rebuildItems,
@@ -434,5 +435,43 @@ describe("pumpSseEvents", () => {
   it("非 data 行（心跳、注释）忽略", async () => {
     const got = await collect(': keep-alive\n\ndata: {"delta":"在"}\n\n');
     expect(got).toEqual([{ delta: "在" }]);
+  });
+});
+
+/* 流断在半途时的收尾。这条提示是「回答可信度」的一部分：
+   半段话与完整回答在气泡里长得一模一样，不标出来用户无从分辨。 */
+describe("流式收尾", () => {
+  const reply: ChatItem[] = [
+    { kind: "text", role: "user", content: "问题" },
+    { kind: "text", role: "assistant", content: "答了一半" },
+  ];
+  const flags = { sawDone: false, sawError: false, aborted: false };
+  const lastText = (items: ChatItem[]) => items[items.length - 1] as { truncated?: boolean };
+
+  it("没收到 done 就结束：标记最后一段回答", () => {
+    expect(lastText(finalizeStream(reply, flags)).truncated).toBe(true);
+  });
+
+  it("正常收到 done：不标记", () => {
+    expect(lastText(finalizeStream(reply, { ...flags, sawDone: true })).truncated).toBeUndefined();
+  });
+
+  // 用户点「停止」是他自己的意图，再提示「可能不完整」是废话
+  it("用户主动停止：不标记", () => {
+    expect(lastText(finalizeStream(reply, { ...flags, aborted: true })).truncated).toBeUndefined();
+  });
+
+  // 出错时错误条已经说明情况，气泡里不再重复一遍
+  it("流内报错：不标记", () => {
+    expect(lastText(finalizeStream(reply, { ...flags, sawError: true })).truncated).toBeUndefined();
+  });
+
+  it("末尾不是助手气泡时原样返回，不硬造空气泡", () => {
+    const endsWithCard: ChatItem[] = [
+      { kind: "text", role: "user", content: "删了它" },
+      { kind: "tool", callId: "c1", name: "delete_note", args: "{}", status: "running", summary: "", undo: "none" },
+    ];
+    expect(finalizeStream(endsWithCard, flags)).toBe(endsWithCard);
+    expect(finalizeStream([], flags)).toEqual([]);
   });
 });

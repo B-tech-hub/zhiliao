@@ -16,7 +16,17 @@ services:
       LLM_API_KEY: ${LLM_API_KEY:-}
       LLM_MODEL: ${LLM_MODEL:-}
       LLM_TIMEOUT_MS: ${LLM_TIMEOUT_MS:-60000}
+      # 视觉模型（AI 读图）与图像模型（AI 画图）：留空则在设置页配置
+      VISION_BASE_URL: ${VISION_BASE_URL:-}
+      VISION_API_KEY: ${VISION_API_KEY:-}
+      VISION_MODEL: ${VISION_MODEL:-}
+      IMAGE_BASE_URL: ${IMAGE_BASE_URL:-}
+      IMAGE_API_KEY: ${IMAGE_API_KEY:-}
+      IMAGE_MODEL: ${IMAGE_MODEL:-}
+      IMAGE_TIMEOUT_MS: ${IMAGE_TIMEOUT_MS:-180000}
       AI_CONFIDENCE_THRESHOLD: ${AI_CONFIDENCE_THRESHOLD:-0.6}
+      # 时区：默认 UTC。「每周回顾」按此分周，中国用户建议在 .env 里设 Asia/Shanghai
+      TZ: ${TZ:-UTC}
     volumes:
       - ./data/db:/data/db
       - ./data/uploads:/data/uploads

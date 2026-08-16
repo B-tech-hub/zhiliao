@@ -33,3 +33,9 @@ next-env.d.ts
 # 本地 AI 协作工具配置（含本机权限白名单等，不进仓库）
 .claude/
 .spec-workflow/
+
+# 本地头脑风暴与工具链草稿，不进仓库
+brainstorm/
+
+# 隔离验收实例的数据目录（端口 3100 那套，不进仓库）
+/data-demo-ui/

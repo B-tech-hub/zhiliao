@@ -40,11 +40,14 @@
 ### 视觉模型（Vision）
 AI 读图专用的第二组 LLM 配置（`vision_base_url` / `vision_api_key` / `vision_model`）。接入点与 Key 留空时回落文本模型配置；仅在显式配置了视觉模型名时"AI 看图"功能才可用。
 
+### 图像模型（Image）
+AI 画图专用的第三组 LLM 配置（`image_base_url` / `image_api_key` / `image_model`），回落语义同视觉模型。未配置模型名时助手不下发生图工具。
+
 ### AI 助手（Assistant）
 全局的对话式入口：任意页面右下角均可唤起，面向整个知识库，可通过**工具调用**检索与改写笔记。当前打开的笔记/主题以**上下文附件**形式带入，可随时摘除。会话与消息持久化，回答走 SSE 流式；模型不支持工具调用时自动降级为纯问答。相关决策见 [docs/adr/0008-assistant-tool-calling.md](docs/adr/0008-assistant-tool-calling.md)（上下文注入时期的决策见 [docs/adr/0003-chat-context-injection.md](docs/adr/0003-chat-context-injection.md)）。
 
 ### 工具调用（Tool Calling）
-助手读写知识库的唯一途径，共 8 个：检索笔记、读取全文、列出主题、新建笔记、追加内容、修改元数据、删除笔记、抓取网页。**不存在覆盖正文的工具**——项目不做版本历史，正文覆盖是唯一不可恢复的操作。单次对话最多 8 轮、每轮最多 20 个调用。`fetch_url` 只能抓取用户消息中出现过的网址，相关决策见 [docs/adr/0009-fetch-url-safety.md](docs/adr/0009-fetch-url-safety.md)。
+助手读写知识库的唯一途径，共 9 个：检索笔记、读取全文、列出主题、新建笔记、追加内容、修改元数据、删除笔记、抓取网页、生成图片。**不存在覆盖正文的工具**——项目不做版本历史，正文覆盖是唯一不可恢复的操作。单次对话最多 8 轮、每轮最多 20 个调用。`fetch_url` 只能抓取用户消息中出现过的网址，相关决策见 [docs/adr/0009-fetch-url-safety.md](docs/adr/0009-fetch-url-safety.md)；`generate_image` 每条用户消息最多 2 次，见 [docs/adr/0011-image-generation.md](docs/adr/0011-image-generation.md)。
 
 ### 上下文附件（Context Attachment）
 挂在助手面板顶部的一份当前材料：用户正在看的笔记或主题。摘除后助手面向全库。它是**会话创建时的上下文快照**，不再是会话的归属维度——会话列表按最近更新倒序列出全部，不按附件切分，旧会话标注「围绕 XX」。与**来源集**的区别：附件跟着页面自动来去、只是给助手的一份参考材料，助手仍可自由使用全库与自身知识；来源集是用户显式挑定的知识边界，一旦设定，整场会话都受**严格接地**约束。二者互斥，来源问答期间不带附件。
@@ -72,6 +75,15 @@ AI 读图专用的第二组 LLM 配置（`vision_base_url` / `vision_api_key` / 
 
 ### 富文本图片属性
 笔记中调整过宽度/对齐/说明的图片，以内嵌 HTML `<img>` 形式存于 Markdown 正文，与纯 Markdown 图片 `![alt](url)` 混存。相关决策见 [docs/adr/0002-image-attrs-inline-html.md](docs/adr/0002-image-attrs-inline-html.md)。
+
+### 图像生成（Image Generation）
+助手按描述画图并落盘为笔记图片的能力。生成结果以卡片呈现，可「插入当前笔记」或「存为新笔记」。**不设确认卡片**（仅删除需确认这条不变量不破例），改以每条用户消息最多 2 张封顶——失败也计数，防「再试一次」绕过。生成卡片没有撤销按钮：文件能删，那次调用的钱撤不回。来源问答中禁用。相关决策见 [docs/adr/0011-image-generation.md](docs/adr/0011-image-generation.md)。
+
+### 每周回顾（Weekly Review）
+每周一凌晨把上一自然周（周一至周日）新建的笔记梳理成一篇脉络回顾，产物是一条普通笔记，归入自动创建的普通主题「每周回顾」。默认开启，设置页可关，另有「立即生成上周回顾」手动补。调度不是日历定时器而是**每小时对表**：settings 记已安排的周，进入新的一周即入队，因此停机期间错过的周开机后会自动补上。空周不产报告。按服务器本地时区分周（容器默认 UTC，需设 `TZ`）。相关决策见 [docs/adr/0012-weekly-review.md](docs/adr/0012-weekly-review.md)。
+
+### Mermaid 图表
+笔记正文中语言标为 `mermaid` 的代码块，在编辑器里渲染成图：光标离开时出图，点图或把光标移进去变回源码，渲染失败则显示源码与错误。存储形态仍是原生 Markdown 代码块，导出后 Obsidian 等工具可直接读。聊天气泡不渲染（那里是纯文本）。
 
 ### FTS 影子表
 笔记的全文搜索索引副本。删除、修改或移入回收站时必须同步更新，否则搜索会出现"幽灵结果"；回收站中的笔记不在索引内，恢复时重建。

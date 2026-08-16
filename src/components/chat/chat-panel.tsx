@@ -357,6 +357,10 @@ export function ChatPanel({
                         ) : (
                           item.content
                         )}
+                        {/* 流断在半途：说清楚这段话可能没说完，别让用户当成完整回答 */}
+                        {item.truncated && (
+                          <span className="mt-1 block text-[12px] text-ink-48">回答可能不完整</span>
+                        )}
                       </div>
                     </div>
                   ),
