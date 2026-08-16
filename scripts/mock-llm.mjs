@@ -114,6 +114,7 @@ function pickTool(tools, user) {
   if (named) return named;
   const has = (name) => tools.find((t) => t?.function?.name === name);
   if (/https?:\/\//.test(user)) return has("fetch_url") ?? tools[0];
+  if (/画|配图|生成.*图/.test(user)) return has("generate_image") ?? tools[0];
   if (/删/.test(user)) return has("delete_note") ?? tools[0];
   if (/记一条|记录|新建|写一条/.test(user)) return has("create_note") ?? tools[0];
   if (/主题|分类/.test(user)) return has("list_topics") ?? tools[0];
@@ -139,6 +140,8 @@ function mockArgs(name, user) {
       return JSON.stringify({ query: user.replace(/[^一-龥a-zA-Z0-9]/g, "").slice(0, 8) || "笔记" });
     case "fetch_url":
       return JSON.stringify({ url: user.match(/https?:\/\/\S+/)?.[0] ?? "https://example.com" });
+    case "generate_image":
+      return JSON.stringify({ prompt: user.slice(0, 100) || "一张示意图" });
     default:
       return "{}";
   }

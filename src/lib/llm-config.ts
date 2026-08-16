@@ -18,6 +18,13 @@ export const VISION_SETTING_KEYS = {
   model: "vision_model",
 } as const;
 
+// 图像生成独立配置：与视觉模型同样的回落规则（模型名不回落）
+export const IMAGE_SETTING_KEYS = {
+  baseUrl: "image_base_url",
+  apiKey: "image_api_key",
+  model: "image_model",
+} as const;
+
 export type LlmConfigSource = "db" | "env" | "none";
 
 export interface LlmConfig {
@@ -67,17 +74,22 @@ export interface VisionConfig {
   apiKey: string | null;
   model: string | null;
   sources: { baseUrl: VisionConfigSource; apiKey: VisionConfigSource; model: VisionConfigSource };
-  // settings 表中存在任一视觉配置项
+  // settings 表中存在任一该组配置项
   hasDbConfig: boolean;
 }
 
-// 视觉模型配置：settings 表优先、VISION_* 环境变量次之，baseUrl/apiKey 缺省回落文本模型
-export function getVisionConfig(): VisionConfig {
+/* 视觉与图像两组附加配置的共同形态：接入点与 API Key 缺省回落文本模型，
+   模型名不回落——只有显式填了模型名，该能力才算启用。两组的差异只有
+   settings key 与环境变量前缀，各抄一份迟早漂移，共用这一段。 */
+function getDerivedConfig(
+  keys: { baseUrl: string; apiKey: string; model: string },
+  envPrefix: string,
+): VisionConfig {
   const db = getDb();
   const rows = db
     .select()
     .from(settings)
-    .where(inArray(settings.key, Object.values(VISION_SETTING_KEYS)))
+    .where(inArray(settings.key, Object.values(keys)))
     .all();
   const dbMap = new Map(rows.map((r) => [r.key, r.value]));
 
@@ -90,9 +102,9 @@ export function getVisionConfig(): VisionConfig {
   }
 
   const text = getLlmConfig();
-  const baseUrl = resolve(VISION_SETTING_KEYS.baseUrl, "VISION_BASE_URL");
-  const apiKey = resolve(VISION_SETTING_KEYS.apiKey, "VISION_API_KEY");
-  const model = resolve(VISION_SETTING_KEYS.model, "VISION_MODEL");
+  const baseUrl = resolve(keys.baseUrl, `${envPrefix}_BASE_URL`);
+  const apiKey = resolve(keys.apiKey, `${envPrefix}_API_KEY`);
+  const model = resolve(keys.model, `${envPrefix}_MODEL`);
 
   // 未显式配置时回落文本模型，来源标 fallback；文本模型也没有才是 none
   const inherit = (
@@ -103,7 +115,7 @@ export function getVisionConfig(): VisionConfig {
   return {
     baseUrl: baseUrl.value ?? text.baseUrl,
     apiKey: apiKey.value ?? text.apiKey,
-    // 模型名不回落：只有显式配置了视觉模型名，AI 读图才可用
+    // 模型名不回落：只有显式配置了模型名，该能力才可用
     model: model.value,
     sources: {
       baseUrl: inherit(baseUrl, text.baseUrl),
@@ -114,9 +126,25 @@ export function getVisionConfig(): VisionConfig {
   };
 }
 
+// 视觉模型配置：settings 表优先、VISION_* 环境变量次之，baseUrl/apiKey 缺省回落文本模型
+export function getVisionConfig(): VisionConfig {
+  return getDerivedConfig(VISION_SETTING_KEYS, "VISION");
+}
+
+// 图像生成配置：规则同视觉模型，环境变量前缀 IMAGE_*
+export function getImageConfig(): VisionConfig {
+  return getDerivedConfig(IMAGE_SETTING_KEYS, "IMAGE");
+}
+
 // 视觉能力可用：至少显式配置了视觉模型名
 export function isVisionConfigured(): boolean {
   const c = getVisionConfig();
+  return Boolean(c.baseUrl && c.apiKey && c.model);
+}
+
+// 生图能力可用：至少显式配置了图像模型名。助手据此决定要不要注册 generate_image
+export function isImageGenConfigured(): boolean {
+  const c = getImageConfig();
   return Boolean(c.baseUrl && c.apiKey && c.model);
 }
 

@@ -3,7 +3,7 @@ import { getTopicsWithCounts } from "@/lib/topics";
 import { getQueueStats } from "@/lib/ai/worker";
 import { getLastBackupAt } from "@/lib/backup";
 import { getTrashCount } from "@/lib/trash";
-import { getLlmConfig, getVisionConfig } from "@/lib/llm-config";
+import { getImageConfig, getLlmConfig, getVisionConfig } from "@/lib/llm-config";
 import { SettingsPanel } from "./settings-panel";
 
 export const dynamic = "force-dynamic";
@@ -34,12 +34,20 @@ export default function SettingsPage() {
     apiKeyMasked: maskKey(visionConfig.apiKey),
     sources: visionConfig.sources,
   };
+  const imageConfig = getImageConfig();
+  const image = {
+    model: imageConfig.model ?? "",
+    baseUrl: imageConfig.baseUrl ?? "",
+    apiKeyMasked: maskKey(imageConfig.apiKey),
+    sources: imageConfig.sources,
+  };
 
   return (
     <SettingsPanel
       topics={rows}
       llm={llm}
       vision={vision}
+      image={image}
       queue={getQueueStats(db)}
       lastBackupAt={getLastBackupAt()}
       trashCount={getTrashCount(db)}

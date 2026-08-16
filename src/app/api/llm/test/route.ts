@@ -1,15 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
+import { testImageConnection } from "@/lib/image-gen";
 import { isLlmConfigured, probeToolSupport, testConnection, testVisionConnection } from "@/lib/llm";
 import { saveToolSupport } from "@/lib/llm-config";
 
 // LLM 连通性测试（设置页“测试连接”按钮）
-// body 可传 { target: "text" | "vision" }；缺省或解析失败一律按 text，保证老前端兼容
+// body 可传 { target: "text" | "vision" | "image" }；缺省或解析失败一律按 text，保证老前端兼容
 export async function POST(req: NextRequest) {
   const body = await req.json().catch(() => null);
-  const target = (body as { target?: string } | null)?.target === "vision" ? "vision" : "text";
+  const raw = (body as { target?: string } | null)?.target;
+  const target = raw === "vision" || raw === "image" ? raw : "text";
 
   if (target === "vision") {
     return NextResponse.json(await testVisionConnection());
+  }
+  // 图像测试会真的生成一张图并因此计费，按钮旁已注明
+  if (target === "image") {
+    return NextResponse.json(await testImageConnection());
   }
 
   if (!isLlmConfigured()) {

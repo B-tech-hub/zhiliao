@@ -175,6 +175,7 @@ export function SettingsPanel({
   topics,
   llm,
   vision,
+  image,
   queue,
   lastBackupAt,
   trashCount,
@@ -182,6 +183,8 @@ export function SettingsPanel({
   topics: TopicRow[];
   llm: LlmInfo;
   vision: VisionInfo;
+  // 图像生成配置，来源语义与视觉模型一致（留空回落文本模型）
+  image: VisionInfo;
   queue: QueueInfo;
   lastBackupAt: number | null;
   trashCount: number;
@@ -209,6 +212,47 @@ export function SettingsPanel({
   const [visionResult, setVisionResult] = useState("");
   const [visionTesting, setVisionTesting] = useState(false);
   const [visionTestResult, setVisionTestResult] = useState("");
+  // 图像模型表单：与视觉模型同构，baseUrl/apiKey 留空回落文本模型配置
+  const [imageModel, setImageModel] = useState(image.model);
+  const [imageBaseUrl, setImageBaseUrl] = useState("");
+  const [imageApiKey, setImageApiKey] = useState("");
+  const [imageSaving, setImageSaving] = useState(false);
+  const [imageResult, setImageResult] = useState("");
+  const [imageTesting, setImageTesting] = useState(false);
+  const [imageTestResult, setImageTestResult] = useState("");
+
+  async function saveImageConfig() {
+    const body: Record<string, string> = {};
+    if (imageModel.trim() !== image.model) body.imageModel = imageModel.trim();
+    if (imageBaseUrl.trim()) body.imageBaseUrl = imageBaseUrl.trim();
+    if (imageApiKey.trim()) body.imageApiKey = imageApiKey.trim();
+    if (Object.keys(body).length === 0) {
+      setImageResult("没有修改的内容");
+      return;
+    }
+    setImageSaving(true);
+    setImageResult("");
+    try {
+      const res = await fetch("/api/settings/llm", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      if (res.ok) {
+        setImageApiKey("");
+        setImageBaseUrl("");
+        setImageResult("✓ 已保存，立即生效");
+        router.refresh();
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setImageResult(`✕ ${data.error || "保存失败"}`);
+      }
+    } catch {
+      setImageResult("✕ 网络错误");
+    } finally {
+      setImageSaving(false);
+    }
+  }
 
   async function saveVision() {
     const body: Record<string, string> = {};
@@ -290,10 +334,16 @@ export function SettingsPanel({
     }
   }
 
-  // 两组配置共用一个测试入口，target 决定打哪个端点
-  async function testLlm(target: "text" | "vision") {
-    const setBusy = target === "vision" ? setVisionTesting : setTesting;
-    const setResult = target === "vision" ? setVisionTestResult : setTestResult;
+  // 三组配置共用一个测试入口，target 决定打哪个端点
+  async function testLlm(target: "text" | "vision" | "image") {
+    const setBusy =
+      target === "vision" ? setVisionTesting : target === "image" ? setImageTesting : setTesting;
+    const setResult =
+      target === "vision"
+        ? setVisionTestResult
+        : target === "image"
+          ? setImageTestResult
+          : setTestResult;
     setBusy(true);
     setResult("");
     try {
@@ -584,6 +634,98 @@ export function SettingsPanel({
               className={`text-[12px] ${visionTestResult.startsWith("✕") ? "text-danger" : "text-ink-80"}`}
             >
               {visionTestResult}
+            </p>
+          )}
+        </div>
+
+        {/* 图像模型：字段序与前两组一致。只支持 OpenAI 兼容的同步生图接口
+            （POST {接入点}/images/generations），取舍见 docs/adr/0011 */}
+        <div className="mt-3 space-y-4 rounded-[18px] bg-surface p-6 text-[14px]">
+          <p className="font-semibold tracking-[-0.224px]">图像模型（AI 生图，可选）</p>
+          <div>
+            <label className="mb-1 flex items-center justify-between">
+              <span className="text-ink-48">接入点</span>
+              <span className="text-[12px] text-ink-48">
+                {VISION_SOURCE_LABEL[image.sources.baseUrl]}
+              </span>
+            </label>
+            <input
+              value={imageBaseUrl}
+              onChange={(e) => setImageBaseUrl(e.target.value)}
+              placeholder={image.baseUrl || "https://…/v1"}
+              className="h-[40px] w-full rounded-full border border-hairline bg-surface px-5 text-[14px] outline-none focus:border-action-focus"
+            />
+          </div>
+          <div>
+            <label className="mb-1 flex items-center justify-between">
+              <span className="text-ink-48">模型</span>
+              <span className="text-[12px] text-ink-48">
+                {VISION_SOURCE_LABEL[image.sources.model]}
+              </span>
+            </label>
+            <input
+              value={imageModel}
+              onChange={(e) => setImageModel(e.target.value)}
+              placeholder="如 cogview-3 / gpt-image-1；留空表示不启用 AI 生图"
+              className="h-[40px] w-full rounded-full border border-hairline bg-surface px-5 text-[14px] outline-none focus:border-action-focus"
+            />
+          </div>
+          <div>
+            <label className="mb-1 flex items-center justify-between">
+              <span className="text-ink-48">API Key</span>
+              <span className="text-[12px] text-ink-48">
+                {VISION_SOURCE_LABEL[image.sources.apiKey]}
+              </span>
+            </label>
+            <input
+              type="password"
+              value={imageApiKey}
+              onChange={(e) => setImageApiKey(e.target.value)}
+              placeholder={
+                image.sources.apiKey === "none"
+                  ? "sk-…"
+                  : image.sources.apiKey === "fallback"
+                    ? `复用上方 ${image.apiKeyMasked}`
+                    : `当前 ${image.apiKeyMasked}，留空则不修改`
+              }
+              autoComplete="off"
+              className="h-[40px] w-full rounded-full border border-hairline bg-surface px-5 text-[14px] outline-none focus:border-action-focus"
+            />
+          </div>
+          <p className="text-[12px] text-ink-48">
+            只填模型名即可启用；接入点与 API Key 留空会自动复用上方文本模型的配置。
+            需要接入点支持 OpenAI 兼容的
+            <code className="mx-1 rounded bg-fill px-1">/images/generations</code>
+            同步接口
+          </p>
+          <div className="flex flex-wrap items-center gap-3 pt-1">
+            <button
+              onClick={saveImageConfig}
+              disabled={imageSaving}
+              className="rounded-full bg-action px-[22px] py-[8px] text-[14px] text-white transition-transform active:scale-95 disabled:opacity-40"
+            >
+              {imageSaving ? "保存中…" : "保存"}
+            </button>
+            <button
+              onClick={() => testLlm("image")}
+              disabled={imageTesting}
+              className="rounded-full border border-action px-4 py-1.5 text-[14px] text-action transition-transform active:scale-95 disabled:opacity-40"
+            >
+              {imageTesting ? "生成中…" : "测试连接"}
+            </button>
+            {/* 与另两组的差别：这个测试真的会花钱，必须说在按钮旁边 */}
+            <span className="text-[12px] text-ink-48">测试会真实生成一张图，消耗一次额度</span>
+          </div>
+          {imageResult && (
+            <p className={`text-[12px] ${imageResult.startsWith("✕") ? "text-danger" : "text-ink-80"}`}>
+              {imageResult}
+            </p>
+          )}
+          {imageTestResult && (
+            <p
+              className={`text-[12px] ${imageTestResult.startsWith("✕") ? "text-danger" : "text-ink-80"}`}
+            >
+              {imageTestResult}
             </p>
           )}
         </div>

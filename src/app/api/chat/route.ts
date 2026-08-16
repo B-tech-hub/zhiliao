@@ -9,10 +9,10 @@ import { buildSystemMessage, type ChatScope } from "@/lib/ai/chat-context";
 import { buildLlmMessages, type ToolLoopDeps } from "@/lib/ai/chat-loop";
 import { createChatSseResponse } from "@/lib/ai/chat-stream";
 import { extractUrls } from "@/lib/ai/fetch-url";
-import { getTool, runTool, toolDefs, type ToolContext } from "@/lib/ai/tools";
+import { getTool, runTool, toolDefs, MAX_IMAGES_PER_MESSAGE, type ToolContext } from "@/lib/ai/tools";
 import { newId } from "@/lib/ids";
 import { chatStream, type ChatContentPart, type LlmMessage } from "@/lib/llm";
-import { getToolSupport, getVisionConfig, isVisionConfigured } from "@/lib/llm-config";
+import { getToolSupport, getVisionConfig, isImageGenConfigured, isVisionConfigured } from "@/lib/llm-config";
 
 export const dynamic = "force-dynamic";
 
@@ -168,12 +168,17 @@ export async function POST(req: NextRequest) {
      且看图问答本就不需要写库）。getToolSupport() 为 null 表示从未探测过，
      此时照常发送——多数供应商是支持的，不该因为没测过就降级。 */
   const grounded = scopeType === "sources";
-  const tools = getToolSupport() === false || wantVision ? [] : toolDefs({ grounded });
+  const tools =
+    getToolSupport() === false || wantVision
+      ? []
+      : toolDefs({ grounded, imageGen: isImageGenConfigured() });
 
   const toolCtx: ToolContext = {
     db,
     userUrls,
     allowedNoteIds: grounded ? new Set(allowedNoteIds ?? []) : undefined,
+    // 一次请求 = 用户的一次发言，额度随之新建；模型幻觉出的调用同样受限
+    imageBudget: { remaining: MAX_IMAGES_PER_MESSAGE },
     signal: req.signal,
   };
   const deps: ToolLoopDeps = {

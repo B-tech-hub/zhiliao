@@ -3,7 +3,7 @@
 // 六条分支（无调用 / 有调用 / 待确认 / 被跳过 / 超轮次 / 预算超限）都能直接断言。
 
 import type { ChatMessageRow } from "@/db/schema";
-import type { ToolOutcome, UndoPayload } from "@/lib/ai/tools";
+import type { GeneratedImageRef, ToolOutcome, UndoPayload } from "@/lib/ai/tools";
 import type { LlmMessage, StreamChunk, ToolCallPart, ToolCallRequest } from "@/lib/llm";
 
 // 轮次上限：模型陷入「调工具 → 结果不满意 → 再调」的循环时兜底
@@ -38,6 +38,8 @@ export type ToolPayload =
       summary: string;
       noteIds?: string[];
       undo?: UndoPayload;
+      // 生成的图片，重开会话时据此把卡片里的图与插入按钮一并重建
+      image?: GeneratedImageRef;
       // 已被用户撤销，撤销按钮置灰
       undone?: boolean;
     }

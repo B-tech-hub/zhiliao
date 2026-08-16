@@ -9,6 +9,7 @@
 import type { ConfirmInfo, ToolCallInfo, ToolEndInfo, UndoResult } from "@/lib/ai/chat-events";
 import type { ChatSseEvent } from "@/lib/ai/chat-events";
 import { parseToolPayload } from "@/lib/ai/chat-loop";
+import type { GeneratedImageRef } from "@/lib/ai/tools";
 
 // 工具名到中文说明。模型可能调用未知工具名（供应商幻觉），回落为原名
 const TOOL_LABELS: Record<string, string> = {
@@ -20,6 +21,7 @@ const TOOL_LABELS: Record<string, string> = {
   update_meta: "修改分类",
   delete_note: "删除笔记",
   fetch_url: "抓取网页",
+  generate_image: "生成图片",
 };
 
 export function toolLabel(name: string): string {
@@ -52,6 +54,8 @@ export interface ToolItem {
   undoReason?: string;
   // 引用溯源白名单的来源
   noteIds?: string[];
+  // generate_image 生成的图，卡片据此画图并给出插入笔记的入口
+  image?: GeneratedImageRef;
 }
 
 export type ChatItem = TextItem | ToolItem;
@@ -121,6 +125,7 @@ function upsertResult(items: ChatItem[], info: ToolEndInfo): ChatItem[] {
     summary: info.summary,
     messageId: info.messageId,
     noteIds: info.noteIds,
+    image: info.image,
     undo: info.canUndo ? "available" : "none",
   };
   if (idx < 0) return [...items, card];
@@ -186,6 +191,7 @@ export function rebuildItems(rows: HistoryMessage[]): ChatItem[] {
       summary: p.summary,
       messageId: r.id,
       noteIds: p.noteIds,
+      image: p.image,
       undo: p.undone ? "undone" : p.undo ? "available" : "none",
     });
   }

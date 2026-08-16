@@ -44,8 +44,16 @@ export interface ToolOutcome {
   undo?: UndoPayload;
   // 操作卡片上的一句话摘要
   summary?: string;
+  // 生成的图片。有值时卡片直接把图画出来，并给出「插入笔记」的入口
+  image?: GeneratedImageRef;
   // 执行失败（参数错、笔记不存在等）。结果照样回灌给模型，让它自行纠正
   error?: boolean;
+}
+
+// 生成图片的引用。alt 取自提示词，写进 Markdown 后导出到 Obsidian 也有意义
+export interface GeneratedImageRef {
+  url: string;
+  alt: string;
 }
 
 export interface ToolContext {
@@ -56,6 +64,10 @@ export interface ToolContext {
      undefined = 不限域（普通对话）；空数组 = 限域且当前一条来源都没有。
      两者语义不同，判空要用 !== undefined 而非 length。 */
   allowedNoteIds?: Set<string>;
+  /* 本条用户消息还剩几张生图额度，由路由按请求创建、工具执行时递减。
+     计数放在上下文而非模块级：模块级计数会在并发会话之间串味，
+     而每个 HTTP 请求恰好对应用户的一次发言。 */
+  imageBudget?: { remaining: number };
   signal?: AbortSignal;
 }
 

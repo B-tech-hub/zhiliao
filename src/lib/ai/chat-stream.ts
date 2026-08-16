@@ -94,6 +94,7 @@ export function createChatSseResponse(params: ChatStreamParams): Response {
                 summary,
                 noteIds: ev.outcome.noteIds,
                 undo: ev.outcome.undo,
+                image: ev.outcome.image,
               });
               send({
                 tool_end: {
@@ -104,6 +105,7 @@ export function createChatSseResponse(params: ChatStreamParams): Response {
                   noteIds: ev.outcome.noteIds,
                   messageId,
                   canUndo: Boolean(ev.outcome.undo),
+                  image: ev.outcome.image,
                 },
               });
               break;

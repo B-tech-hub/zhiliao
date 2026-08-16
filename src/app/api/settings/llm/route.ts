@@ -3,7 +3,7 @@ import { inArray } from "drizzle-orm";
 import { z } from "zod";
 import { getDb } from "@/db";
 import { settings } from "@/db/schema";
-import { LLM_SETTING_KEYS, VISION_SETTING_KEYS } from "@/lib/llm-config";
+import { LLM_SETTING_KEYS, IMAGE_SETTING_KEYS, VISION_SETTING_KEYS } from "@/lib/llm-config";
 
 // 仅携带需要修改的字段；apiKey 留空时前端不携带，避免误覆盖
 const patchSchema = z.object({
@@ -14,6 +14,10 @@ const patchSchema = z.object({
   visionBaseUrl: z.union([z.string().trim().url("接入点需为完整 URL"), z.literal("")]).optional(),
   visionApiKey: z.string().trim().optional(),
   visionModel: z.string().trim().optional(),
+  // 图像生成（可选，独立配置；规则同视觉模型）
+  imageBaseUrl: z.union([z.string().trim().url("接入点需为完整 URL"), z.literal("")]).optional(),
+  imageApiKey: z.string().trim().optional(),
+  imageModel: z.string().trim().optional(),
 });
 
 // 保存 LLM 配置到 settings 表（DB 优先、环境变量兜底，保存后立即生效）
@@ -33,6 +37,9 @@ export async function PATCH(req: NextRequest) {
   if (data.visionBaseUrl !== undefined) entries.push([VISION_SETTING_KEYS.baseUrl, data.visionBaseUrl]);
   if (data.visionApiKey !== undefined) entries.push([VISION_SETTING_KEYS.apiKey, data.visionApiKey]);
   if (data.visionModel !== undefined) entries.push([VISION_SETTING_KEYS.model, data.visionModel]);
+  if (data.imageBaseUrl !== undefined) entries.push([IMAGE_SETTING_KEYS.baseUrl, data.imageBaseUrl]);
+  if (data.imageApiKey !== undefined) entries.push([IMAGE_SETTING_KEYS.apiKey, data.imageApiKey]);
+  if (data.imageModel !== undefined) entries.push([IMAGE_SETTING_KEYS.model, data.imageModel]);
   if (entries.length === 0) {
     return NextResponse.json({ error: "没有需要保存的字段" }, { status: 400 });
   }

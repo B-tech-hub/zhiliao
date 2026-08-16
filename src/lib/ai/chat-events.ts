@@ -3,7 +3,7 @@
 // 事件沿用既有的「字段存在即判别」形式（{delta} / {done} / {error}），
 // 不改成 {type:"..."}：老前端遇到不认识的字段会自然跳过，不会解析出错。
 
-import type { UndoPayload } from "@/lib/ai/tools";
+import type { GeneratedImageRef, UndoPayload } from "@/lib/ai/tools";
 
 // 一次工具调用的标识。args 保持原始 JSON 字符串，前端渲染卡片时自行解析——
 // 模型可能给出畸形 JSON，在服务端解析失败会丢掉整个事件
@@ -25,6 +25,8 @@ export interface ToolEndInfo {
   messageId: string;
   // 是否具备撤销载荷（写工具且执行成功）
   canUndo: boolean;
+  // 生成的图片，有值时卡片直接把图画出来
+  image?: GeneratedImageRef;
 }
 
 export interface ConfirmInfo extends ToolCallInfo {

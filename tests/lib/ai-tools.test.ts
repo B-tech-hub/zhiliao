@@ -31,18 +31,19 @@ beforeEach(() => {
 });
 
 describe("工具注册表", () => {
-  it("8 个工具齐备，且 JSON Schema 可用于 function calling", () => {
+  it("9 个工具齐备，且 JSON Schema 可用于 function calling", () => {
     expect(ASSISTANT_TOOLS.map((t) => t.name).sort()).toEqual([
       "append_to_note",
       "create_note",
       "delete_note",
       "fetch_url",
+      "generate_image",
       "list_topics",
       "read_note",
       "search_notes",
       "update_meta",
     ]);
-    for (const def of toolDefs()) {
+    for (const def of toolDefs({ imageGen: true })) {
       expect(def.type).toBe("function");
       expect(def.function.description.length).toBeGreaterThan(10);
       expect(def.function.parameters).toHaveProperty("type", "object");
@@ -51,12 +52,20 @@ describe("工具注册表", () => {
     }
   });
 
+  /* 没配图像模型时不下发生图工具：发了模型照调不误，收到「未配置」错误后
+     还要多花一轮向用户道歉，而用户根本没提过画图。 */
+  it("未配置图像模型时不下发 generate_image", () => {
+    expect(toolDefs().map((d) => d.function.name)).not.toContain("generate_image");
+    expect(toolDefs({ imageGen: true }).map((d) => d.function.name)).toContain("generate_image");
+  });
+
   it("正文覆盖工具不存在（ADR-0007 不做版本历史，覆盖不可恢复）", () => {
     const names = ASSISTANT_TOOLS.map((t) => t.name);
     expect(names).not.toContain("update_note");
     expect(names).not.toContain("replace_content");
   });
 
+  // 生图不可撤销也要保持这条不变量：代价一侧由张数封顶来管，不靠确认卡片
   it("只有 delete_note 需要用户确认", () => {
     expect(ASSISTANT_TOOLS.filter((t) => t.requiresConfirm).map((t) => t.name)).toEqual([
       "delete_note",

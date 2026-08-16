@@ -16,9 +16,9 @@ import {
 } from "@/lib/ai/chat-loop";
 import { createChatSseResponse } from "@/lib/ai/chat-stream";
 import { extractUrls } from "@/lib/ai/fetch-url";
-import { getTool, runTool, toolDefs, type ToolContext } from "@/lib/ai/tools";
+import { getTool, runTool, toolDefs, MAX_IMAGES_PER_MESSAGE, type ToolContext } from "@/lib/ai/tools";
 import { chatStream, type LlmMessage } from "@/lib/llm";
-import { getToolSupport } from "@/lib/llm-config";
+import { getToolSupport, isImageGenConfigured } from "@/lib/llm-config";
 
 export const dynamic = "force-dynamic";
 
@@ -75,6 +75,7 @@ export async function POST(req: NextRequest) {
     db,
     userUrls,
     allowedNoteIds: grounded ? new Set(allowedNoteIds ?? []) : undefined,
+    imageBudget: { remaining: MAX_IMAGES_PER_MESSAGE },
     signal: req.signal,
   };
   const outcome = approve
@@ -96,6 +97,7 @@ export async function POST(req: NextRequest) {
     summary,
     noteIds: outcome.noteIds,
     undo: outcome.undo,
+    image: outcome.image,
   };
 
   // 原地更新那条 pending 消息，不新增行：新增会让 tool_calls 出现两个配对结果
@@ -118,7 +120,8 @@ export async function POST(req: NextRequest) {
     ...buildLlmMessages(history),
   ];
 
-  const tools = getToolSupport() === false ? [] : toolDefs({ grounded });
+  const tools =
+    getToolSupport() === false ? [] : toolDefs({ grounded, imageGen: isImageGenConfigured() });
   const deps: ToolLoopDeps = {
     stream: (msgs) => chatStream(msgs, { signal: req.signal, tools }),
     execute: (call) => runTool(call.name, call.args, toolCtx),
@@ -146,6 +149,7 @@ export async function POST(req: NextRequest) {
           noteIds: outcome.noteIds,
           messageId,
           canUndo: Boolean(outcome.undo),
+          image: outcome.image,
         },
       },
     ],

@@ -1,23 +1,8 @@
-import fs from "node:fs";
-import path from "node:path";
 import { NextRequest, NextResponse } from "next/server";
 import { getDb } from "@/db";
-import { images } from "@/db/schema";
-import { newId } from "@/lib/ids";
+import { IMAGE_EXT_BY_MIME, saveImage } from "@/lib/uploads";
 
 const MAX_SIZE = 5 * 1024 * 1024;
-const ALLOWED: Record<string, string> = {
-  "image/png": "png",
-  "image/jpeg": "jpg",
-  "image/gif": "gif",
-  "image/webp": "webp",
-};
-
-function getUploadDir(): string {
-  const dir = process.env.UPLOAD_DIR || "./data/uploads";
-  fs.mkdirSync(dir, { recursive: true });
-  return dir;
-}
 
 // 图片上传：multipart 表单，字段 file，可选 noteId
 export async function POST(req: NextRequest) {
@@ -29,21 +14,14 @@ export async function POST(req: NextRequest) {
   if (file.size > MAX_SIZE) {
     return NextResponse.json({ error: "图片不能超过 5MB" }, { status: 400 });
   }
-  const ext = ALLOWED[file.type];
-  if (!ext) {
+  if (!IMAGE_EXT_BY_MIME[file.type]) {
     return NextResponse.json({ error: "仅支持 png/jpg/gif/webp 图片" }, { status: 400 });
   }
 
-  const id = newId();
-  const filename = `${id}.${ext}`;
   const buf = Buffer.from(await file.arrayBuffer());
-  fs.writeFileSync(path.join(getUploadDir(), filename), buf);
-
   const noteId = (form.get("noteId") as string) || null;
-  getDb()
-    .insert(images)
-    .values({ id, noteId, filename, mime: file.type, size: file.size, createdAt: Date.now() })
-    .run();
+  // 落盘与入库统一走 uploads.ts，与 AI 生图工具共用同一条路径
+  const { url } = saveImage(getDb(), buf, file.type, noteId);
 
-  return NextResponse.json({ url: `/api/images/${filename}` }, { status: 201 });
+  return NextResponse.json({ url }, { status: 201 });
 }

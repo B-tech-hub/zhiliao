@@ -5,14 +5,16 @@ import { appendToNoteTool } from "./append-to-note";
 import { createNoteTool } from "./create-note";
 import { deleteNoteTool } from "./delete-note";
 import { fetchUrlTool } from "./fetch-url";
+import { generateImageTool } from "./generate-image";
 import { listTopicsTool } from "./list-topics";
 import { readNoteTool } from "./read-note";
 import { searchNotesTool } from "./search-notes";
 import { updateMetaTool } from "./update-meta";
 import { ToolError, type AssistantTool, type ToolContext, type ToolOutcome } from "./types";
 
-export type { AssistantTool, ToolContext, ToolOutcome, UndoPayload } from "./types";
+export type { AssistantTool, GeneratedImageRef, ToolContext, ToolOutcome, UndoPayload } from "./types";
 export { ToolError, fingerprint, metaFingerprint } from "./types";
+export { MAX_IMAGES_PER_MESSAGE } from "./generate-image";
 
 // 单个工具结果回灌上限：多轮工具调用累积起来会撑爆上下文
 export const MAX_TOOL_RESULT_CHARS = 8000;
@@ -26,19 +28,25 @@ export const ASSISTANT_TOOLS: AssistantTool[] = [
   updateMetaTool,
   deleteNoteTool,
   fetchUrlTool,
+  generateImageTool,
 ];
 
 const BY_NAME = new Map(ASSISTANT_TOOLS.map((t) => [t.name, t]));
 
-/* 来源问答不提供的工具：抓来的网页内容不属于来源集，
-   放行等于让「只依据来源回答」这条保证失效，顺带也少一个提示注入面。
+/* 来源问答不提供的工具：
+   - fetch_url：抓来的网页内容不属于来源集，放行等于让「只依据来源回答」失效
+   - generate_image：图必然出自模型自己的画风与世界知识，不可能只依据来源。
+     想把来源内容画成图，用 Mermaid——纯文本、内容可逐字核对是否出自来源。
    写工具照常保留——写操作不影响回答的接地性，且「把结论存成笔记」是高频需求。 */
-export const GROUNDED_BLOCKED_TOOLS = new Set(["fetch_url"]);
+export const GROUNDED_BLOCKED_TOOLS = new Set(["fetch_url", "generate_image"]);
 
-export function toolDefs(opts: { grounded?: boolean } = {}): ToolDef[] {
-  const list = opts.grounded
-    ? ASSISTANT_TOOLS.filter((t) => !GROUNDED_BLOCKED_TOOLS.has(t.name))
-    : ASSISTANT_TOOLS;
+export function toolDefs(opts: { grounded?: boolean; imageGen?: boolean } = {}): ToolDef[] {
+  let list = ASSISTANT_TOOLS;
+  if (opts.grounded) list = list.filter((t) => !GROUNDED_BLOCKED_TOOLS.has(t.name));
+  /* 没配图像模型就不把生图工具发出去。发了的后果是模型照调不误、
+     收到一条「未配置」错误、再花一轮往返向用户道歉——用户看到的是
+     一张失败卡片，而他根本没要求画图。 */
+  if (!opts.imageGen) list = list.filter((t) => t.name !== "generate_image");
   return list.map((t) => t.def);
 }
 

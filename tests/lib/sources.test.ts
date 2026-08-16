@@ -183,6 +183,22 @@ describe("工具限域", () => {
     expect(r.content).toContain("来源问答模式下不能使用");
   });
 
+  /* 生图与 fetch_url 同置：图必然出自模型自己的画风与世界知识，
+     不可能只依据来源。配了图像模型也不放行——限域优先于能力可用性。 */
+  it("来源问答不下发 generate_image，配了图像模型也不放行", async () => {
+    expect(GROUNDED_BLOCKED_TOOLS.has("generate_image")).toBe(true);
+    const names = toolDefs({ grounded: true, imageGen: true }).map((d) => d.function.name);
+    expect(names).not.toContain("generate_image");
+
+    const r = await runTool(
+      "generate_image",
+      JSON.stringify({ prompt: "一只猫" }),
+      groundedCtx(["n1"]),
+    );
+    expect(r.error).toBe(true);
+    expect(r.content).toContain("来源问答模式下不能使用");
+  });
+
   it("read_note 越界读取被拒，来源内正常读取", async () => {
     insertNote("n1", "来源内容", { title: "在来源里" });
     insertNote("n2", "库里其他笔记", { title: "不在来源里" });
