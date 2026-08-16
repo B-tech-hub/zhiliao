@@ -10,6 +10,9 @@ export default defineConfig({
     setupFiles: ["tests/setup.ts"],
     include: ["tests/**/*.test.ts"],
   },
+  // tsconfig 是 Next 的 jsx: "preserve"，vite 照搬会解析不了 .tsx；
+  // 这里让 esbuild 自己转换（编辑器扩展定义在 .tsx 里，测试要 import 它）
+  oxc: { jsx: { runtime: "automatic" } },
   resolve: {
     alias: { "@": path.resolve(__dirname, "src") },
   },

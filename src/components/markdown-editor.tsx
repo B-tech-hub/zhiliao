@@ -11,6 +11,7 @@ import TableHeader from "@tiptap/extension-table-header";
 import TableCell from "@tiptap/extension-table-cell";
 import { Markdown } from "tiptap-markdown";
 import { useEffect, useRef, useState } from "react";
+import { MermaidCodeBlock } from "./mermaid-code-block";
 
 async function uploadImage(file: File, noteId?: string): Promise<string | null> {
   const form = new FormData();
@@ -255,7 +256,10 @@ export function MarkdownEditor({
   const editor = useEditor({
     immediatelyRender: false,
     extensions: [
-      StarterKit,
+      // 关掉 StarterKit 自带的代码块，换成带 mermaid 渲染的同名扩展
+      // （schema 与输入规则 ``` 完全一致，只多了 NodeView）
+      StarterKit.configure({ codeBlock: false }),
+      MermaidCodeBlock,
       RichImage.configure({ allowBase64: false }),
       Link.configure({
         openOnClick: false,
