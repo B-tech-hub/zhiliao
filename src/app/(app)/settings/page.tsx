@@ -1,6 +1,7 @@
 import { getDb } from "@/db";
 import { getTopicsWithCounts } from "@/lib/topics";
 import { getQueueStats } from "@/lib/ai/worker";
+import { getLastReviewWeek, isWeeklyReviewEnabled } from "@/lib/ai/weekly-review";
 import { getLastBackupAt } from "@/lib/backup";
 import { getTrashCount } from "@/lib/trash";
 import { getImageConfig, getLlmConfig, getVisionConfig } from "@/lib/llm-config";
@@ -49,6 +50,7 @@ export default function SettingsPage() {
       vision={vision}
       image={image}
       queue={getQueueStats(db)}
+      review={{ enabled: isWeeklyReviewEnabled(db), lastWeek: getLastReviewWeek(db) }}
       lastBackupAt={getLastBackupAt()}
       trashCount={getTrashCount(db)}
     />

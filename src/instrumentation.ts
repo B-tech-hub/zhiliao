@@ -11,5 +11,7 @@ export async function register() {
     startWorker();
     const { startDailyBackup } = await import("@/lib/backup");
     startDailyBackup();
+    const { startWeeklyReview } = await import("@/lib/ai/weekly-review");
+    startWeeklyReview();
   }
 }

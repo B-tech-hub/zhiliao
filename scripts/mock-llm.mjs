@@ -55,6 +55,21 @@ function handleSuggest(user) {
   return { status: 200, json: { suggestions } };
 }
 
+// 每周回顾：把清单条目回显成小节，用于验证「输入用摘要 → 产物入主题」这条链路
+function handleWeeklyReview(user) {
+  const label = user.match(/本周（(.+?)）/)?.[1] ?? "本周";
+  const items = user.split("\n").filter((l) => l.startsWith("- "));
+  return [
+    `这一周（${label}）你记了 ${items.length} 条笔记，主线集中在少数几件事上。`,
+    "",
+    "## 本周脉络",
+    ...items.slice(0, 5),
+    "",
+    "## 值得跟进",
+    "这是 mock 生成的回顾，真实回顾由你在设置页配置的模型撰写。",
+  ].join("\n");
+}
+
 // 消息内容可能是字符串，也可能是多模态数组，统一取出其中的文本部分
 function textOf(content) {
   if (typeof content === "string") return content;
@@ -232,6 +247,9 @@ const server = http.createServer((req, res) => {
     } else if (user.includes("现有主题列表")) {
       out = handleNoteProcess(user);
       kind = "process";
+    } else if (system.includes("个人知识库的整理助手")) {
+      out = { status: 200, text: handleWeeklyReview(user) };
+      kind = "review";
     } else if (isChat) {
       out = { status: 200, text: handleChat(system, user, withImage) };
       kind = withImage ? "vision" : "chat";

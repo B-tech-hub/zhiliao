@@ -4,6 +4,7 @@ import { aiJobs } from "@/db/schema";
 import { LlmConfigError, LlmRequestError, isLlmConfigured } from "@/lib/llm";
 import { markNoteFailed, processNote } from "./process-note";
 import { maybeEnqueueSuggestTopics, runSuggestTopics } from "./suggest-topics";
+import { runWeeklyReview } from "./weekly-review";
 
 const POLL_INTERVAL_MS = 5000;
 const MAX_ATTEMPTS = 3;
@@ -86,6 +87,13 @@ async function runJob(db: DB, jobId: string) {
       maybeEnqueueSuggestTopics(db);
     } else if (job.type === "suggest_topics") {
       await runSuggestTopics(db);
+    } else if (job.type === "weekly_review") {
+      await runWeeklyReview(db);
+    } else {
+      /* 显式炸掉而非静默标 done：以前新增任务类型忘了加分支，任务会「成功」
+         消失得无影无踪。抛普通 Error 走通用重试，三次后落 failed，
+         在设置页「最近失败」里看得见 */
+      throw new Error(`未知任务类型 ${job.type}${job.noteId ? "" : "（无 noteId）"}`);
     }
     db.update(aiJobs).set({ status: "done", lastError: null, updatedAt: Date.now() }).where(eq(aiJobs.id, jobId)).run();
   } catch (e) {

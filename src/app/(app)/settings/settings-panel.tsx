@@ -52,6 +52,12 @@ interface VisionInfo {
   sources: { baseUrl: VisionSource; apiKey: VisionSource; model: VisionSource };
 }
 
+interface ReviewInfo {
+  enabled: boolean;
+  // 已安排生成的周（上周一日期 YYYY-MM-DD），从未生成为 null
+  lastWeek: string | null;
+}
+
 const THEME_OPTIONS = [
   { value: "light", label: "浅色" },
   { value: "dark", label: "深色" },
@@ -90,6 +96,97 @@ function AppearanceSection() {
         </p>
       </div>
     </section>
+  );
+}
+
+/* 每周回顾：开关 + 手动补生成。开关沿用外观区块的分段控件形态（两态），
+   不为一个布尔值引入第二种开关样式 */
+function WeeklyReviewCard({ review }: { review: ReviewInfo }) {
+  const [enabled, setEnabled] = useState(review.enabled);
+  const [saving, setSaving] = useState(false);
+  const [generating, setGenerating] = useState(false);
+  const [result, setResult] = useState("");
+
+  async function toggle(next: boolean) {
+    if (next === enabled || saving) return;
+    setSaving(true);
+    setResult("");
+    try {
+      const res = await fetch("/api/review", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ enabled: next }),
+      });
+      if (res.ok) setEnabled(next);
+      else setResult("✕ 保存失败");
+    } catch {
+      setResult("✕ 网络错误");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  // 只入队，生成由 worker 异步完成——所以提示语说的是「已排队」而不是「已生成」
+  async function generateNow() {
+    setGenerating(true);
+    setResult("");
+    try {
+      const res = await fetch("/api/review", { method: "POST" });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) setResult(`✕ ${data.error || "排队失败"}`);
+      else setResult(data.queued ? "✓ 已排队，稍后出现在「每周回顾」主题" : "已有回顾正在生成中");
+    } catch {
+      setResult("✕ 网络错误");
+    } finally {
+      setGenerating(false);
+    }
+  }
+
+  return (
+    <div className="mt-3 rounded-[18px] bg-surface p-6 text-[14px]">
+      <p className="mb-1 font-semibold tracking-[-0.224px]">每周回顾</p>
+      <p className="text-ink-48">
+        每周一凌晨把上一周新建的笔记梳理成一篇回顾，存入「每周回顾」主题
+      </p>
+      <div className="mt-3 flex flex-wrap items-center gap-3">
+        <div className="inline-flex rounded-full bg-fill p-1">
+          {[
+            { value: true, label: "开启" },
+            { value: false, label: "关闭" },
+          ].map((o) => (
+            <button
+              key={o.label}
+              onClick={() => toggle(o.value)}
+              disabled={saving}
+              aria-pressed={enabled === o.value}
+              className={`rounded-full px-4 py-1.5 text-[14px] transition-colors disabled:opacity-40 ${
+                enabled === o.value
+                  ? "bg-surface font-semibold text-ink ring-1 ring-hairline"
+                  : "text-ink-48"
+              }`}
+            >
+              {o.label}
+            </button>
+          ))}
+        </div>
+        <button
+          onClick={generateNow}
+          disabled={generating}
+          className="rounded-full border border-action px-4 py-1.5 text-[14px] text-action transition-transform active:scale-95 disabled:opacity-40"
+        >
+          {generating ? "排队中…" : "立即生成上周回顾"}
+        </button>
+      </div>
+      {/* 记的是已排队的周，不是已成功的周：失败会出现在上方「最近失败」里 */}
+      <p className="mt-2 text-[12px] text-ink-48">
+        最近生成：{review.lastWeek ? `${review.lastWeek} 当周` : "从未生成"}
+      </p>
+      {result && (
+        <p className={`mt-1 text-[12px] ${result.startsWith("✕") ? "text-danger" : "text-ink-80"}`}>
+          {result}
+        </p>
+      )}
+    </div>
   );
 }
 
@@ -177,6 +274,7 @@ export function SettingsPanel({
   vision,
   image,
   queue,
+  review,
   lastBackupAt,
   trashCount,
 }: {
@@ -186,6 +284,7 @@ export function SettingsPanel({
   // 图像生成配置，来源语义与视觉模型一致（留空回落文本模型）
   image: VisionInfo;
   queue: QueueInfo;
+  review: ReviewInfo;
   lastBackupAt: number | null;
   trashCount: number;
 }) {
@@ -745,6 +844,8 @@ export function SettingsPanel({
             </ul>
           )}
         </div>
+
+        <WeeklyReviewCard review={review} />
       </section>
 
       <DataSection lastBackupAt={lastBackupAt} trashCount={trashCount} />
