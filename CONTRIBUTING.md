@@ -45,6 +45,8 @@ npm run build
 
 1. 更新 `package.json` 的 `version`。
 2. 把 `CHANGELOG.md` 的「未发布」段落落为新版本号并补上日期。
-3. 提交后打 tag 并推送：`git tag v0.x.y && git push origin main --tags`。
-4. Release 工作流自动构建多架构镜像推送 ghcr.io，并创建 GitHub Release。
-5. 首次发布后需到 GitHub Packages 将包设为 public 并关联仓库（一次性操作）。
+3. 本地执行 `npm run lint`、`npm test`、`npm run build`，全部通过后提交并先推送 `main`。
+4. 推送预发布标签彩排：`git tag v0.x.y-rc1 && git push origin v0.x.y-rc1`。等待 CI、amd64/arm64 镜像构建、manifest 合并校验与预发布 Release 全部成功。
+5. RC 全绿后，在同一提交上推送正式标签：`git tag v0.x.y && git push origin v0.x.y`。不要在 RC 与正式标签之间夹带未经彩排的提交。
+6. Release 工作流会自动构建多架构镜像并推送至 ghcr.io，同时创建 GitHub Release。发布后确认 `x.y.z`、`x.y` 与 `latest`（正式版本）指向同一多架构 manifest。
+7. 首次发布后需到 GitHub Packages 将包设为 public 并关联仓库（一次性操作）。
