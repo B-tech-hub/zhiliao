@@ -62,7 +62,9 @@ async function drainQueue(db: DB) {
   }
 }
 
-async function runJob(db: DB, jobId: string) {
+// 执行单个任务。导出仅供测试：任务类型分发与「按入队时刻算周界」这类
+// 判定只在这里，从外面驱动一次比搭起整个轮询循环可靠得多
+export async function runJob(db: DB, jobId: string) {
   const job = db.select().from(aiJobs).where(eq(aiJobs.id, jobId)).get();
   if (!job || job.status !== "pending") return;
 
@@ -88,7 +90,12 @@ async function runJob(db: DB, jobId: string) {
     } else if (job.type === "suggest_topics") {
       await runSuggestTopics(db);
     } else if (job.type === "weekly_review") {
-      await runWeeklyReview(db);
+      /* 周界按入队时刻算，不是执行时刻。任务可能因停机、LLM 未配置或退避重试
+         拖到跨周才跑起来，那时现算会得出另一周——原定的那周永远补不回来
+         （对表已经把它记成「已安排」），还会和新一周的任务生成同一篇。
+         实测踩过：周日入队的任务周一才执行，8.3–8.9 的回顾就此丢失，
+         8.10–8.16 反倒出了两篇。 */
+      await runWeeklyReview(db, new Date(job.createdAt));
     } else {
       /* 显式炸掉而非静默标 done：以前新增任务类型忘了加分支，任务会「成功」
          消失得无影无踪。抛普通 Error 走通用重试，三次后落 failed，

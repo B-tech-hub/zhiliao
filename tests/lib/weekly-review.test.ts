@@ -34,6 +34,7 @@ import {
   setWeeklyReviewEnabled,
 } from "@/lib/ai/weekly-review";
 import { replaceNoteTags } from "@/lib/notes";
+import { runJob } from "@/lib/ai/worker";
 import { insertNote, insertTopic, wipeData } from "../helpers/db";
 
 // 用例基准时刻：2026-08-12 是周三，上一自然周为 8.3（周一）–8.9（周日）
@@ -229,5 +230,44 @@ describe("生成回顾", () => {
     llm.output = "   ";
     await expect(runWeeklyReview(getDb(), WED)).rejects.toThrow("无输出");
     expect(reviewNotes()).toHaveLength(0);
+  });
+});
+
+/* 任务从入队到执行可能跨周：停机、LLM 未配置、退避重试都会拖住它。
+   周界必须按入队时刻算——按执行时刻现算的话，原定那周永远补不回来
+   （对表已把它记成「已安排」），还会和新一周的任务生成同一篇。
+   这是实测踩出来的：周日入队的任务周一才跑，8.3–8.9 的回顾就此丢失，
+   8.10–8.16 反倒出了两篇。 */
+describe("跨周执行的任务", () => {
+  it("生成的仍是入队那一周的回顾，而非执行时刻的上一周", async () => {
+    // 2026-08-09 是周日，其上一自然周为 7.27–8.2；测试运行时刻必然已过这一周
+    const enqueuedAt = new Date(2026, 7, 9, 12, 0, 0);
+    const target = lastWeekRange(enqueuedAt);
+    expect(target.label).toBe("7.27–8.2");
+
+    insertNote("old-1", "那一周记的东西", {
+      title: "旧笔记",
+      createdAt: target.start + 3600 * 1000,
+    });
+    const jobId = "job-crossweek-1";
+    getDb()
+      .insert(aiJobs)
+      .values({
+        id: jobId,
+        noteId: null,
+        type: "weekly_review",
+        status: "pending",
+        runAfter: 0,
+        createdAt: enqueuedAt.getTime(),
+        updatedAt: enqueuedAt.getTime(),
+      })
+      .run();
+
+    await runJob(getDb(), jobId);
+
+    const out = reviewNotes();
+    expect(out).toHaveLength(1);
+    expect(out[0].title).toBe("每周回顾 · 7.27–8.2");
+    expect(jobs()[0].status).toBe("done");
   });
 });
