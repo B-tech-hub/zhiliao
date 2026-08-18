@@ -36,7 +36,7 @@ export function createChatSseResponse(params: ChatStreamParams): Response {
   let seq = params.startSeq;
   const nextTs = () => (seq += 1);
 
-  function insert(role: string, content: string, payload?: ToolPayload): string {
+  function insert(role: string, content: string, payload?: ToolPayload, reasoning?: string): string {
     const id = newId();
     db.insert(messages)
       .values({
@@ -45,6 +45,7 @@ export function createChatSseResponse(params: ChatStreamParams): Response {
         role,
         content,
         toolPayload: payload ? JSON.stringify(payload) : null,
+        reasoning: reasoning || null,
         createdAt: nextTs(),
       })
       .run();
@@ -65,13 +66,20 @@ export function createChatSseResponse(params: ChatStreamParams): Response {
               send({ delta: ev.text });
               break;
 
+            case "reasoning":
+              send({ reasoning: ev.text });
+              break;
+
             case "assistant":
-              // 空轮（既无文本又无调用）不落库，避免历史里堆空消息
+              /* 空轮（既无文本又无调用）不落库，避免历史里堆空消息。
+                 只有思考过程没有正文的轮次同样跳过——那段思考属于
+                 紧接着的工具调用轮，不该单独留一条空消息 */
               if (ev.text || ev.calls.length > 0) {
                 insert(
                   "assistant",
                   ev.text,
                   ev.calls.length > 0 ? { kind: "calls", calls: ev.calls } : undefined,
+                  ev.reasoning,
                 );
               }
               break;

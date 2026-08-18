@@ -270,12 +270,14 @@ describe("buildLlmMessages", () => {
     role: string,
     content: string,
     payload?: ToolPayload,
+    reasoning?: string,
   ): ChatMessageRow => ({
     id: `m${(seq += 1)}`,
     conversationId: "conv1",
     role,
     content,
     toolPayload: payload ? JSON.stringify(payload) : null,
+    reasoning: reasoning ?? null,
     createdAt: seq,
   });
 
@@ -298,6 +300,34 @@ describe("buildLlmMessages", () => {
       { role: "user", content: "你好" },
       { role: "assistant", content: "你好呀" },
     ]);
+  });
+
+  /* 思考过程绝不回灌。DeepSeek 等供应商明确要求 reasoning_content 不得作为输入，
+     带上会 400 掉整个请求——用户表现为「开了深度思考聊第二句就报错」。 */
+  it("落库的思考过程不进 LLM 上下文", () => {
+    const out = buildLlmMessages([
+      row("user", "帮我想想"),
+      row("assistant", "结论是 A", undefined, "先假设 B，推翻后得到 A"),
+    ]);
+    expect(out).toEqual([
+      { role: "user", content: "帮我想想" },
+      { role: "assistant", content: "结论是 A" },
+    ]);
+    expect(JSON.stringify(out)).not.toContain("推翻");
+  });
+
+  // 只想了没说话、直接调工具的那一轮：思考过程同样不能混进回灌的 content
+  it("只有思考过程的工具轮不泄漏思维链", () => {
+    const out = buildLlmMessages([
+      row("assistant", "", calls("c1"), "我应该先查一下主题"),
+      row("tool", "共 3 个主题", result("c1")),
+    ]);
+    expect(out[0]).toEqual({
+      role: "assistant",
+      content: null,
+      tool_calls: [{ id: "c1", type: "function", function: { name: "list_topics", arguments: "{}" } }],
+    });
+    expect(JSON.stringify(out)).not.toContain("我应该");
   });
 
   it("配对完整的工具回合被完整保留", () => {

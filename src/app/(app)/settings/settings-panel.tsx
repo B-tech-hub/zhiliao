@@ -51,6 +51,7 @@ interface VisionInfo {
   apiKeyMasked: string;
   sources: { baseUrl: VisionSource; apiKey: VisionSource; model: VisionSource };
 }
+type ReasoningInfo = VisionInfo;
 
 interface ReviewInfo {
   enabled: boolean;
@@ -273,6 +274,7 @@ export function SettingsPanel({
   llm,
   vision,
   image,
+  reasoning,
   queue,
   review,
   lastBackupAt,
@@ -283,6 +285,7 @@ export function SettingsPanel({
   vision: VisionInfo;
   // 图像生成配置，来源语义与视觉模型一致（留空回落文本模型）
   image: VisionInfo;
+  reasoning: ReasoningInfo;
   queue: QueueInfo;
   review: ReviewInfo;
   lastBackupAt: number | null;
@@ -319,6 +322,23 @@ export function SettingsPanel({
   const [imageResult, setImageResult] = useState("");
   const [imageTesting, setImageTesting] = useState(false);
   const [imageTestResult, setImageTestResult] = useState("");
+  // 深度思考模型表单：与视觉/图像模型同构，baseUrl/apiKey 留空回落文本模型配置
+  const [reasoningModel, setReasoningModel] = useState(reasoning.model);
+  const [reasoningBaseUrl, setReasoningBaseUrl] = useState("");
+  const [reasoningApiKey, setReasoningApiKey] = useState("");
+  const [reasoningSaving, setReasoningSaving] = useState(false);
+  const [reasoningResult, setReasoningResult] = useState("");
+  const [reasoningTesting, setReasoningTesting] = useState(false);
+  const [reasoningTestResult, setReasoningTestResult] = useState("");
+  async function saveReasoning() {
+    const body: Record<string, string> = {};
+    if (reasoningModel.trim() !== reasoning.model) body.reasoningModel = reasoningModel.trim();
+    if (reasoningBaseUrl.trim()) body.reasoningBaseUrl = reasoningBaseUrl.trim();
+    if (reasoningApiKey.trim()) body.reasoningApiKey = reasoningApiKey.trim();
+    if (!Object.keys(body).length) return setReasoningResult("没有修改的内容");
+    setReasoningSaving(true); setReasoningResult("");
+    try { const res = await fetch("/api/settings/llm", { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) }); if (!res.ok) throw new Error(); setReasoningApiKey(""); setReasoningBaseUrl(""); setReasoningResult("已保存，立即生效"); router.refresh(); } catch { setReasoningResult("保存失败"); } finally { setReasoningSaving(false); }
+  }
 
   async function saveImageConfig() {
     const body: Record<string, string> = {};
@@ -433,16 +453,24 @@ export function SettingsPanel({
     }
   }
 
-  // 三组配置共用一个测试入口，target 决定打哪个端点
-  async function testLlm(target: "text" | "vision" | "image") {
+  // 四组配置共用一个测试入口，target 决定打哪个端点
+  async function testLlm(target: "text" | "vision" | "image" | "reasoning") {
     const setBusy =
-      target === "vision" ? setVisionTesting : target === "image" ? setImageTesting : setTesting;
+      target === "vision"
+        ? setVisionTesting
+        : target === "image"
+          ? setImageTesting
+          : target === "reasoning"
+            ? setReasoningTesting
+            : setTesting;
     const setResult =
       target === "vision"
         ? setVisionTestResult
         : target === "image"
           ? setImageTestResult
-          : setTestResult;
+          : target === "reasoning"
+            ? setReasoningTestResult
+            : setTestResult;
     setBusy(true);
     setResult("");
     try {
@@ -843,6 +871,60 @@ export function SettingsPanel({
               ))}
             </ul>
           )}
+        </div>
+
+        {/* 深度思考模型：字段序与前三组一致。测试连接会连通性、是否外露思考过程、
+            是否支持工具调用一次测完——工具能力必须单独探测并落库，助手据此
+            决定开着深度思考时要不要下发工具（含生图），见 docs/adr/0015 */}
+        <div className="mt-3 rounded-[18px] bg-surface p-6 text-[14px]">
+          <p className="font-semibold tracking-[-0.224px]">深度思考模型（可选）</p>
+          <p className="mt-1 text-[12px] leading-[1.5] text-ink-48">
+            模型名必须显式配置；接入点和 Key 留空时回落普通文本模型。助手输入框的「深度思考」开关默认关闭，逐条消息生效、不记忆。
+          </p>
+          <div className="mt-3 space-y-3">
+            <input
+              value={reasoningBaseUrl}
+              onChange={(e) => setReasoningBaseUrl(e.target.value)}
+              placeholder={reasoning.baseUrl || "接入点"}
+              className="h-[40px] w-full rounded-full border border-hairline bg-surface px-5 outline-none focus:border-action-focus"
+            />
+            <input
+              value={reasoningModel}
+              onChange={(e) => setReasoningModel(e.target.value)}
+              placeholder="模型名"
+              className="h-[40px] w-full rounded-full border border-hairline bg-surface px-5 outline-none focus:border-action-focus"
+            />
+            <input
+              type="password"
+              value={reasoningApiKey}
+              onChange={(e) => setReasoningApiKey(e.target.value)}
+              placeholder={`API Key（${reasoning.apiKeyMasked}）`}
+              className="h-[40px] w-full rounded-full border border-hairline bg-surface px-5 outline-none focus:border-action-focus"
+            />
+            <div className="flex flex-wrap items-center gap-3">
+              <button
+                onClick={saveReasoning}
+                disabled={reasoningSaving}
+                className="rounded-full bg-action px-[22px] py-[8px] text-white transition-transform active:scale-95 disabled:opacity-40"
+              >
+                {reasoningSaving ? "保存中…" : "保存"}
+              </button>
+              <button
+                onClick={() => testLlm("reasoning")}
+                disabled={reasoningTesting}
+                className="rounded-full border border-hairline px-[22px] py-[8px] text-ink-80 transition-transform active:scale-95 disabled:opacity-40"
+              >
+                {reasoningTesting ? "测试中…" : "测试连接"}
+              </button>
+              {reasoningResult && <span className="text-[12px] text-ink-48">{reasoningResult}</span>}
+            </div>
+            {reasoningTestResult && (
+              <p className="text-[12px] leading-[1.5] text-ink-48">{reasoningTestResult}</p>
+            )}
+            <p className="text-[12px] leading-[1.5] text-ink-48">
+              没测过工具能力时助手照常下发工具；只有测出「不支持」才降级为纯问答。
+            </p>
+          </div>
         </div>
 
         <WeeklyReviewCard review={review} />

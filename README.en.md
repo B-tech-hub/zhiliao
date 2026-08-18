@@ -14,12 +14,12 @@ Full documentation is in Simplified Chinese — see [README.md](README.md). This
 
 ## Features
 
-- Markdown notes (TipTap WYSIWYG), paste/drag image upload, debounced autosave
+- Markdown notes (TipTap WYSIWYG), paste/drag uploads up to 20 MB (PNG/JPEG/GIF/WebP/HEIC), debounced autosave. HEIC originals are preserved while JPEG display copies keep previews browser-compatible. Desktop note pages use a wide canvas with an H1–H3 table of contents; mobile stays single-column
 - AI pipeline: one call per note → topic + title + tags + summary, with retry/backoff; fields you edit manually are never overwritten
 - Topic suggestions: AI clusters inbox notes and proposes new topics
 - Chinese full-text search (jieba segmentation + SQLite FTS5)
-- AI assistant over the whole library: it can search, read, create, append to, re-file and delete notes, and fetch URLs you have pasted. Every write leaves an undoable card in the conversation; deletions require your confirmation (SSE streaming, optional vision model)
-- Your data stays yours: one-click zip export (Markdown + images, Obsidian-friendly), manual backup button, and a trash bin — deleted notes are recoverable for 30 days
+- AI assistant over the whole library: it can search, read, create, append to, re-file and delete notes, and fetch URLs you have pasted. Every write leaves an undoable card in the conversation; deletions require your confirmation. Vision requests use transient compressed copies. A per-message Deep Reasoning toggle uses a separately configured reasoning model, defaults off, is not persisted, and never exposes model chain-of-thought
+- Your data stays yours: one-click zip export (Markdown + display images, with HEIC originals under `assets/originals/`), manual backup button, and a trash bin — deleted notes are recoverable for 30 days
 - PWA, dark mode, daily backups (database + images, 7 copies each)
 
 ## Try it in 1 minute (no API key)
@@ -60,6 +60,7 @@ docker compose up -d
 | `APP_PASSWORD` | ✅ | login password |
 | `SESSION_SECRET` | ✅ | ≥32 random chars (`openssl rand -hex 32`) |
 | `LLM_BASE_URL` / `LLM_API_KEY` / `LLM_MODEL` | | any OpenAI-compatible endpoint (DeepSeek, Qwen, Claude, …); can also be set later in the Settings UI |
+| `REASONING_BASE_URL` / `REASONING_API_KEY` / `REASONING_MODEL` | | optional deep-reasoning endpoint; URL and key may fall back to the text model, but the reasoning model name must be explicit |
 
 The app works without an LLM configured — notes stay "pending" and are processed automatically once you add one.
 

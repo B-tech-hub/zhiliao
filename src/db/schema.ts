@@ -76,6 +76,9 @@ export const images = sqliteTable("images", {
   filename: text("filename").notNull().unique(),
   mime: text("mime").notNull(),
   size: integer("size").notNull(),
+  originalFilename: text("original_filename"),
+  originalMime: text("original_mime"),
+  originalSize: integer("original_size"),
   createdAt: integer("created_at").notNull(),
 });
 
@@ -165,6 +168,10 @@ export const messages = sqliteTable(
     // 工具调用载荷（JSON）：工具名、参数、结果与撤销所需的 before 快照。
     // 仅 role='tool' 的行有值，重开会话时据此重建操作卡片
     toolPayload: text("tool_payload"),
+    /* 深度思考的思考过程。仅 role='assistant' 且走推理模型时有值，
+       只用于展示——buildLlmMessages() 不读这一列，绝不回灌给模型
+       （供应商会以 400 拒绝，见 docs/adr/0015） */
+    reasoning: text("reasoning"),
     createdAt: integer("created_at").notNull(),
   },
   (t) => [index("idx_messages_conv").on(t.conversationId, t.createdAt)],

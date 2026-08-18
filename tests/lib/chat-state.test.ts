@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import type { ChatItem, HistoryMessage, ToolItem } from "@/components/chat/chat-state";
 import {
   applyEvent,
+  citationsToMarkdown,
   collectNoteIds,
   finalizeStream,
   markUndo,
@@ -379,6 +380,34 @@ describe("splitCitations 引用溯源", () => {
 
   it("空文本返回空数组", () => {
     expect(splitCitations("", new Set())).toEqual([]);
+  });
+});
+
+/* 助手回答改走 Markdown 渲染后，`[^id]` 正好撞上 GFM 的脚注语法——
+   不预处理就会被 remark-gfm 当成脚注引用吞掉，上标既看不见也点不动。 */
+describe("citationsToMarkdown 引用转链接", () => {
+  it("白名单内的引用变成站内链接并从 1 连续编号", () => {
+    expect(citationsToMarkdown("A[^n1]B[^n2]", new Set(["n1", "n2"]))).toBe(
+      "A[[1]](/notes/n1)B[[2]](/notes/n2)",
+    );
+  });
+
+  // 不生成打不开的死链，这条不变量不能破
+  it("白名单外的引用保持原样，不产生链接", () => {
+    const out = citationsToMarkdown("据说如此[^n404]。", new Set(["n1"]));
+    expect(out).toBe("据说如此[^n404]。");
+    expect(out).not.toContain("/notes/");
+  });
+
+  // 编号只数放行的那些，被拒的不占号
+  it("混合时编号只按放行的引用递增", () => {
+    expect(citationsToMarkdown("A[^bad]B[^n1]", new Set(["n1"]))).toBe(
+      "A[^bad]B[[1]](/notes/n1)",
+    );
+  });
+
+  it("没有引用的正文原样通过", () => {
+    expect(citationsToMarkdown("## 标题\n\n- 列表", new Set())).toBe("## 标题\n\n- 列表");
   });
 });
 

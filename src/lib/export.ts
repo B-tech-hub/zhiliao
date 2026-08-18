@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { asc, eq, isNull } from "drizzle-orm";
 import type { DB } from "@/db";
-import { notes, topics, type Note } from "@/db/schema";
+import { images, notes, topics, type Note } from "@/db/schema";
 import { extractImageFilenames } from "@/lib/image-refs";
 import { getTagsForNotes } from "@/lib/notes";
 
@@ -92,10 +92,12 @@ export function buildExportPlan(db: DB): ExportPlan {
   });
 
   const uploadDir = process.env.UPLOAD_DIR || "./data/uploads";
-  const assets = [...wanted]
-    .sort()
-    .filter((f) => fs.existsSync(path.join(uploadDir, f)))
-    .map((f) => ({ zipPath: `assets/${f}`, diskPath: path.join(uploadDir, f) }));
+  const assets = [...wanted].sort().flatMap((f) => {
+    const img = db.select().from(images).where(eq(images.filename, f)).get();
+    const out = [{ zipPath: `assets/${f}`, diskPath: path.join(uploadDir, f) }];
+    if (img?.originalFilename) out.push({ zipPath: `assets/originals/${img.originalFilename}`, diskPath: path.join(uploadDir, img.originalFilename) });
+    return out;
+  }).filter((a) => fs.existsSync(a.diskPath));
 
   return { mdEntries, assets };
 }

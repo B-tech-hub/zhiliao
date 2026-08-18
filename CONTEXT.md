@@ -38,13 +38,19 @@
 调用 AI 服务所需的接入点（base URL）、API Key、模型名三元组。读取顺序：**设置页保存的值（数据库）优先，环境变量兜底**；超时时间仅由环境变量控制。相关决策见 [docs/adr/0001-llm-config-in-db.md](docs/adr/0001-llm-config-in-db.md)。
 
 ### 视觉模型（Vision）
-AI 读图专用的第二组 LLM 配置（`vision_base_url` / `vision_api_key` / `vision_model`）。接入点与 Key 留空时回落文本模型配置；仅在显式配置了视觉模型名时"AI 看图"功能才可用。
+AI 读图专用的第二组 LLM 配置（`vision_base_url` / `vision_api_key` / `vision_model`）。接入点与 Key 留空时回落文本模型配置；仅在显式配置了视觉模型名时"AI 看图"功能才可用。发送前只在内存中生成高质量 WebP 副本，原图不变；最多 6 张，并按单图与总字节双重限额，避免 Base64 多图请求触发代理防火墙。视觉回答可由用户直接存成新笔记。相关决策见 [docs/adr/0013-vision-image-payload.md](docs/adr/0013-vision-image-payload.md)。
 
 ### 图像模型（Image）
 AI 画图专用的第三组 LLM 配置（`image_base_url` / `image_api_key` / `image_model`），回落语义同视觉模型。未配置模型名时助手不下发生图工具。
 
+### 深度思考（Deep Thinking）
+助手输入框上的**消息级开关**：本次消息改用第四组独立配置的推理模型（`reasoning_base_url` / `reasoning_api_key` / `reasoning_model`）作答，回落语义同视觉模型。开关**不持久化**，每条消息重置——推理模型贵且慢，不该被无意间一直开着。深度思考只是「换一个更强的模型」，**工具能力不缩水**：知识库工具照常下发，能不能用由它自己那份探测结论决定，与文本模型的结论互不干涉（两者常常不是同一家供应商）。请求超时放宽到 300 秒并省略 `temperature`（推理模型普遍拒绝该参数）。相关决策见 [docs/adr/0015-deep-thinking-tools-and-trace.md](docs/adr/0015-deep-thinking-tools-and-trace.md)。
+
+### 思考过程（Reasoning Trace）
+推理模型在给出答案前吐出的推演文本。三种线格式都认：`reasoning_content`、`reasoning`、以及内联在正文里的 `<think>…</think>`。随消息落库，在回答上方以折叠栏呈现——模型还在想时自动展开，正文一开始吐就自动收起。**绝不回灌进后续请求的上下文**（供应商明确要求，带上会 400 拒绝整个请求），「存为新笔记」时也不带上。
+
 ### AI 助手（Assistant）
-全局的对话式入口：任意页面右下角均可唤起，面向整个知识库，可通过**工具调用**检索与改写笔记。当前打开的笔记/主题以**上下文附件**形式带入，可随时摘除。会话与消息持久化，回答走 SSE 流式；模型不支持工具调用时自动降级为纯问答。相关决策见 [docs/adr/0008-assistant-tool-calling.md](docs/adr/0008-assistant-tool-calling.md)（上下文注入时期的决策见 [docs/adr/0003-chat-context-injection.md](docs/adr/0003-chat-context-injection.md)）。
+全局的对话式入口：任意页面右下角均可唤起，面向整个知识库，可通过**工具调用**检索与改写笔记。当前打开的笔记/主题以**上下文附件**形式带入，可随时摘除。会话与消息持久化，回答走 SSE 流式并按 Markdown 渲染（走与笔记同一套**正文排版层**，不套气泡）；模型不支持工具调用时自动降级为纯问答。面板贴右侧、宽度可拖拽调整并记住。输入框上另有**看图**与**深度思考**两个消息级开关，各自切到对应的独立模型。相关决策见 [docs/adr/0008-assistant-tool-calling.md](docs/adr/0008-assistant-tool-calling.md)（上下文注入时期的决策见 [docs/adr/0003-chat-context-injection.md](docs/adr/0003-chat-context-injection.md)）。
 
 ### 工具调用（Tool Calling）
 助手读写知识库的唯一途径，共 9 个：检索笔记、读取全文、列出主题、新建笔记、追加内容、修改元数据、删除笔记、抓取网页、生成图片。**不存在覆盖正文的工具**——项目不做版本历史，正文覆盖是唯一不可恢复的操作。单次对话最多 8 轮、每轮最多 20 个调用。`fetch_url` 只能抓取用户消息中出现过的网址，相关决策见 [docs/adr/0009-fetch-url-safety.md](docs/adr/0009-fetch-url-safety.md)；`generate_image` 每条用户消息最多 2 次，见 [docs/adr/0011-image-generation.md](docs/adr/0011-image-generation.md)。
@@ -83,7 +89,13 @@ AI 画图专用的第三组 LLM 配置（`image_base_url` / `image_api_key` / `i
 每周一凌晨把上一自然周（周一至周日）新建的笔记梳理成一篇脉络回顾，产物是一条普通笔记，归入自动创建的普通主题「每周回顾」。默认开启，设置页可关，另有「立即生成上周回顾」手动补。调度不是日历定时器而是**每小时对表**：settings 记已安排的周，进入新的一周即入队，因此停机期间错过的周开机后会自动补上。空周不产报告。按服务器本地时区分周（容器默认 UTC，需设 `TZ`）。相关决策见 [docs/adr/0012-weekly-review.md](docs/adr/0012-weekly-review.md)。
 
 ### Mermaid 图表
-笔记正文中语言标为 `mermaid` 的代码块，在编辑器里渲染成图：光标离开时出图，点图或把光标移进去变回源码，渲染失败则显示源码与错误。存储形态仍是原生 Markdown 代码块，导出后 Obsidian 等工具可直接读。聊天气泡不渲染（那里是纯文本）。
+笔记正文中语言标为 `mermaid` 的代码块，在编辑器里渲染成图：光标离开时出图，点图或把光标移进去变回源码，渲染失败则显示源码与错误。存储形态仍是原生 Markdown 代码块，导出后 Obsidian 等工具可直接读。助手回答里只当普通代码块显示，不出图。
+
+### 正文排版层（Prose）
+笔记编辑器与助手回答共用的唯一一套正文排版：段落间距、标题上下留白、列表节奏、等宽代码块、约 40 字的行宽上限。颜色与圆角全部取自既有设计 token，因此暗色自动跟随。共用而非各写一份，是为了不让两处排版漂移。相关决策见 [docs/adr/0016-shared-prose-layer.md](docs/adr/0016-shared-prose-layer.md)。
+
+### 斜杠命令（Slash Command）
+在笔记正文输入 `/` 唤出的块级插入菜单：标题、列表、引用、代码块、Mermaid 图、表格、分隔线。斜杠须在块首或紧跟空白才触发，`and/or` 这类正常输入不受影响。
 
 ### FTS 影子表
 笔记的全文搜索索引副本。删除、修改或移入回收站时必须同步更新，否则搜索会出现"幽灵结果"；回收站中的笔记不在索引内，恢复时重建。

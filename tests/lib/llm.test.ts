@@ -32,6 +32,15 @@ describe("llm", () => {
     expect(stripJsonFence('```\n{"a":1}\n```')).toBe('{"a":1}');
   });
 
+  it("上游返回网站防火墙 HTML 时不把整段页面暴露给界面", async () => {
+    const { formatLlmHttpError } = await freshLlm();
+    const html = '<!doctype html><html><head><title>网站防火墙</title></head></html>';
+    const message = formatLlmHttpError(403, html, "text/html; charset=utf-8");
+    expect(message).toContain("HTTP 403");
+    expect(message).toContain("网站防火墙");
+    expect(message).not.toContain("<!doctype");
+  });
+
   it("chatJson 解析首次合法输出", async () => {
     const { chatJson } = await freshLlm();
     const fetchMock = vi.fn(async () => llmResponse('{"pong":true}'));
@@ -220,5 +229,59 @@ describe("parseSseStream", () => {
   it("只有 arguments 没有函数名的残缺调用被丢弃", async () => {
     const out = await collect(toolDelta({ index: 0, function: { arguments: '{"a":1}' } }), DONE);
     expect(out).toEqual([]);
+  });
+
+  /* 深度思考的思考过程。三种线格式都要认，认不出就等于功能不存在——
+     原先只解析 content，reasoning_content 在这一层被静默丢弃。 */
+  describe("思考过程", () => {
+    const traceDelta = (t: string) => sse({ choices: [{ delta: { reasoning_content: t } }] });
+    const orDelta = (t: string) => sse({ choices: [{ delta: { reasoning: t } }] });
+    const join = (out: { type: string; text?: string }[], type: string) =>
+      out.filter((c) => c.type === type).map((c) => c.text).join("");
+
+    it("reasoning_content 字段产出 reasoning 块", async () => {
+      expect(await collect(traceDelta("先想想"), textDelta("答案"), DONE)).toEqual([
+        { type: "reasoning", text: "先想想" },
+        { type: "text", text: "答案" },
+      ]);
+    });
+
+    it("OpenRouter 的 reasoning 字段同样认", async () => {
+      expect(await collect(orDelta("嗯"), DONE)).toEqual([{ type: "reasoning", text: "嗯" }]);
+    });
+
+    it("内联 <think> 标签被剥离成 reasoning", async () => {
+      expect(await collect(textDelta("<think>推演</think>结论"), DONE)).toEqual([
+        { type: "reasoning", text: "推演" },
+        { type: "text", text: "结论" },
+      ]);
+    });
+
+    /* 标签会跨 chunk 断开。不留住尾巴的话，用户会在答案里看到裸的「<thi」，
+       而后半段思考过程被当成正文吐出来。 */
+    it("跨 chunk 断开的标签不吐半截", async () => {
+      const out = await collect(
+        textDelta("<thi"),
+        textDelta("nk>推演</thi"),
+        textDelta("nk>结论"),
+        DONE,
+      );
+      expect(join(out, "text")).toBe("结论");
+      expect(join(out, "reasoning")).toBe("推演");
+    });
+
+    // 流在思考中途断掉：已收到的部分不能凭空消失
+    it("未闭合的 think 在流末尾被冲出", async () => {
+      const out = await collect(textDelta("<think>想到一半"), DONE);
+      expect(out).toEqual([{ type: "reasoning", text: "想到一半" }]);
+    });
+
+    // 不带标签的普通回答不该受剥离器影响
+    it("无标签文本原样通过", async () => {
+      expect(await collect(textDelta("普通"), textDelta("回答"), DONE)).toEqual([
+        { type: "text", text: "普通" },
+        { type: "text", text: "回答" },
+      ]);
+    });
   });
 });

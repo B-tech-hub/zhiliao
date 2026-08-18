@@ -4,7 +4,7 @@ import { getQueueStats } from "@/lib/ai/worker";
 import { getLastReviewWeek, isWeeklyReviewEnabled } from "@/lib/ai/weekly-review";
 import { getLastBackupAt } from "@/lib/backup";
 import { getTrashCount } from "@/lib/trash";
-import { getImageConfig, getLlmConfig, getVisionConfig } from "@/lib/llm-config";
+import { getImageConfig, getLlmConfig, getVisionConfig, getReasoningConfig } from "@/lib/llm-config";
 import { SettingsPanel } from "./settings-panel";
 
 export const dynamic = "force-dynamic";
@@ -42,6 +42,8 @@ export default function SettingsPage() {
     apiKeyMasked: maskKey(imageConfig.apiKey),
     sources: imageConfig.sources,
   };
+  const reasoningConfig = getReasoningConfig();
+  const reasoning = { model: reasoningConfig.model ?? "", baseUrl: reasoningConfig.baseUrl ?? "", apiKeyMasked: maskKey(reasoningConfig.apiKey), sources: reasoningConfig.sources };
 
   return (
     <SettingsPanel
@@ -49,6 +51,7 @@ export default function SettingsPage() {
       llm={llm}
       vision={vision}
       image={image}
+      reasoning={reasoning}
       queue={getQueueStats(db)}
       review={{ enabled: isWeeklyReviewEnabled(db), lastWeek: getLastReviewWeek(db) }}
       lastBackupAt={getLastBackupAt()}

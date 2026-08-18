@@ -1,6 +1,7 @@
 @import "tailwindcss";
 /* Inter 变量字体（自托管，docs/DESIGN.md 推荐的 SF Pro 替代；拉丁/数字生效，中文回退系统字体） */
 @import "@fontsource-variable/inter";
+main:has(.note-detail) > div { max-width: 1440px; }
 
 /* 暗色模式采用 class 策略：next-themes 在 <html> 上切换 .dark（决策见 docs/adr/0005） */
 @custom-variant dark (&:where(.dark, .dark *));
@@ -108,4 +109,147 @@ h1,
 h2,
 h3 {
   letter-spacing: -0.374px;
+}
+
+/* ── 共享正文排版层 ────────────────────────────────────────────────
+   Tailwind Preflight 把 p / h1-h6 / ul / ol / blockquote 的 margin 全部
+   清零，而本项目从未把它们补回来——段落、标题、列表项因此零间距贴死成
+   一坨，标题只是「变大变粗的一行字」。这一层就是补回来的那层 rhythm。
+
+   笔记编辑器与助手回答共用这一个类，是刻意的：两处各写一份，迟早漂移成
+   两种排版。颜色、圆角、字体一律取 @theme 里的既有 token，不引入新的设计
+   决策，因此暗色自动跟随（见 docs/adr/0016）。 */
+@layer components {
+  .prose-note {
+    /* 中文最佳行宽约 40 字。此前笔记正文在 1440px 宽屏下能拉到 900px 以上，
+       一行 60+ 字，眼睛要横扫。助手面板本就窄于此，该值在那边不生效。 */
+    max-width: 40em;
+  }
+
+  /* 首尾不留外边距：容器自己的 padding 说了算 */
+  .prose-note > :first-child {
+    margin-top: 0;
+  }
+  .prose-note > :last-child {
+    margin-bottom: 0;
+  }
+
+  .prose-note p {
+    margin-block: 0.75em;
+  }
+
+  .prose-note h1,
+  .prose-note h2,
+  .prose-note h3,
+  .prose-note h4 {
+    font-weight: 600;
+    line-height: 1.3;
+    letter-spacing: -0.374px;
+    /* 上留白远大于下留白：标题属于它下面那段，不属于上面那段 */
+    margin-top: 1.6em;
+    margin-bottom: 0.6em;
+  }
+  .prose-note h1 {
+    font-size: 1.6em;
+  }
+  .prose-note h2 {
+    font-size: 1.25em;
+  }
+  .prose-note h3 {
+    font-size: 1.08em;
+  }
+  .prose-note h4 {
+    font-size: 1em;
+  }
+  /* 紧跟标题的块不再自带上边距，由标题的 margin-bottom 独家决定间距 */
+  .prose-note :is(h1, h2, h3, h4) + * {
+    margin-top: 0;
+  }
+
+  .prose-note ul,
+  .prose-note ol {
+    margin-block: 0.75em;
+    padding-left: 1.4em;
+  }
+  .prose-note ul {
+    list-style: disc;
+  }
+  .prose-note ol {
+    list-style: decimal;
+  }
+  .prose-note li {
+    margin-block: 0.35em;
+  }
+  .prose-note li::marker {
+    color: var(--color-ink-48);
+  }
+  /* 嵌套列表用更紧的节奏，否则层级越深空得越离谱 */
+  .prose-note li > ul,
+  .prose-note li > ol {
+    margin-block: 0.35em;
+  }
+
+  .prose-note blockquote {
+    margin-block: 1em;
+    padding-left: 0.9em;
+    border-left: 2px solid var(--color-hairline);
+    color: var(--color-ink-48);
+  }
+
+  .prose-note hr {
+    margin-block: 1.8em;
+    border: 0;
+    border-top: 1px solid var(--color-divider);
+  }
+
+  /* 代码：此前 pre 有底色却没有等宽字体，代码块用的还是 Inter */
+  .prose-note code {
+    font-family: ui-monospace, "SFMono-Regular", "Cascadia Code", Consolas, monospace;
+    font-size: 0.88em;
+    background: var(--color-fill);
+    border-radius: 4px;
+    padding: 0.1em 0.35em;
+  }
+  .prose-note pre {
+    margin-block: 1em;
+    padding: 0.85em 1em;
+    border-radius: 8px;
+    background: var(--color-fill);
+    overflow-x: auto;
+  }
+  /* 块内代码不重复底色与内边距，否则是个套着灰底的灰块 */
+  .prose-note pre code {
+    background: none;
+    padding: 0;
+    font-size: 0.85em;
+    line-height: 1.6;
+  }
+
+  .prose-note table {
+    margin-block: 1em;
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+  }
+  .prose-note th,
+  .prose-note td {
+    border: 1px solid var(--color-hairline);
+    padding: 0.4em 0.6em;
+    text-align: left;
+  }
+  .prose-note th {
+    background: color-mix(in srgb, var(--color-fill) 60%, transparent);
+    font-weight: 600;
+  }
+
+  .prose-note a {
+    color: var(--color-action);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .prose-note img {
+    max-width: 100%;
+    border-radius: 8px;
+  }
 }

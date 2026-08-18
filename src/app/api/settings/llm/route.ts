@@ -3,7 +3,7 @@ import { inArray } from "drizzle-orm";
 import { z } from "zod";
 import { getDb } from "@/db";
 import { settings } from "@/db/schema";
-import { LLM_SETTING_KEYS, IMAGE_SETTING_KEYS, VISION_SETTING_KEYS } from "@/lib/llm-config";
+import { LLM_SETTING_KEYS, IMAGE_SETTING_KEYS, VISION_SETTING_KEYS, REASONING_SETTING_KEYS } from "@/lib/llm-config";
 
 // 仅携带需要修改的字段；apiKey 留空时前端不携带，避免误覆盖
 const patchSchema = z.object({
@@ -18,6 +18,9 @@ const patchSchema = z.object({
   imageBaseUrl: z.union([z.string().trim().url("接入点需为完整 URL"), z.literal("")]).optional(),
   imageApiKey: z.string().trim().optional(),
   imageModel: z.string().trim().optional(),
+  reasoningBaseUrl: z.union([z.string().trim().url(), z.literal("")]).optional(),
+  reasoningApiKey: z.string().trim().optional(),
+  reasoningModel: z.string().trim().optional(),
 });
 
 // 保存 LLM 配置到 settings 表（DB 优先、环境变量兜底，保存后立即生效）
@@ -40,6 +43,9 @@ export async function PATCH(req: NextRequest) {
   if (data.imageBaseUrl !== undefined) entries.push([IMAGE_SETTING_KEYS.baseUrl, data.imageBaseUrl]);
   if (data.imageApiKey !== undefined) entries.push([IMAGE_SETTING_KEYS.apiKey, data.imageApiKey]);
   if (data.imageModel !== undefined) entries.push([IMAGE_SETTING_KEYS.model, data.imageModel]);
+  if (data.reasoningBaseUrl !== undefined) entries.push([REASONING_SETTING_KEYS.baseUrl, data.reasoningBaseUrl]);
+  if (data.reasoningApiKey !== undefined) entries.push([REASONING_SETTING_KEYS.apiKey, data.reasoningApiKey]);
+  if (data.reasoningModel !== undefined) entries.push([REASONING_SETTING_KEYS.model, data.reasoningModel]);
   if (entries.length === 0) {
     return NextResponse.json({ error: "没有需要保存的字段" }, { status: 400 });
   }

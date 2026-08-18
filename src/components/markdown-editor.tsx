@@ -12,6 +12,7 @@ import TableCell from "@tiptap/extension-table-cell";
 import { Markdown } from "tiptap-markdown";
 import { useEffect, useRef, useState } from "react";
 import { MermaidCodeBlock } from "./mermaid-code-block";
+import { SlashMenu, useSlashMenu } from "./slash-menu";
 
 async function uploadImage(file: File, noteId?: string): Promise<string | null> {
   const form = new FormData();
@@ -247,12 +248,18 @@ export function MarkdownEditor({
   onChange,
   noteId,
   placeholder,
+  hideToolbar,
 }: {
   value: string;
   onChange: (markdown: string) => void;
   noteId?: string;
   placeholder?: string;
+  // 专注模式下藏起工具栏，只留标题与正文
+  hideToolbar?: boolean;
 }) {
+  // 斜杠菜单的键盘处理要挂进 editorProps，但它依赖 editor 本身——
+  // 用 ref 打破这个先有鸡还是先有蛋
+  const slashKeyRef = useRef<((e: KeyboardEvent) => boolean) | null>(null);
   const editor = useEditor({
     immediatelyRender: false,
     extensions: [
@@ -279,21 +286,17 @@ export function MarkdownEditor({
     content: value,
     editorProps: {
       attributes: {
+        /* 正文排版全部来自共享的 .prose-note（见 globals.css）：编辑态与
+           阅读态、笔记与助手回答，四处同一套，改一处四处齐动。
+           这里只留 TipTap 自己的选中态样式，那是编辑器独有的。 */
         class:
-          "max-w-none min-h-full outline-none [&_img]:max-w-full [&_img]:rounded-[8px] " +
+          "prose-note min-h-full outline-none " +
           "[&_img.ProseMirror-selectednode]:ring-2 [&_img.ProseMirror-selectednode]:ring-action " +
-          "[&_a]:text-action [&_a]:underline [&_a]:underline-offset-2 " +
-          "[&_h1]:text-[28px] [&_h1]:font-semibold [&_h2]:text-[21px] [&_h2]:font-semibold [&_h3]:font-semibold " +
-          "[&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5 " +
-          "[&_blockquote]:border-l-2 [&_blockquote]:border-hairline [&_blockquote]:pl-3 [&_blockquote]:text-ink-48 " +
-          "[&_code]:rounded [&_code]:bg-fill [&_code]:px-1 [&_pre]:rounded-[8px] [&_pre]:bg-fill [&_pre]:p-3 " +
-          "[&_table]:w-full [&_table]:border-collapse [&_table]:table-fixed " +
-          "[&_th]:border [&_th]:border-hairline [&_th]:bg-fill/60 [&_th]:px-2 [&_th]:py-1.5 [&_th]:text-left [&_th]:font-semibold " +
-          "[&_td]:border [&_td]:border-hairline [&_td]:px-2 [&_td]:py-1.5 " +
           "[&_.selectedCell]:bg-action/10",
       },
-      handlePaste: (_view, event) => {
-        const files = [...(event.clipboardData?.files ?? [])].filter((f) => f.type.startsWith("image/"));
+      // 菜单开着时上下键、回车归它管，返回 true 阻止编辑器的默认行为
+      handleKeyDown: (_view, event) => slashKeyRef.current?.(event) ?? false,
+      handlePaste: (_view, event) => {        const files = [...(event.clipboardData?.files ?? [])].filter((f) => f.type.startsWith("image/"));
         if (files.length && editor) {
           event.preventDefault();
           insertImages(editor, files, noteId);
@@ -325,19 +328,32 @@ export function MarkdownEditor({
     }
   }, [value, editor]);
 
+  const slash = useSlashMenu(editor);
+  // 把最新的键盘处理塞回 editorProps 拿得到的那个 ref
+  slashKeyRef.current = slash.handleKeyDown;
+
   if (!editor) {
     return <div className="min-h-0 flex-1" />;
   }
 
   return (
     <div className="flex min-h-0 flex-1 flex-col">
-      <EditorToolbar editor={editor} noteId={noteId} />
+      {!hideToolbar && <EditorToolbar editor={editor} noteId={noteId} />}
       <div
+        // 目录靠这个标记找到滚动容器，据此算出当前读到哪一节
+        data-note-scroll=""
         className="min-h-0 flex-1 cursor-text overflow-y-auto text-[17px] leading-[1.47]"
         onClick={() => editor.chain().focus().run()}
       >
         <EditorContent editor={editor} className="min-h-full" />
       </div>
+      <SlashMenu
+        menu={slash.menu}
+        items={slash.items}
+        index={slash.index}
+        onPick={slash.apply}
+        onHover={slash.setIndex}
+      />
     </div>
   );
 }

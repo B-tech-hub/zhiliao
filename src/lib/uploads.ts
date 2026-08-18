@@ -15,6 +15,7 @@ export const IMAGE_EXT_BY_MIME: Record<string, string> = {
   "image/gif": "gif",
   "image/webp": "webp",
 };
+export const HEIC_MIMES = new Set(["image/heic", "image/heif"]);
 
 export function getUploadDir(): string {
   const dir = process.env.UPLOAD_DIR || "./data/uploads";
@@ -36,6 +37,10 @@ export function sniffImageMime(buf: Buffer): string | null {
     buf.subarray(8, 12).toString("ascii") === "WEBP"
   ) {
     return "image/webp";
+  }
+  if (buf.length >= 12 && buf.subarray(4, 8).toString("ascii") === "ftyp") {
+    const brand = buf.subarray(8, 12).toString("ascii").toLowerCase();
+    if (["heic", "heix", "hevc", "hevx", "mif1"].includes(brand)) return "image/heic";
   }
   return null;
 }

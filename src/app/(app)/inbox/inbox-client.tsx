@@ -256,7 +256,7 @@ export function InboxClient({
       {notes.length === 0 ? (
         <EmptyNotes hint="太棒了，没有待整理的笔记" />
       ) : (
-        <div className="space-y-3">
+        <div className="space-y-1.5">
           {notes.map((n) => (
             <div
               key={n.id}

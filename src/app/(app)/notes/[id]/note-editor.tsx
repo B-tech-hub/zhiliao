@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { Note } from "@/db/schema";
 import { BackButton } from "@/components/back-button";
 import { AskWithSourcesButton } from "@/components/chat/ask-with-sources";
@@ -58,6 +58,11 @@ export function NoteEditor({
   const [saveState, setSaveState] = useState<"idle" | "dirty" | "saving" | "saved" | "error">("idle");
   const [confirmingDelete, setConfirmingDelete] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  // 目录里高亮的那一节（按标题文本比对，与 data-heading-text 锚点同一套判据）
+  const [activeHeading, setActiveHeading] = useState("");
+  // 专注模式：藏起工具行、目录与标签行，只留标题与正文
+  const [focusMode, setFocusMode] = useState(false);
+  const headings = useMemo(() => Array.from(content.matchAll(/^(#{1,3})\s+(.+)$/gm)).map((m, i) => ({ level: m[1].length, text: m[2].trim(), id: `heading-${i}` })), [content]);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const savedContentRef = useRef(note.content);
 
@@ -108,6 +113,45 @@ export function NoteEditor({
       if (timerRef.current) clearTimeout(timerRef.current);
     };
   }, []);
+
+  useEffect(() => {
+    const root = document.querySelector(".note-detail");
+    if (!root) return;
+    root.querySelectorAll("h1,h2,h3").forEach((el) => el.setAttribute("data-heading-text", el.textContent?.trim() ?? ""));
+  }, [content]);
+
+  /* 目录高亮当前阅读位置。判据不用「第一个进入视口的标题」——正文滚过一段长
+     内容时视口里可能一个标题都没有，高亮会闪回顶部。改为记住「最后一个越过
+     视口上沿的标题」，即当前正在读的那一节。
+
+     监听挂在 document 的捕获阶段而不是滚动容器上：编辑器是懒加载的，
+     effect 首次运行时 [data-note-scroll] 还没挂上，而依赖只有 content，
+     直接查容器会永远拿到 null，高亮从此不动。 */
+  useEffect(() => {
+    const pick = () => {
+      const scroller = document.querySelector<HTMLElement>("[data-note-scroll]");
+      if (!scroller) return;
+      const nodes = [...scroller.querySelectorAll<HTMLElement>("h1,h2,h3")];
+      if (nodes.length === 0) return setActiveHeading("");
+      const top = scroller.getBoundingClientRect().top;
+      // 容差 8px：标题正好卡在上沿时不该来回跳
+      let current = nodes[0];
+      for (const n of nodes) {
+        if (n.getBoundingClientRect().top - top <= 8) current = n;
+        else break;
+      }
+      setActiveHeading(current.textContent?.trim() ?? "");
+    };
+    pick();
+    // 编辑器懒加载完成后补一次，否则首屏没有高亮
+    const timer = setTimeout(pick, 400);
+    // scroll 不冒泡，但捕获阶段能收到任意后代的滚动
+    document.addEventListener("scroll", pick, true);
+    return () => {
+      clearTimeout(timer);
+      document.removeEventListener("scroll", pick, true);
+    };
+  }, [content]);
 
   async function saveTitle() {
     if (title !== note.title) {
@@ -174,6 +218,15 @@ export function NoteEditor({
             <span className={`text-[12px] ${saveState === "error" ? "text-danger" : "text-ink-48"}`}>
               {saveText}
             </span>
+            <button
+              onClick={() => setFocusMode((v) => !v)}
+              className={`text-[12px] transition-colors active:scale-95 ${
+                focusMode ? "text-action" : "text-ink-48 hover:text-action"
+              }`}
+              title={focusMode ? "退出专注模式" : "藏起工具栏、目录与标签，只留正文"}
+            >
+              {focusMode ? "退出专注" : "专注"}
+            </button>
             <AskWithSourcesButton
               type="note"
               id={note.id}
@@ -210,16 +263,63 @@ export function NoteEditor({
           placeholder="标题（留空由 AI 生成）"
           className="mb-4 w-full bg-transparent text-[28px] font-semibold tracking-[-0.374px] outline-none placeholder:text-ink-48/50"
         />
-        <MarkdownEditor value={content} onChange={onContentChange} noteId={note.id} />
-        <div className="mt-5 border-t border-divider pt-4">
-          <input
-            value={tagsText}
-            onChange={(e) => setTagsText(e.target.value)}
-            onBlur={saveTags}
-            placeholder="标签，用逗号分隔（留空由 AI 生成）"
-            className="w-full bg-transparent text-[14px] text-ink-80 outline-none placeholder:text-ink-48/60"
-          />
+        <div className="flex min-h-0 flex-1 gap-8">
+          {/* 必须是 flex 列容器：MarkdownEditor 根节点靠 flex-1 + min-h-0 把
+              自己的滚动区限高，父层若是普通块级元素，它会长到内容高度并
+              溢出到下方的标签行上 */}
+          <div className="flex min-h-0 min-w-0 flex-1 flex-col">
+            <MarkdownEditor
+              value={content}
+              onChange={onContentChange}
+              noteId={note.id}
+              hideToolbar={focusMode}
+            />
+          </div>
+          {!focusMode && (
+            <aside className="hidden w-[260px] shrink-0 overflow-y-auto border-l border-divider pl-5 lg:block">
+              <p className="mb-3 text-[12px] font-medium text-ink-48">目录</p>
+              {headings.length === 0 ? (
+                <p className="text-[12px] text-ink-48">暂无标题</p>
+              ) : (
+                <nav className="space-y-0.5">
+                  {headings.map((h) => {
+                    // 按标题文本比对：目录项与正文锚点用的是同一套判据
+                    const active = h.text === activeHeading;
+                    return (
+                      <button
+                        key={h.id}
+                        className={`block w-full truncate rounded-[6px] py-1 pr-2 text-left text-[13px] transition-colors ${
+                          active
+                            ? "bg-action/10 font-medium text-action"
+                            : "text-ink-80 hover:bg-fill hover:text-action"
+                        }`}
+                        style={{ paddingLeft: 8 + (h.level - 1) * 12 }}
+                        onClick={() =>
+                          document
+                            .querySelector(`[data-heading-text="${CSS.escape(h.text)}"]`)
+                            ?.scrollIntoView({ behavior: "smooth", block: "start" })
+                        }
+                      >
+                        {h.text}
+                      </button>
+                    );
+                  })}
+                </nav>
+              )}
+            </aside>
+          )}
         </div>
+        {!focusMode && (
+          <div className="mt-5 border-t border-divider pt-4">
+            <input
+              value={tagsText}
+              onChange={(e) => setTagsText(e.target.value)}
+              onBlur={saveTags}
+              placeholder="标签，用逗号分隔（留空由 AI 生成）"
+              className="w-full bg-transparent text-[14px] text-ink-80 outline-none placeholder:text-ink-48/60"
+            />
+          </div>
+        )}
       </div>
       <ConfirmDialog
         open={confirmingDelete}

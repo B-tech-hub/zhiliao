@@ -1,7 +1,7 @@
 // LLM 抽象层：OpenAI 兼容 Chat Completions 格式。
 // 配置读取 DB 优先、环境变量兜底（见 llm-config.ts）；LLM_TIMEOUT_MS 仅走环境变量。
 
-import { getLlmConfig, getVisionConfig } from "@/lib/llm-config";
+import { getLlmConfig, getReasoningConfig, getVisionConfig } from "@/lib/llm-config";
 
 export class LlmConfigError extends Error {}
 export class LlmRequestError extends Error {
@@ -11,6 +11,16 @@ export class LlmRequestError extends Error {
   ) {
     super(message);
   }
+}
+
+export function formatLlmHttpError(status: number, text: string, contentType = ""): string {
+  const looksLikeHtml = /text\/html/i.test(contentType) || /^\s*<!doctype html|^\s*<html/i.test(text);
+  if (looksLikeHtml) {
+    const title = text.match(/<title>\s*([^<]+?)\s*<\/title>/i)?.[1]?.trim();
+    const source = title ? `（${title}）` : "";
+    return `LLM 请求被上游服务拒绝 HTTP ${status}${source}，请检查代理限制或稍后重试`;
+  }
+  return `LLM 请求失败 HTTP ${status}: ${text.slice(0, 300)}`;
 }
 
 interface ChatMessage {
@@ -60,9 +70,12 @@ export interface ToolCallPart {
   args: string;
 }
 
-// 流式产出：文本增量逐个到达，工具调用累积完整后在流末尾一次性给出
+/* 流式产出：文本增量逐个到达，工具调用累积完整后在流末尾一次性给出。
+   reasoning 是推理模型在给出答案前吐出的思考过程，只用于展示——
+   绝不能回灌进下一轮请求（供应商会以 400 拒绝，见 docs/adr/0015）。 */
 export type StreamChunk =
   | { type: "text"; text: string }
+  | { type: "reasoning"; text: string }
   | { type: "tool_call"; call: ToolCallPart };
 
 interface DeltaToolCall {
@@ -73,7 +86,61 @@ interface DeltaToolCall {
 
 interface StreamDelta {
   content?: string;
+  // 思考过程的两种线格式：DeepSeek / 智谱 / Qwen / 硅基流动用前者，OpenRouter 用后者
+  reasoning_content?: string;
+  reasoning?: string;
   tool_calls?: DeltaToolCall[];
+}
+
+const THINK_OPEN = "<think>";
+const THINK_CLOSE = "</think>";
+
+/* 字符串末尾有多长的一段可能是 tag 被切断的前缀。
+   标签会跨 chunk 断开（"…<thi" + "nk>思考…"），不留住这段尾巴就会把
+   半个标签当正文吐出去，用户看到裸的「<thi」。 */
+function partialTailLength(s: string, tag: string): number {
+  const max = Math.min(s.length, tag.length - 1);
+  for (let n = max; n > 0; n -= 1) {
+    if (tag.startsWith(s.slice(s.length - n))) return n;
+  }
+  return 0;
+}
+
+/* 内联思维链的剥离器。部分本地模型（Ollama 上的 R1 蒸馏版等）不走
+   reasoning_content 字段，而是把思考过程包在正文的 <think>...</think> 里。
+   不剥的话，用户会在答案正文里看到一整段模型的自言自语。 */
+class ThinkTagSplitter {
+  private inThink = false;
+  private carry = "";
+
+  *push(raw: string): Generator<StreamChunk> {
+    this.carry += raw;
+    for (;;) {
+      const tag = this.inThink ? THINK_CLOSE : THINK_OPEN;
+      const type = this.inThink ? "reasoning" : "text";
+      const at = this.carry.indexOf(tag);
+      if (at >= 0) {
+        if (at > 0) yield { type, text: this.carry.slice(0, at) };
+        this.carry = this.carry.slice(at + tag.length);
+        this.inThink = !this.inThink;
+        continue;
+      }
+      // 没找到完整标签：吐出确定安全的部分，尾部可能的半截标签留到下一片
+      const keep = partialTailLength(this.carry, tag);
+      if (this.carry.length > keep) {
+        yield { type, text: this.carry.slice(0, this.carry.length - keep) };
+        this.carry = this.carry.slice(this.carry.length - keep);
+      }
+      return;
+    }
+  }
+
+  // 流结束时把留存的尾巴吐掉，否则最后几个字符会凭空消失
+  *flush(): Generator<StreamChunk> {
+    if (!this.carry) return;
+    yield { type: this.inThink ? "reasoning" : "text", text: this.carry };
+    this.carry = "";
+  }
 }
 
 /* SSE 解析：与网络层解耦，便于直接喂字符串做单测。
@@ -83,6 +150,7 @@ export async function* parseSseStream(
   source: AsyncIterable<string>,
 ): AsyncGenerator<StreamChunk> {
   const pending = new Map<number, ToolCallPart>();
+  const think = new ThinkTagSplitter();
   let buffer = "";
 
   outer: for await (const piece of source) {
@@ -103,8 +171,13 @@ export async function* parseSseStream(
         continue; // 忽略无法解析的心跳/注释行
       }
 
+      // 独立的思考过程字段：直接转发，无需剥标签
+      const trace = delta?.reasoning_content ?? delta?.reasoning;
+      if (typeof trace === "string" && trace) {
+        yield { type: "reasoning", text: trace };
+      }
       if (typeof delta?.content === "string" && delta.content) {
-        yield { type: "text", text: delta.content };
+        yield* think.push(delta.content);
       }
       if (Array.isArray(delta?.tool_calls)) {
         for (const tc of delta.tool_calls) {
@@ -119,6 +192,8 @@ export async function* parseSseStream(
       }
     }
   }
+
+  yield* think.flush();
 
   // 按 index 升序给出，保证工具执行顺序与模型意图一致；没拿到名字的丢弃
   for (const [, call] of [...pending.entries()].sort((a, b) => a[0] - b[0])) {
@@ -149,6 +224,8 @@ export async function* chatStream(
     apiKey?: string | null;
     model?: string | null;
     signal?: AbortSignal;
+    timeoutMs?: number;
+    noTemperature?: boolean;
     tools?: ToolDef[];
   },
 ): AsyncGenerator<StreamChunk> {
@@ -159,7 +236,7 @@ export async function* chatStream(
   if (!baseUrl || !apiKey || !model) {
     throw new LlmConfigError("LLM 未配置：请在设置页或环境变量中配置接入点 / API Key / 模型");
   }
-  const timeout = Number(process.env.LLM_TIMEOUT_MS) || 120000;
+  const timeout = opts?.timeoutMs ?? (Number(process.env.LLM_TIMEOUT_MS) || 120000);
   const signals = [AbortSignal.timeout(timeout), ...(opts?.signal ? [opts.signal] : [])];
 
   const res = await fetch(`${baseUrl.replace(/\/$/, "")}/chat/completions`, {
@@ -171,7 +248,7 @@ export async function* chatStream(
     body: JSON.stringify({
       model,
       messages: msgs,
-      temperature: 0.5,
+      ...(opts?.noTemperature ? {} : { temperature: 0.5 }),
       stream: true,
       // 无工具时不发 tools 字段：避免不支持的供应商直接 400
       ...(opts?.tools?.length ? { tools: opts.tools } : {}),
@@ -184,7 +261,10 @@ export async function* chatStream(
   if (!res.ok || !res.body) {
     const text = await res.text().catch(() => "");
     const retryable = res.status === 429 || res.status >= 500;
-    throw new LlmRequestError(`LLM 请求失败 HTTP ${res.status}: ${text.slice(0, 300)}`, retryable);
+    throw new LlmRequestError(
+      formatLlmHttpError(res.status, text, res.headers?.get("content-type") ?? ""),
+      retryable,
+    );
   }
 
   yield* parseSseStream(decodeStream(res.body));
@@ -207,17 +287,27 @@ const PROBE_TOOL: ToolDef = {
 
 /* 工具调用能力探测。三种失败模式都判为不支持，其中最危险的是"静默忽略"——
    供应商不报错、直接丢掉 tools 参数返回文本，助手会声称"已帮你创建笔记"
-   但实际什么都没发生。所以判据是"有没有真的收到 tool_call"，而非"有没有报错"。 */
-export async function probeToolSupport(): Promise<{ supported: boolean; message: string }> {
+   但实际什么都没发生。所以判据是"有没有真的收到 tool_call"，而非"有没有报错"。
+   endpoint 缺省时探测文本模型；深度思考模型走同一套逻辑，只是换个端点。 */
+export async function probeToolSupport(endpoint?: {
+  baseUrl?: string | null;
+  apiKey?: string | null;
+  model?: string | null;
+}): Promise<{ supported: boolean; message: string }> {
   try {
     let sawToolCall = false;
     let text = "";
     for await (const chunk of chatStream(
       [{ role: "user", content: "请调用 probe_ping 工具，不要用文字回答。" }],
-      { tools: [PROBE_TOOL], signal: AbortSignal.timeout(60000) },
+      {
+        ...endpoint,
+        tools: [PROBE_TOOL],
+        // 推理模型思考本身就慢，探测给到 120 秒
+        signal: AbortSignal.timeout(endpoint ? 120000 : 60000),
+      },
     )) {
       if (chunk.type === "tool_call") sawToolCall = true;
-      else text += chunk.text;
+      else if (chunk.type === "text") text += chunk.text;
     }
     if (sawToolCall) return { supported: true, message: "支持工具调用" };
     const tail = text.trim() ? `，只回了文字「${text.trim().slice(0, 20)}」` : "";
@@ -271,7 +361,10 @@ async function chatOnce(messages: ChatMessage[], useJsonMode: boolean): Promise<
       return chatOnce(messages, false);
     }
     const retryable = res.status === 429 || res.status >= 500;
-    throw new LlmRequestError(`LLM 请求失败 HTTP ${res.status}: ${text.slice(0, 300)}`, retryable);
+    throw new LlmRequestError(
+      formatLlmHttpError(res.status, text, res.headers?.get("content-type") ?? ""),
+      retryable,
+    );
   }
 
   const data = await res.json().catch(() => {
@@ -365,6 +458,50 @@ export async function testVisionConnection(): Promise<{ ok: boolean; message: st
       return { ok: false, message: "视觉模型无响应内容（端点可能未按 OpenAI 多模态格式返回）" };
     }
     return { ok: true, message: `连接成功（${cfg.model}）` };
+  } catch (e) {
+    return { ok: false, message: e instanceof Error ? e.message : String(e) };
+  }
+}
+
+/* 深度思考模型连通性测试：连通性、是否真的吐思考过程、是否支持工具调用，
+   三件事一次测完。工具能力必须单独探测——推理模型与文本模型往往不是同一家，
+   拿文本模型的探测结论去决定要不要给推理模型下发 tools，两边都可能判错。 */
+export async function testReasoningConnection(): Promise<{
+  ok: boolean;
+  message: string;
+  // 与文本模型测试同名，设置页那套 ✓/⚠/✕ 判定逻辑直接复用
+  supportsTools?: boolean;
+}> {
+  const cfg = getReasoningConfig();
+  if (!cfg.model) {
+    return { ok: false, message: "未配置深度思考模型名，该功能未启用" };
+  }
+  if (!cfg.baseUrl || !cfg.apiKey) {
+    return { ok: false, message: "缺少接入点或 API Key：请填写，或先配置好上方文本模型以便回落" };
+  }
+  const endpoint = { baseUrl: cfg.baseUrl, apiKey: cfg.apiKey, model: cfg.model };
+  try {
+    let text = "";
+    let sawTrace = false;
+    for await (const chunk of chatStream([{ role: "user", content: "1+1 等于几？" }], {
+      ...endpoint,
+      noTemperature: true,
+      signal: AbortSignal.timeout(120000),
+    })) {
+      if (chunk.type === "text") text += chunk.text;
+      else if (chunk.type === "reasoning") sawTrace = true;
+    }
+    if (!text.trim()) {
+      return { ok: false, message: "模型无响应内容（端点可能未按 OpenAI 流式格式返回）" };
+    }
+    const probe = await probeToolSupport(endpoint);
+    // 没吐思考过程不算失败：模型可能就是不外露，但对话本身可用
+    const traceNote = sawTrace ? "可显示思考过程" : "该模型不外露思考过程";
+    return {
+      ok: true,
+      message: `连接成功（${cfg.model}）：${traceNote}；${probe.message}`,
+      supportsTools: probe.supported,
+    };
   } catch (e) {
     return { ok: false, message: e instanceof Error ? e.message : String(e) };
   }

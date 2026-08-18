@@ -131,7 +131,7 @@ export function SearchClient({ topics }: { topics: { id: string; name: string }[
         </div>
       )}
 
-      <div className="space-y-3">
+      <div className="space-y-1.5">
         {results.map((r) => (
           <Link
             key={r.id}

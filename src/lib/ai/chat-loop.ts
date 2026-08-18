@@ -48,8 +48,10 @@ export type ToolPayload =
 export type LoopEvent =
   // 文本增量，逐个转发给前端
   | { kind: "delta"; text: string }
+  // 思考过程增量。只往前端走、随消息落库，绝不进下一轮的 msgs
+  | { kind: "reasoning"; text: string }
   // 一轮问答结束，需落库为 assistant 消息
-  | { kind: "assistant"; text: string; calls: ToolCallPart[] }
+  | { kind: "assistant"; text: string; calls: ToolCallPart[]; reasoning: string }
   | { kind: "tool_start"; call: ToolCallPart }
   | { kind: "tool_result"; call: ToolCallPart; outcome: ToolOutcome }
   | { kind: "pending_confirm"; call: ToolCallPart }
@@ -173,21 +175,27 @@ export async function* runToolLoop(
 
   for (let round = 0; round < MAX_TOOL_ROUNDS; round += 1) {
     let text = "";
+    let reasoning = "";
     const calls: ToolCallPart[] = [];
     for await (const chunk of deps.stream(applyToolBudget(msgs))) {
       if (chunk.type === "text") {
         text += chunk.text;
         yield { kind: "delta", text: chunk.text };
+      } else if (chunk.type === "reasoning") {
+        reasoning += chunk.text;
+        yield { kind: "reasoning", text: chunk.text };
       } else {
         calls.push(withId(chunk.call, round, calls.length));
       }
     }
-    yield { kind: "assistant", text, calls };
+    yield { kind: "assistant", text, calls, reasoning };
 
     // 没有工具调用即终点。静默忽略 tools 参数的供应商也走这条路径，
     // 表现为一次普通问答，不会卡住
     if (calls.length === 0) return;
 
+    /* 回灌给模型的 assistant 消息里没有 reasoning：供应商明确要求
+       思考过程不得作为输入，带上会被 400 拒掉整个请求 */
     msgs.push({ role: "assistant", content: text || null, tool_calls: calls.map(toToolCallRequest) });
 
     let paused = false;

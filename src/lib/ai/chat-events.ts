@@ -47,6 +47,8 @@ export interface GroundingInfo {
 
 export type ChatSseEvent =
   | { delta: string }
+  // 深度思考的思考过程增量。先于 delta 到达，纯展示，不进 LLM 上下文
+  | { reasoning: string }
   | { grounding: GroundingInfo }
   | { tool_start: ToolCallInfo }
   | { tool_end: ToolEndInfo }

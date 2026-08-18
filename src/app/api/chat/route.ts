@@ -1,5 +1,3 @@
-import fs from "node:fs";
-import path from "node:path";
 import { NextRequest, NextResponse } from "next/server";
 import { and, desc, eq } from "drizzle-orm";
 import { z } from "zod";
@@ -12,12 +10,20 @@ import { extractUrls } from "@/lib/ai/fetch-url";
 import { getTool, runTool, toolDefs, MAX_IMAGES_PER_MESSAGE, type ToolContext } from "@/lib/ai/tools";
 import { newId } from "@/lib/ids";
 import { chatStream, type ChatContentPart, type LlmMessage } from "@/lib/llm";
-import { getToolSupport, getVisionConfig, isImageGenConfigured, isVisionConfigured } from "@/lib/llm-config";
+import {
+  getToolSupport,
+  getReasoningToolSupport,
+  getVisionConfig,
+  getReasoningConfig,
+  isImageGenConfigured,
+  isVisionConfigured,
+  isReasoningConfigured,
+} from "@/lib/llm-config";
+import { prepareVisionImageDataUrls, VisionImageError } from "@/lib/vision-images";
 
 export const dynamic = "force-dynamic";
 
 const MAX_HISTORY = 20;
-const MAX_IMAGES = 4;
 
 const bodySchema = z.object({
   conversationId: z.string().optional(),
@@ -30,24 +36,8 @@ const bodySchema = z.object({
     .optional(),
   message: z.string().min(1),
   useVision: z.boolean().optional(),
+  useReasoning: z.boolean().optional(),
 });
-
-// 将本地图片文件读为 data URL（视觉模型输入）
-function loadImagesAsDataUrls(filenames: string[]): string[] {
-  const dir = process.env.UPLOAD_DIR || "./data/uploads";
-  const urls: string[] = [];
-  for (const name of filenames.slice(0, MAX_IMAGES)) {
-    try {
-      const buf = fs.readFileSync(path.join(dir, path.basename(name)));
-      const ext = path.extname(name).slice(1).toLowerCase();
-      const mime = ext === "jpg" ? "image/jpeg" : `image/${ext}`;
-      urls.push(`data:${mime};base64,${buf.toString("base64")}`);
-    } catch {
-      // 文件缺失时跳过
-    }
-  }
-  return urls;
-}
 
 /* AI 助手对话：SSE 流式返回。
    模型可在多轮里调用工具，每轮的 assistant 文本与工具结果都即时落库——
@@ -57,7 +47,7 @@ export async function POST(req: NextRequest) {
   if (!parsed.success) {
     return NextResponse.json({ error: "参数不合法" }, { status: 400 });
   }
-  const { message, useVision } = parsed.data;
+  const { message, useVision, useReasoning } = parsed.data;
   const reqScopeType = parsed.data.scopeType;
   const reqScopeId = parsed.data.scopeId ?? "";
   // 只有 note/topic 有作用域对象；global 与 sources 的 scopeId 本就是空串
@@ -134,7 +124,19 @@ export async function POST(req: NextRequest) {
     scopeId,
     convId,
   );
-  const wantVision = Boolean(useVision) && imageFiles.length > 0 && isVisionConfigured();
+  const reasoningCfg = useReasoning && isReasoningConfigured() ? getReasoningConfig() : null;
+  const wantVision = Boolean(useVision) && imageFiles.length > 0 && (reasoningCfg ? Boolean(reasoningCfg.model) : isVisionConfigured());
+  let visionImageUrls: string[] = [];
+  if (wantVision) {
+    try {
+      visionImageUrls = await prepareVisionImageDataUrls(imageFiles);
+    } catch (error) {
+      if (error instanceof VisionImageError) {
+        return NextResponse.json({ error: error.message }, { status: 400 });
+      }
+      throw error;
+    }
+  }
 
   const chatMessages: LlmMessage[] = [
     { role: "system", content: system },
@@ -143,7 +145,7 @@ export async function POST(req: NextRequest) {
   if (wantVision) {
     const parts: ChatContentPart[] = [
       { type: "text", text: message },
-      ...loadImagesAsDataUrls(imageFiles).map(
+      ...visionImageUrls.map(
         (url): ChatContentPart => ({ type: "image_url", image_url: { url } }),
       ),
     ];
@@ -153,23 +155,27 @@ export async function POST(req: NextRequest) {
   }
 
   // 只取端点三元组：sources/hasDbConfig 是设置页展示用字段，不能带进 LLM 调用
-  const visionCfg = wantVision ? getVisionConfig() : null;
-  const llmOpts = visionCfg
+  const visionCfg = wantVision && !reasoningCfg ? getVisionConfig() : null;
+  const llmOpts = reasoningCfg ?? visionCfg
     ? {
-        baseUrl: visionCfg.baseUrl,
-        apiKey: visionCfg.apiKey,
-        model: visionCfg.model,
+        baseUrl: (reasoningCfg ?? visionCfg)!.baseUrl,
+        apiKey: (reasoningCfg ?? visionCfg)!.apiKey,
+        model: (reasoningCfg ?? visionCfg)!.model,
         signal: req.signal,
+        timeoutMs: reasoningCfg ? 300000 : undefined,
+        noTemperature: Boolean(reasoningCfg),
       }
     : { signal: req.signal };
 
   /* 两种情况不发 tools：探测确认过供应商不支持（发了会 400），
      以及走视觉端点时（视觉模型普遍不支持 function calling，
-     且看图问答本就不需要写库）。getToolSupport() 为 null 表示从未探测过，
-     此时照常发送——多数供应商是支持的，不该因为没测过就降级。 */
+     且看图问答本就不需要写库）。探测结果为 null 表示从未探测过，
+     此时照常发送——多数供应商是支持的，不该因为没测过就降级。
+     深度思考走自己那份探测结论：推理模型与文本模型常常不是同一家。 */
   const grounded = scopeType === "sources";
+  const toolSupport = reasoningCfg ? getReasoningToolSupport() : getToolSupport();
   const tools =
-    getToolSupport() === false || wantVision
+    toolSupport === false || wantVision
       ? []
       : toolDefs({ grounded, imageGen: isImageGenConfigured() });
 

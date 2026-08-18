@@ -34,7 +34,7 @@ export default async function NotePage({ params }: { params: Promise<{ id: strin
 
   return (
     <>
-      <NoteEditor note={note} tags={tagMap.get(id) ?? []} topics={topicRows} backHref={backHref} />
+      <div className="note-detail"><NoteEditor note={note} tags={tagMap.get(id) ?? []} topics={topicRows} backHref={backHref} /></div>
       {/* 把这条笔记登记为助手的上下文附件；助手面板本身挂在 (app)/layout */}
       <ChatScopeBinder
         type="note"

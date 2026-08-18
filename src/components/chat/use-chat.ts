@@ -203,7 +203,7 @@ export function useChat(scopeType: ChatScopeType, scopeId: string) {
   }, [loadConversations]);
 
   const send = useCallback(
-    async (text: string, useVision: boolean) => {
+    async (text: string, useVision: boolean, useReasoning = false) => {
       const message = text.trim();
       if (!message || streaming) return;
       setItems((prev) => [...prev, { kind: "text", role: "user", content: message }]);
@@ -221,6 +221,7 @@ export function useChat(scopeType: ChatScopeType, scopeId: string) {
             : undefined,
         message,
         useVision,
+        useReasoning,
       }).catch(() => {});
     },
     [conversationId, scopeType, scopeId, streaming, runStream, grounded, sources],

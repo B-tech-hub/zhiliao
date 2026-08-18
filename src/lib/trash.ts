@@ -115,6 +115,7 @@ export function purgeOrphans(db: DB): { images: number; conversations: number; s
     } catch {
       // 文件已不存在，只清记录
     }
+    if (img.originalFilename) { try { fs.unlinkSync(path.join(uploadDir, img.originalFilename)); } catch {} }
     removedImages++;
   }
 

@@ -154,4 +154,20 @@ CREATE TABLE IF NOT EXISTS conversation_sources (
 CREATE INDEX IF NOT EXISTS idx_conversation_sources_src ON conversation_sources(source_type, source_id);
 `,
   },
+  {
+    id: "0008_image_originals",
+    sql: `
+ALTER TABLE images ADD COLUMN original_filename TEXT;
+ALTER TABLE images ADD COLUMN original_mime TEXT;
+ALTER TABLE images ADD COLUMN original_size INTEGER;
+`,
+  },
+  {
+    // 深度思考：assistant 消息保存推理模型吐出的思考过程。
+    // 只读不发——重建历史时不进 LLM 上下文（见 docs/adr/0015）
+    id: "0009_message_reasoning",
+    sql: `
+ALTER TABLE messages ADD COLUMN reasoning TEXT;
+`,
+  },
 ];

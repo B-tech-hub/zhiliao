@@ -38,6 +38,9 @@ export interface TextItem {
   content: string;
   // 流没走到 done 就断了：气泡尾部要挂一句「回答可能不完整」
   truncated?: boolean;
+  /* 深度思考的思考过程，只有 assistant 条目可能有。
+     纯展示：不进 LLM 上下文，「存为新笔记」时也不带上 */
+  reasoning?: string;
 }
 
 export interface ToolItem {
@@ -69,6 +72,7 @@ export interface HistoryMessage {
   role: string;
   content: string;
   toolPayload: string | null;
+  reasoning?: string | null;
 }
 
 function runningCard(info: ToolCallInfo): ToolItem {
@@ -110,6 +114,20 @@ function appendDelta(items: ChatItem[], delta: string): ChatItem[] {
   return [...items, { kind: "text", role: "assistant", content: delta }];
 }
 
+/* 思考过程增量。它先于正文到达，所以这里可能要新建一条空 content 的
+   assistant 条目——随后的 delta 由 appendDelta 认领同一条，思考过程与
+   它对应的那段回答因此始终绑在一起。 */
+function appendReasoning(items: ChatItem[], delta: string): ChatItem[] {
+  if (!delta) return items;
+  const last = items[items.length - 1];
+  if (last?.kind === "text" && last.role === "assistant") {
+    const next = [...items];
+    next[next.length - 1] = { ...last, reasoning: (last.reasoning ?? "") + delta };
+    return next;
+  }
+  return [...items, { kind: "text", role: "assistant", content: "", reasoning: delta }];
+}
+
 /* 结果事件就地替换执行中/待确认的卡片。
    找不到对应卡片时补建一张：/api/chat/confirm 会先补发一条 tool_end 再开流，
    用户若刚刚刷新过页面，内存里没有那张卡片，事件不能被丢掉。 */
@@ -138,6 +156,7 @@ function upsertResult(items: ChatItem[], info: ToolEndInfo): ChatItem[] {
 
 export function applyEvent(items: ChatItem[], ev: ChatSseEvent): ChatItem[] {
   if ("delta" in ev) return appendDelta(items, ev.delta);
+  if ("reasoning" in ev) return appendReasoning(items, ev.reasoning);
   if ("tool_start" in ev) return [...items, runningCard(ev.tool_start)];
   if ("tool_end" in ev) return upsertResult(items, ev.tool_end);
   if ("confirm_required" in ev) return [...items, pendingCard(ev.confirm_required)];
@@ -178,8 +197,17 @@ export function rebuildItems(rows: HistoryMessage[]): ChatItem[] {
   const out: ChatItem[] = [];
   for (const r of rows) {
     if (r.role === "user" || r.role === "assistant") {
-      // 只发起调用的 assistant 消息 content 是空串，渲染出来是个空气泡
-      if (r.content) out.push({ kind: "text", role: r.role, content: r.content });
+      /* 只发起调用的 assistant 消息 content 是空串，渲染出来是个空气泡。
+         但若它带着思考过程，仍要保留——那一轮模型确实想了，只是没说话，
+         丢掉它历史里就再也看不到当时的推演。 */
+      if (r.content || r.reasoning) {
+        out.push({
+          kind: "text",
+          role: r.role,
+          content: r.content,
+          ...(r.reasoning ? { reasoning: r.reasoning } : {}),
+        });
+      }
       continue;
     }
     if (r.role !== "tool") continue;
@@ -263,6 +291,24 @@ export function splitCitations(text: string, valid: ReadonlySet<string>): Citati
   buf += text.slice(last);
   flush();
   return segs;
+}
+
+/* 把引用标记预处理成标准 Markdown 链接，交给 Markdown 渲染器原生处理。
+   必须在解析之前做：`[^id]` 正是 GFM 的脚注语法，直接喂给 remark-gfm
+   会被当成脚注引用吞掉，用户既看不到上标也点不动。
+
+   白名单判定沿用 splitCitations——「只有工具真的返回过的 id 才渲染成链接」
+   是产品不变量，模型编造的 id 保持纯文本，不生成打不开的死链。
+   序号从 1 连续编，与此前纯文本渲染时的行为一致。 */
+export function citationsToMarkdown(text: string, valid: ReadonlySet<string>): string {
+  let n = 0;
+  return splitCitations(text, valid)
+    .map((seg) => {
+      if (!seg.noteId) return seg.text;
+      n += 1;
+      return `[[${n}]](/notes/${seg.noteId})`;
+    })
+    .join("");
 }
 
 /* 逐帧读出 SSE 事件。/api/chat 与 /api/chat/confirm 的响应结构相同，共用一份。

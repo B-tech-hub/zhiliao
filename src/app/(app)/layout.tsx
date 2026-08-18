@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { getTopicsWithCounts } from "@/lib/topics";
-import { getToolSupport, isVisionConfigured } from "@/lib/llm-config";
+import { getToolSupport, isReasoningConfigured, isVisionConfigured } from "@/lib/llm-config";
 import { BottomNav, SideNav } from "@/components/nav";
 import { ChatPanel } from "@/components/chat/chat-panel";
 import { ChatScopeProvider } from "@/components/chat/chat-scope";
@@ -40,7 +40,11 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         </Link>
 
         {/* AI 助手：全局唯一一份，当前页面的笔记/主题由 ChatScopeBinder 登记为上下文附件 */}
-        <ChatPanel visionAvailable={isVisionConfigured()} toolSupport={getToolSupport()} />
+        <ChatPanel
+          visionAvailable={isVisionConfigured()}
+          reasoningAvailable={isReasoningConfigured()}
+          toolSupport={getToolSupport()}
+        />
       </div>
     </ChatScopeProvider>
   );

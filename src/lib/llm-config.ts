@@ -24,6 +24,12 @@ export const IMAGE_SETTING_KEYS = {
   apiKey: "image_api_key",
   model: "image_model",
 } as const;
+// 深度思考（推理）模型独立配置：回落规则同视觉/图像，环境变量前缀 REASONING_*
+export const REASONING_SETTING_KEYS = {
+  baseUrl: "reasoning_base_url",
+  apiKey: "reasoning_api_key",
+  model: "reasoning_model",
+} as const;
 
 export type LlmConfigSource = "db" | "env" | "none";
 
@@ -135,6 +141,16 @@ export function getVisionConfig(): VisionConfig {
 export function getImageConfig(): VisionConfig {
   return getDerivedConfig(IMAGE_SETTING_KEYS, "IMAGE");
 }
+// 深度思考模型配置：规则同视觉模型，环境变量前缀 REASONING_*
+export function getReasoningConfig(): VisionConfig {
+  return getDerivedConfig(REASONING_SETTING_KEYS, "REASONING");
+}
+
+// 深度思考可用：至少显式配置了推理模型名
+export function isReasoningConfigured(): boolean {
+  const c = getReasoningConfig();
+  return Boolean(c.baseUrl && c.apiKey && c.model);
+}
 
 // 视觉能力可用：至少显式配置了视觉模型名
 export function isVisionConfigured(): boolean {
@@ -148,22 +164,41 @@ export function isImageGenConfigured(): boolean {
   return Boolean(c.baseUrl && c.apiKey && c.model);
 }
 
-// 当前模型是否支持工具调用：由「测试连接」探测后写入，助手据此决定是否降级为纯问答
+/* 模型是否支持工具调用：由「测试连接」探测后写入，助手据此决定是否降级为纯问答。
+   文本模型与深度思考模型各记一份——两者常常不是同一家供应商，
+   拿文本模型的结论去决定要不要给推理模型下发 tools，两边都可能判错。 */
 export const TOOL_SUPPORT_KEY = "llm_supports_tools";
+export const REASONING_TOOL_SUPPORT_KEY = "reasoning_supports_tools";
 
-export function saveToolSupport(supported: boolean): void {
+function saveFlag(key: string, value: boolean): void {
   const db = getDb();
   const now = Date.now();
-  const value = supported ? "1" : "0";
+  const v = value ? "1" : "0";
   db.insert(settings)
-    .values({ key: TOOL_SUPPORT_KEY, value, updatedAt: now })
-    .onConflictDoUpdate({ target: settings.key, set: { value, updatedAt: now } })
+    .values({ key, value: v, updatedAt: now })
+    .onConflictDoUpdate({ target: settings.key, set: { value: v, updatedAt: now } })
     .run();
 }
 
 // null = 从未探测过（与"探测过且不支持"区分：前者应提示用户去测一次）
-export function getToolSupport(): boolean | null {
+function getFlag(key: string): boolean | null {
   const db = getDb();
-  const row = db.select().from(settings).where(eq(settings.key, TOOL_SUPPORT_KEY)).get();
+  const row = db.select().from(settings).where(eq(settings.key, key)).get();
   return row ? row.value === "1" : null;
+}
+
+export function saveToolSupport(supported: boolean): void {
+  saveFlag(TOOL_SUPPORT_KEY, supported);
+}
+
+export function getToolSupport(): boolean | null {
+  return getFlag(TOOL_SUPPORT_KEY);
+}
+
+export function saveReasoningToolSupport(supported: boolean): void {
+  saveFlag(REASONING_TOOL_SUPPORT_KEY, supported);
+}
+
+export function getReasoningToolSupport(): boolean | null {
+  return getFlag(REASONING_TOOL_SUPPORT_KEY);
 }
