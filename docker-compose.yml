@@ -16,6 +16,11 @@ services:
       LLM_API_KEY: ${LLM_API_KEY:-}
       LLM_MODEL: ${LLM_MODEL:-}
       LLM_TIMEOUT_MS: ${LLM_TIMEOUT_MS:-60000}
+      # 深度思考模型（可选，助手输入框的「深度思考」开关用）：模型名必须显式配置，
+      # 接入点与 Key 留空则回落上方 LLM 配置。也可以只在设置页配，不走环境变量。
+      REASONING_BASE_URL: ${REASONING_BASE_URL:-}
+      REASONING_API_KEY: ${REASONING_API_KEY:-}
+      REASONING_MODEL: ${REASONING_MODEL:-}
       # 视觉模型（AI 读图）与图像模型（AI 画图）：留空则在设置页配置
       VISION_BASE_URL: ${VISION_BASE_URL:-}
       VISION_API_KEY: ${VISION_API_KEY:-}
