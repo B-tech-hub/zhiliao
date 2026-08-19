@@ -11,7 +11,7 @@ export default function manifest(): MetadataRoute.Manifest {
     start_url: "/",
     scope: "/",
     display: "standalone",
-    // 启动闪屏底色（清单只能静态单值，取亮色页底；运行时状态栏色由 meta theme-color 接管）
+    // 启动闪屏底色只能写静态值，设计门禁对此处做精确例外；运行时状态栏色由 meta theme-color 接管。
     background_color: "#f5f5f7",
     theme_color: "#f5f5f7",
     lang: "zh-CN",

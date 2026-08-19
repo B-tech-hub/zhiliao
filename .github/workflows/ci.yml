@@ -20,6 +20,9 @@ jobs:
       - name: 安装依赖
         run: npm ci
 
+      - name: 设计系统门禁
+        run: npm run check:design
+
       - name: 代码检查（ESLint）
         run: npm run lint
 

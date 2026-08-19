@@ -27,6 +27,7 @@ function ThemeColorSync() {
   const { resolvedTheme } = useTheme();
   useEffect(() => {
     if (!resolvedTheme) return;
+    // theme-color 由浏览器读取，不能引用 CSS 变量；设计门禁只精确豁免这一行。
     const color = resolvedTheme === "dark" ? "#000000" : "#f5f5f7";
     let meta = document.head.querySelector<HTMLMetaElement>('meta[name="theme-color"][data-theme-sync]');
     if (!meta) {

@@ -565,12 +565,47 @@ The structural breakpoints that matter for agents: 1440px (content lock), 1068px
 
 本项目在上述亮色体系之上实装了三态暗色模式（浅色/深色/跟随系统，next-themes class 策略，选型见 [adr/0005](adr/0005-dark-mode-class-next-themes.md)）。暗色套值遵循 Apple 暗色分层规范：`#000` 页底 / `#1c1c1e` 卡面 / `#2c2c2e` 填充 / `#38383a` 分隔。
 
+### 本项目字体与字阶 token
+
+参考规范里的 SF Pro 是 Apple 平台字体，知了需要同时覆盖 Windows、自托管与离线部署，因此字体全部随应用打包，不访问字体 CDN：
+
+| Token | 字体栈 | 用途 |
+|---|---|---|
+| `--font-sans` | Inter Variable → Noto Sans SC Variable → 系统无衬线 | 正文、按钮、表单与导航；思源黑体补齐 Windows 中文连续字重 |
+| `--font-serif` | Instrument Serif → Noto Serif SC Variable → 系统衬线 | 仅用于不小于 24px 的页面级大标题，中文小字号不得使用 |
+| `--font-mono` | JetBrains Mono Variable → 系统等宽字体 | 元信息、数字、`kbd` 与代码 |
+
+项目字阶只保留六级，组件不得继续新增 `text-[Npx]` 形成新的字号分叉：
+
+| Token | 大小 | 用途 |
+|---|---:|---|
+| `--text-display` | 34px | 页面大标题 |
+| `--text-title` | 22px | 区块标题 |
+| `--text-body` | 17px | 正文 |
+| `--text-ui` | 15px | 列表标题、按钮、表单 |
+| `--text-meta` | 13px | 摘要、时间、辅助说明 |
+| `--text-micro` | 11px | 标签与角标 |
+
+### 本项目圆角 token
+
+应用界面收敛为三级圆角，`rounded-full` 只保留给真圆点或明确的圆形控件：
+
+| Token / Tailwind 类 | 值 | 用途 |
+|---|---:|---|
+| `--radius-card` / `rounded-card` | 12px | 卡片、弹层与大容器 |
+| `--radius-utility` / `rounded-utility` | 8px | 按钮、输入框与小容器 |
+| `--radius-chip` / `rounded-chip` | 4px | 标签、内联代码与键帽 |
+
+PR1 先建立 token 和“不得新增”的迁移门禁，现存 51 处 `rounded-[Npx]` 以文件和数量精确记录在 `scripts/check-design.mjs`；PR2 完成视觉迁移后删除该基线并要求全量零命中。不得扩大豁免范围。
+
 ### Token 双套值
 
 | Token | 亮色 | 暗色 | 用途 |
 |---|---|---|---|
 | `--color-action` | `#0066cc` | `#2997ff` | 交互蓝（暗底上与 sky 收敛） |
 | `--color-action-focus` | `#0071e3` | `#409cff` | 聚焦态 |
+| `--color-cta` | `#1d1d1f` | `#f5f5f7` | 主行动底色；Action Blue 仅保留给链接、选中态与聚焦态 |
+| `--color-cta-ink` | `#ffffff` | `#1d1d1f` | 主行动文字，随 CTA 底色反转 |
 | `--color-ink` | `#1d1d1f` | `#f5f5f7` | 主文字 |
 | `--color-ink-80` | `#333333` | `#d1d1d6` | 次级文字 |
 | `--color-ink-48` | `#7a7a7a` | `#98989d` | 辅助文字 |
@@ -596,11 +631,14 @@ The structural breakpoints that matter for agents: 1440px (content lock), 1068px
 
 暗色下这些面比 `#000` 页底亮约一档，elevation 分层自然保留；BottomNav 黑玻璃（`bg-black/85` + `border-white/10`）同样不变。
 
-### 裸色类使用规则（硬约束）
+### 设计系统门禁（硬约束）
 
-`text-white`、`bg-white/N`、`bg-black/N` 等裸色类**仅允许出现在主题不变面**上：chrome、tile、accent 按钮（`bg-action`/`bg-danger` 上的白字）、scrim 遮罩（`bg-black/40`、`bg-black/20`）。其余场景一律使用语义 token。违规检查（应零命中）：
+`text-white`、`bg-white/N`、`bg-black/N` 等裸色类**仅允许出现在主题不变面**上：chrome、tile、accent 按钮（`bg-action`/`bg-danger` 上的白字）、scrim 遮罩（`bg-black/40`、`bg-black/20`）。其余场景一律使用语义 token。`bg-white/N` 的透明度写法是合法 chrome 用法，不能被裸 `bg-white` 规则误伤。
 
+门禁同时禁止内容区硬编码语义色、把 `ink` 当背景，以及新增 `rounded-[Npx]`。运行：
+
+```bash
+npm run check:design
 ```
-grep -RnE 'bg-white(["\s/]|$)|bg-black/(5|10)\b|#ff3b30|bg-ink["\s]' src/
-```
 
+CI 在 ESLint、Vitest 与构建之前执行同一命令。PWA manifest 和运行时 `theme-color` 无法读取 CSS 变量，脚本只对两处必要输出按“文件 + 整行”精确豁免；不得把整个文件加入白名单。
