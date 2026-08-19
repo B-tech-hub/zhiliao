@@ -18,6 +18,11 @@
 .env
 .env.local
 .env*.local
+# 任何 .env 的衍生文件都可能含明文 Key：备份、时间戳副本、临时导出。
+# 只写 .env 挡不住 .env.bak-20260819 这类文件名，兜底用通配。
+# 例外是 .env.example（不含真实值），下面显式放行。
+.env*
+!.env.example
 
 # misc
 .DS_Store
