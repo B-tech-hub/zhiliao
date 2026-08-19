@@ -1,4 +1,8 @@
 @import "tailwindcss";
+@import "katex/dist/katex.min.css";
+
+.math-block { display: block; overflow-x: auto; margin: 0.5rem 0; }
+.math-warning { color: var(--color-danger, #b42318); background: color-mix(in srgb, currentColor 10%, transparent); }
 /* Inter 变量字体（自托管，docs/DESIGN.md 推荐的 SF Pro 替代；拉丁/数字生效，中文回退系统字体） */
 @import "@fontsource-variable/inter";
 main:has(.note-detail) > div { max-width: 1440px; }

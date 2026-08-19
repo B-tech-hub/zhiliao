@@ -12,6 +12,22 @@ import { useEffect, useRef, useState } from "react";
 import type { ComponentPropsWithoutRef } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import katex from "katex";
+
+function renderMath(value: string): React.ReactNode {
+  const parts = value.split(/(\$\$[\s\S]*?\$\$|(?<!\\)\$[^$\n]+(?<!\\)\$)/g);
+  return parts.map((part, index) => {
+    if (part.startsWith("$$") && part.endsWith("$$")) {
+      try { return <span key={index} className="math-block" dangerouslySetInnerHTML={{ __html: katex.renderToString(part.slice(2, -2), { displayMode: true, throwOnError: false }) }} />; }
+      catch { return <code key={index} className="math-warning">{part}</code>; }
+    }
+    if (part.startsWith("$") && part.endsWith("$")) {
+      try { return <span key={index} dangerouslySetInnerHTML={{ __html: katex.renderToString(part.slice(1, -1), { throwOnError: false }) }} />; }
+      catch { return <code key={index} className="math-warning">{part}</code>; }
+    }
+    return part;
+  });
+}
 
 /* 流式期间的节流。每个 delta 都重新 parse 整段 Markdown，长回答加上
    每秒几十个增量会明显卡顿；80ms 一拍在观感上仍是连续吐字。
@@ -75,6 +91,7 @@ export function MarkdownView({
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={{
+          text: ({ children }) => <>{renderMath(String(children))}</>,
           a: (props) => <MarkdownLink {...props} onNavigate={onNavigate} />,
         }}
       >

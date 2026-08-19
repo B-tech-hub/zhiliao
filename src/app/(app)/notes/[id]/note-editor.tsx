@@ -63,6 +63,10 @@ export function NoteEditor({
   // 专注模式：藏起工具行、目录与标签行，只留标题与正文
   const [focusMode, setFocusMode] = useState(false);
   const headings = useMemo(() => Array.from(content.matchAll(/^(#{1,3})\s+(.+)$/gm)).map((m, i) => ({ level: m[1].length, text: m[2].trim(), id: `heading-${i}` })), [content]);
+  const transcriptionWarnings = useMemo(() => {
+    try { return note.transcriptionWarnings ? JSON.parse(note.transcriptionWarnings) as string[] : []; }
+    catch { return ["转写告警数据无法解析"]; }
+  }, [note.transcriptionWarnings]);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const savedContentRef = useRef(note.content);
 
@@ -193,6 +197,14 @@ export function NoteEditor({
   }
 
   const statusText = AI_STATUS_TEXT[note.aiStatus];
+  const transcriptionStatus = note.transcriptionReviewStatus;
+  async function markTranscriptionReviewed() {
+    if (await patch({ transcriptionReviewStatus: "reviewed" })) router.refresh();
+  }
+  async function handleCandidate(method: "POST" | "DELETE") {
+    const res = await fetch(`/api/notes/${note.id}/transcription-candidate`, { method });
+    if (res.ok) router.refresh();
+  }
   const saveText = { idle: "", dirty: "输入中…", saving: "保存中…", saved: "已保存", error: "保存失败" }[saveState];
 
   return (
@@ -254,6 +266,26 @@ export function NoteEditor({
               </button>
             )}
           </p>
+        )}
+
+        {transcriptionStatus !== "reviewed" && (
+          <div className="mb-3 border-l-2 border-action pl-3 text-[12px] text-ink-48">
+            <div className="flex items-center gap-2">
+              <span>{transcriptionStatus === "needs_review" ? "转写包含待核对告警" : "转写待核对"}</span>
+              <button type="button" onClick={markTranscriptionReviewed} className="rounded-full border border-action px-3 py-0.5 text-action">标记已核对</button>
+            </div>
+            {transcriptionWarnings.length > 0 && <ul className="mt-1 list-disc pl-4">{transcriptionWarnings.map((warning) => <li key={warning}>{warning}</li>)}</ul>}
+            {note.transcriptionCandidate && (
+              <details className="mt-2">
+                <summary className="cursor-pointer text-action">查看候选稿</summary>
+                <pre className="mt-2 max-h-48 overflow-auto whitespace-pre-wrap rounded-[6px] bg-fill p-2 text-[12px] text-ink-80">{note.transcriptionCandidate}</pre>
+                <div className="mt-2 flex gap-2">
+                  <button type="button" onClick={() => handleCandidate("POST")} className="rounded-[6px] bg-action px-3 py-1 text-white">追加到正文</button>
+                  <button type="button" onClick={() => handleCandidate("DELETE")} className="rounded-[6px] border border-hairline px-3 py-1">丢弃</button>
+                </div>
+              </details>
+            )}
+          </div>
         )}
 
         <input

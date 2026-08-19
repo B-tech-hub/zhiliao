@@ -163,3 +163,7 @@
 [0.2.0]: https://github.com/B-tech-hub/zhiliao/compare/v0.1.1...v0.2.0
 [0.1.1]: https://github.com/B-tech-hub/zhiliao/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/B-tech-hub/zhiliao/releases/tag/v0.1.0
+# 未发布
+
+- 新增单图手写转写队列，原图保留、转写追加且失败可重试。
+- 新增 `$...$` / `$$...$$` 数学 Markdown 契约与 KaTeX 阅读态渲染。

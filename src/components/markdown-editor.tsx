@@ -1,6 +1,7 @@
 "use client";
 
-import { useEditor, EditorContent, type Editor } from "@tiptap/react";
+import { useEditor, EditorContent, NodeViewWrapper, ReactNodeViewRenderer, type Editor, type ReactNodeViewProps } from "@tiptap/react";
+import { Node, mergeAttributes } from "@tiptap/core";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
@@ -13,6 +14,31 @@ import { Markdown } from "tiptap-markdown";
 import { useEffect, useRef, useState } from "react";
 import { MermaidCodeBlock } from "./mermaid-code-block";
 import { SlashMenu, useSlashMenu } from "./slash-menu";
+import katex from "katex";
+import type { MarkdownNodeSpec } from "tiptap-markdown";
+import { mathMarkdownToEditorHtml } from "@/lib/math";
+
+function MathNodeView({ node, updateAttributes }: ReactNodeViewProps) {
+  const latex = String(node.attrs.latex ?? "");
+  const display = Boolean(node.attrs.display);
+  let html = "";
+  try { html = katex.renderToString(latex, { displayMode: display, throwOnError: true }); }
+  catch { html = `<code class=\"math-warning\">${latex.replaceAll("<", "&lt;")}</code>`; }
+  return <NodeViewWrapper as={display ? "div" : "span"} className={display ? "math-node math-block" : "math-node"} onClick={() => { const next = window.prompt("编辑 LaTeX 公式", latex); if (next !== null) updateAttributes({ latex: next }); }} title="点击编辑 LaTeX 源码"><span dangerouslySetInnerHTML={{ __html: html }} /></NodeViewWrapper>;
+}
+
+const MathNode = Node.create({
+  name: "math", inline: true, group: "inline", atom: true, selectable: true,
+  addAttributes() { return { latex: { default: "x^2" }, display: { default: false } }; },
+  parseHTML() { return [{ tag: "span[data-math]", getAttrs: (element) => ({ latex: (element as HTMLElement).getAttribute("data-latex") ?? "", display: (element as HTMLElement).getAttribute("data-display") === "true" }) }]; },
+  renderHTML({ HTMLAttributes }) { return ["span", mergeAttributes({ "data-math": "", "data-latex": HTMLAttributes.latex, "data-display": String(Boolean(HTMLAttributes.display)), class: "math-node" })]; },
+  renderText({ node }) { return node.attrs.display ? `$$${node.attrs.latex}$$` : `$${node.attrs.latex}$`; },
+  addNodeView() { return ReactNodeViewRenderer(MathNodeView); },
+  addStorage() { const markdown: MarkdownNodeSpec = { serialize(state, node) { state.write(node.attrs.display ? `$$${node.attrs.latex}$$` : `$${node.attrs.latex}$`); }, parse: {} }; return { markdown }; },
+  // TipTap 动态命令需要扩展其链式类型，运行时命令仍由节点提供。
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  addCommands() { return { setMath: (attrs: { latex: string; display?: boolean }) => ({ commands }: { commands: { insertContent: (content: unknown) => boolean } }) => commands.insertContent({ type: this.name, attrs }) } as any; },
+});
 
 async function uploadImage(file: File, noteId?: string): Promise<string | null> {
   const form = new FormData();
@@ -96,7 +122,7 @@ function ToolButton({
 }
 
 /* 图片选中态工具条：宽度预设 / 对齐 / 说明文字（alt） */
-function ImageToolbar({ editor }: { editor: Editor }) {
+function ImageToolbar({ editor, noteId }: { editor: Editor; noteId?: string }) {
   const attrs = editor.getAttributes("image");
   const setAttr = (patch: Record<string, unknown>) =>
     editor.chain().focus().updateAttributes("image", patch).run();
@@ -129,6 +155,15 @@ function ImageToolbar({ editor }: { editor: Editor }) {
       >
         说明
       </ToolButton>
+      {noteId && typeof attrs.src === "string" && attrs.src.startsWith("/api/images/") && (
+        <ToolButton title="转写此图" onClick={async () => {
+          const filename = attrs.src.split("/").pop();
+          if (!filename) return;
+          const res = await fetch(`/api/notes/${noteId}/transcribe`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ filename }) });
+          if (!res.ok) alert("转写任务提交失败");
+          else alert("已加入手写转写队列");
+        }}>转写</ToolButton>
+      )}
     </div>
   );
 }
@@ -215,6 +250,11 @@ function EditorToolbar({ editor, noteId }: { editor: Editor; noteId?: string }) 
       <ToolButton title="插入图片" onClick={() => fileRef.current?.click()}>
         🖼
       </ToolButton>
+      <ToolButton title="插入数学公式" onClick={() => {
+        const formula = window.prompt("输入 LaTeX 公式", "x^2");
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        if (formula) (editor.chain().focus() as any).setMath({ latex: formula }).run();
+      }}>ƒx</ToolButton>
       <ToolButton
         title="插入表格"
         active={editor.isActive("table")}
@@ -235,7 +275,7 @@ function EditorToolbar({ editor, noteId }: { editor: Editor; noteId?: string }) 
         }}
       />
       {showLink && <LinkPopover editor={editor} onClose={() => setShowLink(false)} />}
-      {editor.isActive("image") && <ImageToolbar editor={editor} />}
+      {editor.isActive("image") && <ImageToolbar editor={editor} noteId={noteId} />}
       {editor.isActive("table") && <TableToolbar editor={editor} />}
     </div>
   );
@@ -266,6 +306,7 @@ export function MarkdownEditor({
       // 关掉 StarterKit 自带的代码块，换成带 mermaid 渲染的同名扩展
       // （schema 与输入规则 ``` 完全一致，只多了 NodeView）
       StarterKit.configure({ codeBlock: false }),
+      MathNode,
       MermaidCodeBlock,
       RichImage.configure({ allowBase64: false }),
       Link.configure({
@@ -283,7 +324,7 @@ export function MarkdownEditor({
       TableCell,
       Markdown.configure({ html: true, transformPastedText: true, transformCopiedText: true }),
     ],
-    content: value,
+    content: mathMarkdownToEditorHtml(value),
     editorProps: {
       attributes: {
         /* 正文排版全部来自共享的 .prose-note（见 globals.css）：编辑态与
@@ -324,7 +365,7 @@ export function MarkdownEditor({
     if (!editor) return;
     const current = editor.storage.markdown.getMarkdown();
     if (value !== current && !editor.isFocused) {
-      editor.commands.setContent(value);
+      editor.commands.setContent(mathMarkdownToEditorHtml(value));
     }
   }, [value, editor]);
 

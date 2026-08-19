@@ -23,6 +23,22 @@ export function NewNoteForm({
   const [topicId, setTopicId] = useState(defaultTopicId ?? "");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+  const [transcribing, setTranscribing] = useState(false);
+
+  async function captureHandwriting(file: File) {
+    setTranscribing(true); setError("");
+    try {
+      const form = new FormData(); form.append("file", file);
+      const upload = await fetch("/api/uploads", { method: "POST", body: form });
+      const uploaded = await upload.json();
+      if (!upload.ok) throw new Error(uploaded.error || "图片上传失败");
+      const filename = String(uploaded.url).split("/").pop();
+      const res = await fetch("/api/handwriting", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ filename, topicId: topicId || undefined }) });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "转写任务提交失败");
+      router.replace(`/notes/${data.id}`); router.refresh();
+    } catch (e) { setError(e instanceof Error ? e.message : "手写转写失败"); setTranscribing(false); }
+  }
 
   async function save() {
     if (!content.trim()) return;
@@ -77,6 +93,10 @@ export function NewNoteForm({
           >
             {saving ? "保存中…" : "保存"}
           </button>
+          <label className="shrink-0 cursor-pointer rounded-full border border-hairline px-3 py-[7px] text-[13px] text-ink-80">
+            {transcribing ? "转写中" : "手写摄取"}
+            <input type="file" accept="image/*" className="hidden" disabled={transcribing} onChange={(e) => { const file = e.target.files?.[0]; if (file) void captureHandwriting(file); e.target.value = ""; }} />
+          </label>
         </div>
         {error && <p className="mb-2 text-[14px] text-danger">{error}</p>}
         <textarea

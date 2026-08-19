@@ -25,6 +25,7 @@ const patchSchema = z.object({
   title: z.string().max(100).optional(),
   topicId: z.string().optional(),
   tags: z.array(z.string()).max(10).optional(),
+  transcriptionReviewStatus: z.enum(["unreviewed", "reviewed", "needs_review"]).optional(),
 });
 
 // 用户显式修改 title/topicId/tags 时置锁，AI 不再覆盖；修改 content 时重新入队 AI

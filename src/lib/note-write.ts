@@ -22,7 +22,7 @@ export class NoteWriteError extends Error {
 // 新建笔记。指定主题视为用户已手动归类（锁定主题），否则进未分类等 AI 处理
 export function createNote(
   db: DB,
-  input: { content: string; topicId?: string | null },
+  input: { content: string; topicId?: string | null; deferAi?: boolean },
 ): { id: string; topicId: string; createdAt: number } {
   const content = input.content.trim();
   if (!content) throw new NoteWriteError("内容不能为空", "bad_request");
@@ -51,7 +51,7 @@ export function createNote(
     })
     .run();
   refreshNoteFts(db, id);
-  enqueueNoteProcess(db, id);
+  if (!input.deferAi) enqueueNoteProcess(db, id);
   return { id, topicId, createdAt: now };
 }
 
@@ -60,6 +60,7 @@ export interface NotePatch {
   title?: string;
   topicId?: string;
   tags?: string[];
+  transcriptionReviewStatus?: "unreviewed" | "reviewed" | "needs_review";
 }
 
 /* 更新笔记。title/topicId/tags 一经显式修改即置锁，AI 后续不再覆盖——
@@ -86,6 +87,8 @@ export function updateNote(db: DB, noteId: string, patch: NotePatch): { updatedA
   db.transaction((tx) => {
     const values: Partial<typeof notes.$inferInsert> = { updatedAt: now };
     if (patch.content !== undefined) values.content = patch.content;
+    if (patch.content !== undefined && note.transcriptionReviewStatus === "reviewed") values.transcriptionReviewStatus = "needs_review";
+    if (patch.transcriptionReviewStatus !== undefined) values.transcriptionReviewStatus = patch.transcriptionReviewStatus;
     if (patch.title !== undefined) {
       values.title = patch.title;
       values.titleLocked = 1;

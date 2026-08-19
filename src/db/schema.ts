@@ -34,6 +34,9 @@ export const notes = sqliteTable(
     summary: text("summary"),
     // AI 处理状态: pending / processing / done / failed / skipped
     aiStatus: text("ai_status").notNull().default("pending"),
+    transcriptionReviewStatus: text("transcription_review_status").notNull().default("reviewed"),
+    transcriptionWarnings: text("transcription_warnings"),
+    transcriptionCandidate: text("transcription_candidate"),
     // 用户手动改过的字段置 1，AI 不再覆盖
     topicLocked: integer("topic_locked").notNull().default(0),
     titleLocked: integer("title_locked").notNull().default(0),
@@ -90,6 +93,7 @@ export const aiJobs = sqliteTable(
     noteId: text("note_id"),
     // note_process / suggest_topics
     type: text("type").notNull(),
+    payload: text("payload"),
     // pending / running / done / failed
     status: text("status").notNull().default("pending"),
     attempts: integer("attempts").notNull().default(0),
