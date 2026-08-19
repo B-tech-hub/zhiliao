@@ -38,6 +38,17 @@ describe("mermaid 代码块的 Markdown 进出", () => {
     expect(roundTrip(js, custom)).toContain("```js");
     expect(roundTrip(js, custom)).toBe(roundTrip(js));
   });
+
+  it("使用原生 NodeView，避免 TipTap React renderer 调用 flushSync", () => {
+    const editor = new Editor({
+      extensions: [StarterKit.configure({ codeBlock: false }), MermaidCodeBlock, Markdown],
+      content: md,
+    });
+
+    expect(editor.view.dom.querySelector(".react-renderer")).toBeNull();
+    expect(editor.view.dom.querySelector("pre code.language-mermaid")?.textContent).toContain("graph TD");
+    editor.destroy();
+  });
 });
 
 describe("展示形态判定", () => {
