@@ -141,7 +141,7 @@ export function CommandPalette({ topics }: { topics: TopicItem[] }) {
       detail: note.topicName || note.excerpt,
     }));
     const actions: Result[] = [
-      { kind: "action", id: ACTION_IDS.newNote, title: "新建笔记", detail: "打开空白记录", run: () => router.push("/notes/new") },
+      { kind: "action", id: ACTION_IDS.newNote, title: "新建笔记", detail: "打开快速记录", run: () => dispatchCommand(COMMAND_EVENTS.quickCapture) },
       { kind: "action", id: ACTION_IDS.toggleTheme, title: resolvedTheme === "dark" ? "切换浅色" : "切换深色", detail: "切换界面主题", run: () => setTheme(resolvedTheme === "dark" ? "light" : "dark") },
       { kind: "action", id: ACTION_IDS.toggleChat, title: "开关助手", detail: "打开或关闭 AI 助手", run: () => dispatchCommand(COMMAND_EVENTS.toggleChat) },
       { kind: "action", id: ACTION_IDS.toggleNav, title: "折叠侧栏", detail: "切换侧栏折叠状态", run: () => dispatchCommand(COMMAND_EVENTS.toggleNav) },

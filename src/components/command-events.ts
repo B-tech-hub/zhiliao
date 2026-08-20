@@ -3,6 +3,7 @@ export const COMMAND_EVENTS = {
   toggleNav: "zhiliao:command-toggle-nav",
   forceSave: "zhiliao:command-force-save",
   submitChat: "zhiliao:command-submit-chat",
+  quickCapture: "zhiliao:command-quick-capture",
 } as const;
 
 export type CommandEventName = (typeof COMMAND_EVENTS)[keyof typeof COMMAND_EVENTS];

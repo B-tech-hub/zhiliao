@@ -42,10 +42,6 @@ const FROZEN_RADIUS_EXCEPTION = {
    使用 rounded-utility / rounded-chip，避免胶囊语法重新蔓延。 */
 const ROUNDED_FULL_EXCEPTIONS = [
   {
-    file: "src/app/(app)/layout.tsx",
-    line: 'className="fixed bottom-20 right-5 z-20 flex h-14 w-14 items-center justify-center rounded-full bg-cta text-cta-ink transition-transform active:scale-95 md:bottom-10 md:right-[calc(2.5rem+var(--chat-rail,0px))]"',
-  },
-  {
     file: "src/app/(app)/page.tsx",
     line: "className={`rounded-full px-2.5 py-0.5 font-mono text-meta font-semibold ${",
   },
@@ -60,6 +56,11 @@ const ROUNDED_FULL_EXCEPTIONS = [
   {
     file: "src/components/nav.tsx",
     line: '<span className="rounded-full bg-danger px-1.5 font-mono text-micro font-semibold leading-4 text-white">',
+  },
+  {
+    // 快速记录钮：桌面端 <button> 与移动端 <Link> 共用的类名常量，只此一行
+    file: "src/components/quick-capture.tsx",
+    line: '"rounded-full bg-cta text-cta-ink transition-transform active:scale-95 " +',
   },
 ];
 
