@@ -18,6 +18,11 @@ main:has(.note-detail) > div { max-width: 1440px; }
 /* 暗色模式采用 class 策略：next-themes 在 <html> 上切换 .dark（决策见 docs/adr/0005） */
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* 侧栏折叠态：偏好同样锚在 <html> 上，由根 layout 的阻塞脚本在首帧前写入。
+   折叠的宽度与显隐全部走 CSS 而非 React state——服务端读不到 localStorage，
+   若等水合后才收起，居中的正文会横向跳 200px（同 next-themes 防主题闪烁的路数）。 */
+@custom-variant nav-collapsed (html[data-nav-collapsed="1"] &);
+
 /* Apple 设计规范 token（见 docs/DESIGN.md，暗色对照表见其附录）：
    单一 Action Blue 交互色，白/羊皮纸双底色，明暗瓷砖交替，无装饰阴影 */
 @theme {

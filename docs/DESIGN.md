@@ -604,6 +604,14 @@ PR2 已完成迁移：除冻结的 `src/components/mermaid-code-block.tsx` 中�
 
 浮层的焦点契约：命令面板一打开就必须把焦点交给自己的输入框，关闭后还给唤起它的元素。由于面板经 `BodyPortal` 渲染，而 `BodyPortal` 首渲染返回 `null`、要等自身 effect 置 `mounted` 后才 `createPortal`，**自动聚焦必须用 callback ref，不能用 `useEffect` + `requestAnimationFrame`**——后者执行时节点还没进 DOM，焦点会留在原处，在笔记页会导致输入直接写进正文。面板内选择靠上下键，`Tab` 不移动焦点，以此把焦点关在浮层内。
 
+### 侧栏折叠态
+
+桌面侧栏在 256px 与 56px 之间切换，偏好存 `localStorage` 的 `zhiliao.navCollapsed`（与 `zhiliao.chatPanelWidth` 同一套前缀约定）。入口有两个且共用一条命令事件：`⌘\`（编辑器聚焦时让路）与侧栏底部的可见开关。
+
+**折叠态的事实来源是 `<html data-nav-collapsed="1">`，不是 React state。** 服务端读不到 `localStorage`，若等水合后再由 state 收起，居中的正文会横向跳 200px。偏好由根 layout 的同步阻塞脚本在首帧前写入 `<html>`，宽度与显隐一律走 Tailwind 的 `nav-collapsed:` 变体（定义在 `globals.css`，与 `dark` 变体并列）。组件里的 state 只是该属性的镜像，供 `data-collapsed` 契约、`aria-expanded` 与按钮文案使用——**属性的写入必须发生在事件处理里，不能放进 `useEffect`**：挂载时「读属性→setState」与「state→写属性」两个 effect 同批执行，后者会拿着尚未更新的初值把属性抹掉。
+
+折叠态的无障碍取舍：导航项标签用 `nav-collapsed:sr-only` 保留在无障碍树里（`display: none` 会让只剩图标的链接失去可读名称）；「全部主题」整块用 `nav-collapsed:hidden`，那里是有意让内容在折叠态不可达，无障碍树应与视觉一致。未分类计数在折叠态退化为右上角圆点（`rounded-chip`，不占 `rounded-full` 豁免额度）。
+
 ### Token 双套值
 
 | Token | 亮色 | 暗色 | 用途 |
