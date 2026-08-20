@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getTopicsWithCounts } from "@/lib/topics";
+import { NewTopicButton } from "@/components/new-topic-button";
 
 export const dynamic = "force-dynamic";
 
@@ -12,11 +13,17 @@ export default function HomePage() {
 
   return (
     <div>
-      <header className="mb-6">
-        <p className="mb-1.5 text-[12px] font-semibold tracking-[0.06em] text-ink-48">知了</p>
-        <h1 className="font-serif text-display leading-[1.1] tracking-[-0.4px]">
-          主题
-        </h1>
+      <header className="mb-6 flex items-end justify-between gap-4">
+        <div>
+          <p className="mb-1.5 text-[12px] font-semibold tracking-[0.06em] text-ink-48">知了</p>
+          <h1 className="font-serif text-display leading-[1.1] tracking-[-0.4px]">
+            主题
+          </h1>
+        </div>
+        {/* 主题＝分类容器，与到处都是的"新笔记"按钮刻意分开摆放、文案写全 */}
+        <div className="shrink-0">
+          <NewTopicButton />
+        </div>
       </header>
 
       {inbox && (
@@ -41,11 +48,7 @@ export default function HomePage() {
 
       {normal.length === 0 ? (
         <div className="rounded-card bg-surface p-10 text-center text-[14px] text-ink-48">
-          还没有主题。去{" "}
-          <Link href="/settings" className="text-action">
-            设置
-          </Link>{" "}
-          里创建你的第一个主题，比如“自媒体”“羽毛球”。
+          还没有主题。用右上角的「＋ 新建主题」建一个，比如“自媒体”“羽毛球”。
         </div>
       ) : (
         /* 主题卡不再是固定高度 + 40px 巨大数字的营销瓷砖：那是产品发布页的语法，

@@ -6,7 +6,11 @@ import { SideNav } from "@/components/nav";
 import { COMMAND_EVENTS } from "@/components/command-events";
 
 vi.mock("next/link", () => ({ default: ({ children, ...props }: React.PropsWithChildren<{ href: string }>) => <a {...props}>{children}</a> }));
-vi.mock("next/navigation", () => ({ usePathname: () => "/" }));
+// 侧栏内嵌的「新建主题」用到 useRouter，一并补上，否则渲染整棵侧栏就会炸
+vi.mock("next/navigation", () => ({
+  usePathname: () => "/",
+  useRouter: () => ({ refresh: () => {} }),
+}));
 
 // 折叠态的事实来源是 <html> 上的属性，跨用例必须清干净，否则用例之间会串味
 afterEach(() => {

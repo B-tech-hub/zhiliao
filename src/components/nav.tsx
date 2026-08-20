@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { COMMAND_EVENTS, dispatchCommand } from "@/components/command-events";
+import { NewTopicButton } from "@/components/new-topic-button";
 
 /* 线性 SVG 图标（替代 emoji，贴近 SF Symbols 风格） */
 function Icon({ name, className }: { name: string; className?: string }) {
@@ -242,6 +243,9 @@ export function SideNav({ topics, inboxCount }: { topics: SideNavTopic[]; inboxC
                 <span className="font-mono text-micro text-dark-muted">{t.noteCount}</span>
               </Link>
             ))}
+        </div>
+        <div className="mt-1 border-t border-white/10 pt-1">
+          <NewTopicButton tone="dark" />
         </div>
       </div>
       {/* 折叠开关走与 ⌘\ 同一条命令事件，两条入口只有一份状态逻辑。
