@@ -6,7 +6,6 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { BodyPortal } from "@/components/body-portal";
 import { MarkdownView } from "@/components/markdown-view";
 import type { SourceItem } from "@/lib/ai/sources";
 import { onAskWithSources } from "./ask-with-sources";
@@ -30,16 +29,16 @@ const PANEL_WIDTH = { min: 420, max: 900, default: 560 } as const;
 const PANEL_WIDTH_KEY = "zhiliao.chatPanelWidth";
 
 /* 拖拽调宽。宽度存 localStorage：面板是每天都要开的东西，
-   每次开都得重新拖一遍，比不能调还烦。 */
+   每次开都得重新拖一遍，比不能调还烦。
+
+   曾经这里还有一个吞掉合成点击的 150ms 时间窗：面板是 overlay 抽屉时，
+   把手在面板内、松手常落在面板外的遮罩上，浏览器把 click 派发到两者的共同祖先
+   即遮罩本身，于是「往左拖宽」变成「关闭面板」。桌面端改成 push 布局后遮罩连同
+   「点外部关闭」一起没了，那个时间窗失去唯一的消费者，整段删除；手机端仍是全屏
+   面板，本就没有拖拽把手（把手 hidden md:block），也不会产生这种合成点击。 */
 function usePanelWidth() {
   const [width, setWidth] = useState<number>(PANEL_WIDTH.default);
   const [dragging, setDragging] = useState(false);
-  /* 拖拽结束后要吞掉紧接着的那次遮罩点击。浏览器把 click 派发到 mousedown 与
-     mouseup 的共同祖先——把手在面板内、松手却常落在面板外的遮罩上，共同祖先
-     就是遮罩本身，面板上的 stopPropagation 拦不住，结果「往左拖宽」变成「关闭面板」。
-     用时间窗而不是一次性标志位：松手若落在面板内，那次 click 根本不会走到遮罩，
-     标志位没人消费就会赖着，把用户下一次真心想关的点击白白吞掉。 */
-  const dragEndedAt = useRef(0);
 
   // 首屏读 localStorage 而非用 useState 初始值：服务端渲染时没有 window
   useEffect(() => {
@@ -49,19 +48,13 @@ function usePanelWidth() {
 
   useEffect(() => {
     if (!dragging) return;
-    let moved = false;
     // 面板贴右边缘，所以宽度是「视口宽 - 指针横坐标」
     const onMove = (e: PointerEvent) => {
-      moved = true;
       setWidth(
         Math.min(PANEL_WIDTH.max, Math.max(PANEL_WIDTH.min, window.innerWidth - e.clientX)),
       );
     };
-    const onUp = () => {
-      // 只有真的拖动过才记时刻：单纯点一下把手不该影响后续的关闭点击
-      if (moved) dragEndedAt.current = Date.now();
-      setDragging(false);
-    };
+    const onUp = () => setDragging(false);
     window.addEventListener("pointermove", onMove);
     window.addEventListener("pointerup", onUp);
     /* 拖拽时禁掉全局文字选中：否则划过正文会选中一大片蓝 */
@@ -81,11 +74,7 @@ function usePanelWidth() {
     if (!dragging) window.localStorage.setItem(PANEL_WIDTH_KEY, String(width));
   }, [dragging, width]);
 
-  /* 遮罩点击是否应被忽略。只挡拖拽刚结束那一瞬间的合成点击——
-     人不可能在松手后 150ms 内又有意去点遮罩。 */
-  const shouldIgnoreOverlayClick = () => Date.now() - dragEndedAt.current < 150;
-
-  return { width, dragging, startDrag: () => setDragging(true), shouldIgnoreOverlayClick };
+  return { width, dragging, startDrag: () => setDragging(true) };
 }
 
 export function ChatPanel({
@@ -115,9 +104,22 @@ export function ChatPanel({
     Record<number, { state: "busy" | "done" | "error"; noteId?: string }>
   >({});
   const { scope } = useChatScope();
-  const { width, dragging, startDrag, shouldIgnoreOverlayClick } = usePanelWidth();
+  const { width, dragging, startDrag } = usePanelWidth();
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+
+  /* 桌面端面板改推挤布局后，两个贴右下角的 fixed 悬浮钮会浮在面板上方压住输入区。
+     它们在 layout.tsx 里、且 layout 是服务端组件，把 open 状态提上去要多包一层
+     客户端组件；改为由面板把「右侧轨道宽度」写到 <html>，悬浮钮用 CSS 让位。
+     手机端面板全屏覆盖，悬浮钮本就看不见，故只有 md 以上会读这个变量。 */
+  useEffect(() => {
+    const root = document.documentElement;
+    if (open) root.style.setProperty("--chat-rail", `${width}px`);
+    else root.style.removeProperty("--chat-rail");
+    return () => {
+      root.style.removeProperty("--chat-rail");
+    };
+  }, [open, width]);
 
   useEffect(() => {
     const toggle = () => setOpen((value) => !value);
@@ -300,47 +302,47 @@ export function ChatPanel({
   const waiting = chat.streaming && chat.items[chat.items.length - 1]?.kind !== "text";
 
   return (
-    <BodyPortal>
-      {/* 唤起按钮：与右下角"快速记录"钮横向并排贴底（Portal 到 body，避开 template 的 transform 动画劫持 fixed 定位） */}
-      <button
-        onClick={() => setOpen(true)}
-        className="fixed bottom-20 right-[5.5rem] z-20 flex h-12 w-12 items-center justify-center rounded-full bg-chrome text-white shadow-lg transition-transform active:scale-95 dark:ring-1 dark:ring-white/15 md:bottom-10 md:right-[6.75rem]"
-        aria-label="AI 助手"
-        title="AI 助手"
-      >
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5" aria-hidden>
-          <path d="M21 12a8 8 0 0 1-8 8H5l-2 2V12a8 8 0 0 1 8-8h2a8 8 0 0 1 8 8z" />
-        </svg>
-      </button>
+    <>
+      {/* 唤起按钮：与右下角"快速记录"钮横向并排贴底。面板开着时收起——
+          推挤布局下它会实打实地浮在面板上，而此时"打开助手"也已无意义。
+          这里不再需要 BodyPortal：本组件挂在 (app)/layout.tsx 里，是 <main> 的兄弟，
+          而劫持 fixed 定位的 transform 动画在 template.tsx 上、只包 <main> 的内容。 */}
+      {!open && (
+        <button
+          onClick={() => setOpen(true)}
+          className="fixed bottom-20 right-[5.5rem] z-20 flex h-12 w-12 items-center justify-center rounded-full bg-chrome text-white shadow-lg transition-transform active:scale-95 dark:ring-1 dark:ring-white/15 md:bottom-10 md:right-[6.75rem]"
+          aria-label="AI 助手"
+          title="AI 助手"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5" aria-hidden>
+            <path d="M21 12a8 8 0 0 1-8 8H5l-2 2V12a8 8 0 0 1 8-8h2a8 8 0 0 1 8 8z" />
+          </svg>
+        </button>
+      )}
 
       {open && (
-        <div
-          className="fixed inset-0 z-30 flex justify-end bg-black/20"
-          onClick={() => {
-            // 刚拖完宽度的那次点击不算「点了遮罩要关闭」
-            if (shouldIgnoreOverlayClick()) return;
-            setOpen(false);
-          }}
+        /* 手机端仍是盖住全屏的浮层；md 以上变成 layout 那一行 flex 的第三栏，
+           与 SideNav 一样 sticky 贴顶、自身高一屏——否则正文长过一屏时面板会被
+           拉到与页面等高，输入区跟着掉到页面最底下。 */
+        <aside
+          className="fixed inset-0 z-30 flex w-full flex-col bg-surface md:sticky md:inset-auto md:top-0 md:z-auto md:h-dvh md:w-[var(--panel-w)] md:shrink-0 md:border-l md:border-divider"
+          style={{ "--panel-w": `${width}px` } as React.CSSProperties}
+          aria-label="AI 助手"
         >
+          {/* 拖拽把手：贴左边缘的一条窄带，移动端不给——那里面板本就全宽 */}
           <div
-            className="relative flex h-full w-full flex-col bg-surface shadow-2xl md:w-[var(--panel-w)]"
-            style={{ "--panel-w": `${width}px` } as React.CSSProperties}
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* 拖拽把手：贴左边缘的一条窄带，移动端不给——那里面板本就全宽 */}
-            <div
-              onPointerDown={(e) => {
-                e.preventDefault();
-                startDrag();
-              }}
-              className={`absolute inset-y-0 left-0 z-10 hidden w-1.5 cursor-col-resize md:block ${
-                dragging ? "bg-action/40" : "hover:bg-action/25"
-              }`}
-              role="separator"
-              aria-orientation="vertical"
-              aria-label="拖动调整助手面板宽度"
-            />
-            {picking !== null ? (
+            onPointerDown={(e) => {
+              e.preventDefault();
+              startDrag();
+            }}
+            className={`absolute inset-y-0 left-0 z-10 hidden w-1.5 cursor-col-resize md:block ${
+              dragging ? "bg-action/40" : "hover:bg-action/25"
+            }`}
+            role="separator"
+            aria-orientation="vertical"
+            aria-label="拖动调整助手面板宽度"
+          />
+          {picking !== null ? (
               <SourcePicker
                 initial={picking}
                 onCancel={() => setPicking(null)}
@@ -730,10 +732,9 @@ export function ChatPanel({
             </div>
               </>
             )}
-          </div>
-        </div>
+        </aside>
       )}
-    </BodyPortal>
+    </>
   );
 }
 

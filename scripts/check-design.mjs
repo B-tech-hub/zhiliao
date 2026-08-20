@@ -43,7 +43,7 @@ const FROZEN_RADIUS_EXCEPTION = {
 const ROUNDED_FULL_EXCEPTIONS = [
   {
     file: "src/app/(app)/layout.tsx",
-    line: 'className="fixed bottom-20 right-5 z-20 flex h-14 w-14 items-center justify-center rounded-full bg-cta text-cta-ink transition-transform active:scale-95 md:bottom-10 md:right-10"',
+    line: 'className="fixed bottom-20 right-5 z-20 flex h-14 w-14 items-center justify-center rounded-full bg-cta text-cta-ink transition-transform active:scale-95 md:bottom-10 md:right-[calc(2.5rem+var(--chat-rail,0px))]"',
   },
   {
     file: "src/app/(app)/page.tsx",

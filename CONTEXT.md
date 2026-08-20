@@ -56,7 +56,7 @@ AI 画图专用的第三组 LLM 配置（`image_base_url` / `image_api_key` / `i
 推理模型在给出答案前吐出的推演文本。三种线格式都认：`reasoning_content`、`reasoning`、以及内联在正文里的 `<think>…</think>`。随消息落库，在回答上方以折叠栏呈现——模型还在想时自动展开，正文一开始吐就自动收起。**绝不回灌进后续请求的上下文**（供应商明确要求，带上会 400 拒绝整个请求），「存为新笔记」时也不带上。
 
 ### AI 助手（Assistant）
-全局的对话式入口：任意页面右下角均可唤起，面向整个知识库，可通过**工具调用**检索与改写笔记。当前打开的笔记/主题以**上下文附件**形式带入，可随时摘除。会话与消息持久化，回答走 SSE 流式并按 Markdown 渲染（走与笔记同一套**正文排版层**，不套气泡）；模型不支持工具调用时自动降级为纯问答。面板贴右侧、宽度可拖拽调整并记住。输入框上另有**看图**与**深度思考**两个消息级开关，各自切到对应的独立模型。相关决策见 [docs/adr/0008-assistant-tool-calling.md](docs/adr/0008-assistant-tool-calling.md)（上下文注入时期的决策见 [docs/adr/0003-chat-context-injection.md](docs/adr/0003-chat-context-injection.md)）。
+全局的对话式入口：任意页面右下角均可唤起，面向整个知识库，可通过**工具调用**检索与改写笔记。当前打开的笔记/主题以**上下文附件**形式带入，可随时摘除。会话与消息持久化，回答走 SSE 流式并按 Markdown 渲染（走与笔记同一套**正文排版层**，不套气泡）；模型不支持工具调用时自动降级为纯问答。桌面端面板是三栏布局最右的一栏：打开时把正文**推窄而不是盖住**，与侧栏一样贴顶、自身高一屏，宽度可拖拽调整并记住；因此它不是模态，没有遮罩，也没有「点外部关闭」，关闭走 ✕、`Esc` 或 `⌘J`。手机端仍是覆盖全屏的浮层。输入框上另有**看图**与**深度思考**两个消息级开关，各自切到对应的独立模型。相关决策见 [docs/adr/0008-assistant-tool-calling.md](docs/adr/0008-assistant-tool-calling.md)（上下文注入时期的决策见 [docs/adr/0003-chat-context-injection.md](docs/adr/0003-chat-context-injection.md)）。
 
 ### 工具调用（Tool Calling）
 助手读写知识库的唯一途径，共 9 个：检索笔记、读取全文、列出主题、新建笔记、追加内容、修改元数据、删除笔记、抓取网页、生成图片。**不存在覆盖正文的工具**——项目不做版本历史，正文覆盖是唯一不可恢复的操作。单次对话最多 8 轮、每轮最多 20 个调用。`fetch_url` 只能抓取用户消息中出现过的网址，相关决策见 [docs/adr/0009-fetch-url-safety.md](docs/adr/0009-fetch-url-safety.md)；`generate_image` 每条用户消息最多 2 次，见 [docs/adr/0011-image-generation.md](docs/adr/0011-image-generation.md)。

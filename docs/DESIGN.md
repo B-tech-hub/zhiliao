@@ -612,6 +612,16 @@ PR2 已完成迁移：除冻结的 `src/components/mermaid-code-block.tsx` 中�
 
 折叠态的无障碍取舍：导航项标签用 `nav-collapsed:sr-only` 保留在无障碍树里（`display: none` 会让只剩图标的链接失去可读名称）；「全部主题」整块用 `nav-collapsed:hidden`，那里是有意让内容在折叠态不可达，无障碍树应与视觉一致。未分类计数在折叠态退化为右上角圆点（`rounded-chip`，不占 `rounded-full` 豁免额度）。
 
+### 三栏布局与助手面板
+
+`(app)/layout.tsx` 的外层是一行 flex，从左到右：`SideNav`（`shrink-0`）→ `<main>`（`min-w-0 flex-1`）→ `ChatPanel`（`md:shrink-0`）。`min-w-0` 是正文栏不溢出的唯一保证——去掉它，flex 子项的最小尺寸会退回内容固有宽度，三栏同开时立刻出横向滚动。
+
+**桌面端助手面板是第三栏，不是模态。** 打开时把正文推窄而非盖住，因此没有遮罩、没有「点面板外关闭」；关闭入口是 ✕、`Esc` 与 `⌘J`。面板与侧栏一样 `md:sticky md:top-0 md:h-dvh`：**高度必须锁死一屏，不能让它随 flex 拉伸**——正文长过一屏时容器会跟着变高，面板被拉长后输入区会掉到页面最底下，得滚动整页才能打字。手机端不参与这套，仍是 `fixed inset-0 z-30` 的全屏浮层（`z-30` 要压过 `BottomNav` 的 `z-10` 与两颗悬浮钮的 `z-20`）。
+
+推挤布局下，贴右下角的 `fixed` 悬浮钮会浮在面板之上压住输入区。面板打开时把自身宽度写成 `<html>` 上的 `--chat-rail`，悬浮钮用 `md:right-[calc(2.5rem+var(--chat-rail,0px))]` 让位；「AI 助手」唤起钮则在面板打开时直接收起。走 CSS 变量而非把开关状态提到 `layout.tsx`，是因为后者是服务端组件，提状态要多包一层客户端组件。
+
+`ChatPanel` **不使用 `BodyPortal`**：它挂在 `layout.tsx` 里、是 `<main>` 的兄弟，而劫持 `fixed` 定位的 `page-in` transform 在 `template.tsx` 上、只包 `<main>` 的内容。命令面板与确认弹窗仍需 portal，二者渲染位置不同，别照搬。
+
 ### Token 双套值
 
 | Token | 亮色 | 暗色 | 用途 |
