@@ -210,14 +210,14 @@ export function NoteEditor({
   return (
     <div className="flex h-[calc(100dvh-9rem)] flex-col md:h-[calc(100dvh-7.5rem)]">
       {/* 纸面化：整页一张白纸，元数据收进安静的工具行，标题正文裸排 */}
-      <div className="flex min-h-0 flex-1 flex-col rounded-[18px] bg-surface p-6 md:px-10 md:py-8">
+      <div className="flex min-h-0 flex-1 flex-col rounded-card bg-surface p-6 md:px-10 md:py-8">
         <div className="mb-5 flex items-center justify-between gap-2">
           <div className="flex min-w-0 flex-1 items-center gap-2.5">
             <BackButton fallback={backHref} iconOnly />
             <select
               value={topicId}
               onChange={(e) => changeTopic(e.target.value)}
-              className="h-[32px] min-w-0 max-w-full rounded-full border border-hairline bg-surface px-3 text-[13px] text-ink-80 outline-none focus:border-action-focus"
+              className="h-[32px] min-w-0 max-w-full rounded-utility border border-hairline bg-surface px-3 text-[13px] text-ink-80 outline-none focus:border-action-focus"
             >
               {topics.map((t) => (
                 <option key={t.id} value={t.id}>
@@ -260,7 +260,7 @@ export function NoteEditor({
             {note.aiStatus === "failed" && (
               <button
                 onClick={reprocess}
-                className="rounded-full border border-action px-3 py-0.5 text-[12px] text-action transition-transform active:scale-95"
+                className="rounded-chip border border-action px-3 py-0.5 text-[12px] text-action transition-transform active:scale-95"
               >
                 重新处理
               </button>
@@ -272,16 +272,16 @@ export function NoteEditor({
           <div className="mb-3 border-l-2 border-action pl-3 text-[12px] text-ink-48">
             <div className="flex items-center gap-2">
               <span>{transcriptionStatus === "needs_review" ? "转写包含待核对告警" : "转写待核对"}</span>
-              <button type="button" onClick={markTranscriptionReviewed} className="rounded-full border border-action px-3 py-0.5 text-action">标记已核对</button>
+              <button type="button" onClick={markTranscriptionReviewed} className="rounded-chip border border-action px-3 py-0.5 text-action">标记已核对</button>
             </div>
             {transcriptionWarnings.length > 0 && <ul className="mt-1 list-disc pl-4">{transcriptionWarnings.map((warning) => <li key={warning}>{warning}</li>)}</ul>}
             {note.transcriptionCandidate && (
               <details className="mt-2">
                 <summary className="cursor-pointer text-action">查看候选稿</summary>
-                <pre className="mt-2 max-h-48 overflow-auto whitespace-pre-wrap rounded-[6px] bg-fill p-2 text-[12px] text-ink-80">{note.transcriptionCandidate}</pre>
+                <pre className="mt-2 max-h-48 overflow-auto whitespace-pre-wrap rounded-utility bg-fill p-2 text-[12px] text-ink-80">{note.transcriptionCandidate}</pre>
                 <div className="mt-2 flex gap-2">
-                  <button type="button" onClick={() => handleCandidate("POST")} className="rounded-[6px] bg-action px-3 py-1 text-white">追加到正文</button>
-                  <button type="button" onClick={() => handleCandidate("DELETE")} className="rounded-[6px] border border-hairline px-3 py-1">丢弃</button>
+                  <button type="button" onClick={() => handleCandidate("POST")} className="rounded-utility bg-cta px-3 py-1 text-cta-ink">追加到正文</button>
+                  <button type="button" onClick={() => handleCandidate("DELETE")} className="rounded-utility border border-hairline px-3 py-1">丢弃</button>
                 </div>
               </details>
             )}
@@ -293,7 +293,7 @@ export function NoteEditor({
           onChange={(e) => setTitle(e.target.value)}
           onBlur={saveTitle}
           placeholder="标题（留空由 AI 生成）"
-          className="mb-4 w-full bg-transparent text-[28px] font-semibold tracking-[-0.374px] outline-none placeholder:text-ink-48/50"
+          className="mb-4 w-full bg-transparent font-serif text-[28px] tracking-[-0.374px] outline-none placeholder:text-ink-48/50"
         />
         <div className="flex min-h-0 flex-1 gap-8">
           {/* 必须是 flex 列容器：MarkdownEditor 根节点靠 flex-1 + min-h-0 把
@@ -320,7 +320,7 @@ export function NoteEditor({
                     return (
                       <button
                         key={h.id}
-                        className={`block w-full truncate rounded-[6px] py-1 pr-2 text-left text-[13px] transition-colors ${
+                        className={`block w-full truncate rounded-utility py-1 pr-2 text-left text-[13px] transition-colors ${
                           active
                             ? "bg-action/10 font-medium text-action"
                             : "text-ink-80 hover:bg-fill hover:text-action"

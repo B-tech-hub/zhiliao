@@ -23,8 +23,9 @@ main:has(.note-detail) > div { max-width: 1440px; }
 @theme {
   --color-action: #0066cc;
   --color-action-focus: #0071e3;
-  /* 主行动改墨底：Action Blue 降级为链接与选中态，不再背负「主行动」。
-     暗色下反转为浅底深字（见 .dark 块），否则墨底按钮会沉进黑色页底。 */
+  /* 主行动默认改墨底：Action Blue 主要留给链接、选中态、消息气泡，以及
+     主题不变暗面上的行动；暗色下反转为浅底深字（见 .dark 块），否则墨底
+     按钮会沉进黑色页底。 */
   --color-cta: #1d1d1f;
   --color-cta-ink: #ffffff;
   --color-ink: #1d1d1f;
@@ -77,7 +78,7 @@ main:has(.note-detail) > div { max-width: 1440px; }
 
   /* 圆角三级。此前 card / utility 两个 token 定义了却零使用，实际代码里是
      18 / 14 / 12 / 10 / 8 / 6 六种 arbitrary 值混用；收敛为三级并接入 CI 门禁。
-     rounded-full 只留给 CountBadge 这类真·圆点。 */
+     rounded-full 只留给 FAB、圆形图标按钮和计数角标。 */
   --radius-card: 12px; /* 卡片、弹层、大容器 */
   --radius-utility: 8px; /* 按钮、输入框、小容器 */
   --radius-chip: 4px; /* 标签、内联代码、kbd 键帽 */

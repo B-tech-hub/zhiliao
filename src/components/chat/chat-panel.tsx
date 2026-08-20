@@ -323,7 +323,7 @@ export function ChatPanel({
               <div className="flex shrink-0 items-center gap-1">
                 <button
                   onClick={() => setShowHistory((v) => !v)}
-                  className="rounded-full px-2 py-1 text-[12px] text-ink-48 hover:bg-fill"
+                  className="rounded-utility px-2 py-1 text-[12px] text-ink-48 hover:bg-fill"
                 >
                   历史
                 </button>
@@ -332,7 +332,7 @@ export function ChatPanel({
                     void chat.openConversation(null);
                     setShowHistory(false);
                   }}
-                  className="rounded-full px-2 py-1 text-[12px] text-action hover:bg-fill"
+                  className="rounded-utility px-2 py-1 text-[12px] text-action hover:bg-fill"
                 >
                   新对话
                 </button>
@@ -341,14 +341,14 @@ export function ChatPanel({
                     setPicking([]);
                     setShowHistory(false);
                   }}
-                  className="rounded-full px-2 py-1 text-[12px] text-action hover:bg-fill"
+                  className="rounded-utility px-2 py-1 text-[12px] text-action hover:bg-fill"
                   title="选几条笔记或主题作为来源，AI 只依据它们回答"
                 >
                   来源问答
                 </button>
                 <button
                   onClick={() => setOpen(false)}
-                  className="rounded-full px-2 py-1 text-[14px] text-ink-48 hover:bg-fill"
+                  className="rounded-utility px-2 py-1 text-[14px] text-ink-48 hover:bg-fill"
                   aria-label="关闭"
                 >
                   ✕
@@ -440,7 +440,7 @@ export function ChatPanel({
                       <button
                         key={c}
                         onClick={() => fillInput(c)}
-                        className="rounded-full border border-hairline px-3 py-1.5 text-[13px] text-ink-80 transition-colors hover:bg-fill active:scale-95"
+                        className="rounded-utility border border-hairline px-3 py-1.5 text-[13px] text-ink-80 transition-colors hover:bg-fill active:scale-95"
                       >
                         {c}
                       </button>
@@ -478,7 +478,7 @@ export function ChatPanel({
                       {/* 只有思考过程、还没吐正文的那一瞬间不画气泡 */}
                       {(item.role === "user" || item.content) &&
                         (item.role === "user" ? (
-                          <div className="max-w-[85%] whitespace-pre-wrap rounded-[18px] bg-action px-3.5 py-2 text-[15px] leading-[1.5] text-white">
+                          <div className="max-w-[85%] whitespace-pre-wrap rounded-card bg-action px-3.5 py-2 text-[15px] leading-[1.5] text-white dark:text-cta-ink">
                             {item.content}
                           </div>
                         ) : (
@@ -531,7 +531,7 @@ export function ChatPanel({
                 <div className="flex justify-start">
                   <div
                     role="status"
-                    className="flex items-center gap-2 rounded-[18px] bg-fill px-3.5 py-2 text-[14px] text-ink-48"
+                    className="flex items-center gap-2 rounded-card bg-fill px-3.5 py-2 text-[14px] text-ink-48"
                   >
                     <Spinner className="text-action" />
                     思考中…
@@ -546,12 +546,12 @@ export function ChatPanel({
             <div className="p-3">
               {/* 来源集详情：由控件行的来源 chip 展开。接地会话的知识边界，随时可查可改 */}
               {chat.grounded && showSources && (
-                <div className="mb-2 rounded-[18px] border border-hairline bg-fill/40 px-3.5 py-2.5">
+                <div className="mb-2 rounded-card border border-hairline bg-fill/40 px-3.5 py-2.5">
                   <div className="flex items-center justify-between gap-2">
                     <span className="text-[12px] font-medium text-action">来源集</span>
                     <button
                       onClick={() => setPicking(chat.sources)}
-                      className="shrink-0 rounded-full px-2 py-0.5 text-[12px] text-action hover:bg-fill"
+                      className="shrink-0 rounded-utility px-2 py-0.5 text-[12px] text-action hover:bg-fill"
                     >
                       改来源
                     </button>
@@ -576,7 +576,7 @@ export function ChatPanel({
                 </div>
               )}
 
-              <div className="rounded-[18px] border border-hairline bg-surface transition-colors focus-within:border-action-focus">
+              <div className="rounded-card border border-hairline bg-surface transition-colors focus-within:border-action-focus">
                 <textarea
                   ref={inputRef}
                   value={input}
@@ -598,14 +598,14 @@ export function ChatPanel({
                   <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1.5">
                     {/* 上下文附件：摘除后助手只面向整个知识库 */}
                     {attached && (
-                      <span className="flex max-w-full items-center gap-1 rounded-full border border-hairline py-1 pl-2.5 pr-1 text-[12px] text-ink-80">
+                      <span className="flex max-w-full items-center gap-1 rounded-chip border border-hairline py-1 pl-2.5 pr-1 text-[12px] text-ink-80">
                         <span className="shrink-0 text-ink-48">
                           {attached.type === "note" ? "笔记" : "主题"}
                         </span>
                         <span className="min-w-0 max-w-[140px] truncate">{attached.title}</span>
                         <button
                           onClick={() => setDetached(true)}
-                          className="shrink-0 rounded-full px-1 text-ink-48 hover:text-ink-80"
+                          className="shrink-0 rounded-chip px-1 text-ink-48 hover:text-ink-80"
                           title="不带这条上下文，改为面向整个知识库"
                           aria-label="移除上下文附件"
                         >
@@ -616,7 +616,7 @@ export function ChatPanel({
                     {scope && detached && !chat.grounded && (
                       <button
                         onClick={() => setDetached(false)}
-                        className="flex shrink-0 items-center gap-1 rounded-full border border-hairline px-2.5 py-1 text-[12px] text-ink-48 transition-colors hover:bg-fill active:scale-95"
+                        className="flex shrink-0 items-center gap-1 rounded-utility border border-hairline px-2.5 py-1 text-[12px] text-ink-48 transition-colors hover:bg-fill active:scale-95"
                         title={`把当前${scope.type === "note" ? "笔记" : "主题"}加回上下文`}
                       >
                         ＋ 当前{scope.type === "note" ? "笔记" : "主题"}
@@ -627,7 +627,7 @@ export function ChatPanel({
                     {chat.grounded && (
                       <button
                         onClick={() => setShowSources((v) => !v)}
-                        className={`flex shrink-0 items-center gap-1 rounded-full px-2.5 py-1 text-[12px] transition-colors active:scale-95 ${
+                        className={`flex shrink-0 items-center gap-1 rounded-utility px-2.5 py-1 text-[12px] transition-colors active:scale-95 ${
                           showSources ? "bg-action/10 text-action" : "border border-hairline text-action hover:bg-fill"
                         }`}
                         title="查看或修改来源集"
@@ -641,7 +641,7 @@ export function ChatPanel({
                       <button
                         onClick={() => visionAvailable && setUseVision((v) => !v)}
                         disabled={!visionAvailable}
-                        className={`flex shrink-0 items-center gap-1 rounded-full px-2.5 py-1 text-[12px] transition-colors active:scale-95 disabled:opacity-40 ${
+                        className={`flex shrink-0 items-center gap-1 rounded-utility px-2.5 py-1 text-[12px] transition-colors active:scale-95 disabled:opacity-40 ${
                           useVision && visionAvailable
                             ? "bg-action/10 text-action"
                             : "border border-hairline text-ink-48 hover:bg-fill"
@@ -656,7 +656,7 @@ export function ChatPanel({
                     <button
                       onClick={() => reasoningAvailable && setUseReasoning((v) => !v)}
                       disabled={!reasoningAvailable}
-                      className={`flex shrink-0 items-center gap-1 rounded-full px-2.5 py-1 text-[12px] transition-colors active:scale-95 disabled:opacity-40 ${
+                      className={`flex shrink-0 items-center gap-1 rounded-utility px-2.5 py-1 text-[12px] transition-colors active:scale-95 disabled:opacity-40 ${
                         useReasoning && reasoningAvailable
                           ? "bg-action/10 text-action"
                           : "border border-hairline text-ink-48 hover:bg-fill"
@@ -674,7 +674,7 @@ export function ChatPanel({
                   {chat.streaming ? (
                     <button
                       onClick={chat.stop}
-                      className="flex h-8 shrink-0 items-center gap-1.5 rounded-full border border-hairline px-3.5 text-[13px] text-ink-48 active:scale-95"
+                      className="flex h-8 shrink-0 items-center gap-1.5 rounded-utility border border-hairline px-3.5 text-[13px] text-ink-48 active:scale-95"
                     >
                       <Spinner className="text-action" />
                       停止
@@ -683,7 +683,7 @@ export function ChatPanel({
                     <button
                       onClick={submit}
                       disabled={!input.trim()}
-                      className="h-8 shrink-0 rounded-full bg-action px-4 text-[13px] text-white active:scale-95 disabled:opacity-40"
+                      className="h-8 shrink-0 rounded-utility bg-cta px-4 text-[13px] text-cta-ink active:scale-95 disabled:opacity-40"
                     >
                       发送
                     </button>
@@ -700,7 +700,7 @@ export function ChatPanel({
   );
 }
 
-const CARD_BASE = "rounded-[18px] border px-3 py-2 text-[13px] leading-[1.5]";
+const CARD_BASE = "rounded-card border px-3 py-2 text-[13px] leading-[1.5]";
 
 /* 思考过程的折叠栏。展开策略是「跟着注意力走」：模型还在想时自动展开——
    那正是用户唯一想看它的时刻；正文一开始吐就自动收起，把版面让给答案。
@@ -723,7 +723,7 @@ function ReasoningPanel({ text, active }: { text: string; active: boolean }) {
   }, [text, open, active]);
 
   return (
-    <div className="w-full max-w-[85%] rounded-[12px] border border-hairline/70 bg-fill/30">
+    <div className="w-full max-w-[85%] rounded-card border border-hairline/70 bg-fill/30">
       <button
         onClick={() => {
           touched.current = true;
@@ -800,14 +800,14 @@ function ToolCard({
           <button
             onClick={() => onRespond(true)}
             disabled={busy}
-            className="rounded-full bg-action px-3 py-1 text-[12px] text-white active:scale-95 disabled:opacity-40"
+            className="rounded-utility bg-cta px-3 py-1 text-[12px] text-cta-ink active:scale-95 disabled:opacity-40"
           >
             允许
           </button>
           <button
             onClick={() => onRespond(false)}
             disabled={busy}
-            className="rounded-full border border-hairline px-3 py-1 text-[12px] text-ink-48 active:scale-95 disabled:opacity-40"
+            className="rounded-utility border border-hairline px-3 py-1 text-[12px] text-ink-48 active:scale-95 disabled:opacity-40"
           >
             拒绝
           </button>
@@ -836,7 +836,7 @@ function ToolCard({
           <button
             onClick={onUndo}
             disabled={undoing}
-            className="shrink-0 rounded-full px-2 py-0.5 text-[12px] text-action hover:bg-fill disabled:opacity-40"
+            className="shrink-0 rounded-utility px-2 py-0.5 text-[12px] text-action hover:bg-fill disabled:opacity-40"
           >
             {undoing ? "撤销中…" : "撤销"}
           </button>
@@ -857,7 +857,7 @@ function ToolCard({
           <img
             src={item.image.url}
             alt={item.image.alt}
-            className="max-h-64 w-full rounded-[8px] object-contain"
+            className="max-h-64 w-full rounded-utility object-contain"
           />
           {saveState === "done" ? (
             <p className="mt-1.5 text-[12px] text-ink-48">已存入笔记</p>
@@ -867,7 +867,7 @@ function ToolCard({
                 <button
                   onClick={() => onSaveImage("current")}
                   disabled={saveState === "busy"}
-                  className="rounded-full bg-action px-3 py-1 text-[12px] text-white active:scale-95 disabled:opacity-40"
+                  className="rounded-utility bg-cta px-3 py-1 text-[12px] text-cta-ink active:scale-95 disabled:opacity-40"
                   title={`追加到「${attachedNoteTitle}」的正文末尾`}
                 >
                   插入当前笔记
@@ -876,7 +876,7 @@ function ToolCard({
               <button
                 onClick={() => onSaveImage("new")}
                 disabled={saveState === "busy"}
-                className="rounded-full border border-hairline px-3 py-1 text-[12px] text-ink-80 active:scale-95 disabled:opacity-40"
+                className="rounded-utility border border-hairline px-3 py-1 text-[12px] text-ink-80 active:scale-95 disabled:opacity-40"
               >
                 存为新笔记
               </button>

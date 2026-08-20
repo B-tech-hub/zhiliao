@@ -74,8 +74,8 @@ function AppearanceSection() {
   return (
     <section>
       <h2 className="mb-3 text-[21px] font-semibold tracking-[-0.374px]">外观</h2>
-      <div className="rounded-[18px] bg-surface p-6">
-        <div className="inline-flex rounded-full bg-fill p-1">
+      <div className="rounded-card bg-surface p-6">
+        <div className="inline-flex rounded-utility bg-fill p-1">
           {THEME_OPTIONS.map((o) => {
             const active = mounted && theme === o.value;
             return (
@@ -83,7 +83,7 @@ function AppearanceSection() {
                 key={o.value}
                 onClick={() => setTheme(o.value)}
                 aria-pressed={active}
-                className={`rounded-full px-4 py-1.5 text-[14px] transition-colors ${
+                className={`rounded-utility px-4 py-1.5 text-[14px] transition-colors ${
                   active ? "bg-surface font-semibold text-ink ring-1 ring-hairline" : "text-ink-48"
                 }`}
               >
@@ -144,13 +144,13 @@ function WeeklyReviewCard({ review }: { review: ReviewInfo }) {
   }
 
   return (
-    <div className="mt-3 rounded-[18px] bg-surface p-6 text-[14px]">
+    <div className="mt-3 rounded-card bg-surface p-6 text-[14px]">
       <p className="mb-1 font-semibold tracking-[-0.224px]">每周回顾</p>
       <p className="text-ink-48">
         每周一凌晨把上一周新建的笔记梳理成一篇回顾，存入「每周回顾」主题
       </p>
       <div className="mt-3 flex flex-wrap items-center gap-3">
-        <div className="inline-flex rounded-full bg-fill p-1">
+        <div className="inline-flex rounded-utility bg-fill p-1">
           {[
             { value: true, label: "开启" },
             { value: false, label: "关闭" },
@@ -160,7 +160,7 @@ function WeeklyReviewCard({ review }: { review: ReviewInfo }) {
               onClick={() => toggle(o.value)}
               disabled={saving}
               aria-pressed={enabled === o.value}
-              className={`rounded-full px-4 py-1.5 text-[14px] transition-colors disabled:opacity-40 ${
+              className={`rounded-utility px-4 py-1.5 text-[14px] transition-colors disabled:opacity-40 ${
                 enabled === o.value
                   ? "bg-surface font-semibold text-ink ring-1 ring-hairline"
                   : "text-ink-48"
@@ -173,7 +173,7 @@ function WeeklyReviewCard({ review }: { review: ReviewInfo }) {
         <button
           onClick={generateNow}
           disabled={generating}
-          className="rounded-full border border-action px-4 py-1.5 text-[14px] text-action transition-transform active:scale-95 disabled:opacity-40"
+          className="rounded-utility border border-action px-4 py-1.5 text-[14px] text-action transition-transform active:scale-95 disabled:opacity-40"
         >
           {generating ? "排队中…" : "立即生成上周回顾"}
         </button>
@@ -219,16 +219,16 @@ function DataSection({ lastBackupAt, trashCount }: { lastBackupAt: number | null
   return (
     <section>
       <h2 className="mb-3 text-[21px] font-semibold tracking-[-0.374px]">数据</h2>
-      <div className="rounded-[18px] bg-surface p-6 text-[14px]">
+      <div className="rounded-card bg-surface p-6 text-[14px]">
         <div className="flex flex-wrap items-center gap-3">
           <button
             onClick={backupNow}
             disabled={backingUp}
-            className="rounded-full bg-action px-[22px] py-[8px] text-[14px] text-white transition-transform active:scale-95 disabled:opacity-40"
+            className="rounded-utility bg-cta px-[22px] py-[8px] text-[14px] text-cta-ink transition-transform active:scale-95 disabled:opacity-40"
           >
             {backingUp ? "备份中…" : "立即备份"}
           </button>
-          <span className="text-ink-48">
+          <span className="font-mono text-ink-48">
             最近备份：{backedUpAt ? formatTime(backedUpAt) : "从未备份"}
           </span>
           {backupResult && (
@@ -245,7 +245,7 @@ function DataSection({ lastBackupAt, trashCount }: { lastBackupAt: number | null
         <div className="mt-4 flex flex-wrap items-center gap-3 border-t border-divider pt-4">
           <a
             href="/api/export"
-            className="rounded-full border border-action px-[22px] py-[8px] text-[14px] text-action transition-transform active:scale-95"
+            className="rounded-utility border border-action px-[22px] py-[8px] text-[14px] text-action transition-transform active:scale-95"
           >
             导出全部数据
           </a>
@@ -260,7 +260,7 @@ function DataSection({ lastBackupAt, trashCount }: { lastBackupAt: number | null
             className="flex items-center justify-between text-[14px] transition-opacity active:opacity-70"
           >
             <span>回收站</span>
-            <span className="text-ink-48">{trashCount > 0 ? `${trashCount} 条 ›` : "›"}</span>
+            <span className="font-mono text-ink-48">{trashCount > 0 ? `${trashCount} 条 ›` : "›"}</span>
           </Link>
           <p className="mt-1 text-[12px] text-ink-48">删除的笔记保留 30 天，期间可随时恢复</p>
         </div>
@@ -542,7 +542,7 @@ export function SettingsPanel({
       <section>
         <header className="mb-8">
           <p className="mb-2 text-[12px] font-semibold tracking-[0.06em] text-ink-48">知了</p>
-          <h1 className="text-[34px] font-semibold leading-[1.1] tracking-[-0.4px] md:text-[40px]">
+          <h1 className="font-serif text-display leading-[1.1] tracking-[-0.4px]">
             设置
           </h1>
         </header>
@@ -552,37 +552,37 @@ export function SettingsPanel({
             value={newName}
             onChange={(e) => setNewName(e.target.value)}
             placeholder="新主题名，如：羽毛球"
-            className="h-[40px] flex-1 rounded-full border border-hairline bg-surface px-5 text-[14px] outline-none focus:border-action-focus"
+            className="h-[40px] flex-1 rounded-utility border border-hairline bg-surface px-5 text-[14px] outline-none focus:border-action-focus"
           />
           <button
             type="submit"
             disabled={busy || !newName.trim()}
-            className="rounded-full bg-action px-[22px] py-[8px] text-[14px] text-white transition-transform active:scale-95 disabled:opacity-40"
+            className="rounded-utility bg-cta px-[22px] py-[8px] text-[14px] text-cta-ink transition-transform active:scale-95 disabled:opacity-40"
           >
             创建
           </button>
         </form>
         {error && <p className="mb-2 text-[14px] text-danger">{error}</p>}
-        <ul className="divide-y divide-divider rounded-[18px] bg-surface">
+        <ul className="divide-y divide-divider rounded-card bg-surface">
           {topics.map((t) => (
             <li key={t.id} className="flex items-center justify-between px-6 py-3.5">
               <div className="min-w-0">
                 <p className="truncate text-[14px] font-semibold tracking-[-0.224px]">
                   {t.isSystem ? "未分类" : t.name}
                 </p>
-                <p className="text-[12px] text-ink-48">{t.noteCount} 条笔记</p>
+                <p className="font-mono text-meta text-ink-48">{t.noteCount} 条笔记</p>
               </div>
               {!t.isSystem && (
                 <div className="flex shrink-0 gap-1">
                   <button
                     onClick={() => renameTopic(t)}
-                    className="rounded-full px-3 py-1 text-[12px] text-action transition-transform active:scale-95"
+                    className="rounded-utility px-3 py-1 text-[12px] text-action transition-transform active:scale-95"
                   >
                     重命名
                   </button>
                   <button
                     onClick={() => setPendingDeleteTopic(t)}
-                    className="rounded-full px-3 py-1 text-[12px] text-danger transition-transform active:scale-95"
+                    className="rounded-utility px-3 py-1 text-[12px] text-danger transition-transform active:scale-95"
                   >
                     删除
                   </button>
@@ -597,7 +597,7 @@ export function SettingsPanel({
 
       <section>
         <h2 className="mb-3 text-[21px] font-semibold tracking-[-0.374px]">AI 服务</h2>
-        <div className="space-y-4 rounded-[18px] bg-surface p-6 text-[14px]">
+        <div className="space-y-4 rounded-card bg-surface p-6 text-[14px]">
           <div>
             <label className="mb-1 flex items-center justify-between">
               <span className="text-ink-48">接入点</span>
@@ -607,7 +607,7 @@ export function SettingsPanel({
               value={llmBaseUrl}
               onChange={(e) => setLlmBaseUrl(e.target.value)}
               placeholder="https://api.openai.com/v1"
-              className="h-[40px] w-full rounded-full border border-hairline bg-surface px-5 text-[14px] outline-none focus:border-action-focus"
+              className="h-[40px] w-full rounded-utility border border-hairline bg-surface px-5 text-[14px] outline-none focus:border-action-focus"
             />
           </div>
           <div>
@@ -619,7 +619,7 @@ export function SettingsPanel({
               value={llmModel}
               onChange={(e) => setLlmModel(e.target.value)}
               placeholder="如 gpt-4o-mini"
-              className="h-[40px] w-full rounded-full border border-hairline bg-surface px-5 text-[14px] outline-none focus:border-action-focus"
+              className="h-[40px] w-full rounded-utility border border-hairline bg-surface px-5 text-[14px] outline-none focus:border-action-focus"
             />
           </div>
           <div>
@@ -635,7 +635,7 @@ export function SettingsPanel({
                 llm.sources.apiKey === "none" ? "sk-…" : `当前 ${llm.apiKeyMasked}，留空则不修改`
               }
               autoComplete="off"
-              className="h-[40px] w-full rounded-full border border-hairline bg-surface px-5 text-[14px] outline-none focus:border-action-focus"
+              className="h-[40px] w-full rounded-utility border border-hairline bg-surface px-5 text-[14px] outline-none focus:border-action-focus"
             />
           </div>
           <p className="text-[12px] text-ink-48">
@@ -645,14 +645,14 @@ export function SettingsPanel({
             <button
               onClick={saveLlm}
               disabled={llmSaving}
-              className="rounded-full bg-action px-[22px] py-[8px] text-[14px] text-white transition-transform active:scale-95 disabled:opacity-40"
+              className="rounded-utility bg-cta px-[22px] py-[8px] text-[14px] text-cta-ink transition-transform active:scale-95 disabled:opacity-40"
             >
               {llmSaving ? "保存中…" : "保存"}
             </button>
             <button
               onClick={() => testLlm("text")}
               disabled={testing}
-              className="rounded-full border border-action px-4 py-1.5 text-[14px] text-action transition-transform active:scale-95 disabled:opacity-40"
+              className="rounded-utility border border-action px-4 py-1.5 text-[14px] text-action transition-transform active:scale-95 disabled:opacity-40"
             >
               {testing ? "测试中…" : "测试连接"}
             </button>
@@ -679,7 +679,7 @@ export function SettingsPanel({
         </div>
 
         {/* 字段顺序与上方文本模型保持一致：接入点 → 模型 → API Key */}
-        <div className="mt-3 space-y-4 rounded-[18px] bg-surface p-6 text-[14px]">
+        <div className="mt-3 space-y-4 rounded-card bg-surface p-6 text-[14px]">
           <p className="font-semibold tracking-[-0.224px]">视觉模型（AI 读图，可选）</p>
           <div>
             <label className="mb-1 flex items-center justify-between">
@@ -692,7 +692,7 @@ export function SettingsPanel({
               value={visionBaseUrl}
               onChange={(e) => setVisionBaseUrl(e.target.value)}
               placeholder={vision.baseUrl || "https://…/v1"}
-              className="h-[40px] w-full rounded-full border border-hairline bg-surface px-5 text-[14px] outline-none focus:border-action-focus"
+              className="h-[40px] w-full rounded-utility border border-hairline bg-surface px-5 text-[14px] outline-none focus:border-action-focus"
             />
           </div>
           <div>
@@ -706,7 +706,7 @@ export function SettingsPanel({
               value={visionModel}
               onChange={(e) => setVisionModel(e.target.value)}
               placeholder="如 qwen-vl-plus / gpt-4o；留空表示不启用 AI 读图"
-              className="h-[40px] w-full rounded-full border border-hairline bg-surface px-5 text-[14px] outline-none focus:border-action-focus"
+              className="h-[40px] w-full rounded-utility border border-hairline bg-surface px-5 text-[14px] outline-none focus:border-action-focus"
             />
           </div>
           <div>
@@ -728,7 +728,7 @@ export function SettingsPanel({
                     : `当前 ${vision.apiKeyMasked}，留空则不修改`
               }
               autoComplete="off"
-              className="h-[40px] w-full rounded-full border border-hairline bg-surface px-5 text-[14px] outline-none focus:border-action-focus"
+              className="h-[40px] w-full rounded-utility border border-hairline bg-surface px-5 text-[14px] outline-none focus:border-action-focus"
             />
           </div>
           {/* 与文本模型的语义差异：这里留空是"回落文本模型"，不是"不修改" */}
@@ -739,14 +739,14 @@ export function SettingsPanel({
             <button
               onClick={saveVision}
               disabled={visionSaving}
-              className="rounded-full bg-action px-[22px] py-[8px] text-[14px] text-white transition-transform active:scale-95 disabled:opacity-40"
+              className="rounded-utility bg-cta px-[22px] py-[8px] text-[14px] text-cta-ink transition-transform active:scale-95 disabled:opacity-40"
             >
               {visionSaving ? "保存中…" : "保存"}
             </button>
             <button
               onClick={() => testLlm("vision")}
               disabled={visionTesting}
-              className="rounded-full border border-action px-4 py-1.5 text-[14px] text-action transition-transform active:scale-95 disabled:opacity-40"
+              className="rounded-utility border border-action px-4 py-1.5 text-[14px] text-action transition-transform active:scale-95 disabled:opacity-40"
             >
               {visionTesting ? "测试中…" : "测试连接"}
             </button>
@@ -767,7 +767,7 @@ export function SettingsPanel({
 
         {/* 图像模型：字段序与前两组一致。只支持 OpenAI 兼容的同步生图接口
             （POST {接入点}/images/generations），取舍见 docs/adr/0011 */}
-        <div className="mt-3 space-y-4 rounded-[18px] bg-surface p-6 text-[14px]">
+        <div className="mt-3 space-y-4 rounded-card bg-surface p-6 text-[14px]">
           <p className="font-semibold tracking-[-0.224px]">图像模型（AI 生图，可选）</p>
           <div>
             <label className="mb-1 flex items-center justify-between">
@@ -780,7 +780,7 @@ export function SettingsPanel({
               value={imageBaseUrl}
               onChange={(e) => setImageBaseUrl(e.target.value)}
               placeholder={image.baseUrl || "https://…/v1"}
-              className="h-[40px] w-full rounded-full border border-hairline bg-surface px-5 text-[14px] outline-none focus:border-action-focus"
+              className="h-[40px] w-full rounded-utility border border-hairline bg-surface px-5 text-[14px] outline-none focus:border-action-focus"
             />
           </div>
           <div>
@@ -794,7 +794,7 @@ export function SettingsPanel({
               value={imageModel}
               onChange={(e) => setImageModel(e.target.value)}
               placeholder="如 cogview-3 / gpt-image-1；留空表示不启用 AI 生图"
-              className="h-[40px] w-full rounded-full border border-hairline bg-surface px-5 text-[14px] outline-none focus:border-action-focus"
+              className="h-[40px] w-full rounded-utility border border-hairline bg-surface px-5 text-[14px] outline-none focus:border-action-focus"
             />
           </div>
           <div>
@@ -816,7 +816,7 @@ export function SettingsPanel({
                     : `当前 ${image.apiKeyMasked}，留空则不修改`
               }
               autoComplete="off"
-              className="h-[40px] w-full rounded-full border border-hairline bg-surface px-5 text-[14px] outline-none focus:border-action-focus"
+              className="h-[40px] w-full rounded-utility border border-hairline bg-surface px-5 text-[14px] outline-none focus:border-action-focus"
             />
           </div>
           <p className="text-[12px] text-ink-48">
@@ -829,14 +829,14 @@ export function SettingsPanel({
             <button
               onClick={saveImageConfig}
               disabled={imageSaving}
-              className="rounded-full bg-action px-[22px] py-[8px] text-[14px] text-white transition-transform active:scale-95 disabled:opacity-40"
+              className="rounded-utility bg-cta px-[22px] py-[8px] text-[14px] text-cta-ink transition-transform active:scale-95 disabled:opacity-40"
             >
               {imageSaving ? "保存中…" : "保存"}
             </button>
             <button
               onClick={() => testLlm("image")}
               disabled={imageTesting}
-              className="rounded-full border border-action px-4 py-1.5 text-[14px] text-action transition-transform active:scale-95 disabled:opacity-40"
+              className="rounded-utility border border-action px-4 py-1.5 text-[14px] text-action transition-transform active:scale-95 disabled:opacity-40"
             >
               {imageTesting ? "生成中…" : "测试连接"}
             </button>
@@ -857,9 +857,9 @@ export function SettingsPanel({
           )}
         </div>
 
-        <div className="mt-3 rounded-[18px] bg-surface p-6 text-[14px]">
+        <div className="mt-3 rounded-card bg-surface p-6 text-[14px]">
           <p className="mb-1 font-semibold tracking-[-0.224px]">AI 任务队列</p>
-          <p className="text-ink-48">
+          <p className="font-mono text-ink-48">
             等待 {queue.pending} · 处理中 {queue.running} · 失败 {queue.failed}
           </p>
           {queue.recentFailures.length > 0 && (
@@ -876,7 +876,7 @@ export function SettingsPanel({
         {/* 深度思考模型：字段序与前三组一致。测试连接会连通性、是否外露思考过程、
             是否支持工具调用一次测完——工具能力必须单独探测并落库，助手据此
             决定开着深度思考时要不要下发工具（含生图），见 docs/adr/0015 */}
-        <div className="mt-3 rounded-[18px] bg-surface p-6 text-[14px]">
+        <div className="mt-3 rounded-card bg-surface p-6 text-[14px]">
           <p className="font-semibold tracking-[-0.224px]">深度思考模型（可选）</p>
           <p className="mt-1 text-[12px] leading-[1.5] text-ink-48">
             模型名必须显式配置；接入点和 Key 留空时回落普通文本模型。助手输入框的「深度思考」开关默认关闭，逐条消息生效、不记忆。
@@ -886,33 +886,33 @@ export function SettingsPanel({
               value={reasoningBaseUrl}
               onChange={(e) => setReasoningBaseUrl(e.target.value)}
               placeholder={reasoning.baseUrl || "接入点"}
-              className="h-[40px] w-full rounded-full border border-hairline bg-surface px-5 outline-none focus:border-action-focus"
+              className="h-[40px] w-full rounded-utility border border-hairline bg-surface px-5 outline-none focus:border-action-focus"
             />
             <input
               value={reasoningModel}
               onChange={(e) => setReasoningModel(e.target.value)}
               placeholder="模型名"
-              className="h-[40px] w-full rounded-full border border-hairline bg-surface px-5 outline-none focus:border-action-focus"
+              className="h-[40px] w-full rounded-utility border border-hairline bg-surface px-5 outline-none focus:border-action-focus"
             />
             <input
               type="password"
               value={reasoningApiKey}
               onChange={(e) => setReasoningApiKey(e.target.value)}
               placeholder={`API Key（${reasoning.apiKeyMasked}）`}
-              className="h-[40px] w-full rounded-full border border-hairline bg-surface px-5 outline-none focus:border-action-focus"
+              className="h-[40px] w-full rounded-utility border border-hairline bg-surface px-5 outline-none focus:border-action-focus"
             />
             <div className="flex flex-wrap items-center gap-3">
               <button
                 onClick={saveReasoning}
                 disabled={reasoningSaving}
-                className="rounded-full bg-action px-[22px] py-[8px] text-white transition-transform active:scale-95 disabled:opacity-40"
+                className="rounded-utility bg-cta px-[22px] py-[8px] text-cta-ink transition-transform active:scale-95 disabled:opacity-40"
               >
                 {reasoningSaving ? "保存中…" : "保存"}
               </button>
               <button
                 onClick={() => testLlm("reasoning")}
                 disabled={reasoningTesting}
-                className="rounded-full border border-hairline px-[22px] py-[8px] text-ink-80 transition-transform active:scale-95 disabled:opacity-40"
+                className="rounded-utility border border-hairline px-[22px] py-[8px] text-ink-80 transition-transform active:scale-95 disabled:opacity-40"
               >
                 {reasoningTesting ? "测试中…" : "测试连接"}
               </button>
@@ -936,7 +936,7 @@ export function SettingsPanel({
         <h2 className="mb-3 text-[21px] font-semibold tracking-[-0.374px]">账号</h2>
         <button
           onClick={logout}
-          className="rounded-full bg-surface px-[22px] py-[8px] text-[14px] text-ink-80 transition-transform active:scale-95"
+          className="rounded-utility bg-surface px-[22px] py-[8px] text-[14px] text-ink-80 transition-transform active:scale-95"
         >
           退出登录
         </button>

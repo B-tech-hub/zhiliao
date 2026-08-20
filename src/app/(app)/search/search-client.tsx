@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { formatTime } from "@/components/note-card";
+import { TagChip, formatTime } from "@/components/note-card";
 
 interface SearchItem {
   id: string;
@@ -76,12 +76,12 @@ export function SearchClient({ topics }: { topics: { id: string; name: string }[
     <div>
       <header className="mb-8">
         <p className="mb-2 text-[12px] font-semibold tracking-[0.06em] text-ink-48">知了</p>
-        <h1 className="text-[34px] font-semibold leading-[1.1] tracking-[-0.4px] md:text-[40px]">
+        <h1 className="font-serif text-display leading-[1.1] tracking-[-0.4px]">
           搜索
         </h1>
       </header>
 
-      {/* 胶囊形搜索框（Apple search-input 语法，44px 高，输入控件保留发丝线） */}
+      {/* 搜索框采用 utility 圆角（Apple search-input 语法，44px 高，输入控件保留发丝线） */}
       <div className="relative mb-4">
         <svg
           viewBox="0 0 24 24"
@@ -100,11 +100,11 @@ export function SearchClient({ topics }: { topics: { id: string; name: string }[
           onChange={(e) => setQ(e.target.value)}
           placeholder="搜索标题、正文、标签"
           autoFocus
-          className="h-[44px] w-full rounded-full border border-hairline bg-surface pl-11 pr-5 text-[17px] outline-none focus:border-action-focus"
+          className="h-[44px] w-full rounded-utility border border-hairline bg-surface pl-11 pr-5 text-[17px] outline-none focus:border-action-focus"
         />
       </div>
 
-      {/* 主题过滤：胶囊 chips（configurator-option-chip 语法，选中态 2px Focus Blue） */}
+      {/* 主题过滤：紧凑 chip（configurator-option-chip 语法，选中态 2px Focus Blue） */}
       <div className="mb-6 flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {[{ id: "", name: "全部主题" }, ...topics].map((t) => {
           const selectedChip = topicId === t.id;
@@ -112,7 +112,7 @@ export function SearchClient({ topics }: { topics: { id: string; name: string }[
             <button
               key={t.id || "all"}
               onClick={() => setTopicId(t.id)}
-              className={`shrink-0 whitespace-nowrap rounded-full border bg-surface px-4 py-1.5 text-[14px] transition-transform active:scale-95 ${
+              className={`shrink-0 whitespace-nowrap rounded-chip border bg-surface px-4 py-1.5 text-[14px] transition-transform active:scale-95 ${
                 selectedChip
                   ? "border-action-focus font-semibold text-ink ring-1 ring-inset ring-action-focus"
                   : "border-hairline text-ink-80"
@@ -126,35 +126,33 @@ export function SearchClient({ topics }: { topics: { id: string; name: string }[
 
       {loading && <p className="text-[14px] text-ink-48">搜索中…</p>}
       {!loading && searched && results.length === 0 && (
-        <div className="rounded-[18px] bg-surface p-10 text-center text-[14px] text-ink-48">
-          没有找到匹配「{q}」的笔记
+        <div className="rounded-card bg-surface p-10 text-center">
+          <p className="font-serif text-2xl leading-tight text-ink">没有找到匹配「{q}」的笔记</p>
         </div>
       )}
 
-      <div className="space-y-1.5">
+      <div>
         {results.map((r) => (
           <Link
             key={r.id}
             href={`/notes/${r.id}`}
-            className="block rounded-[18px] bg-surface p-6 ring-hairline transition-[box-shadow,transform] hover:ring-1 active:scale-[0.99]"
+            className="block border-b border-divider px-4 py-4 transition-colors hover:bg-fill active:bg-fill"
           >
             <div className="flex items-start justify-between gap-3">
               <p className="min-w-0 flex-1 truncate text-[17px] font-semibold tracking-[-0.374px]">
                 <Highlight text={r.title} terms={terms} />
               </p>
-              <span className="shrink-0 text-[14px] text-ink-48">{formatTime(r.updatedAt)}</span>
+              <span className="shrink-0 font-mono text-meta text-ink-48">{formatTime(r.updatedAt)}</span>
             </div>
             <p className="mt-1 line-clamp-2 text-[14px] leading-[1.43] text-ink-48">
               <Highlight text={r.excerpt} terms={terms} />
             </p>
             <div className="mt-3 flex flex-wrap gap-1.5">
-              <span className="rounded-full bg-fill px-2.5 py-0.5 text-[12px] font-semibold text-action">
+              <span className="rounded-chip bg-fill px-2.5 py-0.5 text-micro font-semibold uppercase tracking-[0.08em] text-action">
                 {r.topicName}
               </span>
               {r.tags.map((t) => (
-                <span key={t} className="rounded-full bg-fill px-2.5 py-0.5 text-[12px] text-ink-48">
-                  {t}
-                </span>
+                <TagChip key={t} name={t} />
               ))}
             </div>
           </Link>

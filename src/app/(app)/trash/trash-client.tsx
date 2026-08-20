@@ -55,7 +55,7 @@ export function TrashClient({ notes }: { notes: TrashItem[] }) {
       <BackButton fallback="/settings" className="mb-4" />
       <header className="mb-2">
         <p className="mb-2 text-[12px] font-semibold tracking-[0.06em] text-ink-48">知了</p>
-        <h1 className="text-[34px] font-semibold leading-[1.1] tracking-[-0.4px] md:text-[40px]">
+        <h1 className="font-serif text-display leading-[1.1] tracking-[-0.4px]">
           回收站
         </h1>
       </header>
@@ -65,19 +65,19 @@ export function TrashClient({ notes }: { notes: TrashItem[] }) {
 
       {/* 批量工具条：毛玻璃悬浮（floating-sticky-bar 语法，与未分类页同款） */}
       {selected.size > 0 && (
-        <div className="sticky top-2 z-10 mb-4 flex items-center gap-2 rounded-full border border-hairline bg-parchment/80 py-2 pl-4 pr-2 backdrop-blur-xl">
-          <span className="flex-1 text-[14px] text-ink-80">已选 {selected.size} 条</span>
+        <div className="sticky top-2 z-10 mb-4 flex items-center gap-2 rounded-card border border-hairline bg-parchment/80 py-2 pl-4 pr-2 backdrop-blur-xl">
+          <span className="flex-1 font-mono text-meta text-ink-80">已选 {selected.size} 条</span>
           <button
             onClick={() => restore([...selected])}
             disabled={busy}
-            className="rounded-full bg-action px-4 py-1.5 text-[14px] text-white transition-transform active:scale-95 disabled:opacity-40"
+            className="rounded-utility bg-cta px-4 py-1.5 text-[14px] text-cta-ink transition-transform active:scale-95 disabled:opacity-40"
           >
             恢复
           </button>
           <button
             onClick={() => setPendingPurge([...selected])}
             disabled={busy}
-            className="rounded-full bg-danger px-4 py-1.5 text-[14px] text-white transition-transform active:scale-95 disabled:opacity-40"
+            className="rounded-utility bg-danger px-4 py-1.5 text-[14px] text-white transition-transform active:scale-95 disabled:opacity-40"
           >
             彻底删除
           </button>
@@ -89,7 +89,7 @@ export function TrashClient({ notes }: { notes: TrashItem[] }) {
       ) : (
         <div className="space-y-3">
           {notes.map((n) => (
-            <div key={n.id} className="flex items-center gap-3.5 rounded-[18px] bg-surface p-5">
+            <div key={n.id} className="flex items-center gap-3.5 rounded-card bg-surface p-5">
               <input
                 type="checkbox"
                 checked={selected.has(n.id)}
@@ -101,7 +101,7 @@ export function TrashClient({ notes }: { notes: TrashItem[] }) {
                   {noteDisplayTitle(n)}
                 </p>
                 {n.summary && <p className="mt-0.5 truncate text-[12px] text-ink-48">{n.summary}</p>}
-                <p className="mt-0.5 text-[12px] text-ink-48">
+                <p className="mt-0.5 font-mono text-meta text-ink-48">
                   {formatTime(n.deletedAt)} 删除 ·{" "}
                   {n.remainingDays > 0 ? `剩余 ${n.remainingDays} 天` : "即将清除"}
                 </p>
@@ -110,14 +110,14 @@ export function TrashClient({ notes }: { notes: TrashItem[] }) {
                 <button
                   onClick={() => restore([n.id])}
                   disabled={busy}
-                  className="rounded-full px-3 py-1 text-[12px] text-action transition-transform active:scale-95 disabled:opacity-40"
+                  className="rounded-utility px-3 py-1 text-[12px] text-action transition-transform active:scale-95 disabled:opacity-40"
                 >
                   恢复
                 </button>
                 <button
                   onClick={() => setPendingPurge([n.id])}
                   disabled={busy}
-                  className="rounded-full px-3 py-1 text-[12px] text-danger transition-transform active:scale-95 disabled:opacity-40"
+                  className="rounded-utility px-3 py-1 text-[12px] text-danger transition-transform active:scale-95 disabled:opacity-40"
                 >
                   彻底删除
                 </button>

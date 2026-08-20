@@ -27,12 +27,12 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         {/* 移动端底部 Tab */}
         <BottomNav inboxCount={inboxCount} />
 
-        {/* 快速记录：Action Blue 圆形按钮，按下 scale 0.95 */}
+        {/* 快速记录：主行动使用 CTA 墨底，按下 scale 0.95 */}
         <Link
           href="/notes/new"
           prefetch={true}
           aria-label="快速记录"
-          className="fixed bottom-20 right-5 z-20 flex h-14 w-14 items-center justify-center rounded-full bg-action text-white transition-transform active:scale-95 md:bottom-10 md:right-10"
+          className="fixed bottom-20 right-5 z-20 flex h-14 w-14 items-center justify-center rounded-full bg-cta text-cta-ink transition-transform active:scale-95 md:bottom-10 md:right-10"
         >
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" className="h-6 w-6" aria-hidden>
             <path d="M12 5v14M5 12h14" />

@@ -31,37 +31,37 @@ const PLATFORM_COLOR_EXCEPTIONS = [
   },
 ];
 
-/* PR2 会把全部 arbitrary 圆角迁移到 rounded-card / rounded-utility /
-   rounded-chip。PR1 先禁止新增，保留当前代码的精确数量作为迁移基线，避免
-   在 token 地基批次混入视觉改动。每个文件和每种半径分别计数，新增一处即失败。 */
-const LEGACY_RADIUS_BASELINE = {
-  "src/app/(app)/inbox/inbox-client.tsx": { "rounded-[18px]": 2 },
-  "src/app/(app)/inbox/loading.tsx": { "rounded-[8px]": 1, "rounded-[18px]": 1 },
-  "src/app/(app)/loading.tsx": { "rounded-[8px]": 1, "rounded-[18px]": 1 },
-  "src/app/(app)/notes/new/new-note-form.tsx": { "rounded-[18px]": 1 },
-  "src/app/(app)/notes/[id]/loading.tsx": { "rounded-[18px]": 1, "rounded-[8px]": 1 },
-  "src/app/(app)/notes/[id]/note-editor.tsx": {
-    "rounded-[18px]": 1,
-    "rounded-[6px]": 4,
-  },
-  "src/app/(app)/search/search-client.tsx": { "rounded-[18px]": 2 },
-  "src/app/(app)/settings/settings-panel.tsx": { "rounded-[18px]": 9 },
-  "src/app/(app)/page.tsx": { "rounded-[14px]": 3 },
-  "src/app/(app)/topics/[id]/loading.tsx": { "rounded-[8px]": 1, "rounded-[18px]": 1 },
-  "src/app/(app)/trash/trash-client.tsx": { "rounded-[18px]": 1 },
-  "src/components/chat/chat-panel.tsx": {
-    "rounded-[8px]": 1,
-    "rounded-[12px]": 1,
-    "rounded-[18px]": 5,
-  },
-  "src/components/chat/source-picker.tsx": { "rounded-[10px]": 1, "rounded-[12px]": 1 },
-  "src/components/confirm-dialog.tsx": { "rounded-[18px]": 1 },
-  "src/components/markdown-editor.tsx": { "rounded-[6px]": 3, "rounded-[10px]": 1 },
-  "src/components/mermaid-code-block.tsx": { "rounded-[8px]": 1 },
-  "src/components/nav.tsx": { "rounded-[8px]": 2 },
-  "src/components/note-card.tsx": { "rounded-[12px]": 1, "rounded-[18px]": 1 },
-  "src/components/slash-menu.tsx": { "rounded-[12px]": 1 },
+/* Mermaid NodeView 是本轮明令冻结的高风险文件。它内部这一个旧类按文件和整行
+   精确豁免；除该行外，任意圆角必须在全仓零命中。 */
+const FROZEN_RADIUS_EXCEPTION = {
+  file: "src/components/mermaid-code-block.tsx",
+  line: '"cursor-pointer overflow-x-auto rounded-[8px] bg-fill p-3 " +',
 };
+
+/* rounded-full 只允许真实圆形控件与计数角标。普通按钮、输入框和 chip 必须分别
+   使用 rounded-utility / rounded-chip，避免胶囊语法重新蔓延。 */
+const ROUNDED_FULL_EXCEPTIONS = [
+  {
+    file: "src/app/(app)/layout.tsx",
+    line: 'className="fixed bottom-20 right-5 z-20 flex h-14 w-14 items-center justify-center rounded-full bg-cta text-cta-ink transition-transform active:scale-95 md:bottom-10 md:right-10"',
+  },
+  {
+    file: "src/app/(app)/page.tsx",
+    line: "className={`rounded-full px-2.5 py-0.5 font-mono text-meta font-semibold ${",
+  },
+  {
+    file: "src/app/(app)/topics/[id]/topic-notes.tsx",
+    line: 'className="-m-2 shrink-0 rounded-full p-2 text-ink-48 transition-colors hover:text-danger active:scale-95"',
+  },
+  {
+    file: "src/components/chat/chat-panel.tsx",
+    line: 'className="fixed bottom-20 right-[5.5rem] z-20 flex h-12 w-12 items-center justify-center rounded-full bg-chrome text-white shadow-lg transition-transform active:scale-95 dark:ring-1 dark:ring-white/15 md:bottom-10 md:right-[6.75rem]"',
+  },
+  {
+    file: "src/components/nav.tsx",
+    line: '<span className="rounded-full bg-danger px-1.5 font-mono text-micro font-semibold leading-4 text-white">',
+  },
+];
 
 /* 每条规则对应 DESIGN.md 的一条硬约束。新增规则请同步更新文档，
    否则门禁和文档会各说各话。 */
@@ -132,21 +132,18 @@ for (const rule of RULES) {
   }
 }
 
-/* 任意圆角采用“禁止新增”的迁移门禁。当前基线会在 PR2 清零；这里不做整文件
-   豁免，所以换文件、换半径或增加同类用法都会立即暴露。 */
+/* 任意圆角全量零命中；唯一例外是冻结的 Mermaid NodeView 精确行。 */
 const radiusHits = [];
-let legacyRadiusCount = 0;
 for (const file of files) {
   const relativeFile = relative(ROOT, file).replace(/\\/g, "/");
-  const baseline = LEGACY_RADIUS_BASELINE[relativeFile] ?? {};
-  const seen = {};
   const lines = readFileSync(file, "utf8").split("\n");
   lines.forEach((line, i) => {
     const matches = line.match(/rounded-\[\d+px\]/g) ?? [];
     for (const token of matches) {
-      legacyRadiusCount += 1;
-      seen[token] = (seen[token] ?? 0) + 1;
-      if (seen[token] > (baseline[token] ?? 0)) {
+      const frozen =
+        relativeFile === FROZEN_RADIUS_EXCEPTION.file &&
+        FROZEN_RADIUS_EXCEPTION.line === line.trim();
+      if (!frozen) {
         radiusHits.push(`${relativeFile}:${i + 1}  ${token}`);
       }
     }
@@ -155,12 +152,35 @@ for (const file of files) {
 
 if (radiusHits.length > 0) {
   failed += radiusHits.length;
-  console.error(`✗ 任意圆角类不得新增（${radiusHits.length} 处）`);
-  console.error("  请改用 rounded-card / rounded-utility / rounded-chip；PR2 将清零现有迁移基线。");
+  console.error(`✗ 任意圆角类必须清零（${radiusHits.length} 处）`);
+  console.error("  请改用 rounded-card / rounded-utility / rounded-chip。");
   for (const hit of radiusHits) console.error(`    ${hit}`);
   console.error("");
 } else {
-  console.log(`✓ 任意圆角类不得新增（现存迁移项 ${legacyRadiusCount} 处）`);
+  console.log("✓ 任意圆角类已清零（冻结的 Mermaid 精确行除外）");
+}
+
+const roundedFullHits = [];
+for (const file of files) {
+  const relativeFile = relative(ROOT, file).replace(/\\/g, "/");
+  const lines = readFileSync(file, "utf8").split("\n");
+  lines.forEach((line, i) => {
+    if (!line.includes("rounded-full")) return;
+    const allowed = ROUNDED_FULL_EXCEPTIONS.some(
+      (exception) => exception.file === relativeFile && exception.line === line.trim(),
+    );
+    if (!allowed) roundedFullHits.push(`${relativeFile}:${i + 1}  ${line.trim()}`);
+  });
+}
+
+if (roundedFullHits.length > 0) {
+  failed += roundedFullHits.length;
+  console.error(`✗ rounded-full 只允许圆形控件与计数角标（${roundedFullHits.length} 处）`);
+  console.error("  普通控件请改用 rounded-utility，标签请用 rounded-chip。");
+  for (const hit of roundedFullHits) console.error(`    ${hit}`);
+  console.error("");
+} else {
+  console.log("✓ rounded-full 只用于圆形控件与计数角标");
 }
 
 if (failed > 0) {

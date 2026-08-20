@@ -67,14 +67,14 @@ export function NewNoteForm({
   return (
     <div className="flex h-[calc(100dvh-9rem)] flex-col md:h-[calc(100dvh-7.5rem)]">
       {/* 纸面化：白纸卡 + 顶部安静工具行 + 无框正文 */}
-      <div className="flex min-h-0 flex-1 flex-col rounded-[18px] bg-surface p-6 md:px-10 md:py-8">
+      <div className="flex min-h-0 flex-1 flex-col rounded-card bg-surface p-6 md:px-10 md:py-8">
         <div className="mb-5 flex items-center justify-between gap-3">
           <div className="flex min-w-0 flex-1 items-center gap-2.5">
             <BackButton fallback="/" iconOnly />
             <select
               value={topicId}
               onChange={(e) => setTopicId(e.target.value)}
-              className="h-[32px] min-w-0 max-w-full rounded-full border border-hairline bg-surface px-3 text-[13px] text-ink-80 outline-none focus:border-action-focus"
+              className="h-[32px] min-w-0 max-w-full rounded-utility border border-hairline bg-surface px-3 text-[13px] text-ink-80 outline-none focus:border-action-focus"
             >
               <option value="">让 AI 决定主题</option>
               {topics
@@ -89,11 +89,11 @@ export function NewNoteForm({
           <button
             onClick={save}
             disabled={saving || !content.trim()}
-            className="shrink-0 rounded-full bg-action px-[22px] py-[8px] text-[14px] text-white transition-transform active:scale-95 disabled:opacity-40"
+            className="shrink-0 rounded-utility bg-cta px-[22px] py-[8px] text-[14px] text-cta-ink transition-transform active:scale-95 disabled:opacity-40"
           >
             {saving ? "保存中…" : "保存"}
           </button>
-          <label className="shrink-0 cursor-pointer rounded-full border border-hairline px-3 py-[7px] text-[13px] text-ink-80">
+          <label className="shrink-0 cursor-pointer rounded-utility border border-hairline px-3 py-[7px] text-[13px] text-ink-80">
             {transcribing ? "转写中" : "手写摄取"}
             <input type="file" accept="image/*" className="hidden" disabled={transcribing} onChange={(e) => { const file = e.target.files?.[0]; if (file) void captureHandwriting(file); e.target.value = ""; }} />
           </label>

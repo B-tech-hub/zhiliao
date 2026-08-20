@@ -588,23 +588,23 @@ The structural breakpoints that matter for agents: 1440px (content lock), 1068px
 
 ### 本项目圆角 token
 
-应用界面收敛为三级圆角，`rounded-full` 只保留给真圆点或明确的圆形控件：
+应用界面收敛为三级圆角，普通控件不再使用胶囊形；`rounded-full` 只保留给 FAB、圆形图标按钮和计数角标：
 
 | Token / Tailwind 类 | 值 | 用途 |
 |---|---:|---|
 | `--radius-card` / `rounded-card` | 12px | 卡片、弹层与大容器 |
 | `--radius-utility` / `rounded-utility` | 8px | 按钮、输入框与小容器 |
-| `--radius-chip` / `rounded-chip` | 4px | 标签、内联代码与键帽 |
+| `--radius-chip` / `rounded-chip` | 4px | 标签、筛选 chip、内联代码与键帽 |
 
-PR1 先建立 token 和“不得新增”的迁移门禁，现存 51 处 `rounded-[Npx]` 以文件和数量精确记录在 `scripts/check-design.mjs`；PR2 完成视觉迁移后删除该基线并要求全量零命中。不得扩大豁免范围。
+PR2 已完成迁移：除冻结的 `src/components/mermaid-code-block.tsx` 中一条精确行外，源码中的 `rounded-[Npx]` 已清零。该 NodeView 属于本轮绝对不碰的高风险实现；门禁按文件和整行精确豁免，不得扩大范围。普通控件的 `rounded-full` 也由门禁限制为五处真实圆形控件或计数角标。
 
 ### Token 双套值
 
 | Token | 亮色 | 暗色 | 用途 |
 |---|---|---|---|
-| `--color-action` | `#0066cc` | `#2997ff` | 交互蓝（暗底上与 sky 收敛） |
+| `--color-action` | `#0066cc` | `#2997ff` | 交互蓝（暗底上与 sky 收敛）；实底文字使用 `text-white dark:text-cta-ink` |
 | `--color-action-focus` | `#0071e3` | `#409cff` | 聚焦态 |
-| `--color-cta` | `#1d1d1f` | `#f5f5f7` | 主行动底色；Action Blue 仅保留给链接、选中态与聚焦态 |
+| `--color-cta` | `#1d1d1f` | `#f5f5f7` | 默认主行动底色；主题不变暗面上的主行动改用 Action Blue，避免亮色 CTA 与暗面融在一起 |
 | `--color-cta-ink` | `#ffffff` | `#1d1d1f` | 主行动文字，随 CTA 底色反转 |
 | `--color-ink` | `#1d1d1f` | `#f5f5f7` | 主文字 |
 | `--color-ink-80` | `#333333` | `#d1d1d6` | 次级文字 |
@@ -635,7 +635,7 @@ PR1 先建立 token 和“不得新增”的迁移门禁，现存 51 处 `rounde
 
 `text-white`、`bg-white/N`、`bg-black/N` 等裸色类**仅允许出现在主题不变面**上：chrome、tile、accent 按钮（`bg-action`/`bg-danger` 上的白字）、scrim 遮罩（`bg-black/40`、`bg-black/20`）。其余场景一律使用语义 token。`bg-white/N` 的透明度写法是合法 chrome 用法，不能被裸 `bg-white` 规则误伤。
 
-门禁同时禁止内容区硬编码语义色、把 `ink` 当背景，以及新增 `rounded-[Npx]`。运行：
+门禁同时禁止内容区硬编码语义色、把 `ink` 当背景、任意 `rounded-[Npx]`（冻结 Mermaid 精确行除外），以及普通控件滥用 `rounded-full`。运行：
 
 ```bash
 npm run check:design

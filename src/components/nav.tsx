@@ -71,7 +71,7 @@ function useOptimisticPath() {
 function CountBadge({ count }: { count: number }) {
   if (count <= 0) return null;
   return (
-    <span className="rounded-full bg-danger px-1.5 text-[11px] font-semibold leading-4 text-white">
+    <span className="rounded-full bg-danger px-1.5 font-mono text-micro font-semibold leading-4 text-white">
       {count > 99 ? "99+" : count}
     </span>
   );
@@ -138,7 +138,7 @@ export function SideNav({ topics, inboxCount }: { topics: SideNavTopic[]; inboxC
               href={item.href}
               prefetch={true}
               onClick={() => setPendingHref(item.href)}
-              className={`flex items-center justify-between rounded-[8px] px-3 py-2 text-[14px] transition-colors ${
+              className={`flex items-center justify-between rounded-utility px-3 py-2 text-[14px] transition-colors ${
                 active
                   ? "bg-white/10 font-semibold text-white"
                   : "text-dark-muted hover:bg-white/5 hover:text-white"
@@ -154,7 +154,7 @@ export function SideNav({ topics, inboxCount }: { topics: SideNavTopic[]; inboxC
         })}
       </nav>
       <div className="mt-9">
-        <p className="px-3 pb-2 text-[12px] font-semibold text-ink-48">全部主题</p>
+        <p className="px-3 pb-2 text-[12px] font-semibold text-dark-muted">全部主题</p>
         <div className="space-y-0.5">
           {topics
             .filter((t) => !t.isSystem)
@@ -164,14 +164,14 @@ export function SideNav({ topics, inboxCount }: { topics: SideNavTopic[]; inboxC
                 href={`/topics/${t.id}`}
                 prefetch={true}
                 onClick={() => setPendingHref(`/topics/${t.id}`)}
-                className={`flex items-center justify-between rounded-[8px] px-3 py-1.5 text-[14px] transition-colors ${
+                className={`flex items-center justify-between rounded-utility px-3 py-1.5 text-[14px] transition-colors ${
                   activePath === `/topics/${t.id}`
                     ? "bg-white/10 font-semibold text-white"
                     : "text-dark-muted hover:bg-white/5 hover:text-white"
                 }`}
               >
                 <span className="truncate">{t.name}</span>
-                <span className="text-[12px] text-ink-48">{t.noteCount}</span>
+                <span className="font-mono text-micro text-dark-muted">{t.noteCount}</span>
               </Link>
             ))}
         </div>

@@ -23,6 +23,7 @@
 ### 变更
 
 - UI 重设计先落设计 token 地基：自托管思源黑体、思源宋体、Instrument Serif 与 JetBrains Mono，新增六级字阶、三级圆角及亮暗双态 CTA token；设计约束改为 `npm run check:design` 自动检查并接入 CI。
+- UI 重设计 PR2 完成视觉换肌：列表行改为发丝线分隔，页面级标题与空态使用衬线字，元信息与数字使用等宽字，主行动默认改为亮暗双态 CTA 墨底（主题不变暗面保留高对比 Action Blue），标签改为小号大写 chip，编辑器工具栏图标统一为内联 SVG；全站 arbitrary 圆角完成迁移。
 
 ### 修复
 

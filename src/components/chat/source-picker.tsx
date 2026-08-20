@@ -96,7 +96,7 @@ export function SourcePicker({
         <p className="text-[14px] font-semibold tracking-[-0.224px]">选择来源</p>
         <button
           onClick={onCancel}
-          className="rounded-full px-2 py-1 text-[14px] text-ink-48 hover:bg-fill"
+          className="rounded-utility px-2 py-1 text-[14px] text-ink-48 hover:bg-fill"
           aria-label="取消"
         >
           ✕
@@ -115,14 +115,14 @@ export function SourcePicker({
               <button
                 key={t.id}
                 onClick={() => toggle({ type: "topic", id: t.id, label: t.name })}
-                className={`rounded-full border px-2.5 py-1 text-[12px] ${
+                className={`rounded-chip border px-2.5 py-1 text-[12px] ${
                   has("topic", t.id)
-                    ? "border-action bg-action text-white"
+                    ? "border-action bg-action text-white dark:text-cta-ink"
                     : "border-hairline text-ink-80 hover:bg-fill"
                 }`}
               >
                 {t.name}
-                <span className={has("topic", t.id) ? "opacity-70" : "text-ink-48"}> {t.noteCount}</span>
+                <span className={`font-mono ${has("topic", t.id) ? "opacity-70" : "text-ink-48"}`}> {t.noteCount}</span>
               </button>
             ))}
           </div>
@@ -134,7 +134,7 @@ export function SourcePicker({
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="输入关键词查找笔记"
-            className="w-full rounded-[12px] border border-hairline px-3 py-2 text-[13px] outline-none focus:border-action-focus"
+            className="w-full rounded-utility border border-hairline px-3 py-2 text-[13px] outline-none focus:border-action-focus"
           />
           {searching && <p className="mt-2 text-[12px] text-ink-48">搜索中…</p>}
           {!searching && query.trim() && results.length === 0 && (
@@ -145,7 +145,7 @@ export function SourcePicker({
               <button
                 key={n.id}
                 onClick={() => toggle({ type: "note", id: n.id, label: n.title })}
-                className={`flex w-full items-start gap-2 rounded-[10px] px-2 py-1.5 text-left text-[13px] hover:bg-fill ${
+                className={`flex w-full items-start gap-2 rounded-utility px-2 py-1.5 text-left text-[13px] hover:bg-fill ${
                   has("note", n.id) ? "bg-fill" : ""
                 }`}
               >
@@ -169,7 +169,7 @@ export function SourcePicker({
             {list.map((s) => (
               <span
                 key={`${s.type}:${s.id}`}
-                className="flex max-w-full items-center gap-1 rounded-full bg-fill px-2 py-1 text-[12px]"
+                className="flex max-w-full items-center gap-1 rounded-chip bg-fill px-2 py-1 text-[12px]"
               >
                 <span className="text-ink-48">{s.type === "topic" ? "主题" : "笔记"}</span>
                 <span className="min-w-0 truncate">{s.label}</span>
@@ -187,14 +187,14 @@ export function SourcePicker({
         <div className="flex justify-end gap-2">
           <button
             onClick={onCancel}
-            className="rounded-full border border-hairline px-4 py-1.5 text-[13px] text-ink-48 active:scale-95"
+            className="rounded-utility border border-hairline px-4 py-1.5 text-[13px] text-ink-48 active:scale-95"
           >
             取消
           </button>
           <button
             onClick={() => onConfirm(list)}
             disabled={list.length === 0}
-            className="rounded-full bg-action px-4 py-1.5 text-[13px] text-white active:scale-95 disabled:opacity-40"
+            className="rounded-utility bg-cta px-4 py-1.5 text-[13px] text-cta-ink active:scale-95 disabled:opacity-40"
           >
             开始来源问答（{list.length}）
           </button>
