@@ -46,5 +46,9 @@ brainstorm/
 /data-demo-ui/
 .npm-cache/
 
-# 本地起 dev server 时重定向的日志（dev.out.log / dev.err.log 等）
-dev.*.log
+# 本地起实例时重定向的日志（dev.out.log / dev-3000.log / prod-3000.log 等）
+*.log
+
+# 验收时随手截的图。仓库内正式截图都在 docs/screenshots/ 与 public/ 下，
+# 只挡仓库根目录这一层，不误伤它们。
+/*.png
