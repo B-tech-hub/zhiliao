@@ -34,7 +34,39 @@ function Highlight({ text, terms }: { text: string; terms: string[] }) {
   );
 }
 
-export function SearchClient({ topics }: { topics: { id: string; name: string }[] }) {
+interface TopicOption {
+  id: string;
+  name: string;
+  isSystem: number;
+}
+
+// 紧凑 chip（configurator-option-chip 语法，选中态 2px Focus Blue）
+function Chip({
+  label,
+  selected,
+  muted,
+  onClick,
+}: {
+  label: string;
+  selected: boolean;
+  muted?: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className={`shrink-0 whitespace-nowrap rounded-chip border bg-surface px-4 py-1.5 text-[14px] transition-transform active:scale-95 ${
+        selected
+          ? "border-action-focus font-semibold text-ink ring-1 ring-inset ring-action-focus"
+          : `border-hairline ${muted ? "text-ink-48" : "text-ink-80"}`
+      }`}
+    >
+      {label}
+    </button>
+  );
+}
+
+export function SearchClient({ topics }: { topics: TopicOption[] }) {
   const [q, setQ] = useState("");
   const [topicId, setTopicId] = useState("");
   const [results, setResults] = useState<SearchItem[]>([]);
@@ -43,10 +75,14 @@ export function SearchClient({ topics }: { topics: { id: string; name: string }[
   const [searched, setSearched] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // 输入防抖 300ms 自动搜索
+  // 普通主题与系统主题（未分类）分开渲染，两者层级不同
+  const realTopics = topics.filter((t) => !t.isSystem);
+  const systemTopics = topics.filter((t) => t.isSystem);
+
+  // 输入防抖 300ms 自动搜索；只选主题不输关键词时，退化为按主题浏览
   useEffect(() => {
     if (timerRef.current) clearTimeout(timerRef.current);
-    if (!q.trim()) {
+    if (!q.trim() && !topicId) {
       setResults([]);
       setSearched(false);
       return;
@@ -54,7 +90,8 @@ export function SearchClient({ topics }: { topics: { id: string; name: string }[
     timerRef.current = setTimeout(async () => {
       setLoading(true);
       try {
-        const params = new URLSearchParams({ q });
+        const params = new URLSearchParams();
+        if (q.trim()) params.set("q", q);
         if (topicId) params.set("topicId", topicId);
         const res = await fetch(`/api/search?${params}`);
         if (res.ok) {
@@ -104,30 +141,25 @@ export function SearchClient({ topics }: { topics: { id: string; name: string }[
         />
       </div>
 
-      {/* 主题过滤：紧凑 chip（configurator-option-chip 语法，选中态 2px Focus Blue） */}
-      <div className="mb-6 flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        {[{ id: "", name: "全部主题" }, ...topics].map((t) => {
-          const selectedChip = topicId === t.id;
-          return (
-            <button
-              key={t.id || "all"}
-              onClick={() => setTopicId(t.id)}
-              className={`shrink-0 whitespace-nowrap rounded-chip border bg-surface px-4 py-1.5 text-[14px] transition-transform active:scale-95 ${
-                selectedChip
-                  ? "border-action-focus font-semibold text-ink ring-1 ring-inset ring-action-focus"
-                  : "border-hairline text-ink-80"
-              }`}
-            >
-              {t.name}
-            </button>
-          );
-        })}
+      {/* 主题过滤：三段式，避免「全部主题 / 未分类 / 普通主题」被误读成并列项 */}
+      <div className="mb-6 flex items-center gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <Chip label="全部主题" selected={topicId === ""} onClick={() => setTopicId("")} />
+        {realTopics.length > 0 && <span className="h-5 w-px shrink-0 bg-hairline" aria-hidden />}
+        {realTopics.map((t) => (
+          <Chip key={t.id} label={t.name} selected={topicId === t.id} onClick={() => setTopicId(t.id)} />
+        ))}
+        {systemTopics.length > 0 && <span className="h-5 w-px shrink-0 bg-hairline" aria-hidden />}
+        {systemTopics.map((t) => (
+          <Chip key={t.id} label={t.name} muted selected={topicId === t.id} onClick={() => setTopicId(t.id)} />
+        ))}
       </div>
 
       {loading && <p className="text-[14px] text-ink-48">搜索中…</p>}
       {!loading && searched && results.length === 0 && (
         <div className="rounded-card bg-surface p-10 text-center">
-          <p className="font-serif text-2xl leading-tight text-ink">没有找到匹配「{q}」的笔记</p>
+          <p className="font-serif text-2xl leading-tight text-ink">
+            {q.trim() ? `没有找到匹配「${q}」的笔记` : "这个主题下还没有笔记"}
+          </p>
         </div>
       )}
 
