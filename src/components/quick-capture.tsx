@@ -42,10 +42,9 @@ function PlusIcon() {
    判据是渲染位置，别照搬 CommandPalette——那一份渲染在页面内容里。 */
 export function QuickCapture({ topics }: { topics: TopicOption[] }) {
   const [open, setOpen] = useState(false);
-  // 草稿托管在这里而不是表单里：表单随浮层开合挂载卸载，存在里面误触一次就没了
+  // 草稿托管在这里而不是表单里：表单随浮层开合挂载卸载，存在里面关一次就没了
   const [draft, setDraft] = useState("");
   const { scope } = useChatScope();
-  const dialogRef = useRef<HTMLDivElement>(null);
   const restoreRef = useRef<HTMLElement | null>(null);
 
   /* 停在某个主题页时预选该主题，省掉一次下拉。系统主题（收件箱）不在下拉选项里，
@@ -74,21 +73,25 @@ export function QuickCapture({ topics }: { topics: TopicOption[] }) {
     return () => window.removeEventListener(COMMAND_EVENTS.quickCapture, openOverlay);
   }, [openOverlay]);
 
-  /* Esc 的监听器挂在浮层节点上，不挂 window：挂 window 时助手面板也开着的话，
-     一次 Esc 会把两层一起关掉——它自己的监听器同样在 window 上。
-     stopPropagation 让事件到不了 window，分层退出才成立。
-     命令面板的监听在 window 捕获阶段、先于这里，但它在关闭时对 Esc 直接 return。 */
+  /* Esc 挂 window 的**捕获阶段**，且只在浮层打开时注册。
+     不挂 window 冒泡：助手面板的监听在那儿，一起挂会一次 Esc 关掉两层。
+     也不挂浮层节点：那样等于要求焦点必须停在浮层内，焦点一跑到 body 上就失灵。
+
+     让路判据不能靠 stopPropagation：它只挡事件传向后续节点，挡不住同一节点上
+     的其他监听器——命令面板的监听也在 window 捕获阶段，两条必然都会执行。
+     所以改为显式让路：还有别的 role="dialog" 开着（命令面板 z-50、确认弹窗），
+     说明上面压着一层，Esc 归它消费。本浮层自己那个也算在内，故判据是 > 1。 */
   useEffect(() => {
     if (!open) return;
-    const node = dialogRef.current;
-    if (!node) return;
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key !== "Escape") return;
+      if (document.querySelectorAll('[role="dialog"]').length > 1) return;
+      // 到这里说明本浮层就是最上层：拦下事件，别让助手面板也跟着关
       event.stopPropagation();
       close();
     };
-    node.addEventListener("keydown", onKeyDown);
-    return () => node.removeEventListener("keydown", onKeyDown);
+    window.addEventListener("keydown", onKeyDown, true);
+    return () => window.removeEventListener("keydown", onKeyDown, true);
   }, [open, close]);
 
   return (
@@ -103,23 +106,25 @@ export function QuickCapture({ topics }: { topics: TopicOption[] }) {
       </button>
 
       {open && (
-        /* 点遮罩不关闭：浮层里躺着还没保存的字，误触一次就白敲了。
-           preventDefault 是为了让焦点留在正文——焦点飘到 body 上，
-           Esc 就走不到上面那个挂在浮层节点上的监听器。
+        /* 点遮罩关闭。草稿留在本组件里，关掉再打开原样还在，这一下什么都不会丢；
+           反过来，遮罩不可点会把全屏浮层变成没有出口的陷阱——用户会以为页面卡死了。
+           关闭动作必须挂在遮罩上、并由浮层 stopPropagation 挡住，不能用
+           preventDefault 去拦：那会连正文、下拉、按钮的 mousedown 一起吞掉，
+           下拉打不开、光标挪不动。这套写法与命令面板一致。
            遮罩取 /40 而非命令面板的 /25：那份是搜索框，底下衬什么都无所谓；
            这份底下衬的是深色页面，/25 叠上去几乎分不出层。 */
         <div
           className="fixed inset-0 z-40 flex items-stretch justify-center bg-black/40 md:items-start md:px-4 md:pt-[12vh]"
-          onMouseDown={(event) => event.preventDefault()}
+          onMouseDown={close}
         >
           <div
-            ref={dialogRef}
             role="dialog"
             aria-modal="true"
             aria-label="快速记录"
             /* 高度刻意压得比整页矮一大截：这里是「记一条就走」，
                开半屏编辑器只会让人对着一片空白发呆。写长了照样能滚。 */
             className="flex w-full flex-col overflow-hidden bg-surface md:h-[min(52vh,22rem)] md:max-w-2xl md:rounded-card md:border md:border-hairline md:shadow-2xl"
+            onMouseDown={(event) => event.stopPropagation()}
           >
             <NewNoteForm
               topics={topics}
