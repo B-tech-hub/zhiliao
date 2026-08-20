@@ -16,8 +16,8 @@ Full documentation is in Simplified Chinese — see [README.md](README.md). This
 
 - Markdown notes (TipTap WYSIWYG), paste/drag uploads up to 20 MB (PNG/JPEG/GIF/WebP/HEIC), debounced autosave. HEIC originals are preserved while JPEG display copies keep previews browser-compatible. Desktop note pages use a wide canvas with an H1–H3 table of contents; mobile stays single-column
 - AI pipeline: one call per note → topic + title + tags + summary, with retry/backoff; fields you edit manually are never overwritten
-- Topic suggestions: AI clusters inbox notes and proposes new topics
-- Chinese full-text search (jieba segmentation + SQLite FTS5)
+- Topic suggestions: AI clusters inbox notes and proposes new topics — accepted one at a time, so taking one suggestion leaves the others intact
+- Chinese full-text search (jieba segmentation + SQLite FTS5); pick a topic without typing a query to just browse that topic's notes
 - AI assistant over the whole library: it can search, read, create, append to, re-file and delete notes, and fetch URLs you have pasted. Every write leaves an undoable card in the conversation; deletions require your confirmation. Vision requests use transient compressed copies. A per-message Deep Reasoning toggle uses a separately configured reasoning model, defaults off, is not persisted, and never exposes model chain-of-thought
 - Your data stays yours: one-click zip export (Markdown + display images, with HEIC originals under `assets/originals/`), manual backup button, and a trash bin — deleted notes are recoverable for 30 days
 - PWA, dark mode, daily backups (database + images, 7 copies each)
