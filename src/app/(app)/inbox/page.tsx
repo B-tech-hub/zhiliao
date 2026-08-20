@@ -32,14 +32,24 @@ export default function InboxPage() {
     .limit(1)
     .get();
   const suggestion = suggestionRow
-    ? { id: suggestionRow.id, ...(JSON.parse(suggestionRow.payload) as object) }
+    ? {
+        id: suggestionRow.id,
+        ...(JSON.parse(suggestionRow.payload) as {
+          suggestions: {
+            name: string;
+            reason: string;
+            noteIds: string[];
+            existingTopicId: string | null;
+          }[];
+        }),
+      }
     : null;
 
   return (
     <InboxClient
       notes={rows.map((n) => ({ ...n, tags: tagMap.get(n.id) ?? [] }))}
       topics={topicRows}
-      suggestion={suggestion as never}
+      suggestion={suggestion}
     />
   );
 }

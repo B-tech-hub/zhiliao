@@ -43,7 +43,8 @@ export function InboxClient({
   const [generating, setGenerating] = useState(false);
   // 批量删除确认框是否打开
   const [confirmingDelete, setConfirmingDelete] = useState(false);
-  // 建议卡片中被用户剔除的笔记
+  // 建议卡片中被用户剔除的笔记，键为 `${建议名}:${笔记id}`
+  // （不能用下标：采纳一项后服务端会原地重写 payload，下标会整体前移）
   const [excluded, setExcluded] = useState<Set<string>>(new Set());
 
   const noteById = new Map(notes.map((n) => [n.id, n]));
@@ -108,7 +109,7 @@ export function InboxClient({
 
   async function accept(index: number, item: SuggestionItem) {
     if (!suggestion) return;
-    const noteIds = item.noteIds.filter((id) => !excluded.has(`${index}:${id}`));
+    const noteIds = item.noteIds.filter((id) => !excluded.has(`${item.name}:${id}`));
     if (noteIds.length === 0) return;
     setBusy(true);
     try {
@@ -158,14 +159,14 @@ export function InboxClient({
             const validNotes = item.noteIds.filter((id) => noteById.has(id));
             if (validNotes.length === 0) return null;
             return (
-              <div key={index} className="rounded-card bg-tile p-6">
+              <div key={item.name} className="rounded-card bg-tile p-6">
                 <p className="text-[17px] font-semibold tracking-[-0.374px] text-white">
                   {item.existingTopicId ? "建议归入现有主题" : "建议新建主题"}「{item.name}」
                 </p>
                 <p className="mt-1 text-[14px] text-dark-muted">{item.reason}</p>
                 <ul className="mt-4 space-y-2">
                   {validNotes.map((id) => {
-                    const key = `${index}:${id}`;
+                    const key = `${item.name}:${id}`;
                     const note = noteById.get(id)!;
                     return (
                       <li key={id} className="flex items-center gap-2.5 text-[14px] text-white">
@@ -198,7 +199,7 @@ export function InboxClient({
                     disabled={busy}
                     className="text-[14px] text-sky transition-opacity active:opacity-70 disabled:opacity-40"
                   >
-                    全部忽略
+                    忽略全部建议
                   </button>
                 </div>
               </div>
