@@ -44,3 +44,4 @@ brainstorm/
 
 # 隔离验收实例的数据目录（端口 3100 那套，不进仓库）
 /data-demo-ui/
+.npm-cache/

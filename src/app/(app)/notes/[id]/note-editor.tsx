@@ -7,6 +7,7 @@ import type { Note } from "@/db/schema";
 import { BackButton } from "@/components/back-button";
 import { AskWithSourcesButton } from "@/components/chat/ask-with-sources";
 import { ConfirmDialog } from "@/components/confirm-dialog";
+import { COMMAND_EVENTS } from "@/components/command-events";
 
 // TipTap 体积较大，懒加载拆出主包；占位与编辑区等高避免布局跳动
 const MarkdownEditor = dynamic(
@@ -69,6 +70,7 @@ export function NoteEditor({
   }, [note.transcriptionWarnings]);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const savedContentRef = useRef(note.content);
+  const contentRef = useRef(note.content);
 
   const patch = useCallback(
     async (body: Record<string, unknown>) => {
@@ -97,6 +99,7 @@ export function NoteEditor({
   const onContentChange = useCallback(
     (md: string) => {
       setContent(md);
+      contentRef.current = md;
       setSaveState("dirty");
       if (timerRef.current) clearTimeout(timerRef.current);
       timerRef.current = setTimeout(async () => {
@@ -111,6 +114,19 @@ export function NoteEditor({
     },
     [patch],
   );
+
+  useEffect(() => {
+    const forceSave = () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+      const latest = contentRef.current;
+      if (latest === savedContentRef.current) return;
+      void patch({ content: latest }).then((saved) => {
+        if (saved) savedContentRef.current = latest;
+      });
+    };
+    window.addEventListener(COMMAND_EVENTS.forceSave, forceSave);
+    return () => window.removeEventListener(COMMAND_EVENTS.forceSave, forceSave);
+  }, [patch]);
 
   useEffect(() => {
     return () => {

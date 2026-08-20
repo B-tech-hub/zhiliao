@@ -19,6 +19,7 @@ import {
 } from "./chat-state";
 import { SourcePicker } from "./source-picker";
 import { useChat } from "./use-chat";
+import { COMMAND_EVENTS } from "@/components/command-events";
 
 // 输入框自增高的上限，约五行正文
 const INPUT_MAX_HEIGHT = 132;
@@ -117,6 +118,42 @@ export function ChatPanel({
   const { width, dragging, startDrag, shouldIgnoreOverlayClick } = usePanelWidth();
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    const toggle = () => setOpen((value) => !value);
+    window.addEventListener(COMMAND_EVENTS.toggleChat, toggle);
+    return () => window.removeEventListener(COMMAND_EVENTS.toggleChat, toggle);
+  }, []);
+
+  /* submit 每次渲染都是新引用，用 ref 兜住最新的一份，
+     监听器只注册一次——否则流式回答每吐一个 token 就要重挂一遍 window 事件。
+     submit 是下方的 const，此处不能取值初始化，只能挂空 ref 等 effect 填。 */
+  const submitRef = useRef<(() => void) | null>(null);
+  useEffect(() => {
+    submitRef.current = submit;
+  });
+
+  useEffect(() => {
+    const submitFromShortcut = () => {
+      if (document.activeElement !== inputRef.current) return;
+      submitRef.current?.();
+    };
+    window.addEventListener(COMMAND_EVENTS.submitChat, submitFromShortcut);
+    return () => window.removeEventListener(COMMAND_EVENTS.submitChat, submitFromShortcut);
+  }, []);
+
+  useEffect(() => {
+    if (!open) return;
+    const closeLayer = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      if (picking !== null) setPicking(null);
+      else if (showHistory) setShowHistory(false);
+      else if (showSources) setShowSources(false);
+      else setOpen(false);
+    };
+    window.addEventListener("keydown", closeLayer);
+    return () => window.removeEventListener("keydown", closeLayer);
+  }, [open, picking, showHistory, showSources]);
 
   // 换了笔记/主题就重新附上——新页面带来的是另一份上下文
   useEffect(() => setDetached(false), [scope?.id]);
@@ -582,7 +619,7 @@ export function ChatPanel({
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={(e) => {
-                    if (e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing) {
+                    if (e.key === "Enter" && !e.shiftKey && !e.metaKey && !e.ctrlKey && !e.nativeEvent.isComposing) {
                       e.preventDefault();
                       submit();
                     }

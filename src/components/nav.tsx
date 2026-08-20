@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { COMMAND_EVENTS } from "@/components/command-events";
 
 /* 线性 SVG 图标（替代 emoji，贴近 SF Symbols 风格） */
 function Icon({ name, className }: { name: string; className?: string }) {
@@ -120,8 +121,18 @@ interface SideNavTopic {
 /* 桌面端侧栏：近黑瓷砖贴边全高（暗色 chrome），白/灰字导航，active 白字微亮底 */
 export function SideNav({ topics, inboxCount }: { topics: SideNavTopic[]; inboxCount: number }) {
   const { activePath, setPendingHref } = useOptimisticPath();
+  const [collapsed, setCollapsed] = useState(false);
+  useEffect(() => {
+    const toggle = () => setCollapsed((value) => !value);
+    window.addEventListener(COMMAND_EVENTS.toggleNav, toggle);
+    return () => window.removeEventListener(COMMAND_EVENTS.toggleNav, toggle);
+  }, []);
   return (
-    <aside className="sticky top-0 hidden h-dvh w-64 shrink-0 flex-col overflow-y-auto bg-chrome p-5 md:flex">
+    <aside
+      className="sticky top-0 hidden h-dvh w-64 shrink-0 flex-col overflow-y-auto bg-chrome p-5 md:flex"
+      data-collapsed={collapsed ? "true" : "false"}
+      aria-label="主导航"
+    >
       <Link
         href="/"
         prefetch={true}

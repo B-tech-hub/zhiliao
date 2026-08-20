@@ -598,6 +598,12 @@ The structural breakpoints that matter for agents: 1440px (content lock), 1068px
 
 PR2 已完成迁移：除冻结的 `src/components/mermaid-code-block.tsx` 中一条精确行外，源码中的 `rounded-[Npx]` 已清零。该 NodeView 属于本轮绝对不碰的高风险实现；门禁按文件和整行精确豁免，不得扩大范围。普通控件的 `rounded-full` 也由门禁限制为五处真实圆形控件或计数角标。
 
+### 键盘交互约定
+
+全局命令面板使用 `⌘K`（Windows/Linux 使用 `Ctrl+K`）唤起，支持笔记搜索、主题跳转与动作执行。基础快捷键为：`⌘\\` 折叠侧栏、`⌘J` 开关助手、`⌘S` 强制保存当前笔记、`⌘Enter` 在助手输入框发送。`Esc` 按当前层级退出：命令面板、助手子层、助手面板或编辑器斜杠菜单依次消费；输入框和编辑器的普通按键不得被全局监听抢占。
+
+浮层的焦点契约：命令面板一打开就必须把焦点交给自己的输入框，关闭后还给唤起它的元素。由于面板经 `BodyPortal` 渲染，而 `BodyPortal` 首渲染返回 `null`、要等自身 effect 置 `mounted` 后才 `createPortal`，**自动聚焦必须用 callback ref，不能用 `useEffect` + `requestAnimationFrame`**——后者执行时节点还没进 DOM，焦点会留在原处，在笔记页会导致输入直接写进正文。面板内选择靠上下键，`Tab` 不移动焦点，以此把焦点关在浮层内。
+
 ### Token 双套值
 
 | Token | 亮色 | 暗色 | 用途 |

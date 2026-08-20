@@ -4,6 +4,8 @@ import { getToolSupport, isReasoningConfigured, isVisionConfigured } from "@/lib
 import { BottomNav, SideNav } from "@/components/nav";
 import { ChatPanel } from "@/components/chat/chat-panel";
 import { ChatScopeProvider } from "@/components/chat/chat-scope";
+import { CommandPalette } from "@/components/command-palette";
+import { GlobalShortcuts } from "@/components/global-shortcuts";
 
 export const dynamic = "force-dynamic";
 
@@ -14,6 +16,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <ChatScopeProvider>
       <div className="flex min-h-dvh">
+        <GlobalShortcuts />
         {/* 桌面端左侧暗色侧栏（贴边全高） */}
         <SideNav topics={topicRows} inboxCount={inboxCount} />
 
@@ -45,6 +48,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           reasoningAvailable={isReasoningConfigured()}
           toolSupport={getToolSupport()}
         />
+        <CommandPalette topics={topicRows.filter((topic) => !topic.isSystem).map(({ id, name }) => ({ id, name }))} />
       </div>
     </ChatScopeProvider>
   );
