@@ -170,4 +170,13 @@ ALTER TABLE images ADD COLUMN original_size INTEGER;
 ALTER TABLE messages ADD COLUMN reasoning TEXT;
 `,
   },
+  {
+    id: "0010_handwriting_transcription",
+    sql: `
+ALTER TABLE notes ADD COLUMN transcription_review_status TEXT NOT NULL DEFAULT 'reviewed';
+ALTER TABLE notes ADD COLUMN transcription_warnings TEXT;
+ALTER TABLE notes ADD COLUMN transcription_candidate TEXT;
+ALTER TABLE ai_jobs ADD COLUMN payload TEXT;
+`,
+  },
 ];

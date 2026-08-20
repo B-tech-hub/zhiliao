@@ -52,7 +52,7 @@ export function ConfirmDialog({
         }}
       >
         <div
-          className="w-full max-w-[360px] rounded-[18px] bg-surface p-6"
+          className="w-full max-w-[360px] rounded-card bg-surface p-6"
           onClick={(e) => e.stopPropagation()}
         >
           <p className="text-[17px] font-semibold tracking-[-0.374px]">{title}</p>
@@ -61,15 +61,15 @@ export function ConfirmDialog({
             <button
               onClick={onCancel}
               disabled={busy}
-              className="rounded-full bg-fill px-[22px] py-[8px] text-[14px] text-ink-80 transition-transform active:scale-95 disabled:opacity-40"
+              className="rounded-utility bg-fill px-[22px] py-[8px] text-[14px] text-ink-80 transition-transform active:scale-95 disabled:opacity-40"
             >
               {cancelText}
             </button>
             <button
               onClick={onConfirm}
               disabled={busy}
-              className={`rounded-full px-[22px] py-[8px] text-[14px] text-white transition-transform active:scale-95 disabled:opacity-40 ${
-                danger ? "bg-danger" : "bg-action"
+              className={`rounded-utility px-[22px] py-[8px] text-[14px] transition-transform active:scale-95 disabled:opacity-40 ${
+                danger ? "bg-danger text-white" : "bg-cta text-cta-ink"
               }`}
             >
               {busy ? "处理中…" : confirmText}

@@ -23,6 +23,7 @@ npm run dev
 ## 提交前自检
 
 ```bash
+npm run check:design
 npm run lint
 npm test
 npm run build

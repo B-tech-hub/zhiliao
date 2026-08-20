@@ -33,21 +33,21 @@ export default async function TopicPage({ params }: { params: Promise<{ id: stri
       <div className="mb-8 flex items-end justify-between gap-4">
         <header className="min-w-0">
           <p className="mb-2 text-[12px] font-semibold tracking-[0.06em] text-ink-48">主题</p>
-          <h1 className="truncate text-[34px] font-semibold leading-[1.1] tracking-[-0.4px] md:text-[40px]">
+          <h1 className="truncate font-serif text-display leading-[1.1] tracking-[-0.4px]">
             {topic.name}
           </h1>
-          <p className="mt-2 text-[14px] text-ink-48">{rows.length} 条笔记</p>
+          <p className="mt-2 font-mono text-meta text-ink-48">{rows.length} 条笔记</p>
         </header>
         <div className="flex shrink-0 items-center gap-3">
           <AskWithSourcesButton
             type="topic"
             id={topic.id}
             label={topic.name}
-            className="rounded-full border border-hairline px-4 py-1.5 text-[14px] text-ink-48 transition-colors hover:text-action active:scale-95"
+            className="rounded-utility border border-hairline px-4 py-1.5 text-[14px] text-ink-48 transition-colors hover:text-action active:scale-95"
           />
           <Link
             href={`/notes/new?topic=${topic.id}`}
-            className="rounded-full bg-action px-4 py-1.5 text-[14px] text-white transition-transform active:scale-95"
+            className="rounded-utility bg-cta px-4 py-1.5 text-[14px] text-cta-ink transition-transform active:scale-95"
           >
             新笔记
           </Link>

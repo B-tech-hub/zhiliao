@@ -211,7 +211,7 @@ export function SlashMenu({
   return (
     <div
       // fixed 定位：编辑器自身是滚动容器，absolute 会跟着内容滚走
-      className="fixed z-40 max-h-72 w-60 overflow-y-auto rounded-[12px] border border-hairline bg-surface py-1 shadow-lg"
+      className="fixed z-40 max-h-72 w-60 overflow-y-auto rounded-card border border-hairline bg-surface py-1 shadow-lg"
       style={{ left: menu.left, top: menu.top + 6 }}
       // 别让点击夺走编辑器焦点，否则命令执行时选区已经没了
       onMouseDown={(e) => e.preventDefault()}

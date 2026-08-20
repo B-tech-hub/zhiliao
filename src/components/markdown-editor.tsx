@@ -1,6 +1,7 @@
 "use client";
 
-import { useEditor, EditorContent, type Editor } from "@tiptap/react";
+import { useEditor, EditorContent, NodeViewWrapper, ReactNodeViewRenderer, type Editor, type ReactNodeViewProps } from "@tiptap/react";
+import { Node, mergeAttributes } from "@tiptap/core";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
@@ -13,6 +14,31 @@ import { Markdown } from "tiptap-markdown";
 import { useEffect, useRef, useState } from "react";
 import { MermaidCodeBlock } from "./mermaid-code-block";
 import { SlashMenu, useSlashMenu } from "./slash-menu";
+import katex from "katex";
+import type { MarkdownNodeSpec } from "tiptap-markdown";
+import { mathMarkdownToEditorHtml } from "@/lib/math";
+
+function MathNodeView({ node, updateAttributes }: ReactNodeViewProps) {
+  const latex = String(node.attrs.latex ?? "");
+  const display = Boolean(node.attrs.display);
+  let html = "";
+  try { html = katex.renderToString(latex, { displayMode: display, throwOnError: true }); }
+  catch { html = `<code class=\"math-warning\">${latex.replaceAll("<", "&lt;")}</code>`; }
+  return <NodeViewWrapper as={display ? "div" : "span"} className={display ? "math-node math-block" : "math-node"} onClick={() => { const next = window.prompt("编辑 LaTeX 公式", latex); if (next !== null) updateAttributes({ latex: next }); }} title="点击编辑 LaTeX 源码"><span dangerouslySetInnerHTML={{ __html: html }} /></NodeViewWrapper>;
+}
+
+const MathNode = Node.create({
+  name: "math", inline: true, group: "inline", atom: true, selectable: true,
+  addAttributes() { return { latex: { default: "x^2" }, display: { default: false } }; },
+  parseHTML() { return [{ tag: "span[data-math]", getAttrs: (element) => ({ latex: (element as HTMLElement).getAttribute("data-latex") ?? "", display: (element as HTMLElement).getAttribute("data-display") === "true" }) }]; },
+  renderHTML({ HTMLAttributes }) { return ["span", mergeAttributes({ "data-math": "", "data-latex": HTMLAttributes.latex, "data-display": String(Boolean(HTMLAttributes.display)), class: "math-node" })]; },
+  renderText({ node }) { return node.attrs.display ? `$$${node.attrs.latex}$$` : `$${node.attrs.latex}$`; },
+  addNodeView() { return ReactNodeViewRenderer(MathNodeView); },
+  addStorage() { const markdown: MarkdownNodeSpec = { serialize(state, node) { state.write(node.attrs.display ? `$$${node.attrs.latex}$$` : `$${node.attrs.latex}$`); }, parse: {} }; return { markdown }; },
+  // TipTap 动态命令需要扩展其链式类型，运行时命令仍由节点提供。
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  addCommands() { return { setMath: (attrs: { latex: string; display?: boolean }) => ({ commands }: { commands: { insertContent: (content: unknown) => boolean } }) => commands.insertContent({ type: this.name, attrs }) } as any; },
+});
 
 async function uploadImage(file: File, noteId?: string): Promise<string | null> {
   const form = new FormData();
@@ -68,6 +94,85 @@ const RichImage = Image.extend({
   },
 });
 
+type EditorIconName =
+  | "align-left"
+  | "align-center"
+  | "align-right"
+  | "list"
+  | "link"
+  | "image"
+  | "math"
+  | "table";
+
+/* 工具栏图标统一为 24 网格线性 SVG（实际渲染 16px），避免 emoji 与字体回退造成的视觉漂移。 */
+function EditorIcon({ name }: { name: EditorIconName }) {
+  const paths: Record<EditorIconName, React.ReactNode> = {
+    "align-left": (
+      <>
+        <path d="M5 6h14M5 12h10M5 18h14" />
+      </>
+    ),
+    "align-center": (
+      <>
+        <path d="M5 6h14M7 12h10M5 18h14" />
+      </>
+    ),
+    "align-right": (
+      <>
+        <path d="M5 6h14M9 12h10M5 18h14" />
+      </>
+    ),
+    list: (
+      <>
+        <circle cx="5" cy="7" r="1" fill="currentColor" stroke="none" />
+        <circle cx="5" cy="12" r="1" fill="currentColor" stroke="none" />
+        <circle cx="5" cy="17" r="1" fill="currentColor" stroke="none" />
+        <path d="M9 7h10M9 12h10M9 17h10" />
+      </>
+    ),
+    link: (
+      <>
+        <path d="m9.5 14.5 5-5" />
+        <path d="M7.4 17.6H6a4 4 0 0 1 0-8h3" />
+        <path d="M16.6 6.4H18a4 4 0 0 1 0 8h-3" />
+      </>
+    ),
+    image: (
+      <>
+        <rect x="3.5" y="4.5" width="17" height="15" rx="1.5" />
+        <circle cx="8.5" cy="9" r="1.5" />
+        <path d="m4.5 17 4.5-4 3 2.5 2-2 5.5 4.5" />
+      </>
+    ),
+    math: (
+      <>
+        <path d="M5 5h8l-4 7 4 7H5" />
+        <path d="m15 9 4 6m0-6-4 6" />
+      </>
+    ),
+    table: (
+      <>
+        <rect x="3.5" y="4" width="17" height="16" rx="1" />
+        <path d="M3.5 9.5h17M3.5 14.5h17M9 4v16M15 4v16" />
+      </>
+    ),
+  };
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="h-4 w-4"
+      aria-hidden
+    >
+      {paths[name]}
+    </svg>
+  );
+}
+
 /* 工具栏按钮：安静的小方块，激活态加底色 */
 function ToolButton({
   onClick,
@@ -86,7 +191,7 @@ function ToolButton({
       title={title}
       onMouseDown={(e) => e.preventDefault()}
       onClick={onClick}
-      className={`flex h-7 min-w-7 items-center justify-center rounded-[6px] px-1 text-[13px] transition-colors ${
+      className={`flex h-7 min-w-7 items-center justify-center rounded-utility px-1 text-[13px] transition-colors ${
         active ? "bg-fill text-ink-80 font-semibold" : "text-ink-48 hover:bg-fill/60"
       }`}
     >
@@ -96,7 +201,7 @@ function ToolButton({
 }
 
 /* 图片选中态工具条：宽度预设 / 对齐 / 说明文字（alt） */
-function ImageToolbar({ editor }: { editor: Editor }) {
+function ImageToolbar({ editor, noteId }: { editor: Editor; noteId?: string }) {
   const attrs = editor.getAttributes("image");
   const setAttr = (patch: Record<string, unknown>) =>
     editor.chain().focus().updateAttributes("image", patch).run();
@@ -117,9 +222,15 @@ function ImageToolbar({ editor }: { editor: Editor }) {
           {o.label}
         </ToolButton>
       ))}
-      <ToolButton title="左对齐" active={!attrs.align} onClick={() => setAttr({ align: null })}>⇤</ToolButton>
-      <ToolButton title="居中" active={attrs.align === "center"} onClick={() => setAttr({ align: "center" })}>⇔</ToolButton>
-      <ToolButton title="右对齐" active={attrs.align === "right"} onClick={() => setAttr({ align: "right" })}>⇥</ToolButton>
+      <ToolButton title="左对齐" active={!attrs.align} onClick={() => setAttr({ align: null })}>
+        <EditorIcon name="align-left" />
+      </ToolButton>
+      <ToolButton title="居中" active={attrs.align === "center"} onClick={() => setAttr({ align: "center" })}>
+        <EditorIcon name="align-center" />
+      </ToolButton>
+      <ToolButton title="右对齐" active={attrs.align === "right"} onClick={() => setAttr({ align: "right" })}>
+        <EditorIcon name="align-right" />
+      </ToolButton>
       <ToolButton
         title="说明文字"
         onClick={() => {
@@ -129,6 +240,15 @@ function ImageToolbar({ editor }: { editor: Editor }) {
       >
         说明
       </ToolButton>
+      {noteId && typeof attrs.src === "string" && attrs.src.startsWith("/api/images/") && (
+        <ToolButton title="转写此图" onClick={async () => {
+          const filename = attrs.src.split("/").pop();
+          if (!filename) return;
+          const res = await fetch(`/api/notes/${noteId}/transcribe`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ filename }) });
+          if (!res.ok) alert("转写任务提交失败");
+          else alert("已加入手写转写队列");
+        }}>转写</ToolButton>
+      )}
     </div>
   );
 }
@@ -163,7 +283,7 @@ function LinkPopover({ editor, onClose }: { editor: Editor; onClose: () => void 
     onClose();
   };
   return (
-    <div className="absolute left-0 top-9 z-10 flex items-center gap-1.5 rounded-[10px] border border-hairline bg-surface p-1.5 shadow-lg">
+    <div className="absolute left-0 top-9 z-10 flex items-center gap-1.5 rounded-utility border border-hairline bg-surface p-1.5 shadow-lg">
       <input
         autoFocus
         value={url}
@@ -173,12 +293,12 @@ function LinkPopover({ editor, onClose }: { editor: Editor; onClose: () => void 
           if (e.key === "Escape") onClose();
         }}
         placeholder="输入网址，留空取消链接"
-        className="h-7 w-56 rounded-[6px] bg-fill/60 px-2 text-[13px] outline-none"
+        className="h-7 w-56 rounded-utility bg-fill/60 px-2 text-[13px] outline-none"
       />
       <button
         type="button"
         onClick={apply}
-        className="h-7 rounded-[6px] bg-action px-2.5 text-[13px] text-white active:scale-95"
+        className="h-7 rounded-utility bg-cta px-2.5 text-[13px] text-cta-ink active:scale-95"
       >
         确定
       </button>
@@ -201,7 +321,7 @@ function EditorToolbar({ editor, noteId }: { editor: Editor; noteId?: string }) 
         H2
       </ToolButton>
       <ToolButton title="无序列表" active={editor.isActive("bulletList")} onClick={() => editor.chain().focus().toggleBulletList().run()}>
-        ••
+        <EditorIcon name="list" />
       </ToolButton>
       <ToolButton title="有序列表" active={editor.isActive("orderedList")} onClick={() => editor.chain().focus().toggleOrderedList().run()}>
         1.
@@ -210,17 +330,24 @@ function EditorToolbar({ editor, noteId }: { editor: Editor; noteId?: string }) 
         {"</>"}
       </ToolButton>
       <ToolButton title="链接" active={editor.isActive("link")} onClick={() => setShowLink((v) => !v)}>
-        🔗
+        <EditorIcon name="link" />
       </ToolButton>
       <ToolButton title="插入图片" onClick={() => fileRef.current?.click()}>
-        🖼
+        <EditorIcon name="image" />
+      </ToolButton>
+      <ToolButton title="插入数学公式" onClick={() => {
+        const formula = window.prompt("输入 LaTeX 公式", "x^2");
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        if (formula) (editor.chain().focus() as any).setMath({ latex: formula }).run();
+      }}>
+        <EditorIcon name="math" />
       </ToolButton>
       <ToolButton
         title="插入表格"
         active={editor.isActive("table")}
         onClick={() => editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()}
       >
-        ⊞
+        <EditorIcon name="table" />
       </ToolButton>
       <input
         ref={fileRef}
@@ -235,7 +362,7 @@ function EditorToolbar({ editor, noteId }: { editor: Editor; noteId?: string }) 
         }}
       />
       {showLink && <LinkPopover editor={editor} onClose={() => setShowLink(false)} />}
-      {editor.isActive("image") && <ImageToolbar editor={editor} />}
+      {editor.isActive("image") && <ImageToolbar editor={editor} noteId={noteId} />}
       {editor.isActive("table") && <TableToolbar editor={editor} />}
     </div>
   );
@@ -266,6 +393,7 @@ export function MarkdownEditor({
       // 关掉 StarterKit 自带的代码块，换成带 mermaid 渲染的同名扩展
       // （schema 与输入规则 ``` 完全一致，只多了 NodeView）
       StarterKit.configure({ codeBlock: false }),
+      MathNode,
       MermaidCodeBlock,
       RichImage.configure({ allowBase64: false }),
       Link.configure({
@@ -283,7 +411,7 @@ export function MarkdownEditor({
       TableCell,
       Markdown.configure({ html: true, transformPastedText: true, transformCopiedText: true }),
     ],
-    content: value,
+    content: mathMarkdownToEditorHtml(value),
     editorProps: {
       attributes: {
         /* 正文排版全部来自共享的 .prose-note（见 globals.css）：编辑态与
@@ -324,7 +452,7 @@ export function MarkdownEditor({
     if (!editor) return;
     const current = editor.storage.markdown.getMarkdown();
     if (value !== current && !editor.isFocused) {
-      editor.commands.setContent(value);
+      editor.commands.setContent(mathMarkdownToEditorHtml(value));
     }
   }, [value, editor]);
 

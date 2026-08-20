@@ -25,6 +25,12 @@ export function enqueueNoteProcess(db: DB, noteId: string) {
   kickWorker();
 }
 
+export function enqueueHandwritingTranscribe(db: DB, noteId: string, filename: string, baseUpdatedAt: number) {
+  const now = Date.now();
+  db.insert(aiJobs).values({ id: newId(), noteId, type: "handwriting_transcribe", payload: JSON.stringify({ filename, baseUpdatedAt }), status: "pending", runAfter: now, createdAt: now, updatedAt: now }).run();
+  kickWorker();
+}
+
 // 通过 globalThis 触发 worker 立即轮询，避免与 worker 模块产生循环依赖
 function kickWorker() {
   (globalThis as { __kbWorkerKick?: () => void }).__kbWorkerKick?.();

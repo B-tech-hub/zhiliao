@@ -43,7 +43,8 @@ export function InboxClient({
   const [generating, setGenerating] = useState(false);
   // 批量删除确认框是否打开
   const [confirmingDelete, setConfirmingDelete] = useState(false);
-  // 建议卡片中被用户剔除的笔记
+  // 建议卡片中被用户剔除的笔记，键为 `${建议名}:${笔记id}`
+  // （不能用下标：采纳一项后服务端会原地重写 payload，下标会整体前移）
   const [excluded, setExcluded] = useState<Set<string>>(new Set());
 
   const noteById = new Map(notes.map((n) => [n.id, n]));
@@ -108,7 +109,7 @@ export function InboxClient({
 
   async function accept(index: number, item: SuggestionItem) {
     if (!suggestion) return;
-    const noteIds = item.noteIds.filter((id) => !excluded.has(`${index}:${id}`));
+    const noteIds = item.noteIds.filter((id) => !excluded.has(`${item.name}:${id}`));
     if (noteIds.length === 0) return;
     setBusy(true);
     try {
@@ -135,7 +136,7 @@ export function InboxClient({
       <div className="mb-2 flex items-end justify-between gap-4">
         <header>
           <p className="mb-2 text-[12px] font-semibold tracking-[0.06em] text-ink-48">知了</p>
-          <h1 className="text-[34px] font-semibold leading-[1.1] tracking-[-0.4px] md:text-[40px]">
+          <h1 className="font-serif text-display leading-[1.1] tracking-[-0.4px]">
             未分类
           </h1>
         </header>
@@ -143,7 +144,7 @@ export function InboxClient({
           <button
             onClick={generate}
             disabled={generating}
-            className="shrink-0 rounded-full bg-action px-4 py-1.5 text-[14px] text-white transition-transform active:scale-95 disabled:opacity-40"
+            className="shrink-0 rounded-utility bg-cta px-4 py-1.5 text-[14px] text-cta-ink transition-transform active:scale-95 disabled:opacity-40"
           >
             {generating ? "AI 分析中…" : "让 AI 帮我整理"}
           </button>
@@ -158,14 +159,14 @@ export function InboxClient({
             const validNotes = item.noteIds.filter((id) => noteById.has(id));
             if (validNotes.length === 0) return null;
             return (
-              <div key={index} className="rounded-[18px] bg-tile p-6">
+              <div key={item.name} className="rounded-card bg-tile p-6">
                 <p className="text-[17px] font-semibold tracking-[-0.374px] text-white">
                   {item.existingTopicId ? "建议归入现有主题" : "建议新建主题"}「{item.name}」
                 </p>
                 <p className="mt-1 text-[14px] text-dark-muted">{item.reason}</p>
                 <ul className="mt-4 space-y-2">
                   {validNotes.map((id) => {
-                    const key = `${index}:${id}`;
+                    const key = `${item.name}:${id}`;
                     const note = noteById.get(id)!;
                     return (
                       <li key={id} className="flex items-center gap-2.5 text-[14px] text-white">
@@ -189,7 +190,7 @@ export function InboxClient({
                   <button
                     onClick={() => accept(index, item)}
                     disabled={busy}
-                    className="rounded-full bg-action px-[22px] py-[8px] text-[14px] text-white transition-transform active:scale-95 disabled:opacity-40"
+                    className="rounded-utility bg-action px-[22px] py-[8px] text-[14px] text-white transition-transform active:scale-95 disabled:opacity-40 dark:text-cta-ink"
                   >
                     采纳
                   </button>
@@ -198,7 +199,7 @@ export function InboxClient({
                     disabled={busy}
                     className="text-[14px] text-sky transition-opacity active:opacity-70 disabled:opacity-40"
                   >
-                    全部忽略
+                    忽略全部建议
                   </button>
                 </div>
               </div>
@@ -209,12 +210,12 @@ export function InboxClient({
 
       {/* 批量移动工具条：毛玻璃悬浮（floating-sticky-bar 语法） */}
       {selected.size > 0 && (
-        <div className="sticky top-2 z-10 mb-4 flex items-center gap-2 rounded-full border border-hairline bg-parchment/80 py-2 pl-4 pr-2 backdrop-blur-xl">
-          <span className="text-[14px] text-ink-80">已选 {selected.size} 条</span>
+        <div className="sticky top-2 z-10 mb-4 flex items-center gap-2 rounded-card border border-hairline bg-parchment/80 py-2 pl-4 pr-2 backdrop-blur-xl">
+          <span className="font-mono text-meta text-ink-80">已选 {selected.size} 条</span>
           <select
             value={moveTarget}
             onChange={(e) => setMoveTarget(e.target.value)}
-            className="h-[32px] flex-1 rounded-full border border-hairline bg-surface px-3 text-[14px] outline-none"
+            className="h-[32px] flex-1 rounded-utility border border-hairline bg-surface px-3 text-[14px] outline-none"
           >
             <option value="">移动到…</option>
             {topics
@@ -228,14 +229,14 @@ export function InboxClient({
           <button
             onClick={batchMove}
             disabled={busy || !moveTarget}
-            className="rounded-full bg-action px-4 py-1.5 text-[14px] text-white transition-transform active:scale-95 disabled:opacity-40"
+            className="rounded-utility bg-cta px-4 py-1.5 text-[14px] text-cta-ink transition-transform active:scale-95 disabled:opacity-40"
           >
             移动
           </button>
           <button
             onClick={() => setConfirmingDelete(true)}
             disabled={busy}
-            className="rounded-full bg-danger px-4 py-1.5 text-[14px] text-white transition-transform active:scale-95 disabled:opacity-40"
+            className="rounded-utility bg-danger px-4 py-1.5 text-[14px] text-white transition-transform active:scale-95 disabled:opacity-40"
           >
             删除
           </button>
@@ -260,7 +261,7 @@ export function InboxClient({
           {notes.map((n) => (
             <div
               key={n.id}
-              className="flex items-center gap-3.5 rounded-[18px] bg-surface p-5"
+              className="flex items-center gap-3.5 rounded-card bg-surface p-5"
             >
               <input
                 type="checkbox"
@@ -273,7 +274,7 @@ export function InboxClient({
                   <p className="min-w-0 flex-1 truncate text-[14px] font-semibold tracking-[-0.224px]">
                     {noteDisplayTitle(n)}
                   </p>
-                  <span className="shrink-0 text-[12px] text-ink-48">{formatTime(n.updatedAt)}</span>
+                  <span className="shrink-0 font-mono text-meta text-ink-48">{formatTime(n.updatedAt)}</span>
                 </div>
                 {n.tags.length > 0 && (
                   <div className="mt-1.5 flex flex-wrap gap-1">

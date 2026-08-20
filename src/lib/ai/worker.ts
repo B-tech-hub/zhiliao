@@ -5,6 +5,7 @@ import { LlmConfigError, LlmRequestError, isLlmConfigured } from "@/lib/llm";
 import { markNoteFailed, processNote } from "./process-note";
 import { maybeEnqueueSuggestTopics, runSuggestTopics } from "./suggest-topics";
 import { runWeeklyReview } from "./weekly-review";
+import { transcribeHandwriting } from "./handwriting";
 
 const POLL_INTERVAL_MS = 5000;
 const MAX_ATTEMPTS = 3;
@@ -87,6 +88,16 @@ export async function runJob(db: DB, jobId: string) {
     if (job.type === "note_process" && job.noteId) {
       await processNote(db, job.noteId);
       maybeEnqueueSuggestTopics(db);
+    } else if (job.type === "handwriting_transcribe" && job.noteId) {
+      const payload = job.payload ? JSON.parse(job.payload) as { filename?: string; baseUpdatedAt?: number } : {};
+      if (!payload.filename) throw new Error("手写任务缺少图片文件名");
+      const outcome = await transcribeHandwriting(db, job.noteId, payload.filename, payload.baseUpdatedAt);
+      db.update(aiJobs).set({ status: "done", updatedAt: Date.now() }).where(eq(aiJobs.id, jobId)).run();
+      const note = db.select({ id: aiJobs.noteId }).from(aiJobs).where(eq(aiJobs.id, jobId)).get();
+      if (note?.id && outcome === "appended") {
+        const { enqueueNoteProcess } = await import("@/lib/notes");
+        enqueueNoteProcess(db, note.id);
+      }
     } else if (job.type === "suggest_topics") {
       await runSuggestTopics(db);
     } else if (job.type === "weekly_review") {

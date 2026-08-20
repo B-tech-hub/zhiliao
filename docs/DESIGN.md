@@ -565,12 +565,87 @@ The structural breakpoints that matter for agents: 1440px (content lock), 1068px
 
 本项目在上述亮色体系之上实装了三态暗色模式（浅色/深色/跟随系统，next-themes class 策略，选型见 [adr/0005](adr/0005-dark-mode-class-next-themes.md)）。暗色套值遵循 Apple 暗色分层规范：`#000` 页底 / `#1c1c1e` 卡面 / `#2c2c2e` 填充 / `#38383a` 分隔。
 
+### 本项目字体与字阶 token
+
+参考规范里的 SF Pro 是 Apple 平台字体，知了需要同时覆盖 Windows、自托管与离线部署，因此字体全部随应用打包，不访问字体 CDN：
+
+| Token | 字体栈 | 用途 |
+|---|---|---|
+| `--font-sans` | Inter Variable → Noto Sans SC Variable → 系统无衬线 | 正文、按钮、表单与导航；思源黑体补齐 Windows 中文连续字重 |
+| `--font-serif` | Instrument Serif → Noto Serif SC Variable → 系统衬线 | 仅用于不小于 24px 的页面级大标题，中文小字号不得使用 |
+| `--font-mono` | JetBrains Mono Variable → 系统等宽字体 | 元信息、数字、`kbd` 与代码 |
+
+项目字阶只保留六级，组件不得继续新增 `text-[Npx]` 形成新的字号分叉：
+
+| Token | 大小 | 用途 |
+|---|---:|---|
+| `--text-display` | 34px | 页面大标题 |
+| `--text-title` | 22px | 区块标题 |
+| `--text-body` | 17px | 正文 |
+| `--text-ui` | 15px | 列表标题、按钮、表单 |
+| `--text-meta` | 13px | 摘要、时间、辅助说明 |
+| `--text-micro` | 11px | 标签与角标 |
+
+### 本项目圆角 token
+
+应用界面收敛为三级圆角，普通控件不再使用胶囊形；`rounded-full` 只保留给 FAB、圆形图标按钮和计数角标：
+
+| Token / Tailwind 类 | 值 | 用途 |
+|---|---:|---|
+| `--radius-card` / `rounded-card` | 12px | 卡片、弹层与大容器 |
+| `--radius-utility` / `rounded-utility` | 8px | 按钮、输入框与小容器 |
+| `--radius-chip` / `rounded-chip` | 4px | 标签、筛选 chip、内联代码与键帽 |
+
+PR2 已完成迁移：除冻结的 `src/components/mermaid-code-block.tsx` 中一条精确行外，源码中的 `rounded-[Npx]` 已清零。该 NodeView 属于本轮绝对不碰的高风险实现；门禁按文件和整行精确豁免，不得扩大范围。普通控件的 `rounded-full` 也由门禁限制为五处真实圆形控件或计数角标。
+
+### 键盘交互约定
+
+全局命令面板使用 `⌘K`（Windows/Linux 使用 `Ctrl+K`）唤起，支持笔记搜索、主题跳转与动作执行。基础快捷键为：`⌘\\` 折叠侧栏、`⌘J` 开关助手、`⌘S` 强制保存当前笔记、`⌘Enter` 在助手输入框发送。`Esc` 按当前层级退出：命令面板、快速捕获浮层、助手子层、助手面板或编辑器斜杠菜单依次消费；输入框和编辑器的普通按键不得被全局监听抢占。
+
+**`Esc` 的分层退出没有统一的层级栈，靠两条约定维持。** 一是**监听位置**：助手面板的监听挂在 `window` 冒泡阶段，浮层若也挂那里，一次 `Esc` 会关掉两层；浮层一律挂 `window` **捕获阶段**并在消费后 `stopPropagation`，事件到不了冒泡阶段，助手才不会跟着关。二是**显式让路**：`stopPropagation` 只挡事件传向后续节点，**挡不住同一节点上的其他监听器**，所以两个都挂 `window` 捕获的浮层分不出先后——下层浮层必须自己判断上面是否压着别的层（判据是文档里 `[role="dialog"]` 的数量超过自己那一个），有就把 `Esc` 让出去。
+
+监听器不要挂在浮层自己的 DOM 节点上：那等于要求焦点始终停在浮层内，焦点一旦被 `Tab` 带出去或落到 `body` 上，`Esc` 就失灵。
+
+浮层的焦点契约：命令面板一打开就必须把焦点交给自己的输入框，关闭后还给唤起它的元素。由于面板经 `BodyPortal` 渲染，而 `BodyPortal` 首渲染返回 `null`、要等自身 effect 置 `mounted` 后才 `createPortal`，**自动聚焦必须用 callback ref，不能用 `useEffect` + `requestAnimationFrame`**——后者执行时节点还没进 DOM，焦点会留在原处，在笔记页会导致输入直接写进正文。面板内选择靠上下键，`Tab` 不移动焦点，以此把焦点关在浮层内。
+
+**焦点归还必须让路给新开的层。** 命令面板的动作可以再开出一层（「新建笔记」唤起快速捕获浮层），新层在 commit 阶段就拿到了焦点，而面板卸载后的恢复 effect 晚一步执行，照老剧本会把焦点抢回调用方——用户对着新浮层打字，字一个也进不去。判据是恢复前读 `document.activeElement`：只有焦点确实掉回 `body` 时才归还，已被别的元素接管就放手。
+
+### 侧栏折叠态
+
+桌面侧栏在 256px 与 56px 之间切换，偏好存 `localStorage` 的 `zhiliao.navCollapsed`（与 `zhiliao.chatPanelWidth` 同一套前缀约定）。入口有两个且共用一条命令事件：`⌘\`（编辑器聚焦时让路）与侧栏底部的可见开关。
+
+**折叠态的事实来源是 `<html data-nav-collapsed="1">`，不是 React state。** 服务端读不到 `localStorage`，若等水合后再由 state 收起，居中的正文会横向跳 200px。偏好由根 layout 的同步阻塞脚本在首帧前写入 `<html>`，宽度与显隐一律走 Tailwind 的 `nav-collapsed:` 变体（定义在 `globals.css`，与 `dark` 变体并列）。组件里的 state 只是该属性的镜像，供 `data-collapsed` 契约、`aria-expanded` 与按钮文案使用——**属性的写入必须发生在事件处理里，不能放进 `useEffect`**：挂载时「读属性→setState」与「state→写属性」两个 effect 同批执行，后者会拿着尚未更新的初值把属性抹掉。
+
+折叠态的无障碍取舍：导航项标签用 `nav-collapsed:sr-only` 保留在无障碍树里（`display: none` 会让只剩图标的链接失去可读名称）；「全部主题」整块用 `nav-collapsed:hidden`，那里是有意让内容在折叠态不可达，无障碍树应与视觉一致。未分类计数在折叠态退化为右上角圆点（`rounded-chip`，不占 `rounded-full` 豁免额度）。
+
+### 三栏布局与助手面板
+
+`(app)/layout.tsx` 的外层是一行 flex，从左到右：`SideNav`（`shrink-0`）→ `<main>`（`min-w-0 flex-1`）→ `ChatPanel`（`md:shrink-0`）。`min-w-0` 是正文栏不溢出的唯一保证——去掉它，flex 子项的最小尺寸会退回内容固有宽度，三栏同开时立刻出横向滚动。
+
+**桌面端助手面板是第三栏，不是模态。** 打开时把正文推窄而非盖住，因此没有遮罩、没有「点面板外关闭」；关闭入口是 ✕、`Esc` 与 `⌘J`。面板与侧栏一样 `md:sticky md:top-0 md:h-dvh`：**高度必须锁死一屏，不能让它随 flex 拉伸**——正文长过一屏时容器会跟着变高，面板被拉长后输入区会掉到页面最底下，得滚动整页才能打字。手机端不参与这套，仍是 `fixed inset-0 z-30` 的全屏浮层（`z-30` 要压过 `BottomNav` 的 `z-10` 与两颗悬浮钮的 `z-20`）。
+
+推挤布局下，贴右下角的 `fixed` 悬浮钮会浮在面板之上压住输入区。面板打开时把自身宽度写成 `<html>` 上的 `--chat-rail`，悬浮钮用 `md:right-[calc(2.5rem+var(--chat-rail,0px))]` 让位；「AI 助手」唤起钮则在面板打开时直接收起。走 CSS 变量而非把开关状态提到 `layout.tsx`，是因为后者是服务端组件，提状态要多包一层客户端组件。
+
+`ChatPanel` **不使用 `BodyPortal`**：它挂在 `layout.tsx` 里、是 `<main>` 的兄弟，而劫持 `fixed` 定位的 `page-in` transform 在 `template.tsx` 上、只包 `<main>` 的内容。命令面板与确认弹窗仍需 portal，二者渲染位置不同，别照搬。
+
+### 快速捕获浮层
+
+「快速记录」在桌面端是就地浮层，移动端仍是整页 `/notes/new`——小屏上浮层挤在软键盘与浏览器 chrome 之间，比整页更差。两个入口（`<Link>` 与 `<button>`）都渲染在 DOM 里，**用 CSS 断点分流而非 JS 媒体查询**：首帧就是对的，也不会有水合抖动。与 `ChatPanel` 同理，浮层不使用 `BodyPortal`。
+
+**浮层与整页共用 `new-note-form.tsx` 这一份表单，判据是 `onClose`。** 给了就是浮层形态：保存后 `router.refresh()` 原地刷新而不跳转、返回钮换成关闭钮、高度交给浮层容器。手写摄取两种形态都跳到新笔记页，浮层额外收起自己。主题列表由 `layout.tsx` 已有的 `getTopicsWithCounts()` 传下去，不重复查询；下拉默认值取自 `ChatScopeProvider`，停在主题页时预选该主题（系统主题不在选项里，需排除）。
+
+**草稿必须托管在浮层而不是表单里**：表单随浮层开合挂载卸载，正文存在组件内部时关一次就没了。表单的 content 因此是可选受控（两个 prop 都不传时行为与整页一致），保存成功才清空。**正因为草稿会留存，点遮罩就该关闭**——关掉再打开原样还在，什么都不会丢；反过来，全屏遮罩不可点会把浮层变成没有出口的陷阱，用户会以为页面卡死。遮罩上挂关闭动作、浮层自身 `stopPropagation` 挡住内部事件，这是命令面板已有的写法；**绝不能改用 `preventDefault` 去拦**——`onMouseDown` 会收到内部冒泡上来的事件，一律 `preventDefault` 会把正文、下拉、按钮的 mousedown 默认行为全部吞掉，表现为主题下拉打不开、点正文挪不动光标、拖不出选区。
+
+保存成功后浮层不跳转，界面本来毫无变化，在 `/settings` 这类页面记一条会像是没保存。约定是先亮出「已保存」约 700ms 再收起，不引入 toast 组件。浮层高度 `min(52vh,22rem)`，刻意压得比整页矮一大截——这里是「记一条就走」，开半屏编辑器只会让人对着空白发呆。遮罩用 `bg-black/40` 而非命令面板的 `/25`：那份底下衬什么都无所谓，这份底下衬的是深色页面。
+
 ### Token 双套值
 
 | Token | 亮色 | 暗色 | 用途 |
 |---|---|---|---|
-| `--color-action` | `#0066cc` | `#2997ff` | 交互蓝（暗底上与 sky 收敛） |
+| `--color-action` | `#0066cc` | `#2997ff` | 交互蓝（暗底上与 sky 收敛）；实底文字使用 `text-white dark:text-cta-ink` |
 | `--color-action-focus` | `#0071e3` | `#409cff` | 聚焦态 |
+| `--color-cta` | `#1d1d1f` | `#f5f5f7` | 默认主行动底色；主题不变暗面上的主行动改用 Action Blue，避免亮色 CTA 与暗面融在一起 |
+| `--color-cta-ink` | `#ffffff` | `#1d1d1f` | 主行动文字，随 CTA 底色反转 |
 | `--color-ink` | `#1d1d1f` | `#f5f5f7` | 主文字 |
 | `--color-ink-80` | `#333333` | `#d1d1d6` | 次级文字 |
 | `--color-ink-48` | `#7a7a7a` | `#98989d` | 辅助文字 |
@@ -596,11 +671,14 @@ The structural breakpoints that matter for agents: 1440px (content lock), 1068px
 
 暗色下这些面比 `#000` 页底亮约一档，elevation 分层自然保留；BottomNav 黑玻璃（`bg-black/85` + `border-white/10`）同样不变。
 
-### 裸色类使用规则（硬约束）
+### 设计系统门禁（硬约束）
 
-`text-white`、`bg-white/N`、`bg-black/N` 等裸色类**仅允许出现在主题不变面**上：chrome、tile、accent 按钮（`bg-action`/`bg-danger` 上的白字）、scrim 遮罩（`bg-black/40`、`bg-black/20`）。其余场景一律使用语义 token。违规检查（应零命中）：
+`text-white`、`bg-white/N`、`bg-black/N` 等裸色类**仅允许出现在主题不变面**上：chrome、tile、accent 按钮（`bg-action`/`bg-danger` 上的白字）、scrim 遮罩（`bg-black/40`、`bg-black/20`）。其余场景一律使用语义 token。`bg-white/N` 的透明度写法是合法 chrome 用法，不能被裸 `bg-white` 规则误伤。
 
+门禁同时禁止内容区硬编码语义色、把 `ink` 当背景、任意 `rounded-[Npx]`（冻结 Mermaid 精确行除外），以及普通控件滥用 `rounded-full`。运行：
+
+```bash
+npm run check:design
 ```
-grep -RnE 'bg-white(["\s/]|$)|bg-black/(5|10)\b|#ff3b30|bg-ink["\s]' src/
-```
 
+CI 在 ESLint、Vitest 与构建之前执行同一命令。PWA manifest 和运行时 `theme-color` 无法读取 CSS 变量，脚本只对两处必要输出按“文件 + 整行”精确豁免；不得把整个文件加入白名单。

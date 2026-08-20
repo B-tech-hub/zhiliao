@@ -1,16 +1,38 @@
 @import "tailwindcss";
-/* Inter 变量字体（自托管，docs/DESIGN.md 推荐的 SF Pro 替代；拉丁/数字生效，中文回退系统字体） */
-@import "@fontsource-variable/inter";
+@import "katex/dist/katex.min.css";
+
+/* 字体一律自托管，不连 CDN（内网 / 离线部署友好）。
+   注意所有 @import 必须集中在文件顶部：CSS 规范要求 @import 先于任何普通规则，
+   此前 Inter 那行夹在 .math-block 之后，靠构建期展开侥幸生效。
+   中文两族按 unicode-range 各切成 101 个分片，浏览器只下载命中的那几片。 */
+@import "@fontsource-variable/inter"; /* 拉丁与数字 */
+@import "@fontsource-variable/noto-sans-sc"; /* 中文正文与 UI */
+@import "@fontsource-variable/noto-serif-sc"; /* 中文大标题，仅 ≥24px */
+@import "@fontsource-variable/jetbrains-mono"; /* 元信息、kbd、代码 */
+@import "@fontsource/instrument-serif/latin-400.css"; /* 拉丁大标题 */
+
+.math-block { display: block; overflow-x: auto; margin: 0.5rem 0; }
+.math-warning { color: var(--color-danger, #b42318); background: color-mix(in srgb, currentColor 10%, transparent); }
 main:has(.note-detail) > div { max-width: 1440px; }
 
 /* 暗色模式采用 class 策略：next-themes 在 <html> 上切换 .dark（决策见 docs/adr/0005） */
 @custom-variant dark (&:where(.dark, .dark *));
+
+/* 侧栏折叠态：偏好同样锚在 <html> 上，由根 layout 的阻塞脚本在首帧前写入。
+   折叠的宽度与显隐全部走 CSS 而非 React state——服务端读不到 localStorage，
+   若等水合后才收起，居中的正文会横向跳 200px（同 next-themes 防主题闪烁的路数）。 */
+@custom-variant nav-collapsed (html[data-nav-collapsed="1"] &);
 
 /* Apple 设计规范 token（见 docs/DESIGN.md，暗色对照表见其附录）：
    单一 Action Blue 交互色，白/羊皮纸双底色，明暗瓷砖交替，无装饰阴影 */
 @theme {
   --color-action: #0066cc;
   --color-action-focus: #0071e3;
+  /* 主行动默认改墨底：Action Blue 主要留给链接、选中态、消息气泡，以及
+     主题不变暗面上的行动；暗色下反转为浅底深字（见 .dark 块），否则墨底
+     按钮会沉进黑色页底。 */
+  --color-cta: #1d1d1f;
+  --color-cta-ink: #ffffff;
   --color-ink: #1d1d1f;
   --color-ink-80: #333333;
   --color-ink-48: #7a7a7a;
@@ -38,11 +60,33 @@ main:has(.note-detail) > div { max-width: 1440px; }
   --color-sky: #2997ff; /* primary-on-dark：暗面上的链接蓝 */
   --color-dark-muted: #cccccc; /* body-muted：暗面辅文 */
 
-  --font-sans: "Inter Variable", system-ui, -apple-system, "SF Pro Text",
-    "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+  /* 字体三层：sans 管正文与 UI，serif 只给 ≥24px 大标题（中文宋体在小字号下
+     可读性差，绝不下放到正文），mono 管元信息、kbd 与代码。
+     中文此前一路回退到系统字体——Windows 上就是微软雅黑，字重档位少、Light 发虚，
+     整套排版意图在该平台被字体拖垮，故引入思源黑体变量版（100–900 连续字重）补齐。 */
+  --font-sans: "Inter Variable", "Noto Sans SC Variable", system-ui,
+    -apple-system, "SF Pro Text", "PingFang SC", "Microsoft YaHei",
+    "Segoe UI", sans-serif;
+  --font-serif: "Instrument Serif", "Noto Serif SC Variable", Georgia,
+    "Songti SC", serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, "SFMono-Regular",
+    "Cascadia Code", Consolas, monospace;
 
-  --radius-card: 18px;
-  --radius-utility: 8px;
+  /* 字阶：此前全站用 text-[17px] 这类 arbitrary value 逐处手写，是漂移最快的一层。
+     取值来自 docs/DESIGN.md 的字阶表，只保留本项目真正用得到的六级。 */
+  --text-display: 34px; /* 页面大标题，配 font-serif */
+  --text-title: 22px; /* 区块标题 */
+  --text-body: 17px; /* 正文，与下方 body 规则同值 */
+  --text-ui: 15px; /* 列表标题、按钮、表单 */
+  --text-meta: 13px; /* 摘要、时间、辅助说明 */
+  --text-micro: 11px; /* 标签、角标 */
+
+  /* 圆角三级。此前 card / utility 两个 token 定义了却零使用，实际代码里是
+     18 / 14 / 12 / 10 / 8 / 6 六种 arbitrary 值混用；收敛为三级并接入 CI 门禁。
+     rounded-full 只留给 FAB、圆形图标按钮和计数角标。 */
+  --radius-card: 12px; /* 卡片、弹层、大容器 */
+  --radius-utility: 8px; /* 按钮、输入框、小容器 */
+  --radius-chip: 4px; /* 标签、内联代码、kbd 键帽 */
 
   /* 页面进场动画：导航时内容区整体淡入上移（用于 template.tsx） */
   --animate-page-in: page-in 240ms cubic-bezier(0.22, 1, 0.36, 1) both;
@@ -64,6 +108,8 @@ main:has(.note-detail) > div { max-width: 1440px; }
 .dark {
   --color-action: #2997ff; /* Action Blue 在暗底上会沉没，与 sky 收敛 */
   --color-action-focus: #409cff;
+  --color-cta: #f5f5f7; /* 墨底按钮在暗色下整体反转，否则沉进黑色页底 */
+  --color-cta-ink: #1d1d1f;
   --color-ink: #f5f5f7;
   --color-ink-80: #d1d1d6;
   --color-ink-48: #98989d;
@@ -93,7 +139,7 @@ body {
   color: var(--color-ink);
   font-family: var(--font-sans);
   /* Apple 正文规范：17px / 400 / 1.47 / 轻微负字距 */
-  font-size: 17px;
+  font-size: var(--text-body);
   line-height: 1.47;
   letter-spacing: -0.2px;
   -webkit-font-smoothing: antialiased;
@@ -202,9 +248,10 @@ h3 {
     border-top: 1px solid var(--color-divider);
   }
 
-  /* 代码：此前 pre 有底色却没有等宽字体，代码块用的还是 Inter */
+  /* 代码：此前 pre 有底色却没有等宽字体，代码块用的还是 Inter。
+     字体栈已提升为 --font-mono，与元信息、kbd 键帽共用同一套 */
   .prose-note code {
-    font-family: ui-monospace, "SFMono-Regular", "Cascadia Code", Consolas, monospace;
+    font-family: var(--font-mono);
     font-size: 0.88em;
     background: var(--color-fill);
     border-radius: 4px;

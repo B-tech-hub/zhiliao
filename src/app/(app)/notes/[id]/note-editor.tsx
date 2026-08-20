@@ -7,6 +7,7 @@ import type { Note } from "@/db/schema";
 import { BackButton } from "@/components/back-button";
 import { AskWithSourcesButton } from "@/components/chat/ask-with-sources";
 import { ConfirmDialog } from "@/components/confirm-dialog";
+import { COMMAND_EVENTS } from "@/components/command-events";
 
 // TipTap 体积较大，懒加载拆出主包；占位与编辑区等高避免布局跳动
 const MarkdownEditor = dynamic(
@@ -63,8 +64,13 @@ export function NoteEditor({
   // 专注模式：藏起工具行、目录与标签行，只留标题与正文
   const [focusMode, setFocusMode] = useState(false);
   const headings = useMemo(() => Array.from(content.matchAll(/^(#{1,3})\s+(.+)$/gm)).map((m, i) => ({ level: m[1].length, text: m[2].trim(), id: `heading-${i}` })), [content]);
+  const transcriptionWarnings = useMemo(() => {
+    try { return note.transcriptionWarnings ? JSON.parse(note.transcriptionWarnings) as string[] : []; }
+    catch { return ["转写告警数据无法解析"]; }
+  }, [note.transcriptionWarnings]);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const savedContentRef = useRef(note.content);
+  const contentRef = useRef(note.content);
 
   const patch = useCallback(
     async (body: Record<string, unknown>) => {
@@ -93,6 +99,7 @@ export function NoteEditor({
   const onContentChange = useCallback(
     (md: string) => {
       setContent(md);
+      contentRef.current = md;
       setSaveState("dirty");
       if (timerRef.current) clearTimeout(timerRef.current);
       timerRef.current = setTimeout(async () => {
@@ -107,6 +114,19 @@ export function NoteEditor({
     },
     [patch],
   );
+
+  useEffect(() => {
+    const forceSave = () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+      const latest = contentRef.current;
+      if (latest === savedContentRef.current) return;
+      void patch({ content: latest }).then((saved) => {
+        if (saved) savedContentRef.current = latest;
+      });
+    };
+    window.addEventListener(COMMAND_EVENTS.forceSave, forceSave);
+    return () => window.removeEventListener(COMMAND_EVENTS.forceSave, forceSave);
+  }, [patch]);
 
   useEffect(() => {
     return () => {
@@ -193,19 +213,27 @@ export function NoteEditor({
   }
 
   const statusText = AI_STATUS_TEXT[note.aiStatus];
+  const transcriptionStatus = note.transcriptionReviewStatus;
+  async function markTranscriptionReviewed() {
+    if (await patch({ transcriptionReviewStatus: "reviewed" })) router.refresh();
+  }
+  async function handleCandidate(method: "POST" | "DELETE") {
+    const res = await fetch(`/api/notes/${note.id}/transcription-candidate`, { method });
+    if (res.ok) router.refresh();
+  }
   const saveText = { idle: "", dirty: "输入中…", saving: "保存中…", saved: "已保存", error: "保存失败" }[saveState];
 
   return (
     <div className="flex h-[calc(100dvh-9rem)] flex-col md:h-[calc(100dvh-7.5rem)]">
       {/* 纸面化：整页一张白纸，元数据收进安静的工具行，标题正文裸排 */}
-      <div className="flex min-h-0 flex-1 flex-col rounded-[18px] bg-surface p-6 md:px-10 md:py-8">
+      <div className="flex min-h-0 flex-1 flex-col rounded-card bg-surface p-6 md:px-10 md:py-8">
         <div className="mb-5 flex items-center justify-between gap-2">
           <div className="flex min-w-0 flex-1 items-center gap-2.5">
             <BackButton fallback={backHref} iconOnly />
             <select
               value={topicId}
               onChange={(e) => changeTopic(e.target.value)}
-              className="h-[32px] min-w-0 max-w-full rounded-full border border-hairline bg-surface px-3 text-[13px] text-ink-80 outline-none focus:border-action-focus"
+              className="h-[32px] min-w-0 max-w-full rounded-utility border border-hairline bg-surface px-3 text-[13px] text-ink-80 outline-none focus:border-action-focus"
             >
               {topics.map((t) => (
                 <option key={t.id} value={t.id}>
@@ -248,7 +276,7 @@ export function NoteEditor({
             {note.aiStatus === "failed" && (
               <button
                 onClick={reprocess}
-                className="rounded-full border border-action px-3 py-0.5 text-[12px] text-action transition-transform active:scale-95"
+                className="rounded-chip border border-action px-3 py-0.5 text-[12px] text-action transition-transform active:scale-95"
               >
                 重新处理
               </button>
@@ -256,12 +284,32 @@ export function NoteEditor({
           </p>
         )}
 
+        {transcriptionStatus !== "reviewed" && (
+          <div className="mb-3 border-l-2 border-action pl-3 text-[12px] text-ink-48">
+            <div className="flex items-center gap-2">
+              <span>{transcriptionStatus === "needs_review" ? "转写包含待核对告警" : "转写待核对"}</span>
+              <button type="button" onClick={markTranscriptionReviewed} className="rounded-chip border border-action px-3 py-0.5 text-action">标记已核对</button>
+            </div>
+            {transcriptionWarnings.length > 0 && <ul className="mt-1 list-disc pl-4">{transcriptionWarnings.map((warning) => <li key={warning}>{warning}</li>)}</ul>}
+            {note.transcriptionCandidate && (
+              <details className="mt-2">
+                <summary className="cursor-pointer text-action">查看候选稿</summary>
+                <pre className="mt-2 max-h-48 overflow-auto whitespace-pre-wrap rounded-utility bg-fill p-2 text-[12px] text-ink-80">{note.transcriptionCandidate}</pre>
+                <div className="mt-2 flex gap-2">
+                  <button type="button" onClick={() => handleCandidate("POST")} className="rounded-utility bg-cta px-3 py-1 text-cta-ink">追加到正文</button>
+                  <button type="button" onClick={() => handleCandidate("DELETE")} className="rounded-utility border border-hairline px-3 py-1">丢弃</button>
+                </div>
+              </details>
+            )}
+          </div>
+        )}
+
         <input
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           onBlur={saveTitle}
           placeholder="标题（留空由 AI 生成）"
-          className="mb-4 w-full bg-transparent text-[28px] font-semibold tracking-[-0.374px] outline-none placeholder:text-ink-48/50"
+          className="mb-4 w-full bg-transparent font-serif text-[28px] tracking-[-0.374px] outline-none placeholder:text-ink-48/50"
         />
         <div className="flex min-h-0 flex-1 gap-8">
           {/* 必须是 flex 列容器：MarkdownEditor 根节点靠 flex-1 + min-h-0 把
@@ -288,7 +336,7 @@ export function NoteEditor({
                     return (
                       <button
                         key={h.id}
-                        className={`block w-full truncate rounded-[6px] py-1 pr-2 text-left text-[13px] transition-colors ${
+                        className={`block w-full truncate rounded-utility py-1 pr-2 text-left text-[13px] transition-colors ${
                           active
                             ? "bg-action/10 font-medium text-action"
                             : "text-ink-80 hover:bg-fill hover:text-action"

@@ -31,7 +31,6 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string
   };
   const suggestion = payload.suggestions[parsed.data.index];
   if (!suggestion) return NextResponse.json({ error: "建议项不存在" }, { status: 400 });
-
   // 只迁移仍在未分类中的笔记，且必须属于该建议
   const allowed = new Set(suggestion.noteIds);
   const targetNoteIds = parsed.data.noteIds.filter((n) => allowed.has(n));
@@ -58,8 +57,23 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string
         .set({ topicId: topicId!, topicLocked: 1, updatedAt: now })
         .where(and(inArray(notes.id, targetNoteIds), isNull(notes.deletedAt)))
         .run();
-      // 该建议整体标记已处理（其余建议项一并失效，避免笔记归属冲突）
-      tx.update(topicSuggestions).set({ status: "accepted" }).where(eq(topicSuggestions.id, id)).run();
+
+      // 逐项采纳：只摘掉当前这一项，其余建议继续留在同一行里等待处理。
+      // 同时把刚迁走的笔记从其余项中剔除（聚类允许同一条笔记出现在多个候选主题里），
+      // 剩不到 2 条笔记的残项直接丢弃，免得留下没有意义的建议卡。
+      const moved = new Set(targetNoteIds);
+      const rest = payload.suggestions
+        .filter((_, i) => i !== parsed.data.index)
+        .map((s) => ({ ...s, noteIds: s.noteIds.filter((n) => !moved.has(n)) }))
+        .filter((s) => s.noteIds.length >= 2);
+      tx.update(topicSuggestions)
+        .set(
+          rest.length > 0
+            ? { payload: JSON.stringify({ suggestions: rest }) }
+            : { status: "accepted" },
+        )
+        .where(eq(topicSuggestions.id, id))
+        .run();
     });
   } catch (e) {
     return NextResponse.json({ error: `采纳失败: ${e instanceof Error ? e.message : e}` }, { status: 500 });

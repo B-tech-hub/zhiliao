@@ -6,7 +6,6 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { BodyPortal } from "@/components/body-portal";
 import { MarkdownView } from "@/components/markdown-view";
 import type { SourceItem } from "@/lib/ai/sources";
 import { onAskWithSources } from "./ask-with-sources";
@@ -19,6 +18,7 @@ import {
 } from "./chat-state";
 import { SourcePicker } from "./source-picker";
 import { useChat } from "./use-chat";
+import { COMMAND_EVENTS } from "@/components/command-events";
 
 // 输入框自增高的上限，约五行正文
 const INPUT_MAX_HEIGHT = 132;
@@ -29,16 +29,16 @@ const PANEL_WIDTH = { min: 420, max: 900, default: 560 } as const;
 const PANEL_WIDTH_KEY = "zhiliao.chatPanelWidth";
 
 /* 拖拽调宽。宽度存 localStorage：面板是每天都要开的东西，
-   每次开都得重新拖一遍，比不能调还烦。 */
+   每次开都得重新拖一遍，比不能调还烦。
+
+   曾经这里还有一个吞掉合成点击的 150ms 时间窗：面板是 overlay 抽屉时，
+   把手在面板内、松手常落在面板外的遮罩上，浏览器把 click 派发到两者的共同祖先
+   即遮罩本身，于是「往左拖宽」变成「关闭面板」。桌面端改成 push 布局后遮罩连同
+   「点外部关闭」一起没了，那个时间窗失去唯一的消费者，整段删除；手机端仍是全屏
+   面板，本就没有拖拽把手（把手 hidden md:block），也不会产生这种合成点击。 */
 function usePanelWidth() {
   const [width, setWidth] = useState<number>(PANEL_WIDTH.default);
   const [dragging, setDragging] = useState(false);
-  /* 拖拽结束后要吞掉紧接着的那次遮罩点击。浏览器把 click 派发到 mousedown 与
-     mouseup 的共同祖先——把手在面板内、松手却常落在面板外的遮罩上，共同祖先
-     就是遮罩本身，面板上的 stopPropagation 拦不住，结果「往左拖宽」变成「关闭面板」。
-     用时间窗而不是一次性标志位：松手若落在面板内，那次 click 根本不会走到遮罩，
-     标志位没人消费就会赖着，把用户下一次真心想关的点击白白吞掉。 */
-  const dragEndedAt = useRef(0);
 
   // 首屏读 localStorage 而非用 useState 初始值：服务端渲染时没有 window
   useEffect(() => {
@@ -48,19 +48,13 @@ function usePanelWidth() {
 
   useEffect(() => {
     if (!dragging) return;
-    let moved = false;
     // 面板贴右边缘，所以宽度是「视口宽 - 指针横坐标」
     const onMove = (e: PointerEvent) => {
-      moved = true;
       setWidth(
         Math.min(PANEL_WIDTH.max, Math.max(PANEL_WIDTH.min, window.innerWidth - e.clientX)),
       );
     };
-    const onUp = () => {
-      // 只有真的拖动过才记时刻：单纯点一下把手不该影响后续的关闭点击
-      if (moved) dragEndedAt.current = Date.now();
-      setDragging(false);
-    };
+    const onUp = () => setDragging(false);
     window.addEventListener("pointermove", onMove);
     window.addEventListener("pointerup", onUp);
     /* 拖拽时禁掉全局文字选中：否则划过正文会选中一大片蓝 */
@@ -80,11 +74,7 @@ function usePanelWidth() {
     if (!dragging) window.localStorage.setItem(PANEL_WIDTH_KEY, String(width));
   }, [dragging, width]);
 
-  /* 遮罩点击是否应被忽略。只挡拖拽刚结束那一瞬间的合成点击——
-     人不可能在松手后 150ms 内又有意去点遮罩。 */
-  const shouldIgnoreOverlayClick = () => Date.now() - dragEndedAt.current < 150;
-
-  return { width, dragging, startDrag: () => setDragging(true), shouldIgnoreOverlayClick };
+  return { width, dragging, startDrag: () => setDragging(true) };
 }
 
 export function ChatPanel({
@@ -114,9 +104,58 @@ export function ChatPanel({
     Record<number, { state: "busy" | "done" | "error"; noteId?: string }>
   >({});
   const { scope } = useChatScope();
-  const { width, dragging, startDrag, shouldIgnoreOverlayClick } = usePanelWidth();
+  const { width, dragging, startDrag } = usePanelWidth();
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+
+  /* 桌面端面板改推挤布局后，两个贴右下角的 fixed 悬浮钮会浮在面板上方压住输入区。
+     它们在 layout.tsx 里、且 layout 是服务端组件，把 open 状态提上去要多包一层
+     客户端组件；改为由面板把「右侧轨道宽度」写到 <html>，悬浮钮用 CSS 让位。
+     手机端面板全屏覆盖，悬浮钮本就看不见，故只有 md 以上会读这个变量。 */
+  useEffect(() => {
+    const root = document.documentElement;
+    if (open) root.style.setProperty("--chat-rail", `${width}px`);
+    else root.style.removeProperty("--chat-rail");
+    return () => {
+      root.style.removeProperty("--chat-rail");
+    };
+  }, [open, width]);
+
+  useEffect(() => {
+    const toggle = () => setOpen((value) => !value);
+    window.addEventListener(COMMAND_EVENTS.toggleChat, toggle);
+    return () => window.removeEventListener(COMMAND_EVENTS.toggleChat, toggle);
+  }, []);
+
+  /* submit 每次渲染都是新引用，用 ref 兜住最新的一份，
+     监听器只注册一次——否则流式回答每吐一个 token 就要重挂一遍 window 事件。
+     submit 是下方的 const，此处不能取值初始化，只能挂空 ref 等 effect 填。 */
+  const submitRef = useRef<(() => void) | null>(null);
+  useEffect(() => {
+    submitRef.current = submit;
+  });
+
+  useEffect(() => {
+    const submitFromShortcut = () => {
+      if (document.activeElement !== inputRef.current) return;
+      submitRef.current?.();
+    };
+    window.addEventListener(COMMAND_EVENTS.submitChat, submitFromShortcut);
+    return () => window.removeEventListener(COMMAND_EVENTS.submitChat, submitFromShortcut);
+  }, []);
+
+  useEffect(() => {
+    if (!open) return;
+    const closeLayer = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      if (picking !== null) setPicking(null);
+      else if (showHistory) setShowHistory(false);
+      else if (showSources) setShowSources(false);
+      else setOpen(false);
+    };
+    window.addEventListener("keydown", closeLayer);
+    return () => window.removeEventListener("keydown", closeLayer);
+  }, [open, picking, showHistory, showSources]);
 
   // 换了笔记/主题就重新附上——新页面带来的是另一份上下文
   useEffect(() => setDetached(false), [scope?.id]);
@@ -263,47 +302,47 @@ export function ChatPanel({
   const waiting = chat.streaming && chat.items[chat.items.length - 1]?.kind !== "text";
 
   return (
-    <BodyPortal>
-      {/* 唤起按钮：与右下角"快速记录"钮横向并排贴底（Portal 到 body，避开 template 的 transform 动画劫持 fixed 定位） */}
-      <button
-        onClick={() => setOpen(true)}
-        className="fixed bottom-20 right-[5.5rem] z-20 flex h-12 w-12 items-center justify-center rounded-full bg-chrome text-white shadow-lg transition-transform active:scale-95 dark:ring-1 dark:ring-white/15 md:bottom-10 md:right-[6.75rem]"
-        aria-label="AI 助手"
-        title="AI 助手"
-      >
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5" aria-hidden>
-          <path d="M21 12a8 8 0 0 1-8 8H5l-2 2V12a8 8 0 0 1 8-8h2a8 8 0 0 1 8 8z" />
-        </svg>
-      </button>
+    <>
+      {/* 唤起按钮：与右下角"快速记录"钮横向并排贴底。面板开着时收起——
+          推挤布局下它会实打实地浮在面板上，而此时"打开助手"也已无意义。
+          这里不再需要 BodyPortal：本组件挂在 (app)/layout.tsx 里，是 <main> 的兄弟，
+          而劫持 fixed 定位的 transform 动画在 template.tsx 上、只包 <main> 的内容。 */}
+      {!open && (
+        <button
+          onClick={() => setOpen(true)}
+          className="fixed bottom-20 right-[5.5rem] z-20 flex h-12 w-12 items-center justify-center rounded-full bg-chrome text-white shadow-lg transition-transform active:scale-95 dark:ring-1 dark:ring-white/15 md:bottom-10 md:right-[6.75rem]"
+          aria-label="AI 助手"
+          title="AI 助手"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5" aria-hidden>
+            <path d="M21 12a8 8 0 0 1-8 8H5l-2 2V12a8 8 0 0 1 8-8h2a8 8 0 0 1 8 8z" />
+          </svg>
+        </button>
+      )}
 
       {open && (
-        <div
-          className="fixed inset-0 z-30 flex justify-end bg-black/20"
-          onClick={() => {
-            // 刚拖完宽度的那次点击不算「点了遮罩要关闭」
-            if (shouldIgnoreOverlayClick()) return;
-            setOpen(false);
-          }}
+        /* 手机端仍是盖住全屏的浮层；md 以上变成 layout 那一行 flex 的第三栏，
+           与 SideNav 一样 sticky 贴顶、自身高一屏——否则正文长过一屏时面板会被
+           拉到与页面等高，输入区跟着掉到页面最底下。 */
+        <aside
+          className="fixed inset-0 z-30 flex w-full flex-col bg-surface md:sticky md:inset-auto md:top-0 md:z-auto md:h-dvh md:w-[var(--panel-w)] md:shrink-0 md:border-l md:border-divider"
+          style={{ "--panel-w": `${width}px` } as React.CSSProperties}
+          aria-label="AI 助手"
         >
+          {/* 拖拽把手：贴左边缘的一条窄带，移动端不给——那里面板本就全宽 */}
           <div
-            className="relative flex h-full w-full flex-col bg-surface shadow-2xl md:w-[var(--panel-w)]"
-            style={{ "--panel-w": `${width}px` } as React.CSSProperties}
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* 拖拽把手：贴左边缘的一条窄带，移动端不给——那里面板本就全宽 */}
-            <div
-              onPointerDown={(e) => {
-                e.preventDefault();
-                startDrag();
-              }}
-              className={`absolute inset-y-0 left-0 z-10 hidden w-1.5 cursor-col-resize md:block ${
-                dragging ? "bg-action/40" : "hover:bg-action/25"
-              }`}
-              role="separator"
-              aria-orientation="vertical"
-              aria-label="拖动调整助手面板宽度"
-            />
-            {picking !== null ? (
+            onPointerDown={(e) => {
+              e.preventDefault();
+              startDrag();
+            }}
+            className={`absolute inset-y-0 left-0 z-10 hidden w-1.5 cursor-col-resize md:block ${
+              dragging ? "bg-action/40" : "hover:bg-action/25"
+            }`}
+            role="separator"
+            aria-orientation="vertical"
+            aria-label="拖动调整助手面板宽度"
+          />
+          {picking !== null ? (
               <SourcePicker
                 initial={picking}
                 onCancel={() => setPicking(null)}
@@ -323,7 +362,7 @@ export function ChatPanel({
               <div className="flex shrink-0 items-center gap-1">
                 <button
                   onClick={() => setShowHistory((v) => !v)}
-                  className="rounded-full px-2 py-1 text-[12px] text-ink-48 hover:bg-fill"
+                  className="rounded-utility px-2 py-1 text-[12px] text-ink-48 hover:bg-fill"
                 >
                   历史
                 </button>
@@ -332,7 +371,7 @@ export function ChatPanel({
                     void chat.openConversation(null);
                     setShowHistory(false);
                   }}
-                  className="rounded-full px-2 py-1 text-[12px] text-action hover:bg-fill"
+                  className="rounded-utility px-2 py-1 text-[12px] text-action hover:bg-fill"
                 >
                   新对话
                 </button>
@@ -341,14 +380,14 @@ export function ChatPanel({
                     setPicking([]);
                     setShowHistory(false);
                   }}
-                  className="rounded-full px-2 py-1 text-[12px] text-action hover:bg-fill"
+                  className="rounded-utility px-2 py-1 text-[12px] text-action hover:bg-fill"
                   title="选几条笔记或主题作为来源，AI 只依据它们回答"
                 >
                   来源问答
                 </button>
                 <button
                   onClick={() => setOpen(false)}
-                  className="rounded-full px-2 py-1 text-[14px] text-ink-48 hover:bg-fill"
+                  className="rounded-utility px-2 py-1 text-[14px] text-ink-48 hover:bg-fill"
                   aria-label="关闭"
                 >
                   ✕
@@ -440,7 +479,7 @@ export function ChatPanel({
                       <button
                         key={c}
                         onClick={() => fillInput(c)}
-                        className="rounded-full border border-hairline px-3 py-1.5 text-[13px] text-ink-80 transition-colors hover:bg-fill active:scale-95"
+                        className="rounded-utility border border-hairline px-3 py-1.5 text-[13px] text-ink-80 transition-colors hover:bg-fill active:scale-95"
                       >
                         {c}
                       </button>
@@ -478,7 +517,7 @@ export function ChatPanel({
                       {/* 只有思考过程、还没吐正文的那一瞬间不画气泡 */}
                       {(item.role === "user" || item.content) &&
                         (item.role === "user" ? (
-                          <div className="max-w-[85%] whitespace-pre-wrap rounded-[18px] bg-action px-3.5 py-2 text-[15px] leading-[1.5] text-white">
+                          <div className="max-w-[85%] whitespace-pre-wrap rounded-card bg-action px-3.5 py-2 text-[15px] leading-[1.5] text-white dark:text-cta-ink">
                             {item.content}
                           </div>
                         ) : (
@@ -531,7 +570,7 @@ export function ChatPanel({
                 <div className="flex justify-start">
                   <div
                     role="status"
-                    className="flex items-center gap-2 rounded-[18px] bg-fill px-3.5 py-2 text-[14px] text-ink-48"
+                    className="flex items-center gap-2 rounded-card bg-fill px-3.5 py-2 text-[14px] text-ink-48"
                   >
                     <Spinner className="text-action" />
                     思考中…
@@ -546,12 +585,12 @@ export function ChatPanel({
             <div className="p-3">
               {/* 来源集详情：由控件行的来源 chip 展开。接地会话的知识边界，随时可查可改 */}
               {chat.grounded && showSources && (
-                <div className="mb-2 rounded-[18px] border border-hairline bg-fill/40 px-3.5 py-2.5">
+                <div className="mb-2 rounded-card border border-hairline bg-fill/40 px-3.5 py-2.5">
                   <div className="flex items-center justify-between gap-2">
                     <span className="text-[12px] font-medium text-action">来源集</span>
                     <button
                       onClick={() => setPicking(chat.sources)}
-                      className="shrink-0 rounded-full px-2 py-0.5 text-[12px] text-action hover:bg-fill"
+                      className="shrink-0 rounded-utility px-2 py-0.5 text-[12px] text-action hover:bg-fill"
                     >
                       改来源
                     </button>
@@ -576,13 +615,13 @@ export function ChatPanel({
                 </div>
               )}
 
-              <div className="rounded-[18px] border border-hairline bg-surface transition-colors focus-within:border-action-focus">
+              <div className="rounded-card border border-hairline bg-surface transition-colors focus-within:border-action-focus">
                 <textarea
                   ref={inputRef}
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={(e) => {
-                    if (e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing) {
+                    if (e.key === "Enter" && !e.shiftKey && !e.metaKey && !e.ctrlKey && !e.nativeEvent.isComposing) {
                       e.preventDefault();
                       submit();
                     }
@@ -598,14 +637,14 @@ export function ChatPanel({
                   <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1.5">
                     {/* 上下文附件：摘除后助手只面向整个知识库 */}
                     {attached && (
-                      <span className="flex max-w-full items-center gap-1 rounded-full border border-hairline py-1 pl-2.5 pr-1 text-[12px] text-ink-80">
+                      <span className="flex max-w-full items-center gap-1 rounded-chip border border-hairline py-1 pl-2.5 pr-1 text-[12px] text-ink-80">
                         <span className="shrink-0 text-ink-48">
                           {attached.type === "note" ? "笔记" : "主题"}
                         </span>
                         <span className="min-w-0 max-w-[140px] truncate">{attached.title}</span>
                         <button
                           onClick={() => setDetached(true)}
-                          className="shrink-0 rounded-full px-1 text-ink-48 hover:text-ink-80"
+                          className="shrink-0 rounded-chip px-1 text-ink-48 hover:text-ink-80"
                           title="不带这条上下文，改为面向整个知识库"
                           aria-label="移除上下文附件"
                         >
@@ -616,7 +655,7 @@ export function ChatPanel({
                     {scope && detached && !chat.grounded && (
                       <button
                         onClick={() => setDetached(false)}
-                        className="flex shrink-0 items-center gap-1 rounded-full border border-hairline px-2.5 py-1 text-[12px] text-ink-48 transition-colors hover:bg-fill active:scale-95"
+                        className="flex shrink-0 items-center gap-1 rounded-utility border border-hairline px-2.5 py-1 text-[12px] text-ink-48 transition-colors hover:bg-fill active:scale-95"
                         title={`把当前${scope.type === "note" ? "笔记" : "主题"}加回上下文`}
                       >
                         ＋ 当前{scope.type === "note" ? "笔记" : "主题"}
@@ -627,7 +666,7 @@ export function ChatPanel({
                     {chat.grounded && (
                       <button
                         onClick={() => setShowSources((v) => !v)}
-                        className={`flex shrink-0 items-center gap-1 rounded-full px-2.5 py-1 text-[12px] transition-colors active:scale-95 ${
+                        className={`flex shrink-0 items-center gap-1 rounded-utility px-2.5 py-1 text-[12px] transition-colors active:scale-95 ${
                           showSources ? "bg-action/10 text-action" : "border border-hairline text-action hover:bg-fill"
                         }`}
                         title="查看或修改来源集"
@@ -641,7 +680,7 @@ export function ChatPanel({
                       <button
                         onClick={() => visionAvailable && setUseVision((v) => !v)}
                         disabled={!visionAvailable}
-                        className={`flex shrink-0 items-center gap-1 rounded-full px-2.5 py-1 text-[12px] transition-colors active:scale-95 disabled:opacity-40 ${
+                        className={`flex shrink-0 items-center gap-1 rounded-utility px-2.5 py-1 text-[12px] transition-colors active:scale-95 disabled:opacity-40 ${
                           useVision && visionAvailable
                             ? "bg-action/10 text-action"
                             : "border border-hairline text-ink-48 hover:bg-fill"
@@ -656,7 +695,7 @@ export function ChatPanel({
                     <button
                       onClick={() => reasoningAvailable && setUseReasoning((v) => !v)}
                       disabled={!reasoningAvailable}
-                      className={`flex shrink-0 items-center gap-1 rounded-full px-2.5 py-1 text-[12px] transition-colors active:scale-95 disabled:opacity-40 ${
+                      className={`flex shrink-0 items-center gap-1 rounded-utility px-2.5 py-1 text-[12px] transition-colors active:scale-95 disabled:opacity-40 ${
                         useReasoning && reasoningAvailable
                           ? "bg-action/10 text-action"
                           : "border border-hairline text-ink-48 hover:bg-fill"
@@ -674,7 +713,7 @@ export function ChatPanel({
                   {chat.streaming ? (
                     <button
                       onClick={chat.stop}
-                      className="flex h-8 shrink-0 items-center gap-1.5 rounded-full border border-hairline px-3.5 text-[13px] text-ink-48 active:scale-95"
+                      className="flex h-8 shrink-0 items-center gap-1.5 rounded-utility border border-hairline px-3.5 text-[13px] text-ink-48 active:scale-95"
                     >
                       <Spinner className="text-action" />
                       停止
@@ -683,7 +722,7 @@ export function ChatPanel({
                     <button
                       onClick={submit}
                       disabled={!input.trim()}
-                      className="h-8 shrink-0 rounded-full bg-action px-4 text-[13px] text-white active:scale-95 disabled:opacity-40"
+                      className="h-8 shrink-0 rounded-utility bg-cta px-4 text-[13px] text-cta-ink active:scale-95 disabled:opacity-40"
                     >
                       发送
                     </button>
@@ -693,14 +732,13 @@ export function ChatPanel({
             </div>
               </>
             )}
-          </div>
-        </div>
+        </aside>
       )}
-    </BodyPortal>
+    </>
   );
 }
 
-const CARD_BASE = "rounded-[18px] border px-3 py-2 text-[13px] leading-[1.5]";
+const CARD_BASE = "rounded-card border px-3 py-2 text-[13px] leading-[1.5]";
 
 /* 思考过程的折叠栏。展开策略是「跟着注意力走」：模型还在想时自动展开——
    那正是用户唯一想看它的时刻；正文一开始吐就自动收起，把版面让给答案。
@@ -723,7 +761,7 @@ function ReasoningPanel({ text, active }: { text: string; active: boolean }) {
   }, [text, open, active]);
 
   return (
-    <div className="w-full max-w-[85%] rounded-[12px] border border-hairline/70 bg-fill/30">
+    <div className="w-full max-w-[85%] rounded-card border border-hairline/70 bg-fill/30">
       <button
         onClick={() => {
           touched.current = true;
@@ -800,14 +838,14 @@ function ToolCard({
           <button
             onClick={() => onRespond(true)}
             disabled={busy}
-            className="rounded-full bg-action px-3 py-1 text-[12px] text-white active:scale-95 disabled:opacity-40"
+            className="rounded-utility bg-cta px-3 py-1 text-[12px] text-cta-ink active:scale-95 disabled:opacity-40"
           >
             允许
           </button>
           <button
             onClick={() => onRespond(false)}
             disabled={busy}
-            className="rounded-full border border-hairline px-3 py-1 text-[12px] text-ink-48 active:scale-95 disabled:opacity-40"
+            className="rounded-utility border border-hairline px-3 py-1 text-[12px] text-ink-48 active:scale-95 disabled:opacity-40"
           >
             拒绝
           </button>
@@ -836,7 +874,7 @@ function ToolCard({
           <button
             onClick={onUndo}
             disabled={undoing}
-            className="shrink-0 rounded-full px-2 py-0.5 text-[12px] text-action hover:bg-fill disabled:opacity-40"
+            className="shrink-0 rounded-utility px-2 py-0.5 text-[12px] text-action hover:bg-fill disabled:opacity-40"
           >
             {undoing ? "撤销中…" : "撤销"}
           </button>
@@ -857,7 +895,7 @@ function ToolCard({
           <img
             src={item.image.url}
             alt={item.image.alt}
-            className="max-h-64 w-full rounded-[8px] object-contain"
+            className="max-h-64 w-full rounded-utility object-contain"
           />
           {saveState === "done" ? (
             <p className="mt-1.5 text-[12px] text-ink-48">已存入笔记</p>
@@ -867,7 +905,7 @@ function ToolCard({
                 <button
                   onClick={() => onSaveImage("current")}
                   disabled={saveState === "busy"}
-                  className="rounded-full bg-action px-3 py-1 text-[12px] text-white active:scale-95 disabled:opacity-40"
+                  className="rounded-utility bg-cta px-3 py-1 text-[12px] text-cta-ink active:scale-95 disabled:opacity-40"
                   title={`追加到「${attachedNoteTitle}」的正文末尾`}
                 >
                   插入当前笔记
@@ -876,7 +914,7 @@ function ToolCard({
               <button
                 onClick={() => onSaveImage("new")}
                 disabled={saveState === "busy"}
-                className="rounded-full border border-hairline px-3 py-1 text-[12px] text-ink-80 active:scale-95 disabled:opacity-40"
+                className="rounded-utility border border-hairline px-3 py-1 text-[12px] text-ink-80 active:scale-95 disabled:opacity-40"
               >
                 存为新笔记
               </button>

@@ -14,12 +14,17 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
+    "check:design": "node scripts/check-design.mjs",
     "test": "vitest run",
     "test:watch": "vitest",
     "demo": "node scripts/demo.mjs"
   },
   "dependencies": {
     "@fontsource-variable/inter": "^5.3.0",
+    "@fontsource-variable/jetbrains-mono": "^5.3.0",
+    "@fontsource-variable/noto-sans-sc": "^5.3.0",
+    "@fontsource-variable/noto-serif-sc": "^5.3.0",
+    "@fontsource/instrument-serif": "^5.3.0",
     "@node-rs/jieba": "^2.0.0",
     "@paralleldrive/cuid2": "^2.2.2",
     "@tiptap/extension-code-block": "^2.27.2",
@@ -36,6 +41,7 @@
     "drizzle-orm": "^0.45.2",
     "heic-convert": "^2.1.0",
     "jose": "^6.0.0",
+    "katex": "^0.16.47",
     "mermaid": "^11.16.1",
     "next": "^15.3.0",
     "next-themes": "^0.4.6",
@@ -51,6 +57,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.0",
     "@tailwindcss/postcss": "^4.1.0",
+    "@testing-library/react": "^16.3.2",
     "@types/better-sqlite3": "^7.6.12",
     "@types/node": "^22.15.0",
     "@types/react": "^19.1.0",

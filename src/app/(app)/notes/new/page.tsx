@@ -1,7 +1,7 @@
 import { asc } from "drizzle-orm";
 import { getDb } from "@/db";
 import { topics } from "@/db/schema";
-import { NewNoteForm } from "./new-note-form";
+import { NewNoteForm } from "@/components/new-note-form";
 
 export const dynamic = "force-dynamic";
 

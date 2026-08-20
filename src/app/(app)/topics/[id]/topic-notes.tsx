@@ -29,7 +29,7 @@ export function TopicNotes({ notes }: { notes: TopicNote[] }) {
   }
 
   return (
-    <div className="space-y-1.5">
+    <div>
       {notes.map((n) => (
         <NoteCard
           key={n.id}
