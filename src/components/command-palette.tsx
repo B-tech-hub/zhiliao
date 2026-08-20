@@ -113,8 +113,14 @@ export function CommandPalette({ topics }: { topics: TopicItem[] }) {
     if (open) return;
     setQuery("");
     setNotes([]);
-    restoreRef.current?.focus?.();
+    const target = restoreRef.current;
     restoreRef.current = null;
+    /* 面板卸载后 activeElement 会掉回 body；若此刻已经有别的元素拿着焦点，
+       说明面板执行的动作又开出了新的一层（⌘K「新建笔记」唤起的快速捕获浮层
+       就是这样），那一层比调用方更该拿焦点，不能抢回来——抢回来的后果是
+       用户对着浮层打字，字一个也进不去。 */
+    const active = document.activeElement;
+    if (target && (!active || active === document.body)) target.focus();
   }, [open]);
 
   // 键盘选中项移出可视区时跟随滚动，否则按到列表下方就看不见选的是哪条

@@ -604,6 +604,8 @@ PR2 已完成迁移：除冻结的 `src/components/mermaid-code-block.tsx` 中�
 
 浮层的焦点契约：命令面板一打开就必须把焦点交给自己的输入框，关闭后还给唤起它的元素。由于面板经 `BodyPortal` 渲染，而 `BodyPortal` 首渲染返回 `null`、要等自身 effect 置 `mounted` 后才 `createPortal`，**自动聚焦必须用 callback ref，不能用 `useEffect` + `requestAnimationFrame`**——后者执行时节点还没进 DOM，焦点会留在原处，在笔记页会导致输入直接写进正文。面板内选择靠上下键，`Tab` 不移动焦点，以此把焦点关在浮层内。
 
+**焦点归还必须让路给新开的层。** 命令面板的动作可以再开出一层（「新建笔记」唤起快速捕获浮层），新层在 commit 阶段就拿到了焦点，而面板卸载后的恢复 effect 晚一步执行，照老剧本会把焦点抢回调用方——用户对着新浮层打字，字一个也进不去。判据是恢复前读 `document.activeElement`：只有焦点确实掉回 `body` 时才归还，已被别的元素接管就放手。
+
 ### 侧栏折叠态
 
 桌面侧栏在 256px 与 56px 之间切换，偏好存 `localStorage` 的 `zhiliao.navCollapsed`（与 `zhiliao.chatPanelWidth` 同一套前缀约定）。入口有两个且共用一条命令事件：`⌘\`（编辑器聚焦时让路）与侧栏底部的可见开关。

@@ -101,4 +101,24 @@ describe("CommandPalette", () => {
     expect(document.activeElement).toBe(outside);
     outside.remove();
   });
+
+  /* ⌘K 的动作可以再开出一层（「新建笔记」就唤起快速捕获浮层）。
+     那一层抢到焦点后，面板不能按老剧本把焦点抢回调用方——
+     抢回来的后果是用户对着浮层打字，字一个也进不去。 */
+  it("焦点已被新开的层接管时不抢回来", async () => {
+    const caller = document.createElement("button");
+    const newLayer = document.createElement("input");
+    document.body.append(caller, newLayer);
+    caller.focus();
+    render(<CommandPalette topics={[]} />);
+    fireEvent.keyDown(window, { key: "k", metaKey: true });
+    await screen.findByRole("dialog");
+    fireEvent.keyDown(window, { key: "Escape" });
+    // 模拟动作开出的新层在同一轮里抢到焦点
+    newLayer.focus();
+    await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
+    expect(document.activeElement).toBe(newLayer);
+    caller.remove();
+    newLayer.remove();
+  });
 });
