@@ -7,6 +7,9 @@ services:
     volumes:
       - kb_db:/data/db
       - kb_uploads:/data/uploads
+      # 注意：/data/notes 不在这里覆盖，会合并继承主文件的 ./data/notes 绑定挂载。
+      # 这是有意的——绑定挂载的限制只出在 SQLite WAL 的共享内存 mmap 上，
+      # 普通 .md 写入不受影响，而且让 Windows 用户能在资源管理器里直接看到导出的笔记。
 
 volumes:
   kb_db:

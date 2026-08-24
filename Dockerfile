@@ -21,12 +21,16 @@ COPY --from=builder /app/public ./public
 # 一键体验（docker-compose.demo.yml）需要镜像内含 mock LLM 脚本（零依赖，仅用 node:http）
 COPY --from=builder /app/scripts/mock-llm.mjs ./scripts/
 
-# 数据目录（挂卷）：数据库 /data/db，图片 /data/uploads
-RUN mkdir -p /data/db /data/uploads && chown -R node:node /data /app
+# 数据目录（挂卷）：数据库 /data/db，图片 /data/uploads，增量 Markdown 导出 /data/notes
+RUN mkdir -p /data/db /data/uploads /data/notes && chown -R node:node /data /app
 USER node
 
 ENV DATABASE_PATH=/data/db/app.db
 ENV UPLOAD_DIR=/data/uploads
+# 必须显式设置。默认值 ./data/notes 会被解析到 WORKDIR 下的 /app/data/notes——
+# 那里不在任何挂卷内，导出的 .md 在宿主机看不见、容器重建即全部丢失，
+# 而这个功能存在的全部理由就是「你的字不被关在 SQLite 里」。
+ENV NOTES_EXPORT_DIR=/data/notes
 ENV PORT=3000
 # Next standalone 的 server.js 用 HOSTNAME 决定监听地址，而 Docker 默认把
 # HOSTNAME 设为容器 ID——那样只绑定容器主机名，容器内 127.0.0.1 不可达，

@@ -29,9 +29,16 @@ services:
       IMAGE_API_KEY: ${IMAGE_API_KEY:-}
       IMAGE_MODEL: ${IMAGE_MODEL:-}
       IMAGE_TIMEOUT_MS: ${IMAGE_TIMEOUT_MS:-180000}
+      # 语义检索 Embedding：三项必须全部显式配置，不回落上方 LLM 配置。也可以只在设置页配
+      EMBEDDING_BASE_URL: ${EMBEDDING_BASE_URL:-}
+      EMBEDDING_API_KEY: ${EMBEDDING_API_KEY:-}
+      EMBEDDING_MODEL: ${EMBEDDING_MODEL:-}
+      EMBEDDING_TIMEOUT_MS: ${EMBEDDING_TIMEOUT_MS:-60000}
       AI_CONFIDENCE_THRESHOLD: ${AI_CONFIDENCE_THRESHOLD:-0.6}
       # 时区：默认 UTC。「每周回顾」按此分周，中国用户建议在 .env 里设 Asia/Shanghai
       TZ: ${TZ:-UTC}
     volumes:
       - ./data/db:/data/db
       - ./data/uploads:/data/uploads
+      # 增量 Markdown 导出：不挂这一项，导出的 .md 只存在于容器内，重建即丢
+      - ./data/notes:/data/notes

@@ -18,6 +18,7 @@
 
 - 新增笔记持续增量导出：写入、编辑、AI 整理和恢复后异步更新 `data/notes/<主题>/<标题>-<id>.md`。
 - 标题或主题变更时自动清理旧路径；导出失败不阻塞笔记保存。
+- 修复 Docker 部署下导出目录未落在挂卷内的问题：镜像新增 `NOTES_EXPORT_DIR=/data/notes`，`docker-compose.yml` 挂载 `./data/notes`。此前默认的相对路径会解析到容器内 `/app/data/notes`，宿主机看不到导出文件且容器重建即丢失。
 
 ### 个性化
 
