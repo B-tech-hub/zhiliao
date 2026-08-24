@@ -64,7 +64,7 @@ docker compose -f docker-compose.demo.yml up -d
 - **Mermaid 图表**：笔记里的 `mermaid` 代码块直接渲染成流程图/时序图，点图即可回到源码编辑；存的仍是原生 Markdown，导出到 Obsidian 照样能看
 - **每周回顾**：每周一凌晨把上一周的笔记梳理成一篇脉络回顾，存进「每周回顾」主题（默认开启，设置页可关，也可手动补生成）
 - **主题建议**：未分类攒到 8 条后（或手动触发），AI 聚类给出最多 3 个建议，确认后一键建主题并迁移；逐条采纳，采纳一条不影响其余建议
-- **中文搜索**：jieba 分词 + SQLite FTS5 全文检索，标题/标签加权，单字查询降级 LIKE；不输关键词只点主题时，直接列出该主题下的笔记
+- **中文搜索**：jieba 分词 + SQLite FTS5 全文检索，标题/标签加权，多词 OR 召回；配置 Embedding 后与向量结果以 RRF 融合，未配置时自动使用 BM25；不输关键词只点主题时，直接列出该主题下的笔记
 - **数据归你**：设置页一键导出全部数据（Markdown + 展示图打包 zip；HEIC 原件额外放入 `assets/originals/`，可导入 Obsidian 等工具）与手动立即备份
 - **外观**：浅色 / 深色 / 跟随系统三态切换（设置 → 外观），偏好保存在本机浏览器
 - **PWA**：手机可"添加到主屏幕"当 app 用（需 HTTPS，推荐 Tailscale 方案，见下），断网有离线兜底页
@@ -143,6 +143,8 @@ docker compose up -d
 | `REASONING_BASE_URL` / `REASONING_API_KEY` / `REASONING_MODEL` | | 深度思考模型；接入点与 Key 留空时回落普通文本模型，`REASONING_MODEL` 必须显式填写。深度请求固定使用 300 秒超时 |
 | `IMAGE_BASE_URL` / `IMAGE_API_KEY` / `IMAGE_MODEL` | | 图像模型（AI 画图）的默认值，规则同视觉模型 |
 | `IMAGE_TIMEOUT_MS` | | 生图请求超时，默认 180000（仅支持环境变量） |
+| `EMBEDDING_BASE_URL` / `EMBEDDING_API_KEY` / `EMBEDDING_MODEL` | | 语义搜索 Embedding 接口。三项必须全部显式配置，**不会回落** `LLM_*`；供应商需支持 OpenAI 兼容 `/embeddings` |
+| `EMBEDDING_TIMEOUT_MS` | | Embedding 请求超时，默认 60000（仅支持环境变量） |
 | `TZ` | | 时区，如 `Asia/Shanghai`。**容器默认 UTC**，会让「每周回顾」按 UTC 分周；按本地时间分周需显式设置 |
 | `AI_CONFIDENCE_THRESHOLD` | | 分类置信度阈值，默认 0.6，低于则归未分类 |
 | `PORT` | | 监听端口，默认 3000 |
@@ -150,6 +152,14 @@ docker compose up -d
 | `NEXT_DIST_DIR` | | 构建输出目录，默认 `.next`；仅在 Windows 下 `.next` 被残留进程句柄锁死、`next build` 卡住时临时改用其他目录 |
 
 未配置 `LLM_*` 时应用照常可用，笔记会停留在"待整理"状态，配置后自动补处理。
+
+未配置 `EMBEDDING_*` 时搜索照常使用 BM25；配置后会自动为新建/修改的笔记生成向量，也可在设置页手动补算。Embedding 配置不继承文本模型配置。
+
+### Embedding 实际验收
+
+拿到供应商信息后，先在隔离环境执行 `node verify-embedding.mjs`，确认供应商支持 OpenAI 兼容的 `/embeddings` 接口、返回维度以及中文语义区分度。通过后在设置页填写 Embedding 接入点、API Key 和模型名，点击“测试连接”，再点击“查看待补算”确认存量笔记数量，最后执行“补算向量”。
+
+验收搜索时，使用与笔记原文不同措辞但语义相近的查询（例如笔记写“又摸鱼了一下午”，查询“拖延”），确认结果中的 `vectorEnabled` 为 `true` 且相关笔记排序靠前；若供应商更换模型或维度，旧向量应计入 `staleEmbeddingCount`，搜索仍能降级到 BM25。API Key 不要写入仓库、日志或交接文档。
 
 > `DATABASE_PATH` 与 `UPLOAD_DIR` 用相对路径时，请注意**不要直接跑 `node .next/standalone/server.js`**：standalone 的 `server.js` 启动时会把工作目录切到自身所在的 `.next/standalone/`，相对路径会解析到那里，于是静默新建一个空库——页面能打开、健康检查也正常，只是数据全都不见了。自建部署走 Docker 镜像即可（镜像内已用绝对路径）；确需手动跑 standalone 产物时，请显式传绝对路径的 `DATABASE_PATH` 与 `UPLOAD_DIR`。
 

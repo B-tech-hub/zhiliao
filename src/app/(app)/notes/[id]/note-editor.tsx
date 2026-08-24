@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import Link from "next/link";
 import type { Note } from "@/db/schema";
 import { BackButton } from "@/components/back-button";
 import { AskWithSourcesButton } from "@/components/chat/ask-with-sources";
@@ -28,6 +29,18 @@ interface TopicOption {
   id: string;
   name: string;
   isSystem: number;
+}
+
+interface RelatedNote {
+  id: string;
+  title: string;
+  excerpt: string;
+  tags: string[];
+}
+
+interface ConflictHint {
+  noteId: string;
+  reason: string;
 }
 
 const AI_STATUS_TEXT: Record<string, string> = {
@@ -63,6 +76,9 @@ export function NoteEditor({
   const [activeHeading, setActiveHeading] = useState("");
   // 专注模式：藏起工具行、目录与标签行，只留标题与正文
   const [focusMode, setFocusMode] = useState(false);
+  const [related, setRelated] = useState<RelatedNote[]>([]);
+  const [conflicts, setConflicts] = useState<ConflictHint[]>([]);
+  const [relatedLoading, setRelatedLoading] = useState(false);
   const headings = useMemo(() => Array.from(content.matchAll(/^(#{1,3})\s+(.+)$/gm)).map((m, i) => ({ level: m[1].length, text: m[2].trim(), id: `heading-${i}` })), [content]);
   const transcriptionWarnings = useMemo(() => {
     try { return note.transcriptionWarnings ? JSON.parse(note.transcriptionWarnings) as string[] : []; }
@@ -71,6 +87,43 @@ export function NoteEditor({
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const savedContentRef = useRef(note.content);
   const contentRef = useRef(note.content);
+  const relatedTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const relatedRequestRef = useRef(0);
+
+  // 正文稳定一小段时间后才召回，避免每次击键都触发 Embedding/LLM 请求。
+  useEffect(() => {
+    if (relatedTimerRef.current) clearTimeout(relatedTimerRef.current);
+    if (content.trim().length < 20) {
+      relatedRequestRef.current += 1;
+      setRelatedLoading(false);
+      setRelated([]);
+      setConflicts([]);
+      return;
+    }
+    relatedTimerRef.current = setTimeout(async () => {
+      const requestId = ++relatedRequestRef.current;
+      setRelatedLoading(true);
+      try {
+        const res = await fetch(`/api/notes/${note.id}/related`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ content }),
+        });
+        if (!res.ok) return;
+        const data = await res.json() as { results?: RelatedNote[]; conflicts?: ConflictHint[] };
+        if (requestId !== relatedRequestRef.current) return;
+        setRelated(data.results ?? []);
+        setConflicts(data.conflicts ?? []);
+      } catch {
+        // 相关笔记是辅助能力，网络或模型失败不影响编辑与保存。
+      } finally {
+        if (requestId === relatedRequestRef.current) setRelatedLoading(false);
+      }
+    }, 900);
+    return () => {
+      if (relatedTimerRef.current) clearTimeout(relatedTimerRef.current);
+    };
+  }, [content, note.id]);
 
   const patch = useCallback(
     async (body: Record<string, unknown>) => {
@@ -354,6 +407,30 @@ export function NoteEditor({
                   })}
                 </nav>
               )}
+              <div className="mt-8 border-t border-divider pt-4">
+                <div className="mb-3 flex items-center justify-between gap-2">
+                  <p className="text-[12px] font-medium text-ink-48">相关笔记</p>
+                  {relatedLoading && <span className="text-[11px] text-ink-48">查找中…</span>}
+                </div>
+                {conflicts.length > 0 && (
+                  <div className="mb-3 border-l-2 border-danger pl-2 text-[12px] text-danger">
+                    <p className="mb-1 font-medium">可能存在冲突</p>
+                    {conflicts.map((conflict) => <p key={conflict.noteId} className="mb-1">{conflict.reason}</p>)}
+                  </div>
+                )}
+                {related.length === 0 && !relatedLoading ? (
+                  <p className="text-[12px] text-ink-48">暂无相关笔记</p>
+                ) : (
+                  <div className="space-y-3">
+                    {related.map((item) => (
+                      <Link key={item.id} href={`/notes/${item.id}`} className="block rounded-utility p-2 transition-colors hover:bg-fill">
+                        <p className="truncate text-[13px] text-ink-80">{item.title}</p>
+                        <p className="mt-1 line-clamp-3 text-[12px] leading-5 text-ink-48">{item.excerpt}</p>
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
             </aside>
           )}
         </div>

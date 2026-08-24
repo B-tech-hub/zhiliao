@@ -43,6 +43,9 @@
 ### LLM 配置
 调用 AI 服务所需的接入点（base URL）、API Key、模型名三元组。读取顺序：**设置页保存的值（数据库）优先，环境变量兜底**；超时时间仅由环境变量控制。相关决策见 [docs/adr/0001-llm-config-in-db.md](docs/adr/0001-llm-config-in-db.md)。
 
+### Embedding 配置
+语义检索专用的第五组模型配置（`embedding_base_url` / `embedding_api_key` / `embedding_model`）。三项必须全部显式配置，**不回落**文本 LLM；供应商需提供 OpenAI 兼容的 `/embeddings` 接口。笔记保存单笔记单向量，模型标识与维度随向量落库；模型变更时旧向量只参与 BM25，补算完成后才重新参与语义检索。
+
 ### 视觉模型（Vision）
 AI 读图专用的第二组 LLM 配置（`vision_base_url` / `vision_api_key` / `vision_model`）。接入点与 Key 留空时回落文本模型配置；仅在显式配置了视觉模型名时"AI 看图"功能才可用。发送前只在内存中生成高质量 WebP 副本，原图不变；最多 6 张，并按单图与总字节双重限额，避免 Base64 多图请求触发代理防火墙。视觉回答可由用户直接存成新笔记。相关决策见 [docs/adr/0013-vision-image-payload.md](docs/adr/0013-vision-image-payload.md)。
 
@@ -57,6 +60,8 @@ AI 画图专用的第三组 LLM 配置（`image_base_url` / `image_api_key` / `i
 
 ### AI 助手（Assistant）
 全局的对话式入口：任意页面右下角均可唤起，面向整个知识库，可通过**工具调用**检索与改写笔记。当前打开的笔记/主题以**上下文附件**形式带入，可随时摘除。会话与消息持久化，回答走 SSE 流式并按 Markdown 渲染（走与笔记同一套**正文排版层**，不套气泡）；模型不支持工具调用时自动降级为纯问答。桌面端面板是三栏布局最右的一栏：打开时把正文**推窄而不是盖住**，与侧栏一样贴顶、自身高一屏，宽度可拖拽调整并记住；因此它不是模态，没有遮罩，也没有「点外部关闭」，关闭走 ✕、`Esc` 或 `⌘J`。手机端仍是覆盖全屏的浮层。输入框上另有**看图**与**深度思考**两个消息级开关，各自切到对应的独立模型。相关决策见 [docs/adr/0008-assistant-tool-calling.md](docs/adr/0008-assistant-tool-calling.md)（上下文注入时期的决策见 [docs/adr/0003-chat-context-injection.md](docs/adr/0003-chat-context-injection.md)）。
+
+笔记编辑页在正文稳定输入后，会在桌面侧栏展示最多 8 条混合检索相关笔记；已配置聊天模型时，另做一次候选内冲突判断。该辅助请求失败不影响正文编辑与保存，模型返回的冲突笔记 ID 必须来自真实召回候选。详见 [docs/adr/0022-writing-related-notes.md](docs/adr/0022-writing-related-notes.md)。
 
 ### 工具调用（Tool Calling）
 助手读写知识库的唯一途径，共 9 个：检索笔记、读取全文、列出主题、新建笔记、追加内容、修改元数据、删除笔记、抓取网页、生成图片。**不存在覆盖正文的工具**——项目不做版本历史，正文覆盖是唯一不可恢复的操作。单次对话最多 8 轮、每轮最多 20 个调用。`fetch_url` 只能抓取用户消息中出现过的网址，相关决策见 [docs/adr/0009-fetch-url-safety.md](docs/adr/0009-fetch-url-safety.md)；`generate_image` 每条用户消息最多 2 次，见 [docs/adr/0011-image-generation.md](docs/adr/0011-image-generation.md)。

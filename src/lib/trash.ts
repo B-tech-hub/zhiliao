@@ -6,6 +6,7 @@ import { aiJobs, conversations, conversationSources, images, notes, topics } fro
 import { extractImageFilenames } from "@/lib/image-refs";
 import { enqueueNoteProcess } from "@/lib/notes";
 import { refreshNoteFts, removeNoteFts } from "@/lib/search";
+import { scheduleNoteMarkdownExport } from "@/lib/markdown-export";
 
 export const TRASH_RETENTION_DAYS = 30;
 // 孤儿图片判定的上传宽限期：图片先入库、正文防抖保存在后，
@@ -28,6 +29,7 @@ export function trashNotes(db: DB, noteIds: string[]): number {
     tx.delete(aiJobs).where(inArray(aiJobs.noteId, ids)).run();
     for (const id of ids) removeNoteFts(id);
   });
+  for (const id of ids) scheduleNoteMarkdownExport(db, id);
   return ids.length;
 }
 
@@ -53,6 +55,7 @@ export function restoreNotes(db: DB, noteIds: string[]): number {
     }
   });
   for (const id of ids) refreshNoteFts(db, id);
+  for (const id of ids) scheduleNoteMarkdownExport(db, id);
   for (const r of interrupted) enqueueNoteProcess(db, r.id);
   return ids.length;
 }

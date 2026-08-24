@@ -2,6 +2,7 @@ import { and, eq, inArray } from "drizzle-orm";
 import type { DB } from "@/db";
 import { aiJobs, noteTags, tags } from "@/db/schema";
 import { newId } from "@/lib/ids";
+import { isEmbeddingConfigured } from "@/lib/llm-config";
 
 // 笔记保存后入队 AI 处理任务；同一笔记已有未完成任务时仅刷新可执行时间，避免堆积
 export function enqueueNoteProcess(db: DB, noteId: string) {
@@ -22,6 +23,24 @@ export function enqueueNoteProcess(db: DB, noteId: string) {
   db.insert(aiJobs)
     .values({ id: newId(), noteId, type: "note_process", status: "pending", runAfter: now, createdAt: now, updatedAt: now })
     .run();
+  kickWorker();
+}
+
+// 向量任务与聊天整理任务分离：未配置聊天模型时也可以单独生成语义向量。
+export function enqueueNoteEmbedding(db: DB, noteId: string) {
+  if (!isEmbeddingConfigured()) return;
+  const now = Date.now();
+  const existing = db
+    .select()
+    .from(aiJobs)
+    .where(and(eq(aiJobs.noteId, noteId), eq(aiJobs.type, "embed_note"), inArray(aiJobs.status, ["pending", "running"])))
+    .get();
+  if (existing) {
+    db.update(aiJobs).set({ status: "pending", runAfter: now, attempts: 0, lastError: null, updatedAt: now }).where(eq(aiJobs.id, existing.id)).run();
+    kickWorker();
+    return;
+  }
+  db.insert(aiJobs).values({ id: newId(), noteId, type: "embed_note", status: "pending", runAfter: now, createdAt: now, updatedAt: now }).run();
   kickWorker();
 }
 

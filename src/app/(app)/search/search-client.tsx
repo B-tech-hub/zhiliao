@@ -71,6 +71,7 @@ export function SearchClient({ topics }: { topics: TopicOption[] }) {
   const [topicId, setTopicId] = useState("");
   const [results, setResults] = useState<SearchItem[]>([]);
   const [terms, setTerms] = useState<string[]>([]);
+  const [staleEmbeddingCount, setStaleEmbeddingCount] = useState(0);
   const [loading, setLoading] = useState(false);
   const [searched, setSearched] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -98,6 +99,7 @@ export function SearchClient({ topics }: { topics: TopicOption[] }) {
           const data = await res.json();
           setResults(data.results);
           setTerms(data.terms);
+          setStaleEmbeddingCount(data.staleEmbeddingCount ?? 0);
           setSearched(true);
         }
       } finally {
@@ -155,6 +157,11 @@ export function SearchClient({ topics }: { topics: TopicOption[] }) {
       </div>
 
       {loading && <p className="text-[14px] text-ink-48">搜索中…</p>}
+      {!loading && staleEmbeddingCount > 0 && (
+        <p className="mb-4 rounded-utility bg-fill px-4 py-2 text-[12px] text-ink-48">
+          {staleEmbeddingCount} 条笔记的向量由其他模型产出，未参与语义检索；可到设置页补算。
+        </p>
+      )}
       {!loading && searched && results.length === 0 && (
         <div className="rounded-card bg-surface p-10 text-center">
           <p className="font-serif text-2xl leading-tight text-ink">

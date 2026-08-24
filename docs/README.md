@@ -36,3 +36,9 @@
 | [0014](adr/0014-heic-original.md) | HEIC 保留原件并另存 JPEG 展示副本，导出/备份/清扫四条链路成对处理 |
 | [0015](adr/0015-deep-thinking-tools-and-trace.md) | 深度思考照常下发全部工具（能力单独探测）；思考过程落库展示但绝不回灌上下文 |
 | [0016](adr/0016-shared-prose-layer.md) | 手写共享正文排版层 `.prose-note`，编辑器与助手回答共用；不装 typography 插件 |
+| [0017](adr/0017-handwriting-transcription-and-math.md) | 手写转写与公式识别：摄取管道、复核状态与告警 |
+| [0018](adr/0018-hybrid-search.md) | BM25 + Embedding 的混合检索、BLOB 存储、RRF 融合与模型漂移降级 |
+| [0019](adr/0019-external-access.md) | 外部接入 Token 权限、快速捕获与只读 MCP 边界 |
+| [0020](adr/0020-incremental-markdown-export.md) | 笔记持续增量导出 Markdown 与路径清理策略 |
+| [0021](adr/0021-correction-learning.md) | 用户纠正样例、Prompt 注入与关闭/清理策略 |
+| [0022](adr/0022-writing-related-notes.md) | 写作侧相关笔记召回与候选约束的冲突提示 |

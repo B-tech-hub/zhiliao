@@ -52,11 +52,41 @@ interface VisionInfo {
   sources: { baseUrl: VisionSource; apiKey: VisionSource; model: VisionSource };
 }
 type ReasoningInfo = VisionInfo;
+type EmbeddingInfo = {
+  model: string;
+  baseUrl: string;
+  apiKeyMasked: string;
+  sources: { baseUrl: LlmSource; apiKey: LlmSource; model: LlmSource };
+};
 
 interface ReviewInfo {
   enabled: boolean;
   // 已安排生成的周（上周一日期 YYYY-MM-DD），从未生成为 null
   lastWeek: string | null;
+}
+
+interface ApiTokenInfo { id: string; scope: string; prefix: string; last4: string; createdAt: number; lastUsedAt: number | null }
+interface CorrectionInfo { enabled: boolean; count: number }
+
+function ApiTokenSection({ initial }: { initial: ApiTokenInfo[] }) {
+  const [tokens, setTokens] = useState(initial);
+  const [scope, setScope] = useState("capture:write");
+  const [newToken, setNewToken] = useState("");
+  const [busy, setBusy] = useState(false);
+  async function create() {
+    setBusy(true); setNewToken("");
+    try { const r = await fetch("/api/settings/tokens", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ scope }) }); const d = await r.json(); if (r.ok) { setNewToken(d.token); setTokens((v) => [...v, d.tokenInfo]); } } finally { setBusy(false); }
+  }
+  async function revoke(id: string) { await fetch(`/api/settings/tokens?id=${encodeURIComponent(id)}`, { method: "DELETE" }); setTokens((v) => v.filter((t) => t.id !== id)); }
+  return <section><h2 className="mb-3 text-[21px] font-semibold tracking-[-0.374px]">外部接入</h2><div className="rounded-card bg-surface p-6 text-[14px]"><p className="text-ink-48">Token 默认不存在。创建后明文只显示一次。</p><div className="mt-3 flex flex-wrap gap-3"><select value={scope} onChange={(e) => setScope(e.target.value)} className="h-[40px] rounded-utility border border-hairline bg-surface px-3"><option value="capture:write">快速捕获（写入）</option><option value="knowledge:read">知识读取（搜索、MCP）</option></select><button onClick={create} disabled={busy} className="rounded-utility bg-cta px-[22px] py-[8px] text-cta-ink">{busy ? "生成中…" : "创建 Token"}</button></div>{newToken && <p className="mt-3 break-all rounded-utility bg-fill p-3 font-mono text-[12px]">{newToken}</p>}<div className="mt-4 space-y-2">{tokens.map((t) => <div key={t.id} className="flex flex-wrap items-center justify-between gap-2 border-t border-divider pt-2"><span>{t.scope} · {t.prefix}••••{t.last4}</span><button onClick={() => revoke(t.id)} className="text-danger">吊销</button></div>)}</div></div></section>;
+}
+
+function CorrectionSection({ initial }: { initial: CorrectionInfo }) {
+  const [enabled, setEnabled] = useState(initial.enabled);
+  const [count, setCount] = useState(initial.count);
+  async function toggle(next: boolean) { await fetch("/api/settings/corrections", { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ enabled: next }) }); setEnabled(next); }
+  async function clear() { await fetch("/api/settings/corrections", { method: "DELETE" }); setCount(0); }
+  return <section><h2 className="mb-3 text-[21px] font-semibold tracking-[-0.374px]">纠正即学习</h2><div className="rounded-card bg-surface p-6 text-[14px]"><p className="text-ink-48">记录你手动修改的主题、标题和标签，用作后续整理的少量参考样例。</p><div className="mt-3 flex flex-wrap items-center gap-3"><button onClick={() => toggle(!enabled)} className="rounded-utility border border-hairline px-4 py-1.5">{enabled ? "已开启" : "已关闭"}</button><span className="text-ink-48">已有 {count} 条样例</span><button onClick={clear} className="text-danger">清空样例</button></div></div></section>;
 }
 
 const THEME_OPTIONS = [
@@ -275,6 +305,9 @@ export function SettingsPanel({
   vision,
   image,
   reasoning,
+  embedding,
+  apiTokens,
+  correctionLearning,
   queue,
   review,
   lastBackupAt,
@@ -286,6 +319,9 @@ export function SettingsPanel({
   // 图像生成配置，来源语义与视觉模型一致（留空回落文本模型）
   image: VisionInfo;
   reasoning: ReasoningInfo;
+  embedding: EmbeddingInfo;
+  apiTokens: ApiTokenInfo[];
+  correctionLearning: CorrectionInfo;
   queue: QueueInfo;
   review: ReviewInfo;
   lastBackupAt: number | null;
@@ -330,6 +366,23 @@ export function SettingsPanel({
   const [reasoningResult, setReasoningResult] = useState("");
   const [reasoningTesting, setReasoningTesting] = useState(false);
   const [reasoningTestResult, setReasoningTestResult] = useState("");
+  const [embeddingModel, setEmbeddingModel] = useState(embedding.model);
+  const [embeddingBaseUrl, setEmbeddingBaseUrl] = useState("");
+  const [embeddingApiKey, setEmbeddingApiKey] = useState("");
+  const [embeddingSaving, setEmbeddingSaving] = useState(false);
+  const [embeddingResult, setEmbeddingResult] = useState("");
+  const [embeddingTesting, setEmbeddingTesting] = useState(false);
+  const [embeddingTestResult, setEmbeddingTestResult] = useState("");
+  const [embeddingBackfill, setEmbeddingBackfill] = useState<{ missing: number; stale: number } | null>(null);
+  /* 这一组不回落文本模型，所以「只填了一部分」既不会兜底也不会报错，功能直接静默不启用。
+     更隐蔽的是 baseUrl 单独兜底到环境变量：模型名填对了，请求却打去了另一个服务——
+     实测踩过一次，页面上一切正常，向量却是别处产出的。故把生效的接入点原样显示出来。 */
+  const embeddingMissing = [
+    embedding.sources.baseUrl === "none" ? "接入点" : null,
+    embedding.sources.model === "none" ? "模型名" : null,
+    embedding.sources.apiKey === "none" ? "API Key" : null,
+  ].filter(Boolean);
+  const [embeddingBackfillResult, setEmbeddingBackfillResult] = useState("");
   async function saveReasoning() {
     const body: Record<string, string> = {};
     if (reasoningModel.trim() !== reasoning.model) body.reasoningModel = reasoningModel.trim();
@@ -338,6 +391,35 @@ export function SettingsPanel({
     if (!Object.keys(body).length) return setReasoningResult("没有修改的内容");
     setReasoningSaving(true); setReasoningResult("");
     try { const res = await fetch("/api/settings/llm", { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) }); if (!res.ok) throw new Error(); setReasoningApiKey(""); setReasoningBaseUrl(""); setReasoningResult("已保存，立即生效"); router.refresh(); } catch { setReasoningResult("保存失败"); } finally { setReasoningSaving(false); }
+  }
+
+  async function saveEmbedding() {
+    const body: Record<string, string> = {};
+    if (embeddingModel.trim() !== embedding.model) body.embeddingModel = embeddingModel.trim();
+    if (embeddingBaseUrl.trim()) body.embeddingBaseUrl = embeddingBaseUrl.trim();
+    if (embeddingApiKey.trim()) body.embeddingApiKey = embeddingApiKey.trim();
+    if (!Object.keys(body).length) return setEmbeddingResult("没有修改的内容");
+    setEmbeddingSaving(true); setEmbeddingResult("");
+    try {
+      const res = await fetch("/api/settings/llm", { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+      if (!res.ok) throw new Error();
+      setEmbeddingApiKey(""); setEmbeddingBaseUrl(""); setEmbeddingResult("已保存，立即生效"); router.refresh();
+    } catch { setEmbeddingResult("保存失败"); } finally { setEmbeddingSaving(false); }
+  }
+
+  async function loadEmbeddingBackfill() {
+    const res = await fetch("/api/embedding/backfill");
+    if (res.ok) setEmbeddingBackfill(await res.json());
+  }
+
+  async function enqueueEmbeddingBackfill() {
+    setEmbeddingBackfillResult("排队中…");
+    try {
+      const res = await fetch("/api/embedding/backfill", { method: "POST" });
+      const data = await res.json().catch(() => ({}));
+      setEmbeddingBackfillResult(res.ok ? `已排队 ${data.queued ?? 0} 条` : `失败：${data.error ?? "未知错误"}`);
+      if (res.ok) setEmbeddingBackfill(data);
+    } catch { setEmbeddingBackfillResult("网络错误"); }
   }
 
   async function saveImageConfig() {
@@ -454,22 +536,26 @@ export function SettingsPanel({
   }
 
   // 四组配置共用一个测试入口，target 决定打哪个端点
-  async function testLlm(target: "text" | "vision" | "image" | "reasoning") {
+  async function testLlm(target: "text" | "vision" | "image" | "reasoning" | "embedding") {
     const setBusy =
       target === "vision"
         ? setVisionTesting
         : target === "image"
           ? setImageTesting
-          : target === "reasoning"
+        : target === "reasoning"
             ? setReasoningTesting
+            : target === "embedding"
+              ? setEmbeddingTesting
             : setTesting;
     const setResult =
       target === "vision"
         ? setVisionTestResult
         : target === "image"
           ? setImageTestResult
-          : target === "reasoning"
+        : target === "reasoning"
             ? setReasoningTestResult
+            : target === "embedding"
+              ? setEmbeddingTestResult
             : setTestResult;
     setBusy(true);
     setResult("");
@@ -927,10 +1013,60 @@ export function SettingsPanel({
           </div>
         </div>
 
+        <div className="mt-3 rounded-card bg-surface p-6 text-[14px]">
+          <p className="font-semibold tracking-[-0.224px]">Embedding 模型（语义搜索，可选）</p>
+          <p className="mt-1 text-[12px] leading-[1.5] text-ink-48">
+            三项必须单独配置，不会回落文本模型；需使用提供 /embeddings 接口的供应商。向量仅用于语义检索，BM25 始终保留。
+          </p>
+          <p className="mt-2 text-[12px] leading-[1.5] text-ink-80">
+            {embeddingMissing.length > 0
+              ? `未启用：还缺 ${embeddingMissing.join("、")}。三项缺一即视为未配置，搜索将继续使用 BM25。`
+              : `已启用 · 当前生效接入点 ${embedding.baseUrl}`}
+          </p>
+          <div className="mt-3 space-y-3">
+            <div>
+              <label className="mb-1 flex items-center justify-between">
+                <span className="text-ink-48">接入点</span>
+                <span className="text-[12px] text-ink-48">{SOURCE_LABEL[embedding.sources.baseUrl]}</span>
+              </label>
+              <input value={embeddingBaseUrl} onChange={(e) => setEmbeddingBaseUrl(e.target.value)} placeholder={embedding.baseUrl || "接入点，如 https://…/v1"} className="h-[40px] w-full rounded-utility border border-hairline bg-surface px-5 outline-none focus:border-action-focus" />
+            </div>
+            <div>
+              <label className="mb-1 flex items-center justify-between">
+                <span className="text-ink-48">模型</span>
+                <span className="text-[12px] text-ink-48">{SOURCE_LABEL[embedding.sources.model]}</span>
+              </label>
+              <input value={embeddingModel} onChange={(e) => setEmbeddingModel(e.target.value)} placeholder="模型名，如 text-embedding-v3" className="h-[40px] w-full rounded-utility border border-hairline bg-surface px-5 outline-none focus:border-action-focus" />
+            </div>
+            <div>
+              <label className="mb-1 flex items-center justify-between">
+                <span className="text-ink-48">API Key</span>
+                <span className="text-[12px] text-ink-48">{SOURCE_LABEL[embedding.sources.apiKey]}</span>
+              </label>
+              <input type="password" value={embeddingApiKey} onChange={(e) => setEmbeddingApiKey(e.target.value)} placeholder={`API Key（${embedding.apiKeyMasked}）`} className="h-[40px] w-full rounded-utility border border-hairline bg-surface px-5 outline-none focus:border-action-focus" autoComplete="off" />
+            </div>
+            <div className="flex flex-wrap items-center gap-3">
+              <button onClick={saveEmbedding} disabled={embeddingSaving} className="rounded-utility bg-cta px-[22px] py-[8px] text-cta-ink disabled:opacity-40">{embeddingSaving ? "保存中…" : "保存"}</button>
+              <button onClick={() => testLlm("embedding")} disabled={embeddingTesting} className="rounded-utility border border-hairline px-[22px] py-[8px] text-ink-80 disabled:opacity-40">{embeddingTesting ? "测试中…" : "测试连接"}</button>
+              {embeddingResult && <span className="text-[12px] text-ink-48">{embeddingResult}</span>}
+            </div>
+            {embeddingTestResult && <p className="text-[12px] leading-[1.5] text-ink-48">{embeddingTestResult}</p>}
+            <div className="border-t border-divider pt-3">
+              <button onClick={() => { void loadEmbeddingBackfill(); }} className="mr-3 rounded-utility border border-hairline px-3 py-1.5 text-[12px] text-ink-80">查看待补算</button>
+              <button onClick={enqueueEmbeddingBackfill} className="rounded-utility border border-action px-3 py-1.5 text-[12px] text-action">补算向量</button>
+              {embeddingBackfill && <span className="ml-3 text-[12px] text-ink-48">缺失 {embeddingBackfill.missing} · 过期 {embeddingBackfill.stale}</span>}
+              {embeddingBackfillResult && <p className="mt-2 text-[12px] text-ink-48">{embeddingBackfillResult}</p>}
+            </div>
+          </div>
+        </div>
+
         <WeeklyReviewCard review={review} />
       </section>
 
       <DataSection lastBackupAt={lastBackupAt} trashCount={trashCount} />
+
+      <ApiTokenSection initial={apiTokens} />
+      <CorrectionSection initial={correctionLearning} />
 
       <section>
         <h2 className="mb-3 text-[21px] font-semibold tracking-[-0.374px]">账号</h2>

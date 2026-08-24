@@ -3,7 +3,7 @@ import { and, desc, eq, inArray, isNull } from "drizzle-orm";
 import { getDb } from "@/db";
 import { notes, topics } from "@/db/schema";
 import { getTagsForNotes } from "@/lib/notes";
-import { makeExcerpt, searchNoteIds } from "@/lib/search";
+import { hybridSearchNoteIds, makeExcerpt } from "@/lib/search";
 
 // 全文搜索：?q=关键词&topicId=可选；q 为空但指定了 topicId 时退化为「按主题浏览」
 export async function GET(req: NextRequest) {
@@ -43,8 +43,9 @@ export async function GET(req: NextRequest) {
   }
 
   // 分支二：全文检索
-  const { ids, terms } = searchNoteIds(q, 50);
-  if (ids.length === 0) return NextResponse.json({ results: [], terms });
+  const search = await hybridSearchNoteIds(q, 50);
+  const { ids, terms } = search;
+  if (ids.length === 0) return NextResponse.json({ results: [], terms, staleEmbeddingCount: search.staleEmbeddingCount, vectorEnabled: search.vectorEnabled });
 
   // 回表时排除回收站：FTS 命中理论上不含已删笔记，此处是第二道防线
   const rows = db
@@ -61,5 +62,5 @@ export async function GET(req: NextRequest) {
     .filter((n): n is NonNullable<typeof n> => Boolean(n))
     .filter((n) => !topicFilter || n.topicId === topicFilter);
 
-  return NextResponse.json({ results: toItems(ordered, terms, tagMap), terms });
+  return NextResponse.json({ results: toItems(ordered, terms, tagMap), terms, staleEmbeddingCount: search.staleEmbeddingCount, vectorEnabled: search.vectorEnabled });
 }

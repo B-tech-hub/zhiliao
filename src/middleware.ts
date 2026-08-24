@@ -14,6 +14,10 @@ export async function middleware(req: NextRequest) {
   const token = req.cookies.get(SESSION_COOKIE)?.value;
   const ok = token ? await verifySessionToken(token) : false;
 
+  // 外部 API/MCP 在各自路由内校验 Bearer Token。middleware 只负责放行到路由，
+  // 避免把 Node-only 的 crypto 认证模块带进 Edge middleware 构建。
+  if (!ok && (pathname.startsWith("/api/external/") || pathname === "/api/mcp")) return NextResponse.next();
+
   if (ok) {
     // 已登录访问登录页时跳回首页
     return NextResponse.next();

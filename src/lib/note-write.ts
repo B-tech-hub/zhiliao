@@ -7,8 +7,11 @@ import { and, eq, isNull } from "drizzle-orm";
 import type { DB } from "@/db";
 import { INBOX_TOPIC_ID, notes, topics } from "@/db/schema";
 import { newId } from "@/lib/ids";
-import { enqueueNoteProcess, replaceNoteTags } from "@/lib/notes";
+import { isLlmConfigured } from "@/lib/llm";
+import { enqueueNoteEmbedding, enqueueNoteProcess, replaceNoteTags, getTagsForNotes } from "@/lib/notes";
 import { refreshNoteFts } from "@/lib/search";
+import { scheduleNoteMarkdownExport } from "@/lib/markdown-export";
+import { recordCorrection } from "@/lib/correction-learning";
 
 export class NoteWriteError extends Error {
   constructor(
@@ -52,6 +55,12 @@ export function createNote(
     .run();
   refreshNoteFts(db, id);
   if (!input.deferAi) enqueueNoteProcess(db, id);
+  /* 整理任务归档后会带着标题与摘要重新入队向量（processNote 会推进 updatedAt，
+     旧向量必然失效重算）。所以只有在压根不会走整理时才在这里补一次，否则每条新笔记
+     都要先用无标题正文白算一次向量，embedding 调用凭空翻倍。
+     deferAi 是手写笔记，此刻正文只是一个图片链接，转写完成后才接上整理链路。 */
+  if (!input.deferAi && !isLlmConfigured()) enqueueNoteEmbedding(db, id);
+  scheduleNoteMarkdownExport(db, id);
   return { id, topicId, createdAt: now };
 }
 
@@ -61,6 +70,7 @@ export interface NotePatch {
   topicId?: string;
   tags?: string[];
   transcriptionReviewStatus?: "unreviewed" | "reviewed" | "needs_review";
+  correctionSource?: "user" | "ai" | "undo";
 }
 
 /* 更新笔记。title/topicId/tags 一经显式修改即置锁，AI 后续不再覆盖——
@@ -84,6 +94,7 @@ export function updateNote(db: DB, noteId: string, patch: NotePatch): { updatedA
   }
 
   const now = Date.now();
+  const beforeTagsForLearning = patch.tags !== undefined ? (getTagsForNotes(db, [noteId]).get(noteId) ?? []) : [];
   db.transaction((tx) => {
     const values: Partial<typeof notes.$inferInsert> = { updatedAt: now };
     if (patch.content !== undefined) values.content = patch.content;
@@ -108,7 +119,17 @@ export function updateNote(db: DB, noteId: string, patch: NotePatch): { updatedA
   if (patch.content !== undefined) {
     db.update(notes).set({ aiStatus: "pending" }).where(eq(notes.id, noteId)).run();
     enqueueNoteProcess(db, noteId);
+    // 同 createNote：整理链路会重新入队向量，未配置文本模型时才需要自己补
+    if (!isLlmConfigured()) enqueueNoteEmbedding(db, noteId);
   }
+  if (patch.correctionSource !== "ai" && patch.correctionSource !== "undo") {
+    if (patch.topicId !== undefined && patch.topicId !== note.topicId) recordCorrection(db, noteId, "topic", note.topicId, patch.topicId);
+    if (patch.title !== undefined && patch.title !== note.title) recordCorrection(db, noteId, "title", note.title || "（空）", patch.title);
+    if (patch.tags !== undefined) {
+      recordCorrection(db, noteId, "tags", beforeTagsForLearning.join(","), patch.tags.join(","));
+    }
+  }
+  scheduleNoteMarkdownExport(db, noteId);
   return { updatedAt: now };
 }
 
@@ -154,5 +175,6 @@ export function restoreNote(db: DB, noteId: string, snap: NoteRestore): boolean 
     if (snap.tags !== undefined) replaceNoteTags(tx as never, noteId, snap.tags);
   });
   refreshNoteFts(db, noteId);
+  if (snap.content !== undefined) enqueueNoteEmbedding(db, noteId);
   return true;
 }

@@ -179,4 +179,44 @@ ALTER TABLE notes ADD COLUMN transcription_candidate TEXT;
 ALTER TABLE ai_jobs ADD COLUMN payload TEXT;
 `,
   },
+  {
+    id: "0011_embeddings",
+    sql: `
+ALTER TABLE notes ADD COLUMN embedding BLOB;
+ALTER TABLE notes ADD COLUMN embedding_model TEXT;
+ALTER TABLE notes ADD COLUMN embedding_dim INTEGER;
+ALTER TABLE notes ADD COLUMN embedding_updated_at INTEGER;
+`,
+  },
+  {
+    id: "0012_api_tokens",
+    sql: `
+CREATE TABLE IF NOT EXISTS api_tokens (
+  id TEXT PRIMARY KEY,
+  token_hash TEXT NOT NULL UNIQUE,
+  token_prefix TEXT NOT NULL,
+  token_last4 TEXT NOT NULL,
+  scope TEXT NOT NULL,
+  created_at INTEGER NOT NULL,
+  last_used_at INTEGER,
+  revoked_at INTEGER
+);
+CREATE INDEX IF NOT EXISTS idx_api_tokens_active ON api_tokens(revoked_at);
+`,
+  },
+  {
+    id: "0013_correction_examples",
+    sql: `
+CREATE TABLE IF NOT EXISTS correction_examples (
+  id TEXT PRIMARY KEY,
+  field TEXT NOT NULL,
+  before_value TEXT NOT NULL,
+  after_value TEXT NOT NULL,
+  context TEXT NOT NULL DEFAULT '',
+  enabled INTEGER NOT NULL DEFAULT 1,
+  created_at INTEGER NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_correction_examples_field_created ON correction_examples(field, created_at);
+`,
+  },
 ];

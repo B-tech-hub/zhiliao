@@ -4,8 +4,11 @@ import { getQueueStats } from "@/lib/ai/worker";
 import { getLastReviewWeek, isWeeklyReviewEnabled } from "@/lib/ai/weekly-review";
 import { getLastBackupAt } from "@/lib/backup";
 import { getTrashCount } from "@/lib/trash";
-import { getImageConfig, getLlmConfig, getVisionConfig, getReasoningConfig } from "@/lib/llm-config";
+import { getImageConfig, getLlmConfig, getVisionConfig, getReasoningConfig, getEmbeddingConfig } from "@/lib/llm-config";
 import { SettingsPanel } from "./settings-panel";
+import { listApiTokens } from "@/lib/api-token";
+import { isCorrectionLearningEnabled } from "@/lib/correction-learning";
+import { correctionExamples } from "@/db/schema";
 
 export const dynamic = "force-dynamic";
 
@@ -44,6 +47,8 @@ export default function SettingsPage() {
   };
   const reasoningConfig = getReasoningConfig();
   const reasoning = { model: reasoningConfig.model ?? "", baseUrl: reasoningConfig.baseUrl ?? "", apiKeyMasked: maskKey(reasoningConfig.apiKey), sources: reasoningConfig.sources };
+  const embeddingConfig = getEmbeddingConfig();
+  const embedding = { model: embeddingConfig.model ?? "", baseUrl: embeddingConfig.baseUrl ?? "", apiKeyMasked: maskKey(embeddingConfig.apiKey), sources: embeddingConfig.sources };
 
   return (
     <SettingsPanel
@@ -52,6 +57,9 @@ export default function SettingsPage() {
       vision={vision}
       image={image}
       reasoning={reasoning}
+      embedding={embedding}
+      apiTokens={listApiTokens().map((t) => ({ id: t.id, scope: t.scope, prefix: t.tokenPrefix, last4: t.tokenLast4, createdAt: t.createdAt, lastUsedAt: t.lastUsedAt }))}
+      correctionLearning={{ enabled: isCorrectionLearningEnabled(db), count: db.select().from(correctionExamples).all().length }}
       queue={getQueueStats(db)}
       review={{ enabled: isWeeklyReviewEnabled(db), lastWeek: getLastReviewWeek(db) }}
       lastBackupAt={getLastBackupAt()}

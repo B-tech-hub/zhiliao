@@ -31,6 +31,13 @@ export const REASONING_SETTING_KEYS = {
   model: "reasoning_model",
 } as const;
 
+// 嵌入模型配置不继承文本模型：DeepSeek/Anthropic 等聊天供应商不一定提供 embeddings。
+export const EMBEDDING_SETTING_KEYS = {
+  baseUrl: "embedding_base_url",
+  apiKey: "embedding_api_key",
+  model: "embedding_model",
+} as const;
+
 export type LlmConfigSource = "db" | "env" | "none";
 
 export interface LlmConfig {
@@ -40,6 +47,43 @@ export interface LlmConfig {
   sources: { baseUrl: LlmConfigSource; apiKey: LlmConfigSource; model: LlmConfigSource };
   // settings 表中存在任一 LLM 配置项
   hasDbConfig: boolean;
+}
+
+export type EmbeddingConfigSource = LlmConfigSource;
+export interface EmbeddingConfig {
+  baseUrl: string | null;
+  apiKey: string | null;
+  model: string | null;
+  sources: { baseUrl: EmbeddingConfigSource; apiKey: EmbeddingConfigSource; model: EmbeddingConfigSource };
+  hasDbConfig: boolean;
+}
+
+export function getEmbeddingConfig(): EmbeddingConfig {
+  const db = getDb();
+  const rows = db.select().from(settings).where(inArray(settings.key, Object.values(EMBEDDING_SETTING_KEYS))).all();
+  const dbMap = new Map(rows.map((r) => [r.key, r.value]));
+  const resolve = (key: string, envName: string) => {
+    const dbValue = dbMap.get(key)?.trim();
+    if (dbValue) return { value: dbValue, source: "db" as const };
+    const envValue = process.env[envName]?.trim();
+    if (envValue) return { value: envValue, source: "env" as const };
+    return { value: null, source: "none" as const };
+  };
+  const baseUrl = resolve(EMBEDDING_SETTING_KEYS.baseUrl, "EMBEDDING_BASE_URL");
+  const apiKey = resolve(EMBEDDING_SETTING_KEYS.apiKey, "EMBEDDING_API_KEY");
+  const model = resolve(EMBEDDING_SETTING_KEYS.model, "EMBEDDING_MODEL");
+  return {
+    baseUrl: baseUrl.value,
+    apiKey: apiKey.value,
+    model: model.value,
+    sources: { baseUrl: baseUrl.source, apiKey: apiKey.source, model: model.source },
+    hasDbConfig: dbMap.size > 0,
+  };
+}
+
+export function isEmbeddingConfigured(): boolean {
+  const c = getEmbeddingConfig();
+  return Boolean(c.baseUrl && c.apiKey && c.model);
 }
 
 export function getLlmConfig(): LlmConfig {

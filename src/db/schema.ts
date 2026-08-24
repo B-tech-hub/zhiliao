@@ -1,6 +1,7 @@
 import {
   index,
   integer,
+  blob,
   primaryKey,
   sqliteTable,
   text,
@@ -45,6 +46,11 @@ export const notes = sqliteTable(
     deletedAt: integer("deleted_at"),
     createdAt: integer("created_at").notNull(),
     updatedAt: integer("updated_at").notNull(),
+    // Float32Array 字节序列；模型和维度单独存储以防向量空间混算
+    embedding: blob("embedding", { mode: "buffer" }),
+    embeddingModel: text("embedding_model"),
+    embeddingDim: integer("embedding_dim"),
+    embeddingUpdatedAt: integer("embedding_updated_at"),
   },
   (t) => [
     index("idx_notes_topic_updated").on(t.topicId, t.updatedAt),
@@ -122,6 +128,35 @@ export const settings = sqliteTable("settings", {
   updatedAt: integer("updated_at").notNull(),
 });
 
+export const apiTokens = sqliteTable(
+  "api_tokens",
+  {
+    id: text("id").primaryKey(),
+    tokenHash: text("token_hash").notNull().unique(),
+    tokenPrefix: text("token_prefix").notNull(),
+    tokenLast4: text("token_last4").notNull(),
+    scope: text("scope").notNull(),
+    createdAt: integer("created_at").notNull(),
+    lastUsedAt: integer("last_used_at"),
+    revokedAt: integer("revoked_at"),
+  },
+  (t) => [index("idx_api_tokens_active").on(t.revokedAt)],
+);
+
+export const correctionExamples = sqliteTable(
+  "correction_examples",
+  {
+    id: text("id").primaryKey(),
+    field: text("field").notNull(),
+    beforeValue: text("before_value").notNull(),
+    afterValue: text("after_value").notNull(),
+    context: text("context").notNull().default(""),
+    enabled: integer("enabled").notNull().default(1),
+    createdAt: integer("created_at").notNull(),
+  },
+  (t) => [index("idx_correction_examples_field_created").on(t.field, t.createdAt)],
+);
+
 // AI 助手会话。scope 是「会话创建时的上下文快照」而非归属维度：
 // 'global' 表示未附带上下文，'sources' 表示来源问答（来源集另存 conversation_sources）
 // （不加硬外键以兼容多态 scope_id）
@@ -189,3 +224,5 @@ export type TopicSuggestion = typeof topicSuggestions.$inferSelect;
 export type Conversation = typeof conversations.$inferSelect;
 export type ConversationSource = typeof conversationSources.$inferSelect;
 export type ChatMessageRow = typeof messages.$inferSelect;
+export type ApiToken = typeof apiTokens.$inferSelect;
+export type CorrectionExample = typeof correctionExamples.$inferSelect;

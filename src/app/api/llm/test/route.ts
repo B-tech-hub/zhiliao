@@ -8,6 +8,8 @@ import {
   testVisionConnection,
 } from "@/lib/llm";
 import { saveReasoningToolSupport, saveToolSupport } from "@/lib/llm-config";
+import { isEmbeddingConfigured } from "@/lib/llm-config";
+import { testEmbeddingConnection } from "@/lib/ai/embedding";
 
 // LLM 连通性测试（设置页“测试连接”按钮）
 // body 可传 { target: "text" | "vision" | "image" | "reasoning" }；缺省或解析失败一律按 text，保证老前端兼容
@@ -15,7 +17,14 @@ export async function POST(req: NextRequest) {
   const body = await req.json().catch(() => null);
   const raw = (body as { target?: string } | null)?.target;
   const target =
-    raw === "vision" || raw === "image" || raw === "reasoning" ? raw : "text";
+    raw === "vision" || raw === "image" || raw === "reasoning" || raw === "embedding" ? raw : "text";
+
+  if (target === "embedding") {
+    if (!isEmbeddingConfigured()) {
+      return NextResponse.json({ ok: false, message: "Embedding 未配置：请填写接入点、API Key 与模型名" });
+    }
+    return NextResponse.json(await testEmbeddingConnection());
+  }
 
   if (target === "vision") {
     return NextResponse.json(await testVisionConnection());

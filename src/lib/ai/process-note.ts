@@ -5,6 +5,8 @@ import { INBOX_TOPIC_ID, notes, tags, topics } from "@/db/schema";
 import { chatJson } from "@/lib/llm";
 import { replaceNoteTags } from "@/lib/notes";
 import { refreshNoteFts } from "@/lib/search";
+import { enqueueNoteEmbedding } from "@/lib/notes";
+import { renderCorrectionHints } from "@/lib/correction-learning";
 
 // 送入 LLM 的正文截断长度：分类/标题/标签对前文敏感度足够
 const CONTENT_LIMIT = 4000;
@@ -67,6 +69,7 @@ export async function processNote(db: DB, noteId: string): Promise<void> {
         `3. tags：2~5 个标签，每个 2~6 字，优先复用已有标签：${JSON.stringify(tagRows.map((t) => t.name))}`,
         `4. summary：笔记原文超过 ${SUMMARY_MIN_LENGTH} 字时给一句话摘要（不超过 50 字），否则为 null。`,
         "",
+        renderCorrectionHints(db),
         "## 输出 JSON 格式",
         '{"topicId":"string","confidence":0.0,"title":"string","tags":["string"],"summary":"string 或 null"}',
       ].join("\n"),
@@ -111,6 +114,7 @@ export async function processNote(db: DB, noteId: string): Promise<void> {
     }
   });
   refreshNoteFts(db, noteId);
+  enqueueNoteEmbedding(db, noteId);
 }
 
 // 处理最终失败：留在原地（通常是未分类），标记 failed，标题回退为内容首行

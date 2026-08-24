@@ -70,6 +70,17 @@ function handleWeeklyReview(user) {
   ].join("\n");
 }
 
+// 语义检索本地验收用的确定性向量：拖延/摸鱼类文本落在同一方向，
+// 其他文本按简单桶分散。真实供应商验证仍需使用实际 Embedding API。
+function mockEmbedding(text) {
+  if (/拖延|摸鱼|偷懒|延期/.test(text)) return [1, 0, 0, 0];
+  if (/羽毛球|训练/.test(text)) return [0, 1, 0, 0];
+  if (/做饭|菜|厨房/.test(text)) return [0, 0, 1, 0];
+  let hash = 0;
+  for (const ch of text) hash = (hash * 31 + ch.codePointAt(0)) >>> 0;
+  return [0, 0, 0, (hash % 1000 + 1) / 1000];
+}
+
 // 消息内容可能是字符串，也可能是多模态数组，统一取出其中的文本部分
 function textOf(content) {
   if (typeof content === "string") return content;
@@ -199,6 +210,17 @@ const server = http.createServer((req, res) => {
   req.on("data", (c) => (body += c));
   req.on("end", () => {
     const payload = JSON.parse(body || "{}");
+    if (req.url === "/v1/embeddings" && req.method === "POST") {
+      const inputs = Array.isArray(payload.input) ? payload.input : [payload.input ?? ""];
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({
+        object: "list",
+        model: payload.model ?? "mock-embedding",
+        data: inputs.map((input, index) => ({ object: "embedding", index, embedding: mockEmbedding(String(input)) })),
+        usage: { prompt_tokens: inputs.length, total_tokens: inputs.length },
+      }));
+      return;
+    }
     const lastUser = payload.messages?.findLast?.((m) => m.role === "user");
     const user = textOf(lastUser?.content);
     const system = textOf(payload.messages?.find?.((m) => m.role === "system")?.content);

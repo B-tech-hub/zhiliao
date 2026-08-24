@@ -1,11 +1,14 @@
-import { and, eq, gt, inArray, lte, sql } from "drizzle-orm";
+import { and, eq, gt, inArray, isNull, lte, sql } from "drizzle-orm";
 import { getDb, type DB } from "@/db";
-import { aiJobs } from "@/db/schema";
+import { aiJobs, notes } from "@/db/schema";
 import { LlmConfigError, LlmRequestError, isLlmConfigured } from "@/lib/llm";
+import { getEmbeddingConfig, isEmbeddingConfigured } from "@/lib/llm-config";
+import { buildNoteEmbeddingText, embedText } from "@/lib/ai/embedding";
 import { markNoteFailed, processNote } from "./process-note";
 import { maybeEnqueueSuggestTopics, runSuggestTopics } from "./suggest-topics";
 import { runWeeklyReview } from "./weekly-review";
 import { transcribeHandwriting } from "./handwriting";
+import { scheduleNoteMarkdownExport } from "@/lib/markdown-export";
 
 const POLL_INTERVAL_MS = 5000;
 const MAX_ATTEMPTS = 3;
@@ -69,10 +72,11 @@ export async function runJob(db: DB, jobId: string) {
   const job = db.select().from(aiJobs).where(eq(aiJobs.id, jobId)).get();
   if (!job || job.status !== "pending") return;
 
-  if (!isLlmConfigured()) {
+  const configured = job.type === "embed_note" ? isEmbeddingConfigured() : isLlmConfigured();
+  if (!configured) {
     // 未配置 LLM 时不消耗重试次数，1 分钟后再看
     db.update(aiJobs)
-      .set({ runAfter: Date.now() + 60_000, lastError: "LLM 未配置", updatedAt: Date.now() })
+      .set({ runAfter: Date.now() + 60_000, lastError: job.type === "embed_note" ? "Embedding 未配置" : "LLM 未配置", updatedAt: Date.now() })
       .where(eq(aiJobs.id, jobId))
       .run();
     return;
@@ -87,7 +91,28 @@ export async function runJob(db: DB, jobId: string) {
   try {
     if (job.type === "note_process" && job.noteId) {
       await processNote(db, job.noteId);
+      scheduleNoteMarkdownExport(db, job.noteId);
       maybeEnqueueSuggestTopics(db);
+    } else if (job.type === "embed_note" && job.noteId) {
+      const note = db.select().from(notes).where(and(eq(notes.id, job.noteId), isNull(notes.deletedAt))).get();
+      if (note) {
+        const cfg = getEmbeddingConfig();
+        if (note.embeddingModel === cfg.model && note.embeddingUpdatedAt !== null && note.embeddingUpdatedAt >= note.updatedAt && note.embedding) {
+          // 已是当前模型且不落后于正文，任务可能是重复入队，直接结束。
+        } else {
+          const vector = await embedText(buildNoteEmbeddingText(note));
+          const latest = db.select({ updatedAt: notes.updatedAt }).from(notes).where(and(eq(notes.id, note.id), isNull(notes.deletedAt))).get();
+          if (!latest || latest.updatedAt !== note.updatedAt) {
+            /* 请求在途期间正文发生变化：丢弃旧向量并让同一任务重新读取最新正文。
+               attempts 一并回退——这不是失败，连续编辑不该把重试次数耗成 failed。 */
+            db.update(aiJobs).set({ status: "pending", attempts: job.attempts, runAfter: Date.now(), lastError: "正文在向量请求期间发生变化", updatedAt: Date.now() }).where(eq(aiJobs.id, jobId)).run();
+            return;
+          }
+          const dim = vector.length;
+          const buffer = Buffer.from(new Float32Array(vector).buffer);
+          db.update(notes).set({ embedding: buffer, embeddingModel: cfg.model, embeddingDim: dim, embeddingUpdatedAt: note.updatedAt }).where(eq(notes.id, note.id)).run();
+        }
+      }
     } else if (job.type === "handwriting_transcribe" && job.noteId) {
       const payload = job.payload ? JSON.parse(job.payload) as { filename?: string; baseUpdatedAt?: number } : {};
       if (!payload.filename) throw new Error("手写任务缺少图片文件名");
@@ -95,6 +120,7 @@ export async function runJob(db: DB, jobId: string) {
       db.update(aiJobs).set({ status: "done", updatedAt: Date.now() }).where(eq(aiJobs.id, jobId)).run();
       const note = db.select({ id: aiJobs.noteId }).from(aiJobs).where(eq(aiJobs.id, jobId)).get();
       if (note?.id && outcome === "appended") {
+        scheduleNoteMarkdownExport(db, note.id);
         const { enqueueNoteProcess } = await import("@/lib/notes");
         enqueueNoteProcess(db, note.id);
       }

@@ -1,12 +1,12 @@
 import { and, eq, inArray, isNull } from "drizzle-orm";
 import { z } from "zod";
 import { notes, topics } from "@/db/schema";
-import { makeExcerpt, searchNoteIds } from "@/lib/search";
+import { hybridSearchNoteIds, makeExcerpt } from "@/lib/search";
 import { getTagsForNotes } from "@/lib/notes";
 import { defineTool } from "./types";
 
 const schema = z.object({
-  query: z.string().min(1).describe("搜索关键词，支持中文分词；多个词用空格分隔表示同时命中"),
+  query: z.string().min(1).describe("搜索关键词，支持中文分词；多个词会扩大召回并优先排列多词命中的笔记"),
   limit: z.number().int().min(1).max(20).optional().describe("返回条数上限，默认 8"),
 });
 
@@ -16,9 +16,9 @@ export const searchNotesTool = defineTool({
     "在用户的知识库中按关键词搜索笔记，返回匹配笔记的 id、标题、所属主题与摘录。" +
     "回答任何与用户已有记录相关的问题前都应先搜索。不会返回回收站中的笔记。",
   schema,
-  run: ({ query, limit }, { db, allowedNoteIds }) => {
+  run: async ({ query, limit }, { db, allowedNoteIds }) => {
     const max = limit ?? 8;
-    const { ids, terms } = searchNoteIds(query, max, allowedNoteIds);
+    const { ids, terms, staleEmbeddingCount } = await hybridSearchNoteIds(query, max, allowedNoteIds);
     if (ids.length === 0) {
       const scope = allowedNoteIds ? "来源集中" : "";
       return { content: `${scope}没有找到与「${query}」相关的笔记。`, noteIds: [] };
@@ -57,8 +57,9 @@ export const searchNotesTool = defineTool({
         .join("\n");
     });
 
+    const warning = staleEmbeddingCount > 0 ? `\n提示：${staleEmbeddingCount} 条笔记的向量由其他模型产出，未参与语义检索。` : "";
     return {
-      content: `找到 ${ordered.length} 条与「${query}」相关的笔记：\n${lines.join("\n")}`,
+      content: `找到 ${ordered.length} 条与「${query}」相关的笔记：${warning}\n${lines.join("\n")}`,
       noteIds: ordered.map((r) => r.id),
     };
   },

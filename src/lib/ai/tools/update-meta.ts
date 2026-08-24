@@ -35,7 +35,7 @@ export const updateMetaTool = defineTool({
 
     const beforeTags = getTagsForNotes(db, [noteId]).get(noteId) ?? [];
     try {
-      const { updatedAt } = updateNote(db, noteId, { topicId, title, tags });
+      const { updatedAt } = updateNote(db, noteId, { topicId, title, tags, correctionSource: "ai" });
       const changed = [
         topicId !== undefined ? "主题" : "",
         title !== undefined ? "标题" : "",
