@@ -6,9 +6,13 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Node](https://img.shields.io/badge/node-%E2%89%A522-339933?logo=node.js&logoColor=white)](Dockerfile)
 
-> **English**: *Zhiliao* (知了, "got it / noted") is a self-hosted, AI-organized personal knowledge base — jot a note, and an LLM titles it, tags it, summarizes it, and files it into the right topic. Next.js 15 + SQLite, single-user, PWA-ready, works with any OpenAI-compatible API. **English quickstart: [README.en.md](README.en.md)**; full documentation is in Simplified Chinese.
+> **English**: *Zhiliao* (知了, "got it / noted") is a self-hosted, AI-organized personal knowledge base — jot a note, and an LLM titles it, tags it, summarizes it, and files it into the right topic. Hybrid keyword + vector retrieval, MCP server, Next.js 15 + SQLite, single-user, PWA-ready, works with any OpenAI-compatible API. **English quickstart: [README.en.md](README.en.md)**; full documentation is in Simplified Chinese.
 
 主题导向的个人知识库：随手记一条笔记，AI 自动阅读理解，起标题、打标签、写摘要，并归入合适的主题；拿不准的进"未分类"，攒多了 AI 会建议"要不要新建主题 X"。
+
+同一个哲学延到读侧——**找的时候不用想关键词**：关键词（BM25）与语义（向量）双路召回后融合重排，用口语化的转述也能捞回原话措辞完全不同的那条笔记；写作时相关旧笔记自动浮现在侧栏，还会提示哪一条与你当前的结论相反。
+
+**AI 不编造**是产品级承诺，不只作用于问答：引用只放行工具真返回过的笔记 id，来源里没有的会直说没有，不拿模型自己的知识凑数，也不渲染幻觉死链。
 
 单用户自用，响应式 Web 应用（手机/电脑浏览器通用）。
 
@@ -65,6 +69,10 @@ docker compose -f docker-compose.demo.yml up -d
 - **每周回顾**：每周一凌晨把上一周的笔记梳理成一篇脉络回顾，存进「每周回顾」主题（默认开启，设置页可关，也可手动补生成）
 - **主题建议**：未分类攒到 8 条后（或手动触发），AI 聚类给出最多 3 个建议，确认后一键建主题并迁移；逐条采纳，采纳一条不影响其余建议
 - **中文搜索**：jieba 分词 + SQLite FTS5 全文检索，标题/标签加权，多词 OR 召回；配置 Embedding 后与向量结果以 RRF 融合，未配置时自动使用 BM25；不输关键词只点主题时，直接列出该主题下的笔记
+- **写作时的相关笔记**：编辑正文停顿约 0.9 秒后，侧栏浮现最多 8 条语义相关的旧笔记（只给标题与摘录，绝不自动改你的正文）；若配了聊天模型，还会指出其中哪条与当前草稿的结论相反——相关是向量能做的，矛盾只有 LLM 看得出来。Embedding 或模型未配置时，编辑保存照常，提示降级为空
+- **纠正即学习**：你每次手动改主题 / 改标题 / 改标签，都被存成 few-shot 样例注入后续 prompt（每字段最多 3 条），AI 越用越贴合你的习惯；设置页可关，也可逐条停用
+- **对外接入**：设置页主动创建 API Token（**默认不生成，不用的人完全感知不到**），数据库只存 SHA-256 哈希，明文仅在创建时返回一次。权限分 `capture:write`（只能调 `POST /api/external/capture` 建笔记，适配 iOS 快捷指令 / 邮件 / bot）与 `knowledge:read`（读 `GET /api/external/knowledge`，或经 `/api/mcp` 用 `search_knowledge`、`get_knowledge` 两个只读语义工具接入 Claude 等 MCP 客户端）。MCP 暴露的是主题与 AI 摘要这层语义，不是裸 CRUD，也不含删除、改配置等高风险操作
+- **增量 Markdown 导出**：每次笔记变更后台写一份 `.md` 到 `./data/notes/主题/标题-id.md`（只出不进、零冲突），你的字不会被关在 SQLite 里——想用 Obsidian 直接打开那个目录即可
 - **数据归你**：设置页一键导出全部数据（Markdown + 展示图打包 zip；HEIC 原件额外放入 `assets/originals/`，可导入 Obsidian 等工具）与手动立即备份
 - **外观**：浅色 / 深色 / 跟随系统三态切换（设置 → 外观），偏好保存在本机浏览器
 - **PWA**：手机可"添加到主屏幕"当 app 用（需 HTTPS，推荐 Tailscale 方案，见下），断网有离线兜底页
@@ -78,7 +86,9 @@ Next.js 15（App Router，全栈单体）· TypeScript · Tailwind CSS 4 · Driz
 
 ## 文档
 
-专项文档集中在 [docs/](docs/README.md)：设计规范（含暗色模式 token 表）、Tailscale 部署手册、[备份与恢复](docs/备份与恢复.md)、架构决策记录（ADR）。领域术语见 [CONTEXT.md](CONTEXT.md)。
+**22 篇架构决策记录（[ADR](docs/adr/)）**——每个取舍为什么这么定、当时否掉了什么、留下了什么代价，都写在里面。想学 Next.js 全栈的话，这里可能比源码本身更有用：从 [ADR-0001（LLM 配置为何存数据库）](docs/adr/0001-llm-config-in-db.md) 顺着读到 [ADR-0018（混合检索与向量存储）](docs/adr/0018-hybrid-search.md)、[ADR-0019（Token 与 MCP）](docs/adr/0019-external-access.md)，就是这个应用的完整演进史。
+
+其余专项文档集中在 [docs/](docs/README.md)：设计规范（含暗色模式 token 表）、Tailscale 部署手册、[备份与恢复](docs/备份与恢复.md)。领域术语见 [CONTEXT.md](CONTEXT.md)。
 
 ## 本地开发
 
@@ -120,6 +130,7 @@ docker compose up -d
 | `./data/db/app.db` | SQLite 数据库（WAL 模式） |
 | `./data/db/backups/` | 每日自动备份：数据库快照 `app-*.db` 与图片快照 `uploads-*/`，各保留 7 份（[恢复方法](docs/备份与恢复.md)） |
 | `./data/uploads/` | 上传的图片 |
+| `./data/notes/` | 增量导出的 Markdown（按 `主题/标题-id.md`，只出不进；可直接用 Obsidian 打开） |
 
 迁移在应用启动时自动执行。升级版本：`docker compose pull && docker compose up -d`（源码构建则 `docker compose up -d --build`），重启不丢数据与未完成的 AI 任务。
 
@@ -135,6 +146,7 @@ docker compose up -d
 | `SESSION_SECRET` | ✅ | 会话签名密钥，≥32 字节随机串（`openssl rand -hex 32`） |
 | `DATABASE_PATH` | | SQLite 路径，默认 `./data/db/app.db`（Docker 内 `/data/db/app.db`） |
 | `UPLOAD_DIR` | | 图片目录，默认 `./data/uploads`（Docker 内 `/data/uploads`） |
+| `NOTES_EXPORT_DIR` | | 增量 Markdown 导出目录，默认 `./data/notes`（Docker 内 `/data/notes`）；每次笔记变更后台写入，只出不进 |
 | `LLM_BASE_URL` | | OpenAI 兼容接入点的默认值（兜底），如 `https://api.deepseek.com/v1`，可在"设置 → AI 服务"页面覆盖 |
 | `LLM_API_KEY` | | 模型服务 API Key 的默认值（兜底），可在设置页覆盖 |
 | `LLM_MODEL` | | 模型名的默认值（兜底），如 `deepseek-chat`，可在设置页覆盖 |
@@ -183,8 +195,11 @@ docker compose up -d
 
 **计划中**
 
-- Memos / flomo / Obsidian 导入（Markdown zip 反向导入优先）
-- 语义（向量）搜索
+- Memos / flomo / Obsidian 导入（Markdown zip 反向导入优先；导出侧已能只出不进）
+- 检索补上第三路 AI 查询改写（当前为 BM25 + 向量两路 RRF 融合）
+- 长笔记分块（chunking）：整篇一个向量会稀释语义，末尾内容召回率偏低
+- 「这条还成立吗」式回顾：把半年前的笔记推回来，问的不是「记住了吗」而是「你现在还这么想吗」
+- 首页指标从「共 N 条笔记」改为「本周进 12 条 / 出 3 条」——让「用了多少」可见，而非「存了多少」可见
 - 图像生成的异步接口适配（DashScope 那类「提交任务 → 轮询」的形态；当前只支持 OpenAI 兼容的同步接口，取舍见 [ADR-0011](docs/adr/0011-image-generation.md)）
 
 **远期再议**
