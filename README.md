@@ -169,7 +169,7 @@ docker compose up -d
 
 ### Embedding 实际验收
 
-拿到供应商信息后，先在隔离环境执行 `node verify-embedding.mjs`，确认供应商支持 OpenAI 兼容的 `/embeddings` 接口、返回维度以及中文语义区分度。通过后在设置页填写 Embedding 接入点、API Key 和模型名，点击“测试连接”，再点击“查看待补算”确认存量笔记数量，最后执行“补算向量”。
+拿到供应商信息后，先把 `EMBEDDING_BASE_URL`、`EMBEDDING_API_KEY`、`EMBEDDING_MODEL` 写入已被 Git 忽略的 `.env.local`，再在隔离环境执行 `node verify-embedding.mjs`。脚本会自动读取 `.env.local`（显式传入的环境变量优先），且只输出接口状态、维度与语义区分度，不回显 API Key。通过后在设置页填写同一组三项，点击“测试连接”，再点击“查看待补算”确认存量笔记数量，最后执行“补算向量”。
 
 验收搜索时，使用与笔记原文不同措辞但语义相近的查询（例如笔记写“又摸鱼了一下午”，查询“拖延”），确认结果中的 `vectorEnabled` 为 `true` 且相关笔记排序靠前；若供应商更换模型或维度，旧向量应计入 `staleEmbeddingCount`，搜索仍能降级到 BM25。API Key 不要写入仓库、日志或交接文档。
 
