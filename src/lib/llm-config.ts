@@ -40,11 +40,48 @@ export const EMBEDDING_SETTING_KEYS = {
 
 export type LlmConfigSource = "db" | "env" | "none";
 
+/* 数据库值遮蔽了一个**不同的**环境变量值。这层信息必须能被界面看见：
+   静默覆盖会让「改了 .env.local 却没生效」无从察觉——2026-08-27 就因此
+   把一批按 4B 算好的向量全部按 8B 重算了一次，而 .env.local 明明写着 4B。
+   apiKey 只给布尔：提示分歧存在即可，密钥不出这一层。 */
+export interface ConfigShadow {
+  baseUrl: string | null;
+  model: string | null;
+  apiKey: boolean;
+}
+
+interface ResolvedValue {
+  value: string | null;
+  source: LlmConfigSource;
+  shadowedEnv: string | null;
+}
+
+/* 五组配置（llm / vision / image / reasoning / embedding）的解析规则完全相同，
+   此前各抄了一份。收敛到这里，遮蔽检测才只需实现一次。 */
+function resolveConfigValue(
+  dbMap: Map<string, string | null>,
+  key: string,
+  envName: string,
+): ResolvedValue {
+  const fromDb = dbMap.get(key)?.trim();
+  const fromEnv = process.env[envName]?.trim();
+  if (fromDb) {
+    return { value: fromDb, source: "db", shadowedEnv: fromEnv && fromEnv !== fromDb ? fromEnv : null };
+  }
+  if (fromEnv) return { value: fromEnv, source: "env", shadowedEnv: null };
+  return { value: null, source: "none", shadowedEnv: null };
+}
+
+function buildShadow(baseUrl: ResolvedValue, apiKey: ResolvedValue, model: ResolvedValue): ConfigShadow {
+  return { baseUrl: baseUrl.shadowedEnv, model: model.shadowedEnv, apiKey: apiKey.shadowedEnv !== null };
+}
+
 export interface LlmConfig {
   baseUrl: string | null;
   apiKey: string | null;
   model: string | null;
   sources: { baseUrl: LlmConfigSource; apiKey: LlmConfigSource; model: LlmConfigSource };
+  shadowed: ConfigShadow;
   // settings 表中存在任一 LLM 配置项
   hasDbConfig: boolean;
 }
@@ -55,6 +92,7 @@ export interface EmbeddingConfig {
   apiKey: string | null;
   model: string | null;
   sources: { baseUrl: EmbeddingConfigSource; apiKey: EmbeddingConfigSource; model: EmbeddingConfigSource };
+  shadowed: ConfigShadow;
   hasDbConfig: boolean;
 }
 
@@ -62,21 +100,15 @@ export function getEmbeddingConfig(): EmbeddingConfig {
   const db = getDb();
   const rows = db.select().from(settings).where(inArray(settings.key, Object.values(EMBEDDING_SETTING_KEYS))).all();
   const dbMap = new Map(rows.map((r) => [r.key, r.value]));
-  const resolve = (key: string, envName: string) => {
-    const dbValue = dbMap.get(key)?.trim();
-    if (dbValue) return { value: dbValue, source: "db" as const };
-    const envValue = process.env[envName]?.trim();
-    if (envValue) return { value: envValue, source: "env" as const };
-    return { value: null, source: "none" as const };
-  };
-  const baseUrl = resolve(EMBEDDING_SETTING_KEYS.baseUrl, "EMBEDDING_BASE_URL");
-  const apiKey = resolve(EMBEDDING_SETTING_KEYS.apiKey, "EMBEDDING_API_KEY");
-  const model = resolve(EMBEDDING_SETTING_KEYS.model, "EMBEDDING_MODEL");
+  const baseUrl = resolveConfigValue(dbMap, EMBEDDING_SETTING_KEYS.baseUrl, "EMBEDDING_BASE_URL");
+  const apiKey = resolveConfigValue(dbMap, EMBEDDING_SETTING_KEYS.apiKey, "EMBEDDING_API_KEY");
+  const model = resolveConfigValue(dbMap, EMBEDDING_SETTING_KEYS.model, "EMBEDDING_MODEL");
   return {
     baseUrl: baseUrl.value,
     apiKey: apiKey.value,
     model: model.value,
     sources: { baseUrl: baseUrl.source, apiKey: apiKey.source, model: model.source },
+    shadowed: buildShadow(baseUrl, apiKey, model),
     hasDbConfig: dbMap.size > 0,
   };
 }
@@ -95,23 +127,16 @@ export function getLlmConfig(): LlmConfig {
     .all();
   const dbMap = new Map(rows.map((r) => [r.key, r.value]));
 
-  function resolve(key: string, envName: string): { value: string | null; source: LlmConfigSource } {
-    const fromDb = dbMap.get(key)?.trim();
-    if (fromDb) return { value: fromDb, source: "db" };
-    const fromEnv = process.env[envName]?.trim();
-    if (fromEnv) return { value: fromEnv, source: "env" };
-    return { value: null, source: "none" };
-  }
-
-  const baseUrl = resolve(LLM_SETTING_KEYS.baseUrl, "LLM_BASE_URL");
-  const apiKey = resolve(LLM_SETTING_KEYS.apiKey, "LLM_API_KEY");
-  const model = resolve(LLM_SETTING_KEYS.model, "LLM_MODEL");
+  const baseUrl = resolveConfigValue(dbMap, LLM_SETTING_KEYS.baseUrl, "LLM_BASE_URL");
+  const apiKey = resolveConfigValue(dbMap, LLM_SETTING_KEYS.apiKey, "LLM_API_KEY");
+  const model = resolveConfigValue(dbMap, LLM_SETTING_KEYS.model, "LLM_MODEL");
 
   return {
     baseUrl: baseUrl.value,
     apiKey: apiKey.value,
     model: model.value,
     sources: { baseUrl: baseUrl.source, apiKey: apiKey.source, model: model.source },
+    shadowed: buildShadow(baseUrl, apiKey, model),
     hasDbConfig: dbMap.size > 0,
   };
 }
@@ -124,6 +149,7 @@ export interface VisionConfig {
   apiKey: string | null;
   model: string | null;
   sources: { baseUrl: VisionConfigSource; apiKey: VisionConfigSource; model: VisionConfigSource };
+  shadowed: ConfigShadow;
   // settings 表中存在任一该组配置项
   hasDbConfig: boolean;
 }
@@ -143,22 +169,14 @@ function getDerivedConfig(
     .all();
   const dbMap = new Map(rows.map((r) => [r.key, r.value]));
 
-  function resolve(key: string, envName: string): { value: string | null; source: LlmConfigSource } {
-    const fromDb = dbMap.get(key)?.trim();
-    if (fromDb) return { value: fromDb, source: "db" };
-    const fromEnv = process.env[envName]?.trim();
-    if (fromEnv) return { value: fromEnv, source: "env" };
-    return { value: null, source: "none" };
-  }
-
   const text = getLlmConfig();
-  const baseUrl = resolve(keys.baseUrl, `${envPrefix}_BASE_URL`);
-  const apiKey = resolve(keys.apiKey, `${envPrefix}_API_KEY`);
-  const model = resolve(keys.model, `${envPrefix}_MODEL`);
+  const baseUrl = resolveConfigValue(dbMap, keys.baseUrl, `${envPrefix}_BASE_URL`);
+  const apiKey = resolveConfigValue(dbMap, keys.apiKey, `${envPrefix}_API_KEY`);
+  const model = resolveConfigValue(dbMap, keys.model, `${envPrefix}_MODEL`);
 
   // 未显式配置时回落文本模型，来源标 fallback；文本模型也没有才是 none
   const inherit = (
-    own: { value: string | null; source: LlmConfigSource },
+    own: ResolvedValue,
     inherited: string | null,
   ): VisionConfigSource => (own.source !== "none" ? own.source : inherited ? "fallback" : "none");
 
@@ -172,6 +190,7 @@ function getDerivedConfig(
       apiKey: inherit(apiKey, text.apiKey),
       model: model.source,
     },
+    shadowed: buildShadow(baseUrl, apiKey, model),
     hasDbConfig: dbMap.size > 0,
   };
 }

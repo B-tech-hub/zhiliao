@@ -30,6 +30,7 @@ export default function SettingsPage() {
     apiKeyMasked: maskKey(config.apiKey),
     hasDbConfig: config.hasDbConfig,
     sources: config.sources,
+    shadowed: config.shadowed,
   };
   const visionConfig = getVisionConfig();
   const vision = {
@@ -37,6 +38,7 @@ export default function SettingsPage() {
     baseUrl: visionConfig.baseUrl ?? "",
     apiKeyMasked: maskKey(visionConfig.apiKey),
     sources: visionConfig.sources,
+    shadowed: visionConfig.shadowed,
   };
   const imageConfig = getImageConfig();
   const image = {
@@ -44,11 +46,12 @@ export default function SettingsPage() {
     baseUrl: imageConfig.baseUrl ?? "",
     apiKeyMasked: maskKey(imageConfig.apiKey),
     sources: imageConfig.sources,
+    shadowed: imageConfig.shadowed,
   };
   const reasoningConfig = getReasoningConfig();
-  const reasoning = { model: reasoningConfig.model ?? "", baseUrl: reasoningConfig.baseUrl ?? "", apiKeyMasked: maskKey(reasoningConfig.apiKey), sources: reasoningConfig.sources };
+  const reasoning = { model: reasoningConfig.model ?? "", baseUrl: reasoningConfig.baseUrl ?? "", apiKeyMasked: maskKey(reasoningConfig.apiKey), sources: reasoningConfig.sources, shadowed: reasoningConfig.shadowed };
   const embeddingConfig = getEmbeddingConfig();
-  const embedding = { model: embeddingConfig.model ?? "", baseUrl: embeddingConfig.baseUrl ?? "", apiKeyMasked: maskKey(embeddingConfig.apiKey), sources: embeddingConfig.sources };
+  const embedding = { model: embeddingConfig.model ?? "", baseUrl: embeddingConfig.baseUrl ?? "", apiKeyMasked: maskKey(embeddingConfig.apiKey), sources: embeddingConfig.sources, shadowed: embeddingConfig.shadowed };
 
   return (
     <SettingsPanel

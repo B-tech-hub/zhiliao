@@ -18,6 +18,14 @@ type LlmSource = "db" | "env" | "none";
 // 视觉配置多一态：未显式填写时回落文本模型配置
 type VisionSource = LlmSource | "fallback";
 
+/* 数据库值遮蔽了不同的环境变量值。必须显示出来：改了 .env.local 却不生效
+   是完全静默的，实测中曾因此把按 4B 算好的向量全部按 8B 重算一次 */
+interface ConfigShadow {
+  baseUrl: string | null;
+  model: string | null;
+  apiKey: boolean;
+}
+
 interface LlmInfo {
   configured: boolean;
   baseUrl: string;
@@ -25,6 +33,7 @@ interface LlmInfo {
   apiKeyMasked: string;
   hasDbConfig: boolean;
   sources: { baseUrl: LlmSource; apiKey: LlmSource; model: LlmSource };
+  shadowed: ConfigShadow;
 }
 
 const SOURCE_LABEL: Record<LlmSource, string> = {
@@ -38,6 +47,23 @@ const VISION_SOURCE_LABEL: Record<VisionSource, string> = {
   fallback: "回落文本模型",
 };
 
+/* 环境变量被数据库配置盖住时的提示。只在两者**不同**时出现——相同则无歧义，
+   提示反而是噪声。密钥不显示原值，只说存在分歧。 */
+function ShadowNotice({ shadowed }: { shadowed: ConfigShadow | undefined }) {
+  if (!shadowed) return null;
+  const items = [
+    shadowed.model ? `模型名（环境变量里是 ${shadowed.model}）` : null,
+    shadowed.baseUrl ? `接入点（环境变量里是 ${shadowed.baseUrl}）` : null,
+    shadowed.apiKey ? "API Key" : null,
+  ].filter(Boolean);
+  if (items.length === 0) return null;
+  return (
+    <p className="mt-2 text-[12px] leading-[1.5] text-danger">
+      以下项的环境变量已被数据库配置覆盖、不生效：{items.join("；")}。改 .env 不会有效果，请在此处修改，或清除数据库配置以回退。
+    </p>
+  );
+}
+
 interface QueueInfo {
   pending: number;
   running: number;
@@ -50,6 +76,7 @@ interface VisionInfo {
   baseUrl: string;
   apiKeyMasked: string;
   sources: { baseUrl: VisionSource; apiKey: VisionSource; model: VisionSource };
+  shadowed: ConfigShadow;
 }
 type ReasoningInfo = VisionInfo;
 type EmbeddingInfo = {
@@ -57,6 +84,7 @@ type EmbeddingInfo = {
   baseUrl: string;
   apiKeyMasked: string;
   sources: { baseUrl: LlmSource; apiKey: LlmSource; model: LlmSource };
+  shadowed: ConfigShadow;
 };
 
 interface ReviewInfo {
@@ -724,6 +752,7 @@ export function SettingsPanel({
               className="h-[40px] w-full rounded-utility border border-hairline bg-surface px-5 text-[14px] outline-none focus:border-action-focus"
             />
           </div>
+          <ShadowNotice shadowed={llm.shadowed} />
           <p className="text-[12px] text-ink-48">
             此处保存的配置存入数据库并立即生效；未保存的项使用服务端环境变量
           </p>
@@ -817,6 +846,7 @@ export function SettingsPanel({
               className="h-[40px] w-full rounded-utility border border-hairline bg-surface px-5 text-[14px] outline-none focus:border-action-focus"
             />
           </div>
+          <ShadowNotice shadowed={vision.shadowed} />
           {/* 与文本模型的语义差异：这里留空是"回落文本模型"，不是"不修改" */}
           <p className="text-[12px] text-ink-48">
             只填模型名即可启用；接入点与 API Key 留空会自动复用上方文本模型的配置
@@ -905,6 +935,7 @@ export function SettingsPanel({
               className="h-[40px] w-full rounded-utility border border-hairline bg-surface px-5 text-[14px] outline-none focus:border-action-focus"
             />
           </div>
+          <ShadowNotice shadowed={image.shadowed} />
           <p className="text-[12px] text-ink-48">
             只填模型名即可启用；接入点与 API Key 留空会自动复用上方文本模型的配置。
             需要接入点支持 OpenAI 兼容的
@@ -987,6 +1018,7 @@ export function SettingsPanel({
               placeholder={`API Key（${reasoning.apiKeyMasked}）`}
               className="h-[40px] w-full rounded-utility border border-hairline bg-surface px-5 outline-none focus:border-action-focus"
             />
+            <ShadowNotice shadowed={reasoning.shadowed} />
             <div className="flex flex-wrap items-center gap-3">
               <button
                 onClick={saveReasoning}
@@ -1045,6 +1077,7 @@ export function SettingsPanel({
               </label>
               <input type="password" value={embeddingApiKey} onChange={(e) => setEmbeddingApiKey(e.target.value)} placeholder={`API Key（${embedding.apiKeyMasked}）`} className="h-[40px] w-full rounded-utility border border-hairline bg-surface px-5 outline-none focus:border-action-focus" autoComplete="off" />
             </div>
+            <ShadowNotice shadowed={embedding.shadowed} />
             <div className="flex flex-wrap items-center gap-3">
               <button onClick={saveEmbedding} disabled={embeddingSaving} className="rounded-utility bg-cta px-[22px] py-[8px] text-cta-ink disabled:opacity-40">{embeddingSaving ? "保存中…" : "保存"}</button>
               <button onClick={() => testLlm("embedding")} disabled={embeddingTesting} className="rounded-utility border border-hairline px-[22px] py-[8px] text-ink-80 disabled:opacity-40">{embeddingTesting ? "测试中…" : "测试连接"}</button>
