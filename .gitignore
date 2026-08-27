@@ -44,6 +44,8 @@ brainstorm/
 
 # 隔离验收实例的数据目录（端口 3100 那套，不进仓库）
 /data-demo-ui/
+# 导入功能验收用的隔离实例（端口 3200）
+/data-import-verify/
 .npm-cache/
 
 # 本地起实例时重定向的日志（dev.out.log / dev-3000.log / prod-3000.log 等）
