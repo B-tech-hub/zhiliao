@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { getDb } from "@/db";
-import { notes } from "@/db/schema";
+import { noteChunks, notes } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { hybridSearchNoteIds, refreshNoteFts, vectorSearch } from "@/lib/search";
 import { insertNote, wipeData } from "../helpers/db";
@@ -132,5 +132,113 @@ describe("模型漂移降级（计划 §3.3 最需守住的一条）", () => {
 
     const result = vectorSearch([1, 0, 0, 0], 10, new Set(["n1"]));
     expect(result.staleEmbeddingCount).toBe(1);
+  });
+});
+
+// 给笔记挂分块向量，并把 notes 一侧按 worker 的写法置空
+function attachChunks(id: string, chunks: { values: number[]; model?: string }[]) {
+  const note = getDb().select().from(notes).where(eq(notes.id, id)).get()!;
+  getDb()
+    .insert(noteChunks)
+    .values(chunks.map((c, i) => ({
+      id: `${id}-c${i}`,
+      noteId: id,
+      chunkIndex: i,
+      text: `第 ${i} 块`,
+      embedding: vec(c.values),
+      embeddingModel: c.model ?? "embed-model",
+      embeddingDim: c.values.length,
+      embeddingUpdatedAt: note.updatedAt,
+    })))
+    .run();
+  getDb().update(notes).set({ embedding: null, embeddingChunkCount: chunks.length }).where(eq(notes.id, id)).run();
+}
+
+describe("分块检索的 max-pooling", () => {
+  it("取最高分块而非平均——平均会让长笔记再次被稀释，等于白分块", () => {
+    enableEmbedding();
+    insertNote("n1", "三节长笔记");
+    insertNote("n2", "一节短笔记");
+    // n1 块分数为 1 / 0 / 0：max=1 胜过 n2 的 0.707，avg=0.333 则会输
+    attachChunks("n1", [{ values: [1, 0, 0] }, { values: [0, 1, 0] }, { values: [0, 0, 1] }]);
+    attachEmbedding("n2", [1, 1, 0]);
+
+    const result = vectorSearch([1, 0, 0], 10);
+    expect(result.ids[0]).toBe("n1");
+    expect(result.scores["n1"]).toBeCloseTo(1, 5);
+  });
+
+  it("单块笔记与多块笔记同场排序，短笔记不因别人分块而掉队", () => {
+    enableEmbedding();
+    insertNote("n1", "短笔记正好命中");
+    insertNote("n2", "长笔记只是沾边");
+    attachEmbedding("n1", [1, 0, 0]);
+    attachChunks("n2", [{ values: [1, 1, 0] }, { values: [0, 1, 0] }]);
+
+    const result = vectorSearch([1, 0, 0], 10);
+    expect(result.ids).toEqual(["n1", "n2"]);
+  });
+
+  it("回收站笔记的块不参与检索——note_chunks 自己没有软删标记", () => {
+    enableEmbedding();
+    insertNote("n1", "已删除的长笔记", { deletedAt: Date.now() });
+    insertNote("n2", "正常短笔记");
+    attachChunks("n1", [{ values: [1, 0, 0] }]);
+    attachEmbedding("n2", [0, 1, 0]);
+
+    const result = vectorSearch([1, 0, 0], 10);
+    expect(result.ids).not.toContain("n1");
+  });
+
+  it("多块笔记的陈旧提示按笔记计一次，不按块累加", () => {
+    enableEmbedding();
+    insertNote("n1", "换模型后作废的长笔记");
+    attachChunks("n1", [
+      { values: [1, 0, 0], model: "旧模型" },
+      { values: [0, 1, 0], model: "旧模型" },
+      { values: [0, 0, 1], model: "旧模型" },
+    ]);
+
+    const result = vectorSearch([1, 0, 0], 10);
+    expect(result.ids).toEqual([]);
+    // 按块累加会让「3 条待补算」变成「9 条」，用户看到的数字与笔记数脱钩
+    expect(result.staleEmbeddingCount).toBe(1);
+  });
+
+  it("只要有一块能算分，这条笔记就参与排序且不计入陈旧", () => {
+    enableEmbedding();
+    insertNote("n1", "补算到一半的长笔记");
+    attachChunks("n1", [
+      { values: [1, 0, 0], model: "旧模型" },
+      { values: [1, 0, 0] },
+      { values: [0, 0, 0] },
+    ]);
+
+    const result = vectorSearch([1, 0, 0], 10);
+    expect(result.ids).toEqual(["n1"]);
+    expect(result.staleEmbeddingCount).toBe(0);
+  });
+
+  it("限定候选范围对块同样生效", () => {
+    enableEmbedding();
+    insertNote("n1", "范围内的长笔记");
+    insertNote("n2", "范围外的长笔记");
+    attachChunks("n1", [{ values: [1, 0, 0] }]);
+    attachChunks("n2", [{ values: [1, 0, 0] }]);
+
+    const result = vectorSearch([1, 0, 0], 10, new Set(["n1"]));
+    expect(result.ids).toEqual(["n1"]);
+  });
+
+  it("两侧都有向量时也只出现一次——互斥若被破坏，排序不能因此错乱", () => {
+    enableEmbedding();
+    insertNote("n1", "异常状态：两侧都有向量");
+    attachChunks("n1", [{ values: [0, 1, 0] }]);
+    // 绕过 worker 的互斥直接写回 notes 一侧，模拟数据异常
+    getDb().update(notes).set({ embedding: vec([1, 0, 0]), embeddingModel: "embed-model", embeddingDim: 3 }).where(eq(notes.id, "n1")).run();
+
+    const result = vectorSearch([1, 0, 0], 10);
+    expect(result.ids).toEqual(["n1"]);
+    expect(result.scores["n1"]).toBeCloseTo(1, 5);
   });
 });

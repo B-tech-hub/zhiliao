@@ -9,6 +9,7 @@ export function wipeData() {
     DELETE FROM conversation_sources;
     DELETE FROM conversations;
     DELETE FROM note_tags;
+    DELETE FROM note_chunks;
     DELETE FROM notes_fts;
     DELETE FROM ai_jobs;
     DELETE FROM topic_suggestions;
