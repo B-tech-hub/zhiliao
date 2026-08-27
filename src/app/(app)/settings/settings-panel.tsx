@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTheme } from "next-themes";
 import { ConfirmDialog } from "@/components/confirm-dialog";
 import { formatTime } from "@/components/note-card";
@@ -254,6 +254,11 @@ function DataSection({ lastBackupAt, trashCount }: { lastBackupAt: number | null
   const [backedUpAt, setBackedUpAt] = useState(lastBackupAt);
   const [backingUp, setBackingUp] = useState(false);
   const [backupResult, setBackupResult] = useState("");
+  const [importing, setImporting] = useState(false);
+  const [importResult, setImportResult] = useState("");
+  const [overwrite, setOverwrite] = useState(false);
+  const [runAi, setRunAi] = useState(false);
+  const fileInput = useRef<HTMLInputElement>(null);
 
   async function backupNow() {
     setBackingUp(true);
@@ -271,6 +276,40 @@ function DataSection({ lastBackupAt, trashCount }: { lastBackupAt: number | null
       setBackupResult("✕ 网络错误");
     } finally {
       setBackingUp(false);
+    }
+  }
+
+  /* zip 直接作为请求体发出去，不套 multipart：包可能几百 MB，
+     服务端要边收边落盘，不能整个读进内存 */
+  async function importZip(file: File) {
+    setImporting(true);
+    setImportResult("");
+    try {
+      const query = new URLSearchParams();
+      if (overwrite) query.set("overwrite", "1");
+      if (runAi) query.set("runAi", "1");
+      const res = await fetch(`/api/import?${query}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/zip" },
+        body: file,
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setImportResult(`✕ ${data.error || "导入失败"}`);
+        return;
+      }
+      const parts = [`导入 ${data.imported} 条`];
+      if (data.overwritten) parts.push(`覆盖 ${data.overwritten} 条`);
+      if (data.skipped?.length) parts.push(`跳过 ${data.skipped.length} 条`);
+      if (data.failed?.length) parts.push(`失败 ${data.failed.length} 条`);
+      if (data.images) parts.push(`图片 ${data.images} 张`);
+      if (data.topicsCreated?.length) parts.push(`新建主题 ${data.topicsCreated.join("、")}`);
+      setImportResult(`✓ ${parts.join("，")}`);
+    } catch {
+      setImportResult("✕ 网络错误");
+    } finally {
+      setImporting(false);
+      if (fileInput.current) fileInput.current.value = "";
     }
   }
 
@@ -310,6 +349,45 @@ function DataSection({ lastBackupAt, trashCount }: { lastBackupAt: number | null
           <span className="text-[12px] text-ink-48">
             Markdown + 图片打包为 zip，可导入 Obsidian 等工具
           </span>
+        </div>
+        <div className="mt-4 border-t border-divider pt-4">
+          <div className="flex flex-wrap items-center gap-3">
+            <input
+              ref={fileInput}
+              type="file"
+              accept=".zip,application/zip"
+              className="hidden"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) void importZip(file);
+              }}
+            />
+            <button
+              type="button"
+              onClick={() => fileInput.current?.click()}
+              disabled={importing}
+              className="rounded-utility border border-action px-[22px] py-[8px] text-[14px] text-action transition-transform active:scale-95 disabled:opacity-40"
+            >
+              {importing ? "导入中…" : "导入 zip"}
+            </button>
+            <label className="flex items-center gap-1.5 text-[12px] text-ink-80">
+              <input type="checkbox" checked={overwrite} onChange={(e) => setOverwrite(e.target.checked)} />
+              覆盖已存在的笔记
+            </label>
+            <label className="flex items-center gap-1.5 text-[12px] text-ink-80">
+              <input type="checkbox" checked={runAi} onChange={(e) => setRunAi(e.target.checked)} />
+              导入后交给 AI 整理
+            </label>
+          </div>
+          {importResult && (
+            <p className={`mt-2 text-[12px] ${importResult.startsWith("✕") ? "text-danger" : "text-ink-80"}`}>
+              {importResult}
+            </p>
+          )}
+          <p className="mt-2 text-[12px] text-ink-48">
+            吃回上面导出的 zip。默认跳过已存在的笔记，也不跑 AI 整理——勾上「交给 AI
+            整理」会按笔记条数消耗模型额度
+          </p>
         </div>
         <div className="mt-4 border-t border-divider pt-4">
           <Link

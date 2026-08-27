@@ -5,7 +5,7 @@
 
 import { and, eq, isNull } from "drizzle-orm";
 import type { DB } from "@/db";
-import { INBOX_TOPIC_ID, notes, topics } from "@/db/schema";
+import { INBOX_TOPIC_ID, noteChunks, notes, topics } from "@/db/schema";
 import { newId } from "@/lib/ids";
 import { isLlmConfigured } from "@/lib/llm";
 import { enqueueNoteEmbedding, enqueueNoteProcess, replaceNoteTags, getTagsForNotes } from "@/lib/notes";
@@ -62,6 +62,87 @@ export function createNote(
   if (!input.deferAi && !isLlmConfigured()) enqueueNoteEmbedding(db, id);
   scheduleNoteMarkdownExport(db, id);
   return { id, topicId, createdAt: now };
+}
+
+export interface ImportedNote {
+  // 沿用来源文件里的 id，判重与「导出→导入」往返都依赖它
+  id: string;
+  content: string;
+  topicId: string;
+  title: string;
+  summary: string | null;
+  tags: string[];
+  createdAt: number;
+  updatedAt: number;
+}
+
+export type ImportOutcome = "imported" | "overwritten" | "skipped";
+
+/* 导入写入。与 createNote 分开而不是给它加参数：导入要带着原 id、原时间戳、
+   已经存在的标题/标签/摘要落库，还要能覆盖同 id 的旧笔记——这些语义和
+   「新建一条等 AI 整理的空白笔记」几乎没有交集，硬塞进去只会让两条路径互相牵制。
+   共用的是收尾三件事：FTS 同步、锁字段、入队，所以仍住在本文件里。 */
+export function writeImportedNote(
+  db: DB,
+  input: ImportedNote,
+  opts: { overwrite?: boolean; runAi?: boolean } = {},
+): { outcome: ImportOutcome; reason?: string } {
+  const content = input.content.trim();
+  if (!content) return { outcome: "skipped", reason: "正文为空" };
+
+  const topic = db.select().from(topics).where(eq(topics.id, input.topicId)).get();
+  if (!topic) throw new NoteWriteError("主题不存在", "bad_request");
+
+  /* 判重刻意不排除回收站：同 id 的笔记躺在回收站里也算已存在。
+     否则跳过判定会漏掉它，而覆盖模式又会撞主键。 */
+  const existing = db.select().from(notes).where(eq(notes.id, input.id)).get();
+  if (existing && !opts.overwrite) {
+    return { outcome: "skipped", reason: existing.deletedAt ? "已存在（在回收站里）" : "已存在" };
+  }
+
+  /* 只有用户勾选且文本模型确实配好了才跑整理，否则一律 skipped。
+     这里不能图省事留 pending：trash.ts 的每日清扫会把 pending/processing 的笔记
+     当成「中断的任务」重新入队，几百条导入笔记会在当晚自己跑起来——
+     用户没勾的那个开关等于从后门被打开了。 */
+  const runAi = Boolean(opts.runAi) && isLlmConfigured();
+  const values = {
+    id: input.id,
+    topicId: input.topicId,
+    title: input.title,
+    content,
+    summary: input.summary,
+    aiStatus: runAi ? "pending" : "skipped",
+    /* 来源文件里带了的字段视为用户已经定过，置锁不让 AI 覆盖；
+       没带的留 0，将来手动「重新处理」时 AI 还能补上。 */
+    topicLocked: input.topicId === INBOX_TOPIC_ID ? 0 : 1,
+    titleLocked: input.title ? 1 : 0,
+    tagsLocked: input.tags.length ? 1 : 0,
+    deletedAt: null,
+    createdAt: input.createdAt,
+    updatedAt: input.updatedAt,
+  };
+
+  db.transaction((tx) => {
+    if (existing) {
+      /* 覆盖时向量五列一起清空、分块整行删掉：正文已经换了，
+         旧向量必然对不上。留着会让这条笔记带着上一版的语义参与检索。 */
+      tx.update(notes)
+        .set({ ...values, embedding: null, embeddingModel: null, embeddingDim: null, embeddingUpdatedAt: null, embeddingChunkCount: null })
+        .where(eq(notes.id, input.id))
+        .run();
+      tx.delete(noteChunks).where(eq(noteChunks.noteId, input.id)).run();
+    } else {
+      tx.insert(notes).values(values).run();
+    }
+    replaceNoteTags(tx as never, input.id, input.tags);
+  });
+
+  refreshNoteFts(db, input.id);
+  // 跑整理的话，整理归档后会带着标题与摘要重新入队向量，这里不必重复入队
+  if (runAi) enqueueNoteProcess(db, input.id);
+  else enqueueNoteEmbedding(db, input.id);
+  scheduleNoteMarkdownExport(db, input.id);
+  return { outcome: existing ? "overwritten" : "imported" };
 }
 
 export interface NotePatch {

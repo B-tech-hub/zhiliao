@@ -47,20 +47,37 @@ export function sniffImageMime(buf: Buffer): string | null {
 
 /* 落盘 + 入库。noteId 允许为空：上传时正文尚未保存、AI 生成的图尚未被采纳，
    两者都靠 trash.ts 的 24 小时上传宽限期兜底——未被任何笔记正文引用且过了
-   宽限期的图才会被每日清扫回收，所以「生成了没用」的图不需要额外处理。 */
+   宽限期的图才会被每日清扫回收，所以「生成了没用」的图不需要额外处理。
+   original 供导入使用：HEIC 的展示副本与原件必须成对落库（ADR-0014），
+   只写副本会让原件变成永远不会被回收的孤儿文件。 */
 export function saveImage(
   db: DB,
   buf: Buffer,
   mime: string,
   noteId: string | null = null,
+  original?: { buf: Buffer; mime: string; ext: string },
 ): { id: string; filename: string; url: string } {
   const ext = IMAGE_EXT_BY_MIME[mime];
   if (!ext) throw new Error(`不支持的图片类型：${mime}`);
   const id = newId();
   const filename = `${id}.${ext}`;
-  fs.writeFileSync(path.join(getUploadDir(), filename), buf);
+  const dir = getUploadDir();
+  fs.writeFileSync(path.join(dir, filename), buf);
+  // 原件与展示副本共用 id 作文件名主干，导出时靠这一点把两者配回一对
+  const originalFilename = original ? `${id}.${original.ext}` : null;
+  if (original && originalFilename) fs.writeFileSync(path.join(dir, originalFilename), original.buf);
   db.insert(images)
-    .values({ id, noteId, filename, mime, size: buf.byteLength, createdAt: Date.now() })
+    .values({
+      id,
+      noteId,
+      filename,
+      mime,
+      size: buf.byteLength,
+      originalFilename,
+      originalMime: original?.mime ?? null,
+      originalSize: original?.buf.byteLength ?? null,
+      createdAt: Date.now(),
+    })
     .run();
   return { id, filename, url: `/api/images/${filename}` };
 }
