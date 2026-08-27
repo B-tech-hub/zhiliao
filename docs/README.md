@@ -44,3 +44,4 @@
 | [0021](adr/0021-correction-learning.md) | 用户纠正样例、Prompt 注入与关闭/清理策略 |
 | [0022](adr/0022-writing-related-notes.md) | 写作侧相关笔记召回与候选约束的冲突提示 |
 | [0023](adr/0023-note-chunking.md) | 长笔记分块存储、标题注入与 max-pooling 检索 |
+| [0024](adr/0024-markdown-zip-import.md) | Markdown zip 反向导入：判重、AI 整理开关与不可信输入的边界 |
