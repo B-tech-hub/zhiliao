@@ -43,3 +43,4 @@
 | [0020](adr/0020-incremental-markdown-export.md) | 笔记持续增量导出 Markdown 与路径清理策略 |
 | [0021](adr/0021-correction-learning.md) | 用户纠正样例、Prompt 注入与关闭/清理策略 |
 | [0022](adr/0022-writing-related-notes.md) | 写作侧相关笔记召回与候选约束的冲突提示 |
+| [0023](adr/0023-note-chunking.md) | 长笔记分块存储、标题注入与 max-pooling 检索 |
