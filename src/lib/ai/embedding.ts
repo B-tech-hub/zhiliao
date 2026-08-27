@@ -12,6 +12,111 @@ export function buildNoteEmbeddingText(note: { title: string; summary: string | 
   return parts.join("\n\n").slice(0, MAX_INPUT_CHARS);
 }
 
+/* 分块参数。上限 1000 字：实测 1426 字笔记按 ## 切分后最佳块 0.5623 vs 整篇 0.4770，
+   粒度再大就回到稀释，再小则每块都缺上下文。下限 200 字避免产生无上下文的碎片。
+   块数封顶 20（约 2 万字）纯为兜住异常长文，防止一条笔记打爆单次请求。 */
+export const CHUNK_MAX_CHARS = 1000;
+export const CHUNK_MIN_CHARS = 200;
+export const CHUNK_MAX_COUNT = 20;
+
+export interface ChunkOptions {
+  maxChars?: number;
+  minChars?: number;
+  maxChunks?: number;
+  /* 标题是否随每块重复注入。默认开启：按 ## 切分时含标题的首块会吸走权重
+     （实测最高分块是标题块而非术语所在块），每块都带标题才能抹平首块的结构性优势。
+     留成开关是为了能用同一组样本实测对比两种切法，而不是靠推理定论。 */
+  injectTitle?: boolean;
+}
+
+// 按空行段落把超长片段切开；单段仍超长则硬切（无结构可依时字数是唯一依据）
+function splitOversized(text: string, maxChars: number): string[] {
+  if (text.length <= maxChars) return [text];
+  const out: string[] = [];
+  let buf = "";
+  for (const para of text.split(/\n\s*\n/)) {
+    if (!para.trim()) continue;
+    if (buf && buf.length + para.length + 2 > maxChars) {
+      out.push(buf);
+      buf = "";
+    }
+    if (para.length > maxChars) {
+      if (buf) { out.push(buf); buf = ""; }
+      for (let i = 0; i < para.length; i += maxChars) out.push(para.slice(i, i + maxChars));
+    } else {
+      buf = buf ? `${buf}\n\n${para}` : para;
+    }
+  }
+  if (buf) out.push(buf);
+  return out;
+}
+
+/* 把笔记正文切成待 embedding 的块。返回长度 <= 1 表示该笔记不需要分块，
+   调用方应走 buildNoteEmbeddingText 的单块路径（短笔记不该产生额外行）。
+
+   摘要刻意不进分块：它是整篇的概括，注入每块会让所有块彼此靠近、抹平块间差异，
+   等于白分块。笔记标题够承担「这块属于哪条笔记」的上下文。 */
+export function buildNoteChunks(
+  note: { title: string; summary: string | null; content: string },
+  options: ChunkOptions = {},
+): string[] {
+  const maxChars = options.maxChars ?? CHUNK_MAX_CHARS;
+  const minChars = options.minChars ?? CHUNK_MIN_CHARS;
+  const maxChunks = options.maxChunks ?? CHUNK_MAX_COUNT;
+  const injectTitle = options.injectTitle ?? true;
+
+  const content = note.content.trim();
+  if (!content) return [];
+
+  // 先按 Markdown 标题分节，标题行归入其后那一节
+  const sections: string[] = [];
+  let cur: string[] = [];
+  const flush = () => {
+    if (cur.some((l) => l.trim())) sections.push(cur.join("\n").trim());
+    cur = [];
+  };
+  for (const line of content.split("\n")) {
+    if (/^#{1,6}\s/.test(line)) flush();
+    cur.push(line);
+  }
+  flush();
+
+  const pieces = sections.flatMap((s) => splitOversized(s, maxChars));
+
+  // 过短的片段并入前一块。尾块没有下一块可并，只能回并前一块——
+  // 这一步允许略微超过 maxChars（最多 maxChars + minChars），仍远低于 MAX_INPUT_CHARS
+  const merged: string[] = [];
+  for (const piece of pieces) {
+    const last = merged[merged.length - 1];
+    if (last !== undefined && last.length < minChars && last.length + piece.length + 2 <= maxChars) {
+      merged[merged.length - 1] = `${last}\n\n${piece}`;
+    } else {
+      merged.push(piece);
+    }
+  }
+  while (merged.length >= 2 && merged[merged.length - 1].length < minChars) {
+    const tail = merged.pop() as string;
+    merged[merged.length - 1] = `${merged[merged.length - 1]}\n\n${tail}`;
+  }
+
+  /* 超出块数上限时合并最短的相邻对，而不是丢弃尾部——末尾内容进不了向量
+     正是分块要解决的问题，为了守住块数上限把它扔掉等于白做 */
+  while (merged.length > maxChunks) {
+    let bestIndex = 0;
+    let bestLength = Infinity;
+    for (let i = 0; i < merged.length - 1; i++) {
+      const length = merged[i].length + merged[i + 1].length;
+      if (length < bestLength) { bestLength = length; bestIndex = i; }
+    }
+    merged.splice(bestIndex, 2, `${merged[bestIndex]}\n\n${merged[bestIndex + 1]}`);
+  }
+
+  const title = note.title.trim();
+  return merged.map((piece) =>
+    (injectTitle && title ? `${title}\n\n${piece}` : piece).slice(0, MAX_INPUT_CHARS),
+  );
+}
+
 function normalizeInput(value: string): string {
   return value.trim().slice(0, MAX_INPUT_CHARS);
 }

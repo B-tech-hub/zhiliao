@@ -219,4 +219,21 @@ CREATE TABLE IF NOT EXISTS correction_examples (
 CREATE INDEX IF NOT EXISTS idx_correction_examples_field_created ON correction_examples(field, created_at);
 `,
   },
+  {
+    id: "0014_note_chunks",
+    sql: `
+CREATE TABLE IF NOT EXISTS note_chunks (
+  id TEXT PRIMARY KEY,
+  note_id TEXT NOT NULL REFERENCES notes(id) ON DELETE CASCADE,
+  chunk_index INTEGER NOT NULL,
+  text TEXT NOT NULL,
+  embedding BLOB,
+  embedding_model TEXT,
+  embedding_dim INTEGER,
+  embedding_updated_at INTEGER
+);
+CREATE INDEX IF NOT EXISTS idx_note_chunks_note ON note_chunks(note_id, chunk_index);
+ALTER TABLE notes ADD COLUMN embedding_chunk_count INTEGER;
+`,
+  },
 ];

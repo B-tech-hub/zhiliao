@@ -51,6 +51,10 @@ export const notes = sqliteTable(
     embeddingModel: text("embedding_model"),
     embeddingDim: integer("embedding_dim"),
     embeddingUpdatedAt: integer("embedding_updated_at"),
+    /* 向量落在哪一侧的权威标记：NULL/0/1 = 单块，向量在上面的 embedding 列；
+       >=2 = 多块，向量在 note_chunks。不用「embedding 为空但 model 非空」这种
+       隐式约定——那样长笔记改短时两侧都可能有残留，同一条笔记会被算两次分 */
+    embeddingChunkCount: integer("embedding_chunk_count"),
   },
   (t) => [
     index("idx_notes_topic_updated").on(t.topicId, t.updatedAt),
@@ -58,6 +62,27 @@ export const notes = sqliteTable(
     // 局部索引只覆盖回收站行，不膨胀主查询
     index("idx_notes_deleted_at").on(t.deletedAt).where(sql`deleted_at IS NOT NULL`),
   ],
+);
+
+/* 长笔记的分块向量。整篇一个向量会把末尾内容摊薄，检索时按 note_id 取最高分块
+   （max-pooling）。只有切出多块的笔记才在这里占行，短笔记仍走 notes.embedding。
+   note_id 外键级联：孤儿块由数据库兜底，不靠四条删除链路各自记得成对处理 */
+export const noteChunks = sqliteTable(
+  "note_chunks",
+  {
+    id: text("id").primaryKey(),
+    noteId: text("note_id")
+      .notNull()
+      .references(() => notes.id, { onDelete: "cascade" }),
+    chunkIndex: integer("chunk_index").notNull(),
+    // 实际送去 embedding 的文本，含按策略注入的标题
+    text: text("text").notNull(),
+    embedding: blob("embedding", { mode: "buffer" }),
+    embeddingModel: text("embedding_model"),
+    embeddingDim: integer("embedding_dim"),
+    embeddingUpdatedAt: integer("embedding_updated_at"),
+  },
+  (t) => [index("idx_note_chunks_note").on(t.noteId, t.chunkIndex)],
 );
 
 export const tags = sqliteTable("tags", {

@@ -1056,6 +1056,9 @@ export function SettingsPanel({
               <button onClick={enqueueEmbeddingBackfill} className="rounded-utility border border-action px-3 py-1.5 text-[12px] text-action">补算向量</button>
               {embeddingBackfill && <span className="ml-3 text-[12px] text-ink-48">缺失 {embeddingBackfill.missing} · 过期 {embeddingBackfill.stale}</span>}
               {embeddingBackfillResult && <p className="mt-2 text-[12px] text-ink-48">{embeddingBackfillResult}</p>}
+              {/* 长笔记分块上线后，升级前算的整篇向量会一次性全部计入「过期」。
+                  不说明的话，用户什么都没改却看到一批过期，会当成 bug */}
+              <p className="mt-2 text-[12px] leading-[1.5] text-ink-48">长笔记会切成多块分别建立向量，末尾内容才不会被整篇稀释。升级到分块版本后，此前算好的向量会一次性显示为过期，补算一次即可。</p>
             </div>
           </div>
         </div>

@@ -1,9 +1,10 @@
 import { and, eq, gt, inArray, isNull, lte, sql } from "drizzle-orm";
 import { getDb, type DB } from "@/db";
-import { aiJobs, notes } from "@/db/schema";
+import { aiJobs, noteChunks, notes } from "@/db/schema";
 import { LlmConfigError, LlmRequestError, isLlmConfigured } from "@/lib/llm";
+import { newId } from "@/lib/ids";
 import { getEmbeddingConfig, isEmbeddingConfigured } from "@/lib/llm-config";
-import { buildNoteEmbeddingText, embedText } from "@/lib/ai/embedding";
+import { buildNoteChunks, buildNoteEmbeddingText, embedTexts } from "@/lib/ai/embedding";
 import { markNoteFailed, processNote } from "./process-note";
 import { maybeEnqueueSuggestTopics, runSuggestTopics } from "./suggest-topics";
 import { runWeeklyReview } from "./weekly-review";
@@ -97,10 +98,18 @@ export async function runJob(db: DB, jobId: string) {
       const note = db.select().from(notes).where(and(eq(notes.id, job.noteId), isNull(notes.deletedAt))).get();
       if (note) {
         const cfg = getEmbeddingConfig();
-        if (note.embeddingModel === cfg.model && note.embeddingUpdatedAt !== null && note.embeddingUpdatedAt >= note.updatedAt && note.embedding) {
+        /* 向量可能落在 notes.embedding（单块）或 note_chunks（多块），幂等检查要认准这一侧。
+           chunk_count 为 NULL 则是分块上线前算的整篇向量：看不出它该切几块，一律重算，
+           否则存量长笔记会被幂等挡住、永远享受不到分块 */
+        const vectorFresh = note.embeddingChunkCount !== null && (note.embeddingChunkCount >= 2 || Boolean(note.embedding));
+        if (note.embeddingModel === cfg.model && note.embeddingUpdatedAt !== null && note.embeddingUpdatedAt >= note.updatedAt && vectorFresh) {
           // 已是当前模型且不落后于正文，任务可能是重复入队，直接结束。
         } else {
-          const vector = await embedText(buildNoteEmbeddingText(note));
+          /* 长笔记切块后一次请求全部块：embedTexts 的批量上限是 64，块数封顶 20，
+             所以请求次数仍是每条笔记 1 次，不随块数翻倍 */
+          const chunks = buildNoteChunks(note);
+          const multi = chunks.length >= 2;
+          const vectors = await embedTexts(multi ? chunks : [buildNoteEmbeddingText(note)]);
           const latest = db.select({ updatedAt: notes.updatedAt }).from(notes).where(and(eq(notes.id, note.id), isNull(notes.deletedAt))).get();
           if (!latest || latest.updatedAt !== note.updatedAt) {
             /* 请求在途期间正文发生变化：丢弃旧向量并让同一任务重新读取最新正文。
@@ -108,9 +117,35 @@ export async function runJob(db: DB, jobId: string) {
             db.update(aiJobs).set({ status: "pending", attempts: job.attempts, runAfter: Date.now(), lastError: "正文在向量请求期间发生变化", updatedAt: Date.now() }).where(eq(aiJobs.id, jobId)).run();
             return;
           }
-          const dim = vector.length;
-          const buffer = Buffer.from(new Float32Array(vector).buffer);
-          db.update(notes).set({ embedding: buffer, embeddingModel: cfg.model, embeddingDim: dim, embeddingUpdatedAt: note.updatedAt }).where(eq(notes.id, note.id)).run();
+          const dim = vectors[0].length;
+          if (vectors.some((v) => v.length !== dim)) {
+            // 同一次请求内维度不一致：混着落库会让部分块永久算不出相似度且不计入提示
+            throw new LlmRequestError("Embedding 同批返回的向量维度不一致", false);
+          }
+          const meta = { embeddingModel: cfg.model, embeddingDim: dim, embeddingUpdatedAt: note.updatedAt };
+          db.transaction((tx) => {
+            /* 两侧必须互斥：笔记从长改短会留下旧块，从短改长会留下旧的整篇向量，
+               任一残留都让同一条笔记在 max-pooling 里拿两个分 */
+            tx.delete(noteChunks).where(eq(noteChunks.noteId, note.id)).run();
+            if (multi) {
+              tx.update(notes).set({ embedding: null, embeddingChunkCount: chunks.length, ...meta }).where(eq(notes.id, note.id)).run();
+              tx.insert(noteChunks)
+                .values(chunks.map((text, index) => ({
+                  id: newId(),
+                  noteId: note.id,
+                  chunkIndex: index,
+                  text,
+                  embedding: Buffer.from(new Float32Array(vectors[index]).buffer),
+                  ...meta,
+                })))
+                .run();
+            } else {
+              tx.update(notes)
+                .set({ embedding: Buffer.from(new Float32Array(vectors[0]).buffer), embeddingChunkCount: 1, ...meta })
+                .where(eq(notes.id, note.id))
+                .run();
+            }
+          });
         }
       }
     } else if (job.type === "handwriting_transcribe" && job.noteId) {

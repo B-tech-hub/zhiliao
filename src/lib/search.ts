@@ -156,33 +156,66 @@ function cosineSimilarity(a: Buffer, b: number[], dim: number): number | null {
   return dot / (Math.sqrt(an) * Math.sqrt(bn));
 }
 
+interface ScoredRow {
+  embedding: Buffer;
+  embedding_model: string | null;
+  embedding_dim: number | null;
+}
+
+/* 同时扫两处：短笔记的整篇向量在 notes.embedding，长笔记的分块向量在 note_chunks。
+   一条笔记的得分取其所有块的最高分（max-pooling，不做平均——平均会让长笔记再次
+   被稀释，等于白分块）。 */
 export function vectorSearch(query: number[], limit = 50, allowedIds?: Set<string>): { ids: string[]; scores: Record<string, number>; staleEmbeddingCount: number } {
   const cfg = getEmbeddingConfig();
   const sqlite = getSqlite();
-  const rows = sqlite.prepare("SELECT id, embedding, embedding_model, embedding_dim FROM notes WHERE deleted_at IS NULL AND embedding IS NOT NULL").all() as { id: string; embedding: Buffer; embedding_model: string | null; embedding_dim: number | null }[];
-  let staleEmbeddingCount = 0;
-  const scored: { id: string; score: number }[] = [];
-  for (const row of rows) {
+  const best = new Map<string, number>();
+  const stale = new Set<string>();
+
+  const consider = (noteId: string, row: ScoredRow) => {
     // 先按检索范围过滤，提示条数才与用户当前看到的范围一致
-    if (allowedIds && !allowedIds.has(row.id)) continue;
+    if (allowedIds && !allowedIds.has(noteId)) return;
     /* 模型名与维度必须同时对上才能进同一次相似度计算。只看模型名是不够的：
        同名模型换了默认输出维度（或供应商支持 dimensions 参数）时，这批向量会被
        悄悄排除，用户既搜不到又看不到任何提示——把它们一并计入 stale 才有得救。 */
     if (row.embedding_model !== cfg.model || row.embedding_dim !== query.length) {
-      staleEmbeddingCount++;
-      continue;
+      stale.add(noteId);
+      return;
     }
     const score = cosineSimilarity(row.embedding, query, query.length);
     // 零向量或字节数对不上：算不出相似度就不能拿哨兵分冒充结果去占名额
     if (score === null) {
-      staleEmbeddingCount++;
-      continue;
+      stale.add(noteId);
+      return;
     }
-    scored.push({ id: row.id, score });
+    const prev = best.get(noteId);
+    if (prev === undefined || score > prev) best.set(noteId, score);
+  };
+
+  for (const row of sqlite
+    .prepare("SELECT id, embedding, embedding_model, embedding_dim FROM notes WHERE deleted_at IS NULL AND embedding IS NOT NULL")
+    .all() as ({ id: string } & ScoredRow)[]) {
+    consider(row.id, row);
   }
-  scored.sort((a, b) => b.score - a.score);
-  const top = scored.slice(0, limit);
-  return { ids: top.map((r) => r.id), scores: Object.fromEntries(top.map((r) => [r.id, r.score])), staleEmbeddingCount };
+  // note_chunks 自己没有软删标记，回收站笔记的块必须靠 JOIN notes 排除
+  for (const row of sqlite
+    .prepare(
+      `SELECT c.note_id, c.embedding, c.embedding_model, c.embedding_dim
+       FROM note_chunks c JOIN notes n ON n.id = c.note_id
+       WHERE n.deleted_at IS NULL AND c.embedding IS NOT NULL`,
+    )
+    .all() as ({ note_id: string } & ScoredRow)[]) {
+    consider(row.note_id, row);
+  }
+
+  const top = [...best.entries()].sort((a, b) => b[1] - a[1]).slice(0, limit);
+  /* 陈旧按笔记计一次而非按块累加：一条 10 块的笔记若按块计，会把「3 条待补算」
+     显示成「30 条」，数字与笔记数脱钩。且只要有一块算得出分，这条笔记就已可被
+     检索到，不该再提示补算。 */
+  let staleEmbeddingCount = 0;
+  for (const id of stale) {
+    if (!best.has(id)) staleEmbeddingCount++;
+  }
+  return { ids: top.map(([id]) => id), scores: Object.fromEntries(top), staleEmbeddingCount };
 }
 
 export async function hybridSearchNoteIds(query: string, limit = 50, allowedIds?: Set<string>): Promise<HybridSearchResult> {
