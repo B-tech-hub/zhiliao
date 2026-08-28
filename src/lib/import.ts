@@ -1,11 +1,11 @@
-/* Markdown zip 反向导入：吃回 /api/export 导出的包。
-   与导出严格互为逆运算——目录名即主题、front-matter 带 id 与时间戳、
-   正文里的 ../assets/ 指向包内图片。往返（导出→导入）能否原样还原，
-   是这条链路唯一可靠的验收手段。
+/* Markdown zip 导入：既能吃回 /api/export 导出的包，也接收普通 Markdown。
+   自家包与导出严格互为逆运算；普通 Markdown 从 front-matter、一级标题、
+   文件名与直接父目录推断元数据，没有 id 时用内容指纹防止重复导入。
 
    zip 是不可信输入。条目名的校验、条目数与体积的上限都必须挡在这一层，
    下游的 saveImage / writeImportedNote 只负责写，不负责防。 */
 
+import { createHash } from "node:crypto";
 import yauzl from "yauzl";
 import { parse as parseYaml } from "yaml";
 import { eq } from "drizzle-orm";
@@ -140,7 +140,11 @@ function toText(value: unknown): string {
   return typeof value === "string" ? value.trim() : "";
 }
 
-// 主题按名字找，没有就建。扁平一层，所以只认最靠外的那级目录
+function firstLevelOneHeading(body: string): string {
+  return /^#\s+(.+?)\s*$/m.exec(body)?.[1].trim() ?? "";
+}
+
+// 主题按名字找，没有就建。扁平一层，目录来源只取 Markdown 的直接父目录
 function resolveTopicId(db: DB, name: string, created: string[], cache: Map<string, string>): string {
   const clean = name.trim().slice(0, 50);
   if (!clean) return INBOX_TOPIC_ID;
@@ -215,6 +219,12 @@ function stemOf(name: string): string {
   return dot > 0 ? base.slice(0, dot) : base;
 }
 
+function isImportableMarkdownPath(name: string): boolean {
+  const segments = name.toLowerCase().split("/");
+  const filename = segments[segments.length - 1];
+  return filename.endsWith(".md") && filename !== "readme.md" && !segments.includes("licenses");
+}
+
 export async function importZipFile(db: DB, zipPath: string, opts: ImportOptions = {}): Promise<ImportReport> {
   const report: ImportReport = {
     imported: 0,
@@ -238,7 +248,7 @@ export async function importZipFile(db: DB, zipPath: string, opts: ImportOptions
     const declared = files.reduce((sum, e) => sum + e.uncompressedSize, 0);
     if (declared > MAX_TOTAL_BYTES) throw new ImportError("压缩包解压后超过 500 MB，请分批导入");
 
-    const mdEntries = files.filter((e) => e.fileName.toLowerCase().endsWith(".md") && !e.fileName.startsWith(ASSET_PREFIX));
+    const mdEntries = files.filter((e) => isImportableMarkdownPath(e.fileName) && !e.fileName.startsWith(ASSET_PREFIX));
     const originalEntries = new Map<string, yauzl.Entry>();
     for (const e of files) {
       if (e.fileName.startsWith(ORIGINAL_PREFIX)) originalEntries.set(stemOf(e.fileName), e);
@@ -262,7 +272,9 @@ export async function importZipFile(db: DB, zipPath: string, opts: ImportOptions
         const { data, body } = parseFrontMatter(buf.toString("utf8"));
 
         const rawId = toText(data.id);
-        const id = ID_PATTERN.test(rawId) ? rawId : newId();
+        const id = ID_PATTERN.test(rawId)
+          ? rawId
+          : `import_${createHash("sha256").update(buf).digest("hex").slice(0, 32)}`;
 
         /* 这里的判重只为「要不要为它解压图片」，writeImportedNote 里那次才算数。
            判错的代价仅仅是多导一张图，不会写出不一致的数据。 */
@@ -279,15 +291,20 @@ export async function importZipFile(db: DB, zipPath: string, opts: ImportOptions
         }
 
         const segs = entry.fileName.split("/");
-        const dirTopic = segs.length > 1 ? segs[0] : "";
+        const dirTopic = segs.length > 1 ? segs[segs.length - 2] : "";
         const createdAt = toTimestamp(data.created, Date.now());
         pending.push({
           entry,
           body,
           note: {
             id,
-            topicId: resolveTopicId(db, toText(data.topic) || dirTopic, report.topicsCreated, topicCache),
-            title: toText(data.title).slice(0, 200),
+            topicId: resolveTopicId(
+              db,
+              toText(data.topic) || toText(data.category) || dirTopic,
+              report.topicsCreated,
+              topicCache,
+            ),
+            title: (toText(data.title) || firstLevelOneHeading(body) || stemOf(entry.fileName)).slice(0, 200),
             summary: toText(data.summary) || null,
             tags: toTags(data.tags),
             createdAt,

@@ -385,8 +385,9 @@ function DataSection({ lastBackupAt, trashCount }: { lastBackupAt: number | null
             </p>
           )}
           <p className="mt-2 text-[12px] text-ink-48">
-            吃回上面导出的 zip。默认跳过已存在的笔记，也不跑 AI 整理——勾上「交给 AI
-            整理」会按笔记条数消耗模型额度
+            支持上面导出的 zip 与普通 Markdown zip；标题取 front-matter、一级标题或文件名，
+            主题取 topic、category 或所在目录。默认跳过已存在的笔记，也不跑 AI 整理——勾上
+            「交给 AI 整理」会按笔记条数消耗模型额度
           </p>
         </div>
         <div className="mt-4 border-t border-divider pt-4">
