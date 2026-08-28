@@ -73,7 +73,7 @@ docker compose -f docker-compose.demo.yml up -d
 - **纠正即学习**：你每次手动改主题 / 改标题 / 改标签，都被存成 few-shot 样例注入后续 prompt（每字段最多 3 条），AI 越用越贴合你的习惯；设置页可关，也可逐条停用
 - **对外接入**：设置页主动创建 API Token（**默认不生成，不用的人完全感知不到**），数据库只存 SHA-256 哈希，明文仅在创建时返回一次。权限分 `capture:write`（只能调 `POST /api/external/capture` 建笔记，适配 iOS 快捷指令 / 邮件 / bot）与 `knowledge:read`（读 `GET /api/external/knowledge`，或经 `/api/mcp` 用 `search_knowledge`、`get_knowledge` 两个只读语义工具接入 Claude 等 MCP 客户端）。MCP 暴露的是主题与 AI 摘要这层语义，不是裸 CRUD，也不含删除、改配置等高风险操作
 - **增量 Markdown 导出**：每次笔记变更后台写一份 `.md` 到 `./data/notes/主题/标题-id.md`（只出不进、零冲突），你的字不会被关在 SQLite 里——想用 Obsidian 直接打开那个目录即可
-- **数据归你**：设置页一键导出全部数据（Markdown + 展示图打包 zip；HEIC 原件额外放入 `assets/originals/`，可导入 Obsidian 等工具）与手动立即备份；导出的 zip 可以原样导回来（设置 → 数据 → 导入 zip），笔记、主题、标签、时间戳与图片全部还原，默认跳过已存在的笔记、也不跑 AI 整理（取舍见 [ADR-0024](docs/adr/0024-markdown-zip-import.md)）
+- **数据归你**：设置页一键导出全部数据（Markdown + 展示图打包 zip；HEIC 原件额外放入 `assets/originals/`，可导入 Obsidian 等工具）与手动立即备份；导出的 zip 可以原样导回来，也可导入普通 Markdown zip（标题从 front-matter / H1 / 文件名推断，主题识别 `topic` / `category` / 所在目录）。无 id 文件按内容指纹防重复，默认不跑 AI 整理（取舍见 [ADR-0024](docs/adr/0024-markdown-zip-import.md)）
 - **外观**：浅色 / 深色 / 跟随系统三态切换（设置 → 外观），偏好保存在本机浏览器
 - **PWA**：手机可"添加到主屏幕"当 app 用（需 HTTPS，推荐 Tailscale 方案，见下），断网有离线兜底页
 - **安全与运维**：单用户密码登录（30 天会话）、登录限流；每日自动备份数据库与图片（各保留 7 份，[恢复方法](docs/备份与恢复.md)），到期回收站与孤儿数据在备份成功后自动清扫；`/api/healthz` 健康检查，Docker 镜像内置 HEALTHCHECK
@@ -195,12 +195,13 @@ docker compose up -d
 
 **下一步**
 
-- Memos / flomo / Obsidian 导入：自家导出的 zip 已经能导回来，还差外来格式的解析（Obsidian 的 `![[wiki 嵌入]]`、各家自己的 front-matter 字段）
+- Memos / flomo / Obsidian 专用适配：普通 Markdown zip 已支持；仍缺 Obsidian 的 `![[wiki 嵌入]]`、附件目录解析，以及 Memos / flomo 各自的导出字段映射
 
 **计划中**
 
 - 图像生成的异步接口适配（DashScope 那类「提交任务 → 轮询」的形态；当前只支持 OpenAI 兼容的同步接口，取舍见 [ADR-0011](docs/adr/0011-image-generation.md)）
 - 极短笔记的向量病理：正文只有两三个字的笔记，会在毫不相关的查询上排到第一。候选解法是按内容长度做分数惩罚，或设一个建向量的最小长度
+- 批量导入的增量导出性能：每篇新笔记都会触发一次全导出目录扫描；实测成本约为“笔记数 × 主题目录数 × 0.24 ms”，2000 篇 / 30 个主题会在主线程阻塞十余秒。新增笔记没有旧导出路径，应跳过清理扫描
 - 「这条还成立吗」式回顾：把半年前的笔记推回来，问的不是「记住了吗」而是「你现在还这么想吗」
 - 首页指标从「共 N 条笔记」改为「本周进 12 条 / 出 3 条」——让「用了多少」可见，而非「存了多少」可见
 
