@@ -16,6 +16,14 @@ Full documentation is in Simplified Chinese — see [README.md](README.md). This
 
 ![Demo: jot a note → AI files it → topic suggestions](docs/screenshots/demo.gif)
 
+## Project status
+
+**North-star metric: real notes captured. No new features ship until it reaches 100.**
+
+Every number this project used to track — commits, ADRs, test coverage — could stay green while nobody actually used the thing. Real note count is the one metric that turns red in that case, so it is now the only one that gates new work.
+
+Bug fixes, documentation, packaging and operations are exempt and continue as usual. The full [Roadmap](README.md#roadmap) (Chinese) lists what is frozen, what is not, and what is waiting on a real user rather than a hypothetical one.
+
 ## Features
 
 - Markdown notes (TipTap WYSIWYG), paste/drag uploads up to 20 MB (PNG/JPEG/GIF/WebP/HEIC), debounced autosave. HEIC originals are preserved while JPEG display copies keep previews browser-compatible. Desktop note pages use a wide canvas with an H1–H3 table of contents; mobile stays single-column
