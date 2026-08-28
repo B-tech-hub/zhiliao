@@ -142,6 +142,81 @@ describe("import restoreImageRefs", () => {
 });
 
 describe("import 往返", () => {
+  it("普通 Markdown 从一级标题与所在目录推断标题和主题", async () => {
+    const zipPath = await makeZip([
+      { name: "公开笔记测试集/计算机科学.md", content: "# 计算机科学自学规划\n\n从基础课程开始。\n" },
+    ]);
+
+    const report = await importZipFile(getDb(), zipPath);
+
+    expect(report).toMatchObject({ imported: 1, skipped: [], failed: [], topicsCreated: ["公开笔记测试集"] });
+    const note = getDb().select().from(notes).all()[0];
+    expect(note.title).toBe("计算机科学自学规划");
+    const topic = getDb().select().from(topics).where(eq(topics.id, note.topicId)).get();
+    expect(topic?.name).toBe("公开笔记测试集");
+  });
+
+  it("普通 Markdown 把 category 映射为主题", async () => {
+    const zipPath = await makeZip([
+      {
+        name: "测试笔记/考研数学.md",
+        content: "---\ntitle: 极限计算\ncategory: 考研数学\ntags: [高等数学, 极限]\n---\n\n正文\n",
+      },
+    ]);
+
+    const report = await importZipFile(getDb(), zipPath);
+
+    expect(report.topicsCreated).toEqual(["考研数学"]);
+    const note = getDb().select().from(notes).all()[0];
+    const topic = getDb().select().from(topics).where(eq(topics.id, note.topicId)).get();
+    expect(topic?.name).toBe("考研数学");
+    expect([...(getTagsForNotes(getDb(), [note.id]).get(note.id) ?? [])].sort()).toEqual(["极限", "高等数学"]);
+  });
+
+  it("普通 Markdown 没有标题字段和一级标题时使用文件名", async () => {
+    const zipPath = await makeZip([{ name: "未分类资料.md", content: "只有正文，没有标题。\n" }]);
+
+    await importZipFile(getDb(), zipPath);
+
+    expect(getDb().select().from(notes).all()[0].title).toBe("未分类资料");
+  });
+
+  it("多层目录中的普通 Markdown 使用直接父目录作为主题", async () => {
+    const zipPath = await makeZip([
+      { name: "测试笔记/公开笔记测试集/信息检索.md", content: "# 信息检索\n\n正文\n" },
+    ]);
+
+    await importZipFile(getDb(), zipPath);
+
+    const note = getDb().select().from(notes).all()[0];
+    const topic = getDb().select().from(topics).where(eq(topics.id, note.topicId)).get();
+    expect(topic?.name).toBe("公开笔记测试集");
+  });
+
+  it("普通 Markdown 导入忽略说明文件和许可证目录", async () => {
+    const zipPath = await makeZip([
+      { name: "测试笔记/正文.md", content: "# 正文\n\n知识内容\n" },
+      { name: "测试笔记/README.md", content: "# 数据集说明\n" },
+      { name: "测试笔记/licenses/许可.md", content: "# 许可证\n" },
+    ]);
+
+    const report = await importZipFile(getDb(), zipPath);
+
+    expect(report.imported).toBe(1);
+    expect(getDb().select().from(notes).all().map((note) => note.title)).toEqual(["正文"]);
+  });
+
+  it("没有 id 的普通 Markdown 重复导入时不会产生副本", async () => {
+    const zipPath = await makeZip([{ name: "资料/检索.md", content: "# 信息检索\n\n搜索引擎分为抓取、索引和排序。\n" }]);
+
+    const first = await importZipFile(getDb(), zipPath);
+    const second = await importZipFile(getDb(), zipPath);
+
+    expect(first.imported).toBe(1);
+    expect(second).toMatchObject({ imported: 0, skipped: [{ path: "资料/检索.md", reason: "已存在" }] });
+    expect(getDb().select().from(notes).all()).toHaveLength(1);
+  });
+
   it("导出再导入，笔记、主题、标签、时间戳与摘要原样还原", async () => {
     insertTopic("t1", "读书");
     const created = Date.UTC(2025, 2, 3, 4, 5, 6);
