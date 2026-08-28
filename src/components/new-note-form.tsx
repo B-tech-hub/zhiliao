@@ -22,6 +22,7 @@ export function NewNoteForm({
   onClose,
   draft,
   onDraftChange,
+  handwritingEnabled,
 }: {
   topics: TopicOption[];
   defaultTopicId?: string;
@@ -30,6 +31,8 @@ export function NewNoteForm({
      由浮层托管这份草稿，误触关闭不丢字；整页形态两个都不传，行为与从前一致。 */
   draft?: string;
   onDraftChange?: (value: string) => void;
+  // 手写摄取的功能开关（设置页），默认关闭；关闭时上传入口整个不渲染
+  handwritingEnabled?: boolean;
 }) {
   const router = useRouter();
   const overlay = Boolean(onClose);
@@ -146,10 +149,12 @@ export function NewNoteForm({
           >
             {saved ? "已保存" : saving ? "保存中…" : "保存"}
           </button>
-          <label className="shrink-0 cursor-pointer rounded-utility border border-hairline px-3 py-[7px] text-[13px] text-ink-80">
-            {transcribing ? "转写中" : "手写摄取"}
-            <input type="file" accept="image/*" className="hidden" disabled={transcribing} onChange={(e) => { const file = e.target.files?.[0]; if (file) void captureHandwriting(file); e.target.value = ""; }} />
-          </label>
+          {handwritingEnabled && (
+            <label className="shrink-0 cursor-pointer rounded-utility border border-hairline px-3 py-[7px] text-[13px] text-ink-80">
+              {transcribing ? "转写中" : "手写摄取"}
+              <input type="file" accept="image/*" className="hidden" disabled={transcribing} onChange={(e) => { const file = e.target.files?.[0]; if (file) void captureHandwriting(file); e.target.value = ""; }} />
+            </label>
+          )}
         </div>
         {error && <p className="mb-2 text-[14px] text-danger">{error}</p>}
         <textarea

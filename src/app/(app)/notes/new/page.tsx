@@ -2,6 +2,7 @@ import { asc } from "drizzle-orm";
 import { getDb } from "@/db";
 import { topics } from "@/db/schema";
 import { NewNoteForm } from "@/components/new-note-form";
+import { isFeatureEnabled } from "@/lib/feature-flags";
 
 export const dynamic = "force-dynamic";
 
@@ -18,5 +19,12 @@ export default async function NewNotePage({
     .orderBy(asc(topics.sortOrder), asc(topics.createdAt))
     .all();
 
-  return <NewNoteForm topics={topicRows} defaultTopicId={topic} />;
+  // 整页形态进不去 (app)/layout 的作用域，开关得自己读一次
+  return (
+    <NewNoteForm
+      topics={topicRows}
+      defaultTopicId={topic}
+      handwritingEnabled={isFeatureEnabled(db, "handwriting")}
+    />
+  );
 }

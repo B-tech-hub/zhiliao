@@ -57,12 +57,15 @@ export function NoteEditor({
   tags: initialTags,
   topics,
   backHref,
+  mermaidEnabled,
 }: {
   note: Note;
   tags: string[];
   topics: TopicOption[];
   // 无浏览器历史时的返回兜底路径（服务端按所属主题算好传入）
   backHref: string;
+  // Mermaid 功能开关：关闭时代码块不出图，已有内容照常显示与导出
+  mermaidEnabled?: boolean;
 }) {
   const router = useRouter();
   const [title, setTitle] = useState(note.title);
@@ -374,6 +377,7 @@ export function NoteEditor({
               onChange={onContentChange}
               noteId={note.id}
               hideToolbar={focusMode}
+              mermaidEnabled={mermaidEnabled}
             />
           </div>
           {!focusMode && (

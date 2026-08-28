@@ -79,10 +79,14 @@ function usePanelWidth() {
 
 export function ChatPanel({
   visionAvailable,
+  reasoningEnabled,
   reasoningAvailable,
   toolSupport,
 }: {
   visionAvailable?: boolean;
+  // 深度思考的功能开关（设置页）：关闭时整个入口不渲染，默认即关闭
+  reasoningEnabled?: boolean;
+  // 开关已开、且推理模型也配好了，才真的能点
   reasoningAvailable?: boolean;
   // 模型是否支持工具调用：false 已探测且不支持，null 从未探测过
   toolSupport?: boolean | null;
@@ -690,24 +694,27 @@ export function ChatPanel({
                         看图{visionAvailable ? "" : "（未配置）"}
                       </button>
                     )}
-                    {/* 深度思考开关。未配置推理模型时置灰——原先它照常亮着，
-                        点了静默无效，用户只会以为功能坏了 */}
-                    <button
-                      onClick={() => reasoningAvailable && setUseReasoning((v) => !v)}
-                      disabled={!reasoningAvailable}
-                      className={`flex shrink-0 items-center gap-1 rounded-utility px-2.5 py-1 text-[12px] transition-colors active:scale-95 disabled:opacity-40 ${
-                        useReasoning && reasoningAvailable
-                          ? "bg-action/10 text-action"
-                          : "border border-hairline text-ink-48 hover:bg-fill"
-                      }`}
-                      title={
-                        reasoningAvailable
-                          ? "本次消息改用独立的推理模型作答，并显示它的思考过程"
-                          : "请先在设置页配置深度思考模型"
-                      }
-                    >
-                      深度思考{reasoningAvailable ? "" : "（未配置）"}
-                    </button>
+                    {/* 深度思考。功能开关关闭时整个入口不出现（默认即如此，降低第一屏认知负担）；
+                        开关已开但没配推理模型时保留置灰的引导——那时用户是想要这功能、只是还没配好，
+                        直接藏掉会让他在设置页开了开关却看不到任何变化。 */}
+                    {reasoningEnabled && (
+                      <button
+                        onClick={() => reasoningAvailable && setUseReasoning((v) => !v)}
+                        disabled={!reasoningAvailable}
+                        className={`flex shrink-0 items-center gap-1 rounded-utility px-2.5 py-1 text-[12px] transition-colors active:scale-95 disabled:opacity-40 ${
+                          useReasoning && reasoningAvailable
+                            ? "bg-action/10 text-action"
+                            : "border border-hairline text-ink-48 hover:bg-fill"
+                        }`}
+                        title={
+                          reasoningAvailable
+                            ? "本次消息改用独立的推理模型作答，并显示它的思考过程"
+                            : "请先在设置页配置深度思考模型"
+                        }
+                      >
+                        深度思考{reasoningAvailable ? "" : "（未配置）"}
+                      </button>
+                    )}
                   </div>
 
                   {chat.streaming ? (

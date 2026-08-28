@@ -376,6 +376,7 @@ export function MarkdownEditor({
   noteId,
   placeholder,
   hideToolbar,
+  mermaidEnabled,
 }: {
   value: string;
   onChange: (markdown: string) => void;
@@ -383,6 +384,10 @@ export function MarkdownEditor({
   placeholder?: string;
   // 专注模式下藏起工具栏，只留标题与正文
   hideToolbar?: boolean;
+  /* Mermaid 的功能开关（设置页），默认关闭。关闭时不注册渲染扩展，
+     已存在的 ```mermaid 块退回 StarterKit 自带的代码块——照常显示源码、
+     照常存回 Markdown，只是不出图，不会报错也不会丢内容。 */
+  mermaidEnabled?: boolean;
 }) {
   // 斜杠菜单的键盘处理要挂进 editorProps，但它依赖 editor 本身——
   // 用 ref 打破这个先有鸡还是先有蛋
@@ -390,11 +395,12 @@ export function MarkdownEditor({
   const editor = useEditor({
     immediatelyRender: false,
     extensions: [
-      // 关掉 StarterKit 自带的代码块，换成带 mermaid 渲染的同名扩展
-      // （schema 与输入规则 ``` 完全一致，只多了 NodeView）
-      StarterKit.configure({ codeBlock: false }),
+      /* 开启 Mermaid 时关掉 StarterKit 自带的代码块，换成带 mermaid 渲染的同名扩展
+         （schema 与输入规则 ``` 完全一致，只多了 NodeView）；
+         关闭时反过来用自带的那个，两者 schema 相同，正文进出不受影响。 */
+      StarterKit.configure(mermaidEnabled ? { codeBlock: false } : {}),
       MathNode,
-      MermaidCodeBlock,
+      ...(mermaidEnabled ? [MermaidCodeBlock] : []),
       RichImage.configure({ allowBase64: false }),
       Link.configure({
         openOnClick: false,
@@ -456,7 +462,7 @@ export function MarkdownEditor({
     }
   }, [value, editor]);
 
-  const slash = useSlashMenu(editor);
+  const slash = useSlashMenu(editor, { mermaid: mermaidEnabled });
   // 把最新的键盘处理塞回 editorProps 拿得到的那个 ref
   slashKeyRef.current = slash.handleKeyDown;
 

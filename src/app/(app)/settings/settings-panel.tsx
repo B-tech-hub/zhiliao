@@ -6,6 +6,8 @@ import { useEffect, useRef, useState } from "react";
 import { useTheme } from "next-themes";
 import { ConfirmDialog } from "@/components/confirm-dialog";
 import { formatTime } from "@/components/note-card";
+// 只取类型：feature-flags 会经 llm-config 牵进 better-sqlite3，不能进客户端产物
+import type { FeatureFlags, FeatureKey } from "@/lib/feature-flags";
 
 interface TopicRow {
   id: string;
@@ -115,6 +117,54 @@ function CorrectionSection({ initial }: { initial: CorrectionInfo }) {
   async function toggle(next: boolean) { await fetch("/api/settings/corrections", { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ enabled: next }) }); setEnabled(next); }
   async function clear() { await fetch("/api/settings/corrections", { method: "DELETE" }); setCount(0); }
   return <section><h2 className="mb-3 text-[21px] font-semibold tracking-[-0.374px]">纠正即学习</h2><div className="rounded-card bg-surface p-6 text-[14px]"><p className="text-ink-48">记录你手动修改的主题、标题和标签，用作后续整理的少量参考样例。</p><div className="mt-3 flex flex-wrap items-center gap-3"><button onClick={() => toggle(!enabled)} className="rounded-utility border border-hairline px-4 py-1.5">{enabled ? "已开启" : "已关闭"}</button><span className="text-ink-48">已有 {count} 条样例</span><button onClick={clear} className="text-danger">清空样例</button></div></div></section>;
+}
+
+/* 四项非核心功能的开关。默认全关，核心路径只留「记—找—用」。
+   切换后要 router.refresh()：助手面板与编辑器的开关是服务端在 layout / page
+   里读好传下来的，不刷新的话设置页这边已经变了、那两处还是旧的。 */
+const FEATURE_ITEMS: { key: FeatureKey; label: string; desc: string }[] = [
+  { key: "handwriting", label: "手写摄取", desc: "新建笔记页多一个上传入口，拍张手写稿转写成正文（另需配置视觉模型）" },
+  { key: "imageGen", label: "AI 生图", desc: "对助手说「画一张…」生成插图（另需配置图像模型）" },
+  { key: "mermaid", label: "Mermaid 图表", desc: "编辑器斜杠菜单多一项，mermaid 代码块渲染成流程图、时序图" },
+  { key: "reasoning", label: "深度思考", desc: "助手输入框上的消息级开关，改用独立推理模型作答（另需配置推理模型）" },
+];
+
+function FeatureSection({ initial }: { initial: FeatureFlags }) {
+  const router = useRouter();
+  const [flags, setFlags] = useState(initial);
+  const [busy, setBusy] = useState<FeatureKey | null>(null);
+  async function toggle(feature: FeatureKey, next: boolean) {
+    setBusy(feature);
+    try {
+      const r = await fetch("/api/settings/features", { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ feature, enabled: next }) });
+      if (r.ok) { setFlags(await r.json()); router.refresh(); }
+    } finally { setBusy(null); }
+  }
+  return (
+    <section>
+      <h2 className="mb-3 text-[21px] font-semibold tracking-[-0.374px]">功能开关</h2>
+      <div className="rounded-card bg-surface p-6 text-[14px]">
+        <p className="text-ink-48">这四项默认关闭，核心路径只保留「记—找—用」。关闭的只是入口，已经产生的转写、插图、图表和思考过程照常显示与导出。</p>
+        <div className="mt-3">
+          {FEATURE_ITEMS.map((item) => (
+            <div key={item.key} className="flex flex-wrap items-center justify-between gap-3 border-t border-divider py-3">
+              <div className="min-w-0">
+                <p className="text-ink-80">{item.label}</p>
+                <p className="mt-0.5 text-[13px] text-ink-48">{item.desc}</p>
+              </div>
+              <button
+                onClick={() => toggle(item.key, !flags[item.key])}
+                disabled={busy === item.key}
+                className="shrink-0 rounded-utility border border-hairline px-4 py-1.5 disabled:opacity-40"
+              >
+                {flags[item.key] ? "已开启" : "已关闭"}
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
 }
 
 const THEME_OPTIONS = [
@@ -415,6 +465,7 @@ export function SettingsPanel({
   embedding,
   apiTokens,
   correctionLearning,
+  features,
   queue,
   review,
   lastBackupAt,
@@ -429,6 +480,7 @@ export function SettingsPanel({
   embedding: EmbeddingInfo;
   apiTokens: ApiTokenInfo[];
   correctionLearning: CorrectionInfo;
+  features: FeatureFlags;
   queue: QueueInfo;
   review: ReviewInfo;
   lastBackupAt: number | null;
@@ -1180,6 +1232,7 @@ export function SettingsPanel({
 
       <DataSection lastBackupAt={lastBackupAt} trashCount={trashCount} />
 
+      <FeatureSection initial={features} />
       <ApiTokenSection initial={apiTokens} />
       <CorrectionSection initial={correctionLearning} />
 

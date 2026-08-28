@@ -13,6 +13,8 @@ export interface SlashCommand {
   // 拉丁别名，让用户打 /h1、/table 也能命中
   aliases: string[];
   run: (editor: Editor) => void;
+  // 挂在功能开关上的项：开关关闭时整条不出现在菜单里
+  feature?: "mermaid";
 }
 
 export const SLASH_COMMANDS: SlashCommand[] = [
@@ -64,6 +66,7 @@ export const SLASH_COMMANDS: SlashCommand[] = [
     aliases: ["mermaid", "tu", "chart", "diagram"],
     // 代码块 + mermaid 语言，与手打 ```mermaid 完全等价
     run: (e) => e.chain().focus().toggleCodeBlock({ language: "mermaid" }).run(),
+    feature: "mermaid",
   },
   {
     label: "表格",
@@ -94,7 +97,7 @@ interface MenuState {
   top: number;
 }
 
-export function useSlashMenu(editor: Editor | null) {
+export function useSlashMenu(editor: Editor | null, features: { mermaid?: boolean } = {}) {
   const [menu, setMenu] = useState<MenuState | null>(null);
   const [index, setIndex] = useState(0);
   /* 键盘处理挂在 editorProps 上、创建时就固定了闭包，所以状态要走 ref
@@ -105,7 +108,9 @@ export function useSlashMenu(editor: Editor | null) {
     index: 0,
   });
 
-  const items = menu ? SLASH_COMMANDS.filter((c) => match(c, menu.query)) : [];
+  // 关掉的功能连菜单项都不给：留着但点了没反应，比不出现更让人困惑
+  const available = SLASH_COMMANDS.filter((c) => !c.feature || features[c.feature]);
+  const items = menu ? available.filter((c) => match(c, menu.query)) : [];
   stateRef.current = { menu, items, index };
 
   const close = useCallback(() => {

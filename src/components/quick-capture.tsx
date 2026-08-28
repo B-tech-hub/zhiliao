@@ -40,7 +40,7 @@ function PlusIcon() {
    这里不需要 BodyPortal：本组件挂在 (app)/layout.tsx 里，是 <main> 的兄弟，
    而劫持 fixed 定位的 transform 动画在 template.tsx 上、只包 <main> 的内容。
    判据是渲染位置，别照搬 CommandPalette——那一份渲染在页面内容里。 */
-export function QuickCapture({ topics }: { topics: TopicOption[] }) {
+export function QuickCapture({ topics, handwritingEnabled }: { topics: TopicOption[]; handwritingEnabled?: boolean }) {
   const [open, setOpen] = useState(false);
   // 草稿托管在这里而不是表单里：表单随浮层开合挂载卸载，存在里面关一次就没了
   const [draft, setDraft] = useState("");
@@ -132,6 +132,7 @@ export function QuickCapture({ topics }: { topics: TopicOption[] }) {
               onClose={close}
               draft={draft}
               onDraftChange={setDraft}
+              handwritingEnabled={handwritingEnabled}
             />
           </div>
         </div>

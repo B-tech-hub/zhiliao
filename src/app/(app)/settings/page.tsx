@@ -8,6 +8,7 @@ import { getImageConfig, getLlmConfig, getVisionConfig, getReasoningConfig, getE
 import { SettingsPanel } from "./settings-panel";
 import { listApiTokens } from "@/lib/api-token";
 import { isCorrectionLearningEnabled } from "@/lib/correction-learning";
+import { getFeatureFlags } from "@/lib/feature-flags";
 import { correctionExamples } from "@/db/schema";
 
 export const dynamic = "force-dynamic";
@@ -63,6 +64,7 @@ export default function SettingsPage() {
       embedding={embedding}
       apiTokens={listApiTokens().map((t) => ({ id: t.id, scope: t.scope, prefix: t.tokenPrefix, last4: t.tokenLast4, createdAt: t.createdAt, lastUsedAt: t.lastUsedAt }))}
       correctionLearning={{ enabled: isCorrectionLearningEnabled(db), count: db.select().from(correctionExamples).all().length }}
+      features={getFeatureFlags(db)}
       queue={getQueueStats(db)}
       review={{ enabled: isWeeklyReviewEnabled(db), lastWeek: getLastReviewWeek(db) }}
       lastBackupAt={getLastBackupAt()}

@@ -162,4 +162,20 @@ describe("QuickCapture", () => {
     expect(select.textContent).toContain("项目");
     expect(select.textContent).not.toContain("收件箱");
   });
+
+  /* 手写摄取默认关闭：不传开关就等同关闭，入口不该出现。
+     这条按钮此前是无条件渲染的——没配视觉模型时它照样在，点下去才报错。 */
+  it("手写摄取默认关闭时不出现入口", async () => {
+    render(<QuickCapture topics={TOPICS} />);
+    openOverlay();
+    await screen.findByRole("dialog");
+    expect(screen.queryByText("手写摄取")).toBeNull();
+  });
+
+  it("开启手写摄取后入口出现", async () => {
+    render(<QuickCapture topics={TOPICS} handwritingEnabled />);
+    openOverlay();
+    await screen.findByRole("dialog");
+    expect(screen.getByText("手写摄取")).toBeTruthy();
+  });
 });

@@ -6,6 +6,7 @@ import { getDb } from "@/db";
 import { notes, topics } from "@/db/schema";
 import { buildSourcesContext } from "@/lib/ai/sources";
 import { extractImageFilenames } from "@/lib/image-refs";
+import { isFeatureEnabled } from "@/lib/feature-flags";
 
 // 上下文附件的注入上限（字符），超出截断并在 prompt 中说明
 export const MAX_CONTEXT_CHARS = 12000;
@@ -17,12 +18,21 @@ export const SYSTEM_PROMPT = `你是「知了」个人知识库的 AI 助手，�
 工作方式：
 - 需要知识库里的信息时，先用 search_notes / read_note / list_topics 查，不要凭记忆回答
 - 记录新内容用 create_note；补充已有笔记用 append_to_note；调整分类、标题、标签用 update_meta
-- 写进笔记的内容涉及流程、结构或时间线时，可以用语言标为 mermaid 的代码块画图（笔记编辑器会渲染成图；聊天回答里不要输出 mermaid，那里只显示源码）
 - 你没有覆盖或删改已有正文的能力。用户想改写正文时，请告诉他手动编辑
 - fetch_url 只能抓取用户在本次对话中亲自给出的链接，不要自行构造网址
 - 删除操作会先请求用户确认，确认前不会真正执行
 
 引用规范：引用知识库内容时，在相关结论后标注 [^noteId]，noteId 必须来自工具返回的真实 id。不要编造 id，宁可不标。`;
+
+/* 绘图指引只在 Mermaid 开关打开时追加。关掉了还教模型画图，笔记里会落下一段
+   编辑器不渲染的源码——用户没开这功能，却先收到了它的半成品。 */
+const MERMAID_GUIDANCE = `
+
+绘图：写进笔记的内容涉及流程、结构或时间线时，可以用语言标为 mermaid 的代码块画图（笔记编辑器会渲染成图；聊天回答里不要输出 mermaid，那里只显示源码）。`;
+
+const SOURCES_MERMAID_GUIDANCE = `
+
+绘图：写进笔记的内容涉及流程、结构或时间线时，可以用语言标为 mermaid 的代码块画图（图的内容同样只能出自来源）。`;
 
 /* 来源问答的 system prompt。与普通助手的关键差别是「严格接地」：
    回答只能来自来源集，来源里没有就明说没有。这是会话级不变量，
@@ -39,7 +49,6 @@ export const SOURCES_SYSTEM_PROMPT = `你是「知了」个人知识库的 AI �
 工具使用：
 - search_notes 与 read_note 已被限定在来源集范围内，取不到的笔记就是不在来源集里
 - 记录新内容用 create_note；补充已有笔记用 append_to_note；调整分类、标题、标签用 update_meta
-- 写进笔记的内容涉及流程、结构或时间线时，可以用语言标为 mermaid 的代码块画图（图的内容同样只能出自来源）
 - 你没有覆盖或删改已有正文的能力。用户想改写正文时，请告诉他手动编辑
 - 本模式下不能抓取网页，外部内容不属于来源
 - 删除操作会先请求用户确认，确认前不会真正执行
@@ -98,6 +107,7 @@ export function buildSystemMessage(
   scopeId: string,
   conversationId?: string,
 ): { system: string; imageFiles: string[]; allowedNoteIds?: string[]; sourcesMode?: "full" | "digest" | "empty" } {
+  const mermaid = isFeatureEnabled(getDb(), "mermaid");
   if (scopeType === "sources") {
     const { context, allowedNoteIds, mode } = buildSourcesContext(getDb(), conversationId ?? "");
     const body =
@@ -105,19 +115,20 @@ export function buildSystemMessage(
         ? "当前来源集为空（可能来源笔记都已删除或移入回收站）。请告诉用户来源集里没有可用内容，建议他重新选择来源。"
         : context;
     return {
-      system: `${SOURCES_SYSTEM_PROMPT}\n\n---\n来源集：\n${body}`,
+      system: `${SOURCES_SYSTEM_PROMPT}${mermaid ? SOURCES_MERMAID_GUIDANCE : ""}\n\n---\n来源集：\n${body}`,
       imageFiles: [],
       allowedNoteIds,
       sourcesMode: mode,
     };
   }
 
+  const base = `${SYSTEM_PROMPT}${mermaid ? MERMAID_GUIDANCE : ""}`;
   const { context, truncated, imageFiles } = buildContext(scopeType, scopeId);
-  if (!context) return { system: SYSTEM_PROMPT, imageFiles };
+  if (!context) return { system: base, imageFiles };
   const label = scopeType === "note" ? "笔记" : "主题";
   const note = truncated ? "（内容过长已截断）" : "";
   return {
-    system: `${SYSTEM_PROMPT}\n\n---\n用户当前正在查看的${label}${note}：\n${context}`,
+    system: `${base}\n\n---\n用户当前正在查看的${label}${note}：\n${context}`,
     imageFiles,
   };
 }

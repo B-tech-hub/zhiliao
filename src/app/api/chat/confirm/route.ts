@@ -18,7 +18,8 @@ import { createChatSseResponse } from "@/lib/ai/chat-stream";
 import { extractUrls } from "@/lib/ai/fetch-url";
 import { getTool, runTool, toolDefs, MAX_IMAGES_PER_MESSAGE, type ToolContext } from "@/lib/ai/tools";
 import { chatStream, type LlmMessage } from "@/lib/llm";
-import { getToolSupport, isImageGenConfigured } from "@/lib/llm-config";
+import { getToolSupport } from "@/lib/llm-config";
+import { isImageGenAvailable } from "@/lib/feature-flags";
 
 export const dynamic = "force-dynamic";
 
@@ -121,7 +122,7 @@ export async function POST(req: NextRequest) {
   ];
 
   const tools =
-    getToolSupport() === false ? [] : toolDefs({ grounded, imageGen: isImageGenConfigured() });
+    getToolSupport() === false ? [] : toolDefs({ grounded, imageGen: isImageGenAvailable(db) });
   const deps: ToolLoopDeps = {
     stream: (msgs) => chatStream(msgs, { signal: req.signal, tools }),
     execute: (call) => runTool(call.name, call.args, toolCtx),

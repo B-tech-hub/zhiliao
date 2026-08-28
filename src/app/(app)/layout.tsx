@@ -1,5 +1,7 @@
 import { getTopicsWithCounts } from "@/lib/topics";
-import { getToolSupport, isReasoningConfigured, isVisionConfigured } from "@/lib/llm-config";
+import { getDb } from "@/db";
+import { getToolSupport, isVisionConfigured } from "@/lib/llm-config";
+import { getFeatureFlags, isReasoningAvailable } from "@/lib/feature-flags";
 import { BottomNav, SideNav } from "@/components/nav";
 import { ChatPanel } from "@/components/chat/chat-panel";
 import { ChatScopeProvider } from "@/components/chat/chat-scope";
@@ -12,6 +14,9 @@ export const dynamic = "force-dynamic";
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const topicRows = getTopicsWithCounts();
   const inboxCount = topicRows.find((t) => t.isSystem)?.noteCount ?? 0;
+  // 四项非核心功能的开关一次取齐，分发给下面的客户端组件（默认全关）
+  const db = getDb();
+  const flags = getFeatureFlags(db);
 
   return (
     <ChatScopeProvider>
@@ -35,6 +40,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             但整页那条路会自己再查一次（它是独立路由，进不来这个作用域）。 */}
         <QuickCapture
           topics={topicRows.map(({ id, name, isSystem }) => ({ id, name, isSystem }))}
+          handwritingEnabled={flags.handwriting}
         />
 
         {/* AI 助手：全局唯一一份，当前页面的笔记/主题由 ChatScopeBinder 登记为上下文附件。
@@ -42,7 +48,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             必须排在 <main> 之后：flex 顺序决定它靠右。 */}
         <ChatPanel
           visionAvailable={isVisionConfigured()}
-          reasoningAvailable={isReasoningConfigured()}
+          reasoningEnabled={flags.reasoning}
+          reasoningAvailable={isReasoningAvailable(db)}
           toolSupport={getToolSupport()}
         />
         <CommandPalette topics={topicRows.filter((topic) => !topic.isSystem).map(({ id, name }) => ({ id, name }))} />

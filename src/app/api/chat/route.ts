@@ -15,10 +15,9 @@ import {
   getReasoningToolSupport,
   getVisionConfig,
   getReasoningConfig,
-  isImageGenConfigured,
   isVisionConfigured,
-  isReasoningConfigured,
 } from "@/lib/llm-config";
+import { isImageGenAvailable, isReasoningAvailable } from "@/lib/feature-flags";
 import { prepareVisionImageDataUrls, VisionImageError } from "@/lib/vision-images";
 
 export const dynamic = "force-dynamic";
@@ -124,7 +123,7 @@ export async function POST(req: NextRequest) {
     scopeId,
     convId,
   );
-  const reasoningCfg = useReasoning && isReasoningConfigured() ? getReasoningConfig() : null;
+  const reasoningCfg = useReasoning && isReasoningAvailable(db) ? getReasoningConfig() : null;
   const wantVision = Boolean(useVision) && imageFiles.length > 0 && (reasoningCfg ? Boolean(reasoningCfg.model) : isVisionConfigured());
   let visionImageUrls: string[] = [];
   if (wantVision) {
@@ -177,7 +176,7 @@ export async function POST(req: NextRequest) {
   const tools =
     toolSupport === false || wantVision
       ? []
-      : toolDefs({ grounded, imageGen: isImageGenConfigured() });
+      : toolDefs({ grounded, imageGen: isImageGenAvailable(db) });
 
   const toolCtx: ToolContext = {
     db,

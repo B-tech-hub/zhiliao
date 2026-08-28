@@ -53,3 +53,4 @@
 | [0022](adr/0022-writing-related-notes.md) | 写作侧相关笔记召回与候选约束的冲突提示 |
 | [0023](adr/0023-note-chunking.md) | 长笔记分块存储、标题注入与 max-pooling 检索 |
 | [0024](adr/0024-markdown-zip-import.md) | Markdown zip 反向导入：判重、AI 整理开关与不可信输入的边界 |
+| [0025](adr/0025-non-core-features-off-by-default.md) | 四项非核心功能默认关闭：开关语义、降级表现与服务端拦截 |
