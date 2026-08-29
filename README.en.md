@@ -10,6 +10,8 @@ The same idea extends to reading it back: **you shouldn't have to guess the keyw
 
 **No fabrication** is a product-level promise, not just a chat feature: citations only ever point at note ids a tool actually returned, anything absent from your sources is reported as absent, and dead hallucinated links are never rendered.
 
+**Your writing stays portable** — also a promise, not a feature bullet. Every save writes the body as plain Markdown to `data/notes/<topic>/<title>-<id>.md`: no export step, no network, just point Obsidian at that folder ([ADR-0020](docs/adr/0020-incremental-markdown-export.md)). The zip export imports back as well, restoring notes, topics, tags, timestamps, summaries and images field by field — **export and import are inverse operations**, not a one-way "export supported" ([ADR-0024](docs/adr/0024-markdown-zip-import.md)). Stop using Zhiliao whenever you like; your words don't leave with it.
+
 Single-user by design. Next.js 15 + SQLite, PWA-ready, works with any OpenAI-compatible API.
 
 Full documentation is in Simplified Chinese — see [README.md](README.md). This page covers just enough to get you running.
