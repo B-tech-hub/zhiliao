@@ -20,6 +20,14 @@ export function mermaidBlockMode(state: {
   return "diagram";
 }
 
+type MermaidMutation = { type: MutationRecord["type"] | "selection"; target: Node };
+
+export function shouldIgnoreMermaidMutation(mutation: MermaidMutation, contentDOM: Node): boolean {
+  if (mutation.type === "selection") return false;
+  if (mutation.type === "attributes" && mutation.target === contentDOM) return true;
+  return !contentDOM.contains(mutation.target);
+}
+
 function createMermaidNodeView({ node, editor, getPos }: NodeViewRendererProps): NodeView {
   let currentNode = node;
   let editing = false;
@@ -189,8 +197,7 @@ function createMermaidNodeView({ node, editor, getPos }: NodeViewRendererProps):
       return diagram.contains(event.target as globalThis.Node);
     },
     ignoreMutation(mutation) {
-      if (mutation.type === "selection") return false;
-      return !contentDOM.contains(mutation.target);
+      return shouldIgnoreMermaidMutation(mutation, contentDOM);
     },
     destroy() {
       destroyed = true;

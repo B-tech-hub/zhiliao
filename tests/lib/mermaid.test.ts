@@ -3,7 +3,11 @@ import { describe, expect, it } from "vitest";
 import { Editor, type Extensions } from "@tiptap/core";
 import StarterKit from "@tiptap/starter-kit";
 import { Markdown } from "tiptap-markdown";
-import { MermaidCodeBlock, mermaidBlockMode } from "@/components/mermaid-code-block";
+import {
+  MermaidCodeBlock,
+  mermaidBlockMode,
+  shouldIgnoreMermaidMutation,
+} from "@/components/mermaid-code-block";
 
 /* 编辑器里的 mermaid 块最终要以原生 ```mermaid 代码块存回笔记正文——
    导出打包后能被 Obsidian 直接读，靠的就是这条。语言标记一旦在
@@ -66,5 +70,19 @@ describe("展示形态判定", () => {
      用户写下的内容必须原样留在编辑器里 */
   it("渲染不出图时一律回落源码", () => {
     expect(mermaidBlockMode({ language: "mermaid", editing: false, svg: "" })).toBe("source");
+  });
+});
+
+describe("NodeView mutation 边界", () => {
+  it("忽略代码节点自身的属性同步，但保留正文与选区 mutation", () => {
+    const contentDOM = document.createElement("code");
+    const text = document.createTextNode("graph TD");
+    contentDOM.append(text);
+    const outside = document.createElement("div");
+
+    expect(shouldIgnoreMermaidMutation({ type: "attributes", target: contentDOM }, contentDOM)).toBe(true);
+    expect(shouldIgnoreMermaidMutation({ type: "characterData", target: text }, contentDOM)).toBe(false);
+    expect(shouldIgnoreMermaidMutation({ type: "selection", target: contentDOM }, contentDOM)).toBe(false);
+    expect(shouldIgnoreMermaidMutation({ type: "attributes", target: outside }, contentDOM)).toBe(true);
   });
 });
