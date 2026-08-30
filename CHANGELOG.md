@@ -2,7 +2,7 @@
 
 本项目遵循 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/) 与[语义化版本](https://semver.org/lang/zh-CN/)。
 
-## [0.6.0] - 2026-08-29
+## [0.6.0] - 2026-08-30
 
 > **从 0.5.0 升级前，先读这三条。** 都不需要手工改数据，但不知道的话会以为出了问题。
 >
@@ -48,6 +48,11 @@
 ### 新增
 
 - AI 助手的完整文字回答可直接「存为新笔记」，视觉识别结果无需复制粘贴。
+- 新增单图手写转写队列：原图保留、转写结果追加到笔记，失败后可重试。
+- 新增 `$...$` / `$$...$$` 数学 Markdown 契约与 KaTeX 阅读态渲染。
+- 新增 `⌘K` 命令面板，支持笔记搜索、主题跳转与常用动作。
+- 新增 `⌘\\`、`⌘J`、`⌘S`、`⌘Enter` 与分层 `Esc` 快捷键，并为侧栏折叠建立状态契约。
+- 补充命令面板与快捷键的前端组件测试基础。
 - 图片上传上限提升至 20 MB，按文件魔数识别 PNG、JPEG、GIF、WebP 与 HEIC；HEIC 保留原件并生成 JPEG 展示副本。
 - 笔记详情页增加桌面宽屏画布及 H1–H3 标题目录，移动端保持单栏。
 - AI 助手增加默认关闭、不持久化的「深度思考」消息级开关和独立推理模型配置。
@@ -209,7 +214,7 @@
 - PWA、深浅色主题、图片上传
 - 单密码登录 + JWT 会话；Docker 部署；每日自动备份数据库
 
-[未发布]: https://github.com/B-tech-hub/zhiliao/compare/v0.5.0...HEAD
+[0.6.0]: https://github.com/B-tech-hub/zhiliao/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/B-tech-hub/zhiliao/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/B-tech-hub/zhiliao/compare/v0.3.1...v0.4.0
 [0.3.1]: https://github.com/B-tech-hub/zhiliao/compare/v0.3.0...v0.3.1
@@ -217,12 +222,3 @@
 [0.2.0]: https://github.com/B-tech-hub/zhiliao/compare/v0.1.1...v0.2.0
 [0.1.1]: https://github.com/B-tech-hub/zhiliao/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/B-tech-hub/zhiliao/releases/tag/v0.1.0
-# 未发布
-
-- 新增单图手写转写队列，原图保留、转写追加且失败可重试。
-- 新增 `$...$` / `$$...$$` 数学 Markdown 契约与 KaTeX 阅读态渲染。
-## 未发布
-
-- 新增 `⌘K` 命令面板，支持笔记搜索、主题跳转与常用动作。
-- 新增 `⌘\\`、`⌘J`、`⌘S`、`⌘Enter` 与分层 `Esc` 快捷键，并为侧栏折叠建立状态契约。
-- 补充命令面板与快捷键的前端组件测试基础。

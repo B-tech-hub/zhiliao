@@ -133,17 +133,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: 选择 Release Notes
+        id: release-notes
+        shell: bash
+        run: |
+          version_tag="${GITHUB_REF_NAME%%-*}"
+          notes="docs/releases/${version_tag}.md"
+          test -f "$notes" || { echo "缺少 Release Notes：$notes" >&2; exit 1; }
+          echo "path=$notes" >> "$GITHUB_OUTPUT"
+
       - name: 发布 Release
         uses: softprops/action-gh-release@v2
         with:
           # 含 -rc / -beta / -alpha 的 tag 自动标记为预发布，不会成为仓库的 Latest
           prerelease: ${{ contains(github.ref_name, '-rc') || contains(github.ref_name, '-beta') || contains(github.ref_name, '-alpha') }}
-          generate_release_notes: true
-          body: |
-            变更明细见 [CHANGELOG.md](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md)。
-
-            Docker 镜像（amd64 / arm64）：
-
-            ```bash
-            docker pull ghcr.io/b-tech-hub/zhiliao:latest
-            ```
+          body_path: ${{ steps.release-notes.outputs.path }}
