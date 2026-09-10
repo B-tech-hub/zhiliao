@@ -1,0 +1,60 @@
+# STATUS DEFINITIONS:
+# ==================
+# Epic Status:
+#   - backlog: Epic not yet started
+#   - in-progress: Epic actively being worked on
+#   - done: All stories in epic completed
+
+# Story Status:
+#   - backlog: Story only exists in epic file
+#   - ready-for-dev: Story file created, ready for development
+#   - in-progress: Developer actively working on implementation
+#   - review: Implementation complete, ready for review
+#   - done: Story completed
+
+# Retrospective Status:
+#   - optional: Can be completed but not required
+#   - done: Retrospective has been completed
+
+# Action Item Status:
+#   - open: Committed during a retrospective, not yet addressed
+#   - in-progress: Actively being worked on
+#   - done: Completed
+
+# WORKFLOW NOTES:
+# ===============
+# - Epic transitions to 'in-progress' automatically when its first story starts (via build's sprint sync)
+# - Stories can be worked in parallel if team capacity allows
+# - Developer typically creates the next story after the previous one is 'done' to incorporate learnings
+# - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
+# - Retrospective appends its action items to action_items; the status view surfaces open ones
+generated: 09-09-2026 16:00
+last_updated: 09-10-2026 08:30
+project: 知了
+project_key: ZHILIAO
+tracking_system: file-system
+story_location: _bmad-output/implementation-artifacts
+development_status:
+  epic-1: in-progress
+  1-1-固化受支持的-github-安装路径: review
+  1-2-完成全新环境安装冒烟与证据留存: review
+  1-3-编写首次使用与故障排查教程: backlog
+  epic-1-retrospective: optional
+
+  epic-2: backlog
+  2-1-建立服务端-demo-能力边界: backlog
+  2-2-隔离-demo-部署并限制资源: backlog
+  2-3-建立重置-健康检查与故障恢复手册: backlog
+  epic-2-retrospective: optional
+
+  epic-3: backlog
+  3-1-固化演示数据与对照问题: backlog
+  3-2-产出-20-30-秒演示素材并同步-readme: backlog
+  3-3-完成演示复现与失效处理: backlog
+  epic-3-retrospective: optional
+
+  epic-4: backlog
+  4-1-撰写并校验首篇-adr-文章: backlog
+  4-2-准备渠道发布包与-readme-承接: backlog
+  4-3-建立-traffic-快照与-30-天复盘: backlog
+  epic-4-retrospective: optional
