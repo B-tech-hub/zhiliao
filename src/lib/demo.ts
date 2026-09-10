@@ -4,6 +4,7 @@ import { notes, topics } from "@/db/schema";
 import { newId } from "@/lib/ids";
 import { enqueueNoteProcess } from "@/lib/notes";
 import { refreshNoteFts } from "@/lib/search";
+export { demoForbiddenResponse, isDemoMode } from "@/lib/demo-guard";
 
 // 演示数据必须与 scripts/mock-llm.mjs 的规则严格对齐：
 //   含「球」→ 归入「羽毛球」（conf 0.9）；含「视频/选题」→ 归入「自媒体」（conf 0.85）；

@@ -53,6 +53,10 @@ docker compose -f docker-compose.demo.yml up -d
 
 ## 界面预览
 
+### Demo 服务端边界
+
+体验模式只保留新建普通笔记、AI 自动整理和主题建议主流程，并固定使用容器内 mock LLM。设置外部模型、创建或吊销 API Token、备份、导入导出、向量回填、文件上传和模型测试等高风险操作由服务端直接拒绝并返回 HTTP `403`；前端隐藏入口只是辅助提示，不能替代服务端校验。
+
 | 首页 · 浅色 | 主题页 · 深色（AI 标题/摘要/标签） |
 |---|---|
 | ![首页浅色](docs/screenshots/home-light.png) | ![主题页深色](docs/screenshots/topic-dark.png) |

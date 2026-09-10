@@ -4,6 +4,7 @@
 import { eq, inArray } from "drizzle-orm";
 import { getDb } from "@/db";
 import { settings } from "@/db/schema";
+import { isDemoMode } from "@/lib/demo-guard";
 
 export const LLM_SETTING_KEYS = {
   baseUrl: "llm_base_url",
@@ -97,6 +98,16 @@ export interface EmbeddingConfig {
 }
 
 export function getEmbeddingConfig(): EmbeddingConfig {
+  if (isDemoMode()) {
+    return {
+      baseUrl: null,
+      apiKey: null,
+      model: null,
+      sources: { baseUrl: "none", apiKey: "none", model: "none" },
+      shadowed: { baseUrl: null, model: null, apiKey: false },
+      hasDbConfig: false,
+    };
+  }
   const db = getDb();
   const rows = db.select().from(settings).where(inArray(settings.key, Object.values(EMBEDDING_SETTING_KEYS))).all();
   const dbMap = new Map(rows.map((r) => [r.key, r.value]));
@@ -119,6 +130,16 @@ export function isEmbeddingConfigured(): boolean {
 }
 
 export function getLlmConfig(): LlmConfig {
+  if (isDemoMode()) {
+    return {
+      baseUrl: process.env.DEMO_LLM_BASE_URL?.trim() || "http://mockllm:8787/v1",
+      apiKey: "demo",
+      model: "mock",
+      sources: { baseUrl: "env", apiKey: "env", model: "env" },
+      shadowed: { baseUrl: null, model: null, apiKey: false },
+      hasDbConfig: false,
+    };
+  }
   const db = getDb();
   const rows = db
     .select()
@@ -161,6 +182,16 @@ function getDerivedConfig(
   keys: { baseUrl: string; apiKey: string; model: string },
   envPrefix: string,
 ): VisionConfig {
+  if (isDemoMode()) {
+    return {
+      baseUrl: null,
+      apiKey: null,
+      model: null,
+      sources: { baseUrl: "none", apiKey: "none", model: "none" },
+      shadowed: { baseUrl: null, model: null, apiKey: false },
+      hasDbConfig: false,
+    };
+  }
   const db = getDb();
   const rows = db
     .select()

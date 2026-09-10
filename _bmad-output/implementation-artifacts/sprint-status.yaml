@@ -41,8 +41,8 @@ development_status:
   1-3-编写首次使用与故障排查教程: done
   epic-1-retrospective: optional
 
-  epic-2: backlog
-  2-1-建立服务端-demo-能力边界: ready-for-dev
+  epic-2: in-progress
+  2-1-建立服务端-demo-能力边界: in-progress
   2-2-隔离-demo-部署并限制资源: backlog
   2-3-建立重置-健康检查与故障恢复手册: backlog
   epic-2-retrospective: optional

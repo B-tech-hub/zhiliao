@@ -2,7 +2,8 @@
 title: 'Story 2-1 建立服务端 Demo 能力边界'
 type: 'feature'
 created: '2026-09-10'
-status: 'ready-for-dev'
+status: 'done'
+baseline_commit: '58efce6'
 context:
   - 'D:/ClaudeProjects/ai_acknowladge/_bmad-output/implementation-artifacts/epic-2-context.md'
   - 'D:/ClaudeProjects/ai_acknowladge/_bmad-output/planning-artifacts/epics-github-install-distribution-demo.md'
@@ -39,3 +40,20 @@ context:
 - 运行 Story 2-1 对应的服务端单元/集成测试。
 - 使用直接 HTTP 请求验证禁止路径均为 403，并验证允许路径仍返回预期状态。
 - 检查测试配置、正式配置和 Demo 配置的数据库、卷、环境文件与密钥路径隔离。
+
+## Suggested Review Order
+
+**服务端统一边界**
+
+- 统一 Demo 判定与错误响应
+  [`demo-guard.ts:3`](../../src/lib/demo-guard.ts#L3)
+- 高风险入口先行拒绝
+  [`llm-route.ts:30`](../../src/app/api/settings/llm/route.ts#L30)
+- Token 管理不暴露正式凭据
+  [`tokens-route.ts:9`](../../src/app/api/settings/tokens/route.ts#L9)
+- 数据出口与文件写入受限
+  [`export-route.ts:12`](../../src/app/api/export/route.ts#L12)
+- 模型配置固定 mock
+  [`llm-config.ts:124`](../../src/lib/llm-config.ts#L124)
+- 直接路由测试覆盖边界
+  [`demo-boundary.test.ts:18`](../../tests/api/demo-boundary.test.ts#L18)

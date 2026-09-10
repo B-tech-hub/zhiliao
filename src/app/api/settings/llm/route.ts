@@ -4,6 +4,7 @@ import { z } from "zod";
 import { getDb } from "@/db";
 import { settings } from "@/db/schema";
 import { LLM_SETTING_KEYS, IMAGE_SETTING_KEYS, VISION_SETTING_KEYS, REASONING_SETTING_KEYS, EMBEDDING_SETTING_KEYS } from "@/lib/llm-config";
+import { demoForbiddenResponse, isDemoMode } from "@/lib/demo-guard";
 
 // 仅携带需要修改的字段；apiKey 留空时前端不携带，避免误覆盖
 const patchSchema = z.object({
@@ -28,6 +29,7 @@ const patchSchema = z.object({
 
 // 保存 LLM 配置到 settings 表（DB 优先、环境变量兜底，保存后立即生效）
 export async function PATCH(req: NextRequest) {
+  if (isDemoMode()) return demoForbiddenResponse();
   const parsed = patchSchema.safeParse(await req.json().catch(() => null));
   if (!parsed.success) {
     return NextResponse.json(
@@ -71,6 +73,7 @@ export async function PATCH(req: NextRequest) {
 
 // 清除数据库中的 LLM 配置，回退到环境变量
 export async function DELETE() {
+  if (isDemoMode()) return demoForbiddenResponse();
   const db = getDb();
   db.delete(settings).where(inArray(settings.key, Object.values(LLM_SETTING_KEYS))).run();
   return NextResponse.json({ ok: true });

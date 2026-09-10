@@ -3,12 +3,14 @@ import { NextResponse } from "next/server";
 import { ZipFile } from "yazl";
 import { getDb } from "@/db";
 import { buildExportPlan, exportZipName } from "@/lib/export";
+import { demoForbiddenResponse, isDemoMode } from "@/lib/demo-guard";
 
 export const dynamic = "force-dynamic";
 
 // 导出全部数据：主题目录/标题-id.md + 顶层 assets/ 图片，yazl 流式写出不占内存。
 // 计划构建（同步查询）失败时还能返回 JSON 错误；流开始后出错只能中断连接
 export async function GET() {
+  if (isDemoMode()) return demoForbiddenResponse();
   let plan;
   try {
     plan = buildExportPlan(getDb());

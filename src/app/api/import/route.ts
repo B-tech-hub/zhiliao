@@ -7,6 +7,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getDb } from "@/db";
 import { newId } from "@/lib/ids";
 import { ImportError, importZipFile } from "@/lib/import";
+import { demoForbiddenResponse, isDemoMode } from "@/lib/demo-guard";
 
 export const dynamic = "force-dynamic";
 
@@ -17,6 +18,7 @@ const MAX_UPLOAD_BYTES = 200 * 1024 * 1024;
    包可能有几百 MB，走 formData 会整个读进内存，这里边收边落临时文件。
    选项走查询串，省掉一个 multipart 解析器。 */
 export async function POST(req: NextRequest) {
+  if (isDemoMode()) return demoForbiddenResponse();
   if (!req.body) return NextResponse.json({ error: "请求里没有文件" }, { status: 400 });
 
   const overwrite = req.nextUrl.searchParams.get("overwrite") === "1";

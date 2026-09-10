@@ -7,10 +7,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { getDb } from "@/db";
 import { images } from "@/db/schema";
 import { HEIC_MIMES, IMAGE_EXT_BY_MIME, getUploadDir, saveImage, sniffImageMime } from "@/lib/uploads";
+import { demoForbiddenResponse, isDemoMode } from "@/lib/demo-guard";
 
 const MAX_SIZE = 20 * 1024 * 1024;
 
 export async function POST(req: NextRequest) {
+  if (isDemoMode()) return demoForbiddenResponse();
   const form = await req.formData().catch(() => null);
   const file = form?.get("file");
   if (!form || !(file instanceof File)) return NextResponse.json({ error: "缺少文件" }, { status: 400 });

@@ -10,10 +10,12 @@ import {
 import { saveReasoningToolSupport, saveToolSupport } from "@/lib/llm-config";
 import { isEmbeddingConfigured } from "@/lib/llm-config";
 import { testEmbeddingConnection } from "@/lib/ai/embedding";
+import { demoForbiddenResponse, isDemoMode } from "@/lib/demo-guard";
 
 // LLM 连通性测试（设置页“测试连接”按钮）
 // body 可传 { target: "text" | "vision" | "image" | "reasoning" }；缺省或解析失败一律按 text，保证老前端兼容
 export async function POST(req: NextRequest) {
+  if (isDemoMode()) return demoForbiddenResponse();
   const body = await req.json().catch(() => null);
   const raw = (body as { target?: string } | null)?.target;
   const target =

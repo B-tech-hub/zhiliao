@@ -1,10 +1,12 @@
 import { NextResponse } from "next/server";
 import { doBackup, getLastBackupAt } from "@/lib/backup";
+import { demoForbiddenResponse, isDemoMode } from "@/lib/demo-guard";
 
 export const dynamic = "force-dynamic";
 
 // 设置页「立即备份」：复用每日备份逻辑，进行中的备份自动合并（见 doBackup）
 export async function POST() {
+  if (isDemoMode()) return demoForbiddenResponse();
   try {
     await doBackup();
     return NextResponse.json({ ok: true, backedUpAt: getLastBackupAt() ?? Date.now() });

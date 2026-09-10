@@ -1,14 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { createApiToken, listApiTokens, revokeApiToken, API_TOKEN_SCOPES } from "@/lib/api-token";
+import { demoForbiddenResponse, isDemoMode } from "@/lib/demo-guard";
 
 const createSchema = z.object({ scope: z.enum(API_TOKEN_SCOPES) });
 
 export async function GET() {
+  if (isDemoMode()) return demoForbiddenResponse();
   return NextResponse.json({ tokens: listApiTokens().map((t) => ({ id: t.id, scope: t.scope, prefix: t.tokenPrefix, last4: t.tokenLast4, createdAt: t.createdAt, lastUsedAt: t.lastUsedAt })) });
 }
 
 export async function POST(req: NextRequest) {
+  if (isDemoMode()) return demoForbiddenResponse();
   const parsed = createSchema.safeParse(await req.json().catch(() => null));
   if (!parsed.success) return NextResponse.json({ error: "权限范围无效" }, { status: 400 });
   const created = createApiToken(parsed.data.scope);
@@ -16,6 +19,7 @@ export async function POST(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
+  if (isDemoMode()) return demoForbiddenResponse();
   const id = req.nextUrl.searchParams.get("id");
   if (!id || !revokeApiToken(id)) return NextResponse.json({ error: "Token 不存在或已吊销" }, { status: 404 });
   return NextResponse.json({ ok: true });

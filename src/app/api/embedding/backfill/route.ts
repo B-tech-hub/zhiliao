@@ -4,6 +4,7 @@ import { getDb } from "@/db";
 import { notes } from "@/db/schema";
 import { enqueueNoteEmbedding } from "@/lib/notes";
 import { getEmbeddingConfig, isEmbeddingConfigured } from "@/lib/llm-config";
+import { demoForbiddenResponse, isDemoMode } from "@/lib/demo-guard";
 
 type Row = {
   embedding: Buffer | null;
@@ -47,10 +48,12 @@ function counts() {
 }
 
 export async function GET() {
+  if (isDemoMode()) return demoForbiddenResponse();
   return NextResponse.json({ ...counts(), configured: isEmbeddingConfigured() });
 }
 
 export async function POST() {
+  if (isDemoMode()) return demoForbiddenResponse();
   if (!isEmbeddingConfigured()) return NextResponse.json({ error: "Embedding 未配置" }, { status: 400 });
   const db = getDb();
   const cfg = getEmbeddingConfig();
