@@ -3,11 +3,11 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import type { Note } from "@/db/schema";
+import type { ClientNote } from "@/lib/client-note";
 import { EmptyNotes, TagChip, formatTime, noteDisplayTitle } from "@/components/note-card";
 import { ConfirmDialog } from "@/components/confirm-dialog";
 
-type InboxNote = Note & { tags: string[] };
+type InboxNote = ClientNote & { tags: string[] };
 
 interface TopicOption {
   id: string;

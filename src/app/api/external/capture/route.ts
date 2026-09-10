@@ -4,7 +4,7 @@ import { getDb } from "@/db";
 import { createNote, NoteWriteError } from "@/lib/note-write";
 import { authenticateApiToken, getBearerToken } from "@/lib/api-token";
 
-const schema = z.object({ content: z.string().min(1), topicId: z.string().optional() });
+const schema = z.object({ content: z.string().trim().min(1).max(100_000), topicId: z.string().optional() });
 
 export async function POST(req: NextRequest) {
   if (!authenticateApiToken(getBearerToken(req), "capture:write")) return NextResponse.json({ error: "无效或无权限的 Token" }, { status: 401 });

@@ -14,12 +14,13 @@ const demoEnv = {
   SESSION_SECRET: "zhiliao-demo-session-secret-0123",
   DATABASE_PATH: "./data-demo/db/app.db",
   UPLOAD_DIR: "./data-demo/uploads",
+  NOTES_EXPORT_DIR: "./data-demo/notes",
   LLM_BASE_URL: "http://127.0.0.1:8787/v1",
   LLM_API_KEY: "demo",
   LLM_MODEL: "mock",
 };
-// shell 里显式导出过的同名变量以用户为准；.env/.env.local 文件优先级低于此处注入的进程环境变量
-const env = { ...demoEnv, ...process.env };
+// Demo 的数据与凭据必须覆盖 shell/.env，避免误写正式目录；PORT 等未列出的变量仍可由用户覆盖。
+const env = { ...process.env, ...demoEnv };
 
 const children = [];
 let shuttingDown = false;
@@ -37,8 +38,14 @@ process.on("SIGTERM", () => shutdown(0));
 // 探测 8787 是否已有可用的 mock LLM（上次未退干净或用户手动起过时直接复用，避免 EADDRINUSE）
 async function probeMock() {
   try {
-    const res = await fetch("http://127.0.0.1:8787/v1/chat/completions", { method: "POST", body: "{}" });
-    return res.ok;
+    const res = await fetch("http://127.0.0.1:8787/v1/chat/completions", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ messages: [{ role: "user", content: "__zhiliao_mock_probe__" }] }),
+    });
+    if (!res.ok) return false;
+    const body = await res.json();
+    return body?.choices?.[0]?.message?.content === "__zhiliao_mock_pong__";
   } catch {
     return false;
   }

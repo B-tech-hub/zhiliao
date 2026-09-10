@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { useChatScope } from "@/components/chat/chat-scope";
 import { COMMAND_EVENTS } from "@/components/command-events";
 import { NewNoteForm } from "@/components/new-note-form";
@@ -41,6 +42,7 @@ function PlusIcon() {
    而劫持 fixed 定位的 transform 动画在 template.tsx 上、只包 <main> 的内容。
    判据是渲染位置，别照搬 CommandPalette——那一份渲染在页面内容里。 */
 export function QuickCapture({ topics, handwritingEnabled }: { topics: TopicOption[]; handwritingEnabled?: boolean }) {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   // 草稿托管在这里而不是表单里：表单随浮层开合挂载卸载，存在里面关一次就没了
   const [draft, setDraft] = useState("");
@@ -69,9 +71,16 @@ export function QuickCapture({ topics, handwritingEnabled }: { topics: TopicOpti
 
   // ⌘K 面板的「新建笔记」走同一条路径，两个入口行为一致
   useEffect(() => {
-    window.addEventListener(COMMAND_EVENTS.quickCapture, openOverlay);
-    return () => window.removeEventListener(COMMAND_EVENTS.quickCapture, openOverlay);
-  }, [openOverlay]);
+    const onQuickCapture = () => {
+      if (window.matchMedia?.("(max-width: 767px)").matches) {
+        router.push("/notes/new");
+        return;
+      }
+      openOverlay();
+    };
+    window.addEventListener(COMMAND_EVENTS.quickCapture, onQuickCapture);
+    return () => window.removeEventListener(COMMAND_EVENTS.quickCapture, onQuickCapture);
+  }, [openOverlay, router]);
 
   /* Esc 挂 window 的**捕获阶段**，且只在浮层打开时注册。
      不挂 window 冒泡：助手面板的监听在那儿，一起挂会一次 Esc 关掉两层。

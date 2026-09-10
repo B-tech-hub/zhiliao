@@ -10,14 +10,11 @@ import { listTopicsTool } from "./list-topics";
 import { readNoteTool } from "./read-note";
 import { searchNotesTool } from "./search-notes";
 import { updateMetaTool } from "./update-meta";
-import { ToolError, type AssistantTool, type ToolContext, type ToolOutcome } from "./types";
+import { MAX_TOOL_RESULT_CHARS, ToolError, type AssistantTool, type ToolContext, type ToolOutcome } from "./types";
 
 export type { AssistantTool, GeneratedImageRef, ToolContext, ToolOutcome, UndoPayload } from "./types";
-export { ToolError, fingerprint, metaFingerprint } from "./types";
+export { MAX_TOOL_RESULT_CHARS, ToolError, fingerprint, metaFingerprint } from "./types";
 export { MAX_IMAGES_PER_MESSAGE } from "./generate-image";
-
-// 单个工具结果回灌上限：多轮工具调用累积起来会撑爆上下文
-export const MAX_TOOL_RESULT_CHARS = 8000;
 
 export const ASSISTANT_TOOLS: AssistantTool[] = [
   searchNotesTool,

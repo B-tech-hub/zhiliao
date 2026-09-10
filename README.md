@@ -24,10 +24,12 @@
 
 ## 一键体验（无需 API Key）
 
+首次登录、首条笔记、AI 整理、主题与搜索的连续步骤，以及按症状排错，请先看[首次使用与故障排查教程](docs/首次使用与故障排查.md)。
+
 一条命令在本地体验完整的「随手记 → AI 自动归档 → 主题建议」流程。内置演示数据与本地 mock LLM，不需要申请任何 API Key，也不会发出任何外部请求：
 
 ```bash
-git clone https://github.com/B-tech-hub/zhiliao.git
+git clone --branch v0.6.0 --depth 1 https://github.com/B-tech-hub/zhiliao.git
 cd zhiliao && npm install
 npm run demo
 ```
@@ -92,7 +94,7 @@ Next.js 15（App Router，全栈单体）· TypeScript · Tailwind CSS 4 · Driz
 
 **25 篇架构决策记录（[ADR](docs/adr/)）**——每个取舍为什么这么定、当时否掉了什么、留下了什么代价，都写在里面。想学 Next.js 全栈的话，这里可能比源码本身更有用：从 [ADR-0001（LLM 配置为何存数据库）](docs/adr/0001-llm-config-in-db.md) 顺着读到 [ADR-0018（混合检索与向量存储）](docs/adr/0018-hybrid-search.md)、[ADR-0019（Token 与 MCP）](docs/adr/0019-external-access.md)，就是这个应用的完整演进史。
 
-其余专项文档集中在 [docs/](docs/README.md)：设计规范（含暗色模式 token 表）、Tailscale 部署手册、[备份与恢复](docs/备份与恢复.md)。领域术语见 [CONTEXT.md](CONTEXT.md)。
+其余专项文档集中在 [docs/](docs/README.md)：[开发规范](docs/开发规范.md)、[UI 规范](docs/UI规范.md)、Tailscale 部署手册和[备份与恢复](docs/备份与恢复.md)。领域术语见 [CONTEXT.md](CONTEXT.md)，Agent 入口见 [AGENTS.md](AGENTS.md)。
 
 ## 本地开发
 
@@ -108,12 +110,14 @@ npm run dev
 
 ## 部署（Docker）
 
-默认使用预构建镜像 [`ghcr.io/b-tech-hub/zhiliao`](https://github.com/B-tech-hub/zhiliao/pkgs/container/zhiliao)（amd64 / arm64），无需本地构建：
+**主路径：Docker 预构建镜像。** 固定使用 `ghcr.io/b-tech-hub/zhiliao:0.6.0`（amd64 / arm64），无需本地构建。源码安装是备用路径，请先 checkout `v0.6.0` tag：
 
 ```bash
 # 1. 下载 compose 文件与环境变量模板（或直接 git clone 整个仓库）
-curl -LO https://raw.githubusercontent.com/B-tech-hub/zhiliao/main/docker-compose.yml
-curl -Lo .env https://raw.githubusercontent.com/B-tech-hub/zhiliao/main/.env.example
+curl -L -o docker-compose.yml https://raw.githubusercontent.com/B-tech-hub/zhiliao/v0.6.0/docker-compose.yml
+curl -L -o .env https://raw.githubusercontent.com/B-tech-hub/zhiliao/v0.6.0/.env.example
+# Windows Docker Desktop 还需下载命名卷覆盖文件：
+curl -L -o docker-compose.win.yml https://raw.githubusercontent.com/B-tech-hub/zhiliao/v0.6.0/docker-compose.win.yml
 
 # 2. 编辑 .env：设置 APP_PASSWORD / SESSION_SECRET（LLM 可稍后在设置页配置）
 
@@ -127,7 +131,19 @@ docker compose up -d
 > `docker compose -f docker-compose.yml -f docker-compose.win.yml up -d`
 > Linux 服务器不受影响。
 
-数据全部落在宿主机 `./data/` 目录：
+`APP_PASSWORD` 和 `SESSION_SECRET` 是必填变量；应用监听 3000 端口，数据默认持久化在 `./data/db`、`./data/uploads` 和 `./data/notes`。手机安装 PWA 必须通过 HTTPS 访问；自托管可使用 Tailscale 或其他 HTTPS 反向代理，详见 [部署手册-tailscale.md](docs/部署手册-tailscale.md)。
+
+### 全新环境安装冒烟
+
+维护者可在 Docker 可用的机器上运行隔离冒烟（使用临时密码、named volume 和临时导出目录，不接触正式 `data/`、`.env` 或正式 Docker 卷）：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/smoke-fresh-install.ps1
+```
+
+脚本固定使用 `ghcr.io/b-tech-hub/zhiliao:0.6.0`，镜像不存在时先尝试拉取；会验证健康检查、登录、首条笔记、SQLite/上传目录、Markdown 导出和重启持久化，并生成不含密码/API Key 的记录。失败时脚本返回非零并输出容器状态与最近日志；使用 `-KeepResources` 可保留隔离资源和日志用于诊断，完成后执行脚本输出的 `docker compose ... down -v --remove-orphans` 清理。可用 `-Port 3301` 选择未占用的宿主端口。
+
+Linux/默认绑定挂载时数据落在宿主机 `./data/`；Windows Docker Desktop 叠加 `docker-compose.win.yml` 后，数据库和上传文件位于 `kb_db`、`kb_uploads` 命名卷，`./data/notes` 仍保存 Markdown 导出：
 
 | 路径 | 内容 |
 |---|---|
@@ -141,6 +157,10 @@ docker compose up -d
 ### 手机安装为 App（PWA）
 
 浏览器要求 PWA 必须运行在 HTTPS 下。单用户自用推荐 **Tailscale 组网**：免费获得 `*.ts.net` 域名与受信任证书，手机随处可访问且服务零公网暴露。完整步骤见 **[docs/部署手册-tailscale.md](docs/部署手册-tailscale.md)**。
+
+### 手机一键记录
+
+设置页可创建专用 `capture:write` Token，并在应用内先完成真实写入自测。iPhone 可按 [手机快捷记录指南](docs/手机快捷记录.md) 配置分享文本、分享网址和语音听写入口，从主屏幕、控制中心或分享菜单直接写入知了。Token 只允许创建笔记，不能读取知识库。
 
 ## 环境变量
 
@@ -209,6 +229,9 @@ docker compose up -d
 
 **缺陷修复**（不受冻结约束）
 
+当前工作区已修复搜索候选截断和长文续读，尚未发布。130 篇固定语料下，助手前五命中从 5/13 提升到 12/13；18902 字符的长文可通过续读完整还原。证据见 [130 篇隔离验收](docs/测试笔记隔离验收-2026-09-08.md)。剩余缺陷：
+
+- 自然问句中的常用词影响关键词排名：“文档给出的圆面积公式是什么？”的目标仍排第 15，关键词“圆面积公式”排第 1。需要单独评估词权重或停用词，原始验收问题继续保留。
 - 极短笔记的向量病理：正文只有两三个字的笔记，会在毫不相关的查询上排到第一。候选解法是按内容长度做分数惩罚，或设一个建向量的最小长度
 - 批量导入的增量导出性能：每篇新笔记都会触发一次全导出目录扫描；实测成本约为“笔记数 × 主题目录数 × 0.24 ms”，2000 篇 / 30 个主题会在主线程阻塞十余秒。新增笔记没有旧导出路径，应跳过清理扫描
 - 图像生成的异步接口适配（DashScope 那类「提交任务 → 轮询」的形态；当前只支持 OpenAI 兼容的同步接口，取舍见 [ADR-0011](docs/adr/0011-image-generation.md)）

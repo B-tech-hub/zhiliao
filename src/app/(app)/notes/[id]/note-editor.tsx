@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import type { Note } from "@/db/schema";
+import type { ClientNote } from "@/lib/client-note";
 import { BackButton } from "@/components/back-button";
 import { AskWithSourcesButton } from "@/components/chat/ask-with-sources";
 import { ConfirmDialog } from "@/components/confirm-dialog";
@@ -59,7 +59,7 @@ export function NoteEditor({
   backHref,
   mermaidEnabled,
 }: {
-  note: Note;
+  note: ClientNote;
   tags: string[];
   topics: TopicOption[];
   // 无浏览器历史时的返回兜底路径（服务端按所属主题算好传入）

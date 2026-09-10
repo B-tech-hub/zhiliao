@@ -273,6 +273,8 @@ components:
     padding: 64px
 ---
 
+> **文档状态：历史研究与实现记录。** 本文前半部分（Overview 至 Known Gaps）是 Apple 官网与商店页面的视觉研究，不是知了 App 的页面模板；后半附录记录 2026-08 的实装背景。知了页面的唯一执行标准是 [UI 规范](UI规范.md)，产品方向见 [知了产品视觉 PRD](产品规划/知了产品视觉PRD-v1.0.md)。发生冲突时以 UI 规范、产品 PRD 和当前源码事实为准，不采用营销页的大面积摄影、低密度整屏区块、胶囊 CTA、负字距或 18px 卡片圆角。
+
 ## Overview
 
 Apple's web presence is a masterclass in **reverent product photography framed by near-invisible UI**. Every page is a stack of edge-to-edge product "tiles" — alternating light and dark canvases, each centered on a hero headline, a one-line tagline, two tiny blue pill CTAs, and an impossibly crisp product render. Nothing competes with the product. Typography is confident but quiet; color is either pure white, an off-white parchment, or a near-black tile; interactive elements are a single, quiet blue.

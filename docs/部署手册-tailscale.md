@@ -491,6 +491,16 @@ docker compose -f docker-compose.yml -f docker-compose.win.yml up -d
 
 ---
 
+## 全新环境安装冒烟（维护者）
+
+需要证明安装路径可重复时，在仓库根目录执行：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/smoke-fresh-install.ps1
+```
+
+脚本使用固定 `v0.6.0` 镜像（本地不存在时尝试拉取）、临时 Compose project、named volume 和临时 Markdown 目录，验证 `/api/healthz`、登录、首条笔记、SQLite/上传目录、导出和重启持久化。它不会读取正式 `.env`、`data/` 或正式 Docker 卷；失败时返回非零并输出容器状态与日志，在验收记录中写明环境、版本、端口、耗时和清理命令。需要排查时加 `-KeepResources` 保留临时资源；不要把一次 `npm run dev` 运行结果替代 Docker 安装验收。
+
 ## 第 9 章：常见问题（按症状查）
 
 ### Q1：Docker Desktop 装不上 / 起不来（弹 WSL 或 Virtualization 报错、鲸鱼图标一直转）

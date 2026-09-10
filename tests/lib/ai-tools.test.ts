@@ -302,11 +302,14 @@ describe("search_notes / read_note / list_topics", () => {
     expect(r.noteIds).toEqual([noteId]);
   });
 
-  it("read_note 截断超长正文", async () => {
+  it("read_note 为超长正文返回续读位置", async () => {
     const created = await call("create_note", { content: "长".repeat(9000) });
     const r = await call("read_note", { noteId: created.noteIds![0] });
-    expect(r.content).toContain("已截断");
-    expect(r.content.length).toBeLessThan(9000);
+    expect(r.content).toContain("nextOffset: 6000");
+    expect(r.content.length).toBeLessThan(8000);
+    const next = await call("read_note", { noteId: created.noteIds![0], offset: 6000 });
+    expect(next.content).toContain("nextOffset: null");
+    expect(next.content).toContain(`正文:\n${"长".repeat(3000)}`);
   });
 
   it("list_topics 含系统主题与笔记计数", async () => {

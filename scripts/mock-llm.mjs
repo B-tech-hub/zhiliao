@@ -227,6 +227,12 @@ const server = http.createServer((req, res) => {
     const withImage = hasImagePart(lastUser?.content);
     const isChat = system.includes("个人知识库的 AI 助手") || withImage;
 
+    if (user === "__zhiliao_mock_probe__") {
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ choices: [{ message: { role: "assistant", content: "__zhiliao_mock_pong__" } }] }));
+      return;
+    }
+
     /* 工具调用优先，但只在这一轮里调一次：消息里已经有 tool 结果时改回文本，
        模拟真实模型「拿到结果就总结」的行为。否则每轮都发新调用，
        助手的循环会一路跑到轮次上限，端到端验证永远看不到收尾文本。

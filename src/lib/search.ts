@@ -64,7 +64,7 @@ export function rebuildFtsIfNeeded(db: DB): void {
 
 // 关键词搜索：分词后 MATCH，bm25 加权（标题 > 标签 > 正文）；
 // 1 字查询或 MATCH 无结果时降级 LIKE。返回有序 noteId 与查询词（供前端高亮）。
-// allowedIds 限定候选范围（来源问答）：先多取再过滤，避免前 limit 条恰好都在范围外时颗粒无收。
+// allowedIds 限定候选范围（来源问答）：必须在排序和截断之前过滤来源与回收站。
 export function searchNoteIds(
   query: string,
   limit = 50,
@@ -80,7 +80,9 @@ export function searchNoteIds(
     .map((t) => t.trim())
     .filter((t) => t && !/^[\s\p{P}]+$/u.test(t));
 
-  const fetchLimit = allowedIds ? Math.max(limit * 10, 200) : limit;
+  // 用 JSON 数组绑定来源，避免来源较多时超过 SQL 参数数量上限。
+  const scopeFilter = allowedIds ? " AND notes.id IN (SELECT value FROM json_each(?))" : "";
+  const scopeArgs = allowedIds ? [JSON.stringify([...allowedIds])] : [];
   let ids: string[] = [];
   const scores: Record<string, number> = {};
   if (q.length > 1 && terms.length > 0) {
@@ -91,15 +93,23 @@ export function searchNoteIds(
         sqlite
           .prepare(
             `SELECT note_id, bm25(notes_fts, 0, 5.0, 1.0, 3.0) AS rank
-             FROM notes_fts WHERE notes_fts MATCH ? LIMIT ?`,
+             FROM notes_fts JOIN notes ON notes.id = notes_fts.note_id
+             WHERE notes_fts MATCH ? AND notes.deleted_at IS NULL${scopeFilter}
+             ORDER BY rank LIMIT ?`,
           )
-          .all(match, fetchLimit) as { note_id: string; rank: number }[]
+          .all(match, ...scopeArgs, limit) as { note_id: string; rank: number }[]
       );
       const termHit = new Map<string, number>();
+      // 只统计已选候选的完整命中数，不能再次按索引顺序截断单词结果。
+      const candidateIds = JSON.stringify(rows.map((row) => row.note_id));
+      const termQuery = sqlite.prepare(
+        `SELECT note_id FROM notes_fts WHERE notes_fts MATCH ?
+         AND note_id IN (SELECT value FROM json_each(?))`,
+      );
       for (const term of terms) {
         const one = `"${term.replace(/"/g, '""')}"`;
         try {
-          const hitRows = sqlite.prepare("SELECT note_id FROM notes_fts WHERE notes_fts MATCH ? LIMIT ?").all(one, fetchLimit) as { note_id: string }[];
+          const hitRows = termQuery.all(one, candidateIds) as { note_id: string }[];
           for (const row of hitRows) termHit.set(row.note_id, (termHit.get(row.note_id) ?? 0) + 1);
         } catch { /* 单词异常时沿用 OR 结果 */ }
       }
@@ -113,7 +123,6 @@ export function searchNoteIds(
     } catch {
       ids = [];
     }
-    if (allowedIds) ids = ids.filter((id) => allowedIds.has(id));
   }
 
   if (ids.length === 0) {
@@ -122,15 +131,13 @@ export function searchNoteIds(
     ids = (
       sqlite
         .prepare(
-          `SELECT id FROM notes WHERE (title LIKE ? OR content LIKE ?) AND deleted_at IS NULL
+          `SELECT id FROM notes WHERE (title LIKE ? OR content LIKE ?) AND deleted_at IS NULL${scopeFilter}
            ORDER BY updated_at DESC LIMIT ?`,
         )
-        .all(like, like, fetchLimit) as { id: string }[]
+        .all(like, like, ...scopeArgs, limit) as { id: string }[]
     ).map((r) => r.id);
-    if (allowedIds) ids = ids.filter((id) => allowedIds.has(id));
     ids.forEach((id, index) => { scores[id] = 1 / (index + 1); });
   }
-  if (allowedIds) ids = ids.slice(0, limit);
 
   // 高亮词按长度降序，避免长词被短词拆散
   const highlightTerms = [...new Set([q, ...terms])].sort((a, b) => b.length - a.length);

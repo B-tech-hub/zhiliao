@@ -4,10 +4,9 @@
 # 结束体验：docker compose -f docker-compose.demo.yml down -v（-v 一并清空演示数据）
 services:
   app:
-    image: ghcr.io/b-tech-hub/zhiliao:latest
+    image: ghcr.io/b-tech-hub/zhiliao:0.6.0
     # 想本地构建镜像时，注释掉上面 image 行并取消下一行注释：
     # build: .
-    container_name: zhiliao-demo
     restart: unless-stopped
     depends_on:
       - mockllm
@@ -25,12 +24,12 @@ services:
       # 命名卷：兼顾 Windows（SQLite WAL 不支持绑定挂载）与演示数据隔离
       - demo_db:/data/db
       - demo_uploads:/data/uploads
+      - demo_notes:/data/notes
 
   # 本地 mock LLM：复用同一镜像内置的零依赖脚本，模拟分类/聚类结果
   mockllm:
-    image: ghcr.io/b-tech-hub/zhiliao:latest
+    image: ghcr.io/b-tech-hub/zhiliao:0.6.0
     # build: .
-    container_name: zhiliao-demo-mockllm
     restart: unless-stopped
     command: ["node", "scripts/mock-llm.mjs"]
     healthcheck:
@@ -40,3 +39,4 @@ services:
 volumes:
   demo_db:
   demo_uploads:
+  demo_notes:

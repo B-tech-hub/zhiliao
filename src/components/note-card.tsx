@@ -1,9 +1,9 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import type { Note } from "@/db/schema";
+import type { ClientNote } from "@/lib/client-note";
 
 // 笔记摘要行：优先标题，其次内容首行
-export function noteDisplayTitle(note: Pick<Note, "title" | "content">): string {
+export function noteDisplayTitle(note: Pick<ClientNote, "title" | "content">): string {
   if (note.title) return note.title;
   const firstLine = note.content.split("\n").find((l) => l.trim());
   return (firstLine ?? "（空笔记）").replace(/^#+\s*/, "").slice(0, 40);
@@ -42,7 +42,7 @@ export function NoteCard({
   tags,
   action,
 }: {
-  note: Note;
+  note: ClientNote;
   tags: string[];
   action?: ReactNode;
 }) {

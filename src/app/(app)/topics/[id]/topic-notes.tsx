@@ -2,11 +2,11 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import type { Note } from "@/db/schema";
+import type { ClientNote } from "@/lib/client-note";
 import { NoteCard, noteDisplayTitle } from "@/components/note-card";
 import { ConfirmDialog } from "@/components/confirm-dialog";
 
-type TopicNote = Note & { tags: string[] };
+type TopicNote = ClientNote & { tags: string[] };
 
 // 主题页笔记列表：卡片右上角快捷删除（常显小按钮，兼容移动端无 hover）
 export function TopicNotes({ notes }: { notes: TopicNote[] }) {

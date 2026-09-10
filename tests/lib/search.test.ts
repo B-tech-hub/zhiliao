@@ -34,6 +34,57 @@ describe("search", () => {
     expect(ids).toContain("n1");
   });
 
+  it("来源外匹配超过旧候选上限时，仍能找到来源内的多词结果", () => {
+    for (let i = 0; i < 205; i++) {
+      insertNote(`outside-${i}`, "量子领域的计算研究");
+      refreshNoteFts(getDb(), `outside-${i}`);
+    }
+    insertNote("inside", "量子领域的计算研究");
+    refreshNoteFts(getDb(), "inside");
+
+    // 故意用非连续的词，避免 LIKE 降级掩盖 FTS 候选漏检。
+    const result = searchNoteIds("量子 计算", 5, new Set(["inside"]));
+    expect(result.ids).toEqual(["inside"]);
+    expect(Object.keys(result.scores ?? {})).toEqual(["inside"]);
+  });
+
+  it("来源内搜索不返回来源外的分数", () => {
+    for (const id of ["inside", "outside"]) {
+      insertNote(id, "羽毛球训练记录");
+      refreshNoteFts(getDb(), id);
+    }
+    const result = searchNoteIds("羽毛球", 5, new Set(["inside"]));
+    expect(result.ids).toEqual(["inside"]);
+    expect(Object.keys(result.scores ?? {})).toEqual(["inside"]);
+    expect(searchNoteIds("羽毛球", 5, new Set()).ids).toEqual([]);
+  });
+
+  it("LIKE 降级先限定来源，较新的来源外笔记不能挤掉旧来源", () => {
+    insertNote("inside", "羽毛球训练记录", { updatedAt: 1 });
+    for (let i = 0; i < 205; i++) {
+      insertNote(`outside-${i}`, "羽毛球训练记录", { updatedAt: i + 2 });
+    }
+
+    const result = searchNoteIds("球", 5, new Set(["inside"]));
+    expect(result.ids).toEqual(["inside"]);
+    expect(Object.keys(result.scores ?? {})).toEqual(["inside"]);
+    expect(searchNoteIds("球", 5, new Set()).ids).toEqual([]);
+  });
+
+  it("失步索引中的回收站和已删除笔记不占用候选名额", () => {
+    for (const id of ["trash", "missing", "active"]) {
+      insertNote(id, "量子领域的计算研究");
+      refreshNoteFts(getDb(), id);
+    }
+    // 绕过正常删除路径，模拟索引尚未清理的状态。
+    getDb().update(notes).set({ deletedAt: Date.now() }).where(eq(notes.id, "trash")).run();
+    getDb().delete(notes).where(eq(notes.id, "missing")).run();
+
+    const result = searchNoteIds("量子 计算", 1);
+    expect(result.ids).toEqual(["active"]);
+    expect(Object.keys(result.scores ?? {})).toEqual(["active"]);
+  });
+
   it("查询词包含引号不抛异常（FTS 语法注入防护）", () => {
     insertNote("n1", "普通内容");
     refreshNoteFts(getDb(), "n1");

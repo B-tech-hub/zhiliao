@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>知了手机快捷记录</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --canvas: #f5f5f7;
+      --surface: #ffffff;
+      --fill: #ececf0;
+      --ink: #1d1d1f;
+      --muted: #6e6e73;
+      --line: #d9d9de;
+      --action: #0066cc;
+      --danger: #b42318;
+      --code: #262628;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        color-scheme: dark;
+        --canvas: #000000;
+        --surface: #1c1c1e;
+        --fill: #2c2c2e;
+        --ink: #f5f5f7;
+        --muted: #a1a1a6;
+        --line: #38383a;
+        --action: #2997ff;
+        --danger: #ff6961;
+        --code: #f5f5f7;
+      }
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--canvas);
+      color: var(--ink);
+      font-family: Inter, "Noto Sans SC", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+      letter-spacing: 0;
+    }
+    a { color: var(--action); }
+    header, main, footer { width: min(100% - 32px, 980px); margin-inline: auto; }
+    header { padding: 64px 0 40px; border-bottom: 1px solid var(--line); }
+    h1 { margin: 0; font-size: clamp(32px, 6vw, 52px); line-height: 1.12; letter-spacing: 0; }
+    header p { max-width: 680px; margin: 18px 0 0; color: var(--muted); font-size: 18px; }
+    main { padding: 24px 0 72px; }
+    section { padding: 36px 0; border-bottom: 1px solid var(--line); }
+    h2 { margin: 0 0 14px; font-size: 24px; line-height: 1.3; letter-spacing: 0; }
+    h3 { margin: 28px 0 10px; font-size: 18px; letter-spacing: 0; }
+    p { margin: 10px 0; }
+    ol, ul { margin: 14px 0; padding-left: 24px; }
+    li + li { margin-top: 8px; }
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1px;
+      margin-top: 28px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--line);
+    }
+    .summary div { min-width: 0; padding: 18px; background: var(--surface); }
+    .summary strong { display: block; margin-bottom: 4px; }
+    .summary span { color: var(--muted); font-size: 14px; }
+    .shot {
+      display: block;
+      width: 100%;
+      margin: 20px 0 8px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--surface);
+    }
+    .caption { color: var(--muted); font-size: 14px; }
+    .notice { margin: 18px 0; padding: 14px 16px; border-left: 3px solid var(--action); background: var(--surface); }
+    .warning { border-left-color: var(--danger); }
+    code, pre { font-family: "JetBrains Mono", "Cascadia Code", Consolas, monospace; }
+    code { color: var(--code); }
+    pre {
+      overflow-x: auto;
+      margin: 16px 0;
+      padding: 16px;
+      border-radius: 8px;
+      background: var(--fill);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    table { width: 100%; border-collapse: collapse; margin-top: 16px; font-size: 14px; }
+    th, td { padding: 12px 10px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+    th { font-weight: 600; }
+    footer { padding: 28px 0 48px; color: var(--muted); font-size: 14px; }
+    @media (max-width: 720px) {
+      header { padding-top: 40px; }
+      .summary { grid-template-columns: 1fr; }
+      section { padding: 28px 0; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>知了手机快捷记录</h1>
+    <p>从分享菜单、主屏幕或控制中心直接记录。笔记先可靠保存，再由现有 AI 流程整理。</p>
+    <div class="summary" aria-label="首版能力">
+      <div><strong>只写入</strong><span>专用 Token 不能读取知识库</span></div>
+      <div><strong>先自测</strong><span>在设置页验证真实接口</span></div>
+      <div><strong>失败保留</strong><span>应用内输入不会因失败清空</span></div>
+    </div>
+  </header>
+
+  <main>
+    <section>
+      <h2>开始前</h2>
+      <p>手机必须能通过 HTTPS 访问知了。推荐使用 Tailscale 提供的 <code>*.ts.net</code> 地址，并保持运行知了的电脑或服务器在线。</p>
+      <div class="notice warning"><strong>不要使用 localhost。</strong>手机里的 localhost 指手机本身，不是运行知了的电脑。</div>
+    </section>
+
+    <section>
+      <h2>创建手机专用 Token</h2>
+      <ol>
+        <li>进入知了“设置”，找到“外部接入”。</li>
+        <li>用途选择“手机快捷记录（只写入）”。</li>
+        <li>点击“创建 Token”，立即复制明文。</li>
+      </ol>
+      <img class="shot" src="guides/mobile-capture/token-created-desktop-light.png" alt="设置页创建手机快捷记录 Token 后显示复制和自测入口">
+      <p class="caption">截图中的 Token 已脱敏。自己的 Token 不要放进截图或共享模板。</p>
+    </section>
+
+    <section>
+      <h2>先在知了中验证</h2>
+      <p>在“写入一条真实笔记”中输入内容并点击“写入知识库”。成功后可以直接打开新笔记，失败时输入内容仍会保留。</p>
+      <img class="shot" src="guides/mobile-capture/capture-success-mobile-light.png" alt="手机视口下的写入成功状态和打开笔记入口">
+      <p class="caption">“已保存”和“AI 已整理”是两个状态。未配置模型不会影响笔记保存。</p>
+    </section>
+
+    <section>
+      <h2>创建 iOS 快捷指令</h2>
+      <ol>
+        <li>新建快捷指令“记到知了”，开启“在共享表单中显示”，接收文本和 URL。</li>
+        <li>有共享输入时使用共享内容，没有输入时使用“听写文本”。</li>
+        <li>使用“询问输入”让用户发送前确认或修改正文。</li>
+        <li>发送前把正文拷贝到剪贴板，网络失败时可直接粘贴重试。</li>
+        <li>添加“获取 URL 内容”，地址使用设置页的捕获接口，方法选择 <code>POST</code>。</li>
+        <li>JSON 请求体增加 <code>content</code>，值使用确认后的正文。</li>
+        <li>请求头增加 <code>Authorization: Bearer &lt;Token&gt;</code> 和 <code>Content-Type: application/json</code>。</li>
+        <li>响应含 <code>id</code> 时显示“已记到知了”，响应含 <code>error</code> 时显示错误内容。</li>
+      </ol>
+      <div class="notice">设置页的“复制请求信息”会一次复制 URL、方法、请求头和请求体结构。</div>
+      <pre>POST https://你的实例/api/external/capture
+Authorization: Bearer zhl_xxx
+Content-Type: application/json
+
+{"content":"确认后的正文"}</pre>
+    </section>
+
+    <section>
+      <h2>放到常用入口</h2>
+      <ul>
+        <li>主屏幕：在快捷指令详情中选择“添加到主屏幕”。</li>
+        <li>控制中心：添加“快捷指令”控制并选择“记到知了”。</li>
+        <li>分享菜单：在任意应用分享文本或网页，选择“记到知了”。</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>遇到问题</h2>
+      <table>
+        <thead><tr><th>现象</th><th>原因</th><th>下一步</th></tr></thead>
+        <tbody>
+          <tr><td>401</td><td>Token 无效、已吊销或权限错误</td><td>创建新的手机快捷记录 Token</td></tr>
+          <tr><td>超时</td><td>服务未运行或网络不可达</td><td>确认主机在线并使用 Tailscale HTTPS 地址</td></tr>
+          <tr><td>证书错误</td><td>HTTPS 证书不受信任</td><td>重新核对 <code>*.ts.net</code> 地址</td></tr>
+          <tr><td>一直待整理</td><td>笔记已保存，模型或队列不可用</td><td>在设置页检查 AI 服务与任务状态</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>当前边界</h2>
+      <p>本首版完成应用内配置、自测、文档和自动测试。Apple 签名的快捷指令分享链接、真实 iPhone 蜂窝网络验证和连续 7 日真实使用仍需在 Apple 设备上完成。</p>
+      <p>完整技术指南位于仓库 <code>docs/手机快捷记录.md</code>。</p>
+    </section>
+  </main>
+
+  <footer>知了是单用户、自托管的个人知识库。Token 默认不存在，只有用户主动创建后才启用外部写入。</footer>
+</body>
+</html>

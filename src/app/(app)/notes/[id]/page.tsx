@@ -4,6 +4,7 @@ import { getDb } from "@/db";
 import { notes, topics } from "@/db/schema";
 import { getTagsForNotes } from "@/lib/notes";
 import { isFeatureEnabled } from "@/lib/feature-flags";
+import { toClientNote } from "@/lib/client-note";
 import { ChatScopeBinder } from "@/components/chat/chat-scope";
 import { NoteEditor } from "./note-editor";
 
@@ -35,7 +36,7 @@ export default async function NotePage({ params }: { params: Promise<{ id: strin
 
   return (
     <>
-      <div className="note-detail"><NoteEditor note={note} tags={tagMap.get(id) ?? []} topics={topicRows} backHref={backHref} mermaidEnabled={isFeatureEnabled(db, "mermaid")} /></div>
+      <div className="note-detail"><NoteEditor note={toClientNote(note)} tags={tagMap.get(id) ?? []} topics={topicRows} backHref={backHref} mermaidEnabled={isFeatureEnabled(db, "mermaid")} /></div>
       {/* 把这条笔记登记为助手的上下文附件；助手面板本身挂在 (app)/layout */}
       <ChatScopeBinder
         type="note"

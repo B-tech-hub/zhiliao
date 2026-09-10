@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { useTheme } from "next-themes";
 import { ConfirmDialog } from "@/components/confirm-dialog";
 import { formatTime } from "@/components/note-card";
+import { ApiTokenSection, type ApiTokenInfo } from "./api-token-section";
 // 只取类型：feature-flags 会经 llm-config 牵进 better-sqlite3，不能进客户端产物
 import type { FeatureFlags, FeatureKey } from "@/lib/feature-flags";
 
@@ -95,21 +96,7 @@ interface ReviewInfo {
   lastWeek: string | null;
 }
 
-interface ApiTokenInfo { id: string; scope: string; prefix: string; last4: string; createdAt: number; lastUsedAt: number | null }
 interface CorrectionInfo { enabled: boolean; count: number }
-
-function ApiTokenSection({ initial }: { initial: ApiTokenInfo[] }) {
-  const [tokens, setTokens] = useState(initial);
-  const [scope, setScope] = useState("capture:write");
-  const [newToken, setNewToken] = useState("");
-  const [busy, setBusy] = useState(false);
-  async function create() {
-    setBusy(true); setNewToken("");
-    try { const r = await fetch("/api/settings/tokens", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ scope }) }); const d = await r.json(); if (r.ok) { setNewToken(d.token); setTokens((v) => [...v, d.tokenInfo]); } } finally { setBusy(false); }
-  }
-  async function revoke(id: string) { await fetch(`/api/settings/tokens?id=${encodeURIComponent(id)}`, { method: "DELETE" }); setTokens((v) => v.filter((t) => t.id !== id)); }
-  return <section><h2 className="mb-3 text-[21px] font-semibold tracking-[-0.374px]">外部接入</h2><div className="rounded-card bg-surface p-6 text-[14px]"><p className="text-ink-48">Token 默认不存在。创建后明文只显示一次。</p><div className="mt-3 flex flex-wrap gap-3"><select value={scope} onChange={(e) => setScope(e.target.value)} className="h-[40px] rounded-utility border border-hairline bg-surface px-3"><option value="capture:write">快速捕获（写入）</option><option value="knowledge:read">知识读取（搜索、MCP）</option></select><button onClick={create} disabled={busy} className="rounded-utility bg-cta px-[22px] py-[8px] text-cta-ink">{busy ? "生成中…" : "创建 Token"}</button></div>{newToken && <p className="mt-3 break-all rounded-utility bg-fill p-3 font-mono text-[12px]">{newToken}</p>}<div className="mt-4 space-y-2">{tokens.map((t) => <div key={t.id} className="flex flex-wrap items-center justify-between gap-2 border-t border-divider pt-2"><span>{t.scope} · {t.prefix}••••{t.last4}</span><button onClick={() => revoke(t.id)} className="text-danger">吊销</button></div>)}</div></div></section>;
-}
 
 function CorrectionSection({ initial }: { initial: CorrectionInfo }) {
   const [enabled, setEnabled] = useState(initial.enabled);
@@ -783,7 +770,7 @@ export function SettingsPanel({
   }
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-10 md:pr-28 2xl:pr-0">
       <section>
         <header className="mb-8">
           <p className="mb-2 text-[12px] font-semibold tracking-[0.06em] text-ink-48">知了</p>

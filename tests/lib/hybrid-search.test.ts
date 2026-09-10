@@ -44,6 +44,21 @@ beforeEach(() => {
 afterEach(() => vi.unstubAllGlobals());
 
 describe("混合检索的最小可信证明", () => {
+  it("助手只取 8 条时，后写入的强相关笔记仍排在前面", async () => {
+    for (let i = 0; i < 55; i++) {
+      insertNote(`early-${i}`, "模型 学习");
+      refreshNoteFts(getDb(), `early-${i}`);
+    }
+    insertNote("target", "BERT 模型 学习", { title: "BERT 模型 学习" });
+    refreshNoteFts(getDb(), "target");
+
+    const result = await hybridSearchNoteIds("BERT 模型 学习", 8);
+    expect(result.vectorEnabled).toBe(false);
+    expect(result.ids).toHaveLength(8);
+    // 同时防止逐词计数先截断：那会漏算 target 的两个常用词，重新把它排到后面。
+    expect(result.ids[0]).toBe("target");
+  });
+
   // 计划 §1：正文写「又摸鱼了一下午」，搜「拖延」要能召回——措辞完全不同
   it("口语化措辞的笔记能被语义相近的查询召回", async () => {
     enableEmbedding();

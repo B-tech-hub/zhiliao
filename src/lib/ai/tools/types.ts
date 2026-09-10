@@ -6,6 +6,9 @@ import { z } from "zod";
 import type { DB } from "@/db";
 import type { ToolDef } from "@/lib/llm";
 
+// 单个工具结果回灌上限；分页工具也据此为正文预留预算。
+export const MAX_TOOL_RESULT_CHARS = 8000;
+
 export class ToolError extends Error {}
 
 /* 状态指纹：撤销前比对，不一致说明笔记在助手写入之后又被改过。

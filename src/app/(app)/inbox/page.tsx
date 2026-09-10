@@ -2,6 +2,7 @@ import { and, asc, desc, eq, isNull } from "drizzle-orm";
 import { getDb } from "@/db";
 import { INBOX_TOPIC_ID, notes, topicSuggestions, topics } from "@/db/schema";
 import { getTagsForNotes } from "@/lib/notes";
+import { toClientNote } from "@/lib/client-note";
 import { InboxClient } from "./inbox-client";
 
 export const dynamic = "force-dynamic";
@@ -47,7 +48,7 @@ export default function InboxPage() {
 
   return (
     <InboxClient
-      notes={rows.map((n) => ({ ...n, tags: tagMap.get(n.id) ?? [] }))}
+      notes={rows.map((n) => ({ ...toClientNote(n), tags: tagMap.get(n.id) ?? [] }))}
       topics={topicRows}
       suggestion={suggestion}
     />

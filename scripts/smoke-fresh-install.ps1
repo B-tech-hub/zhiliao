@@ -13,7 +13,7 @@ $notesDir = Join-Path $work "notes"
 $envFile = Join-Path $work ".env"
 $composeFile = Join-Path $work "compose.yml"
 $failureLog = Join-Path $work "failure.log"
-$evidence = Join-Path $repoRoot "docs/验收记录-全新环境安装冒烟-2026-09-09.md"
+$evidence = Join-Path $repoRoot "docs/验收记录-全新环境安装冒烟-$stamp.md"
 $image = "ghcr.io/b-tech-hub/zhiliao:0.6.0"
 $smokePassword = "smoke-only-password"
 $smokeSessionSecret = "smoke-session-secret-0123456789abcdef"
@@ -83,14 +83,18 @@ function Write-Evidence([string]$Status, [string]$Failure = "") {
     "## 执行结果",
     ""
   )
-  $lines += @($steps | ForEach-Object { "- [x] $_" })
+  $lines += @($steps | ForEach-Object {
+    if ($_ -like "失败：*" -or $_ -like "清理失败：*") { "- [ ] $_" } else { "- [x] $_" }
+  })
   if ($Failure) {
+    $evidenceLog = Join-Path $repoRoot "docs/验收日志-全新环境安装冒烟-$stamp.txt"
+    if (Test-Path -LiteralPath $failureLog) { Copy-Item -LiteralPath $failureLog -Destination $evidenceLog -Force }
     $lines += @(
       "",
       "## 失败与恢复",
       "",
       "- 失败原因：$Failure",
-      "- 诊断日志：$failureLog（-KeepResources 时保留；默认清理后以终端输出为准）",
+      "- 诊断日志：$evidenceLog（临时目录日志：$failureLog）",
       "- 恢复：确认 Docker daemon、固定镜像和端口可用后重新执行脚本；必要时使用 -KeepResources 保留容器查看日志。"
     )
   }
@@ -182,6 +186,8 @@ volumes:
   $steps.Add("测试密码登录通过")
 
   $content = "Fresh install smoke $stamp"
+  $uploadMarker = "smoke-$stamp.txt"
+  $uploadContent = "upload persistence $stamp"
   $created = Invoke-WebRequest -Uri "http://127.0.0.1:$Port/api/notes" -Method Post `
     -WebSession $session -UseBasicParsing -ContentType "application/json" -Body (@{ content = $content } | ConvertTo-Json)
   if ($created.StatusCode -ne 201) { throw "首条笔记创建失败：HTTP $($created.StatusCode)" }
@@ -192,6 +198,7 @@ volumes:
 
   Test-ContainerPath "/data/db/app.db"
   Test-ContainerPath "/data/uploads"
+  Invoke-Compose @("exec", "-T", "app", "node", "-e", "require('fs').writeFileSync('/data/uploads/$uploadMarker', '$uploadContent')") | Out-Null
   $exportDir = (Invoke-Compose @("exec", "-T", "app", "node", "-e", "process.stdout.write(process.env.NOTES_EXPORT_DIR || '')")) -join ""
   if ($exportDir.Trim() -ne "/data/notes") { throw "NOTES_EXPORT_DIR 异常：$exportDir" }
   $steps.Add("SQLite 与上传目录存在，NOTES_EXPORT_DIR=/data/notes")
@@ -218,12 +225,18 @@ volumes:
   $persisted = @($listJson.notes | Where-Object { [string]$_.id -eq $noteId })
   if ($persisted.Count -ne 1) { throw "重启后未找到首条笔记：$noteId" }
   if ([string]$persisted[0].content -ne $content) { throw "重启后笔记正文不一致：$noteId" }
+  if ([string]$persisted[0].aiStatus -eq "done") { throw "未配置 AI 的笔记不应在冒烟期间完成整理：$noteId" }
+  $search = Invoke-WebRequest -Uri "http://127.0.0.1:$Port/api/search?q=Fresh%20install%20smoke" -WebSession $session -UseBasicParsing
+  $searchJson = $search.Content | ConvertFrom-Json
+  if (-not @($searchJson.results | Where-Object { [string]$_.id -eq $noteId })) { throw "重启后搜索未找到首条笔记：$noteId" }
+  Test-ContainerPath "/data/uploads/$uploadMarker"
+  $persistedUpload = (Invoke-Compose @("exec", "-T", "app", "node", "-e", "process.stdout.write(require('fs').readFileSync('/data/uploads/$uploadMarker', 'utf8'))")) -join ""
+  if ($persistedUpload -ne $uploadContent) { throw "重启后上传文件内容不一致：$uploadMarker" }
   if (-not (Test-Path -LiteralPath $export.FullName)) { throw "重启后 Markdown 导出文件丢失：$($export.FullName)" }
   $persistedExportContent = [IO.File]::ReadAllText($export.FullName, [Text.UTF8Encoding]::new($false))
   if ($persistedExportContent -notmatch [regex]::Escape($content)) { throw "重启后 Markdown 导出正文不一致：$($export.FullName)" }
-  $steps.Add("重启后健康检查、笔记读取、SQLite 与 Markdown 持久化通过")
+  $steps.Add("重启后健康检查、笔记读取、搜索、SQLite、上传文件与 Markdown 持久化通过")
 
-  Write-Evidence "通过"
   Write-Host "冒烟验收通过；证据：$evidence"
 } catch {
   $exitCode = 1
@@ -244,9 +257,17 @@ volumes:
     Write-Host "已保留隔离资源：$work"
     Write-Host "清理命令：docker compose --project-name $project --project-directory $work --env-file $envFile -f $composeFile down -v --remove-orphans"
   } else {
-    try { Invoke-Compose @("down", "-v", "--remove-orphans") | Out-Null } catch { $exitCode = 1; Write-Host "清理隔离资源失败：$($_.Exception.Message)" }
+    try { Invoke-Compose @("down", "-v", "--remove-orphans") | Out-Null }
+    catch {
+      $exitCode = 1
+      $cleanupFailure = $_.Exception.Message
+      $steps.Add("清理失败：$cleanupFailure")
+      Write-Host "清理隔离资源失败：$cleanupFailure"
+    }
     Remove-Item -LiteralPath $work -Recurse -Force -ErrorAction SilentlyContinue
   }
+  if ($exitCode -eq 0) { Write-Evidence "通过" }
+  elseif ($cleanupFailure) { Write-Evidence "失败（清理失败）" $cleanupFailure }
 }
 
 exit $exitCode

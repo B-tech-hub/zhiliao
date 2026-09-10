@@ -1,5 +1,9 @@
 # 项目协作说明
 
+## 项目规范
+
+进入仓库后先读取根目录 `AGENTS.md`。日常实现遵守 `docs/开发规范.md`；涉及页面、组件、交互或样式时同时遵守 `docs/UI规范.md`。产品范围仍以 README Roadmap、`CONTEXT.md` 和相关 ADR 为准。
+
 ## Agent skills
 
 ### Issue tracker

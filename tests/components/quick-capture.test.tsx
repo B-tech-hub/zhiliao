@@ -14,7 +14,10 @@ vi.mock("next/link", () => ({
 
 const replace = vi.fn();
 const refresh = vi.fn();
-vi.mock("next/navigation", () => ({ useRouter: () => ({ replace, refresh, push: vi.fn() }) }));
+const push = vi.fn();
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({ replace, refresh, push }),
+}));
 
 const TOPICS = [
   { id: "inbox", name: "收件箱", isSystem: 1 },
@@ -29,6 +32,7 @@ describe("QuickCapture", () => {
   beforeEach(() => {
     replace.mockReset();
     refresh.mockReset();
+    push.mockReset();
   });
 
   /* 焦点没进正文时，用户以为在记笔记，敲下的字其实落进了底层页面。
@@ -147,10 +151,22 @@ describe("QuickCapture", () => {
     expect(await screen.findByRole("dialog")).toBeTruthy();
   });
 
+  it("移动端命令面板的新建动作跳转整页", () => {
+    vi.stubGlobal("matchMedia", vi.fn(() => ({ matches: true })));
+    render(<QuickCapture topics={TOPICS} />);
+    fireEvent(window, new Event(COMMAND_EVENTS.quickCapture));
+    expect(push).toHaveBeenCalledWith("/notes/new");
+  });
+
   // 小屏不走浮层：整页形态在软键盘弹起时更好用
   it("移动端入口仍是指向 /notes/new 的整页链接", () => {
     render(<QuickCapture topics={TOPICS} />);
     expect(screen.getByRole("link", { name: "快速记录" }).getAttribute("href")).toBe("/notes/new");
+  });
+
+  it("设置页移动端仍保留快速记录悬浮入口", () => {
+    render(<QuickCapture topics={TOPICS} />);
+    expect(screen.getByRole("link", { name: "快速记录" })).toBeTruthy();
   });
 
   // 系统主题不在下拉里，预选它会让选择框显示空白

@@ -14,7 +14,7 @@ The same idea extends to reading it back: **you shouldn't have to guess the keyw
 
 Single-user by design. Next.js 15 + SQLite, PWA-ready, works with any OpenAI-compatible API.
 
-Full documentation is in Simplified Chinese — see [README.md](README.md). This page covers just enough to get you running.
+Full documentation is in Simplified Chinese — see [README.md](README.md). Contributors should start with [AGENTS.md](AGENTS.md), the [development standards](docs/开发规范.md), and the [UI standards](docs/UI规范.md). This page covers just enough to get you running.
 
 ![Demo: jot a note → AI files it → topic suggestions](docs/screenshots/demo.gif)
 
@@ -35,6 +35,7 @@ Bug fixes, documentation, packaging and operations are exempt and continue as us
 - Related notes while writing: ~0.9s after you stop typing, up to 8 semantically related notes appear in a sidebar (titles and excerpts only — your draft is never modified). With a chat model configured, it also points out which one contradicts your current conclusion
 - Learning from corrections: every time you fix a topic, title or tag, it is stored as a few-shot example (max 3 per field) injected into later prompts. Toggleable in settings
 - External access: create an API token in settings (**none exists by default**) — only a SHA-256 hash is stored and the plaintext is shown once. `capture:write` allows `POST /api/external/capture` for quick capture (iOS Shortcuts, mail, bots); `knowledge:read` allows `GET /api/external/knowledge` and read-only `search_knowledge` / `get_knowledge` tools over `/api/mcp` for MCP clients. MCP exposes the topic + AI-summary semantic layer, not raw CRUD, and no destructive operations
+- Mobile quick capture: create a write-only token, verify a real capture in Settings, then follow the [iOS Shortcuts guide](docs/手机快捷记录.md) to capture shared text, URLs, or dictation without opening the browser first
 - Incremental Markdown export: every change also writes `./data/notes/<topic>/<title>-<id>.md` in the background — write-only, conflict-free, so your text is never locked inside SQLite (point Obsidian straight at that folder)
 - AI assistant over the whole library: it can search, read, create, append to, re-file and delete notes, and fetch URLs you have pasted. Every write leaves an undoable card in the conversation; deletions require your confirmation. Vision requests use transient compressed copies. A per-message Deep Reasoning toggle uses a separately configured reasoning model, defaults off, is not persisted, and never exposes model chain-of-thought
 - Your data stays yours: one-click zip export (Markdown + display images, with HEIC originals under `assets/originals/`) and zip import for both Zhiliao exports and ordinary Markdown folders. Titles fall back from front matter to H1 to filename; topics accept `topic`, `category`, or the containing folder; content fingerprints prevent duplicate imports when no id exists. Manual backups and a 30-day trash bin are included
@@ -42,13 +43,15 @@ Bug fixes, documentation, packaging and operations are exempt and continue as us
 
 ## Try it in 1 minute (no API key)
 
+For the complete first-use path from login to a saved note, AI status, topic view, and search, see the [first-use and troubleshooting guide](docs/首次使用与故障排查.md) (Simplified Chinese).
+
 ```bash
-git clone https://github.com/B-tech-hub/zhiliao.git
+git clone --branch v0.6.0 --depth 1 https://github.com/B-tech-hub/zhiliao.git
 cd zhiliao && npm install
 npm run demo
 ```
 
-Open http://localhost:3000, password `demo`. Demo data and a local mock LLM are bundled — nothing leaves your machine. Delete `./data-demo/` to reset.
+Requires Node.js 22 or newer. Open http://localhost:3000, password `demo`. Demo data and a local mock LLM are bundled — nothing leaves your machine. Delete `./data-demo/` to reset.
 
 Prefer Docker? Download [docker-compose.demo.yml](docker-compose.demo.yml), then:
 
@@ -58,11 +61,13 @@ docker compose -f docker-compose.demo.yml up -d   # → http://localhost:3210
 
 ## Deploy with Docker
 
-Prebuilt images (amd64 / arm64) are published to `ghcr.io/b-tech-hub/zhiliao`:
+**Primary path: prebuilt Docker image.** Use the pinned `ghcr.io/b-tech-hub/zhiliao:0.6.0` image (amd64 / arm64). The source checkout is the fallback path and uses the `v0.6.0` tag.
 
 ```bash
-curl -LO https://raw.githubusercontent.com/B-tech-hub/zhiliao/main/docker-compose.yml
-curl -Lo .env https://raw.githubusercontent.com/B-tech-hub/zhiliao/main/.env.example
+curl -L -o docker-compose.yml https://raw.githubusercontent.com/B-tech-hub/zhiliao/v0.6.0/docker-compose.yml
+curl -Lo .env https://raw.githubusercontent.com/B-tech-hub/zhiliao/v0.6.0/.env.example
+# Windows Docker Desktop also needs the named-volume override:
+curl -L -o docker-compose.win.yml https://raw.githubusercontent.com/B-tech-hub/zhiliao/v0.6.0/docker-compose.win.yml
 # edit .env (APP_PASSWORD, SESSION_SECRET), then:
 docker compose up -d
 ```
@@ -70,6 +75,8 @@ docker compose up -d
 > ⚠️ Zhiliao needs a long-running process (in-process AI job queue + backup timers) — it cannot run on Vercel or other serverless platforms.
 >
 > On Windows Docker Desktop, add the named-volume override: `docker compose -f docker-compose.yml -f docker-compose.win.yml up -d` (bind mounts don't support SQLite WAL).
+
+`APP_PASSWORD` and `SESSION_SECRET` are required. Linux/default bind mounts persist data under `./data/db`, `./data/uploads`, and `./data/notes`; on Windows with the override, database and uploads use named volumes `kb_db` and `kb_uploads` while Markdown remains in `./data/notes`. The app listens on port 3000. Installing the app as a phone PWA requires HTTPS. For self-hosting, use Tailscale or another HTTPS reverse proxy; see [the deployment guide](docs/部署手册-tailscale.md).
 
 ## Minimal configuration
 

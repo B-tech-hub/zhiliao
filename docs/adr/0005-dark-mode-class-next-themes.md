@@ -19,7 +19,7 @@
 ## 前提约束（破坏即静默失效）
 
 - `.dark` 类必须挂在 `<html>`（`:root` 元素）上——`@theme` 变量由 Tailwind 输出在 `@layer theme` 的 `:root` 规则里，我们的覆盖块靠"未分层 CSS 胜过任何 @layer"+"同元素后来居上"两条保险生效。若未来把 `.dark` 挂到 `body`，或把覆盖块搬进某个 `@layer`，覆盖会静默失效。
-- 裸色类（`text-white`、`bg-white/10`、`bg-black/40` 等）仅允许出现在主题不变面（chrome、tile、accent 按钮、scrim 遮罩）上，其余一律使用语义 token——完整对照表见 docs/DESIGN.md 附录。
+- 裸色类（`text-white`、`bg-white/10`、`bg-black/40` 等）仅允许出现在主题不变面（chrome、tile、accent 按钮、scrim 遮罩）上，其余一律使用语义 token；当前执行规则和完整对照表见 `docs/UI规范.md`，历史背景见 `docs/DESIGN.md` 附录。
 
 ## 备选方案与否决理由
 

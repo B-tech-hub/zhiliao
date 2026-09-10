@@ -1,8 +1,8 @@
 #!/usr/bin/env node
-/* 设计系统门禁：把 docs/DESIGN.md 里的硬约束变成可执行检查。
+/* 设计系统门禁：把 docs/UI规范.md 里的硬约束变成可执行检查。
  *
  * 存在的理由：本项目的前端没有任何自动化保护，vitest 只收 tests/ 下的后端
- * 纯逻辑，改 Tailwind 类、改布局、换组件结构 CI 一律绿灯。DESIGN.md 附录原本
+ * 纯逻辑，改 Tailwind 类、改布局、换组件结构 CI 一律绿灯。历史 DESIGN.md 附录原本
  * 附了一条 grep 自查命令，但它有两处假阳性：一是 `bg-white(["\s/]|$)` 里的 `/`
  * 会误伤 chrome 面上完全合法的 `bg-white/10`；二是颜色字面量会命中平台元数据的
  * 必要输出。这份脚本是那条命令的可审计版本。
@@ -64,7 +64,7 @@ const ROUNDED_FULL_EXCEPTIONS = [
   },
 ];
 
-/* 每条规则对应 DESIGN.md 的一条硬约束。新增规则请同步更新文档，
+/* 每条规则对应 UI规范.md 的一条硬约束。新增规则请同步更新文档，
    否则门禁和文档会各说各话。 */
 const RULES = [
   {
@@ -185,7 +185,7 @@ if (roundedFullHits.length > 0) {
 }
 
 if (failed > 0) {
-  console.error(`设计系统门禁未通过：共 ${failed} 处违规。规则见 docs/DESIGN.md。`);
+  console.error(`设计系统门禁未通过：共 ${failed} 处违规。规则见 docs/UI规范.md。`);
   process.exit(1);
 }
 console.log(`设计系统门禁通过（检查了 ${files.length} 个文件）。`);

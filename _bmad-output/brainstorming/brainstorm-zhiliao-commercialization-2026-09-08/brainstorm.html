@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>知了 · 商业化航海图</title>
+  <style>
+    :root {
+      --ink: #15201e;
+      --paper: #f2efe7;
+      --paper-deep: #e6e0d3;
+      --mint: #9ccfc0;
+      --teal: #2d746c;
+      --coral: #d8664d;
+      --sun: #e4b854;
+      --white: #fffdf7;
+      --muted: #64736e;
+      --line: rgba(21, 32, 30, .18);
+      --shadow: 0 16px 38px rgba(21, 32, 30, .10);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: "Segoe UI", "Microsoft YaHei", sans-serif;
+      line-height: 1.5;
+    }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    a { color: inherit; }
+    .shell { width: min(1180px, calc(100% - 40px)); margin: 0 auto; }
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 74px;
+      border-bottom: 1px solid var(--line);
+    }
+    .brand { display: flex; align-items: center; gap: 12px; font-weight: 800; letter-spacing: .02em; }
+    .brand-mark {
+      width: 34px; height: 34px; display: grid; place-items: center;
+      border: 2px solid var(--ink); border-radius: 50%; font-size: 15px;
+      background: var(--sun); box-shadow: 4px 4px 0 var(--ink);
+    }
+    .brand small { display: block; color: var(--muted); font-size: 11px; font-weight: 600; letter-spacing: .12em; }
+    .topbar nav { display: flex; gap: 18px; color: var(--muted); font-size: 13px; }
+    .topbar nav a { text-decoration: none; }
+    .status {
+      padding: 7px 10px; border: 1px solid var(--line); border-radius: 999px;
+      background: var(--white); color: var(--teal); font-size: 12px; font-weight: 700;
+    }
+    .hero { padding: 76px 0 58px; position: relative; overflow: hidden; }
+    .hero-grid { display: grid; grid-template-columns: 1.12fr .88fr; gap: 54px; align-items: end; }
+    .eyebrow { margin: 0 0 18px; color: var(--coral); font-size: 12px; font-weight: 800; letter-spacing: .18em; text-transform: uppercase; }
+    h1 { max-width: 730px; margin: 0; font-size: clamp(42px, 7vw, 82px); line-height: .98; letter-spacing: -.035em; }
+    .hero-lead { max-width: 620px; margin: 28px 0 0; color: #3c4a46; font-size: clamp(18px, 2.2vw, 25px); line-height: 1.35; }
+    .hero-note { margin: 16px 0 0; color: var(--muted); font-size: 13px; }
+    .hero-card { padding: 24px; border: 1px solid var(--ink); background: var(--ink); color: var(--white); box-shadow: 10px 10px 0 var(--coral); }
+    .hero-card h2 { margin: 0; font-size: 15px; letter-spacing: .06em; }
+    .hero-card p { margin: 10px 0 22px; color: #d3ded9; font-size: 13px; }
+    .counter { display: flex; align-items: end; justify-content: space-between; gap: 18px; }
+    .counter strong { font-size: 58px; line-height: .9; color: var(--sun); }
+    .counter span { padding-bottom: 4px; color: #c5d1cc; font-size: 12px; }
+    .meter { height: 12px; margin: 20px 0 8px; border: 1px solid rgba(255,255,255,.35); background: rgba(255,255,255,.07); }
+    .meter > i { display: block; width: 0; height: 100%; background: var(--sun); transition: width .25s ease; }
+    .meter-label { display: flex; justify-content: space-between; color: #aebdb7; font-size: 11px; }
+    .hero-actions { display: flex; gap: 10px; margin-top: 26px; }
+    .button {
+      border: 1px solid var(--ink); padding: 10px 14px; background: var(--sun); color: var(--ink); font-size: 13px; font-weight: 800;
+      text-decoration: none; transition: transform .15s ease, background .15s ease;
+    }
+    .button:hover { transform: translate(-2px, -2px); }
+    .button.secondary { background: transparent; color: var(--ink); }
+    .section { padding: 74px 0; border-top: 1px solid var(--line); }
+    .section-head { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 30px; }
+    .section-kicker { margin: 0 0 8px; color: var(--teal); font-size: 12px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
+    h2 { margin: 0; font-size: clamp(27px, 4vw, 44px); line-height: 1.05; letter-spacing: -.02em; }
+    .section-head p { max-width: 360px; margin: 0; color: var(--muted); font-size: 13px; }
+    .rails { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; position: relative; }
+    .rail { min-height: 300px; padding: 24px; border: 1px solid var(--ink); background: var(--white); position: relative; overflow: hidden; transition: transform .2s ease, box-shadow .2s ease; }
+    .rail:hover, .rail.active { transform: translateY(-6px); box-shadow: var(--shadow); }
+    .rail:nth-child(1) { background: #d9eee7; }
+    .rail:nth-child(2) { background: #f5dbd0; }
+    .rail:nth-child(3) { background: #f6e6b9; }
+    .rail-no { display: inline-grid; place-items: center; width: 28px; height: 28px; border: 1px solid var(--ink); border-radius: 50%; font-size: 12px; font-weight: 800; }
+    .rail h3 { margin: 32px 0 8px; font-size: 24px; }
+    .rail .tagline { margin: 0 0 18px; color: #3b4a46; font-size: 14px; font-weight: 700; }
+    .rail ul { margin: 0; padding: 0; list-style: none; color: #44534f; font-size: 13px; }
+    .rail li { padding: 8px 0; border-top: 1px solid rgba(21, 32, 30, .15); }
+    .rail li::before { content: "↳ "; color: var(--coral); font-weight: 800; }
+    .rail-arrow { position: absolute; right: 18px; top: 20px; font-size: 24px; }
+    .flow-caption { margin: 18px 0 0; color: var(--muted); font-size: 12px; text-align: center; }
+    .signal-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; margin-top: 34px; border: 1px solid var(--ink); background: var(--ink); }
+    .signal { min-height: 104px; padding: 16px; background: var(--paper); }
+    .signal b { display: block; margin-bottom: 8px; color: var(--coral); font-size: 12px; }
+    .signal span { color: #43514e; font-size: 13px; }
+    .timeline { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); }
+    .phase { min-height: 310px; padding: 22px 24px 26px; border-right: 1px solid var(--ink); position: relative; }
+    .phase:last-child { border-right: 0; }
+    .phase:first-child { background: var(--white); }
+    .phase:nth-child(2) { background: #e0eee8; }
+    .phase:nth-child(3) { background: #fae8c9; }
+    .phase-time { color: var(--coral); font-size: 12px; font-weight: 800; letter-spacing: .13em; }
+    .phase h3 { margin: 40px 0 10px; font-size: 23px; }
+    .phase p { margin: 0 0 16px; color: #4b5955; font-size: 13px; }
+    .phase ol { margin: 0; padding-left: 18px; color: #354541; font-size: 13px; }
+    .phase li { margin: 9px 0; }
+    .phase .stamp { position: absolute; right: 18px; top: 17px; width: 45px; height: 45px; display: grid; place-items: center; border: 1px dashed var(--ink); border-radius: 50%; color: var(--teal); font-size: 11px; text-align: center; line-height: 1.05; transform: rotate(8deg); }
+    .personas { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .persona { padding: 20px; border-left: 5px solid var(--teal); background: var(--white); }
+    .persona:nth-child(2), .persona:nth-child(5) { border-left-color: var(--coral); }
+    .persona:nth-child(3), .persona:nth-child(6) { border-left-color: var(--sun); }
+    .persona h3 { margin: 0 0 7px; font-size: 17px; }
+    .persona p { margin: 0; color: #50605b; font-size: 13px; }
+    .persona em { display: block; margin-top: 14px; color: var(--coral); font-size: 12px; font-style: normal; font-weight: 800; }
+    .flip-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    .flip { min-height: 192px; padding: 18px; border: 1px solid var(--ink); background: var(--ink); color: var(--white); position: relative; cursor: pointer; transition: background .2s ease, color .2s ease; }
+    .flip:hover, .flip.open { background: var(--coral); }
+    .flip .front, .flip .back { transition: opacity .2s ease; }
+    .flip .back { display: none; }
+    .flip.open .front { display: none; }
+    .flip.open .back { display: block; }
+    .flip small { display: block; margin-bottom: 22px; color: var(--sun); font-size: 11px; font-weight: 800; letter-spacing: .1em; }
+    .flip.open small { color: var(--ink); }
+    .flip p { margin: 0; font-size: 14px; line-height: 1.4; }
+    .flip .hint { position: absolute; right: 14px; bottom: 12px; font-size: 11px; opacity: .65; }
+    .dashboard { display: grid; grid-template-columns: .93fr 1.07fr; gap: 28px; align-items: start; }
+    .controls { padding: 24px; border: 1px solid var(--ink); background: var(--ink); color: var(--white); }
+    .controls h3 { margin: 0 0 4px; font-size: 19px; }
+    .controls > p { margin: 0 0 24px; color: #b8c8c1; font-size: 12px; }
+    .control { margin: 20px 0; }
+    .control-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+    .control label { color: #d4dfda; font-size: 13px; }
+    .control output { color: var(--sun); font-size: 15px; font-weight: 800; }
+    input[type="range"] { width: 100%; height: 4px; margin-top: 10px; accent-color: var(--sun); }
+    .readout { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .decision { min-height: 90px; padding: 15px; border: 1px solid var(--line); background: var(--white); }
+    .decision b { display: block; margin-bottom: 7px; font-size: 12px; color: var(--teal); }
+    .decision span { color: #43514e; font-size: 13px; }
+    .decision.hot { border-color: var(--coral); background: #f9ddd3; }
+    .decision.hot b { color: var(--coral); }
+    .climax { padding: 50px 0 86px; border-top: 1px solid var(--line); background: var(--ink); color: var(--white); }
+    .climax .section-kicker { color: var(--sun); }
+    .climax h2 { max-width: 750px; }
+    .climax-intro { max-width: 610px; margin: 17px 0 38px; color: #c4d1cc; font-size: 15px; }
+    .principles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; border: 1px solid rgba(255,255,255,.35); background: rgba(255,255,255,.35); }
+    .principle { min-height: 180px; padding: 18px; background: var(--ink); }
+    .principle strong { display: block; margin-bottom: 24px; color: var(--sun); font-size: 30px; line-height: 1; }
+    .principle h3 { margin: 0 0 8px; font-size: 17px; }
+    .principle p { margin: 0; color: #becbc5; font-size: 13px; }
+    .climax-foot { display: flex; align-items: center; justify-content: space-between; gap: 25px; margin-top: 36px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,.25); }
+    .climax-foot p { max-width: 650px; margin: 0; color: #c4d1cc; font-size: 13px; }
+    .source { color: var(--sun); font-size: 11px; text-decoration: none; white-space: nowrap; }
+    footer { padding: 20px 0 34px; background: var(--ink); color: #879991; font-size: 11px; }
+    @media (max-width: 860px) {
+      .topbar nav { display: none; }
+      .hero-grid, .dashboard { grid-template-columns: 1fr; }
+      .hero { padding-top: 52px; }
+      .rails, .timeline, .personas { grid-template-columns: 1fr; }
+      .phase { min-height: auto; border-right: 0; border-bottom: 1px solid var(--ink); }
+      .phase:last-child { border-bottom: 0; }
+      .flip-grid { grid-template-columns: repeat(2, 1fr); }
+      .signal-strip { grid-template-columns: repeat(2, 1fr); }
+      .principles { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 520px) {
+      .shell { width: min(100% - 26px, 1180px); }
+      h1 { font-size: 47px; }
+      .section { padding: 54px 0; }
+      .flip-grid, .signal-strip, .readout, .principles { grid-template-columns: 1fr; }
+      .climax-foot { display: block; }
+      .source { display: block; margin-top: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="shell topbar">
+    <div class="brand">
+      <span class="brand-mark">知</span>
+      <div>知了<small>商业化航海图</small></div>
+    </div>
+    <nav aria-label="页面导航">
+      <a href="#model">三条轨道</a>
+      <a href="#route">90天节奏</a>
+      <a href="#dashboard">决策指挥台</a>
+    </nav>
+    <span class="status">自主模式 · 2026.09.08</span>
+  </header>
+
+  <main>
+    <section class="shell hero">
+      <div class="hero-grid">
+        <div>
+          <p class="eyebrow">从头脑风暴到可验证收入</p>
+          <h1>把可靠交付，变成可持续收入。</h1>
+          <p class="hero-lead">开源核心负责吸引，服务负责变现，托管保持候补。每一步都要经过真实使用与付费承诺的检验。</p>
+          <p class="hero-note">这不是功能清单，而是一张在边界内航行的实验地图。</p>
+          <div class="hero-actions">
+            <a class="button" href="#dashboard">打开决策指挥台</a>
+            <a class="button secondary" href="#model">查看收入轨道</a>
+          </div>
+        </div>
+        <aside class="hero-card" aria-label="100条真实笔记冻结闸门">
+          <h2>冻结闸门 / 真实笔记计数</h2>
+          <p>在达到 100 条真实笔记前，冻结新功能；继续验证需求、交付与付费意向。</p>
+          <div class="counter"><strong id="noteCount">0</strong><span>条 / 100 条</span></div>
+          <div class="meter"><i id="noteMeter"></i></div>
+          <div class="meter-label"><span id="gateState">闸门保持关闭</span><span>100 条</span></div>
+          <input id="noteSlider" type="range" min="0" max="100" value="0" aria-label="模拟真实笔记数量">
+        </aside>
+      </div>
+    </section>
+
+    <section class="section" id="model">
+      <div class="shell">
+        <div class="section-head">
+          <div><p class="section-kicker">01 / 商业化骨架</p><h2>三条轨道，先后有序。</h2></div>
+          <p>共同模式是：免费或开源核心吸引用户，再对托管、同步、AI 用量、支持与维护收费。</p>
+        </div>
+        <div class="rails" id="rails">
+          <article class="rail active" data-rail="core">
+            <span class="rail-no">A</span><span class="rail-arrow">↗</span>
+            <h3>开源核心</h3>
+            <p class="tagline">让人放心开始，也能随时带走。</p>
+            <ul><li>免费自托管，保持单用户核心</li><li>Markdown 导出与 SQLite 备份</li><li>严格来源问答，AI 不覆盖正文</li><li>Docker、PWA、手机捕获作为已有基础</li></ul>
+          </article>
+          <article class="rail" data-rail="service">
+            <span class="rail-no">B</span><span class="rail-arrow">↗</span>
+            <h3>服务变现</h3>
+            <p class="tagline">用户购买的是少折腾、少丢数据、快得到结果。</p>
+            <ul><li>安装、迁移、备份恢复演练</li><li>隐私配置审计与本地模型接入</li><li>按实例维护，按项目交付</li><li>先人工交付，工时沉淀为文档和脚本</li></ul>
+          </article>
+          <article class="rail" data-rail="hosted">
+            <span class="rail-no">C</span><span class="rail-arrow">↗</span>
+            <h3>托管候补</h3>
+            <p class="tagline">卖省运维，不卖数据锁定。</p>
+            <ul><li>只收集候补名单与预付意向</li><li>按实例、存储与 AI 成本分档</li><li>BYOK，平台不吞模型毛利风险</li><li>一键导出、完整备份、明确退出路径</li></ul>
+          </article>
+        </div>
+        <p class="flow-caption">开源核心 → 真实服务交付 → 证据足够时再评估托管；任何新功能都要回到这条顺序。</p>
+        <div class="signal-strip">
+          <div class="signal"><b>收入最小单位</b><span>不是功能，而是节省的时间、降低的风险、持续可用性。</span></div>
+          <div class="signal"><b>信任差异</b><span>来源边界可核验，数据可导出，AI 不改用户正文。</span></div>
+          <div class="signal"><b>收费边界</b><span>同步、发布、托管、优先支持、迁移与维护。</span></div>
+          <div class="signal"><b>产品边界</b><span>单用户自托管，可有多个独立实例，不引入账号体系。</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="route">
+      <div class="shell">
+        <div class="section-head">
+          <div><p class="section-kicker">02 / 从纪要编排的 90 天节奏</p><h2>先把服务卖出去，再决定自动化。</h2></div>
+          <p>三周最小实验先收集真实转化，后续用交付工时、访谈和承诺数做闸门。</p>
+        </div>
+        <div class="timeline">
+          <article class="phase"><span class="phase-time">第 01—21 天</span><span class="stamp">先测<br>转化</span><h3>摆出四个入口</h3><p>把想法变成可回复、可购买、可排队的动作。</p><ol><li>发布赞助页、安装服务页、候补托管表单</li><li>为 3 位用户免费安装，记录耗时与阻碍</li><li>开放 5 个付费迁移名额，记录来源格式与工时</li><li>邀请 10 位隐私敏感用户完成 7 天手机捕获挑战</li></ol></article>
+          <article class="phase"><span class="phase-time">第 22—60 天</span><span class="stamp">交付<br>找证据</span><h3>把答疑变成资产</h3><p>可靠交付是第一产品，重复问题要沉淀为文档和脚本。</p><ol><li>完成 15—20 次访谈，观察高频痛点</li><li>每周发布开发与数据透明报告</li><li>比较赞助转化、迁移付款、安装耗时与留存</li><li>记录支持工时，计算服务毛利</li></ol></article>
+          <article class="phase"><span class="phase-time">第 61—90 天</span><span class="stamp">过闸<br>才扩</span><h3>用门槛决定下一步</h3><p>证据不够时保持人工交付，避免商业化变成功能借口。</p><ol><li>3 个明确付费承诺后，才进入服务自动化评估</li><li>托管候补达到 10 个且有 3 个预付意向，才评估基础设施</li><li>支持工时超过收入 50%，先提价或缩小承诺</li><li>结果回写 #4、#5、#8、#9 路线与 #10 冻结闸门</li></ol></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="shell">
+        <div class="section-head">
+          <div><p class="section-kicker">03 / 谁会先付费</p><h2>同一个核心，不同的可靠交付。</h2></div>
+          <p>角色不是新产品线，而是用来辨认最早的服务入口。</p>
+        </div>
+        <div class="personas">
+          <article class="persona"><h3>个人开发者</h3><p>要一键安装、低月费、可迁移数据。</p><em>入口：托管试用 / Docker 支持</em></article>
+          <article class="persona"><h3>隐私敏感研究者</h3><p>要本地模型与清晰的来源边界。</p><em>入口：部署审计 / 本地模型接入</em></article>
+          <article class="persona"><h3>自由职业者</h3><p>要手机快速捕获与客户资料隔离。</p><em>入口：快捷记录配置包</em></article>
+          <article class="persona"><h3>写作者</h3><p>要长期检索，也不想正文被 AI 改写。</p><em>入口：备份与恢复承诺</em></article>
+          <article class="persona"><h3>教师 / 顾问</h3><p>要带引用的课程库问答与独立实例。</p><em>入口：资料导入 / 多实例托管</em></article>
+          <article class="persona"><h3>开源维护者</h3><p>要减少重复答疑，并让项目持续维护。</p><em>入口：GitHub Sponsors / 专属支持时段</em></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="shell">
+        <div class="section-head">
+          <div><p class="section-kicker">04 / 反向航标</p><h2>点开那些“最快失败”的路线。</h2></div>
+          <p>反向头脑风暴把边界写成了护栏：先看会怎样坏掉，再保留可交付的承诺。</p>
+        </div>
+        <div class="flip-grid">
+          <article class="flip"><div class="front"><small>失败 01</small><p>先开发多用户、RBAC 和团队协作。</p><span class="hint">点击翻面</span></div><div class="back"><small>反向结论</small><p>保持单用户核心，可允许多个独立实例，不引入账号体系。</p></div></article>
+          <article class="flip"><div class="front"><small>失败 02</small><p>把无限 AI 调用成本塞进低价订阅。</p><span class="hint">点击翻面</span></div><div class="back"><small>反向结论</small><p>采用 BYOK、额度和限额控制，让 AI 费用透明。</p></div></article>
+          <article class="flip"><div class="front"><small>失败 03</small><p>托管版取消 Markdown 导出和完整备份。</p><span class="hint">点击翻面</span></div><div class="back"><small>反向结论</small><p>所有托管与服务都保留一键导出和明确退出路径。</p></div></article>
+          <article class="flip"><div class="front"><small>失败 04</small><p>只发布功能列表，不展示真实任务结果。</p><span class="hint">点击翻面</span></div><div class="back"><small>反向结论</small><p>用公开 demo、安装时间和真实数据挑战观察激活。</p></div></article>
+          <article class="flip"><div class="front"><small>失败 05</small><p>等到 100 条笔记后才与用户谈价格。</p><span class="hint">点击翻面</span></div><div class="back"><small>反向结论</small><p>现在就测试安装、迁移、恢复服务和赞助支付意愿。</p></div></article>
+          <article class="flip"><div class="front"><small>失败 06</small><p>承诺无限免费安装和无限一对一答疑。</p><span class="hint">点击翻面</span></div><div class="back"><small>反向结论</small><p>把安装、迁移、审计、培训做成固定 SKU，控制支持范围。</p></div></article>
+          <article class="flip"><div class="front"><small>失败 07</small><p>把核心能力锁进闭源插件。</p><span class="hint">点击翻面</span></div><div class="back"><small>反向结论</small><p>免费开源核心，围绕结果交付与运维收费。</p></div></article>
+          <article class="flip"><div class="front"><small>失败 08</small><p>同时服务企业、学生、开发者和家庭。</p><span class="hint">点击翻面</span></div><div class="back"><small>反向结论</small><p>先访谈隐私敏感个人、自由职业者、研究人员三类人群。</p></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="dashboard">
+      <div class="shell">
+        <div class="section-head">
+          <div><p class="section-kicker">05 / 决策指挥台</p><h2>把想象换成几个可数的信号。</h2></div>
+          <p>拖动滑杆模拟证据积累。指挥台只复述纪要中的门槛，不替你做承诺。</p>
+        </div>
+        <div class="dashboard">
+          <div class="controls">
+            <h3>证据输入</h3>
+            <p>所有数字都是实验信号，不是虚构的经营现状。</p>
+            <div class="control"><div class="control-head"><label for="interviewSlider">完成访谈</label><output id="interviewValue">0 次</output></div><input id="interviewSlider" type="range" min="0" max="20" value="0"></div>
+            <div class="control"><div class="control-head"><label for="paidSlider">明确付费承诺</label><output id="paidValue">0 个</output></div><input id="paidSlider" type="range" min="0" max="5" value="0"></div>
+            <div class="control"><div class="control-head"><label for="waitlistSlider">托管候补</label><output id="waitlistValue">0 个</output></div><input id="waitlistSlider" type="range" min="0" max="15" value="0"></div>
+            <div class="control"><div class="control-head"><label for="prepaySlider">托管预付意向</label><output id="prepayValue">0 个</output></div><input id="prepaySlider" type="range" min="0" max="5" value="0"></div>
+            <div class="control"><div class="control-head"><label for="supportSlider">支持工时占收入</label><output id="supportValue">0%</output></div><input id="supportSlider" type="range" min="0" max="100" value="0"></div>
+          </div>
+          <div class="readout">
+            <div class="decision" id="decisionInterview"><b>访谈门槛</b><span>继续收集 15—20 次访谈证据。</span></div>
+            <div class="decision" id="decisionService"><b>服务自动化</b><span>先人工交付；出现 3 个付费承诺后再评估自动化。</span></div>
+            <div class="decision" id="decisionHosted"><b>托管基础设施</b><span>只收集候补与预付意向，不先建设云端能力。</span></div>
+            <div class="decision" id="decisionMargin"><b>交付毛利</b><span>记录工时；支持工时超过收入 50% 时先提价或缩小承诺。</span></div>
+            <div class="decision" id="decisionFeature"><b>新功能资格</b><span>连接到已付费用户痛点，并服从 100 条冻结规则。</span></div>
+            <div class="decision" id="decisionNext"><b>下一张牌</b><span>发布赞助页、安装服务页、候补托管表单，三周内观察真实转化。</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="climax">
+      <div class="shell">
+        <p class="section-kicker">SYNTHESIS / 终局不是扩张，是可信</p>
+        <h2>开源核心吸引人，服务把价值交付出去，托管只有在证据足够时才出现。</h2>
+        <p class="climax-intro">单用户、自托管与 100 条真实笔记冻结，不是商业障碍，而是把支持范围控制在能做到高质量的地方。真正的护城河，是可迁移的数据、可核验的来源和可恢复的结果。</p>
+        <div class="principles">
+          <article class="principle"><strong>01</strong><h3>收入线</h3><p>先围绕安装、迁移、恢复、审计与运维收费，不围绕功能开关收费。</p></article>
+          <article class="principle"><strong>02</strong><h3>信任线</h3><p>Markdown、SQLite、公开备份策略、BYOK 与来源边界构成可验证差异。</p></article>
+          <article class="principle"><strong>03</strong><h3>边界线</h3><p>单用户核心、独立实例、暂不做完整 SaaS；每项新提案都连接付费痛点。</p></article>
+          <article class="principle"><strong>04</strong><h3>验证线</h3><p>15—20 次访谈、3 个付费承诺、10 个候补与 3 个预付，组成阶段门槛。</p></article>
+        </div>
+        <div class="climax-foot"><p>这张图的唯一事实来源是本次自主头脑风暴记忆日志；它保留了发散，也把下一步压缩成可数的动作。</p><a class="source" href="./.memlog.md">查看 .memlog.md</a></div>
+      </div>
+    </section>
+  </main>
+  <footer><div class="shell">知了商业化与变现规划 · keepsake · 2026-09-08</div></footer>
+
+  <script>
+    // 交互只改变展示状态，不写入外部数据。
+    const $ = (id) => document.getElementById(id);
+    const noteSlider = $("noteSlider");
+    function updateNotes() {
+      const value = Number(noteSlider.value);
+      $("noteCount").textContent = value;
+      $("noteMeter").style.width = value + "%";
+      $("gateState").textContent = value >= 100 ? "闸门可重新评估" : "闸门保持关闭";
+      $("gateState").style.color = value >= 100 ? "#9ccfc0" : "#aebdb7";
+    }
+    noteSlider.addEventListener("input", updateNotes);
+    updateNotes();
+
+    document.querySelectorAll(".rail").forEach((rail) => {
+      rail.addEventListener("click", () => {
+        document.querySelectorAll(".rail").forEach((item) => item.classList.remove("active"));
+        rail.classList.add("active");
+      });
+    });
+    document.querySelectorAll(".flip").forEach((card) => card.addEventListener("click", () => card.classList.toggle("open")));
+
+    const sliders = [
+      ["interviewSlider", "interviewValue", " 次"],
+      ["paidSlider", "paidValue", " 个"],
+      ["waitlistSlider", "waitlistValue", " 个"],
+      ["prepaySlider", "prepayValue", " 个"],
+      ["supportSlider", "supportValue", "%"]
+    ];
+    function readSignals() {
+      const values = Object.fromEntries(sliders.map(([slider]) => [slider, Number($(slider).value)]));
+      sliders.forEach(([slider, output, suffix]) => { $(output).textContent = values[slider] + suffix; });
+      const interview = $("decisionInterview");
+      interview.classList.toggle("hot", values.interviewSlider >= 15);
+      interview.querySelector("span").textContent = values.interviewSlider >= 15 ? "已达到 15—20 次访谈区间，可进入下一层验证。" : "继续收集 15—20 次访谈证据。";
+      const service = $("decisionService");
+      service.classList.toggle("hot", values.paidSlider >= 3);
+      service.querySelector("span").textContent = values.paidSlider >= 3 ? "出现 3 个明确付费承诺，可进入服务自动化评估。" : "先人工交付；出现 3 个付费承诺后再评估自动化。";
+      const hosted = $("decisionHosted");
+      const hostedReady = values.waitlistSlider >= 10 && values.prepaySlider >= 3;
+      hosted.classList.toggle("hot", hostedReady);
+      hosted.querySelector("span").textContent = hostedReady ? "候补与预付达到阶段门槛，可评估托管基础设施。" : "只收集候补与预付意向，不先建设云端能力。";
+      const margin = $("decisionMargin");
+      margin.classList.toggle("hot", values.supportSlider > 50);
+      margin.querySelector("span").textContent = values.supportSlider > 50 ? "支持工时超过收入 50%，先提价或缩小承诺。" : "记录工时；支持工时超过收入 50% 时先提价或缩小承诺。";
+    }
+    sliders.forEach(([slider]) => $(slider).addEventListener("input", readSignals));
+    readSignals();
+  </script>
+</body>
+</html>

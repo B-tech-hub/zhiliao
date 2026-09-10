@@ -14,6 +14,8 @@ npm run dev
 
 不想申请 LLM API Key？运行 `npm run demo` 会启动「内置 mock LLM + 演示数据」的完整联调环境（数据写在 `./data-demo/`，与正式数据完全隔离），AI 归档、主题建议、失败重试等流水线机制都能在本地跑通。
 
+开始改动前请阅读 [项目开发规范](docs/开发规范.md)；涉及页面、组件、交互或样式时同时阅读 [UI 规范](docs/UI规范.md)。产品边界和新功能冻结仍以 README Roadmap、`CONTEXT.md` 与相关 ADR 为准。
+
 ### Windows 注意事项
 
 1. better-sqlite3 与 @node-rs/jieba 均有预编译产物，正常 `npm install` 无需编译器；若安装时报编译错误，安装 Visual Studio Build Tools 后重试。
@@ -21,6 +23,8 @@ npm run dev
 3. Docker Desktop 的绑定挂载不支持 SQLite WAL，请叠加命名卷配置：`docker compose -f docker-compose.yml -f docker-compose.win.yml up -d`。
 
 ## 提交前自检
+
+开发过程中先运行与改动范围匹配的局部测试；准备合并或发布时执行完整门禁：
 
 ```bash
 npm run check:design
@@ -35,6 +39,7 @@ npm run build
 - 一个 PR 只做一件事。
 - 标题使用 `feat:` / `fix:` / `docs:` / `refactor:` / `test:` / `chore:` 前缀。
 - 行为变化需在 PR 描述中附验证步骤；UI 改动请附截图。
+- 新增或修改代码应符合 [开发规范](docs/开发规范.md)；UI 改动应符合 [UI 规范](docs/UI规范.md)。
 - 涉及数据库结构：必须在 `src/db/migrations.ts` **追加**新迁移（禁止修改已发布的迁移），并在 PR 中说明。
 - 架构层面的取舍，请在 `docs/adr/` 补一篇决策记录。
 

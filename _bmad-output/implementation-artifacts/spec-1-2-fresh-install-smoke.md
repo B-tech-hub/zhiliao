@@ -60,3 +60,12 @@ context:
   [`smoke-fresh-install.ps1:212`](../../scripts/smoke-fresh-install.ps1#L212)
 - 验收证据记录
   [`验收记录-全新环境安装冒烟-2026-09-09.md:1`](../../docs/验收记录-全新环境安装冒烟-2026-09-09.md#L1)
+
+### Review Findings
+
+- [x] [Review][Patch] Docker-only 冒烟在证据阶段无条件调用宿主机 `node --version`，无 Node.js 的合法 Docker 环境会被误判失败 [scripts/smoke-fresh-install.ps1:64-68]
+- [x] [Review][Patch] 冒烟仅检查 `/data/uploads` 目录存在，未写入文件并跨重启校验，无法证明上传数据持久化 [scripts/smoke-fresh-install.ps1:193-224]
+- [x] [Review][Patch] 失败证据把所有步骤渲染为 `[x]`，失败项会显示为已完成，验收记录可能误导读者 [scripts/smoke-fresh-install.ps1:86]
+- [x] [Review][Patch] 失败时诊断日志写入临时目录后默认删除，记录中的日志路径立即失效，且每次运行覆盖同一验收文件，历史证据不可追溯 [scripts/smoke-fresh-install.ps1:16,64-104,231-248]
+- [x] [Review][Patch] 成功记录在清理前写入；若 finally 清理失败，脚本退出码为非零但证据仍为“通过”，状态与结果矛盾 [scripts/smoke-fresh-install.ps1:226-247]
+- [x] [Review][Patch] Demo 启动器对 8787 端口任意返回 2xx 的本地服务直接复用，可能把笔记发送给非 mock 服务，违反“不会发出外部请求”承诺 [scripts/demo.mjs:37-48]

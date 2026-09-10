@@ -23,8 +23,8 @@ main:has(.note-detail) > div { max-width: 1440px; }
    若等水合后才收起，居中的正文会横向跳 200px（同 next-themes 防主题闪烁的路数）。 */
 @custom-variant nav-collapsed (html[data-nav-collapsed="1"] &);
 
-/* Apple 设计规范 token（见 docs/DESIGN.md，暗色对照表见其附录）：
-   单一 Action Blue 交互色，白/羊皮纸双底色，明暗瓷砖交替，无装饰阴影 */
+/* 知了 UI token（执行规则见 docs/UI规范.md，历史研究见 docs/DESIGN.md）：
+   单一 Action Blue 交互色，白/羊皮纸双底色，受控暗面和语义颜色 */
 @theme {
   --color-action: #0066cc;
   --color-action-focus: #0071e3;
@@ -73,7 +73,7 @@ main:has(.note-detail) > div { max-width: 1440px; }
     "Cascadia Code", Consolas, monospace;
 
   /* 字阶：此前全站用 text-[17px] 这类 arbitrary value 逐处手写，是漂移最快的一层。
-     取值来自 docs/DESIGN.md 的字阶表，只保留本项目真正用得到的六级。 */
+     执行规则见 docs/UI规范.md，只保留本项目真正用得到的六级。 */
   --text-display: 34px; /* 页面大标题，配 font-serif */
   --text-title: 22px; /* 区块标题 */
   --text-body: 17px; /* 正文，与下方 body 规则同值 */
@@ -138,7 +138,7 @@ body {
   background: var(--color-parchment);
   color: var(--color-ink);
   font-family: var(--font-sans);
-  /* Apple 正文规范：17px / 400 / 1.47 / 轻微负字距 */
+  /* 当前正文兼容值：17px / 400 / 1.47。负字距是历史债务，新代码不得继续扩散。 */
   font-size: var(--text-body);
   line-height: 1.47;
   letter-spacing: -0.2px;
@@ -150,7 +150,7 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* 标题统一负字距（Apple tight） */
+/* 标题负字距为历史兼容值；新增或修改界面按 docs/UI规范.md 使用零字距。 */
 h1,
 h2,
 h3 {

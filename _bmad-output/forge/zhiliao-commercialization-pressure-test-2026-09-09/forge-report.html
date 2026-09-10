@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>知了商业化压力测试报告</title>
+  <style>
+    :root { color-scheme: light; --ink:#20252b; --muted:#5f6872; --line:#d9dee3; --paper:#fbfaf7; --accent:#1f5b52; --warn:#a5522c; --soft:#eef3f0; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:#e9eceb; color:var(--ink); font:16px/1.65 system-ui,-apple-system,"Segoe UI","Microsoft YaHei",sans-serif; }
+    main { max-width:1060px; margin:0 auto; padding:32px 20px 56px; }
+    article { background:var(--paper); border:1px solid var(--line); padding:34px clamp(22px,5vw,64px); box-shadow:0 10px 30px rgba(27,39,42,.08); }
+    h1,h2,h3 { line-height:1.25; margin:0 0 14px; letter-spacing:0; }
+    h1 { font-size:clamp(28px,4vw,42px); max-width:780px; }
+    h2 { font-size:23px; border-top:1px solid var(--line); padding-top:26px; margin-top:32px; }
+    h3 { font-size:18px; margin-top:22px; }
+    p { margin:10px 0; }
+    .kicker { color:var(--muted); font-size:14px; }
+    .lead { font-size:19px; max-width:820px; }
+    .verdict { display:grid; grid-template-columns:150px 1fr; gap:22px; align-items:center; margin:26px 0 28px; padding:20px; background:var(--soft); border-left:5px solid var(--accent); }
+    .seal { width:142px; height:142px; }
+    .verdict strong { color:var(--accent); font-size:25px; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:14px; }
+    .panel { border:1px solid var(--line); padding:16px 18px; background:#fff; }
+    .panel h3 { margin-top:0; }
+    .tag { display:inline-block; padding:2px 8px; border:1px solid var(--line); color:var(--muted); font-size:13px; margin-right:6px; }
+    table { width:100%; border-collapse:collapse; margin:12px 0; background:#fff; }
+    th,td { border:1px solid var(--line); padding:10px 12px; text-align:left; vertical-align:top; }
+    th { background:#f0f3f1; font-weight:650; }
+    .bad { color:var(--warn); font-weight:650; }
+    .good { color:var(--accent); font-weight:650; }
+    ul { margin:8px 0 0; padding-left:22px; }
+    li { margin:5px 0; }
+    .source { color:var(--muted); font-size:14px; }
+    footer { margin-top:30px; padding-top:18px; border-top:1px solid var(--line); color:var(--muted); font-size:14px; }
+    @media (max-width:640px) { main { padding:0; } article { border-left:0; border-right:0; padding:26px 18px 42px; } .verdict { grid-template-columns:1fr; } .seal { width:118px; height:118px; } table { font-size:14px; } th,td { padding:8px; } }
+  </style>
+</head>
+<body>
+<main>
+<article>
+  <div class="kicker">BMad Forge Idea · 2026-09-09 · 基于商业化行动规划、GitHub 调研与 README 冻结规则</div>
+  <h1>知了商业化方案：方向成立，原门槛不成立</h1>
+  <p class="lead">压力测试后的可执行版本是：先卖可验收的可靠交付和数据恢复，再用真实付款、工时和持续使用决定是否产品化。托管与 AI 网关继续只做需求和预付验证。</p>
+
+  <div class="verdict">
+    <svg class="seal" viewBox="0 0 160 160" role="img" aria-label="HARDENED 印章">
+      <circle cx="80" cy="80" r="70" fill="#1f5b52"/>
+      <circle cx="80" cy="80" r="58" fill="none" stroke="#d7eee7" stroke-width="3"/>
+      <path d="M35 111 51 99 58 119 72 106 86 123 99 103 119 112 113 91 130 80 111 68 117 47 97 56 85 37 71 53 56 37 50 58 29 52 37 73 19 84 39 94Z" fill="#2d7567" opacity=".9"/>
+      <text x="80" y="74" text-anchor="middle" fill="#fff" font-size="21" font-weight="700" font-family="Arial,sans-serif">HARDENED</text>
+      <text x="80" y="94" text-anchor="middle" fill="#d7eee7" font-size="10" font-family="Arial,sans-serif">WITH CONDITIONS</text>
+    </svg>
+    <div><strong>HARDENED（有条件成立）</strong><p>商业化主张足够具体，可以开始 90 天服务实验；但必须先收窄首发买方、改写价格边界，并把“意向”升级为现金和交付证据。</p></div>
+  </div>
+
+  <h2>六项审查结论</h2>
+  <div class="grid">
+    <section class="panel"><h3>1. 首发客户</h3><p class="bad">原定义过宽。</p><p>“中文、会 Docker、重隐私、想手机记录”同时覆盖个人开发者和知识工作者，无法形成单一话术或报价。</p><p class="good">收窄后：</p><p>近期确实遇到安装、迁移、恢复或手机捕获阻塞，愿意提供自托环境与数据盘点的中文个人自托管用户。首轮不接企业、多人团队、教育机构。</p></section>
+    <section class="panel"><h3>2. 付费触发</h3><p class="good">触发存在，但必须结果化。</p><p>可收费结果是：实例可用；来源数据、数量和附件对账；手机捕获跑通；隔离备份真实恢复并打开笔记、图片、搜索。每项都要有清单和用户确认。</p><p>“30 分钟跑起来”目前只能当待验证主张，须记录中位数、P90 和返工原因。</p></section>
+    <section class="panel"><h3>3. 价格锚点</h3><p class="bad">数字合理性尚未被成本证明。</p><p>¥99 适合限时诊断，不适合无限答疑；¥299～¥699 只能是盘点后的测试带；¥399～¥999/年必须绑定响应时段、包含工时、额外费率、排除项和退出规则，并先出现复购证据。</p></section>
+    <section class="panel"><h3>4. 暂不开发</h3><p class="good">托管和 AI 网关都应保持候补。</p><p>当前既没有预付需求证据，又会新增数据托管、异地备份、隐私合规、删除/退出、SLA 和持续运维责任。AI 网关还会引入模型变量成本、额度和密钥责任，和 BYOK 的信任承诺冲突。</p></section>
+    <section class="panel"><h3>5. 90 天证据</h3><p class="bad">原计划偏重访谈与意向。</p><p>访谈、免费陪跑、候补名单只能是线索。继续门槛应以至少 3 个实际付款并完成交付、至少 2 个客户完成 7 天真实记录或恢复验收、交付与支持成本占收入不超过 50%、无数据事故和至少一个可重复获客来源为主。</p></section>
+    <section class="panel"><h3>6. 停止与边界</h3><p class="good">需要硬停止，不靠加功能补救。</p><p>20 次访谈无付款、5 个名额无 3 个付款、成本持续超过收入 50%、支持范围无法一页写清、数据泄露或恢复失败、第三方依赖导致无法履约，均应暂停对应 SKU 或商业化。</p></section>
+  </div>
+
+  <h2>价格实验：把数字变成可验收的服务</h2>
+  <table>
+    <thead><tr><th>锚点</th><th>可以卖什么</th><th>必须先证明什么</th><th>否决信号</th></tr></thead>
+    <tbody>
+      <tr><td>¥99</td><td>限时安装/故障诊断、只读盘点、书面建议；购买套餐可抵扣</td><td>限定时长内能稳定交付，且不会靠免费延长补洞</td><td>诊断频繁超时或无人转套餐/复购</td></tr>
+      <tr><td>¥299～¥699</td><td>范围明确的安装、迁移或恢复小套餐；先盘点再报价</td><td>实际工时、附件风险、返工和第三方依赖可计算</td><td>交付与支持成本超过收入 50%，或范围无法写清</td></tr>
+      <tr><td>¥399～¥999/年</td><td>有明确响应时段和工时上限的维护/故障支持</td><td>已有服务客户出现复购/续费意向，且额外费率与退出规则可执行</td><td>变成无限客服、无边界排障或支持成本失控</td></tr>
+    </tbody>
+  </table>
+  <p class="source">这些是验证用测试带，不是最终定价。实际收款前仍需确认主体、支付、税务、退款与数据处理规则。</p>
+
+  <h2>90 天验证：什么算真实商业证据</h2>
+  <table>
+    <thead><tr><th>阶段</th><th>动作</th><th>证据</th></tr></thead>
+    <tbody>
+      <tr><td>第 1～3 周</td><td>发布一页服务说明；访谈 15～20 名符合 ICP 的用户；3 个陪跑案例记录安装、手机捕获、迁移、恢复工时</td><td>明确痛点、报价异议、范围边界；免费案例只算交付证据，不算收入</td></tr>
+      <tr><td>第 4～8 周</td><td>开放 5 个付费名额；只读盘点后报价；交付前备份、交付后对账与用户确认</td><td>至少 3 个已收款并完成交付；记录获客来源、返工、AI 变量成本和支持分钟数</td></tr>
+      <tr><td>第 9～12 周</td><td>复盘服务毛利、7 日真实使用/恢复验收、复购意向与投诉退款</td><td>至少 2 个客户完成 7 日真实记录或恢复验收；形成继续/调整/停止结论</td></tr>
+    </tbody>
+  </table>
+  <p><strong>证据等级：</strong>已收现金 &gt; 已签且可退款预付 &gt; 明确报价下的书面拒绝原因 &gt; 口头意向 &gt; 泛访谈观点。低等级证据不能单独触发托管、网关或新功能。</p>
+
+  <h2>支持边界与硬停止</h2>
+  <div class="grid">
+    <section class="panel"><h3>支持边界</h3><ul><li>仅工作日约定时段，按工单或预约处理，不承诺 24/7。</li><li>不承诺 AI 答案正确、不承诺绝对不丢数据；只承诺已执行的备份与恢复验收。</li><li>不代写用户内容，不为未购买范围长期排障，不承担用户错误操作或未提供备份造成的损失。</li><li>涉及数据操作先备份、最小权限、用户确认；服务说明写清数据位置、删除和退出。</li></ul></section>
+    <section class="panel"><h3>硬停止</h3><ul><li>20 次有效访谈仍无实际付款。</li><li>5 个服务名额仍少于 3 个付款客户。</li><li>任一 SKU 的交付与支持成本持续超过收入 50%。</li><li>支持范围无法在一页内写清，或发生数据泄露/恢复失败。</li><li>第三方模型、支付或主机依赖使承诺无法履约。</li></ul></section>
+  </div>
+
+  <h2>冻结规则判定</h2>
+  <p>README 明确规定：真实笔记达到 100 条前冻结所有新功能；缺陷修复、文档、分发、部署和运维不受约束。商业实验可以继续，但新导入器、首次向导、托管平台、AI 网关、自动行为埋点、团队/账号能力只能记录为候选，不能以商业化名义实现。100 条是重新分诊的触发器，不是自动批准开发。</p>
+
+  <h2>压力测试者</h2>
+  <p><span class="tag">📏 Level</span> 证据审查：区分付款、预付、意向和访谈，要求每个主张有可复核证据。</p>
+  <p><span class="tag">🔒 Vex</span> 安全边界：追问托管、恢复、Token、模型和用户数据责任的实际风险。</p>
+  <p><span class="tag">🛑 Killjoy</span> 停止条件：阻止用新功能掩盖没有支付或成本失控。</p>
+  <p><span class="tag">💼 沈岚（生成角色）</span> 首发买方兼财务审查：只为可验收结果付费，拒绝“可能有用”的功能和无上限支持。</p>
+
+  <footer>工作区状态：已形成可执行的有条件结论。详细的 append-only 讨论记录见同目录 `.memlog.md`；极短决策稿见 `forged-idea.md`。</footer>
+</article>
+</main>
+</body>
+</html>

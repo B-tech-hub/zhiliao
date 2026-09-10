@@ -4,6 +4,7 @@ import { and, desc, eq, isNull } from "drizzle-orm";
 import { getDb } from "@/db";
 import { notes, topics } from "@/db/schema";
 import { getTagsForNotes } from "@/lib/notes";
+import { toClientNote } from "@/lib/client-note";
 import { BackButton } from "@/components/back-button";
 import { EmptyNotes } from "@/components/note-card";
 import { ChatScopeBinder } from "@/components/chat/chat-scope";
@@ -56,7 +57,7 @@ export default async function TopicPage({ params }: { params: Promise<{ id: stri
       {rows.length === 0 ? (
         <EmptyNotes hint="这个主题下还没有笔记" />
       ) : (
-        <TopicNotes notes={rows.map((n) => ({ ...n, tags: tagMap.get(n.id) ?? [] }))} />
+        <TopicNotes notes={rows.map((n) => ({ ...toClientNote(n), tags: tagMap.get(n.id) ?? [] }))} />
       )}
       {/* 把这个主题登记为助手的上下文附件；助手面板本身挂在 (app)/layout */}
       <ChatScopeBinder type="topic" id={topic.id} title={topic.name} />
