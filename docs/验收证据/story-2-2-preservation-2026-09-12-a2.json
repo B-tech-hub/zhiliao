@@ -1,0 +1,309 @@
+{
+  "story": "2.2",
+  "recorded_at": "2026-09-12T04:00:12.310Z",
+  "status": "passed",
+  "scope": "核对既有容器元数据、保留文件和真实验收输入；未读取正式数据内容",
+  "container_comparison": {
+    "fields": [
+      "id",
+      "name",
+      "image",
+      "status",
+      "exit_code",
+      "started_at",
+      "finished_at",
+      "project",
+      "run_id",
+      "mounts",
+      "networks"
+    ],
+    "normalization": "挂载按 Destination 排序，网络名称排序；消除 Docker 返回集合的顺序差异",
+    "containers": [
+      {
+        "id": "cd07490a30d9cd068c4552f0f528dacecd9349eb2a60c1dbf9f8c18333fe83ea",
+        "name": "/zhiliao-smoke-20260910-082135-app-1",
+        "status": "exited",
+        "exit_code": 255,
+        "unchanged": true,
+        "changed_fields": []
+      },
+      {
+        "id": "5d05095aa56b26fee8ff02b3372764d8300cc7b1851773eca5ee0a95ed3f675f",
+        "name": "/zhiliao-smoke-20260910-081121-app-1",
+        "status": "exited",
+        "exit_code": 255,
+        "unchanged": true,
+        "changed_fields": []
+      },
+      {
+        "id": "254c7caca374780a6c1a3bea1c2c6ba59d6ab092de155c34f8efd3cd411532c8",
+        "name": "/zhiliao",
+        "status": "exited",
+        "exit_code": 0,
+        "unchanged": true,
+        "changed_fields": []
+      },
+      {
+        "id": "ea240066dd4a847db38ef758917c36a04be31191329ab6c995bdc94cd83fc721",
+        "name": "/zhiliao-rc",
+        "status": "exited",
+        "exit_code": 255,
+        "unchanged": true,
+        "changed_fields": []
+      },
+      {
+        "id": "50a70f44a32e78adf331f7084743f042001eb5b650ee7af849441ed6a14a85c0",
+        "name": "/bilinote-nginx",
+        "status": "exited",
+        "exit_code": 0,
+        "unchanged": true,
+        "changed_fields": []
+      },
+      {
+        "id": "ab1926223971ae43ca775c7078f16057bde76b5e2f53aa6856382830542c3e4a",
+        "name": "/bilinote-frontend",
+        "status": "exited",
+        "exit_code": 0,
+        "unchanged": true,
+        "changed_fields": []
+      },
+      {
+        "id": "f61337186432f4b8be3bba6578ebb2a3f768cd39baf5349a0fc19c53f224ef81",
+        "name": "/bilinote-backend",
+        "status": "exited",
+        "exit_code": 1,
+        "unchanged": true,
+        "changed_fields": []
+      }
+    ]
+  },
+  "protected_files": [
+    {
+      "path": "src/middleware.ts",
+      "sha256_before": "1B51FA7F95A90E8BCC94609CD2D2B820FEA838503538A3932C2EF3EE64BC2D22",
+      "sha256_after": "1B51FA7F95A90E8BCC94609CD2D2B820FEA838503538A3932C2EF3EE64BC2D22"
+    },
+    {
+      "path": "src/lib/llm-config.ts",
+      "sha256_before": "C9A363404FE78DA50278237704B60514B8C230CB8153CEDC46713F0E3EF3899C",
+      "sha256_after": "C9A363404FE78DA50278237704B60514B8C230CB8153CEDC46713F0E3EF3899C"
+    },
+    {
+      "path": "src/app/(app)/settings/page.tsx",
+      "sha256_before": "BC7E0DBA9A0D9A20D3C7FB3F64157AC0E4D3001E6355E64E53B6B982F2DED46C",
+      "sha256_after": "BC7E0DBA9A0D9A20D3C7FB3F64157AC0E4D3001E6355E64E53B6B982F2DED46C"
+    },
+    {
+      "path": "tests/api/demo-boundary.test.ts",
+      "sha256_before": "B407FF9EC6D62487F93EA31E871900351AF2A72600377A6294DCC5F20C3ECAF3",
+      "sha256_after": "B407FF9EC6D62487F93EA31E871900351AF2A72600377A6294DCC5F20C3ECAF3"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/spec-2-1-server-demo-boundary.md",
+      "sha256_before": "002A58D4DB6835CA57C2672DDCE0A1C8FC3C4CE23E640E823725174C36CF68F4",
+      "sha256_after": "002A58D4DB6835CA57C2672DDCE0A1C8FC3C4CE23E640E823725174C36CF68F4"
+    },
+    {
+      "path": "docker-compose.yml",
+      "sha256_before": "70E6867A5E5E686C835C0830D96229440AA6BE5F58A132A978002F40E82BFD4B",
+      "sha256_after": "70E6867A5E5E686C835C0830D96229440AA6BE5F58A132A978002F40E82BFD4B"
+    },
+    {
+      "path": "docker-compose.demo.yml",
+      "sha256_before": "F259C2E5FD7809BC872492C5EB753A5AB54389969C3106A6FF0E926F070455F2",
+      "sha256_after": "F259C2E5FD7809BC872492C5EB753A5AB54389969C3106A6FF0E926F070455F2"
+    },
+    {
+      "path": "docker-compose.demo.verify.yml",
+      "sha256_before": "2F21847F6798764D6929991855F848F83CD4BFD6345EA4F8638ED2B255DE22F1",
+      "sha256_after": "2F21847F6798764D6929991855F848F83CD4BFD6345EA4F8638ED2B255DE22F1"
+    },
+    {
+      "path": "Dockerfile",
+      "sha256_before": "19B26EE235928D6D360EDC9B5C803427302EB90D9A8DC8D231482BA6380E6668",
+      "sha256_after": "19B26EE235928D6D360EDC9B5C803427302EB90D9A8DC8D231482BA6380E6668"
+    },
+    {
+      "path": "nginx/demo.conf",
+      "sha256_before": "DF240AEF6F22929AB6435D4F4A2E3C603BAA17A124FE0D9B7F01D10EAA27C093",
+      "sha256_after": "DF240AEF6F22929AB6435D4F4A2E3C603BAA17A124FE0D9B7F01D10EAA27C093"
+    },
+    {
+      "path": "scripts/verify-demo-runtime.ps1",
+      "sha256_before": "D8D0B56BAB5C432CA4ED824EC5780B8360A09D8BD722F2904044289433E57695",
+      "sha256_after": "D8D0B56BAB5C432CA4ED824EC5780B8360A09D8BD722F2904044289433E57695"
+    },
+    {
+      "path": "scripts/verify-demo-runtime.mjs",
+      "sha256_before": "E302FBB02B0A383AD8FA268B284B9EB307982D0543BEA4FC52562344BE2AC2B5",
+      "sha256_after": "E302FBB02B0A383AD8FA268B284B9EB307982D0543BEA4FC52562344BE2AC2B5"
+    },
+    {
+      "path": "scripts/demo-http-probes.mjs",
+      "sha256_before": "420DDCD722AE3F4FCA844671F97CECABB398637D557F47B1C3174D2A059BE238",
+      "sha256_after": "420DDCD722AE3F4FCA844671F97CECABB398637D557F47B1C3174D2A059BE238"
+    },
+    {
+      "path": "package.json",
+      "sha256_before": "93E20900FA70D3674F04C022F733EB78528B21ED67B0CE8A7C0F69EC245CD42E",
+      "sha256_after": "93E20900FA70D3674F04C022F733EB78528B21ED67B0CE8A7C0F69EC245CD42E"
+    },
+    {
+      "path": "package-lock.json",
+      "sha256_before": "D16A6AF6D2342A702AC0D49B20F7201B9DB1ED9F98EBDF4EAA6C3FAA5E7D3598",
+      "sha256_after": "D16A6AF6D2342A702AC0D49B20F7201B9DB1ED9F98EBDF4EAA6C3FAA5E7D3598"
+    },
+    {
+      "path": "docs/验收证据/story-2-2-environment-2026-09-11T08-37-01Z.json",
+      "sha256_before": "D78972E0F1272655F9CFD8F466930D527BEFAC5301984E11728415C0BFF3AE99",
+      "sha256_after": "D78972E0F1272655F9CFD8F466930D527BEFAC5301984E11728415C0BFF3AE99"
+    },
+    {
+      "path": "docs/验收证据/story-2-2-network-2026-09-12-a2-final.json",
+      "sha256_before": "10A67CE81458721C89424B8717E931DCFF2D44CEA1C4B838DD28E9A107BAB323",
+      "sha256_after": "10A67CE81458721C89424B8717E931DCFF2D44CEA1C4B838DD28E9A107BAB323"
+    },
+    {
+      "path": "docs/验收证据/story-2-2-network-2026-09-12-a2-final2.json",
+      "sha256_before": "8F97F80A4C3A403E66B0329E0EB7F8C2D8C6A4BD084A1BE16C79E449EA97C9EA",
+      "sha256_after": "8F97F80A4C3A403E66B0329E0EB7F8C2D8C6A4BD084A1BE16C79E449EA97C9EA"
+    },
+    {
+      "path": "docs/验收证据/story-2-2-network-2026-09-12-a2-rerun.json",
+      "sha256_before": "DA30EF2A6F76B2A693CC096D202848A7BFD5C10A75D926E796DDEA6E500D7754",
+      "sha256_after": "DA30EF2A6F76B2A693CC096D202848A7BFD5C10A75D926E796DDEA6E500D7754"
+    },
+    {
+      "path": "docs/验收证据/story-2-2-network-2026-09-12-a2.json",
+      "sha256_before": "7F63E343C871A16EDF0B36A2040708372119D73CFD01D65117D4265E4C204DA8",
+      "sha256_after": "7F63E343C871A16EDF0B36A2040708372119D73CFD01D65117D4265E4C204DA8"
+    },
+    {
+      "path": "docs/验收证据/story-2-2-proxy-timeouts-2026-09-12-a2-debug.json",
+      "sha256_before": "B896D0E8BA31F3F50C8EE8953E5C26190F45A80AA42615351F62FB52E6F87BAB",
+      "sha256_after": "B896D0E8BA31F3F50C8EE8953E5C26190F45A80AA42615351F62FB52E6F87BAB"
+    },
+    {
+      "path": "docs/验收证据/story-2-2-proxy-timeouts-2026-09-12-a2.json",
+      "sha256_before": "0DCAF2EEAAF63DEB3974B6A7D6043E13CACA07422F65CA2F62150F25E659469F",
+      "sha256_after": "0DCAF2EEAAF63DEB3974B6A7D6043E13CACA07422F65CA2F62150F25E659469F"
+    },
+    {
+      "path": "docs/验收证据/story-2-2-runtime-2026-09-10.json",
+      "sha256_before": "8FEBD1D0C876BFE2B1DB1230E36A341B60CB4E4023ADCAF3636A4AB751DC8E95",
+      "sha256_after": "8FEBD1D0C876BFE2B1DB1230E36A341B60CB4E4023ADCAF3636A4AB751DC8E95"
+    },
+    {
+      "path": "docs/验收证据/story-2-2-runtime-2026-09-11.json",
+      "sha256_before": "4C95C9EE95CE03F2C69D2CC1F97C2E72338B83B3847AE3FD51FC8D91425DAF21",
+      "sha256_after": "4C95C9EE95CE03F2C69D2CC1F97C2E72338B83B3847AE3FD51FC8D91425DAF21"
+    },
+    {
+      "path": "docs/验收证据/story-2-2-runtime-2026-09-11T07-56-56-279Z-ccefbb73.json",
+      "sha256_before": "270C7CACBCD01E3586B4AD2B08CDF9C76F4A10EE3C00A3E220BE3C946441A7B2",
+      "sha256_after": "270C7CACBCD01E3586B4AD2B08CDF9C76F4A10EE3C00A3E220BE3C946441A7B2"
+    },
+    {
+      "path": "docs/验收证据/story-2-2-runtime-2026-09-12T02-41-22-818Z-ea454295.json",
+      "sha256_before": "B685FDAB2491A6F2C5DD0DDE67242C492F4CB240DD6765589CFC845EBB411409",
+      "sha256_after": "B685FDAB2491A6F2C5DD0DDE67242C492F4CB240DD6765589CFC845EBB411409"
+    }
+  ],
+  "runtime_input_comparison": [
+    {
+      "evidence": "docs/验收证据/story-2-2-network-2026-09-12T03-38-29-471Z.json",
+      "input": "scripts/verify-demo-network.mjs",
+      "expected_sha256": "935bd93d1b1178424ad0336e319bd235b2e72d4c2ea02228aebf0b5d64409821",
+      "current_sha256": "e527300e9a0c26676906a737ab0bd53cacb7e4cee6f6280936f4463eb7eec365",
+      "exact_match": false,
+      "jsdoc_only_change": true,
+      "execution_input_preserved": true
+    },
+    {
+      "evidence": "docs/验收证据/story-2-2-network-2026-09-12T03-38-29-471Z.json",
+      "input": "scripts/demo-verification-utils.mjs",
+      "expected_sha256": "7f470b62da3ce58fe36354797db426c5e6ba6b9e95e2829ad6ac263861da4665",
+      "current_sha256": "7f470b62da3ce58fe36354797db426c5e6ba6b9e95e2829ad6ac263861da4665",
+      "exact_match": true,
+      "jsdoc_only_change": false,
+      "execution_input_preserved": true
+    },
+    {
+      "evidence": "docs/验收证据/story-2-2-network-2026-09-12T03-38-29-471Z.json",
+      "input": "docker-compose.demo.yml",
+      "expected_sha256": "f259c2e5fd7809bc872492c5eb753a5ab54389969c3106a6ff0e926f070455f2",
+      "current_sha256": "f259c2e5fd7809bc872492c5eb753a5ab54389969c3106a6ff0e926f070455f2",
+      "exact_match": true,
+      "jsdoc_only_change": false,
+      "execution_input_preserved": true
+    },
+    {
+      "evidence": "docs/验收证据/story-2-2-network-2026-09-12T03-38-29-471Z.json",
+      "input": "docker-compose.demo.verify.yml",
+      "expected_sha256": "2f21847f6798764d6929991855f848f83cd4bfd6345ea4f8638ed2b255de22f1",
+      "current_sha256": "2f21847f6798764d6929991855f848f83cd4bfd6345ea4f8638ed2b255de22f1",
+      "exact_match": true,
+      "jsdoc_only_change": false,
+      "execution_input_preserved": true
+    },
+    {
+      "evidence": "docs/验收证据/story-2-2-proxy-timeouts-2026-09-12T03-25-47-619Z.json",
+      "input": "docker-compose.demo.proxy-verify.yml",
+      "expected_sha256": "db8eed5296212444d435cd378cae07b97d3e8d24f1a58bdb40b16ed4813cb05d",
+      "current_sha256": "db8eed5296212444d435cd378cae07b97d3e8d24f1a58bdb40b16ed4813cb05d",
+      "exact_match": true,
+      "jsdoc_only_change": false,
+      "execution_input_preserved": true
+    },
+    {
+      "evidence": "docs/验收证据/story-2-2-proxy-timeouts-2026-09-12T03-25-47-619Z.json",
+      "input": "nginx/demo-proxy.conf",
+      "expected_sha256": "abae7a74feb2ed1b048b7579348707cc68d9c6a7126baab4356a7d44c7244fb2",
+      "current_sha256": "abae7a74feb2ed1b048b7579348707cc68d9c6a7126baab4356a7d44c7244fb2",
+      "exact_match": true,
+      "jsdoc_only_change": false,
+      "execution_input_preserved": true
+    },
+    {
+      "evidence": "docs/验收证据/story-2-2-proxy-timeouts-2026-09-12T03-25-47-619Z.json",
+      "input": "scripts/fixtures/demo-proxy-upstream.mjs",
+      "expected_sha256": "88298403d5b72a60760c36309639e777fce3859a9c5e076ded9e33ea3a32c169",
+      "current_sha256": "88298403d5b72a60760c36309639e777fce3859a9c5e076ded9e33ea3a32c169",
+      "exact_match": true,
+      "jsdoc_only_change": false,
+      "execution_input_preserved": true
+    },
+    {
+      "evidence": "docs/验收证据/story-2-2-proxy-timeouts-2026-09-12T03-25-47-619Z.json",
+      "input": "nginx/demo.conf",
+      "expected_sha256": "df240aef6f22929ab6435d4f4a2e3c603baa17a124fe0d9b7f01d10eaa27c093",
+      "current_sha256": "df240aef6f22929ab6435d4f4a2e3c603baa17a124fe0d9b7f01d10eaa27c093",
+      "exact_match": true,
+      "jsdoc_only_change": false,
+      "execution_input_preserved": true
+    },
+    {
+      "evidence": "docs/验收证据/story-2-2-proxy-timeouts-2026-09-12T03-25-47-619Z.json",
+      "input": "scripts/verify-demo-proxy-timeouts.mjs",
+      "expected_sha256": "d87d7a80852cb21bbd4bf54ece09f7d906736688957a951e93214019592895d7",
+      "current_sha256": "71c54bff2a8a4116356553646f8d0423b84cad078818fba52076f58c00e49d5f",
+      "exact_match": false,
+      "jsdoc_only_change": true,
+      "execution_input_preserved": true
+    },
+    {
+      "evidence": "docs/验收证据/story-2-2-proxy-timeouts-2026-09-12T03-25-47-619Z.json",
+      "input": "scripts/demo-verification-utils.mjs",
+      "expected_sha256": "77993e60ab31325fe83c09bc03a574f742c04680cb1f2015d221d16b9daf8c0c",
+      "current_sha256": "7f470b62da3ce58fe36354797db426c5e6ba6b9e95e2829ad6ac263861da4665",
+      "exact_match": false,
+      "jsdoc_only_change": true,
+      "execution_input_preserved": true
+    }
+  ],
+  "demo_resources_after_cleanup": {
+    "containers": [],
+    "networks": [],
+    "volumes": []
+  }
+}

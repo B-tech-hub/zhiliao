@@ -1,0 +1,23 @@
+{
+  "keys": [
+    "llm_base_url",
+    "llm_api_key",
+    "llm_model",
+    "vision_base_url",
+    "vision_api_key",
+    "vision_model",
+    "image_base_url",
+    "image_api_key",
+    "image_model",
+    "reasoning_base_url",
+    "reasoning_api_key",
+    "reasoning_model",
+    "embedding_base_url",
+    "embedding_api_key",
+    "embedding_model"
+  ],
+  "syntheticOnly": true,
+  "target": "http://127.0.0.1:18787/v1",
+  "inserted": 15,
+  "timeUtc": "2026-09-14T08:00:11.708Z"
+}

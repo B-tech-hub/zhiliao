@@ -1,0 +1,24 @@
+{
+  "phase": "cold",
+  "stopped": [
+    {
+      "name": "node.exe",
+      "pid": 62384
+    },
+    {
+      "name": "node.exe",
+      "pid": 5096
+    },
+    {
+      "name": "node.exe",
+      "pid": 38224
+    },
+    {
+      "name": "node.exe",
+      "pid": 15096
+    }
+  ],
+  "remainingListeners": [],
+  "timeUtc": "2026-09-14T08:00:11.4234920Z",
+  "passed": true
+}

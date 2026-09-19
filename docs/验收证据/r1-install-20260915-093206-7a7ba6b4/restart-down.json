@@ -1,0 +1,13 @@
+{
+  "runId": "20260915-093206-7a7ba6b4",
+  "phase": "restart-down",
+  "startedUtc": "2026-09-15T02:32:38.471026+00:00",
+  "arguments": [
+    "down",
+    "--timeout",
+    "15"
+  ],
+  "exitCode": 0,
+  "elapsedSeconds": 15.484,
+  "finishedUtc": "2026-09-15T02:32:53.945399+00:00"
+}

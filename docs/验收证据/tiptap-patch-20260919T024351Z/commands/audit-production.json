@@ -1,0 +1,25 @@
+{
+  "step": "audit-production",
+  "cwd": "D:/ClaudeProjects/ai_acknowladge",
+  "command": [
+    "D:/node.js/node.exe",
+    "D:/node.js/node_modules/npm/bin/npm-cli.js",
+    "audit",
+    "--json",
+    "--package-lock-only",
+    "--omit=dev",
+    "--include=optional",
+    "--include=peer",
+    "--ignore-scripts",
+    "--registry=https://registry.npmjs.org",
+    "--fetch-retries=0",
+    "--fetch-timeout=30000"
+  ],
+  "startedUtc": "2026-09-19T02:57:08.623940+00:00",
+  "finishedUtc": "2026-09-19T02:57:14.426878+00:00",
+  "elapsedSeconds": 5.797,
+  "exitCode": 1,
+  "stdout": "audit-production.stdout.log",
+  "stderr": "audit-production.stderr.log",
+  "lifecycleScriptsDisabled": true
+}

@@ -1,0 +1,20 @@
+{
+  "step": "editor-before",
+  "cwd": "D:/ClaudeProjects/ai_acknowladge",
+  "command": [
+    "D:/node.js/node.exe",
+    "node_modules/vitest/vitest.mjs",
+    "run",
+    "tests/components/markdown-editor-security.test.tsx",
+    "--maxWorkers=1",
+    "--reporter=json",
+    "--outputFile=C:/Users/BAIBAI/AppData/Local/Temp/zhiliao-tiptap-wald1s82/editor-before.report.json"
+  ],
+  "startedUtc": "2026-09-19T02:46:02.074283+00:00",
+  "finishedUtc": "2026-09-19T02:47:07.541638+00:00",
+  "elapsedSeconds": 65.469,
+  "exitCode": 1,
+  "stdout": "editor-before.stdout.log",
+  "stderr": "editor-before.stderr.log",
+  "lifecycleScriptsDisabled": true
+}

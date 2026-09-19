@@ -1,0 +1,15 @@
+{
+  "step": "sharp-runtime",
+  "cwd": "D:/ClaudeProjects/ai_acknowladge",
+  "command": [
+    "D:/node.js/node.exe",
+    "C:/Users/BAIBAI/AppData/Local/Temp/dependency-patches-20260918T065520Z-aj_74aqy/sharp-runtime.cjs"
+  ],
+  "startedUtc": "2026-09-18T07:22:27.915818+00:00",
+  "finishedUtc": "2026-09-18T07:22:28.319552+00:00",
+  "elapsedSeconds": 0.406,
+  "exitCode": 0,
+  "stdout": "sharp-runtime.stdout.log",
+  "stderr": "sharp-runtime.stderr.log",
+  "lifecycleScriptsDisabled": true
+}

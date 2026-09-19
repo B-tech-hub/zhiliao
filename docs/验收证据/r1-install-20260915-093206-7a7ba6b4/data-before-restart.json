@@ -1,0 +1,78 @@
+{
+  "runId": "20260915-093206-7a7ba6b4",
+  "phase": "before-restart",
+  "timeUtc": "2026-09-15T02:31:56.917481+00:00",
+  "db": {
+    "notes": [
+      {
+        "id": "mkh5swgf5bcho7oqg19vfbfz",
+        "title": "R1 安装验收：今晚·AI",
+        "content": "R1 安装验收：今晚羽毛球训练，杀球有下压",
+        "topic_id": "sxpoiqymygtcsflg916yiktv",
+        "ai_status": "done",
+        "tags": [
+          "羽毛球",
+          "训练"
+        ]
+      },
+      {
+        "id": "ox6f52w66q7g9ldv1jt1am52",
+        "title": "R1 安装验收：无模·AI",
+        "content": "R1 安装验收：无模型也能保存和找回",
+        "topic_id": "inbox",
+        "ai_status": "done",
+        "tags": [
+          "测试",
+          "记录"
+        ]
+      }
+    ],
+    "topics": [
+      {
+        "id": "inbox",
+        "name": "未分类",
+        "is_system": 1
+      },
+      {
+        "id": "sxpoiqymygtcsflg916yiktv",
+        "name": "羽毛球",
+        "is_system": 0
+      }
+    ],
+    "models": [
+      {
+        "key": "llm_api_key",
+        "value": "[已配置]"
+      },
+      {
+        "key": "llm_base_url",
+        "value": "http://mockllm:8787/v1"
+      },
+      {
+        "key": "llm_model",
+        "value": "mock"
+      }
+    ]
+  },
+  "markdown": [
+    {
+      "noteId": "ox6f52w66q7g9ldv1jt1am52",
+      "path": "未分类/R1 安装验收：无模·AI-ox6f52w66q7g9ldv1jt1am52.md",
+      "sha256": "0b104ffa856cf1440c00f9ea17dd707a1f311e20be343c78c3ea98f19a72d4af",
+      "bodyMatches": true
+    },
+    {
+      "noteId": "mkh5swgf5bcho7oqg19vfbfz",
+      "path": "羽毛球/R1 安装验收：今晚·AI-mkh5swgf5bcho7oqg19vfbfz.md",
+      "sha256": "88b293714cb5b6ffc3deefa641870e68e6f12eb831c8a26fe173fc4654f19420",
+      "bodyMatches": true
+    }
+  ],
+  "zip": null,
+  "uploadMarker": {
+    "name": "r1-persistence-20260915-093206-7a7ba6b4.txt",
+    "bodyMatches": true
+  },
+  "passed": true,
+  "scope": "本轮合成笔记、Markdown、ZIP 下载及挂载持久化；不是导回或完整恢复"
+}

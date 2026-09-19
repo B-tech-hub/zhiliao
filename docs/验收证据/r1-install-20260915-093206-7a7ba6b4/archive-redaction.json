@@ -1,0 +1,9 @@
+{
+  "harnessLiteralRedactions": [
+    {
+      "file": "prepare.py",
+      "field": "mockKey"
+    }
+  ],
+  "privateCredentialsArchived": false
+}

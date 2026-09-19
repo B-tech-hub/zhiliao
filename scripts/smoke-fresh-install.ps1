@@ -1,20 +1,39 @@
 ﻿param(
   [ValidateRange(1, 65535)]
   [int]$Port = 3300,
-  [switch]$KeepResources
+  [switch]$KeepResources,
+  [string]$Image = "",
+  [switch]$PrintConfig
 )
 
 $ErrorActionPreference = "Stop"
+$repoRoot = (Resolve-Path (Join-Path $PSScriptRoot "..")).Path
+$packageVersion = (Get-Content -Raw -Encoding UTF8 -LiteralPath (Join-Path $repoRoot "package.json") | ConvertFrom-Json).version
+$stableVersionPattern = '(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)'
+$preReleasePattern = '(?:-(?:rc|beta|alpha)(?:[1-9][0-9]*|\.(?:0|[1-9][0-9]*)))?'
+if ($packageVersion -isnot [string] -or $packageVersion -cnotmatch "\A$stableVersionPattern\z") {
+  throw "package.json 必须包含有效的正式基础版本。"
+}
+if ([string]::IsNullOrWhiteSpace($Image)) {
+  $Image = "ghcr.io/b-tech-hub/zhiliao:$packageVersion"
+}
+if ($Image -cnotmatch "\Aghcr\.io/b-tech-hub/zhiliao(?::$stableVersionPattern$preReleasePattern|@sha256:[a-f0-9]{64})\z") {
+  throw "Image 必须为知了镜像的固定完整版本、预发布版本或 sha256 digest；不接受 latest 或浮动版本。"
+}
+# 预览在创建临时目录、读取 Docker 状态和运行容器之前结束。
+if ($PrintConfig) {
+  [ordered]@{ packageVersion = $packageVersion; image = $Image; port = $Port } | ConvertTo-Json -Compress
+  exit 0
+}
+
 $stamp = Get-Date -Format "yyyyMMdd-HHmmss"
 $project = "zhiliao-smoke-$stamp-$([guid]::NewGuid().ToString('N').Substring(0, 8))".ToLowerInvariant()
-$repoRoot = (Resolve-Path (Join-Path $PSScriptRoot "..")).Path
 $work = Join-Path ([IO.Path]::GetTempPath()) $project
 $notesDir = Join-Path $work "notes"
 $envFile = Join-Path $work ".env"
 $composeFile = Join-Path $work "compose.yml"
 $failureLog = Join-Path $work "failure.log"
 $evidence = Join-Path $repoRoot "docs/验收记录-全新环境安装冒烟-$stamp.md"
-$image = "ghcr.io/b-tech-hub/zhiliao:0.6.0"
 $smokePassword = "smoke-only-password"
 $smokeSessionSecret = "smoke-session-secret-0123456789abcdef"
 $startedAt = Get-Date
@@ -73,6 +92,7 @@ function Write-Evidence([string]$Status, [string]$Failure = "") {
     "- 平台：$([Environment]::OSVersion.VersionString)",
     "- Docker：$dockerVersion",
     "- Node：$nodeVersion",
+    "- 脚本所属包版本：$packageVersion",
     "- 目标镜像：$image",
     "- Compose project：$project",
     "- 端口：$Port",

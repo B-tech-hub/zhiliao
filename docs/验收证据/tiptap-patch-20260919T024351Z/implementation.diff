@@ -1,0 +1,66 @@
+--- before/package.json
++++ after/package.json
+@@ -74,9 +74,10 @@
+     "vitest": "^4.1.11",
+     "yaml": "^2.9.0"
+   },
+-  "//overrides": "Next 仍声明旧 PostCSS，保留修复版覆盖；Sharp 覆盖防止传递依赖回落至低于 0.35.4 的受影响版本。移除前先核对实际解析结果。",
++  "//overrides": "Next 仍声明旧 PostCSS，保留修复版覆盖；Sharp 防止回落至低于 0.35.4；TipTap core 2.27.3 已回补属性原型缺陷，公告范围尚未反映，证据见 docs/TipTap残余风险调查-2026-09-19.md。移除前先核对实际解析结果。",
+   "overrides": {
+     "postcss": "^8.5.26",
+-    "sharp": "^0.35.4"
++    "sharp": "^0.35.4",
++    "@tiptap/core": "2.27.3"
+   }
+ }
+--- before/package-lock.json
++++ after/package-lock.json
+@@ -2412,9 +2412,9 @@
+       }
+     },
+     "node_modules/@tiptap/core": {
+-      "version": "2.27.2",
+-      "resolved": "https://registry.npmmirror.com/@tiptap/core/-/core-2.27.2.tgz",
+-      "integrity": "sha512-ABL1N6eoxzDzC1bYvkMbvyexHacszsKdVPYqhl5GwHLOvpZcv9VE9QaKwDILTyz5voCA0lGcAAXZp+qnXOk5lQ==",
++      "version": "2.27.3",
++      "resolved": "https://registry.npmjs.org/@tiptap/core/-/core-2.27.3.tgz",
++      "integrity": "sha512-a5LfRbLpfaGI3hbL/LPHUYHI0I+FQHdSHsy8L4YnVIuu3hXcm3QZgkWbpEGf8hCz8krk6zEiu0+iFOjTySU2FA==",
+       "license": "MIT",
+       "funding": {
+         "type": "github",
+--- before/src/components/markdown-editor.tsx
++++ after/src/components/markdown-editor.tsx
+@@ -1,7 +1,9 @@
+ "use client";
+ 
+ import { useEditor, EditorContent, NodeViewWrapper, ReactNodeViewRenderer, type Editor, type ReactNodeViewProps } from "@tiptap/react";
+-import { Node, mergeAttributes } from "@tiptap/core";
++import { Node, getHTMLFromFragment, mergeAttributes } from "@tiptap/core";
++import { Fragment } from "@tiptap/pm/model";
++import { defaultMarkdownSerializer } from "@tiptap/pm/markdown";
+ import StarterKit from "@tiptap/starter-kit";
+ import Image from "@tiptap/extension-image";
+ import Link from "@tiptap/extension-link";
+@@ -68,6 +70,22 @@
+ 
+ // 扩展 Image：支持宽度与对齐，序列化为内嵌 HTML 存入 Markdown（决策见 docs/adr）
+ const RichImage = Image.extend({
++  addStorage() {
++    const markdown: MarkdownNodeSpec = {
++      serialize(state, node, parent, index) {
++        if (node.attrs.width || node.attrs.align) {
++          // 沿用 schema 的属性白名单与 DOM 转义，不能拼接用户属性生成 HTML。
++          state.write(getHTMLFromFragment(Fragment.from(node), node.type.schema));
++        } else {
++          defaultMarkdownSerializer.nodes.image(state, node, parent, index);
++        }
++        // Image 是块级节点；缺少分隔会把下一张图片或 GFM 表头接到同一行。
++        state.closeBlock(node);
++      },
++      parse: {},
++    };
++    return { markdown };
++  },
+   addAttributes() {
+     return {
+       ...this.parent?.(),

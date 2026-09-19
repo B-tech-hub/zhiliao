@@ -1,0 +1,22 @@
+{
+  "timeUtc": "2026-09-15T02:35:43.031Z",
+  "query": "安装验收",
+  "reopened": [
+    {
+      "id": "mkh5swgf5bcho7oqg19vfbfz",
+      "url": "http://127.0.0.1:3312/notes/mkh5swgf5bcho7oqg19vfbfz",
+      "bodyMatches": true,
+      "title": "R1 安装验收：今晚·AI",
+      "tags": "训练, 羽毛球",
+      "searchStatus": 200
+    },
+    {
+      "id": "ox6f52w66q7g9ldv1jt1am52",
+      "url": "http://127.0.0.1:3312/notes/ox6f52w66q7g9ldv1jt1am52",
+      "bodyMatches": true,
+      "title": "R1 安装验收：无模·AI",
+      "tags": "记录, 测试",
+      "searchStatus": 200
+    }
+  ]
+}

@@ -1,0 +1,400 @@
+const assert = require("node:assert/strict");
+const fs = require("node:fs");
+const path = require("node:path");
+const { createHash } = require("node:crypto");
+const { spawnSync } = require("node:child_process");
+const { chromium, expect } = require("C:/Users/BAIBAI/AppData/Local/npm-cache/_npx/9833c18b2d85bc59/node_modules/playwright/test");
+const task = __dirname;
+const run = JSON.parse(fs.readFileSync(path.join(task, "run.json"), "utf8"));
+const credentials = JSON.parse(fs.readFileSync(path.join(task, "private/credentials.json"), "utf8"));
+const evidence = path.join(task, "evidence");
+const origin = "http://127.0.0.1:" + run.port;
+const reportFile = path.join(evidence, "browser-report.json");
+const report = {
+  runId: run.runId, imageId: run.imageId, startedUtc: new Date().toISOString(), status: "running",
+  ordinaryMode: true, httpCacheDisabled: true, serviceWorkers: "block", cookieInjection: false,
+  sessions: [], cases: [], operations: [], screenshots: [], network: [], requestFailures: [],
+  pageErrors: [], console: [], blocked: [], activeAction: "preflight",
+};
+const sha = value => createHash("sha256").update(value).digest("hex");
+const redact = value => {
+  let text = String(value);
+  for (const secret of Object.values(credentials)) text = text.replaceAll(secret, "[REDACTED]");
+  return text.replace(/kb_session=[^;\s"]+/g, "kb_session=[REDACTED]");
+};
+const save = () => fs.writeFileSync(reportFile, redact(JSON.stringify(report, null, 2)) + "\n", "utf8");
+const progress = (stage, value) => { console.log(JSON.stringify({ stage, ...value })); save(); };
+const dataSection = page => page.locator("section").filter({ has: page.getByRole("heading", { name: "数据", exact: true }) });
+const backupText = page => page.getByText(/^最近备份：/);
+const aiSection = page => page.locator("section").filter({ has: page.getByRole("heading", { name: "AI 服务", exact: true }) });
+let session;
+let lastBackupAt = null;
+let expectedModel = "mock";
+let expectedMaskedKey = null;
+const modelBase = "mock-r1-hydration";
+
+function backupFacts() {
+  const script = [
+    "const fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypto');",
+    "const dir=path.join(path.dirname(process.env.DATABASE_PATH),'backups');",
+    "const files=fs.existsSync(dir)?fs.readdirSync(dir).filter(name=>/^app-.*\\.db$/.test(name)):[];",
+    "const backups=files.map(name=>{const p=path.join(dir,name),s=fs.statSync(p);",
+    "const db=require('better-sqlite3')(p,{readonly:true,fileMustExist:true});",
+    "const quickCheck=db.pragma('quick_check',{simple:true});db.close();",
+    "return {name,bytes:s.size,mtimeMs:s.mtimeMs,sha256:crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex'),quickCheck};});",
+    "console.log(JSON.stringify({serverTz:process.env.TZ,serverNowUtc:new Date().toISOString(),",
+    "lastBackupAt:backups.length?Math.max(...backups.map(x=>x.mtimeMs)):null,backups}));",
+  ].join("");
+  const env = { ...process.env };
+  for (const key of Object.keys(env)) if (/^(DOCKER_|COMPOSE_|DEMO_)/i.test(key)) delete env[key];
+  const result = spawnSync("C:/Program Files/Docker/Docker/resources/bin/docker.exe",
+    ["--context", "desktop-linux", "exec", run.appId, "node", "-e", script],
+    { encoding: "utf8", windowsHide: true, timeout: 15000, env });
+  assert.equal(result.status, 0, redact(result.stderr || result.error || "无法读取本轮备份"));
+  const facts = JSON.parse(result.stdout);
+  assert.equal(facts.serverTz, "UTC");
+  assert.ok(facts.backups.every(value => value.quickCheck === "ok"));
+  return facts;
+}
+
+async function createSession(name, timezoneId) {
+  const profile = path.join(task, "browser-" + name);
+  assert.equal(fs.existsSync(profile), false, "浏览器目录必须是新的");
+  const context = await chromium.launchPersistentContext(profile, {
+    executablePath: "C:/Program Files/Google/Chrome/Application/chrome.exe",
+    headless: true, viewport: { width: 1440, height: 900 }, timezoneId, locale: "zh-CN",
+    colorScheme: "light", serviceWorkers: "block", acceptDownloads: true,
+    args: ["--no-proxy-server", "--disable-background-networking", "--disable-component-update",
+      "--disable-sync", "--no-first-run", "--no-default-browser-check"],
+  });
+  const page = context.pages()[0] || await context.newPage();
+  const current = { name, timezoneId, context, page, gate: null };
+  session = current;
+  page.setDefaultTimeout(20000);
+  page.setDefaultNavigationTimeout(30000);
+  await context.route("**/*", async route => {
+    const url = new URL(route.request().url());
+    if (["http:", "https:"].includes(url.protocol) && url.origin !== origin) {
+      report.blocked.push({ at: new Date().toISOString(), path: url.pathname, origin: url.origin, action: report.activeAction });
+      await route.abort("blockedbyclient");
+      return;
+    }
+    if (current.gate && route.request().resourceType() === "script") await current.gate.promise;
+    await route.continue();
+  });
+  const cdp = await context.newCDPSession(page);
+  await cdp.send("Network.enable");
+  await cdp.send("Network.setCacheDisabled", { cacheDisabled: true });
+  page.on("response", response => {
+    const request = response.request();
+    report.network.push({ at: new Date().toISOString(), session: name, action: report.activeAction,
+      path: new URL(response.url()).pathname, status: response.status(),
+      resourceType: request.resourceType(), method: request.method() });
+  });
+  page.on("requestfailed", request => report.requestFailures.push({
+    at: new Date().toISOString(), session: name, action: report.activeAction,
+    path: new URL(request.url()).pathname, resourceType: request.resourceType(), error: request.failure()?.errorText,
+  }));
+  page.on("pageerror", error => report.pageErrors.push({
+    at: new Date().toISOString(), session: name, action: report.activeAction,
+    name: error.name, message: redact(error.message), stack: redact(error.stack || ""),
+    cause: error.cause ? redact(error.cause.stack || String(error.cause)) : null,
+  }));
+  page.on("console", message => {
+    if (["error", "warning"].includes(message.type())) report.console.push({
+      at: new Date().toISOString(), session: name, action: report.activeAction,
+      type: message.type(), text: redact(message.text()), location: message.location(),
+    });
+  });
+  report.activeAction = name + "-login";
+  assert.equal((await page.goto(origin + "/login", { waitUntil: "networkidle" })).status(), 200);
+  await page.getByPlaceholder("请输入访问密码", { exact: true }).fill(credentials.password);
+  const [login] = await Promise.all([
+    page.waitForResponse(response => new URL(response.url()).pathname === "/api/auth/login" && response.request().method() === "POST"),
+    page.getByRole("button", { name: "登录", exact: true }).click(),
+  ]);
+  assert.equal(login.status(), 200);
+  await page.waitForURL(origin + "/");
+  await page.waitForLoadState("networkidle");
+  const actual = await page.evaluate(() => ({
+    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    offsetMinutes: new Date().getTimezoneOffset(), nowUtc: new Date().toISOString(),
+    userAgent: navigator.userAgent, language: navigator.language,
+  }));
+  assert.equal(actual.timezone, timezoneId);
+  report.sessions.push({ name, requestedTimezone: timezoneId, actual, freshProfile: true,
+    loginStatus: login.status(), browserVersion: context.browser().version() });
+  progress("session-ready", { name, timezone: actual.timezone });
+  return current;
+}
+
+async function expectedTime(page, timestamp) {
+  return page.evaluate(value => {
+    if (value === null) return { text: "从未备份", nowUtc: new Date().toISOString(), timezone: Intl.DateTimeFormat().resolvedOptions().timeZone };
+    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const parts = date => Object.fromEntries(new Intl.DateTimeFormat("en-GB", {
+      timeZone: timezone, year: "numeric", month: "2-digit", day: "2-digit",
+      hour: "2-digit", minute: "2-digit", hourCycle: "h23",
+    }).formatToParts(date).map(part => [part.type, part.value]));
+    const backup = parts(new Date(value)), now = parts(new Date());
+    let text;
+    if (backup.year === now.year && backup.month === now.month && backup.day === now.day) text = backup.hour + ":" + backup.minute;
+    else if (backup.year === now.year) text = Number(backup.month) + "月" + Number(backup.day) + "日";
+    else text = backup.year + "/" + backup.month + "/" + backup.day;
+    return { text, nowUtc: new Date().toISOString(), timezone };
+  }, timestamp);
+}
+
+async function verifyConfiguration(page) {
+  await expect(page.getByPlaceholder("https://api.openai.com/v1", { exact: true })).toHaveValue("http://mockllm:8787/v1");
+  await expect(page.getByPlaceholder("如 gpt-4o-mini", { exact: true })).toHaveValue(expectedModel);
+  const key = aiSection(page).locator('input[type="password"]').first();
+  await expect(key).toHaveValue("");
+  if (expectedMaskedKey) assert.ok((await key.getAttribute("placeholder")).includes(expectedMaskedKey));
+  assert.equal((await page.content()).includes(credentials.mockKey), false, "页面出现完整密钥");
+}
+
+async function layoutAndScreenshot(name, stage) {
+  const page = session.page;
+  const section = dataSection(page);
+  await section.scrollIntoViewIfNeeded();
+  await page.evaluate(() => document.fonts.ready);
+  const layout = await section.evaluate(element => {
+    const span = [...element.querySelectorAll("span")].find(item => item.textContent.startsWith("最近备份："));
+    const button = [...element.querySelectorAll("button")].find(item => item.textContent.includes("立即备份"));
+    const rect = target => {
+      const r = target.getBoundingClientRect();
+      return { left: r.left, right: r.right, top: r.top, bottom: r.bottom, width: r.width, height: r.height };
+    };
+    return { viewport: { width: innerWidth, height: innerHeight }, bodyScrollWidth: document.documentElement.scrollWidth,
+      sectionWidth: element.clientWidth, sectionScrollWidth: element.scrollWidth,
+      theme: document.documentElement.classList.contains("dark") ? "dark" : "light",
+      section: rect(element), time: rect(span), button: rect(button), text: span.textContent,
+      backupEnabled: !button.disabled };
+  });
+  assert.ok(layout.sectionScrollWidth <= layout.sectionWidth + 1, "数据区块横向溢出");
+  assert.ok(layout.bodyScrollWidth <= layout.viewport.width + 1, "页面横向溢出");
+  for (const field of ["time", "button"]) {
+    assert.ok(layout[field].left >= -1 && layout[field].right <= layout.viewport.width + 1, field + " 超出视口");
+  }
+  assert.equal(layout.backupEnabled, true);
+  const file = name + ".png";
+  await page.screenshot({ path: path.join(evidence, file), fullPage: false, animations: "disabled" });
+  const entry = { name, stage, file, sha256: sha(fs.readFileSync(path.join(evidence, file))), ...layout };
+  report.screenshots.push(entry);
+  save();
+  return entry;
+}
+
+async function serverSettings(name, options = {}) {
+  const page = session.page;
+  report.activeAction = name;
+  let release;
+  if (options.placeholderScreenshot) {
+    const promise = new Promise(resolve => { release = resolve; });
+    session.gate = { promise };
+  }
+  let response, html, initial;
+  try {
+    const waitUntil = options.placeholderScreenshot ? "commit" : "networkidle";
+    response = options.reload ? await page.reload({ waitUntil }) : await page.goto(origin + "/settings", { waitUntil });
+    assert.equal(response.status(), 200);
+    html = await response.text();
+    const span = html.match(/<span[^>]*>最近备份：[\s\S]*?<\/span>/);
+    assert.ok(span, "服务器 HTML 缺少最近备份节点");
+    const values = [...new Set([...html.matchAll(/lastBackupAt\\*":(null|-?\d+(?:\.\d+)?)/g)].map(match => match[1]))];
+    assert.equal(values.length, 1, "无法唯一读取服务端备份时间戳");
+    lastBackupAt = values[0] === "null" ? null : Number(values[0]);
+    const ssrText = span[0].replace(/<[^>]*>/g, "");
+    assert.equal(ssrText, "最近备份：" + (lastBackupAt === null ? "从未备份" : "—"));
+    if (options.noBackup) assert.equal(lastBackupAt, null);
+    else if (options.hasBackup) assert.notEqual(lastBackupAt, null);
+    assert.equal(html.includes(credentials.mockKey), false);
+    initial = { status: response.status(), htmlSha256: sha(html), htmlBytes: Buffer.byteLength(html),
+      timeSpanHtml: span[0], text: ssrText, backedUpAt: lastBackupAt };
+    if (options.placeholderScreenshot) {
+      await expect(backupText(page)).toHaveText(ssrText);
+      initial.browserBeforeScripts = await backupText(page).textContent();
+      await layoutAndScreenshot(options.placeholderScreenshot, "scripts-deferred-first-frame");
+    }
+  } finally {
+    session.gate = null;
+    release?.();
+  }
+  await page.waitForLoadState("networkidle");
+  const expected = await expectedTime(page, lastBackupAt);
+  await expect(backupText(page)).toHaveText("最近备份：" + expected.text);
+  await expect(dataSection(page).getByRole("button", { name: "立即备份", exact: true })).toBeEnabled();
+  await verifyConfiguration(page);
+  const entry = { name, session: session.name, mode: options.reload ? "reload" : "direct",
+    server: initial, client: { ...expected, text: await backupText(page).textContent() },
+    configurationReadback: true, secretMasked: true, pageErrorCount: report.pageErrors.length,
+    scriptsDeferredForFirstFrame: Boolean(options.placeholderScreenshot) };
+  report.cases.push(entry);
+  progress("settings-passed", { name, serverText: initial.text, clientText: entry.client.text });
+}
+
+async function saveSettings(name, model) {
+  report.activeAction = name;
+  const page = session.page, section = aiSection(page);
+  await page.getByPlaceholder("如 gpt-4o-mini", { exact: true }).fill(model);
+  const key = section.locator('input[type="password"]').first();
+  await key.fill(credentials.mockKey);
+  const [response] = await Promise.all([
+    page.waitForResponse(value => new URL(value.url()).pathname === "/api/settings/llm" && value.request().method() === "PATCH"),
+    section.getByRole("button", { name: "保存", exact: true }).first().click(),
+  ]);
+  assert.equal(response.status(), 200);
+  await page.getByText("✓ 已保存，立即生效", { exact: true }).waitFor();
+  expectedModel = model;
+  expectedMaskedKey = credentials.mockKey.slice(0, 4) + "…" + credentials.mockKey.slice(-4);
+  await verifyConfiguration(page);
+  report.operations.push({ name, type: "settings-save", status: response.status(),
+    fields: Object.keys(response.request().postDataJSON()), model, keyInputEmpty: true, secretMasked: true });
+  progress("settings-saved", { name, status: response.status() });
+}
+
+async function clientNavigation(name) {
+  report.activeAction = name;
+  const page = session.page;
+  assert.equal((await page.goto(origin + "/", { waitUntil: "networkidle" })).status(), 200);
+  await page.getByRole("link", { name: "设置", exact: true }).click();
+  await page.waitForURL(origin + "/settings");
+  await page.waitForLoadState("networkidle");
+  const facts = backupFacts();
+  const expected = await expectedTime(page, facts.lastBackupAt);
+  await expect(backupText(page)).toHaveText("最近备份：" + expected.text);
+  await verifyConfiguration(page);
+  report.cases.push({ name, session: session.name, mode: "client-navigation", backedUpAt: facts.lastBackupAt,
+    client: { ...expected, text: await backupText(page).textContent() },
+    configurationReadback: true, secretMasked: true, pageErrorCount: report.pageErrors.length });
+  progress("navigation-passed", { name });
+}
+
+async function theme(name) {
+  const page = session.page;
+  await page.getByRole("button", { name: name === "dark" ? "深色" : "浅色", exact: true }).click();
+  await page.waitForFunction(value => document.documentElement.classList.contains(value), name);
+}
+
+(async () => {
+  try {
+    assert.equal(JSON.parse(fs.readFileSync(path.join(evidence, "runtime.json"), "utf8")).status, "healthy-awaiting-browser");
+    report.initialBackupFacts = backupFacts();
+    assert.equal(report.initialBackupFacts.lastBackupAt, null, "必须先覆盖无备份状态");
+
+    await createSession("utc-empty", "UTC");
+    await serverSettings("utc-empty-direct", { noBackup: true });
+    await serverSettings("utc-empty-refresh", { noBackup: true, reload: true });
+    await session.context.close();
+    session = null;
+
+    await createSession("shanghai", "Asia/Shanghai");
+    await serverSettings("shanghai-empty-direct", { noBackup: true });
+    await serverSettings("shanghai-empty-refresh", { noBackup: true, reload: true });
+    report.activeAction = "manual-backup";
+    const [backup] = await Promise.all([
+      session.page.waitForResponse(response => new URL(response.url()).pathname === "/api/backup" && response.request().method() === "POST"),
+      dataSection(session.page).getByRole("button", { name: "立即备份", exact: true }).click(),
+    ]);
+    assert.equal(backup.status(), 200);
+    const backupResult = await backup.json();
+    assert.equal(backupResult.ok, true);
+    assert.equal(typeof backupResult.backedUpAt, "number");
+    lastBackupAt = backupResult.backedUpAt;
+    await session.page.getByText("✓ 已备份", { exact: true }).waitFor();
+    const createdBackup = backupFacts();
+    assert.ok(Math.abs(createdBackup.lastBackupAt - lastBackupAt) < 1, "API 时间戳与真实备份 mtime 不一致");
+    const expected = await expectedTime(session.page, lastBackupAt);
+    await expect(backupText(session.page)).toHaveText("最近备份：" + expected.text);
+    report.operations.push({ name: "manual-backup", type: "real-backup", status: backup.status(),
+      api: backupResult, files: createdBackup, updatedText: await backupText(session.page).textContent() });
+    progress("backup-created", { timestamp: lastBackupAt, files: createdBackup.backups.length });
+
+    await serverSettings("shanghai-backed-direct", { hasBackup: true, placeholderScreenshot: "first-frame-desktop-light" });
+    await saveSettings("shanghai-save", modelBase + "-shanghai");
+    await serverSettings("shanghai-after-save-refresh", { hasBackup: true, reload: true });
+    await serverSettings("shanghai-after-save-direct", { hasBackup: true });
+    await clientNavigation("shanghai-client-navigation");
+
+    for (const item of [
+      { width: 1440, height: 900, theme: "light" }, { width: 1440, height: 900, theme: "dark" },
+      { width: 1024, height: 768, theme: "light" }, { width: 390, height: 844, theme: "light" },
+      { width: 390, height: 844, theme: "dark" },
+    ]) {
+      report.activeAction = "visual-" + item.width + "-" + item.theme;
+      await session.page.setViewportSize({ width: item.width, height: item.height });
+      await theme(item.theme);
+      await layoutAndScreenshot(report.activeAction, "real-backup-current-date");
+    }
+    await theme("light");
+    await serverSettings("shanghai-mobile-first-frame", { hasBackup: true, reload: true, placeholderScreenshot: "first-frame-mobile-light" });
+
+    report.activeAction = "adjacent-export";
+    const [download] = await Promise.all([
+      session.page.waitForEvent("download"),
+      dataSection(session.page).getByRole("link", { name: "导出全部数据", exact: true }).click(),
+    ]);
+    assert.equal(await download.failure(), null);
+    const exportBytes = fs.readFileSync(await download.path());
+    assert.ok(exportBytes.length > 0);
+    report.operations.push({ name: "adjacent-export", type: "export", bytes: exportBytes.length,
+      sha256: sha(exportBytes), suggestedFilename: download.suggestedFilename() });
+
+    const fixedTime = new Date(Date.UTC(new Date(lastBackupAt).getUTCFullYear() + 1, 1, 1, 12));
+    await session.page.clock.setFixedTime(fixedTime);
+    report.controlledClock = { purpose: "真实备份的跨年与长日期排版", clientTimeUtc: fixedTime.toISOString(),
+      serverClockModified: false, backupMtimeModified: false };
+    await serverSettings("shanghai-controlled-next-year-refresh", { hasBackup: true, reload: true });
+    for (const item of [{ width: 390, theme: "light" }, { width: 390, theme: "dark" }, { width: 320, theme: "light" }]) {
+      report.activeAction = "long-date-" + item.width + "-" + item.theme;
+      await session.page.setViewportSize({ width: item.width, height: 844 });
+      await theme(item.theme);
+      await layoutAndScreenshot(report.activeAction, "controlled-client-next-year");
+    }
+    await session.context.close();
+    session = null;
+
+    await createSession("utc-backed", "UTC");
+    await serverSettings("utc-backed-direct", { hasBackup: true });
+    await saveSettings("utc-save", modelBase + "-utc");
+    await serverSettings("utc-after-save-refresh", { hasBackup: true, reload: true });
+    await serverSettings("utc-after-save-direct", { hasBackup: true });
+    await clientNavigation("utc-client-navigation");
+    report.finalBackupFacts = backupFacts();
+    await session.context.close();
+    session = null;
+
+    assert.equal(report.blocked.length, 0, "出现站外请求");
+    assert.equal(report.pageErrors.length, 0, "出现页面错误");
+    const unanticipatedConsole = report.console.filter(item => !/Service Worker registration blocked by Playwright/.test(item.text));
+    assert.equal(unanticipatedConsole.length, 0, "出现未预期的控制台错误或警告");
+    const staticResponses = report.network.filter(item => item.path.startsWith("/_next/static/"));
+    assert.ok(staticResponses.length > 0);
+    assert.ok(staticResponses.every(item => item.status === 200), "静态资源存在非 200");
+    assert.equal(report.requestFailures.filter(item => item.path.startsWith("/_next/static/")).length, 0);
+    report.summary = { settingsCases: report.cases.length, sessions: report.sessions.length,
+      screenshots: report.screenshots.length, realBackups: 1, settingsSaves: 2,
+      pageErrors: report.pageErrors.length, unexpectedConsole: unanticipatedConsole.length,
+      react418: 0, staticResponses: staticResponses.length, static503: 0,
+      expectedServiceWorkerWarnings: report.console.length };
+    report.status = "passed";
+  } catch (error) {
+    report.status = "failed";
+    report.failure = { action: report.activeAction, name: error.name, message: redact(error.message), stack: redact(error.stack || "") };
+    if (session) {
+      try {
+        fs.writeFileSync(path.join(evidence, "browser-failure-dom.txt"), redact(await session.page.locator("body").innerText()) + "\n");
+        await session.page.screenshot({ path: path.join(evidence, "browser-failure.png"), fullPage: false });
+      } catch (captureError) { report.failureCaptureError = redact(captureError.message); }
+    }
+  } finally {
+    if (session) await session.context.close();
+    report.finishedUtc = new Date().toISOString();
+    report.browserClosed = true;
+    save();
+    console.log(JSON.stringify({ status: report.status, summary: report.summary, failure: report.failure }));
+    process.exitCode = report.status === "passed" ? 0 : 1;
+  }
+})();
+

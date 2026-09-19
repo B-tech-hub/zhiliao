@@ -20,6 +20,9 @@
 
 ## Cross-Story Dependencies
 
+2026-09-13 已批准[开源发布优先范围调整](../planning-artifacts/sprint-change-proposal-2026-09-12-open-source-first.md)：开源交付与免费自托管反馈先行，Epic 2 剩余公网工作后移。本机成果保留，Story 2.2 的原验收、基线和冻结块不改；本次不改变 Story/Sprint 状态。
+
 - Story 2.1 依赖 Story 1.1 固化的 v0.6.0 运行边界，当前已完成。
 - Story 2.2 依赖 Story 2.1 的服务端能力边界，并另需维护者确认服务器、域名、DNS、HTTPS、费用和是否共机。
-- Story 2.3 依赖 Story 2.2 的隔离部署结果。
+- Story 2.3 依赖 Story 2.2 全部原验收与审查通过，本机结果不解除依赖。
+- Story 3.1 改依赖 1.2/1.3 与固定版本，在隔离本地实例复现；公网重置联验仍归 Epic 2 上线验收，由 Story 3.3 留存关联证据。

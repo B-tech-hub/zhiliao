@@ -1,0 +1,45 @@
+{
+  "story": "2.2",
+  "recorded_at": "2026-09-12T03:53:28.364Z",
+  "status": "removed",
+  "project": "zhiliao-demo-verify-a2-20260912",
+  "run_id": "ea454295b0c842a9318d3d9a31e6598d",
+  "original_evidence": "story-2-2-runtime-2026-09-12T02-41-22-818Z-ea454295.json",
+  "ownership_verified": true,
+  "resources": [
+    {
+      "type": "container",
+      "id": "c3d4ba49e936"
+    },
+    {
+      "type": "container",
+      "id": "84f1d147de00"
+    },
+    {
+      "type": "container",
+      "id": "eb03ec409280"
+    },
+    {
+      "type": "network",
+      "id": "b9fe8f5cd150"
+    },
+    {
+      "type": "network",
+      "id": "609bc7bc7fb3"
+    },
+    {
+      "type": "volume",
+      "id": "zhiliao-demo-verify-a2-20260912_demo_db"
+    },
+    {
+      "type": "volume",
+      "id": "zhiliao-demo-verify-a2-20260912_demo_notes"
+    },
+    {
+      "type": "volume",
+      "id": "zhiliao-demo-verify-a2-20260912_demo_uploads"
+    }
+  ],
+  "temporary_directory_removed": true,
+  "finished_at": "2026-09-12T03:53:39.928Z"
+}

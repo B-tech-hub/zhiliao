@@ -1,0 +1,5 @@
+{
+  "id": "boundary",
+  "error": "Error: page.evaluate: TypeError: res.status is not a function\n    at eval (eval at evaluate (:311:30), <anonymous>:21:69)\n    at async <anonymous>:337:30",
+  "stack": "page.evaluate: TypeError: res.status is not a function\n    at eval (eval at evaluate (:311:30), <anonymous>:21:69)\n    at async <anonymous>:337:30\n    at eval (<anonymous>:4:23)\n    at {验收目录}\\browser-driver.cjs:50:29"
+}

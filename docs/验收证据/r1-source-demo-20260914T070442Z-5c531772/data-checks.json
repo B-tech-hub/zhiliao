@@ -1,0 +1,94 @@
+{
+  "noteCount": 18,
+  "pollutionKeys": [
+    {
+      "key": "llm_base_url",
+      "preserved": true
+    },
+    {
+      "key": "llm_api_key",
+      "preserved": true
+    },
+    {
+      "key": "llm_model",
+      "preserved": true
+    },
+    {
+      "key": "vision_base_url",
+      "preserved": true
+    },
+    {
+      "key": "vision_api_key",
+      "preserved": true
+    },
+    {
+      "key": "vision_model",
+      "preserved": true
+    },
+    {
+      "key": "image_base_url",
+      "preserved": true
+    },
+    {
+      "key": "image_api_key",
+      "preserved": true
+    },
+    {
+      "key": "image_model",
+      "preserved": true
+    },
+    {
+      "key": "reasoning_base_url",
+      "preserved": true
+    },
+    {
+      "key": "reasoning_api_key",
+      "preserved": true
+    },
+    {
+      "key": "reasoning_model",
+      "preserved": true
+    },
+    {
+      "key": "embedding_base_url",
+      "preserved": true
+    },
+    {
+      "key": "embedding_api_key",
+      "preserved": true
+    },
+    {
+      "key": "embedding_model",
+      "preserved": true
+    }
+  ],
+  "notes": [
+    {
+      "phase": "cold",
+      "id": "eifme1synnzp9q0y8o314hkw",
+      "title": "R1验收冷启动：今晚·AI",
+      "status": "done",
+      "topic": "羽毛球",
+      "bodyPreserved": true,
+      "markdownCount": 1,
+      "markdownBodyPreserved": true,
+      "markdownPath": "data-demo/notes/羽毛球/R1验收冷启动：今晚·AI-eifme1synnzp9q0y8o314hkw.md"
+    },
+    {
+      "phase": "restart",
+      "id": "fu735lj7ygepx87pfd3ub705",
+      "title": "R1验收配置污染：重·AI",
+      "status": "done",
+      "topic": "羽毛球",
+      "bodyPreserved": true,
+      "markdownCount": 1,
+      "markdownBodyPreserved": true,
+      "markdownPath": "data-demo/notes/羽毛球/R1验收配置污染：重·AI-fu735lj7ygepx87pfd3ub705.md"
+    }
+  ],
+  "canaryDirectoryCreated": false,
+  "formalDataDirectoryCreated": false,
+  "failedJobs": 0,
+  "timeUtc": "2026-09-14T08:11:31.001Z",
+  "passed": true
+}

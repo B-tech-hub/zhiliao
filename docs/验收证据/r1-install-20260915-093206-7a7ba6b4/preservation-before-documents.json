@@ -1,0 +1,30 @@
+{
+  "runId": "20260915-093206-7a7ba6b4",
+  "phase": "before-documents",
+  "timeUtc": "2026-09-15T02:47:22.598841+00:00",
+  "originalWorkspaceFiles": 748,
+  "originalWorkspaceFilesUnchanged": 748,
+  "allowedChangedFiles": [],
+  "unexpectedChangedFiles": [],
+  "unexpectedNewFiles": [],
+  "approvedNewFilesCount": 0,
+  "headUnchanged": true,
+  "indexUnchanged": true,
+  "protectedFilesChecked": 148,
+  "protectedFilesAndSetUnchanged": true,
+  "dataMetadataFilesChecked": 143,
+  "dataMetadataUnchanged": true,
+  "originalResources": {
+    "containers": 7,
+    "volumes": 8,
+    "networks": 7
+  },
+  "originalResourceMetadataUnchanged": {
+    "containers": true,
+    "volumes": true,
+    "networks": true
+  },
+  "containerMountOrderNormalized": true,
+  "originalImagesRetained": true,
+  "passed": true
+}

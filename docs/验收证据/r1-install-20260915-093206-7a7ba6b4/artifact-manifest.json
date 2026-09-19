@@ -1,0 +1,437 @@
+{
+    "runId":  "20260915-093206-7a7ba6b4",
+    "generatedUtc":  "2026-09-15T03:06:55.1038238Z",
+    "credentialScanPassed":  true,
+    "files":  [
+                  {
+                      "path":  ".gitignore",
+                      "bytes":  244,
+                      "sha256":  "b181c9f451987b33f1e2cb0aebea86f91ae2940e9afad27916b88cc45754c7bd"
+                  },
+                  {
+                      "path":  "01-login.png",
+                      "bytes":  16190,
+                      "sha256":  "1a5811069abd5f62dd9588a7fe91b51e9c1a7fe901c3ccceccbe8d4f851e5691"
+                  },
+                  {
+                      "path":  "02-note-without-model.png",
+                      "bytes":  50976,
+                      "sha256":  "ba876ac8138e99f3a429f8baa6e1d24049c2bab8fbaaafe6f9e71c61a7cd692e"
+                  },
+                  {
+                      "path":  "03-page-recovered.png",
+                      "bytes":  35418,
+                      "sha256":  "cd15668501dc4c5418b892e11ac55082c169978c11c2ce16fc621da5a9e78eef"
+                  },
+                  {
+                      "path":  "04-mock-note.png",
+                      "bytes":  49186,
+                      "sha256":  "74a78d61f284fca6d54346587df60463c06449b8db546bd9c78ca5347fa7b1d6"
+                  },
+                  {
+                      "path":  "05-search-after-restart.png",
+                      "bytes":  59834,
+                      "sha256":  "388b8817d08b3966b49d186d15d4873863388a67d62e46596bf4717af569cb68"
+                  },
+                  {
+                      "path":  "06-note-after-restart.png",
+                      "bytes":  49186,
+                      "sha256":  "74a78d61f284fca6d54346587df60463c06449b8db546bd9c78ca5347fa7b1d6"
+                  },
+                  {
+                      "path":  "archive-redaction.json",
+                      "bytes":  144,
+                      "sha256":  "2d60803c44a230905794384346e892ebac0b9c5767e6e020925f9f36aeb9d4a2"
+                  },
+                  {
+                      "path":  "browser-actions.jsonl",
+                      "bytes":  13655,
+                      "sha256":  "b011f8b572a4438657050381266002c411c64b8278960f3d93ff0a94cdd70844"
+                  },
+                  {
+                      "path":  "browser-asset-diagnosis.json",
+                      "bytes":  3031,
+                      "sha256":  "5f7e63529e149606b69f92f0b4643bbe3efe162bee73f6a6fa77dc902293132b"
+                  },
+                  {
+                      "path":  "browser-before-restart.json",
+                      "bytes":  151,
+                      "sha256":  "c134132a411640abce176255b7fbd33b0cbc93ca83aa5144a9be7b3ab815781d"
+                  },
+                  {
+                      "path":  "browser-browser-final.json",
+                      "bytes":  2429,
+                      "sha256":  "906151ef9d4df9293d02ec26c0ecfa35207bbaec0f9e1bff5b4ef5c0cbc2a05c"
+                  },
+                  {
+                      "path":  "browser-driver-adjustment.json",
+                      "bytes":  448,
+                      "sha256":  "08186a614bafdc5c235b8a88e0091b8599b95d70a93ad2d73485c71f6c4071f9"
+                  },
+                  {
+                      "path":  "browser-export-after-restart.json",
+                      "bytes":  182,
+                      "sha256":  "6a25f2d74e527a2564519819b853aa1993eea5867b21232ee400f43ae642ac8a"
+                  },
+                  {
+                      "path":  "browser-export-without-model.json",
+                      "bytes":  182,
+                      "sha256":  "d4e2a832d50e073a8f616262b36a46f11fdf6ece17da5ae6c1503ac81d7f6cc2"
+                  },
+                  {
+                      "path":  "browser-first-note.json",
+                      "bytes":  260,
+                      "sha256":  "1fe4562a7fa582f4e056258cd9de5ab0fc7ba08ef2837a26f9f14f4c039a1c5e"
+                  },
+                  {
+                      "path":  "browser-initial-driver.json",
+                      "bytes":  252,
+                      "sha256":  "55d325b038bec87400551bbccb877550c624c069cf696594c2fe16c7bedddc43"
+                  },
+                  {
+                      "path":  "browser-login.json",
+                      "bytes":  378,
+                      "sha256":  "197df6dd41d66554132aa60f98dae6cdddbf707de54782d67fcb2be6b5e05ab1"
+                  },
+                  {
+                      "path":  "browser-login-page.json",
+                      "bytes":  105,
+                      "sha256":  "a8cf69fa1d515e1ebe64f10c24dc13835752603a41b3c28f9122daf771c9a303"
+                  },
+                  {
+                      "path":  "browser-mock-completed.json",
+                      "bytes":  357,
+                      "sha256":  "88ebbf2b71fd5f1141ae6a92aa0b7c6936f5410838a02838d5cceebfee3a13e5"
+                  },
+                  {
+                      "path":  "browser-mock-note.json",
+                      "bytes":  267,
+                      "sha256":  "e7dd90ddeaabd46656813f26a13a9a04524d792c9d9be3071386b4f7a297302a"
+                  },
+                  {
+                      "path":  "browser-mock-settings.json",
+                      "bytes":  174,
+                      "sha256":  "678979a53533a8e835b54feca595c1c5b3963764ae823dae4f24df8146da7877"
+                  },
+                  {
+                      "path":  "browser-recover-page.json",
+                      "bytes":  131,
+                      "sha256":  "e232f0e7ada19412323ed72d4e52611526ffcbff8cd4ac09aeb9021da09f5047"
+                  },
+                  {
+                      "path":  "browser-report.json",
+                      "bytes":  73074,
+                      "sha256":  "23c623493b4ba128c153d607f429d3d9f21cbb50499c101b66671d2be305c950"
+                  },
+                  {
+                      "path":  "browser-restart-login.json",
+                      "bytes":  290,
+                      "sha256":  "303f53ab4a0f529caf209d65b69cf1349883d7815990dbb8b4b92a4196d0a8c3"
+                  },
+                  {
+                      "path":  "browser-restart-notes.json",
+                      "bytes":  602,
+                      "sha256":  "1108156ebeac452a75218c93315fa49a6cd9154aa894722d332379fe9b17ce93"
+                  },
+                  {
+                      "path":  "browser-search-without-model.json",
+                      "bytes":  216,
+                      "sha256":  "bc7700a44b19790ea9768d0de6afeb9ed5ecc0df3c16a67801588cba4cb60e2f"
+                  },
+                  {
+                      "path":  "browser-topic-created.json",
+                      "bytes":  116,
+                      "sha256":  "747e1eb2aff8c9163add59365dc32f2a75c77a174148f060a89c47616287033d"
+                  },
+                  {
+                      "path":  "build.json",
+                      "bytes":  1158,
+                      "sha256":  "13127dfdfd03af31f8745220f2f884ff33b478a6fd3cfa2a20408f0bc7fd7749"
+                  },
+                  {
+                      "path":  "build.log",
+                      "bytes":  11460,
+                      "sha256":  "ea3d027a1e180a285dc19ff450c7267cd3d541856423b8771c0abdd6b338b75f"
+                  },
+                  {
+                      "path":  "build-diagnosis.json",
+                      "bytes":  1344,
+                      "sha256":  "d0e88227535654b39effab9fe970b9ac8c6b309fc93075d20797aff2d0c73a3e"
+                  },
+                  {
+                      "path":  "build-download-progress-3.json",
+                      "bytes":  144,
+                      "sha256":  "7312de30fe79a299bf50d6b9d1ec4ad6ef3ba6d71966435a752de1870c5a8fa2"
+                  },
+                  {
+                      "path":  "build-download-progress-4.json",
+                      "bytes":  144,
+                      "sha256":  "efc392bdfd6af6c4128b05c3fe0114c893f647f7152e2b8741a70229f5f559bf"
+                  },
+                  {
+                      "path":  "build-download-progress-5.json",
+                      "bytes":  144,
+                      "sha256":  "0d68310c4fb48029d889b804653612d2735d6851c41935b871c4137dee9c3b20"
+                  },
+                  {
+                      "path":  "build-download-size.json",
+                      "bytes":  364,
+                      "sha256":  "45c20c679ebdf4c7f7e8ac3aeb51578b2cc45f58b31883f57a14adac652acb40"
+                  },
+                  {
+                      "path":  "build-probe-1.json",
+                      "bytes":  397085,
+                      "sha256":  "a254584adaa7c6a2b21e1972c72d457ab3530c1976a819d7a2cf24c4cfb8ac13"
+                  },
+                  {
+                      "path":  "build-progress-2.json",
+                      "bytes":  1743,
+                      "sha256":  "4fc4d88b190afa28ee55ca80d5fda67735c37f6305c9b1e1596326ee6d8970ce"
+                  },
+                  {
+                      "path":  "build-progress-after-download.json",
+                      "bytes":  83,
+                      "sha256":  "d9484eb38d386299dc1409699aff2f90bf5b78e42ea16a44e17b33de23ee654c"
+                  },
+                  {
+                      "path":  "cleanup-compose.json",
+                      "bytes":  292,
+                      "sha256":  "72d61eafb02ddba7c51bc954aa07a2247a8b1685d29c0a8f016e49056f658be1"
+                  },
+                  {
+                      "path":  "cleanup-compose.log",
+                      "bytes":  1372,
+                      "sha256":  "56fa0554c01de7b2fdb6a5ed67a3ac291a77e7aca7ac77a137a1f7bd0e109f79"
+                  },
+                  {
+                      "path":  "cleanup-directory.json",
+                      "bytes":  549,
+                      "sha256":  "fb282d08f0b84df2edac1bbe6bace541860874bae7abf175078301ccb98dc228"
+                  },
+                  {
+                      "path":  "cleanup-runtime.json",
+                      "bytes":  370,
+                      "sha256":  "bfe5efd6631bd45d20bdc2cedc872445c0bc9d2de7d1b8beb7ed8ff194236635"
+                  },
+                  {
+                      "path":  "compose-initial.txt",
+                      "bytes":  1081,
+                      "sha256":  "a074d126cb68e541a453b5afb0c785e575d50bce13ecee0cc94ff2f1bc1b5b82"
+                  },
+                  {
+                      "path":  "compose-runtime-change.txt",
+                      "bytes":  194,
+                      "sha256":  "31fbcaab95a4421feabc6a8872213dc34868410bf0fcc7faa88a972c77a34189"
+                  },
+                  {
+                      "path":  "config-initial-redacted.json",
+                      "bytes":  6593,
+                      "sha256":  "47d5c0e10cc7d5dccc5c454314a9c174335fa9a1e337699ca7d2bf471aa4aabc"
+                  },
+                  {
+                      "path":  "config-redacted.json",
+                      "bytes":  6569,
+                      "sha256":  "b69c6b312fd95e2f9b7f7a709af46abc746367fb0694df2f9acd2e3e89d91d89"
+                  },
+                  {
+                      "path":  "data-after-restart.json",
+                      "bytes":  2585,
+                      "sha256":  "8167cdf2265aa3a777941125d21f6ddf6db8868fb6a66444537b5a01f93af856"
+                  },
+                  {
+                      "path":  "data-before-restart.json",
+                      "bytes":  2046,
+                      "sha256":  "9d1597df6b70ef42b214ae56fa8772da4230398b3beba113f0722e104d91e07e"
+                  },
+                  {
+                      "path":  "data-without-model.json",
+                      "bytes":  1274,
+                      "sha256":  "e0b9354d0402174048ec2892f61c3a2a4296f60274fc637493f69898f1810147"
+                  },
+                  {
+                      "path":  "docker-version.json",
+                      "bytes":  1583,
+                      "sha256":  "601609f3646a4f2f5d61e548d680912dc7969ff335ccac207ea3fd14dd04898a"
+                  },
+                  {
+                      "path":  "document-verification.json",
+                      "bytes":  4087,
+                      "sha256":  "bdba2807701f19fecd3a09cff472cc37e4da0aedd1b028f39fadfddf33109ca6"
+                  },
+                  {
+                      "path":  "export-after-restart.zip",
+                      "bytes":  861,
+                      "sha256":  "2d191025857784876acff04c8e6758a9aaf25079fcd01a2e79e2b60e878a3b20"
+                  },
+                  {
+                      "path":  "export-without-model.zip",
+                      "bytes":  375,
+                      "sha256":  "a8e6b6c6537d35d75d180e250e4d8112a95bbd7f93f12d53fffdf4b92bf3dc10"
+                  },
+                  {
+                      "path":  "harness.zip",
+                      "bytes":  29390,
+                      "sha256":  "ca77d1ba0b8240249016710303d3d770ae9e1f61b8428ccc31d3e9bc2f08cf17"
+                  },
+                  {
+                      "path":  "host-probe-diagnosis.json",
+                      "bytes":  581,
+                      "sha256":  "f398357322d0ba49e89d4e732bd857a16eda386274ec663c805fdbd70006ca64"
+                  },
+                  {
+                      "path":  "ingress-config-finding.json",
+                      "bytes":  981,
+                      "sha256":  "239380b4d2f9b446db77dca047518a76fd85c4d4830b68236ad8d70d9e4072fd"
+                  },
+                  {
+                      "path":  "initial-empty-db.json",
+                      "bytes":  33,
+                      "sha256":  "723d9758d1f8affc23924fbbd512dfa4321919dc301d02d9f16d7aa9f8d6ef53"
+                  },
+                  {
+                      "path":  "initial-runtime.json",
+                      "bytes":  5572,
+                      "sha256":  "2378a221462c3afa04a43c4a6eb209d7a28e994697c217905aaeb2db71579e17"
+                  },
+                  {
+                      "path":  "nginx-image.json",
+                      "bytes":  348,
+                      "sha256":  "d9a1d71204a17abfef562edc08e3158e18e5d4f78271f7399a5f949e5af5e770"
+                  },
+                  {
+                      "path":  "npm-ci-debug.log",
+                      "bytes":  388952,
+                      "sha256":  "5686180ff25edf043d98e9964e0beb9e17ad9389928761e03f971a462b6bd327"
+                  },
+                  {
+                      "path":  "preparation.json",
+                      "bytes":  1523,
+                      "sha256":  "4fb471a84505e6265b9a013138e25b428e24c322dc0565b3ed7f40495791faaa"
+                  },
+                  {
+                      "path":  "preservation-before-documents.json",
+                      "bytes":  800,
+                      "sha256":  "92a2b0cd7f12e5af3083f4aedac2d0d3dd384620f70381c66992bd0461c7efc7"
+                  },
+                  {
+                      "path":  "preservation-before-documents-raw-order.json",
+                      "bytes":  761,
+                      "sha256":  "2c77fc3dbd27cd867f8aef89337414e7d7a06d89ec55a31933f1c5ed18fe49aa"
+                  },
+                  {
+                      "path":  "preservation-final.json",
+                      "bytes":  965,
+                      "sha256":  "439076a76fff4f9c7cd6da1e0d9b6ef3fbada43a6baa0f35e1ab77f74f66ad0d"
+                  },
+                  {
+                      "path":  "resource-comparison-diagnosis.json",
+                      "bytes":  179,
+                      "sha256":  "75ece10d484d2b4079efdad7eace4966bf8572b500cba02612dec5bc9190e920"
+                  },
+                  {
+                      "path":  "restart-down.json",
+                      "bytes":  279,
+                      "sha256":  "c23ca4513b047b3e120958f7f868c424e335686194045489ea3c8c14e6bffde8"
+                  },
+                  {
+                      "path":  "restart-down.log",
+                      "bytes":  1088,
+                      "sha256":  "cf1524aa3f2d4beb64c749688a660bcb16a070473f30a341047654eb57ad3a2c"
+                  },
+                  {
+                      "path":  "restart-runtime.json",
+                      "bytes":  5572,
+                      "sha256":  "7d120897c64f88e7a6144d6329b0bbb43adac937c7578b2dec4cd62ede0ab518"
+                  },
+                  {
+                      "path":  "restart-up.json",
+                      "bytes":  350,
+                      "sha256":  "9232ec3387611bd01ae2e994d7ee68ca00e98fc42a2b7aff2b4c34d384e1a4da"
+                  },
+                  {
+                      "path":  "restart-up.log",
+                      "bytes":  1772,
+                      "sha256":  "694b17c9548bc1654d23d17c1fe570cb3a887a2c333a48932a339244830afdfa"
+                  },
+                  {
+                      "path":  "run-identity.json",
+                      "bytes":  369,
+                      "sha256":  "98b22fc7234fc379b00eee772403729a59c6ac7d244cfd689a0077e7fcc48930"
+                  },
+                  {
+                      "path":  "runtime.log",
+                      "bytes":  30214,
+                      "sha256":  "306563ec04b9abbde11b4a5324f124c529e1e87e2040da36098ccf3db5a255a1"
+                  },
+                  {
+                      "path":  "runtime-before-restart.log",
+                      "bytes":  78218,
+                      "sha256":  "a51d4fab8e1ff0bc710c04b7607b7fdd7d31efe629769c0b6f4dd93a38b5b2d8"
+                  },
+                  {
+                      "path":  "runtime-business-isolation.json",
+                      "bytes":  1198,
+                      "sha256":  "063c7730fb2b0f31103708d84b55841652bd25ea2105772e31edc5926bed753c"
+                  },
+                  {
+                      "path":  "runtime-final-bindings.json",
+                      "bytes":  1551,
+                      "sha256":  "fcdfdd19d48c6805b745acc635d39e4e145811bf1daa03dd33638a9057b701d4"
+                  },
+                  {
+                      "path":  "runtime-network-diagnosis.json",
+                      "bytes":  7348,
+                      "sha256":  "4ecfa96c722c8baedd2eca2bba53ebaa0ba08b36d9a15bb46d9a199ccebac7ad"
+                  },
+                  {
+                      "path":  "runtime-start-failure.json",
+                      "bytes":  172,
+                      "sha256":  "c95c0b62eb64b72535627c44b8c9d614743fe6afe71bf6373dcad11e23f464ec"
+                  },
+                  {
+                      "path":  "source-manifest.json",
+                      "bytes":  27452,
+                      "sha256":  "1de98911e22cfca248a709c92d247436d50c862baaa04cd947ea0bf0750cac0d"
+                  },
+                  {
+                      "path":  "source-snapshot.zip",
+                      "bytes":  1109717,
+                      "sha256":  "fb76293f0c3599e4f5bd142e5c771099606beb06b4556a1b968dc2c52d5d5614"
+                  },
+                  {
+                      "path":  "startup.json",
+                      "bytes":  347,
+                      "sha256":  "be9f4a2c3e8495345a77a30378628f97f7b88a3270c89d8c40fe68b19594fe4b"
+                  },
+                  {
+                      "path":  "startup.log",
+                      "bytes":  2056,
+                      "sha256":  "bb79b4221561aa663f653eb904b22ea7c5af5c820455bafe340709754844ca4d"
+                  },
+                  {
+                      "path":  "startup-config-down.json",
+                      "bytes":  286,
+                      "sha256":  "8046e8772608e3299cbae98d07454a2fe8862e648f41be8a3bb560a23318f2bd"
+                  },
+                  {
+                      "path":  "startup-config-down.log",
+                      "bytes":  1088,
+                      "sha256":  "a6a25a7c860faa25b2c1c0025dc042cf788ddfadb79cd5d61398ecfecad0ab59"
+                  },
+                  {
+                      "path":  "startup-config-up.json",
+                      "bytes":  357,
+                      "sha256":  "2a62e245d7aaccb10116fe317e07aacb89665422283ae5c76adb8bf98132606d"
+                  },
+                  {
+                      "path":  "startup-config-up.log",
+                      "bytes":  1772,
+                      "sha256":  "63540855bfedfba22fab2f3bcf7c7049f54ce794d4c7385f94d3c56f7a1ef0ec"
+                  },
+                  {
+                      "path":  "summary.json",
+                      "bytes":  7794,
+                      "sha256":  "a604b1a300b09d250fe43595962c6aa42c2c1f46fcb959fa0fd199ff07daea7a"
+                  }
+              ]
+}

@@ -1,7 +1,9 @@
 "use client";
 
 import { useEditor, EditorContent, NodeViewWrapper, ReactNodeViewRenderer, type Editor, type ReactNodeViewProps } from "@tiptap/react";
-import { Node, mergeAttributes } from "@tiptap/core";
+import { Node, getHTMLFromFragment, mergeAttributes } from "@tiptap/core";
+import { Fragment } from "@tiptap/pm/model";
+import { defaultMarkdownSerializer } from "@tiptap/pm/markdown";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
@@ -68,6 +70,22 @@ function insertImages(editor: Editor, files: File[], noteId?: string) {
 
 // 扩展 Image：支持宽度与对齐，序列化为内嵌 HTML 存入 Markdown（决策见 docs/adr）
 const RichImage = Image.extend({
+  addStorage() {
+    const markdown: MarkdownNodeSpec = {
+      serialize(state, node, parent, index) {
+        if (node.attrs.width || node.attrs.align) {
+          // 沿用 schema 的属性白名单与 DOM 转义，不能拼接用户属性生成 HTML。
+          state.write(getHTMLFromFragment(Fragment.from(node), node.type.schema));
+        } else {
+          defaultMarkdownSerializer.nodes.image(state, node, parent, index);
+        }
+        // Image 是块级节点；缺少分隔会把下一张图片或 GFM 表头接到同一行。
+        state.closeBlock(node);
+      },
+      parse: {},
+    };
+    return { markdown };
+  },
   addAttributes() {
     return {
       ...this.parent?.(),

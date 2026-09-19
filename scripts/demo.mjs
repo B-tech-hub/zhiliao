@@ -9,6 +9,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
 const demoEnv = {
   DEMO_MODE: "1",
+  DEMO_RUNTIME: "local",
   APP_PASSWORD: "demo",
   // 仅本机演示用的固定密钥（32 字符），无安全诉求；固定值保证重启后会话不失效
   SESSION_SECRET: "zhiliao-demo-session-secret-0123",

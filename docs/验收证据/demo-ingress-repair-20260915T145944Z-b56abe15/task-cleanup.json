@@ -1,0 +1,9 @@
+{
+    "status":  "removed",
+    "checkedAt":  "2026-09-15T15:31:23.6430701Z",
+    "taskDirectory":  "zhiliao-ingress-repair-20260915T145944Z-b56abe15",
+    "markerVerified":  true,
+    "reparsePoints":  0,
+    "runtimeResources":  "参见 runtime.json，本轮容器、卷、网络与运行目录已清理",
+    "vscode":  "已调用 code -r 打开仓库及完成规格"
+}

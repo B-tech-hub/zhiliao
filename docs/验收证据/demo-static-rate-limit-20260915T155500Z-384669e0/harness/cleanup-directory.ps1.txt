@@ -1,0 +1,48 @@
+﻿$ErrorActionPreference = 'Stop'
+$repairDirectory = 'C:/Users/BAIBAI/AppData/Local/Temp/zhiliao-static-repair-20260915T155500Z-384669e0'
+$repairEvidence = 'D:/ClaudeProjects/ai_acknowladge/docs/验收证据/demo-static-rate-limit-20260915T155500Z-384669e0'
+$repairRunId = '20260915T155500Z-384669e0'
+$repairProject = 'zhiliao-static-repair-' + $repairRunId.ToLowerInvariant()
+$repairResolved = (Resolve-Path -LiteralPath $repairDirectory).Path
+$repairTemp = [System.IO.Path]::GetFullPath([System.IO.Path]::GetTempPath()).TrimEnd('\', '/')
+if ([System.IO.Path]::GetDirectoryName($repairResolved) -ne $repairTemp) { throw '临时目录超出系统 TEMP 父目录' }
+if ([System.IO.Path]::GetFileName($repairResolved) -ne ('zhiliao-static-repair-' + $repairRunId)) { throw '临时目录名称不匹配' }
+$repairState = Get-Content -Raw -Encoding UTF8 -LiteralPath (Join-Path $repairResolved 'runtime-private.json') | ConvertFrom-Json
+if ($repairState.runId -ne $repairRunId -or $repairState.project -ne $repairProject) { throw '运行归属不匹配' }
+$repairReport = Get-Content -Raw -Encoding UTF8 -LiteralPath (Join-Path $repairEvidence 'runtime.json') | ConvertFrom-Json
+$repairAudit = Get-Content -Raw -Encoding UTF8 -LiteralPath (Join-Path $repairEvidence 'pre-cleanup-audit.json') | ConvertFrom-Json
+if ($repairReport.status -ne 'passed' -or $repairReport.cleanup.status -ne 'removed' -or $repairAudit.status -ne 'passed') { throw '运行、资源清理或归档检查未通过' }
+$repairItems = @((Get-Item -LiteralPath $repairResolved -Force)) + @(Get-ChildItem -LiteralPath $repairResolved -Recurse -Force)
+if (@($repairItems | Where-Object { ($_.Attributes -band [System.IO.FileAttributes]::ReparsePoint) -ne 0 }).Count -gt 0) { throw '目录包含重解析点，停止删除' }
+$repairBrowsers = @(Get-CimInstance Win32_Process -Filter "Name='chrome.exe'" | Where-Object { $_.CommandLine -and $_.CommandLine.IndexOf($repairResolved, [System.StringComparison]::OrdinalIgnoreCase) -ge 0 })
+if ($repairBrowsers.Count -ne 0) { throw '本轮浏览器进程仍存在' }
+$repairContainers = @(docker ps -aq --filter ('label=com.docker.compose.project=' + $repairProject))
+if ($LASTEXITCODE -ne 0 -or $repairContainers.Count -ne 0) { throw '容器归属检查失败或资源仍存在' }
+$repairNetworks = @(docker network ls -q --filter ('label=com.docker.compose.project=' + $repairProject))
+if ($LASTEXITCODE -ne 0 -or $repairNetworks.Count -ne 0) { throw '网络归属检查失败或资源仍存在' }
+$repairVolumes = @(docker volume ls -q --filter ('label=com.docker.compose.project=' + $repairProject))
+if ($LASTEXITCODE -ne 0 -or $repairVolumes.Count -ne 0) { throw '卷归属检查失败或资源仍存在' }
+$repairArchived = Join-Path $repairEvidence 'harness/cleanup-directory.ps1.txt'
+if ((Get-FileHash -LiteralPath $PSCommandPath -Algorithm SHA256).Hash -ne (Get-FileHash -LiteralPath $repairArchived -Algorithm SHA256).Hash) { throw '清理脚本归档不一致' }
+$repairSummary = [ordered]@{
+  runId = $repairRunId
+  project = $repairProject
+  checkedAbsoluteDirectory = $repairResolved
+  parentTempVerified = $true
+  ownershipVerified = $true
+  noReparsePoints = $true
+  browserProcessCount = 0
+  remainingContainers = 0
+  remainingNetworks = 0
+  remainingVolumes = 0
+  archivedScriptsVerified = $true
+  status = 'pending'
+}
+Remove-Item -LiteralPath $repairResolved -Recurse -Force
+if (Test-Path -LiteralPath $repairResolved) { throw '临时目录未删除' }
+$repairSummary.status = 'removed'
+$repairSummary.finishedAt = (Get-Date).ToUniversalTime().ToString('o')
+$repairJson = $repairSummary | ConvertTo-Json -Depth 5
+[System.IO.File]::WriteAllText((Join-Path $repairEvidence 'cleanup-directory.json'), $repairJson + [char]10, [System.Text.UTF8Encoding]::new($false))
+$repairJson
+

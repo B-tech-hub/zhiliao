@@ -1,0 +1,53 @@
+const fs = require('node:fs');
+const path = require('node:path');
+const assert = require('node:assert/strict');
+const repo = process.cwd();
+const semver = require(require.resolve('semver', { paths: [repo] }));
+const readJson = (file) => JSON.parse(fs.readFileSync(file, 'utf8'));
+const lock = readJson('package-lock.json');
+const manifest = readJson('package.json');
+const reviewed = readJson(path.join(__dirname, 'lock-scope-review.json'));
+
+function resolveEntry(parent, name) {
+  const nested = `${parent}/node_modules/${name}`;
+  return lock.packages[nested] ?? lock.packages[`node_modules/${name}`];
+}
+
+let checkedEdges = 0;
+for (const item of reviewed.acceptedPackageChanges) {
+  const entry = lock.packages[item.path];
+  assert.equal(entry.version, item.after);
+  if (entry.engines?.node) assert(semver.satisfies(process.versions.node, entry.engines.node), item.path);
+  for (const kind of ['dependencies', 'optionalDependencies', 'peerDependencies']) {
+    for (const [name, requested] of Object.entries(entry[kind] ?? {})) {
+      const target = resolveEntry(item.path, name);
+      if (!target && kind === 'peerDependencies' && entry.peerDependenciesMeta?.[name]?.optional) continue;
+      assert(target, `${item.path}: missing ${kind} ${name}`);
+      const effective = manifest.overrides[name] ?? requested;
+      assert(semver.satisfies(target.version, effective), `${item.path}: ${name} ${target.version} does not satisfy ${effective}`);
+      checkedEdges++;
+    }
+  }
+}
+
+const registryDir = path.join(repo, 'docs/验收证据/dependency-triage-20260918T063915Z-93d2673e/registry');
+const matched = [];
+for (const file of fs.readdirSync(registryDir).filter((name) => name.endsWith('.json'))) {
+  const upstream = readJson(path.join(registryDir, file));
+  const entry = lock.packages[`node_modules/${upstream.name}`];
+  assert.equal(entry.version, upstream.version);
+  assert.equal(entry.integrity, upstream.dist.integrity);
+  assert.equal(entry.resolved, upstream.dist.tarball);
+  for (const key of ['dependencies', 'optionalDependencies', 'peerDependencies', 'peerDependenciesMeta', 'engines']) {
+    assert.deepEqual(entry[key] ?? {}, upstream[key] ?? {}, `${upstream.name}: ${key}`);
+  }
+  matched.push({ name: upstream.name, version: entry.version, registryMetadataMatched: true });
+}
+process.stdout.write(JSON.stringify({
+  checkedUtc: new Date().toISOString(),
+  changedPackages: reviewed.acceptedPackageChanges.length,
+  checkedEdges,
+  nodeEngineRangesSatisfied: true,
+  registryMatches: matched,
+  scope: '只读核对变更包的依赖关系、Node 兼容范围和已归档官方元数据；没有安装或运行构建。',
+}, null, 2) + '\n');

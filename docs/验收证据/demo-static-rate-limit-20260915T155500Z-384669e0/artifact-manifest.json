@@ -1,0 +1,209 @@
+{
+  "scope": "本次可归档证据；原始 .log 已按字节复制为 .log.txt",
+  "files": {
+    "attempt-1/attempt-notes.json": {
+      "sha256": "d63c43fe5607fb85e225f7bc0a8f6fa604d2d801e0c7927ded1f7ebf81db2da1",
+      "bytes": 703
+    },
+    "attempt-1/config-redacted.json": {
+      "sha256": "fbd1a41fb22b4cba5da142079e80f37682404dba1538c89f630e2d67d94c3387",
+      "bytes": 6351
+    },
+    "attempt-1/nginx-after.conf": {
+      "sha256": "80e5aff8a60a9d9e2e7acad8ac8effd1d46c59b68a592e714b95a09fff9ac99e",
+      "bytes": 1338
+    },
+    "attempt-1/nginx-before.conf": {
+      "sha256": "a798fd4981ebbced93c5a52150ac34da31b7fcad4f41c8a95e87c15090adde7b",
+      "bytes": 1182
+    },
+    "attempt-1/nginx-failure.log.txt": {
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+      "bytes": 1
+    },
+    "attempt-1/runtime.json": {
+      "sha256": "4758cb66b7f5387797c56b1d733dcd2f936a9d722a24a4d11a05ef6ef75c5972",
+      "bytes": 33892
+    },
+    "boundary-0.json": {
+      "sha256": "767c36322ac41e7244f462471d8413e5ac3a1f13adbb8b96795023f51ccc98f9",
+      "bytes": 8439
+    },
+    "boundary-1.json": {
+      "sha256": "1e59b65b5018e4bbf7c0561a799535e5a0d18c8c874f2a5af4780a221fcaf014",
+      "bytes": 8499
+    },
+    "boundary-2.json": {
+      "sha256": "848e7260fe7066cd47f7439da4363c838422d8b696dcee86ea9de93ca9ed4f8c",
+      "bytes": 8529
+    },
+    "boundary-3.json": {
+      "sha256": "971700642c8217ebd777fdc9eb082d0256ae6905fad35d23977e3a0fa276be70",
+      "bytes": 8619
+    },
+    "boundary-4.json": {
+      "sha256": "d871766532edc7f954aaa3c8d8d5e2bc4944b2ae047421146d8fefbc0c12c1f3",
+      "bytes": 8510
+    },
+    "boundary-5.json": {
+      "sha256": "8a2c4cf98b641b767c0abda9a9134a5606a613cf16d03146f5a854a8fb46b135",
+      "bytes": 8829
+    },
+    "boundary-6.json": {
+      "sha256": "9dfa9b00f72f7c443569d2dae5e789cdb19a2ef5218ef14f16b16d955f7308fd",
+      "bytes": 9069
+    },
+    "boundary-7.json": {
+      "sha256": "209c2db216d281c8d288b19d978cb02fd1c77bce4e9d0bfe39ee64d3ca96da65",
+      "bytes": 8829
+    },
+    "boundary-8.json": {
+      "sha256": "2e96a950f562785a23c00c1b77a4f29d88e8a5f5afe88be9c5f2b838bc061dfa",
+      "bytes": 9369
+    },
+    "boundary-9.json": {
+      "sha256": "20f8e93a4e14d3b08b56fc9e45c27982e32067eeba4bbdd8a0e64fb2a1612c8c",
+      "bytes": 9039
+    },
+    "browser-failure-dom.txt": {
+      "sha256": "2d375f48a7a4e9e0cecabee5f79518d19b00642317a46dd5b985e6700da1f91a",
+      "bytes": 4045
+    },
+    "browser-failure.png": {
+      "sha256": "53e4e9c19db2e34156dd047be8dc86fcb514bcb90acd2e359dc20db0eb158a20",
+      "bytes": 81018
+    },
+    "browser-initial-attempt.json": {
+      "sha256": "0a15209ce2d177865a5fd38e656c0d0e840e8de2502fe2c1baf6f4e1b01dab3b",
+      "bytes": 63672
+    },
+    "browser-report.json": {
+      "sha256": "acb6af8c65c654b0d099289e8de29bd8fbb1cab825048d0c61318e021f75f220",
+      "bytes": 87212
+    },
+    "cleanup-directory.json": {
+      "sha256": "7cb3f3eb2b98cfb4132ed84f04082f21cfe888e2b29b1a3fc16b5d23c53a4416",
+      "bytes": 581
+    },
+    "config-redacted.json": {
+      "sha256": "fbd1a41fb22b4cba5da142079e80f37682404dba1538c89f630e2d67d94c3387",
+      "bytes": 6351
+    },
+    "dynamic-health.json": {
+      "sha256": "f8510c799a0d409230e3e4ab0d795c4a26de9cd1d6d9198c44ab59f830906048",
+      "bytes": 28836
+    },
+    "final-checks.json": {
+      "sha256": "1fe140b7ce309b6d3f13ea4cd29bae94187d1012f9a5c56a3ef418c3061f4a5b",
+      "bytes": 1866
+    },
+    "harness/archive-attempt.cjs.txt": {
+      "sha256": "ceed1b77d8359663215d1da8fa46392c755e80b11c99c289b82f99ee168c2d3d",
+      "bytes": 1871
+    },
+    "harness/browser-resume.cjs.txt": {
+      "sha256": "6ab824f0003a83919eeb75638156a72b06eda26faff10323198b626bdf01f7be",
+      "bytes": 8614
+    },
+    "harness/browser.cjs.txt": {
+      "sha256": "025cf60c181a9faf749368111f9fd62887ff1f0f232339fd760874bab0070e75",
+      "bytes": 10111
+    },
+    "harness/cleanup-directory.ps1.txt": {
+      "sha256": "29e6ab956e8dcb945fabf2dc9126419a220b405d1d7ff5b135901af53fd58857",
+      "bytes": 3805
+    },
+    "harness/final-checks.py.txt": {
+      "sha256": "f6e94225fb6a60e85ea6e268b42b24fd847db899c7f4747b9544d195197c273a",
+      "bytes": 8232
+    },
+    "harness/README.md": {
+      "sha256": "1f910a17ac8c153d9e0232a6f995d97f57f5254912e96cf482c9cd01791514bd",
+      "bytes": 1772
+    },
+    "harness/runtime.mjs.txt": {
+      "sha256": "af66c915c05e122ab88f33674ba743fd0c05f05962664d22ec78931c9f284b3f",
+      "bytes": 23028
+    },
+    "harness/workspace.py.txt": {
+      "sha256": "9d99cdf409af1574959e191e56aa270d75bf5b8ebf89afd6fbb93c7986c879a9",
+      "bytes": 3615
+    },
+    "local-checks.json": {
+      "sha256": "ad1624b37d3d080702e0c26d05821fb585f5662ee9a59e1fd85857fc6da0f411",
+      "bytes": 1610
+    },
+    "new-static.json": {
+      "sha256": "c947196b900cd2f6f590411465fc2faf7a69d43ff7db57e35d510732ae3f8085",
+      "bytes": 35082
+    },
+    "nginx-after.conf": {
+      "sha256": "80e5aff8a60a9d9e2e7acad8ac8effd1d46c59b68a592e714b95a09fff9ac99e",
+      "bytes": 1338
+    },
+    "nginx-before.conf": {
+      "sha256": "a798fd4981ebbced93c5a52150ac34da31b7fcad4f41c8a95e87c15090adde7b",
+      "bytes": 1182
+    },
+    "nginx-failure.log.txt": {
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+      "bytes": 1
+    },
+    "nginx-final.log.txt": {
+      "sha256": "95af488c4d3ff82cc87f068fe39796d1a14a70bc1de813d1e2690694c3573ca2",
+      "bytes": 313902
+    },
+    "nginx-http-fixed.log.txt": {
+      "sha256": "0b1458361f6934daeff2110a9cd58f4a10568fec62a4ba356a92370f45c00d13",
+      "bytes": 221533
+    },
+    "nginx-old.log.txt": {
+      "sha256": "9c6523ba09d6f7e004a9b92ec9c8dbe78410ac05ec7506b0be2b3892e23be8e5",
+      "bytes": 47913
+    },
+    "note-after-save.png": {
+      "sha256": "8d08e457b6dab6a1fb20f8c37bc6e9e98578ccac5ded8b0306f06049e5c8b2f6",
+      "bytes": 59069
+    },
+    "note-readback.json": {
+      "sha256": "3d4d12a0307b16ff4e5e5ab2438f7de4e8c014d9ff7b3140b32a1f5fbb029079",
+      "bytes": 230
+    },
+    "old-static.json": {
+      "sha256": "ca6afaadfad56873950165f1edcde58c481e38370239698f28e6a90bdc023571",
+      "bytes": 33710
+    },
+    "pre-cleanup-audit.json": {
+      "sha256": "2efc2a0b071bb98e84eb3ff0f8798d18e7bc051d8cdc829577e534f7b1ef99ce",
+      "bytes": 470
+    },
+    "preservation.json": {
+      "sha256": "8cac1ed98c988821f84db1016b7b12f12fb2f2653cdd62abff4803283a2860e7",
+      "bytes": 4331
+    },
+    "review.md": {
+      "sha256": "29b6e372c1f38cfaabe534d40bf1dcbba3bcc80d50ad5c81de4e79c19df32a2b",
+      "bytes": 2861
+    },
+    "runtime.json": {
+      "sha256": "65a1a3675f7b118810d8fbaf0f8657b12ec89d0d9a3201b9c00b1606ac54bf7c",
+      "bytes": 46133
+    },
+    "settings-after-refresh.png": {
+      "sha256": "658e0f8d0a843f2c711960f7370e9793bc14478c37294db01c12c138cd936122",
+      "bytes": 80257
+    },
+    "static-under-load.json": {
+      "sha256": "2a202430d22e45b6297d5c43b77e80817dd780e3401970ce3196e39badddcb29",
+      "bytes": 5125
+    },
+    "task-changes.diff": {
+      "sha256": "161147d206c12a48f124326c8c269f1b224bb408619fef2c33218731f6e0655d",
+      "bytes": 40750
+    },
+    "vitest-results.json": {
+      "sha256": "9c0c39fbfebf866aae27ecae955a98e8585e17ce76891397ba558bf3f4888792",
+      "bytes": 6558
+    }
+  }
+}

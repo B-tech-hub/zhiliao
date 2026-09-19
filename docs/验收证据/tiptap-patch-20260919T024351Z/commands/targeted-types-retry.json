@@ -1,0 +1,18 @@
+{
+  "step": "targeted-types-retry",
+  "cwd": "D:/ClaudeProjects/ai_acknowladge",
+  "command": [
+    "D:/node.js/node.exe",
+    "node_modules/typescript/bin/tsc",
+    "--noEmit",
+    "-p",
+    "C:/Users/BAIBAI/AppData/Local/Temp/zhiliao-tiptap-wald1s82/tsconfig.targeted.json"
+  ],
+  "startedUtc": "2026-09-19T02:56:20.738450+00:00",
+  "finishedUtc": "2026-09-19T02:56:30.395794+00:00",
+  "elapsedSeconds": 9.656,
+  "exitCode": 2,
+  "stdout": "targeted-types-retry.stdout.log",
+  "stderr": "targeted-types-retry.stderr.log",
+  "lifecycleScriptsDisabled": true
+}

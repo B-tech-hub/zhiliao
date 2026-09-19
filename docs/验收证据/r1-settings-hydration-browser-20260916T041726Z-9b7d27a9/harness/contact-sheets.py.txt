@@ -1,0 +1,27 @@
+import json
+from pathlib import Path
+from PIL import Image, ImageDraw
+root = Path(__file__).resolve().parent
+report = json.loads((root / "evidence/browser-report.json").read_text(encoding="utf-8"))
+for name, entries, width, columns in [
+    ("desktop", [x for x in report["screenshots"] if x["viewport"]["width"] > 500], 720, 2),
+    ("mobile", [x for x in report["screenshots"] if x["viewport"]["width"] <= 500], 390, 3),
+]:
+    height = 0
+    tiles = []
+    for entry in entries:
+        image = Image.open(root / "evidence" / entry["file"]).convert("RGB")
+        image.thumbnail((width, 900))
+        tile = Image.new("RGB", (width + 10, image.height + 38), "white")
+        ImageDraw.Draw(tile).text((6, 7), entry["name"], fill="black")
+        tile.paste(image, (5, 32))
+        tiles.append(tile)
+        height = max(height, tile.height)
+    rows = (len(tiles) + columns - 1) // columns
+    sheet = Image.new("RGB", ((width + 10) * columns, height * rows), "#dddddd")
+    for index, tile in enumerate(tiles):
+        sheet.paste(tile, ((index % columns) * (width + 10), (index // columns) * height))
+    file = root / ("visual-review-" + name + ".png")
+    sheet.save(file)
+    print(json.dumps({"file": str(file), "screenshots": len(entries)}))
+

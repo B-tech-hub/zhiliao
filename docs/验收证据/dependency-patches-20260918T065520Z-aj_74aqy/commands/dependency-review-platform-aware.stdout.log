@@ -1,0 +1,174 @@
+{
+  "checkedUtc": "2026-09-18T07:31:31.462Z",
+  "changedPackages": 48,
+  "checkedEdges": 114,
+  "nodeEngineRangesSatisfiedForReviewedPlatforms": true,
+  "reviewedPlatforms": [
+    {
+      "os": "win32",
+      "cpu": "x64"
+    },
+    {
+      "os": "linux",
+      "cpu": "x64"
+    },
+    {
+      "os": "linux",
+      "cpu": "arm64"
+    }
+  ],
+  "excludedEngineChecks": [
+    {
+      "name": "node_modules/@img/sharp-darwin-arm64",
+      "os": [
+        "darwin"
+      ],
+      "cpu": [
+        "arm64"
+      ],
+      "node": ">=20.9.0"
+    },
+    {
+      "name": "node_modules/@img/sharp-darwin-x64",
+      "os": [
+        "darwin"
+      ],
+      "cpu": [
+        "x64"
+      ],
+      "node": ">=20.9.0"
+    },
+    {
+      "name": "node_modules/@img/sharp-freebsd-wasm32",
+      "os": [
+        "freebsd"
+      ],
+      "node": ">=20.9.0"
+    },
+    {
+      "name": "node_modules/@img/sharp-linux-arm",
+      "os": [
+        "linux"
+      ],
+      "cpu": [
+        "arm"
+      ],
+      "node": ">=20.9.0"
+    },
+    {
+      "name": "node_modules/@img/sharp-linux-ppc64",
+      "os": [
+        "linux"
+      ],
+      "cpu": [
+        "ppc64"
+      ],
+      "node": ">=20.9.0"
+    },
+    {
+      "name": "node_modules/@img/sharp-linux-riscv64",
+      "os": [
+        "linux"
+      ],
+      "cpu": [
+        "riscv64"
+      ],
+      "node": ">=20.9.0"
+    },
+    {
+      "name": "node_modules/@img/sharp-linux-s390x",
+      "os": [
+        "linux"
+      ],
+      "cpu": [
+        "s390x"
+      ],
+      "node": ">=20.9.0"
+    },
+    {
+      "name": "node_modules/@img/sharp-webcontainers-wasm32",
+      "cpu": [
+        "wasm32"
+      ],
+      "node": ">=20.9.0"
+    },
+    {
+      "name": "node_modules/@img/sharp-win32-arm64",
+      "os": [
+        "win32"
+      ],
+      "cpu": [
+        "arm64"
+      ],
+      "node": ">=20.9.0"
+    },
+    {
+      "name": "node_modules/@img/sharp-win32-ia32",
+      "os": [
+        "win32"
+      ],
+      "cpu": [
+        "ia32"
+      ],
+      "node": "^20.9.0"
+    },
+    {
+      "name": "node_modules/@next/swc-darwin-arm64",
+      "os": [
+        "darwin"
+      ],
+      "cpu": [
+        "arm64"
+      ],
+      "node": ">= 10"
+    },
+    {
+      "name": "node_modules/@next/swc-darwin-x64",
+      "os": [
+        "darwin"
+      ],
+      "cpu": [
+        "x64"
+      ],
+      "node": ">= 10"
+    },
+    {
+      "name": "node_modules/@next/swc-win32-arm64-msvc",
+      "os": [
+        "win32"
+      ],
+      "cpu": [
+        "arm64"
+      ],
+      "node": ">= 10"
+    }
+  ],
+  "registryMatches": [
+    {
+      "name": "eslint-config-next",
+      "version": "15.5.24",
+      "registryMetadataMatched": true
+    },
+    {
+      "name": "js-yaml",
+      "version": "4.3.2",
+      "registryMetadataMatched": true
+    },
+    {
+      "name": "next",
+      "version": "15.5.24",
+      "registryMetadataMatched": true
+    },
+    {
+      "name": "sharp",
+      "version": "0.35.4",
+      "registryMetadataMatched": true
+    },
+    {
+      "name": "vitest",
+      "version": "4.1.11",
+      "registryMetadataMatched": true
+    }
+  ],
+  "scope": "只读核对变更包的依赖关系、Node 兼容范围和已归档官方元数据；没有安装或运行构建。"
+}

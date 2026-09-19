@@ -1,0 +1,16 @@
+{
+    "createdAt":  "2026-09-15T15:32:39.4132602Z",
+    "algorithm":  "SHA-256",
+    "files":  {
+                  "compose.runtime.json":  "d66d5690c10089270b250b7715d3eb44fc5b59fac6878934dbbe5372b658ccb4",
+                  "config-redacted.json":  "7e6bc8136b88977e5f6b316b7f775acb9f41de859e6fd91f284e48bd1fb3e35c",
+                  "demo-verification-utils.mjs.txt":  "7f470b62da3ce58fe36354797db426c5e6ba6b9e95e2829ad6ac263861da4665",
+                  "input-sha256.json":  "d3d9ee6de36dd9399ee0536f6af65b183a4274d9ff41ea955c334092ee635cd4",
+                  "review.md":  "1dd6fe5dbcdfa89f3a4c4316e8e7736b17c908e978f02d163024c7ffa04b345b",
+                  "runtime.json":  "0430b5fbcf54b1dec6a0384ffba95ae9ac86858ac0d251babcfda8027e522cdb",
+                  "runtime-harness.mjs.txt":  "787c33dcc19d75f21f25066e059f8748cc01333bacb0ac3d7ab428a28facc6c7",
+                  "task-cleanup.json":  "a71714b3113e5fb813830bdcb61c9de89f3bd5f0f7d881bc38bb38e418599356",
+                  "verification.json":  "58843c98f2a713e42a32ba2e2079e78caa6df9e3693e3b4e7a6d095324e3d5a0",
+                  "vitest-results.json":  "b6685035818dfca20ce4f0e07fdfc0db300b1dec49730efbac5b90dbcef1e816"
+              }
+}

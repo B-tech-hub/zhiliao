@@ -1,0 +1,23 @@
+{
+  "step": "targeted-after",
+  "cwd": "D:/ClaudeProjects/ai_acknowladge",
+  "command": [
+    "D:/node.js/node.exe",
+    "node_modules/vitest/vitest.mjs",
+    "run",
+    "tests/lib/tiptap-security.test.ts",
+    "tests/components/markdown-editor-security.test.tsx",
+    "tests/lib/math.test.ts",
+    "tests/lib/mermaid.test.ts",
+    "--maxWorkers=1",
+    "--reporter=json",
+    "--outputFile=C:/Users/BAIBAI/AppData/Local/Temp/zhiliao-tiptap-wald1s82/targeted-after.report.json"
+  ],
+  "startedUtc": "2026-09-19T02:53:48.768474+00:00",
+  "finishedUtc": "2026-09-19T02:53:58.199950+00:00",
+  "elapsedSeconds": 9.422,
+  "exitCode": 0,
+  "stdout": "targeted-after.stdout.log",
+  "stderr": "targeted-after.stderr.log",
+  "lifecycleScriptsDisabled": true
+}

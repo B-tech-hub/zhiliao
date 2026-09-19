@@ -1,0 +1,51 @@
+{
+  "changedInstalledPackages": {
+    "node_modules/@tiptap/core": {
+      "before": "2.27.2",
+      "after": "2.27.3"
+    }
+  },
+  "checkedInstalledPackages": 752,
+  "nativeHashesUnchanged": true,
+  "lockUnchangedAfterInstall": true,
+  "installedCoreArtifactsMatchOfficial": {
+    "src/utilities/mergeAttributes.ts": "3bd0c4db0aeb05f6d1c12e6e22cb3c4ec0704f2b85168bfcf578c2c0840708ce",
+    "dist/index.js": "bad8f5a54dfabd943298de64dac3aa716ca0d37fb65a07ce11ff71841f2d4b6a",
+    "dist/index.cjs": "95efb562d6b684daa8b423f850cf565b24193479e53f8b074b2cc578b2b86c69"
+  },
+  "coreReferences": 31,
+  "treeProblems": false,
+  "audits": {
+    "audit-all": {
+      "counts": {
+        "info": 0,
+        "low": 0,
+        "moderate": 32,
+        "high": 0,
+        "critical": 0,
+        "total": 32
+      },
+      "advisories": [
+        "https://github.com/advisories/GHSA-cp6q-959q-f8rh"
+      ]
+    },
+    "audit-production": {
+      "counts": {
+        "info": 0,
+        "low": 0,
+        "moderate": 32,
+        "high": 0,
+        "critical": 0,
+        "total": 32
+      },
+      "advisories": [
+        "https://github.com/advisories/GHSA-cp6q-959q-f8rh"
+      ]
+    }
+  },
+  "applicationVersion": "0.6.1",
+  "packageSha256": {
+    "package.json": "8e0d7f1d8f8a80eec1faccffce59439ebf448b4e4e18599cfb8aa8abab69a4f8",
+    "package-lock.json": "ec395b6392eae245af76f37d75dd6e1dd5465915884f38c985e479928df49fd6"
+  }
+}

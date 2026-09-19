@@ -14,7 +14,24 @@ env:
   IMAGE_NAME: b-tech-hub/zhiliao
 
 jobs:
+  validate:
+    name: 核对发布版本
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: 安装校验依赖
+        run: npm ci --ignore-scripts
+      - name: 核对 tag、版本与发布材料
+        run: npm run check:version -- --tag "$GITHUB_REF_NAME"
+
   build:
+    needs: [validate]
     # 双平台均用原生 runner，不用 QEMU：next build 的 SWC 与原生模块（better-sqlite3/@node-rs/jieba）
     # 在 QEMU 模拟下极慢且有崩溃前科。若 ubuntu-24.04-arm 排队异常，可临时删除 arm64 条目单平台发布。
     name: 构建镜像 ${{ matrix.platform }}

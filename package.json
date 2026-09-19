@@ -1,6 +1,6 @@
 {
   "name": "zhiliao",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "private": true,
   "license": "MIT",
   "author": "BAIBAI",
@@ -15,9 +15,11 @@
     "start": "next start",
     "lint": "eslint .",
     "check:design": "node scripts/check-design.mjs",
+    "check:version": "node scripts/check-release-version.mjs",
     "test": "vitest run",
     "test:watch": "vitest",
-    "demo": "node scripts/demo.mjs"
+    "demo": "node scripts/demo.mjs",
+    "demo:compose": "node scripts/demo-compose.mjs"
   },
   "dependencies": {
     "@fontsource-variable/inter": "^5.3.0",
@@ -43,13 +45,13 @@
     "jose": "^6.0.0",
     "katex": "^0.16.47",
     "mermaid": "^11.16.1",
-    "next": "^15.3.0",
+    "next": "^15.5.24",
     "next-themes": "^0.4.6",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-markdown": "^10.1.0",
     "remark-gfm": "^4.0.1",
-    "sharp": "^0.35.0",
+    "sharp": "^0.35.4",
     "tiptap-markdown": "^0.8.10",
     "yauzl": "^3.4.0",
     "yazl": "^3.3.1",
@@ -66,16 +68,17 @@
     "@types/yauzl": "^3.4.0",
     "@types/yazl": "^3.3.1",
     "eslint": "^9.34.0",
-    "eslint-config-next": "^15.5.0",
+    "eslint-config-next": "^15.5.24",
     "jsdom": "^29.1.1",
     "tailwindcss": "^4.1.0",
     "typescript": "^5.8.0",
-    "vitest": "^4.1.10",
+    "vitest": "^4.1.11",
     "yaml": "^2.9.0"
   },
-  "//overrides": "next 内嵌的 postcss(8.4.31)与 sharp(0.34.5)带已知漏洞，上游尚未跟进，用 overrides 顶到修复版。移除前先确认 next 自身已依赖安全版本。",
+  "//overrides": "Next 仍声明旧 PostCSS，保留修复版覆盖；Sharp 防止回落至低于 0.35.4；TipTap core 2.27.3 已回补属性原型缺陷，公告范围尚未反映，证据见 docs/TipTap残余风险调查-2026-09-19.md。移除前先核对实际解析结果。",
   "overrides": {
     "postcss": "^8.5.26",
-    "sharp": "^0.35.0"
+    "sharp": "^0.35.4",
+    "@tiptap/core": "2.27.3"
   }
 }

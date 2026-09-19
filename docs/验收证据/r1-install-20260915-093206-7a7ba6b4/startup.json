@@ -1,0 +1,18 @@
+{
+  "runId": "20260915-093206-7a7ba6b4",
+  "phase": "startup",
+  "startedUtc": "2026-09-15T02:07:29.100603+00:00",
+  "arguments": [
+    "up",
+    "-d",
+    "--no-build",
+    "--pull",
+    "never",
+    "--wait",
+    "--wait-timeout",
+    "180"
+  ],
+  "exitCode": 0,
+  "elapsedSeconds": 21.328,
+  "finishedUtc": "2026-09-15T02:07:50.420635+00:00"
+}

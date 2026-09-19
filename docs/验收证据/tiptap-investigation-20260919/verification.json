@@ -1,0 +1,68 @@
+{
+  "preservedFiles": {
+    "package.json": true,
+    "package-lock.json": true,
+    "src/components/markdown-editor.tsx": true,
+    "src/components/mermaid-code-block.tsx": true,
+    "src/lib/math.ts": true,
+    "src/lib/import.ts": true,
+    "src/app/api/notes/route.ts": true,
+    "src/app/api/notes/[id]/route.ts": true,
+    "src/app/api/notes/[id]/append/route.ts": true,
+    "src/app/api/external/capture/route.ts": true,
+    "src/app/(app)/notes/[id]/note-editor.tsx": true,
+    "node_modules/@tiptap/core/dist/index.js": true,
+    "node_modules/@tiptap/core/dist/index.cjs": true
+  },
+  "headUnchanged": true,
+  "authoredMarkdownFormats": {
+    "docs\\TipTap残余风险调查-2026-09-19.md": {
+      "utf8": true,
+      "lf": true
+    },
+    "_bmad-output\\implementation-artifacts\\spec-r1-tiptap-residual-risk.md": {
+      "utf8": true,
+      "lf": true
+    },
+    "docs\\验收证据\\tiptap-investigation-20260919\\README.md": {
+      "utf8": true,
+      "lf": true
+    },
+    "docs\\依赖告警分诊-2026-09-18.md": {
+      "utf8": true,
+      "lf": true
+    },
+    "docs\\README.md": {
+      "utf8": true,
+      "lf": true
+    }
+  },
+  "localLinks": [
+    {
+      "file": "docs\\TipTap残余风险调查-2026-09-19.md",
+      "target": "依赖告警分诊-2026-09-18.md",
+      "exists": true
+    },
+    {
+      "file": "docs\\TipTap残余风险调查-2026-09-19.md",
+      "target": "验收证据/tiptap-investigation-20260919/README.md",
+      "exists": true
+    },
+    {
+      "file": "docs\\TipTap残余风险调查-2026-09-19.md",
+      "target": "../_bmad-output/implementation-artifacts/spec-r1-tiptap-residual-risk.md",
+      "exists": true
+    },
+    {
+      "file": "docs\\验收证据\\tiptap-investigation-20260919\\README.md",
+      "target": "../../TipTap残余风险调查-2026-09-19.md",
+      "exists": true
+    }
+  ],
+  "specStatus": "draft",
+  "productTestsRun": false,
+  "dependencyInstalled": false,
+  "buildRun": false,
+  "fullTestsRun": false,
+  "scope": "Only investigation artifacts and two existing documentation references updated; no claim about unrelated concurrent changes"
+}

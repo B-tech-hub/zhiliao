@@ -1,0 +1,17 @@
+{
+  "phase": "before-documents",
+  "workspaceFilesChecked": 687,
+  "workspaceChanged": [],
+  "workspaceAdded": [],
+  "headUnchanged": true,
+  "indexUnchanged": true,
+  "protectedHashFilesChecked": 51,
+  "protectedHashChangedCount": 0,
+  "dataFilesChecked": 143,
+  "dataMetadataUnchanged": true,
+  "candidateRuntimeChanged": [
+    "next-env.d.ts",
+    "tsconfig.json"
+  ],
+  "passed": true
+}

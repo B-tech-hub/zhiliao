@@ -1,0 +1,21 @@
+{
+  "step": "editor-diagnosis",
+  "cwd": "D:/ClaudeProjects/ai_acknowladge",
+  "command": [
+    "D:/node.js/node.exe",
+    "node_modules/vitest/vitest.mjs",
+    "run",
+    "tests/components/markdown-editor-security.test.tsx",
+    "--maxWorkers=1",
+    "-t",
+    "初次加载|保真",
+    "--reporter=verbose"
+  ],
+  "startedUtc": "2026-09-19T02:48:03.973396+00:00",
+  "finishedUtc": "2026-09-19T02:48:07.949233+00:00",
+  "elapsedSeconds": 3.969,
+  "exitCode": 1,
+  "stdout": "editor-diagnosis.stdout.log",
+  "stderr": "editor-diagnosis.stderr.log",
+  "lifecycleScriptsDisabled": true
+}

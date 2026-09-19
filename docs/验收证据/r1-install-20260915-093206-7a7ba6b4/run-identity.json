@@ -1,0 +1,9 @@
+{
+  "runId": "20260915-093206-7a7ba6b4",
+  "project": "zhiliao-r1-061-20260915-093206-7a7ba6b4",
+  "imageTag": "zhiliao-r1:0.6.1-20260915-093206-7a7ba6b4",
+  "port": 3312,
+  "baseCommit": "f213761b795cc020be2122e27301fe4a7c5cf7a0",
+  "createdUtc": "2026-09-15T01:32:06.6959901Z",
+  "imageId": "sha256:8a8f2cd3ec1a26fc68bf04a2661f2306f09bba4b06ba9b1593d74b3f3953deb1"
+}

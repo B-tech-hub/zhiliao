@@ -1,0 +1,15 @@
+
+ RUN  v4.1.11 D:/ClaudeProjects/ai_acknowladge
+
+ ✓ tests/lib/vision-images.test.ts (4 tests) 437ms
+ ✓ tests/api/demo-boundary.test.ts (44 tests) 2729ms
+     ✓ 所有高风险入口在 Demo 中直接拒绝  2454ms
+ ✓ tests/components/settings-panel-hydration.test.tsx (13 tests) 982ms
+ ✓ tests/lib/auth.test.ts (4 tests) 11ms
+
+ Test Files  4 passed (4)
+      Tests  65 passed (65)
+   Start at  15:07:37
+   Duration  38.13s (transform 1.33s, setup 64ms, import 11.43s, tests 4.16s, environment 21.09s)
+
+JSON report written to C:/Users/BAIBAI/AppData/Local/Temp/dependency-patches-20260918T065520Z-aj_74aqy/targeted-tests.report.json

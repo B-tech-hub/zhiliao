@@ -1,0 +1,79 @@
+{
+  "story": "2.2",
+  "recorded_at": "2026-09-12T03:44:50.581Z",
+  "status": "observed",
+  "scope": "只读比较宿主机和 Docker 虚拟机计时，未更改系统时钟或 WSL 设置",
+  "container": "zhiliao-demo-verify-a2-20260912-app-1",
+  "run_id": "ea454295b0c842a9318d3d9a31e6598d",
+  "host": {
+    "platform": "win32",
+    "release": "10.0.26200",
+    "node": "v22.19.0"
+  },
+  "samples": [
+    {
+      "before": {
+        "wall_ms": 1789184690582,
+        "monotonic_ms": 128.6092
+      },
+      "after": {
+        "wall_ms": 1789184690743,
+        "monotonic_ms": 289.3324
+      },
+      "guest": {
+        "wall_ms": 1789184690172,
+        "monotonic_ns": "67686304172424",
+        "uptime_seconds": 67686.3,
+        "clocksource": "tsc"
+      }
+    },
+    {
+      "before": {
+        "wall_ms": 1789184700757,
+        "monotonic_ms": 10303.9498
+      },
+      "after": {
+        "wall_ms": 1789184701222,
+        "monotonic_ms": 10768.6778
+      },
+      "guest": {
+        "wall_ms": 1789184701186,
+        "monotonic_ns": "67697318516142",
+        "uptime_seconds": 67697.31,
+        "clocksource": "tsc"
+      }
+    },
+    {
+      "before": {
+        "wall_ms": 1789184711235,
+        "monotonic_ms": 20781.5611
+      },
+      "after": {
+        "wall_ms": 1789184711399,
+        "monotonic_ms": 20945.1921
+      },
+      "guest": {
+        "wall_ms": 1789184711929,
+        "monotonic_ns": "67708061430982",
+        "uptime_seconds": 67708.06,
+        "clocksource": "tsc"
+      }
+    }
+  ],
+  "deltas": [
+    {
+      "host_monotonic_ms": 10327.343,
+      "guest_monotonic_ms": 11014.343718,
+      "guest_to_host_ratio": 1.0665225041910587,
+      "host_round_trip_ms": 464.72799999999916
+    },
+    {
+      "host_monotonic_ms": 10327.0628,
+      "guest_monotonic_ms": 10742.91484,
+      "guest_to_host_ratio": 1.0402681815782122,
+      "host_round_trip_ms": 163.63100000000122
+    }
+  ],
+  "guest_probe": "const fs=require('node:fs');console.log(JSON.stringify({wall_ms:Date.now(),monotonic_ns:process.hrtime.bigint().toString(),uptime_seconds:require('node:os').uptime(),clocksource:fs.readFileSync('/sys/devices/system/clocksource/clocksource0/current_clocksource','utf8').trim()}))",
+  "finished_at": "2026-09-12T03:45:11.399Z"
+}

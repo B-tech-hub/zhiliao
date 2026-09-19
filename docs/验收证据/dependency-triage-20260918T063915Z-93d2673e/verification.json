@@ -1,0 +1,66 @@
+{
+  "status": "passed-with-unrelated-concurrent-change",
+  "checkedUtc": "2026-09-18T06:52:01.001072+00:00",
+  "documents": [
+    {
+      "file": "docs/依赖告警分诊-2026-09-18.md",
+      "relativeLinks": 4,
+      "utf8Lf": true,
+      "balancedFences": true
+    },
+    {
+      "file": "_bmad-output/implementation-artifacts/spec-r1-dependency-security-patches.md",
+      "relativeLinks": 0,
+      "utf8Lf": true,
+      "balancedFences": true
+    },
+    {
+      "file": "docs/README.md",
+      "relativeLinks": 70,
+      "utf8Lf": true,
+      "balancedFences": true
+    },
+    {
+      "file": "docs/releases/v0.6.1.md",
+      "relativeLinks": 14,
+      "utf8Lf": true,
+      "balancedFences": true
+    },
+    {
+      "file": "docs/产品规划/开源发布范围与执行清单-2026-09-13.md",
+      "relativeLinks": 40,
+      "utf8Lf": true,
+      "balancedFences": true
+    },
+    {
+      "file": "docs/验收证据/dependency-triage-20260918T063915Z-93d2673e/README.md",
+      "relativeLinks": 1,
+      "utf8Lf": true,
+      "balancedFences": true
+    }
+  ],
+  "relativeLinkCount": 129,
+  "auditCountsReconciled": true,
+  "officialResponsesVerified": 11,
+  "baselineFiles": 958,
+  "unchangedBaselineFiles": 954,
+  "modifiedByThisTask": [
+    "docs/releases/v0.6.1.md",
+    "docs/产品规划/开源发布范围与执行清单-2026-09-13.md",
+    "docs/README.md"
+  ],
+  "unrelatedConcurrentChanges": [
+    {
+      "path": "_bmad-output/brainstorming/brainstorm-custom-prompts-and-agent-2026-09-16/.memlog.md",
+      "beforeSha256": "90801a2f1155182d6e57964b6175de0ef536943725871eb7bad8348eda612fa9",
+      "observedSha256": "d9a325cd5b6630493e6a9795ca1c71dbb77910c420d437b8e608a2ff794403c4",
+      "observedModifiedUtc": "2026-09-18T06:44:42.870815+00:00",
+      "action": "preserved; unrelated concurrent change"
+    }
+  ],
+  "missingBaselineFiles": [],
+  "headUnchanged": true,
+  "indexUnchanged": true,
+  "applicationSourcesAndDependencyFilesUnchanged": true,
+  "errors": []
+}

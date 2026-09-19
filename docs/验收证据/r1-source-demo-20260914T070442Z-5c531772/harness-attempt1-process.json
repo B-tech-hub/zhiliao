@@ -1,0 +1,7 @@
+{
+  "phase": "cold",
+  "startUtc": "2026-09-14T07:11:48.6071062Z",
+  "pid": 28468,
+  "root": "{验收目录}",
+  "command": "npm.cmd run demo"
+}

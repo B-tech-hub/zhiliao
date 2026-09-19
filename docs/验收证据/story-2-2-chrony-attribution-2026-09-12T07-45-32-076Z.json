@@ -1,0 +1,87 @@
+{
+  "story": "2.2",
+  "recorded_at": "2026-09-12T07:45:32.076Z",
+  "status": "partial_attribution",
+  "scope": "跟踪结束后的只读归因补充；没有写入时钟参数、启停服务或新增跟踪",
+  "trace_evidence": {
+    "path": "docs/验收证据/story-2-2-tick-trace-2026-09-12T06-55-37-663Z.json",
+    "sha256": "3c7bb803c43e4cec421bc60f63398d652cbb7a830a6c3c08fe17b7cf1d71c4a1",
+    "trace_pid": 308,
+    "comm": "chronyd",
+    "successful_adjtimex_calls": 6,
+    "modes": 16386,
+    "mode_flags": [
+      "ADJ_TICK",
+      "ADJ_FREQUENCY"
+    ],
+    "tick_values_us": [
+      10324,
+      10322
+    ]
+  },
+  "control_note": "成功采集中的只读对照进程名显示为 <...>；改用同源 CLOCK_MONOTONIC_RAW 时间窗唯一匹配，内核 PID 42098 对应 Ubuntu PID 5563，不能用数字 PID 跨命名空间直接查进程。",
+  "diagnostic_limitations": [
+    "6 条已捕获调用有配对的成功返回；kprobe_profile 数组为空，未保存探针自身的总漏记计数，不据此承诺捕获了所有调用。",
+    "尚未从 WSL 根 PID 命名空间核实 PID 308 的 exe、启动时间、父进程或活动配置。",
+    "chronyc 查询展示可访问的时间服务状态；未把系统发行版默认配置文件当作 PID 308 的活动配置。",
+    "这不是计时修复或 A2 代理时限验收。"
+  ],
+  "chrony_tracking": {
+    "command": "wsl.exe --system -u root -- chronyc -n tracking",
+    "output": "Reference ID    : 50484330 (PHC0)\nStratum         : 1\nRef time (UTC)  : Sat Sep 12 07:04:41 2026\nSystem time     : 0.013704940 seconds slow of NTP time\nLast offset     : +0.006457759 seconds\nRMS offset      : 0.023718612 seconds\nFrequency       : 33023.988 ppm slow\nResidual freq   : -0.130 ppm\nSkew            : 663.023 ppm\nRoot delay      : 0.000000001 seconds\nRoot dispersion : 0.070353486 seconds\nUpdate interval : 8.3 seconds\nLeap status     : Normal\n",
+    "reference_id": "50484330",
+    "reference_name": "PHC0",
+    "frequency_ppm_slow": 33023.988,
+    "system_time_seconds_slow": 0.01370494
+  },
+  "chrony_additional_status": {
+    "source": "for entry in /var/run/chrony /var/run/chronyd.pid /var/run/chrony/chronyd.pid /run/chronyd.pid; do\n if [ -d \"$entry\" ]; then ls -ld \"$entry\"; elif [ -f \"$entry\" ]; then printf '%s\\n' \"$entry\"; cat \"$entry\"; fi\ndone\nchronyc -n sources\nchronyc -n sourcestats\nchronyd -v\nreadlink /proc/self/ns/net\n",
+    "code": 0,
+    "stdout": "MS Name/IP address         Stratum Poll Reach LastRx Last sample               \n===============================================================================\n#* PHC0                          0   3   377     7   -268ms[ -297ms] +/-   13ms\nName/IP Address            NP  NR  Span  Frequency  Freq Skew  Offset  Std Dev\n==============================================================================\nPHC0                       64  33   518    -22.800    708.921    -86us   226ms\nchronyd (chrony) version 4.1 (+CMDMON +NTP +REFCLOCK +RTC +PRIVDROP +SCFILTER +SIGND +ASYNCDNS -NTS +SECHASH +IPV6 +DEBUG)\nnet:[4026531840]\n",
+    "stderr": "wsl: 检测到 localhost 代理配置，但未镜像到 WSL。NAT 模式下的 WSL 不支持 localhost 代理。\r\n",
+    "version_scope": "版本 4.1 为系统发行版中的 chronyd 可执行文件；未核实内核 PID 308 的 exe"
+  },
+  "observed_system_default_config": {
+    "path": "/etc/chrony.conf",
+    "active_configuration_verified": false,
+    "content": "# Use public servers from the pool.ntp.org project.\n# Please consider joining the pool (https://www.pool.ntp.org/join.html).\nserver time.windows.com\n\n# Record the rate at which the system clock gains/losses time.\ndriftfile /var/lib/chrony/drift\n\n# Allow the system clock to be stepped in the first three updates\n# if its offset is larger than 1 second.\nmakestep 1.0 3\n\n# Enable kernel synchronization of the real-time clock (RTC).\nrtcsync\n\n# Enable hardware timestamping on all interfaces that support it.\n#hwtimestamp *\n\n# Increase the minimum number of selectable sources required to adjust\n# the system clock.\n#minsources 2\n\n# Allow NTP client access from local network.\n#allow 192.168.0.0/16\n\n# Serve time even if not synchronized to a time source.\n#local stratum 10\n\n# Require authentication (nts or key option) for all NTP sources.\n#authselectmode require\n\n# Specify file containing keys for NTP authentication.\nkeyfile /etc/chrony.keys\n\n# Save NTS keys and cookies.\nntsdumpdir /var/lib/chrony\n\n# Insert/delete leap seconds by slewing instead of stepping.\n#leapsecmode slew\n\n# Get TAI-UTC offset and leap seconds from the system tz database.\nleapsectz right/UTC\n\n# Specify directory for log files.\nlogdir /var/log/chrony\n\n# Select which information is logged.\n#log measurements statistics tracking\n\n# Setting larger 'maxdistance' to tolerate time.windows.com delay\nmaxdistance 16.0\n# Disable listening on UDP port (leaving only Unix socket interface).\ncmdport 0\n"
+  },
+  "process_visibility": {
+    "ubuntu": {
+      "namespace": "pid:[4026532235]",
+      "processes": []
+    },
+    "docker_desktop": {
+      "code": 0,
+      "stdout": "READER_NAMESPACE=pid:[4026532219]\n",
+      "stderr": "wsl: 检测到 localhost 代理配置，但未镜像到 WSL。NAT 模式下的 WSL 不支持 localhost 代理。\r\n"
+    },
+    "system_distribution": {
+      "code": 0,
+      "stdout": "READER_NAMESPACE=pid:[4026532223]\nCHRONY_BINARY=/usr/sbin/chronyd\nCHRONY_CONFIG_PATHS\n/etc/chrony.conf\n",
+      "stderr": "wsl: 检测到 localhost 代理配置，但未镜像到 WSL。NAT 模式下的 WSL 不支持 localhost 代理。\r\n"
+    },
+    "inspection_source": "printf 'READER_NAMESPACE='\nreadlink /proc/self/ns/pid\nfor record in /proc/[0-9]*/comm; do\n  IFS= read -r name < \"$record\" || continue\n  case \"$name\" in\n    *chrony*|*timesync*)\n      base=${record%/comm}\n      sed -n '/^Name:/p;/^Pid:/p;/^Tgid:/p;/^PPid:/p;/^NSpid:/p;/^NStgid:/p' \"$base/status\"\n      readlink \"$base/exe\"\n      readlink \"$base/ns/pid\"\n      ;;\n  esac\ndone\n",
+    "kernel_pid_executable_verified": false
+  },
+  "root_namespace_access": {
+    "command": "wsl.exe --debug-shell",
+    "requested_stdin": "readlink /proc/1/ns/pid\ncat /proc/1/comm\nexit\n",
+    "code": 1,
+    "stdout": "运行调试 shell 需要以管理员身份运行 wsl.exe。\r\n",
+    "stderr": "",
+    "administrator_shell_started": false
+  },
+  "windows_time_service_query": {
+    "command": "w32tm /query /status /verbose",
+    "exit_code": 1,
+    "win32_error": "0x80070426",
+    "meaning": "服务尚未启动；没有启动该服务"
+  },
+  "supporting_reference": {
+    "url": "https://github.com/microsoft/WSL/issues/10024",
+    "title": "Cannot enable custom Chrony daemon",
+    "use": "历史问题也记录了在发行版中看不到进程但能查询 PHC0 chrony 服务的现象，仅供背景参考，不替代本机进程身份核对"
+  },
+  "next_step": "如继续主机维护，先取得可核对 WSL 根 PID 命名空间的执行通道，再在单独批准的范围内准备临时暂停、tick 校正、条件复验和恢复；当前尚未批准或执行。"
+}

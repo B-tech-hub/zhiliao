@@ -1,0 +1,52 @@
+import datetime
+import json
+import os
+from pathlib import Path
+import subprocess
+import sys
+import time
+
+sys.stdout.reconfigure(encoding="utf-8")
+run_dir = Path(__file__).resolve().parent
+label, workdir, *command = sys.argv[1:]
+started = datetime.datetime.now(datetime.timezone.utc).isoformat()
+env = dict(os.environ)
+for name in list(env):
+    if name.startswith(("LLM_", "EMBEDDING_", "VISION_", "IMAGE_", "REASONING_")) or name in {
+        "APP_PASSWORD", "SESSION_SECRET", "DATABASE_PATH", "UPLOAD_DIR",
+        "NOTES_EXPORT_DIR", "DEMO_MODE", "DEMO_RUNTIME", "NODE_OPTIONS",
+    }:
+        env.pop(name, None)
+# 验证只使用内存库、合成数据与本轮临时目录，不读取正式配置。
+env.update({
+    "DATABASE_PATH": ":memory:",
+    "UPLOAD_DIR": str(run_dir / "test-uploads"),
+    "NOTES_EXPORT_DIR": str(run_dir / "test-notes"),
+    "CI": "true",
+    "NO_COLOR": "1",
+    "npm_config_ignore_scripts": "true",
+})
+env.pop("FORCE_COLOR", None)
+stdout_path = run_dir / f"{label}.stdout.log"
+stderr_path = run_dir / f"{label}.stderr.log"
+print(json.dumps({"step": label, "status": "started", "startedUtc": started}), flush=True)
+clock = time.monotonic()
+with stdout_path.open("wb") as stdout, stderr_path.open("wb") as stderr:
+    process = subprocess.run(command, cwd=workdir, env=env, stdout=stdout, stderr=stderr,
+                             creationflags=subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0)
+result = {
+    "step": label, "cwd": str(workdir), "command": command,
+    "startedUtc": started,
+    "finishedUtc": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+    "elapsedSeconds": round(time.monotonic() - clock, 3),
+    "exitCode": process.returncode,
+    "stdout": stdout_path.name, "stderr": stderr_path.name,
+    "lifecycleScriptsDisabled": True,
+}
+(run_dir / f"{label}.json").write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+print(json.dumps(result, ensure_ascii=False), flush=True)
+for name, file in (("stdout", stdout_path), ("stderr", stderr_path)):
+    value = file.read_text(encoding="utf-8", errors="replace")
+    if value:
+        print(json.dumps({"stream": name, "tail": value[-5000:]}, ensure_ascii=False), flush=True)
+sys.exit(process.returncode)

@@ -1,0 +1,372 @@
+{
+  "story": "2.2",
+  "recorded_at": "2026-09-12T04:59:16.595Z",
+  "status": "observed",
+  "scope": "只读比较 WSL 内核原始与经补偿单调时钟；adjtimex modes=0，不写参数、不启动容器",
+  "debug_tag": "DEBUG-clock-a2",
+  "python_probe": "\nimport ctypes, json, os, sys, time\nfrom pathlib import Path\nclass Timeval(ctypes.Structure):\n    _fields_ = [(\"tv_sec\", ctypes.c_long), (\"tv_usec\", ctypes.c_long)]\nclass TimexPrefix(ctypes.Structure):\n    _fields_ = [(\"modes\", ctypes.c_uint), (\"offset\", ctypes.c_long), (\"freq\", ctypes.c_long),\n                (\"maxerror\", ctypes.c_long), (\"esterror\", ctypes.c_long), (\"status\", ctypes.c_int),\n                (\"constant\", ctypes.c_long), (\"precision\", ctypes.c_long), (\"tolerance\", ctypes.c_long),\n                (\"time\", Timeval), (\"tick\", ctypes.c_long)]\nassert ctypes.sizeof(ctypes.c_long) == 8\nlibc = ctypes.CDLL(None, use_errno=True)\nlibc.adjtimex.argtypes = [ctypes.c_void_p]\nlibc.adjtimex.restype = ctypes.c_int\nfor incoming in sys.stdin:\n    buf = ctypes.create_string_buffer(1024)\n    result = libc.adjtimex(ctypes.byref(buf))\n    value = TimexPrefix.from_buffer_copy(buf.raw)\n    print(json.dumps({\n        \"id\": incoming.strip(),\n        \"monotonic_ns\": str(time.clock_gettime_ns(time.CLOCK_MONOTONIC)),\n        \"raw_ns\": str(time.clock_gettime_ns(time.CLOCK_MONOTONIC_RAW)),\n        \"realtime_ns\": str(time.clock_gettime_ns(time.CLOCK_REALTIME)),\n        \"clocksource\": Path(\"/sys/devices/system/clocksource/clocksource0/current_clocksource\").read_text().strip(),\n        \"timex\": {\"modes_input\": 0, \"result\": result, \"errno\": ctypes.get_errno(),\n                  \"user_hz\": os.sysconf(\"SC_CLK_TCK\"), \"tick_us\": value.tick,\n                  \"freq_scaled_ppm\": value.freq, \"freq_ppm\": value.freq / 65536,\n                  \"status\": value.status, \"offset\": value.offset}\n    }), flush=True)\n",
+  "python_probe_sha256": "57ab2341b1163b4fe5d4f7f1dfa9a531fa67398edb592415a60a4c435d25e218",
+  "hypotheses": [
+    "内核频率补偿：CLOCK_MONOTONIC 比 CLOCK_MONOTONIC_RAW 快，原始时钟应与宿主机接近。",
+    "WSL 原始时钟失真：原始和经补偿时钟都应相对宿主机偏快。",
+    "Node 探针口径问题：Python 直接系统时钟应不重现 Node 的偏差。"
+  ],
+  "samples": [
+    {
+      "host_before": {
+        "wall_ms": 1789189156694,
+        "monotonic_ms": 146.8161
+      },
+      "host_after": {
+        "wall_ms": 1789189156694,
+        "monotonic_ms": 147.1517
+      },
+      "round_trip_ms": 0.33559999999999945,
+      "guest": {
+        "id": "2",
+        "monotonic_ns": "72370027273574",
+        "raw_ns": "71527392977101",
+        "realtime_ns": "1789189156180650775",
+        "clocksource": "tsc",
+        "timex": {
+          "modes_input": 0,
+          "result": 0,
+          "errno": 0,
+          "user_hz": 100,
+          "tick_us": 10464,
+          "freq_scaled_ppm": 1175512,
+          "freq_ppm": 17.9368896484375,
+          "status": 8192,
+          "offset": 0
+        }
+      }
+    },
+    {
+      "host_before": {
+        "wall_ms": 1789189156694,
+        "monotonic_ms": 147.2059
+      },
+      "host_after": {
+        "wall_ms": 1789189156695,
+        "monotonic_ms": 147.49
+      },
+      "round_trip_ms": 0.28409999999999513,
+      "guest": {
+        "id": "3",
+        "monotonic_ns": "72370027645344",
+        "raw_ns": "71527393332202",
+        "realtime_ns": "1789189156181022225",
+        "clocksource": "tsc",
+        "timex": {
+          "modes_input": 0,
+          "result": 0,
+          "errno": 0,
+          "user_hz": 100,
+          "tick_us": 10464,
+          "freq_scaled_ppm": 1175512,
+          "freq_ppm": 17.9368896484375,
+          "status": 8192,
+          "offset": 0
+        }
+      }
+    },
+    {
+      "host_before": {
+        "wall_ms": 1789189156695,
+        "monotonic_ms": 147.5264
+      },
+      "host_after": {
+        "wall_ms": 1789189156695,
+        "monotonic_ms": 147.8313
+      },
+      "round_trip_ms": 0.3049000000000035,
+      "guest": {
+        "id": "4",
+        "monotonic_ns": "72370027975785",
+        "raw_ns": "71527393647993",
+        "realtime_ns": "1789189156181352663",
+        "clocksource": "tsc",
+        "timex": {
+          "modes_input": 0,
+          "result": 0,
+          "errno": 0,
+          "user_hz": 100,
+          "tick_us": 10464,
+          "freq_scaled_ppm": 1175512,
+          "freq_ppm": 17.9368896484375,
+          "status": 8192,
+          "offset": 0
+        }
+      }
+    },
+    {
+      "host_before": {
+        "wall_ms": 1789189166703,
+        "monotonic_ms": 10155.5609
+      },
+      "host_after": {
+        "wall_ms": 1789189166703,
+        "monotonic_ms": 10156.3151
+      },
+      "round_trip_ms": 0.7541999999994005,
+      "guest": {
+        "id": "5",
+        "monotonic_ns": "72380502724827",
+        "raw_ns": "71537401863505",
+        "realtime_ns": "1789189166656103133",
+        "clocksource": "tsc",
+        "timex": {
+          "modes_input": 0,
+          "result": 0,
+          "errno": 0,
+          "user_hz": 100,
+          "tick_us": 10467,
+          "freq_scaled_ppm": -1334314,
+          "freq_ppm": -20.360015869140625,
+          "status": 8192,
+          "offset": 0
+        }
+      }
+    },
+    {
+      "host_before": {
+        "wall_ms": 1789189166703,
+        "monotonic_ms": 10156.4114
+      },
+      "host_after": {
+        "wall_ms": 1789189166704,
+        "monotonic_ms": 10156.8231
+      },
+      "round_trip_ms": 0.4116999999987456,
+      "guest": {
+        "id": "6",
+        "monotonic_ns": "72380503473878",
+        "raw_ns": "71537402578046",
+        "realtime_ns": "1789189166656851115",
+        "clocksource": "tsc",
+        "timex": {
+          "modes_input": 0,
+          "result": 0,
+          "errno": 0,
+          "user_hz": 100,
+          "tick_us": 10467,
+          "freq_scaled_ppm": -1334314,
+          "freq_ppm": -20.360015869140625,
+          "status": 8192,
+          "offset": 0
+        }
+      }
+    },
+    {
+      "host_before": {
+        "wall_ms": 1789189166704,
+        "monotonic_ms": 10157.074
+      },
+      "host_after": {
+        "wall_ms": 1789189166706,
+        "monotonic_ms": 10158.7305
+      },
+      "round_trip_ms": 1.6564999999991414,
+      "guest": {
+        "id": "7",
+        "monotonic_ns": "72380504843777",
+        "raw_ns": "71537403889534",
+        "realtime_ns": "1789189166658224412",
+        "clocksource": "tsc",
+        "timex": {
+          "modes_input": 0,
+          "result": 0,
+          "errno": 0,
+          "user_hz": 100,
+          "tick_us": 10467,
+          "freq_scaled_ppm": -1334314,
+          "freq_ppm": -20.360015869140625,
+          "status": 8192,
+          "offset": 0
+        }
+      }
+    },
+    {
+      "host_before": {
+        "wall_ms": 1789189176723,
+        "monotonic_ms": 20175.8911
+      },
+      "host_after": {
+        "wall_ms": 1789189176724,
+        "monotonic_ms": 20177.1248
+      },
+      "round_trip_ms": 1.233700000000681,
+      "guest": {
+        "id": "8",
+        "monotonic_ns": "72390988169932",
+        "raw_ns": "71547422628377",
+        "realtime_ns": "1789189177141548489",
+        "clocksource": "tsc",
+        "timex": {
+          "modes_input": 0,
+          "result": 0,
+          "errno": 0,
+          "user_hz": 100,
+          "tick_us": 10462,
+          "freq_scaled_ppm": -1267533,
+          "freq_ppm": -19.341018676757812,
+          "status": 8192,
+          "offset": 0
+        }
+      }
+    },
+    {
+      "host_before": {
+        "wall_ms": 1789189176724,
+        "monotonic_ms": 20177.2191
+      },
+      "host_after": {
+        "wall_ms": 1789189176725,
+        "monotonic_ms": 20177.804
+      },
+      "round_trip_ms": 0.5849000000016531,
+      "guest": {
+        "id": "9",
+        "monotonic_ns": "72390989148451",
+        "raw_ns": "71547423562451",
+        "realtime_ns": "1789189177142525701",
+        "clocksource": "tsc",
+        "timex": {
+          "modes_input": 0,
+          "result": 0,
+          "errno": 0,
+          "user_hz": 100,
+          "tick_us": 10462,
+          "freq_scaled_ppm": -1267533,
+          "freq_ppm": -19.341018676757812,
+          "status": 8192,
+          "offset": 0
+        }
+      }
+    },
+    {
+      "host_before": {
+        "wall_ms": 1789189176725,
+        "monotonic_ms": 20177.935
+      },
+      "host_after": {
+        "wall_ms": 1789189176725,
+        "monotonic_ms": 20178.3716
+      },
+      "round_trip_ms": 0.43659999999727006,
+      "guest": {
+        "id": "10",
+        "monotonic_ns": "72390989788077",
+        "raw_ns": "71547424173706",
+        "realtime_ns": "1789189177143165164",
+        "clocksource": "tsc",
+        "timex": {
+          "modes_input": 0,
+          "result": 0,
+          "errno": 0,
+          "user_hz": 100,
+          "tick_us": 10462,
+          "freq_scaled_ppm": -1267533,
+          "freq_ppm": -19.341018676757812,
+          "status": 8192,
+          "offset": 0
+        }
+      }
+    }
+  ],
+  "comparisons": [
+    {
+      "sample_ids": [
+        "3",
+        "6"
+      ],
+      "host_min_ms": 10008.921400000001,
+      "host_max_ms": 10009.617199999999,
+      "guest_monotonic_ms": 10475.828534,
+      "guest_raw_ms": 10009.245844,
+      "monotonic_to_host_ratio": [
+        1.0465763400022932,
+        1.0466490958756054
+      ],
+      "raw_to_host_ratio": [
+        0.9999629000797353,
+        1.0000324154808526
+      ],
+      "monotonic_to_raw_ratio": 1.0466151693416235,
+      "timex": {
+        "modes_input": 0,
+        "result": 0,
+        "errno": 0,
+        "user_hz": 100,
+        "tick_us": 10467,
+        "freq_scaled_ppm": -1334314,
+        "freq_ppm": -20.360015869140625,
+        "status": 8192,
+        "offset": 0
+      },
+      "timex_predicted_ratio": 1.0466796399841307
+    },
+    {
+      "sample_ids": [
+        "6",
+        "10"
+      ],
+      "host_min_ms": 10021.111900000002,
+      "host_max_ms": 10021.960199999998,
+      "guest_monotonic_ms": 10486.314199,
+      "guest_raw_ms": 10021.59566,
+      "monotonic_to_host_ratio": [
+        1.0463336502773182,
+        1.0464222237654086
+      ],
+      "raw_to_host_ratio": [
+        0.999963625878299,
+        1.000048274084236
+      ],
+      "monotonic_to_raw_ratio": 1.0463717111292834,
+      "timex": {
+        "modes_input": 0,
+        "result": 0,
+        "errno": 0,
+        "user_hz": 100,
+        "tick_us": 10462,
+        "freq_scaled_ppm": -1267533,
+        "freq_ppm": -19.341018676757812,
+        "status": 8192,
+        "offset": 0
+      },
+      "timex_predicted_ratio": 1.0461806589813232
+    }
+  ],
+  "warmup": {
+    "host_before": {
+      "wall_ms": 1789189156605,
+      "monotonic_ms": 58.3388
+    },
+    "host_after": {
+      "wall_ms": 1789189156694,
+      "monotonic_ms": 146.6589
+    },
+    "round_trip_ms": 88.3201,
+    "guest": {
+      "id": "1",
+      "monotonic_ns": "72370026337055",
+      "raw_ns": "71527392082597",
+      "realtime_ns": "1789189156179714796",
+      "clocksource": "tsc",
+      "timex": {
+        "modes_input": 0,
+        "result": 0,
+        "errno": 0,
+        "user_hz": 100,
+        "tick_us": 10464,
+        "freq_scaled_ppm": 1175512,
+        "freq_ppm": 17.9368896484375,
+        "status": 8192,
+        "offset": 0
+      }
+    }
+  },
+  "probe_exit_code": 0,
+  "finished_at": "2026-09-12T04:59:36.738Z"
+}

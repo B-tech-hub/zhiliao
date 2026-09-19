@@ -1,0 +1,22 @@
+{
+  "advisories/GHSA-2883-xcg3-v3hh.json": "ca30af1df1262ce05f0c492fb4733fa1f2860745a89d5dc5a59a07542072ad56",
+  "advisories/GHSA-2xp9-vwfh-vxw4.json": "f98c65b8173104d92b97a0781f626e6b715b91adbbf3ede07b90f76bfd74a424",
+  "advisories/GHSA-82fw-gwwq-j7x9.json": "a4cf3e2fcfddc3e839a5411d01f4203e10d359a6effe2fed8cbc2aaf7ce9887d",
+  "advisories/GHSA-cp6q-959q-f8rh.json": "6218be4dbf8c976057f72f837f986a04492502e6c32c36c22875b2d2683dcef1",
+  "advisories/GHSA-p293-qw3h-jr36.json": "dad0039482ca752547c8ef2fb359d01cbc321a71048fe7740223caed207ca0fb",
+  "advisories/GHSA-rgj7-g3m4-5g8c.json": "9608faf7bf8d6ad522670a05d9444aed16d34e3dc933b873aadaf943ca79aa94",
+  "candidate-comparison.json": "1996646375c9e3ea81dfc1f581efa922288b261635a4b38b9e9c14402064097f",
+  "dependency-inventory.json": "268f32eb4d16ace6710b71e36d074f458c08c6c89c025b25b6d944b2840bc60f",
+  "harness/tiptap-boundary-probe.mjs.txt": "f42dc674b131da3b4d3a8f2b6472c079d48d036b9e1b1c41463252132ab8e5b9",
+  "npm-audit-all.json": "1d38d5dbab33466358cf3127a378335a90d6c5961159a813f7faf4e45380e919",
+  "npm-audit-production.json": "98da96193d0ee5f7884cfde207a04403567f819010e415d31a3cf58a3a38a113",
+  "README.md": "943c79352c8165d83514ccba9c9840c563d45b8598d7e4dd77544eb9ef843b37",
+  "registry/registry-eslint-config-next-15.5.24.json": "98e2132502dbf2871194fe2306558ae0ecd046de63a3043a56d568f7d363a467",
+  "registry/registry-js-yaml-4.3.2.json": "970a78cb315f1ce5f66885117f37a28e90e43ad7150fe172e826e87a11aca06e",
+  "registry/registry-next-15.5.24.json": "508f122d28aa20dc74572b49b46460f7300a437d884a5208fc2907c5fa8e5acf",
+  "registry/registry-sharp-0.35.4.json": "d300df4698d4b409ff1631274c755333f27d7f35ba2e5ce11704b525b2f294d1",
+  "registry/registry-vitest-4.1.11.json": "48432f161ab45f60344d096cb21f7022450d2707159234ce51e420ffdabe8068",
+  "summary.json": "ffb5765bb5fe45cb4729079d9eb99c33bb314bdbb43be68665f5d244292d2de1",
+  "tiptap-boundary-probe.json": "b48fe9a2db0d1cb2eeb0f240f1cab9e78620ad2ad9ba74c7ac43b375d3ba1e7d",
+  "verification.json": "3f8e05bed69251e4a2b56de4f7b317b8b130d921b8d69903a781b45543ed7edb"
+}

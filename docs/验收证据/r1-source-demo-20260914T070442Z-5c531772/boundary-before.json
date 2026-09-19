@@ -1,0 +1,108 @@
+{
+  "tables": {
+    "_migrations": {
+      "count": 14,
+      "sha256": "f6ff5f847b439a49e183a3f40eb904b9704d0324345685d6e4e75fa17f4043dc"
+    },
+    "ai_jobs": {
+      "count": 18,
+      "sha256": "0c2babffe3d411a2449890dc346a00b5dcca84ddd776a0e4ce5265868fb3c8e4"
+    },
+    "api_tokens": {
+      "count": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "conversation_sources": {
+      "count": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "conversations": {
+      "count": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "correction_examples": {
+      "count": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "images": {
+      "count": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "messages": {
+      "count": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "note_chunks": {
+      "count": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "note_tags": {
+      "count": 32,
+      "sha256": "2c61279bac9c42a35f1c1669bf2e0ffe591dd4bdaf49176cf458984f13ec6d5b"
+    },
+    "notes": {
+      "count": 17,
+      "sha256": "bf9e96335ffb25f7a587cbfa58eed5305688a69a747325d8b58eb63f5744d6ea"
+    },
+    "notes_fts": {
+      "count": 17,
+      "sha256": "281bafbd74476ada6b13f05b979107ca82deb4d965108ea847f568ee2fbe003f"
+    },
+    "notes_fts_config": {
+      "count": 1,
+      "sha256": "6c188207c1643c51060a5ec50fd4a8e3dabea41f56e6ffe9131b864c8f54ad07"
+    },
+    "notes_fts_content": {
+      "count": 17,
+      "sha256": "e668d9256f8388117e3600b204390f9496079c344e9f225b2be6527ad566577d"
+    },
+    "notes_fts_data": {
+      "count": 7,
+      "sha256": "cfe6d2397270866e751b99a350e67a1136fb9155d41ed8bfc0819a6c5b09dbbc"
+    },
+    "notes_fts_docsize": {
+      "count": 17,
+      "sha256": "b279994bae9aa7ac31bc32ce49be842dd3d06d211ef32ff6a626fded56988d90"
+    },
+    "notes_fts_idx": {
+      "count": 5,
+      "sha256": "662185fe51197890f1241417f9892529dd1f5a9a89190c2ca1aecfc71bda8cfe"
+    },
+    "settings": {
+      "count": 2,
+      "sha256": "57c709aa890f13eed873ab3b9f7dad759fea5750b459745a77af94d5ff0dad6e"
+    },
+    "tags": {
+      "count": 4,
+      "sha256": "234613d1d47acedda9a29854d8579564e4836b606cfbdc8a580b2be1c577b7a2"
+    },
+    "topic_suggestions": {
+      "count": 1,
+      "sha256": "bf89f83fb13ae0203d2db428192d84f905162edfa797e81ee434d9d72382bbb0"
+    },
+    "topics": {
+      "count": 5,
+      "sha256": "4716b997ee15aaf56b0b999badaac96f529ffca7d8cfd1eddc5082c6d9d6a15b"
+    }
+  },
+  "files": {
+    "db/backups/app-2026-09-14.db": "921ec0929f9a65930f242468aac20d40703bec324576b4206df10057c9b1a0f0",
+    "notes/未分类/周末想试 10 公里·AI-rb3hss2qzaspxp0kn2xhg2qh.md": "cdca98a411109d4bdda62b8cb43accd6a4e2816dc5607755253235c104475afd",
+    "notes/未分类/周末逛菜市场买了排骨·AI-sx0tkkaj24akub5ebb18j984.md": "9525f6d7a3a5cd3a8f86631fc56aa1b5e273891604cdcafb0bcc73645c4114f8",
+    "notes/未分类/夜跑改到操场，塑胶场·AI-fx2kdc04okk5y41r6zqled5v.md": "a0d464e51268bdc37a0f216e6b1923e465f1ced77262f907290ed855d76d1cfe",
+    "notes/未分类/学做菜第二天：番茄炒·AI-w7vzqffb2mzfyqbo34fs832y.md": "8e2dec473c7da72ce61fe5c6dcbed3e6f78b653cf28cd20a8462d3d65b97b4ca",
+    "notes/未分类/晨跑 5 公里，配速·AI-wsyc3qpp2tlu1szq83j6e9kp.md": "bb7b1be01d022aae1dcf6cf97ecd7ef49c7ca32df4d611d9798e9d484b7fa046",
+    "notes/未分类/第一次做饭挑战可乐鸡·AI-nek5ibxb8lygyrj7impy3gyn.md": "f6c702be4155d9161ee802df01f117629db153322cb7633de632456738a90079",
+    "notes/未分类/跑前热身偷懒了，小腿·AI-fn0gtqpvvbtb8b3ohnv9xowh.md": "b7f6ecaf636f0efaa074dd9161a4f6a08e57f1b74908b0ab2e1c8a6abfa2b196",
+    "notes/未分类/跑步歌单更新：步频 ·AI-feebaey0c5yrzziciutvf1fj.md": "62c6d385841676014b293522bd8dce2c50a38efa76430c37794f5529592083ad",
+    "notes/羽毛球/R1验收冷启动：今晚·AI-eifme1synnzp9q0y8o314hkw.md": "0729cb2aa46be570f38209eb49054a6a1402d258c598d4ff5d66823a49c9f3b1",
+    "notes/羽毛球/今晚羽毛球多球训练，·AI-jc3niz4rzkzxl0rs8b4dm4ob.md": "c4286d00a0e38916196b4953761028e80b500ced18a5345b700a7583255dba95",
+    "notes/羽毛球/双打站位复盘：接杀球·AI-j86xi1u1l187xm5hzdbcklo9.md": "df21c4e29a48eaa5f7a59821cf0cc2b4e917c159c8a767e2ac4c976150338cea",
+    "notes/羽毛球/新球拍拉了 26 磅·AI-htmpc7pr2m5h6sg8h8fu27j1.md": "29fd6d96a656a55dfafa2c76ad13d388fe4003db7c31e750698d25828735df12",
+    "notes/羽毛球/这个月羽毛球训练小结·AI-fg0hpdtc0qu05ck23ijc23il.md": "e778f5351f8fc39c6e1f3948bf595f4ba7ee36ebbc87020a7e603bfc273abea7",
+    "notes/自媒体/下周视频备选：宿舍收·AI-mjns80q5krtytzrga8yqbmyc.md": "1263f5f8fbee4c2a4705e40d25873b51f4625fe170c54ce800d933ca3ccb609e",
+    "notes/自媒体/剪辑复盘：这期视频开·AI-in9nuq7zpm91dkl94n1heir2.md": "4c7fac24fe58f3e1c7260c0e08790ccd8ee4ca15921319fb94ab5529006f9cfb",
+    "notes/自媒体/选题灵感：把长文笔记·AI-cr0dnhyn4hduva1vhrg63dyn.md": "a8e25ca274cb0e6a13251c4e39b00af78c34b26f13b86e82d588b72e12f78551"
+  },
+  "timeUtc": "2026-09-14T07:51:47.607Z"
+}

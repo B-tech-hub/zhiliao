@@ -1,0 +1,198 @@
+{
+    "archive-checks.json":  {
+                                "sha256":  "bdd5d78a56fb8880f8e00e414aaf7fdbec15fb477bf5983ff4361407c89f7238",
+                                "bytes":  259
+                            },
+    "browser-report.json":  {
+                                "sha256":  "eeea1e2508574fd4c091df8e4e09e10479ca19dc9b9fe9be7e0ff58713802fdc",
+                                "bytes":  220033
+                            },
+    "build.json":  {
+                       "sha256":  "33bf1da1068cc567e1263c6b6bb9f38cf7eae65a4ba5931768c82bca04c3ba61",
+                       "bytes":  1192
+                   },
+    "build.log":  {
+                      "sha256":  "5a5a92f61c7c309a4049eef003621aaa3a04445b8ccb34a916e632d87ae3ca27",
+                      "bytes":  11063
+                  },
+    "cleanup-comparison-diff.json":  {
+                                         "sha256":  "155a4fbea3876a52e0f6b933ac024c2787827ca6071e0cbe26f7f4ec1d3e8f33",
+                                         "bytes":  225
+                                     },
+    "cleanup-order-only-failure.json":  {
+                                            "sha256":  "35d7da2ee998d1843181163913218fa0947c60417a86d64bc1cb86150f13dbc6",
+                                            "bytes":  5968
+                                        },
+    "config-redacted.json":  {
+                                 "sha256":  "d492e0ab1e8f6fceba229c98b235c43c7ff2299bfe0051593015f299a2b5420b",
+                                 "bytes":  6471
+                             },
+    "docker-version.json":  {
+                                "sha256":  "601609f3646a4f2f5d61e548d680912dc7969ff335ccac207ea3fd14dd04898a",
+                                "bytes":  1583
+                            },
+    "first-frame-desktop-light.png":  {
+                                          "sha256":  "6e0916fdc7f08a042a728f8abf0101704cc9cc33a89dbd42ef72c83d564a7569",
+                                          "bytes":  105064
+                                      },
+    "first-frame-mobile-light.png":  {
+                                         "sha256":  "e1cd4e741e3c7457870846be7747b16e01f6f397f45a9d72a794db44bed55433",
+                                         "bytes":  62480
+                                     },
+    "harness/archive.py.txt":  {
+                                   "sha256":  "b1eeb41fe9f76fdcda07f47a5d8eb2081540fa5d12fbf536f264a92b3f2d13ba",
+                                   "bytes":  2684
+                               },
+    "harness/audit.py.txt":  {
+                                 "sha256":  "89b588ff354058efae94516830be81cdb46c4b6c1dc9e81cf71ce3299f70c44a",
+                                 "bytes":  2790
+                             },
+    "harness/browser.cjs.txt":  {
+                                    "sha256":  "c82840e2877f2acbcd4c7e213e377cf1b5569524a0077bc331d9e80351a8c9df",
+                                    "bytes":  23074
+                                },
+    "harness/build.py.txt":  {
+                                 "sha256":  "07c004ea736fdfbf48540c1189d7d56071f7468556286be2fac0fe1f8d0e2677",
+                                 "bytes":  3785
+                             },
+    "harness/cleanup-directory.ps1.txt":  {
+                                              "sha256":  "611c83003e5bc653989b64e8ad04a6f149c6364a44e9d865a63ee19d37d5bb50",
+                                              "bytes":  4119
+                                          },
+    "harness/compose.base.yml.txt":  {
+                                         "sha256":  "af97fe2ae47eb4ff6977500aaf37dd90e9d0381c2396eb4c7eaf6d2a33500c7f",
+                                         "bytes":  4243
+                                     },
+    "harness/compose.r1.yml.txt":  {
+                                       "sha256":  "e98274dd289da828f2d46b5d660ab410064d7a5cab5e8d3ac881f9a644a4d07c",
+                                       "bytes":  651
+                                   },
+    "harness/contact-sheets.py.txt":  {
+                                          "sha256":  "f2876b15a7cbc81a0130cce689b6f409795ac0b76552e901aa0d16b76335179f",
+                                          "bytes":  1255
+                                      },
+    "harness/nginx-demo.conf.txt":  {
+                                        "sha256":  "a84bf1960a41566d70bc4acef9532831a6c9264f75c6ff03a0962fcd0ec9f442",
+                                        "bytes":  1344
+                                    },
+    "harness/prepare.py.txt":  {
+                                   "sha256":  "b31301a64f2bf186153e4152d2fd850e7aeee50c44eb42d1e0cc83e47c65e100",
+                                   "bytes":  6459
+                               },
+    "harness/r1lib.py.txt":  {
+                                 "sha256":  "ed9622aa5a23450b4f24360639cf78d9a1c6e0357f51b7678feb327f6d617dba",
+                                 "bytes":  4936
+                             },
+    "harness/runtime.py.txt":  {
+                                   "sha256":  "93215ce0e2208fea364890a8be4c073d12637a764302761547da5eaf88f1e311",
+                                   "bytes":  10281
+                               },
+    "harness/static-checks.py.txt":  {
+                                         "sha256":  "4f47c2d232496d49494e844baf3305069504b431459a475ffe5fa9b2e5ca538f",
+                                         "bytes":  4997
+                                     },
+    "long-date-320-light.png":  {
+                                    "sha256":  "879ef6d56652d33b940bdc1ed7e1d6bc46d79ad6a7f4cb1782fabd864ae6cff0",
+                                    "bytes":  58406
+                                },
+    "long-date-390-dark.png":  {
+                                   "sha256":  "5a2bc9acc76c43eed2a1cede7d8662e5dfb185eb40273d737fc14491fc8be2ec",
+                                   "bytes":  71100
+                               },
+    "long-date-390-light.png":  {
+                                    "sha256":  "730b124f428e85af0779ebf8f78702a001a3f1e89dbbc91c0801d2531de318d4",
+                                    "bytes":  63721
+                                },
+    "preflight-config-extension-failure.json":  {
+                                                    "sha256":  "7bfd795a93dd743396fee94611faab2cdbc33ca623ab33390255be98e01eefca",
+                                                    "bytes":  598
+                                                },
+    "preflight-default-value-failure.json":  {
+                                                 "sha256":  "d9e51ac15b8c52b4cf461418deb1aa6316454c45e0185fb975e3fdae8acb202e",
+                                                 "bytes":  1104
+                                             },
+    "preparation.json":  {
+                             "sha256":  "ac7e1d3f0fcae352bfc63caa26a2f3fc67895a95c28534eb510a41fd860d982d",
+                             "bytes":  1813
+                         },
+    "preservation-before-documents.json":  {
+                                               "sha256":  "5f7c5badc028862173a8ce759ee544a141158233ae09dbb635ee21628d0bfc40",
+                                               "bytes":  617
+                                           },
+    "preservation-final.json":  {
+                                    "sha256":  "1a067a6de0cdfd8eb817f2d237ab3d053e9cd92c153c4d712d36e03db73036f1",
+                                    "bytes":  5650
+                                },
+    "README.md":  {
+                      "sha256":  "79db4c32e356c0830c4c5caa360dccb099c77b57afb146b3fd7c5669dd62c4a6",
+                      "bytes":  3882
+                  },
+    "review.md":  {
+                      "sha256":  "703ac2aceead3d7d37556565218e2a38c4003b9c6869764c9c53cb8eee6fea58",
+                      "bytes":  3193
+                  },
+    "runtime-before-cleanup.log":  {
+                                       "sha256":  "71f1db30d9ccc30e3d06a4cf8fa6c3956b0a0d39ba008c04da7373e115652c79",
+                                       "bytes":  234730
+                                   },
+    "runtime-cleanup-first.py.txt":  {
+                                         "sha256":  "3cc74c72a4ad6bd796a0e413a9478f62dd77d898bc883059eb969fdbca9e02d4",
+                                         "bytes":  9369
+                                     },
+    "runtime-preflight-1.py.txt":  {
+                                       "sha256":  "d50ea24f2592bf32b3386c041daba51c8dfb13f0c092e593f82cbabcc39f82ce",
+                                       "bytes":  8914
+                                   },
+    "runtime-preflight-2.py.txt":  {
+                                       "sha256":  "1a622a461600ade3ebf5f19c2500348b3206930af663cbdd70b604389f19b496",
+                                       "bytes":  9045
+                                   },
+    "runtime.json":  {
+                         "sha256":  "f5fb35c48fc25187d1dda0b2cfc8d4667c966c4bee0bf3f42f7467854eebbc13",
+                         "bytes":  6520
+                     },
+    "source-manifest.json":  {
+                                 "sha256":  "8474075a8140692fd38dc7369534d466f8422607710f31589fb938f3de9c0350",
+                                 "bytes":  27576
+                             },
+    "source-snapshot.zip":  {
+                                "sha256":  "d05e8ca92d138b2a22116298cff05c41e2a31c12bcbac6318630aaa4039d692d",
+                                "bytes":  1115593
+                            },
+    "static-checks-before-final-protection-failed.json":  {
+                                                              "sha256":  "85831481e49f5b98e6deb60e0413d30938f2aab26f7596207588dc1fa8420d1c",
+                                                              "bytes":  501
+                                                          },
+    "static-checks.json":  {
+                               "sha256":  "83bbc6ace3d75d430e79820ef354bc9f37542e8fe173a442125c0235626940b2",
+                               "bytes":  314
+                           },
+    "visual-1024-light.png":  {
+                                  "sha256":  "441aebf6a38136405df517592c3aaed00fa955c12ec88fe2e8b01045e56c5c5c",
+                                  "bytes":  90794
+                              },
+    "visual-1440-dark.png":  {
+                                 "sha256":  "8a9d4444b4103d312a6013b28e80730d7d64690144b923c2d9e0ce6e4464c136",
+                                 "bytes":  115260
+                             },
+    "visual-1440-light.png":  {
+                                  "sha256":  "0a1613c6d99940ec857949c5185c0d4414411f410d3aa9436479224124205fa6",
+                                  "bytes":  105764
+                              },
+    "visual-390-dark.png":  {
+                                "sha256":  "307813dca36cbb5846702af99683ec2997049e7dcfb3c0167a067cb0893c11f9",
+                                "bytes":  70325
+                            },
+    "visual-390-light.png":  {
+                                 "sha256":  "ed76a046833f06cd01073b7345aed81913962bcc4223ecc5bea0973eef199ba8",
+                                 "bytes":  63043
+                             },
+    "visual-review.json":  {
+                               "sha256":  "986d2c65364550e2056d85df476905a984362af08d11450c872705ee9e9d8cc5",
+                               "bytes":  1080
+                           },
+    "cleanup-directory.json":  {
+                                   "sha256":  "4e5a0cddabdc10d6d090595df89d396b1560638b48d30061c2d112ca4bad6c2b",
+                                   "bytes":  657
+                               }
+}

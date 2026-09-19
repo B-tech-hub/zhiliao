@@ -1,0 +1,340 @@
+--- a/nginx/demo.conf
++++ b/nginx/demo.conf
+@@ -7,8 +7,13 @@
+ http {
+   access_log /dev/stdout;
+   error_log /dev/stderr warn;
++  # 空 key 不计入请求限流；仅豁免 Next 构建静态资源。
++  map $uri $demo_req_key {
++    default $binary_remote_addr;
++    ~^/_next/static/ "";
++  }
+   limit_conn_zone $binary_remote_addr zone=demo_conn:10m;
+-  limit_req_zone $binary_remote_addr zone=demo_req:10m rate=10r/s;
++  limit_req_zone $demo_req_key zone=demo_req:10m rate=10r/s;
+ 
+   upstream zhiliao_app {
+     server app:3000;
+--- a/tests/config/demo-compose.test.ts
++++ b/tests/config/demo-compose.test.ts
+@@ -88,7 +88,7 @@
+     ]);
+     expect(nginxConfig).toContain("worker_connections 256;");
+     expect(nginxConfig).toContain("limit_conn_zone $binary_remote_addr zone=demo_conn:10m;");
+-    expect(nginxConfig).toContain("limit_req_zone $binary_remote_addr zone=demo_req:10m rate=10r/s;");
++    expect(nginxConfig).toContain("limit_req_zone $demo_req_key zone=demo_req:10m rate=10r/s;");
+     expect(nginxConfig).toContain("client_max_body_size 8m;");
+     expect(nginxConfig).toContain("location = /api/import");
+     expect(nginxConfig).toContain("client_max_body_size 200m;");
+@@ -102,6 +102,43 @@
+     expect(app.healthcheck.test[1]).toBe("node");
+     expect(app.healthcheck.test[3]).toContain("/api/healthz");
+     expect(mock.healthcheck.test[0]).toBe("CMD");
++  });
++
++  it("仅从规范化路径生成请求限流 key，动态请求和连接限制继续在 server 层生效", () => {
++    const requestMap = nginxConfig.match(/map\s+\$uri\s+\$demo_req_key\s*\{([^}]+)\}/);
++    expect(requestMap).not.toBeNull();
++    if (!requestMap) throw new Error("缺少静态资源限流映射");
++    const rules = requestMap[1].replace(/#.*$/gm, "").split(";").map((rule) => rule.trim()).filter(Boolean);
++    expect(rules).toEqual(["default $binary_remote_addr", '~^/_next/static/ ""']);
++    const serverLimits = nginxConfig.match(/server\s*\{([\s\S]*?)location\b/)?.[1];
++    expect(serverLimits).toContain("limit_req zone=demo_req burst=40 nodelay;");
++    expect(serverLimits).toContain("limit_conn demo_conn 32;");
++    expect(nginxConfig.match(/\blimit_req\s/g)).toHaveLength(1);
++    expect(nginxConfig.match(/\blimit_conn\s/g)).toHaveLength(1);
++  });
++
++  it.each([
++    ["/_next/static/chunks/app/(app)/page.js", true],
++    ["/_next/static/css/app.css", true],
++    ["/_next/static/media/font.woff2", true],
++    ["/", false],
++    ["/login", false],
++    ["/settings", false],
++    ["/api/healthz", false],
++    ["/api/import", false],
++    ["/api/uploads", false],
++    ["/api/example.js", false],
++    ["/_next/image", false],
++    ["/_next/data/build/page.json", false],
++    ["/_next/static", false],
++    ["/_next/staticx/chunks/app.js", false],
++    ["/_NEXT/static/chunks/app.js", false],
++  ] as const)("静态豁免边界：%s → %s", (uri, exempt) => {
++    const requestMap = nginxConfig.match(/map\s+\$uri\s+\$demo_req_key\s*\{([^}]+)\}/);
++    if (!requestMap) throw new Error("缺少静态资源限流映射");
++    const patterns = [...requestMap[1].matchAll(/~(\S+)\s+""\s*;/g)].map((match) => new RegExp(match[1]));
++    // 读取配置中的规则检查路径边界；真实 Nginx 的计数和 URI 规范化另做运行对照。
++    expect(patterns.some((pattern) => pattern.test(uri))).toBe(exempt);
+   });
+ 
+   it("不包含正式目录、正式环境文件或固定会话密钥", () => {
+--- a/README.md
++++ b/README.md
+@@ -71,6 +71,10 @@
+ 访问 http://localhost:3210 （默认仅绑定本机，密码默认 `demo`，可在 `demo.env` 中修改 `DEMO_PASSWORD`）；结束体验：`docker compose --env-file demo.env -p zhiliao-demo -f docker-compose.demo.yml down -v`。
+ 
+ Demo 启动命令显式使用独立且已被 Git 忽略的 `demo.env`，不会让 Docker Compose 自动读取正式 `.env`。默认 project 为 `zhiliao-demo`，内部网络、入口网络和三个 `demo_*` 命名卷随 project 隔离，不挂载 `./data` 或正式卷。Nginx 仅固定转发到 app，并限制 `200 MiB` 实际请求体；入口默认只绑定 `127.0.0.1`，不会直接暴露到局域网。app 与 mock LLM 位于不分配宿主机网关的 isolated 内网。三个服务均设置 CPU、内存、进程数、只读文件系统和日志轮转上限。
++
++当前候选的入口请求限流仅豁免 `/_next/static/` 下的构建资源，避免并行加载脚本、样式和字体耗尽额度。页面、API 及其他路径仍按入口来源地址限制为 `10r/s`、突发 `40`；所有路径继续受每来源地址 `32` 个连接的限制。`/_next/image` 等动态路径不在豁免范围。局部对照与浏览器结果见[静态资源限流修复验收](docs/R1安装验收-2026-09-15.md#demo-static-rate-limit-repair)。
++
++已运行这套入口且镜像已在本机的实例，更新 `nginx/demo.conf` 后应单独重建入口，让新进程初始化限流区。例如在原部署目录执行 `docker compose --env-file demo.env -p zhiliao-demo -f docker-compose.demo.yml up -d --no-deps --force-recreate --no-build --pull never ingress`；project 与环境文件沿用实际实例参数。此操作会短暂中断入口，不重建 app/mock 或数据卷。
+ 
+ **版本边界：已发布 v0.6.0 不含本轮 Demo 服务端防护；0.6.1 配置更新不代表补丁镜像已发布。** Nginx 入口已经承担接收正文前的实际请求体限制，当前工作区源码同时保留高风险操作和长度声明检查。公网使用前仍须发布包含当前源码补丁的固定应用镜像，并由宿主机或 Docker 存储层限制 Demo 卷容量；运行复核进度见 [Story 2.2 验收记录](docs/Demo部署隔离验收-2026-09-10.md)。
+ 
+--- a/README.en.md
++++ b/README.en.md
+@@ -86,6 +86,10 @@
+ 
+ The command uses a dedicated, Git-ignored `demo.env`, so Docker Compose does not auto-load the production `.env`. The default project is `zhiliao-demo`; its ingress network, isolated internal network, and three `demo_*` named volumes follow the project name and never mount `./data` or production volumes. Nginx only proxies to the app and enforces a `200 MiB` body limit. The ingress binds to `127.0.0.1` by default, so it is not exposed to the LAN. All three services have CPU, memory, process, read-only filesystem, and log rotation limits.
+ 
++The candidate exempts only build assets under `/_next/static/` from request-rate accounting, so parallel script, stylesheet, and font downloads do not consume the allowance. Pages, APIs, and other paths retain `10r/s` with a burst of `40` per ingress source address. The `32`-connection limit still applies to all paths; dynamic routes such as `/_next/image` are not exempt. See the [focused HTTP and browser verification](docs/R1安装验收-2026-09-15.md#demo-static-rate-limit-repair) (Chinese).
++
++For an existing instance using this ingress with its image already available locally, update `nginx/demo.conf` and recreate only the ingress to initialize the changed rate-limit key. From the original deployment directory, use `docker compose --env-file demo.env -p zhiliao-demo -f docker-compose.demo.yml up -d --no-deps --force-recreate --no-build --pull never ingress`, retaining that instance's actual project and environment-file arguments. This briefly interrupts ingress traffic without recreating the app, mock, or data volumes.
++
+ **Version boundary: published v0.6.0 lacks the current Demo server protections; updating Compose to 0.6.1 does not publish a patched image.** Nginx now performs the actual body-size check before proxying, while the working-tree application also rejects restricted operations and invalid length declarations. Publish a fixed application image before public deployment, and apply host or Docker storage quotas to Demo volumes. Runtime verification progress is recorded in the [Story 2.2 verification record](docs/Demo部署隔离验收-2026-09-10.md) (Simplified Chinese).
+ 
+ Maintainers can use `scripts/verify-demo-runtime.ps1` with Node.js 22+ on the host and the local candidate image. `-Port` selects the loopback port; `-IncludeSse -IncludeNetwork` runs HTTP/SSE checks and 20 network comparisons in one session. The runner links the separate network evidence and cleans up its resources by default. Check, evidence, or cleanup failures return a nonzero exit status. Standalone network and proxy timeout tools remain available through `node scripts/verify-demo-network.mjs --help` and `node scripts/verify-demo-proxy-timeouts.mjs --help`.
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -14,6 +14,7 @@
+ 
+ ### 修复
+ 
++- 修复 Demo Nginx 将构建静态资源计入页面/API 请求额度、导致 503 和 ChunkLoadError 的问题：仅豁免 `/_next/static/`，动态请求仍为 `10r/s`、突发 `40`，连接上限保持 `32`。[局部验收](docs/R1安装验收-2026-09-15.md#demo-static-rate-limit-repair)覆盖旧新配置对照、动态保护和禁用缓存的浏览器刷新；React #418 独立保留。
+ - 修复 Demo Compose 入口网络错误声明为内部网络、导致服务健康却没有宿主端口的问题：入口改为 `internal: false`，业务网络保持 `internal + isolated`。相关配置回归 9 项通过，仓库默认 `127.0.0.1:3210` 入口已完成[本机定向验收](docs/R1安装验收-2026-09-15.md#demo-ingress-repair)；完整安装、浏览器异常与发布验收继续保留。
+ - 修复当前候选源码 `npm run demo` 启动本机 mock、应用却访问容器名的问题：启动器设置 `DEMO_RUNTIME=local`，应用仅在固定本机/容器 mock 地址中选择，缺省或非法标记保持容器地址。数据库/环境中的外部模型配置仍被忽略，凭据与数据隔离、附加模型禁用及服务端防护保持；[R1 局部验证](docs/产品规划/开源发布范围与执行清单-2026-09-13.md#r1-source-demo)之外，已补充 [Windows 本机受控源码验收](docs/R1源码Demo接线验收-2026-09-14.md)；Docker、完整安装/恢复和发布验收仍待完成。
+ - 修复搜索候选在相关性排序前被截断的问题：先限定有效笔记与来源范围，再按 BM25 选候选并统计命中词；大量来源外结果不再挤掉来源内笔记。130 篇固定语料下，助手前五命中由 5/13 提升至 12/13。
+--- a/docs/README.md
++++ b/docs/README.md
+@@ -35,7 +35,7 @@
+ | [首次使用与故障排查](首次使用与故障排查.md) | 面向首次使用者的登录、首条笔记、AI 整理、主题与搜索闭环，以及按症状排错、实例隔离和安全边界 |
+ | [R1 源码 Demo 接线验收](R1源码Demo接线验收-2026-09-14.md) | 当前 0.6.1 候选的 Windows 本机受控启动、浏览器闭环、配置污染、403 与清理；不替代安装或发布 |
+ | [R1 安装验收准备](R1安装验收准备-2026-09-14.md) | 已确认并执行；保留原方案、入口失败原因与临时覆盖差异，实际结果另记 |
+-| [R1 本机候选安装验收](R1安装验收-2026-09-15.md) | 0.6.1 本地镜像、真实登录、无模型出口、mock 整理和重建持久化；仓库默认入口已修复并通过定向复验，静态资源 503、React #418 与 R1 整体验收仍待完成 |
++| [R1 本机候选安装验收](R1安装验收-2026-09-15.md) | 0.6.1 本地镜像、真实登录、无模型出口、mock 整理和重建持久化；默认入口及静态资源限流 503 已分别修复并定向复验，React #418 与 R1 整体验收仍待完成 |
+ | [Demo 部署隔离验收](Demo部署隔离验收-2026-09-10.md#b2-local) | Story 2.2 的 B2 本机 HTTP/SSE、20 项网络对照及资源保留核对；保留 A2 历史证据与硬配额、公网、发布门槛 |
+ | [Story 2.2 剩余验收实施方案](Story-2.2-剩余验收实施方案-2026-09-11.md#b1-b2-windows-local) | Windows Docker Desktop、仅本机体验；B2 统一网络入口及一次本机验收已完成，B1 硬配额、实际正式网络、公网和发布仍保留 |
+ | [部署手册-tailscale.md](部署手册-tailscale.md) | Windows 主线与 Linux/NAS 备注：固定 v0.6.0 文件及镜像锁定、本机端口、首次启动、Tailscale/PWA、保留原 project/挂载的升级与排错 |
+--- a/docs/R1安装验收-2026-09-15.md
++++ b/docs/R1安装验收-2026-09-15.md
+@@ -3,6 +3,8 @@
+ 日期：2026-09-15，时间按北京时间说明。原安装轮次结论：**临时入口修正后的本机安装主流程通过；该轮原模板入口失败，浏览器异常待处理，R1 整体未关闭。**
+ 
+ 同日后续：仓库入口配置已修复，默认 3210 端口的独立定向复验通过，见[第 8 节](#demo-ingress-repair)。下方原安装轮次与历史失败证据保留，浏览器异常及 R1 整体验收继续待完成。
++
++2026-09-16 追加：静态资源请求限流已修复并完成局部 HTTP/浏览器复验，见[第 9 节](#demo-static-rate-limit-repair)。React #418 继续单独跟踪，R1 整体仍未关闭。
+ 
+ 依据：[开源发布执行清单](产品规划/开源发布范围与执行清单-2026-09-13.md#r1-install)与用户已确认的[准备方案](R1安装验收准备-2026-09-14.md)。单 Agent，仅本机 mock。完成一次构建、隔离运行、真实浏览器操作、数据核对与清理，没有提交、推送、tag 或发布。
+ 
+@@ -107,7 +109,7 @@
+ ## 5. 仍需处理的问题
+ 
+ 1. **默认入口配置阻断（后续已修复）。** 原安装轮次的仓库 `ingress_net.internal:true` 与旧 B2 实际配置不一致，原模板没有发布宿主端口；当时仅作临时覆盖。后续已修复仓库声明并完成默认入口定向复验，见[第 8 节](#demo-ingress-repair)，不据此关闭完整安装验收。
+-2. **静态资源被限流。** 保存模型设置后刷新、以及后续页面加载期间，共有 6 个静态脚本请求返回 503，与 Nginx `demo_req` 限流日志逐条匹配。首次导致 ChunkLoadError，mock 记录操作在提交前超时；同一脚本直连随后为 200，刷新后完成后续流程。限流参数保持 10r/s、burst 40。Playwright 的请求拦截会禁用 HTTP 缓存，本轮不推断普通缓存浏览器的发生率，也没有把恢复操作算成问题已修复。
++2. **静态资源被限流（后续已定向修复）。** 保存模型设置后刷新、以及后续页面加载期间，共有 6 个静态脚本请求返回 503，与 Nginx `demo_req` 限流日志逐条匹配。首次导致 ChunkLoadError，mock 记录操作在提交前超时；同一脚本直连随后为 200，刷新后完成后续流程。限流参数保持 10r/s、burst 40。Playwright 的请求拦截会禁用 HTTP 缓存，本轮不推断普通缓存浏览器的发生率，也没有把恢复操作算成问题已修复。后续独立修复及证据见[第 9 节](#demo-static-rate-limit-repair)，原安装失败记录保留。
+ 3. **React hydration 错误。** 设置页刷新出现一次 React #418，具体不一致字段尚未定位。后续路径完成不能代替该问题的修复与复验。
+ 4. **构建提示待分诊。** npm ci 自带审计汇总为 37 项：34 moderate、2 high、1 critical；未区分生产/开发依赖或可达性，未运行 audit fix。编译还记录 libheif-js 动态 require、package.json 版本命名导入与 jose Edge Runtime API 警告。最终构建退出码为 0，不代表这些提示已经处理。
+ 
+@@ -158,3 +160,36 @@
+ 独立证据：[运行与清理报告](验收证据/demo-ingress-repair-20260915T145944Z-b56abe15/runtime.json)、[真实配置测试结果](验收证据/demo-ingress-repair-20260915T145944Z-b56abe15/vitest-results.json)、[临时覆盖](验收证据/demo-ingress-repair-20260915T145944Z-b56abe15/compose.runtime.json)、[脱敏解析配置](验收证据/demo-ingress-repair-20260915T145944Z-b56abe15/config-redacted.json)、[验收辅助脚本原文](验收证据/demo-ingress-repair-20260915T145944Z-b56abe15/runtime-harness.mjs.txt)。脚本按本次临时目录和保护快照执行，以文本归档供审阅；复验应重新准备运行标识、凭据与保护基线。
+ 
+ 本次复用本地镜像，不证明 GHCR 0.6.1 已可获取或当前全部工作区源码已构建；业务网络配置与默认路由核对不替代原 20 项目标网络对照。静态资源 503、React #418、无缓存分发、独立 Linux、恢复、长时代理与公网/发布等既有未完成项继续保留，原失败证据不覆盖。
++
++<a id="demo-static-rate-limit-repair"></a>
++
++## 9. 静态资源限流修复与局部验收（2026-09-16）
++
++用户确认[修复规格](../_bmad-output/implementation-artifacts/spec-repair-demo-static-rate-limit.md)及局部验收后，单 Agent 在现有工作区落地修复。`nginx/demo.conf` 使用规范化 `$uri` 生成请求限流 key：仅 `/_next/static/` 为空 key，不计入 `demo_req`；其他路径继续按来源地址执行 `10r/s`、`burst=40 nodelay`。所有路径仍受 `demo_conn 32` 限制，代理路径、转发头、正文上限和超时未改。
++
++独立 project 为 `zhiliao-static-repair-20260915t155500z-384669e0`，入口为 `127.0.0.1:3313`，三个数据卷与凭据均为本轮新建。复用第 1 节的 R1 应用镜像及固定 Nginx 摘要；临时运行配置仅调整本地镜像引用、`DEMO_MODE=0`、回环验收端口和归属标签，其余解析字段与仓库 Compose 一致。app/mock 仅在 isolated 业务网，均无宿主端口和默认路由。该模式对应原安装失败场景，不是完整 Demo 能力边界复验。
++
++| 检查 | 本轮结果 |
++|---|---|
++| 局部回归 | `demo-compose.test.ts` 20 项通过、无跳过；局部 ESLint 通过；旧、新配置的 `nginx -t` 均通过 |
++| 真实静态样本 | 原 6 次失败涉及的 5 个脚本 URL，加真实 CSS 和字体；所有突发请求均携带查询参数，最多 6 并发，校验成功响应的正文 SHA-256 与类型 |
++| 旧配置对照 | 100 次请求：41 次 200、59 次 503；59 次拒绝逐条匹配 `demo_req` 日志 |
++| 修复配置 | 同样 100 次请求全部 200，正文哈希一致，无对应请求限流日志；随后健康接口为 200 |
++| 动态保护 | 健康接口突发 100 次仍有 59 次 503；额度耗尽后 14 次真实静态请求全部 200 |
++| 路径边界 | 页面、导入、上传、伪装为 `.js` 的 API、`/_next/image`、`/_next/data`、`/_next/staticx/`、大小写及 `..` 规范化等 10 组各 30 次请求仍受限；299 次 503 均匹配日志，另 1 次无参数 image 请求为正常 400 |
++| 其他入口约束 | 未出现连接限流；普通请求 8 MiB、上传 25 MiB、导入 200 MiB 的超限长度声明均提前返回 413，每次仅发送 1 字节 |
++| 浏览器 | Chrome 153.0.8010.36，独立新目录、真实登录、未注入 Cookie；保存 mock Key 后连续 3 次禁用 HTTP 缓存刷新设置页。两段浏览器记录共 215 次静态响应，全部 200，无 ChunkLoadError |
++| 笔记保存与重开 | 保存 201；仅新建 1 条合成笔记 `el22x397om53jf1ah2wy56l9`，独立库只读核对正文一致，新浏览器会话真实登录后重开正文可见 |
++| 清理与保护 | 本轮 3 容器、3 卷、2 网已清理，3313 释放；既有 7 容器、8 卷、7 网及镜像列表保持。工作区及临时目录的最终核对见下方证据 |
++
++切换旧、新配置时只重建本轮 ingress，app/mock 的容器 ID 和启动时间保持。更换请求限流 key 后采用新入口进程初始化限流区；已有实例的应用命令见 [README](../README.md)。回退需恢复修复前的 Nginx 配置并同样重建入口，原静态限流故障也可能恢复。
++
++![刷新后的模型设置](验收证据/demo-static-rate-limit-20260915T155500Z-384669e0/settings-after-refresh.png)
++
++![保存后重开的笔记](验收证据/demo-static-rate-limit-20260915T155500Z-384669e0/note-after-save.png)
++
++工具调整保留原记录：首轮未从 HTML 找到字体，清理后改从 CSS 解析；临时重置命令出现 PowerShell 引号问题，重入保护阻止重复启动。浏览器首段误把仅返回 `{id}` 的创建接口当成完整笔记响应；保留已完成的设置刷新和 POST 201 证据，仅补做只读数据库核对及新会话重开，没有重复新建笔记。浏览器另有 1 条字体响应因后续导航而无法采集正文，保留原始采集错误，不计作正文哈希通过；HTTP 对照的 7 个样本正文校验均完成。
++
++证据：[运行与清理](验收证据/demo-static-rate-limit-20260915T155500Z-384669e0/runtime.json)、[局部检查](验收证据/demo-static-rate-limit-20260915T155500Z-384669e0/local-checks.json)、[旧静态对照](验收证据/demo-static-rate-limit-20260915T155500Z-384669e0/old-static.json)、[新静态对照](验收证据/demo-static-rate-limit-20260915T155500Z-384669e0/new-static.json)、[动态额度耗尽后的静态请求](验收证据/demo-static-rate-limit-20260915T155500Z-384669e0/static-under-load.json)、[浏览器原始结果](验收证据/demo-static-rate-limit-20260915T155500Z-384669e0/browser-report.json)、[笔记读回](验收证据/demo-static-rate-limit-20260915T155500Z-384669e0/note-readback.json)、[工作区保护](验收证据/demo-static-rate-limit-20260915T155500Z-384669e0/preservation.json)、[目录清理](验收证据/demo-static-rate-limit-20260915T155500Z-384669e0/cleanup-directory.json)、[辅助脚本说明](验收证据/demo-static-rate-limit-20260915T155500Z-384669e0/harness/README.md)。
++
++本轮仅关闭静态资源请求限流缺陷。React #418 本轮未出现，但未调查或修改，继续保留原独立待办。浏览器缓存被主动禁用，不能推断普通缓存浏览器的发生率；有界突发对照不是性能基准。未构建、拉取、运行全量测试或发布，不证明当前全部工作区源码已构建、GHCR 0.6.1 可获取或完整 R1 通过；原 Story/Sprint、恢复、无缓存分发及公网门槛保持。
+--- a/docs/releases/v0.6.1.md
++++ b/docs/releases/v0.6.1.md
+@@ -5,8 +5,9 @@
+ ## 本轮已实现范围
+ 
+ - `package.json` 是应用版本来源，`package-lock.json` 的两个根版本与其一致。MCP `initialize` 的 `serverInfo.version` 静态读取包版本，`protocolVersion` 仍为 `2025-03-26`。
+-- 主 Compose 与 Demo app/mockllm 固定 `ghcr.io/b-tech-hub/zhiliao:0.6.1`；Windows override 继承主文件，Demo 的 Nginx 摘要、卷与资源限制保持。
++- 主 Compose 与 Demo app/mockllm 固定 `ghcr.io/b-tech-hub/zhiliao:0.6.1`；Windows override 继承主文件，Demo 的 Nginx 摘要、卷与 CPU/内存/进程上限保持。
+ - 修复 Demo 入口网络错误声明为内部网络、导致三服务健康但宿主端口未发布的问题：`ingress_net.internal` 改为 `false`，app/mock 保持仅加入 `internal + isolated` 业务内网。仓库网络及默认 3210 入口已完成[一次本机定向复验](../R1安装验收-2026-09-15.md#demo-ingress-repair)。
++- 修复静态资源与动态请求共用 Nginx 请求额度导致的 503 / ChunkLoadError：仅 `/_next/static/` 不计请求限流，动态请求保持 `10r/s`、突发 `40`，连接上限仍为 `32`。已完成[局部配置、HTTP 对照和禁用缓存的浏览器复验](../R1安装验收-2026-09-15.md#demo-static-rate-limit-repair)；现有入口更新此配置后需单独重建 ingress。
+ - 安装冒烟脚本默认读取脚本所属仓库版本；`-Image` 可指定固定完整 tag 或 digest，`-PrintConfig` 只解析参数，不接触 Docker 或部署数据。
+ - 新增版本校验并接入 CI；Release 工作流先核对基础版本、tag、Compose 与发布材料，成功后才进入原双架构构建与发布步骤。
+ - 源码 Demo 启动器注入 `DEMO_RUNTIME=local`，使应用固定连接本机 `http://127.0.0.1:8787/v1`；缺省或非法标记仍连接容器 `http://mockllm:8787/v1`。外部模型配置不能改写目标，附加模型禁用，原数据/凭据覆盖与 403 防护保持。修正首次使用文档中密码可被宿主变量覆盖的过时说明。
+@@ -19,7 +20,7 @@
+ 
+ - **源码 Demo 已通过 Windows 本机受控源码验收。** [R1 结果](../产品规划/开源发布范围与执行清单-2026-09-13.md#r1-source-demo)与[实测记录](../R1源码Demo接线验收-2026-09-14.md)分别记录局部回归和实际 Next/mock 启动、浏览器闭环、配置污染及十二项 403 检查。本次使用复制依赖和附加运行保护，不代表原生网络隔离、当前候选镜像、完整安装/恢复或发布门禁通过。
+ - **本地候选安装主流程已有实测证据。** [9 月 15 日记录](../R1安装验收-2026-09-15.md)覆盖单次 linux/amd64 构建、普通模式真实登录、无模型保存/搜索/出口、本机 mock 整理和容器重建持久化。原安装轮次依赖临时入口修正，其失败与覆盖记录保留；后续仓库修复的独立复验只覆盖实际回环端口、健康检查及业务网络隔离，不等同于静态资源、浏览器异常或完整候选安装流程全部通过。
+-- 本轮观察到 6 次静态资源限流 503、一次 ChunkLoadError 和一次 React #418；刷新后完成后续步骤，相关问题仍待处理。npm ci 自带审计报告 37 项（含 2 high、1 critical）及编译警告已留证，尚未进行依赖漏洞分诊。构建与局部运行不等于完整门禁或发布就绪。
++- 原安装轮次观察到 6 次静态资源限流 503、一次 ChunkLoadError 和一次 React #418，失败记录保留。静态请求限流随后已独立修复并局部复验；React #418 仍待独立定位。npm ci 自带审计报告 37 项（含 2 high、1 critical）及编译警告已留证，尚未进行依赖漏洞分诊。构建与局部运行不等于完整门禁或发布就绪。
+ - MCP 入口鉴权与 `get_knowledge`/`search_knowledge` 语义另行分诊；版本统一不代表 MCP 全部契约已修复。
+ - Story 2.2 的配额、实际正式服务边界、HTTPS、补丁镜像与最终启动路径等全部原验收仍保留。本机历史 A2/B2 不能证明 0.6.1 镜像或公网部署通过。
+ - R1/R3 局部验证不替代无缓存安装、升级/恢复彩排、双架构镜像及 manifest 核对、RC 冒烟和完整门禁。详见 [R1 规格](../../_bmad-output/implementation-artifacts/spec-r1-source-demo-wiring.md)与 [R3 规格](../../_bmad-output/implementation-artifacts/spec-r3-version-consistency.md)。
+--- a/docs/产品规划/开源发布范围与执行清单-2026-09-13.md
++++ b/docs/产品规划/开源发布范围与执行清单-2026-09-13.md
+@@ -6,7 +6,7 @@
+ 
+ R1 接续（2026-09-14）：源码 Demo 的固定地址接线已修复，见 [R1 规格](../../_bmad-output/implementation-artifacts/spec-r1-source-demo-wiring.md)与[本页实施记录](#r1-source-demo)。局部回归与实际启动、浏览器和发布验收分别记录；下方 R3 阶段发现冲突的历史记录保留。
+ 
+-R1 安装接续（2026-09-15）：用户已确认[准备方案](../R1安装验收准备-2026-09-14.md)，单 Agent 构建本地 0.6.1 候选并完成普通模式、本机 mock 的安装主流程，见[实测结果](../R1安装验收-2026-09-15.md)和[本页记录](#r1-install)。原安装轮次因入口网络标记造成端口未发布，仅作临时覆盖；后续仓库入口修复已完成[配置回归和默认 3210 入口的独立复验](../R1安装验收-2026-09-15.md#demo-ingress-repair)。静态资源 503、React #418 与依赖审计提示仍待处理。9 月 14 日的远端镜像 not found、无 v0.6.1* 标签属于原查询时点；本地构建不等于发布，无缓存分发、独立 Linux 与发布门槛保持待验收。
++R1 安装接续（2026-09-15，9 月 16 日追加修复结果）：用户已确认[准备方案](../R1安装验收准备-2026-09-14.md)，单 Agent 构建本地 0.6.1 候选并完成普通模式、本机 mock 的安装主流程，见[实测结果](../R1安装验收-2026-09-15.md)和[本页记录](#r1-install)。原安装轮次因入口网络标记造成端口未发布，仅作临时覆盖；后续仓库入口修复已完成[配置回归和默认 3210 入口的独立复验](../R1安装验收-2026-09-15.md#demo-ingress-repair)，静态资源限流 503 也已完成[独立修复及局部 HTTP/浏览器复验](../R1安装验收-2026-09-15.md#demo-static-rate-limit-repair)。React #418 与依赖审计提示仍待处理。9 月 14 日的远端镜像 not found、无 v0.6.1* 标签属于原查询时点；本地构建不等于发布，无缓存分发、独立 Linux 与发布门槛保持待验收。
+ 
+ 近期按“可复现安装 → 核心记、找、用 → 数据出口与恢复 → 版本文档一致 → 免费使用反馈”推进。公网 Demo 和收费招募后移；MIT、单用户自托管、100 条真实笔记前的新功能冻结及原合并/发布门禁保持。
+ 
+@@ -44,7 +44,7 @@
+ | 任务 | 当前安排 | 可审阅的下一步与退出条件 |
+ |---|---|---|
+ | R1-文档 | 文档已修订，安装实测另记 | 固定 tag 获取后显式锁定 image；Tailscale 与双语 README 同步预构建主路径、本机端口、原 project/实际挂载和升级回退。文档检查不替代 R1-安装 |
+-| R1-安装 | Windows 本地候选主流程及入口定向修复通过，浏览器异常待处理 | [原安装结果](../R1安装验收-2026-09-15.md)与[后续入口复验](../R1安装验收-2026-09-15.md#demo-ingress-repair)分别留证；继续独立处理静态资源限流 503 和 React #418，再推进固定候选的无缓存获取与独立 Linux 验收，分别记录架构、tag/digest、缓存与耗时 |
++| R1-安装 | Windows 本地候选主流程、入口与静态限流定向修复通过，React #418 待处理 | [原安装结果](../R1安装验收-2026-09-15.md)、[入口复验](../R1安装验收-2026-09-15.md#demo-ingress-repair)及[静态限流复验](../R1安装验收-2026-09-15.md#demo-static-rate-limit-repair)分别留证；继续独立处理 React #418，再推进固定候选的无缓存获取与独立 Linux 验收，分别记录架构、tag/digest、缓存与耗时 |
+ | R1-核心闭环 | 待实施与局部验证 | 用固定数据检查记录、整理、主题、搜索、来源引用/拒答与模型失败降级；mock 只证明流程，真实模型使用获准发送范围和预算；无模型仍能保存、关键词搜索和导出 |
+ | R2-恢复说明 | 文档已修订，恢复实测另记 | Windows/Linux 配对取出、空目标恢复、HEIC 原件、实际卷名、写权限、WAL/SHM、模型联网条件及失败回退已写入手册；配置静态检查不替代 R2-出口与恢复 |
+ | R2-出口与恢复 | 待候选和隔离目标明确 | 增量 Markdown、ZIP 往返/判重、数据库加完整图片快照分别验收；真实恢复后打开笔记/图片、搜索及会话。ZIP 不替代完整恢复，同盘副本不替代异地备份 |
+@@ -206,8 +206,8 @@
+ | 原入口配置 | 原安装轮次三服务健康但无实际端口映射；旧 B2 入口网实际为 `internal:false`，该轮源配置为 `true`，仅临时覆盖后继续 | 原失败证据保留；后续已修复仓库声明、通过 9 项配置回归及默认 3210 入口定向复验，见[入口修复记录](../R1安装验收-2026-09-15.md#demo-ingress-repair)，不等同完整安装通过 |
+ | 安装主流程 | 修正后真实登录、无模型保存、关键词重开、Markdown/ZIP、本机 mock 整理、容器重建持久化通过 | 两条合成笔记；正文保持，附加模型未配置；不代表完整核心闭环或真实模型效果 |
+ | 时间 | 构建 1,814.750 秒，其中 npm ci 1,704.8 秒；修正后服务首启 16.922 秒；开始登录至首条保存 29.665 秒 | 存在缓存命中，下载等待与操作停顿单列，不是无缓存预构建镜像安装指标 |
+-| 浏览器异常 | 静态脚本共 6 次 503，匹配 Nginx 限流日志；出现一次 ChunkLoadError 和一次 React #418，刷新后继续完成 | 限流未调整，hydration 的具体差异未定位；请求拦截关闭 HTTP 缓存，普通缓存浏览器发生率另验 |
++| 浏览器异常 | 原安装轮次静态脚本共 6 次 503，匹配 Nginx 限流日志；出现一次 ChunkLoadError 和一次 React #418，刷新后继续完成 | 该轮限流未调整；后续[静态限流修复](../R1安装验收-2026-09-15.md#demo-static-rate-limit-repair)已定向复验，hydration 的具体差异仍未定位；普通缓存浏览器发生率另验 |
+ | 构建提示 | npm ci 自带审计报告 37 项（34 moderate、2 high、1 critical），编译有依赖/版本导入警告 | 已保存原日志，未升级依赖，未做漏洞可达性与生产依赖分诊 |
+ | 保护与清理 | 本轮三容器、两卷、两网已删除，端口释放；原 748 文件、环境/数据及 7 容器、8 卷、7 网络在文档同步前保护通过 | 临时目录收尾和最终文件核对见实测记录；新候选镜像、旧镜像与缓存保留 |
+ 
+-后续入口配置修复已完成回归、一次定向运行验证和文档同步，仅关闭该修复规格。下一步独立处理静态资源 503 与 React #418。无缓存分发、独立 Linux、R2 恢复、双架构/manifest、RC、四条发布门禁和正式发布仍未完成；不推进 Story/Sprint，不覆盖旧验收，也不把本机 image ID 当成 GHCR 发布摘要。
++后续入口配置修复已完成回归、一次定向运行验证和文档同步；静态资源请求限流也已单独完成配置回归、旧新 HTTP 对照及禁用缓存的浏览器复验，仅关闭各自修复规格。下一步独立处理 React #418。无缓存分发、独立 Linux、R2 恢复、双架构/manifest、RC、四条发布门禁和正式发布仍未完成；不推进 Story/Sprint，不覆盖旧验收，也不把本机 image ID 当成 GHCR 发布摘要。
+--- a/_bmad-output/implementation-artifacts/deferred-work.md
++++ b/_bmad-output/implementation-artifacts/deferred-work.md
+@@ -9,6 +9,7 @@
+ - source_spec: none
+   summary: 修复静态资源 503 与 Nginx 限流导致的 ChunkLoadError。
+   evidence: 0.6.1 候选安装验收记录了六次 `_next/static` 503，日志与入口限流匹配，首轮触发 ChunkLoadError。
++  resolution: 2026-09-16 已按 spec-repair-demo-static-rate-limit.md 修复并完成局部配置、HTTP 对照和浏览器复验；见 docs/R1安装验收-2026-09-15.md 第 9 节，React #418 与完整 R1 保持独立待验收。
+ - source_spec: none
+   summary: 定位并修复设置页刷新时的 React #418 水合不一致。
+   evidence: 0.6.1 候选安装验收在设置页记录一次 Minified React error #418，具体不一致字段尚未定位。
+--- a/_bmad-output/implementation-artifacts/spec-repair-demo-static-rate-limit.md
++++ b/_bmad-output/implementation-artifacts/spec-repair-demo-static-rate-limit.md
+@@ -0,0 +1,98 @@
++---
++title: '修复 Demo 静态资源请求限流'
++type: 'bugfix'
++created: '2026-09-15'
++status: 'done'
++baseline_commit: 'f213761b795cc020be2122e27301fe4a7c5cf7a0'
++review_loop_iteration: 0
++context: []
++---
++
++<frozen-after-approval reason="用户已确认修复范围、现有工作区基线及局部验收">
++
++## Intent
++
++**Problem:** R1 安装验收的六次脚本 503 均匹配 `demo_req` 日志，首个失败 URL 导致 ChunkLoadError。静态资源与动态请求共用额度。
++
++**Approach:** 用 `$uri` 映射请求限流 key，仅 `/_next/static/` 使用空 key；页面和 API 继续按来源地址限流。
++
++## Boundaries & Constraints
++
++**Always:** 单 Agent；保留既有改动、历史证据、10r/s、burst 40、nodelay、32 连接及正文/代理限制；同步文档。
++
++**Ask First:** 扩大豁免路径、放宽限额，或增加构建、全量测试、长时验证。
++
++**Never:** 处理 React #418；改变应用源码、缓存、Compose 拓扑、版本、Story/Sprint 或正式数据；提交、推送、发布。
++
++## I/O & Edge-Case Matrix
++
++| 场景 | 输入 | 预期 | 失败处理 |
++|---|---|---|---|
++| 静态突发 | JS/CSS/字体，含查询参数 | 不占请求额度，完整 200 | 保存状态、正文哈希与日志 |
++| 动态突发 | 页面、API | 超额仍按现有行为拒绝 | 必须匹配限流日志 |
++| 路径边界 | `/_next/image`、`/_next/staticx/`、API | 无静态豁免 | 拒绝扩大匹配 |
++| 动态额度耗尽 | 紧接着请求真实静态文件 | 静态资源仍为 200 | 不用重试掩盖失败 |
++
++</frozen-after-approval>
++
++## Code Map
++
++- `nginx/demo.conf`：HTTP 层 zone、server 层限流及三个代理 location。
++- `tests/config/demo-compose.test.ts`：现有配置断言，更新旧 key 并补边界检查。
++- `scripts/demo-verification-utils.mjs`：复用清洁环境、Docker 调用及资源归属校验。
++- `docs/R1安装验收-2026-09-15.md` 第 5、8 节及其原始日志：只读失败和镜像身份来源。
++- 基线：`f213761b795cc020be2122e27301fe4a7c5cf7a0` 加现有工作区；本地 R1 应用与固定 Nginx 镜像均已核实存在。
++
++## Tasks & Acceptance
++
++**Execution:**
++- [x] `nginx/demo.conf`：增加限定静态路径的 map，替换请求 zone 的 key。
++- [x] `tests/config/demo-compose.test.ts`：覆盖矩阵、动态保护和其他配置约束。
++- [x] `docs/验收证据/demo-static-rate-limit-20260915T155500Z-384669e0/`：归档临时验收脚本、旧新对照、浏览器及保护清理结果。
++- [x] `README.md`、`README.en.md`、`CHANGELOG.md`：说明静态豁免及动态保护。
++- [x] `docs/R1安装验收-2026-09-15.md`、`docs/README.md`、`docs/releases/v0.6.1.md`、`docs/产品规划/开源发布范围与执行清单-2026-09-13.md`、`_bmad-output/implementation-artifacts/deferred-work.md`：追加实际结果，保留原失败及其他待验收项。
++
++**Acceptance Criteria:**
++- Given 同一固定候选与最多 6 并发，when 对照旧新配置，then 旧配置复现静态限流，新配置通过矩阵，正文完整且无对应限流日志。
++- Given 普通模式、本机 mock 与独立空卷，when 登录、保存设置、禁用缓存刷新并保存笔记，then 无静态限流 503 / ChunkLoadError；React #418 独立记录。
++- Given 原工作区和既有资源保护基线，when 本轮结束，then 范围外文件、原环境/数据及 Docker 资源保持，本轮资源归属核对后清理。
++
++## Spec Change Log
++
++## Design Notes
++
++用户已确认本方案及局部运行，无需重复审批。BMad 的子 Agent 步骤按明确的单 Agent 要求改为顺序自查。空 key 使 Nginx 不计请求额度，连接限制保持；不新增静态 location，避免代理继承变化。
++
++## Verification
++
++- `npm test -- tests/config/demo-compose.test.ts --maxWorkers=1 --no-file-parallelism`：相关用例通过。
++- `node node_modules/eslint/bin/eslint.js tests/config/demo-compose.test.ts`：通过。
++- 独立 project、新卷和回环端口，复用原 R1 镜像，使用 `--no-build --pull never`；实际运行 `nginx -t`、有界 HTTP 对照和短程浏览器验收。
++- 保留 32 连接限制，以最多 6 并发检验请求限流；不推广为所有负载均无 503，亦不关闭完整 R1 或发布验收。
++
++2026-09-16 结果：20 项配置回归、局部 ESLint、Nginx 语法、矩阵运行与浏览器检查通过。旧配置 100 次静态请求中 59 次 503，新配置 100 次全部 200；动态突发仍有 59 次请求限流，饱和期间 14 次静态请求全部 200。浏览器三次禁用缓存刷新及笔记保存/重开通过，215 次静态响应均为 200。1 条字体正文采集因后续导航失效，原错误保留；React #418 未出现，仍独立待处理。
++
++[运行结果](../../docs/验收证据/demo-static-rate-limit-20260915T155500Z-384669e0/runtime.json)、[局部检查](../../docs/验收证据/demo-static-rate-limit-20260915T155500Z-384669e0/local-checks.json)、[浏览器](../../docs/验收证据/demo-static-rate-limit-20260915T155500Z-384669e0/browser-report.json)、[最终校验](../../docs/验收证据/demo-static-rate-limit-20260915T155500Z-384669e0/final-checks.json)。本轮资源、凭据和浏览器临时目录已清理；既有资源、148 份环境/数据文件、HEAD、索引与范围外文件保持。
++
++## Suggested Review Order
++
++**静态豁免与动态保护**
++
++- 仅构建静态资源豁免请求额度。
++  [demo.conf:11](../../nginx/demo.conf#L11)
++
++- 核对动态请求与连接上限继续生效。
++  [demo.conf:29](../../nginx/demo.conf#L29)
++
++**实测结果与配置应用**
++
++- 核对旧新对照、浏览器结果与验收边界。
++  [R1安装验收-2026-09-15.md:166](../../docs/R1安装验收-2026-09-15.md#L166)
++
++- 现有实例单独重建入口，初始化新的限流区。
++  [README.md:77](../../README.md#L77)
++
++**回归约束**
++
++- 检查规范化路径、相似前缀与限流继承。
++  [demo-compose.test.ts:107](../../tests/config/demo-compose.test.ts#L107)

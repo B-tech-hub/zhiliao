@@ -1,0 +1,18 @@
+{
+  "step": "targeted-types",
+  "cwd": "D:/ClaudeProjects/ai_acknowladge",
+  "command": [
+    "D:/node.js/node.exe",
+    "node_modules/typescript/bin/tsc",
+    "--noEmit",
+    "-p",
+    "C:/Users/BAIBAI/AppData/Local/Temp/zhiliao-tiptap-wald1s82/tsconfig.targeted.json"
+  ],
+  "startedUtc": "2026-09-19T02:55:07.646778+00:00",
+  "finishedUtc": "2026-09-19T02:55:08.542610+00:00",
+  "elapsedSeconds": 0.891,
+  "exitCode": 1,
+  "stdout": "targeted-types.stdout.log",
+  "stderr": "targeted-types.stderr.log",
+  "lifecycleScriptsDisabled": true
+}

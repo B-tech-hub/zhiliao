@@ -1,0 +1,44 @@
+{
+  "runId": "20260916T041726Z-9b7d27a9",
+  "startedUtc": "2026-09-16T04:18:27.552592+00:00",
+  "finishedUtc": "2026-09-16T04:18:42.657668+00:00",
+  "baseCommit": "f213761b795cc020be2122e27301fe4a7c5cf7a0",
+  "workingTree": true,
+  "version": "0.6.1",
+  "sourceFiles": 263,
+  "sourceManifestSha256": "8474075a8140692fd38dc7369534d466f8422607710f31589fb938f3de9c0350",
+  "sourceArchiveSha256": "d05e8ca92d138b2a22116298cff05c41e2a31c12bcbac6318630aaa4039d692d",
+  "originalRelevantSourceMatches": {
+    "src/app/(app)/settings/page.tsx": true,
+    "src/app/(app)/settings/settings-panel.tsx": false,
+    "src/app/(app)/settings/api-token-section.tsx": true,
+    "src/components/note-card.tsx": true,
+    "src/lib/backup.ts": true,
+    "src/components/nav.tsx": true,
+    "src/components/theme-provider.tsx": true,
+    "src/components/chat/chat-scope.tsx": true,
+    "package-lock.json": true
+  },
+  "originalEnvOrDataCopied": false,
+  "originalBuildOutputsOrDependenciesCopied": false,
+  "port": 3316,
+  "portFree": true,
+  "originalResourceCounts": {
+    "containers": 7,
+    "volumes": 8,
+    "networks": 7,
+    "imageIds": 18
+  },
+  "protectedWorkspaceFiles": 910,
+  "protectedDataAndEnvFiles": 148,
+  "composeVersion": "Docker Compose version v2.39.4-desktop.1",
+  "chrome": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+  "playwrightVersion": "1.64.0-alpha-2026-09-14",
+  "nginxImageId": "sha256:dc5069ad14f19660b141b21236140b91656bf89bbc3e2417c70ae650cd66104c",
+  "tempFreeBytes": 76624928768,
+  "configSha256": {
+    "compose.base.yml": "af97fe2ae47eb4ff6977500aaf37dd90e9d0381c2396eb4c7eaf6d2a33500c7f",
+    "compose.r1.yml": "e98274dd289da828f2d46b5d660ab410064d7a5cab5e8d3ac881f9a644a4d07c",
+    "nginx/demo.conf": "a84bf1960a41566d70bc4acef9532831a6c9264f75c6ff03a0962fcd0ec9f442"
+  }
+}

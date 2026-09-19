@@ -1,0 +1,23 @@
+{
+  "step": "resolve-lock-pinned-vite",
+  "cwd": "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\dependency-patches-20260918T065520Z-aj_74aqy\\resolver",
+  "command": [
+    "D:\\node.js\\node.exe",
+    "D:\\node.js\\node_modules\\npm\\bin\\npm-cli.js",
+    "install",
+    "--package-lock-only",
+    "--ignore-scripts",
+    "--no-audit",
+    "--no-fund",
+    "--registry=https://registry.npmjs.org",
+    "--fetch-retries=0",
+    "--fetch-timeout=30000"
+  ],
+  "startedUtc": "2026-09-18T06:59:09.607728+00:00",
+  "finishedUtc": "2026-09-18T06:59:12.246765+00:00",
+  "elapsedSeconds": 2.639,
+  "exitCode": 1,
+  "stdout": "resolve-lock-pinned-vite.stdout.log",
+  "stderr": "resolve-lock-pinned-vite.stderr.log",
+  "lifecycleScriptsDisabled": true
+}

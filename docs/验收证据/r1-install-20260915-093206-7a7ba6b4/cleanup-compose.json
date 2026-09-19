@@ -1,0 +1,14 @@
+{
+  "runId": "20260915-093206-7a7ba6b4",
+  "phase": "cleanup-compose",
+  "startedUtc": "2026-09-15T02:41:25.610425+00:00",
+  "arguments": [
+    "down",
+    "-v",
+    "--timeout",
+    "15"
+  ],
+  "exitCode": 0,
+  "elapsedSeconds": 15.344,
+  "finishedUtc": "2026-09-15T02:41:40.955291+00:00"
+}

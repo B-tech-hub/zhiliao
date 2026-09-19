@@ -1,0 +1,30 @@
+function mergeAttributes(...objects) {
+    return objects
+        .filter(item => !!item)
+        .reduce((items, item) => {
+        const mergedAttributes = { ...items };
+        Object.entries(item).forEach(([key, value]) => {
+            // Define a data property so untrusted input cannot change the merged object's prototype.
+            if (key === '__proto__') {
+                Object.defineProperty(mergedAttributes, key, {
+                    configurable: true,
+                    enumerable: true,
+                    value,
+                    writable: true,
+                });
+                return;
+            }
+            const exists = mergedAttributes[key];
+            if (!exists) {
+                mergedAttributes[key] = value;
+                return;
+            }
+            if (key === 'class') {
+                const valueClasses = value ? String(value).split(' ') : [];
+                const existingClasses = mergedAttributes[key] ? mergedAttributes[key].split(' ') : [];
+                const insertClasses = valueClasses.filter(valueClass => !existingClasses.includes(valueClass));
+                mergedAttributes[key] = [...existingClasses, ...insertClasses].join(' ');
+            }
+            else if (key === 'style') {
+                const newStyles = value ? value.split(';').map((style) => style.trim()).filter(Boolean) : [];
+                const existingStyles = mergedAttributes[key] ? mergedAttributes[key].split(';').map((style) => style.trim()).f

@@ -1,0 +1,8 @@
+{
+  "id": "browser-finish",
+  "result": {
+    "pageErrors": 0,
+    "blockedPageRequests": 0,
+    "completed": true
+  }
+}

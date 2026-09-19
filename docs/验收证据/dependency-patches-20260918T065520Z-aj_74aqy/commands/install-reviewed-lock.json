@@ -1,0 +1,23 @@
+{
+  "step": "install-reviewed-lock",
+  "cwd": "D:\\ClaudeProjects\\ai_acknowladge",
+  "command": [
+    "D:\\node.js\\node.exe",
+    "D:\\node.js\\node_modules\\npm\\bin\\npm-cli.js",
+    "install",
+    "--ignore-scripts",
+    "--no-audit",
+    "--no-fund",
+    "--registry=https://registry.npmjs.org",
+    "--fetch-retries=0",
+    "--fetch-timeout=120000",
+    "--prefer-offline"
+  ],
+  "startedUtc": "2026-09-18T07:04:39.638755+00:00",
+  "finishedUtc": "2026-09-18T07:05:05.769382+00:00",
+  "elapsedSeconds": 26.131,
+  "exitCode": 0,
+  "stdout": "install-reviewed-lock.stdout.log",
+  "stderr": "install-reviewed-lock.stderr.log",
+  "lifecycleScriptsDisabled": true
+}

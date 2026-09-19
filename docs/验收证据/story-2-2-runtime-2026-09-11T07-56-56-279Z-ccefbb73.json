@@ -1,0 +1,105 @@
+{
+  "story": "2.2",
+  "recorded_at": "2026-09-11T07:56:56.281Z",
+  "status": "passed",
+  "project": "zhiliao-demo-verify-ccefbb73f503",
+  "run_id": "ccefbb73f503e338e361c1205080996c",
+  "port": 3322,
+  "scope": "本机候选入口、HTTP 和 SSE",
+  "checks": {
+    "services_healthy": true,
+    "http": {
+      "health": 200,
+      "oversize": 413,
+      "oversize_response_ms": 9,
+      "sent_body_bytes": 1
+    },
+    "nginx_syntax": "passed",
+    "sse": {
+      "completed": {
+        "first_event_ms": 76,
+        "first_delta_ms": 95,
+        "event_count": 13,
+        "delta_count": 10,
+        "max_event_gap_ms": 20,
+        "delta_batches": 10,
+        "duration_ms": 254,
+        "cancelled": false,
+        "done": true
+      },
+      "cancellation": {
+        "first_event_ms": 66,
+        "first_delta_ms": 81,
+        "event_count": 3,
+        "delta_count": 1,
+        "max_event_gap_ms": 15,
+        "delta_batches": 1,
+        "duration_ms": 82,
+        "cancelled": true,
+        "done": false
+      },
+      "health_after_cancel": 200
+    }
+  },
+  "cleanup": {
+    "status": "removed"
+  },
+  "limitations": [
+    "本次只验收本机候选镜像，不代表固定的 0.6.0 发布镜像已包含补丁。",
+    "目标主机出站隔离、业务卷磁盘配额及 Nginx 300 秒代理空闲超时尚需专门验收。",
+    "配置及脚本哈希用于关联本次验收输入，不证明候选镜像包含当前全部工作区源码。"
+  ],
+  "engine": "28.4.0",
+  "compose": "2.39.4-desktop.1",
+  "candidate_image_id": "sha256:46f9241b6d2e539ce3a94324c356cf4336f8cf17e0cf59e5b5d920bf9b53769e",
+  "baseline_commit": "f213761b795cc020be2122e27301fe4a7c5cf7a0",
+  "input_sha256": {
+    "docker-compose.demo.yml": "f259c2e5fd7809bc872492c5eb753a5ab54389969c3106a6ff0e926f070455f2",
+    "docker-compose.demo.verify.yml": "2f21847f6798764d6929991855f848f83cd4bfd6345ea4f8638ed2b255de22f1",
+    "nginx/demo.conf": "df240aef6f22929ab6435d4f4a2e3c603baa17a124fe0d9b7f01d10eaa27c093",
+    "scripts/verify-demo-runtime.ps1": "d8d0b56bab5c432ca4ed824ec5780b8360a09d8bd722f2904044289433e57695",
+    "scripts/verify-demo-runtime.mjs": "e302fbb02b0a383ad8fa268b284b9eb307982d0543bea4fc52562344be2ac2b5",
+    "scripts/demo-http-probes.mjs": "420ddcd722ae3f4fca844671f97cecabb398637d557f47b1c3174d2a059be238"
+  },
+  "images": {
+    "app": "zhiliao-demo-verify:story-2-2",
+    "ingress": "nginx:1.30.4-alpine@sha256:dc5069ad14f19660b141b21236140b91656bf89bbc3e2417c70ae650cd66104c",
+    "mockllm": "zhiliao-demo-verify:story-2-2"
+  },
+  "resources": [
+    {
+      "type": "container",
+      "id": "de18aac732ea"
+    },
+    {
+      "type": "container",
+      "id": "d643e98c9abd"
+    },
+    {
+      "type": "container",
+      "id": "248612e6087d"
+    },
+    {
+      "type": "network",
+      "id": "8987a8dc3f61"
+    },
+    {
+      "type": "network",
+      "id": "a2d30faec802"
+    },
+    {
+      "type": "volume",
+      "id": "zhiliao-demo-verify-ccefbb73f503_demo_db"
+    },
+    {
+      "type": "volume",
+      "id": "zhiliao-demo-verify-ccefbb73f503_demo_notes"
+    },
+    {
+      "type": "volume",
+      "id": "zhiliao-demo-verify-ccefbb73f503_demo_uploads"
+    }
+  ],
+  "ingress_binding": "127.0.0.1:3322",
+  "finished_at": "2026-09-11T07:57:30.936Z"
+}

@@ -1,0 +1,14 @@
+{
+  "id": "restart-preservation",
+  "result": {
+    "checks": {
+      "status": 200,
+      "sameIds": true,
+      "countBefore": 17,
+      "countAfter": 17,
+      "firstNoteBodyPreserved": true,
+      "sessionPreserved": true
+    },
+    "snapshot": "- dialog \"快速记录\":\n  - button \"关闭\": ✕\n  - combobox \"归入主题\":\n    - option \"让 AI 决定主题\" [selected]\n    - option \"羽毛球\"\n    - option \"每周回顾\"\n    - option \"跑步\"\n    - option \"自媒体\"\n  - button \"保存\" [disabled]\n  - textbox \"笔记正文\":\n    - /placeholder: 随手记点什么……保存后 AI 会自动起标题、打标签、归入主题"
+  }
+}

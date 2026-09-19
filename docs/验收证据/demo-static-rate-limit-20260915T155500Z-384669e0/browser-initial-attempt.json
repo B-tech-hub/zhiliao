@@ -1,0 +1,1986 @@
+{
+  "runId": "20260915T155500Z-384669e0",
+  "startedAt": "2026-09-15T16:09:37.619Z",
+  "status": "failed",
+  "browserSurface": "浏览器插件无可用实例，复用已安装的 Chrome/Playwright，独立新目录",
+  "httpCacheDisabled": true,
+  "serviceWorkers": "block",
+  "cookieInjection": false,
+  "network": [
+    {
+      "at": "2026-09-15T16:09:38.255Z",
+      "path": "/login",
+      "method": "GET",
+      "status": 200,
+      "action": "login",
+      "resourceType": "document"
+    },
+    {
+      "at": "2026-09-15T16:09:38.279Z",
+      "path": "/_next/static/css/3f43a07db598b6ec.css",
+      "method": "GET",
+      "status": 200,
+      "action": "login",
+      "resourceType": "stylesheet",
+      "bytes": 265193,
+      "sha256": "c6abde282c81005541f6f65e272afcd55639af3bfa15dc0d8dc9ac9ce0840545"
+    },
+    {
+      "at": "2026-09-15T16:09:38.284Z",
+      "path": "/_next/static/chunks/webpack-40deb59ae2a23f6a.js",
+      "method": "GET",
+      "status": 200,
+      "action": "login",
+      "resourceType": "script",
+      "bytes": 5439,
+      "sha256": "257a2ca8397fd5204c57daee63916249d5147cd437e24edc6479530e078a05f0"
+    },
+    {
+      "at": "2026-09-15T16:09:38.285Z",
+      "path": "/_next/static/chunks/main-app-f3336e172256d2ab.js",
+      "method": "GET",
+      "status": 200,
+      "action": "login",
+      "resourceType": "script",
+      "bytes": 572,
+      "sha256": "91801d552d3e97ad6aabb535c2d8eeff31bab152fb2448b8556373894e7d7215"
+    },
+    {
+      "at": "2026-09-15T16:09:38.287Z",
+      "path": "/manifest.webmanifest",
+      "method": "GET",
+      "status": 200,
+      "action": "login",
+      "resourceType": "manifest"
+    },
+    {
+      "at": "2026-09-15T16:09:38.293Z",
+      "path": "/_next/static/chunks/app/login/page-dc157243fbc1fc0f.js",
+      "method": "GET",
+      "status": 200,
+      "action": "login",
+      "resourceType": "script",
+      "bytes": 2068,
+      "sha256": "8dbfaa83c5f1174770e497a3233bb355159248cc535f268c7ad2e691ef0325ff"
+    },
+    {
+      "at": "2026-09-15T16:09:38.293Z",
+      "path": "/_next/static/chunks/app/layout-904d69f7d5cdde36.js",
+      "method": "GET",
+      "status": 200,
+      "action": "login",
+      "resourceType": "script",
+      "bytes": 4355,
+      "sha256": "7af05a48067f3cded13eac365fc48045724ff0e6aabdfe5626973fb275dd29d8"
+    },
+    {
+      "at": "2026-09-15T16:09:38.293Z",
+      "path": "/_next/static/chunks/1255-912c63e691e3026b.js",
+      "method": "GET",
+      "status": 200,
+      "action": "login",
+      "resourceType": "script",
+      "bytes": 174199,
+      "sha256": "e2a3ad1de44d9cb2da39d295b95e1849b07d264e4c36dadcb17cea94d87ed990"
+    },
+    {
+      "at": "2026-09-15T16:09:38.303Z",
+      "path": "/_next/static/chunks/4bd1b696-100b9d70ed4e49c1.js",
+      "method": "GET",
+      "status": 200,
+      "action": "login",
+      "resourceType": "script",
+      "bytes": 173025,
+      "sha256": "5421e13a91a9389517b66179f3b4b5eaa0d95245438066d4d7b19ac30aeb809b"
+    },
+    {
+      "at": "2026-09-15T16:09:38.403Z",
+      "path": "/_next/static/media/inter-latin-wght-normal.6c596dfc.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "login",
+      "resourceType": "font",
+      "bytes": 48256,
+      "sha256": "3100e775e8616cd2611beecfa23a4263d7037586789b43f035236a2e6fbd4c62"
+    },
+    {
+      "at": "2026-09-15T16:09:38.403Z",
+      "path": "/_next/static/media/instrument-serif-latin-400-normal.e872e3f2.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "login",
+      "resourceType": "font",
+      "bytes": 21032,
+      "sha256": "5eb09b5ac0e28b67c2f041c8ba6d244604ca0c0980d65912ab2d47fed84ddc31"
+    },
+    {
+      "at": "2026-09-15T16:09:38.412Z",
+      "path": "/_next/static/media/noto-sans-sc-119-wght-normal.affd1213.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "login",
+      "resourceType": "font",
+      "bytes": 76800,
+      "sha256": "b3b2374881f4cd93f239820dfd91f0fde8d52f8f92ba2888f7ab9cba21e4d7eb"
+    },
+    {
+      "at": "2026-09-15T16:09:38.415Z",
+      "path": "/_next/static/media/noto-sans-sc-117-wght-normal.2e4b1f04.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "login",
+      "resourceType": "font",
+      "bytes": 52464,
+      "sha256": "d94b5af0c14838af99bf9855f91e851878726558531ddef5bd2100b70dfbe90c"
+    },
+    {
+      "at": "2026-09-15T16:09:38.419Z",
+      "path": "/_next/static/media/noto-sans-sc-118-wght-normal.fa5a5b16.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "login",
+      "resourceType": "font",
+      "bytes": 46192,
+      "sha256": "76c9ddb85ae4578cccd35ae4f6e6bbffaa2c8c2aec0fea17d3c17c84a3c6f7d1"
+    },
+    {
+      "at": "2026-09-15T16:09:38.423Z",
+      "path": "/_next/static/media/noto-sans-sc-115-wght-normal.d494d07f.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "login",
+      "resourceType": "font",
+      "bytes": 56508,
+      "sha256": "fb29957c7adccb9a89e34fb28d3d1c7d12bd7401f80c0dba6e1c9e5259cb3262"
+    },
+    {
+      "at": "2026-09-15T16:09:38.426Z",
+      "path": "/_next/static/media/noto-sans-sc-114-wght-normal.4c8b25a1.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "login",
+      "resourceType": "font",
+      "bytes": 57964,
+      "sha256": "cf7b8344807a316e8db054500a2b44ad9346ffa00763fec203ab5aa1c99ff602"
+    },
+    {
+      "at": "2026-09-15T16:09:38.430Z",
+      "path": "/_next/static/media/noto-sans-sc-113-wght-normal.58d174d1.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "login",
+      "resourceType": "font",
+      "bytes": 58648,
+      "sha256": "614ab8f616352583f92cc2130fe8812c5aaaa8560b3828de45eefb318be7b503"
+    },
+    {
+      "at": "2026-09-15T16:09:38.434Z",
+      "path": "/_next/static/media/noto-sans-sc-111-wght-normal.3f3c8c90.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "login",
+      "resourceType": "font",
+      "bytes": 62664,
+      "sha256": "372be010ac0e87cb12065a861da39821104a43d68345a62ca95d3d3e2fb2c269"
+    },
+    {
+      "at": "2026-09-15T16:09:38.438Z",
+      "path": "/_next/static/media/noto-sans-sc-116-wght-normal.7c86bddd.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "login",
+      "resourceType": "font",
+      "bytes": 52984,
+      "sha256": "a98dc5a726f82141f74a827c443e120709a12fe737fabacf2530927a275fce0d"
+    },
+    {
+      "at": "2026-09-15T16:09:38.442Z",
+      "path": "/_next/static/media/noto-serif-sc-118-wght-normal.f07da885.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "login",
+      "resourceType": "font",
+      "bytes": 58148,
+      "sha256": "9a03bacc0425e420573fa8ba6b4a1468ebfe8860ef2243e41a646dee45b67b54"
+    },
+    {
+      "at": "2026-09-15T16:09:38.456Z",
+      "path": "/icons/icon-192.png",
+      "method": "GET",
+      "status": 200,
+      "action": "login",
+      "resourceType": "other"
+    },
+    {
+      "at": "2026-09-15T16:09:39.032Z",
+      "path": "/api/auth/login",
+      "method": "POST",
+      "status": 200,
+      "action": "login",
+      "resourceType": "fetch"
+    },
+    {
+      "at": "2026-09-15T16:09:39.050Z",
+      "path": "/",
+      "method": "GET",
+      "status": 200,
+      "action": "login",
+      "resourceType": "fetch"
+    },
+    {
+      "at": "2026-09-15T16:09:39.069Z",
+      "path": "/",
+      "method": "GET",
+      "status": 200,
+      "action": "login",
+      "resourceType": "fetch"
+    },
+    {
+      "at": "2026-09-15T16:09:39.071Z",
+      "path": "/_next/static/chunks/2619-04bc32f026a0d946.js",
+      "method": "GET",
+      "status": 200,
+      "action": "login",
+      "resourceType": "script",
+      "bytes": 8564,
+      "sha256": "a9b6c2213ea787a015c0169d198b4a90d7a44a0cc17abb0d132e8362d3016ced"
+    },
+    {
+      "at": "2026-09-15T16:09:39.074Z",
+      "path": "/_next/static/chunks/app/(app)/page-546d9e331d248176.js",
+      "method": "GET",
+      "status": 200,
+      "action": "login",
+      "resourceType": "script",
+      "bytes": 2518,
+      "sha256": "d5180b1bf055a5da787cdb28c6d9d53a270b96574d84f47f08756c028524fad2"
+    },
+    {
+      "at": "2026-09-15T16:09:39.076Z",
+      "path": "/_next/static/chunks/app/(app)/layout-1052a57c6a33ae25.js",
+      "method": "GET",
+      "status": 200,
+      "action": "login",
+      "resourceType": "script",
+      "bytes": 57571,
+      "sha256": "b1cc221bcc4ddeaad30449a351689ebc4683f319ec11e1b0d372c3486f28e5a0"
+    },
+    {
+      "at": "2026-09-15T16:09:39.077Z",
+      "path": "/_next/static/chunks/d3ac728e-c168d39ae19d599f.js",
+      "method": "GET",
+      "status": 200,
+      "action": "login",
+      "resourceType": "script",
+      "bytes": 263817,
+      "sha256": "a2e57f2d74c24ddf8baa04f2695f8df0047a47cd1a8e7d54ba96bb2a6ebc8fdf"
+    },
+    {
+      "at": "2026-09-15T16:09:39.078Z",
+      "path": "/_next/static/chunks/5395-343aef0ba32cbeab.js",
+      "method": "GET",
+      "status": 200,
+      "action": "login",
+      "resourceType": "script",
+      "bytes": 148208,
+      "sha256": "fc49683c6bd71c9dfaf4240c931edfdde5d84461bf58a2738a0ba4d391319271"
+    },
+    {
+      "at": "2026-09-15T16:09:39.153Z",
+      "path": "/settings",
+      "method": "GET",
+      "status": 200,
+      "action": "settings-save",
+      "resourceType": "document"
+    },
+    {
+      "at": "2026-09-15T16:09:39.180Z",
+      "path": "/_next/static/css/3f43a07db598b6ec.css",
+      "method": "GET",
+      "status": 200,
+      "action": "settings-save",
+      "resourceType": "stylesheet",
+      "bytes": 265193,
+      "sha256": "c6abde282c81005541f6f65e272afcd55639af3bfa15dc0d8dc9ac9ce0840545"
+    },
+    {
+      "at": "2026-09-15T16:09:39.184Z",
+      "path": "/manifest.webmanifest",
+      "method": "GET",
+      "status": 200,
+      "action": "settings-save",
+      "resourceType": "manifest"
+    },
+    {
+      "at": "2026-09-15T16:09:39.187Z",
+      "path": "/_next/static/chunks/main-app-f3336e172256d2ab.js",
+      "method": "GET",
+      "status": 200,
+      "action": "settings-save",
+      "resourceType": "script",
+      "bytes": 572,
+      "sha256": "91801d552d3e97ad6aabb535c2d8eeff31bab152fb2448b8556373894e7d7215"
+    },
+    {
+      "at": "2026-09-15T16:09:39.190Z",
+      "path": "/_next/static/chunks/webpack-40deb59ae2a23f6a.js",
+      "method": "GET",
+      "status": 200,
+      "action": "settings-save",
+      "resourceType": "script",
+      "bytes": 5439,
+      "sha256": "257a2ca8397fd5204c57daee63916249d5147cd437e24edc6479530e078a05f0"
+    },
+    {
+      "at": "2026-09-15T16:09:39.192Z",
+      "path": "/_next/static/chunks/1255-912c63e691e3026b.js",
+      "method": "GET",
+      "status": 200,
+      "action": "settings-save",
+      "resourceType": "script",
+      "bytes": 174199,
+      "sha256": "e2a3ad1de44d9cb2da39d295b95e1849b07d264e4c36dadcb17cea94d87ed990"
+    },
+    {
+      "at": "2026-09-15T16:09:39.193Z",
+      "path": "/_next/static/chunks/app/layout-904d69f7d5cdde36.js",
+      "method": "GET",
+      "status": 200,
+      "action": "settings-save",
+      "resourceType": "script",
+      "bytes": 4355,
+      "sha256": "7af05a48067f3cded13eac365fc48045724ff0e6aabdfe5626973fb275dd29d8"
+    },
+    {
+      "at": "2026-09-15T16:09:39.195Z",
+      "path": "/_next/static/chunks/4bd1b696-100b9d70ed4e49c1.js",
+      "method": "GET",
+      "status": 200,
+      "action": "settings-save",
+      "resourceType": "script",
+      "bytes": 173025,
+      "sha256": "5421e13a91a9389517b66179f3b4b5eaa0d95245438066d4d7b19ac30aeb809b"
+    },
+    {
+      "at": "2026-09-15T16:09:39.202Z",
+      "path": "/_next/static/chunks/2619-04bc32f026a0d946.js",
+      "method": "GET",
+      "status": 200,
+      "action": "settings-save",
+      "resourceType": "script",
+      "bytes": 8564,
+      "sha256": "a9b6c2213ea787a015c0169d198b4a90d7a44a0cc17abb0d132e8362d3016ced"
+    },
+    {
+      "at": "2026-09-15T16:09:39.212Z",
+      "path": "/_next/static/chunks/app/(app)/layout-1052a57c6a33ae25.js",
+      "method": "GET",
+      "status": 200,
+      "action": "settings-save",
+      "resourceType": "script",
+      "bytes": 57571,
+      "sha256": "b1cc221bcc4ddeaad30449a351689ebc4683f319ec11e1b0d372c3486f28e5a0"
+    },
+    {
+      "at": "2026-09-15T16:09:39.212Z",
+      "path": "/_next/static/chunks/5395-343aef0ba32cbeab.js",
+      "method": "GET",
+      "status": 200,
+      "action": "settings-save",
+      "resourceType": "script",
+      "bytes": 148208,
+      "sha256": "fc49683c6bd71c9dfaf4240c931edfdde5d84461bf58a2738a0ba4d391319271"
+    },
+    {
+      "at": "2026-09-15T16:09:39.213Z",
+      "path": "/_next/static/chunks/d3ac728e-c168d39ae19d599f.js",
+      "method": "GET",
+      "status": 200,
+      "action": "settings-save",
+      "resourceType": "script",
+      "bytes": 263817,
+      "sha256": "a2e57f2d74c24ddf8baa04f2695f8df0047a47cd1a8e7d54ba96bb2a6ebc8fdf"
+    },
+    {
+      "at": "2026-09-15T16:09:39.213Z",
+      "path": "/_next/static/chunks/app/(app)/settings/page-5997b3acd7a84aea.js",
+      "method": "GET",
+      "status": 200,
+      "action": "settings-save",
+      "resourceType": "script",
+      "bytes": 52358,
+      "sha256": "b08b330f007ec1dae4d953ea105536c32122a75e299f0db0d26b68ea4f592b24"
+    },
+    {
+      "at": "2026-09-15T16:09:39.247Z",
+      "path": "/_next/static/media/noto-sans-sc-116-wght-normal.7c86bddd.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "settings-save",
+      "resourceType": "font",
+      "bytes": 52984,
+      "sha256": "a98dc5a726f82141f74a827c443e120709a12fe737fabacf2530927a275fce0d"
+    },
+    {
+      "at": "2026-09-15T16:09:39.253Z",
+      "path": "/_next/static/media/inter-latin-wght-normal.6c596dfc.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "settings-save",
+      "resourceType": "font",
+      "bytes": 48256,
+      "sha256": "3100e775e8616cd2611beecfa23a4263d7037586789b43f035236a2e6fbd4c62"
+    },
+    {
+      "at": "2026-09-15T16:09:39.259Z",
+      "path": "/_next/static/media/noto-sans-sc-118-wght-normal.fa5a5b16.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "settings-save",
+      "resourceType": "font",
+      "bytes": 46192,
+      "sha256": "76c9ddb85ae4578cccd35ae4f6e6bbffaa2c8c2aec0fea17d3c17c84a3c6f7d1"
+    },
+    {
+      "at": "2026-09-15T16:09:39.263Z",
+      "path": "/_next/static/media/noto-sans-sc-117-wght-normal.2e4b1f04.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "settings-save",
+      "resourceType": "font",
+      "bytes": 52464,
+      "sha256": "d94b5af0c14838af99bf9855f91e851878726558531ddef5bd2100b70dfbe90c"
+    },
+    {
+      "at": "2026-09-15T16:09:39.265Z",
+      "path": "/_next/static/media/noto-sans-sc-104-wght-normal.2958f540.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "settings-save",
+      "resourceType": "font",
+      "bytes": 61588,
+      "sha256": "b0bf80ced89dd61bc3c1427c23203b44413dfef6aafb50da905ab28a7937a923"
+    },
+    {
+      "at": "2026-09-15T16:09:39.352Z",
+      "path": "/_next/static/media/noto-sans-sc-119-wght-normal.affd1213.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "settings-save",
+      "resourceType": "font",
+      "bytes": 76800,
+      "sha256": "b3b2374881f4cd93f239820dfd91f0fde8d52f8f92ba2888f7ab9cba21e4d7eb"
+    },
+    {
+      "at": "2026-09-15T16:09:39.370Z",
+      "path": "/_next/static/media/instrument-serif-latin-400-normal.e872e3f2.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "settings-save",
+      "resourceType": "font",
+      "bytes": 21032,
+      "sha256": "5eb09b5ac0e28b67c2f041c8ba6d244604ca0c0980d65912ab2d47fed84ddc31"
+    },
+    {
+      "at": "2026-09-15T16:09:39.376Z",
+      "path": "/_next/static/media/noto-sans-sc-114-wght-normal.4c8b25a1.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "settings-save",
+      "resourceType": "font",
+      "bytes": 57964,
+      "sha256": "cf7b8344807a316e8db054500a2b44ad9346ffa00763fec203ab5aa1c99ff602"
+    },
+    {
+      "at": "2026-09-15T16:09:39.377Z",
+      "path": "/_next/static/media/noto-sans-sc-115-wght-normal.d494d07f.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "settings-save",
+      "resourceType": "font",
+      "bytes": 56508,
+      "sha256": "fb29957c7adccb9a89e34fb28d3d1c7d12bd7401f80c0dba6e1c9e5259cb3262"
+    },
+    {
+      "at": "2026-09-15T16:09:39.392Z",
+      "path": "/_next/static/media/noto-sans-sc-111-wght-normal.3f3c8c90.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "settings-save",
+      "resourceType": "font",
+      "bytes": 62664,
+      "sha256": "372be010ac0e87cb12065a861da39821104a43d68345a62ca95d3d3e2fb2c269"
+    },
+    {
+      "at": "2026-09-15T16:09:39.392Z",
+      "path": "/_next/static/media/jetbrains-mono-latin-wght-normal.a865edea.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "settings-save",
+      "resourceType": "font",
+      "bytes": 40404,
+      "sha256": "18be452724bfdc236c074ca94a249a7f41a86752c7d04ab258ce9ed5651f6a7e"
+    },
+    {
+      "at": "2026-09-15T16:09:39.393Z",
+      "path": "/_next/static/media/noto-sans-sc-110-wght-normal.cbb24916.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "settings-save",
+      "resourceType": "font",
+      "bytes": 61472,
+      "sha256": "bbca9081655c45233a25c4cca030c47ebcf2e156eeedd48110836658adb31fa0"
+    },
+    {
+      "at": "2026-09-15T16:09:39.393Z",
+      "path": "/_next/static/media/noto-sans-sc-113-wght-normal.58d174d1.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "settings-save",
+      "resourceType": "font",
+      "bytes": 58648,
+      "sha256": "614ab8f616352583f92cc2130fe8812c5aaaa8560b3828de45eefb318be7b503"
+    },
+    {
+      "at": "2026-09-15T16:09:39.393Z",
+      "path": "/_next/static/media/noto-sans-sc-105-wght-normal.5202d792.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "settings-save",
+      "resourceType": "font",
+      "bytes": 61828,
+      "sha256": "8d8b4e6f4a00621d2be4279e9ba4b07cded89ab6d4018d9b87d2116867ead335"
+    },
+    {
+      "at": "2026-09-15T16:09:39.408Z",
+      "path": "/_next/static/media/noto-sans-sc-112-wght-normal.4d8fa99b.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "settings-save",
+      "resourceType": "font",
+      "bytes": 57648,
+      "sha256": "34a4580239eae8dc54b726a1e1e9fec266e74225b112063ed93b412d54b97ccd"
+    },
+    {
+      "at": "2026-09-15T16:09:39.409Z",
+      "path": "/_next/static/media/noto-sans-sc-109-wght-normal.54798e55.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "settings-save",
+      "resourceType": "font",
+      "bytes": 60372,
+      "sha256": "a91f8b038e5ce10805a173a293484c8c49552c275cf901cdf21324d6dca3ed17"
+    },
+    {
+      "at": "2026-09-15T16:09:39.410Z",
+      "path": "/_next/static/media/noto-sans-sc-101-wght-normal.973dcd0f.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "settings-save",
+      "resourceType": "font",
+      "bytes": 58204,
+      "sha256": "e189b81fc22ca6afcf03a1fcbf8fad93e8272a502d4b23241900113d9ddbe51a"
+    },
+    {
+      "at": "2026-09-15T16:09:39.410Z",
+      "path": "/_next/static/media/noto-sans-sc-108-wght-normal.8c7c4dad.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "settings-save",
+      "resourceType": "font",
+      "bytes": 64552,
+      "sha256": "91882203459867be07157e9c8d433372b65cd4ce484fda26b97b05ed2cf6290d"
+    },
+    {
+      "at": "2026-09-15T16:09:39.412Z",
+      "path": "/",
+      "method": "GET",
+      "status": 200,
+      "action": "settings-save",
+      "resourceType": "fetch"
+    },
+    {
+      "at": "2026-09-15T16:09:39.412Z",
+      "path": "/search",
+      "method": "GET",
+      "status": 200,
+      "action": "settings-save",
+      "resourceType": "fetch"
+    },
+    {
+      "at": "2026-09-15T16:09:39.413Z",
+      "path": "/_next/static/media/noto-serif-sc-117-wght-normal.8f2a718c.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "settings-save",
+      "resourceType": "font",
+      "bytes": 66576,
+      "sha256": "44c0c56034f2906014cd0082c42cef587cd4e2eb24983aca2a10d9805a0f26f6"
+    },
+    {
+      "at": "2026-09-15T16:09:39.422Z",
+      "path": "/inbox",
+      "method": "GET",
+      "status": 200,
+      "action": "settings-save",
+      "resourceType": "fetch"
+    },
+    {
+      "at": "2026-09-15T16:09:39.432Z",
+      "path": "/_next/static/chunks/app/(app)/search/page-195baf5521c05d5d.js",
+      "method": "GET",
+      "status": 200,
+      "action": "settings-save",
+      "resourceType": "script",
+      "bytes": 6883,
+      "sha256": "bdd5cade22a527207e58370a726f36352762d4dfa8a54b3f13e18f36e7302f68"
+    },
+    {
+      "at": "2026-09-15T16:09:39.433Z",
+      "path": "/_next/static/chunks/app/(app)/page-546d9e331d248176.js",
+      "method": "GET",
+      "status": 200,
+      "action": "settings-save",
+      "resourceType": "script",
+      "bytes": 2518,
+      "sha256": "d5180b1bf055a5da787cdb28c6d9d53a270b96574d84f47f08756c028524fad2"
+    },
+    {
+      "at": "2026-09-15T16:09:39.435Z",
+      "path": "/_next/static/chunks/app/(app)/inbox/page-681898bb0a303d89.js",
+      "method": "GET",
+      "status": 200,
+      "action": "settings-save",
+      "resourceType": "script",
+      "bytes": 9901,
+      "sha256": "64b66f92275cb539b5cd6af9696fa28329effe538b85f9ffcb6e66c93ea9a9ca"
+    },
+    {
+      "at": "2026-09-15T16:09:39.440Z",
+      "path": "/icons/icon-192.png",
+      "method": "GET",
+      "status": 200,
+      "action": "settings-save",
+      "resourceType": "other"
+    },
+    {
+      "at": "2026-09-15T16:09:40.000Z",
+      "path": "/api/settings/llm",
+      "method": "PATCH",
+      "status": 200,
+      "action": "settings-save",
+      "resourceType": "fetch"
+    },
+    {
+      "at": "2026-09-15T16:09:40.014Z",
+      "path": "/settings",
+      "method": "GET",
+      "status": 200,
+      "action": "settings-save",
+      "resourceType": "fetch"
+    },
+    {
+      "at": "2026-09-15T16:09:40.030Z",
+      "path": "/_next/static/media/noto-sans-sc-87-wght-normal.44ffc6ca.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-1",
+      "resourceType": "font",
+      "bodyReadError": "response.body: Protocol error (Network.getResponseBody): No resource with given identifier found\nResponse body is not available for a response that was navigated away from. Read response.body() before triggering any navigation."
+    },
+    {
+      "at": "2026-09-15T16:09:40.039Z",
+      "path": "/manifest.webmanifest",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-1",
+      "resourceType": "manifest"
+    },
+    {
+      "at": "2026-09-15T16:09:40.056Z",
+      "path": "/settings",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-1",
+      "resourceType": "document"
+    },
+    {
+      "at": "2026-09-15T16:09:40.080Z",
+      "path": "/manifest.webmanifest",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-1",
+      "resourceType": "manifest"
+    },
+    {
+      "at": "2026-09-15T16:09:40.080Z",
+      "path": "/_next/static/css/3f43a07db598b6ec.css",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-1",
+      "resourceType": "stylesheet",
+      "bytes": 265193,
+      "sha256": "c6abde282c81005541f6f65e272afcd55639af3bfa15dc0d8dc9ac9ce0840545"
+    },
+    {
+      "at": "2026-09-15T16:09:40.082Z",
+      "path": "/_next/static/chunks/main-app-f3336e172256d2ab.js",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-1",
+      "resourceType": "script",
+      "bytes": 572,
+      "sha256": "91801d552d3e97ad6aabb535c2d8eeff31bab152fb2448b8556373894e7d7215"
+    },
+    {
+      "at": "2026-09-15T16:09:40.083Z",
+      "path": "/_next/static/chunks/webpack-40deb59ae2a23f6a.js",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-1",
+      "resourceType": "script",
+      "bytes": 5439,
+      "sha256": "257a2ca8397fd5204c57daee63916249d5147cd437e24edc6479530e078a05f0"
+    },
+    {
+      "at": "2026-09-15T16:09:40.086Z",
+      "path": "/_next/static/chunks/app/layout-904d69f7d5cdde36.js",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-1",
+      "resourceType": "script",
+      "bytes": 4355,
+      "sha256": "7af05a48067f3cded13eac365fc48045724ff0e6aabdfe5626973fb275dd29d8"
+    },
+    {
+      "at": "2026-09-15T16:09:40.089Z",
+      "path": "/_next/static/chunks/4bd1b696-100b9d70ed4e49c1.js",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-1",
+      "resourceType": "script",
+      "bytes": 173025,
+      "sha256": "5421e13a91a9389517b66179f3b4b5eaa0d95245438066d4d7b19ac30aeb809b"
+    },
+    {
+      "at": "2026-09-15T16:09:40.091Z",
+      "path": "/_next/static/chunks/1255-912c63e691e3026b.js",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-1",
+      "resourceType": "script",
+      "bytes": 174199,
+      "sha256": "e2a3ad1de44d9cb2da39d295b95e1849b07d264e4c36dadcb17cea94d87ed990"
+    },
+    {
+      "at": "2026-09-15T16:09:40.096Z",
+      "path": "/_next/static/chunks/2619-04bc32f026a0d946.js",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-1",
+      "resourceType": "script",
+      "bytes": 8564,
+      "sha256": "a9b6c2213ea787a015c0169d198b4a90d7a44a0cc17abb0d132e8362d3016ced"
+    },
+    {
+      "at": "2026-09-15T16:09:40.106Z",
+      "path": "/_next/static/chunks/5395-343aef0ba32cbeab.js",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-1",
+      "resourceType": "script",
+      "bytes": 148208,
+      "sha256": "fc49683c6bd71c9dfaf4240c931edfdde5d84461bf58a2738a0ba4d391319271"
+    },
+    {
+      "at": "2026-09-15T16:09:40.106Z",
+      "path": "/_next/static/chunks/d3ac728e-c168d39ae19d599f.js",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-1",
+      "resourceType": "script",
+      "bytes": 263817,
+      "sha256": "a2e57f2d74c24ddf8baa04f2695f8df0047a47cd1a8e7d54ba96bb2a6ebc8fdf"
+    },
+    {
+      "at": "2026-09-15T16:09:40.106Z",
+      "path": "/_next/static/chunks/app/(app)/settings/page-5997b3acd7a84aea.js",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-1",
+      "resourceType": "script",
+      "bytes": 52358,
+      "sha256": "b08b330f007ec1dae4d953ea105536c32122a75e299f0db0d26b68ea4f592b24"
+    },
+    {
+      "at": "2026-09-15T16:09:40.107Z",
+      "path": "/_next/static/chunks/app/(app)/layout-1052a57c6a33ae25.js",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-1",
+      "resourceType": "script",
+      "bytes": 57571,
+      "sha256": "b1cc221bcc4ddeaad30449a351689ebc4683f319ec11e1b0d372c3486f28e5a0"
+    },
+    {
+      "at": "2026-09-15T16:09:40.160Z",
+      "path": "/_next/static/media/noto-sans-sc-118-wght-normal.fa5a5b16.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-1",
+      "resourceType": "font",
+      "bytes": 46192,
+      "sha256": "76c9ddb85ae4578cccd35ae4f6e6bbffaa2c8c2aec0fea17d3c17c84a3c6f7d1"
+    },
+    {
+      "at": "2026-09-15T16:09:40.161Z",
+      "path": "/_next/static/media/noto-sans-sc-104-wght-normal.2958f540.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-1",
+      "resourceType": "font",
+      "bytes": 61588,
+      "sha256": "b0bf80ced89dd61bc3c1427c23203b44413dfef6aafb50da905ab28a7937a923"
+    },
+    {
+      "at": "2026-09-15T16:09:40.161Z",
+      "path": "/_next/static/media/inter-latin-wght-normal.6c596dfc.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-1",
+      "resourceType": "font",
+      "bytes": 48256,
+      "sha256": "3100e775e8616cd2611beecfa23a4263d7037586789b43f035236a2e6fbd4c62"
+    },
+    {
+      "at": "2026-09-15T16:09:40.161Z",
+      "path": "/_next/static/media/noto-sans-sc-116-wght-normal.7c86bddd.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-1",
+      "resourceType": "font",
+      "bytes": 52984,
+      "sha256": "a98dc5a726f82141f74a827c443e120709a12fe737fabacf2530927a275fce0d"
+    },
+    {
+      "at": "2026-09-15T16:09:40.161Z",
+      "path": "/_next/static/media/noto-sans-sc-119-wght-normal.affd1213.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-1",
+      "resourceType": "font",
+      "bytes": 76800,
+      "sha256": "b3b2374881f4cd93f239820dfd91f0fde8d52f8f92ba2888f7ab9cba21e4d7eb"
+    },
+    {
+      "at": "2026-09-15T16:09:40.161Z",
+      "path": "/_next/static/media/noto-sans-sc-117-wght-normal.2e4b1f04.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-1",
+      "resourceType": "font",
+      "bytes": 52464,
+      "sha256": "d94b5af0c14838af99bf9855f91e851878726558531ddef5bd2100b70dfbe90c"
+    },
+    {
+      "at": "2026-09-15T16:09:40.225Z",
+      "path": "/_next/static/media/jetbrains-mono-latin-wght-normal.a865edea.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-1",
+      "resourceType": "font",
+      "bytes": 40404,
+      "sha256": "18be452724bfdc236c074ca94a249a7f41a86752c7d04ab258ce9ed5651f6a7e"
+    },
+    {
+      "at": "2026-09-15T16:09:40.226Z",
+      "path": "/_next/static/media/instrument-serif-latin-400-normal.e872e3f2.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-1",
+      "resourceType": "font",
+      "bytes": 21032,
+      "sha256": "5eb09b5ac0e28b67c2f041c8ba6d244604ca0c0980d65912ab2d47fed84ddc31"
+    },
+    {
+      "at": "2026-09-15T16:09:40.226Z",
+      "path": "/_next/static/media/noto-sans-sc-114-wght-normal.4c8b25a1.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-1",
+      "resourceType": "font",
+      "bytes": 57964,
+      "sha256": "cf7b8344807a316e8db054500a2b44ad9346ffa00763fec203ab5aa1c99ff602"
+    },
+    {
+      "at": "2026-09-15T16:09:40.226Z",
+      "path": "/_next/static/media/noto-sans-sc-111-wght-normal.3f3c8c90.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-1",
+      "resourceType": "font",
+      "bytes": 62664,
+      "sha256": "372be010ac0e87cb12065a861da39821104a43d68345a62ca95d3d3e2fb2c269"
+    },
+    {
+      "at": "2026-09-15T16:09:40.227Z",
+      "path": "/_next/static/media/noto-sans-sc-110-wght-normal.cbb24916.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-1",
+      "resourceType": "font",
+      "bytes": 61472,
+      "sha256": "bbca9081655c45233a25c4cca030c47ebcf2e156eeedd48110836658adb31fa0"
+    },
+    {
+      "at": "2026-09-15T16:09:40.227Z",
+      "path": "/_next/static/media/noto-sans-sc-115-wght-normal.d494d07f.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-1",
+      "resourceType": "font",
+      "bytes": 56508,
+      "sha256": "fb29957c7adccb9a89e34fb28d3d1c7d12bd7401f80c0dba6e1c9e5259cb3262"
+    },
+    {
+      "at": "2026-09-15T16:09:40.227Z",
+      "path": "/_next/static/media/noto-sans-sc-112-wght-normal.4d8fa99b.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-1",
+      "resourceType": "font",
+      "bytes": 57648,
+      "sha256": "34a4580239eae8dc54b726a1e1e9fec266e74225b112063ed93b412d54b97ccd"
+    },
+    {
+      "at": "2026-09-15T16:09:40.228Z",
+      "path": "/_next/static/media/noto-sans-sc-108-wght-normal.8c7c4dad.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-1",
+      "resourceType": "font",
+      "bytes": 64552,
+      "sha256": "91882203459867be07157e9c8d433372b65cd4ce484fda26b97b05ed2cf6290d"
+    },
+    {
+      "at": "2026-09-15T16:09:40.228Z",
+      "path": "/_next/static/media/noto-sans-sc-113-wght-normal.58d174d1.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-1",
+      "resourceType": "font",
+      "bytes": 58648,
+      "sha256": "614ab8f616352583f92cc2130fe8812c5aaaa8560b3828de45eefb318be7b503"
+    },
+    {
+      "at": "2026-09-15T16:09:40.228Z",
+      "path": "/_next/static/media/noto-sans-sc-105-wght-normal.5202d792.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-1",
+      "resourceType": "font",
+      "bytes": 61828,
+      "sha256": "8d8b4e6f4a00621d2be4279e9ba4b07cded89ab6d4018d9b87d2116867ead335"
+    },
+    {
+      "at": "2026-09-15T16:09:40.228Z",
+      "path": "/_next/static/media/noto-sans-sc-101-wght-normal.973dcd0f.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-1",
+      "resourceType": "font",
+      "bytes": 58204,
+      "sha256": "e189b81fc22ca6afcf03a1fcbf8fad93e8272a502d4b23241900113d9ddbe51a"
+    },
+    {
+      "at": "2026-09-15T16:09:40.228Z",
+      "path": "/_next/static/media/noto-sans-sc-109-wght-normal.54798e55.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-1",
+      "resourceType": "font",
+      "bytes": 60372,
+      "sha256": "a91f8b038e5ce10805a173a293484c8c49552c275cf901cdf21324d6dca3ed17"
+    },
+    {
+      "at": "2026-09-15T16:09:40.271Z",
+      "path": "/_next/static/media/noto-serif-sc-117-wght-normal.8f2a718c.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-1",
+      "resourceType": "font",
+      "bytes": 66576,
+      "sha256": "44c0c56034f2906014cd0082c42cef587cd4e2eb24983aca2a10d9805a0f26f6"
+    },
+    {
+      "at": "2026-09-15T16:09:40.282Z",
+      "path": "/search",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-1",
+      "resourceType": "fetch"
+    },
+    {
+      "at": "2026-09-15T16:09:40.284Z",
+      "path": "/",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-1",
+      "resourceType": "fetch"
+    },
+    {
+      "at": "2026-09-15T16:09:40.290Z",
+      "path": "/inbox",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-1",
+      "resourceType": "fetch"
+    },
+    {
+      "at": "2026-09-15T16:09:40.296Z",
+      "path": "/icons/icon-192.png",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-1",
+      "resourceType": "other"
+    },
+    {
+      "at": "2026-09-15T16:09:40.299Z",
+      "path": "/_next/static/chunks/app/(app)/page-546d9e331d248176.js",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-1",
+      "resourceType": "script",
+      "bytes": 2518,
+      "sha256": "d5180b1bf055a5da787cdb28c6d9d53a270b96574d84f47f08756c028524fad2"
+    },
+    {
+      "at": "2026-09-15T16:09:40.300Z",
+      "path": "/_next/static/chunks/app/(app)/search/page-195baf5521c05d5d.js",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-1",
+      "resourceType": "script",
+      "bytes": 6883,
+      "sha256": "bdd5cade22a527207e58370a726f36352762d4dfa8a54b3f13e18f36e7302f68"
+    },
+    {
+      "at": "2026-09-15T16:09:40.302Z",
+      "path": "/_next/static/chunks/app/(app)/inbox/page-681898bb0a303d89.js",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-1",
+      "resourceType": "script",
+      "bytes": 9901,
+      "sha256": "64b66f92275cb539b5cd6af9696fa28329effe538b85f9ffcb6e66c93ea9a9ca"
+    },
+    {
+      "at": "2026-09-15T16:09:40.849Z",
+      "path": "/settings",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-2",
+      "resourceType": "document"
+    },
+    {
+      "at": "2026-09-15T16:09:40.868Z",
+      "path": "/_next/static/chunks/webpack-40deb59ae2a23f6a.js",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-2",
+      "resourceType": "script",
+      "bytes": 5439,
+      "sha256": "257a2ca8397fd5204c57daee63916249d5147cd437e24edc6479530e078a05f0"
+    },
+    {
+      "at": "2026-09-15T16:09:40.868Z",
+      "path": "/_next/static/css/3f43a07db598b6ec.css",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-2",
+      "resourceType": "stylesheet",
+      "bytes": 265193,
+      "sha256": "c6abde282c81005541f6f65e272afcd55639af3bfa15dc0d8dc9ac9ce0840545"
+    },
+    {
+      "at": "2026-09-15T16:09:40.869Z",
+      "path": "/manifest.webmanifest",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-2",
+      "resourceType": "manifest"
+    },
+    {
+      "at": "2026-09-15T16:09:40.873Z",
+      "path": "/_next/static/chunks/main-app-f3336e172256d2ab.js",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-2",
+      "resourceType": "script",
+      "bytes": 572,
+      "sha256": "91801d552d3e97ad6aabb535c2d8eeff31bab152fb2448b8556373894e7d7215"
+    },
+    {
+      "at": "2026-09-15T16:09:40.873Z",
+      "path": "/_next/static/chunks/app/layout-904d69f7d5cdde36.js",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-2",
+      "resourceType": "script",
+      "bytes": 4355,
+      "sha256": "7af05a48067f3cded13eac365fc48045724ff0e6aabdfe5626973fb275dd29d8"
+    },
+    {
+      "at": "2026-09-15T16:09:40.878Z",
+      "path": "/_next/static/chunks/1255-912c63e691e3026b.js",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-2",
+      "resourceType": "script",
+      "bytes": 174199,
+      "sha256": "e2a3ad1de44d9cb2da39d295b95e1849b07d264e4c36dadcb17cea94d87ed990"
+    },
+    {
+      "at": "2026-09-15T16:09:40.885Z",
+      "path": "/_next/static/chunks/4bd1b696-100b9d70ed4e49c1.js",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-2",
+      "resourceType": "script",
+      "bytes": 173025,
+      "sha256": "5421e13a91a9389517b66179f3b4b5eaa0d95245438066d4d7b19ac30aeb809b"
+    },
+    {
+      "at": "2026-09-15T16:09:40.885Z",
+      "path": "/_next/static/chunks/2619-04bc32f026a0d946.js",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-2",
+      "resourceType": "script",
+      "bytes": 8564,
+      "sha256": "a9b6c2213ea787a015c0169d198b4a90d7a44a0cc17abb0d132e8362d3016ced"
+    },
+    {
+      "at": "2026-09-15T16:09:40.889Z",
+      "path": "/_next/static/chunks/d3ac728e-c168d39ae19d599f.js",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-2",
+      "resourceType": "script",
+      "bytes": 263817,
+      "sha256": "a2e57f2d74c24ddf8baa04f2695f8df0047a47cd1a8e7d54ba96bb2a6ebc8fdf"
+    },
+    {
+      "at": "2026-09-15T16:09:40.894Z",
+      "path": "/_next/static/chunks/5395-343aef0ba32cbeab.js",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-2",
+      "resourceType": "script",
+      "bytes": 148208,
+      "sha256": "fc49683c6bd71c9dfaf4240c931edfdde5d84461bf58a2738a0ba4d391319271"
+    },
+    {
+      "at": "2026-09-15T16:09:40.895Z",
+      "path": "/_next/static/chunks/app/(app)/settings/page-5997b3acd7a84aea.js",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-2",
+      "resourceType": "script",
+      "bytes": 52358,
+      "sha256": "b08b330f007ec1dae4d953ea105536c32122a75e299f0db0d26b68ea4f592b24"
+    },
+    {
+      "at": "2026-09-15T16:09:40.895Z",
+      "path": "/_next/static/chunks/app/(app)/layout-1052a57c6a33ae25.js",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-2",
+      "resourceType": "script",
+      "bytes": 57571,
+      "sha256": "b1cc221bcc4ddeaad30449a351689ebc4683f319ec11e1b0d372c3486f28e5a0"
+    },
+    {
+      "at": "2026-09-15T16:09:40.920Z",
+      "path": "/_next/static/media/noto-sans-sc-116-wght-normal.7c86bddd.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-2",
+      "resourceType": "font",
+      "bytes": 52984,
+      "sha256": "a98dc5a726f82141f74a827c443e120709a12fe737fabacf2530927a275fce0d"
+    },
+    {
+      "at": "2026-09-15T16:09:40.921Z",
+      "path": "/_next/static/media/noto-sans-sc-118-wght-normal.fa5a5b16.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-2",
+      "resourceType": "font",
+      "bytes": 46192,
+      "sha256": "76c9ddb85ae4578cccd35ae4f6e6bbffaa2c8c2aec0fea17d3c17c84a3c6f7d1"
+    },
+    {
+      "at": "2026-09-15T16:09:40.926Z",
+      "path": "/_next/static/media/noto-sans-sc-117-wght-normal.2e4b1f04.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-2",
+      "resourceType": "font",
+      "bytes": 52464,
+      "sha256": "d94b5af0c14838af99bf9855f91e851878726558531ddef5bd2100b70dfbe90c"
+    },
+    {
+      "at": "2026-09-15T16:09:40.968Z",
+      "path": "/_next/static/media/inter-latin-wght-normal.6c596dfc.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-2",
+      "resourceType": "font",
+      "bytes": 48256,
+      "sha256": "3100e775e8616cd2611beecfa23a4263d7037586789b43f035236a2e6fbd4c62"
+    },
+    {
+      "at": "2026-09-15T16:09:40.969Z",
+      "path": "/_next/static/media/noto-sans-sc-119-wght-normal.affd1213.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-2",
+      "resourceType": "font",
+      "bytes": 76800,
+      "sha256": "b3b2374881f4cd93f239820dfd91f0fde8d52f8f92ba2888f7ab9cba21e4d7eb"
+    },
+    {
+      "at": "2026-09-15T16:09:40.969Z",
+      "path": "/_next/static/media/noto-sans-sc-104-wght-normal.2958f540.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-2",
+      "resourceType": "font",
+      "bytes": 61588,
+      "sha256": "b0bf80ced89dd61bc3c1427c23203b44413dfef6aafb50da905ab28a7937a923"
+    },
+    {
+      "at": "2026-09-15T16:09:40.970Z",
+      "path": "/_next/static/media/instrument-serif-latin-400-normal.e872e3f2.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-2",
+      "resourceType": "font",
+      "bytes": 21032,
+      "sha256": "5eb09b5ac0e28b67c2f041c8ba6d244604ca0c0980d65912ab2d47fed84ddc31"
+    },
+    {
+      "at": "2026-09-15T16:09:40.970Z",
+      "path": "/_next/static/media/jetbrains-mono-latin-wght-normal.a865edea.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-2",
+      "resourceType": "font",
+      "bytes": 40404,
+      "sha256": "18be452724bfdc236c074ca94a249a7f41a86752c7d04ab258ce9ed5651f6a7e"
+    },
+    {
+      "at": "2026-09-15T16:09:40.970Z",
+      "path": "/_next/static/media/noto-sans-sc-114-wght-normal.4c8b25a1.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-2",
+      "resourceType": "font",
+      "bytes": 57964,
+      "sha256": "cf7b8344807a316e8db054500a2b44ad9346ffa00763fec203ab5aa1c99ff602"
+    },
+    {
+      "at": "2026-09-15T16:09:40.971Z",
+      "path": "/_next/static/media/noto-sans-sc-111-wght-normal.3f3c8c90.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-2",
+      "resourceType": "font",
+      "bytes": 62664,
+      "sha256": "372be010ac0e87cb12065a861da39821104a43d68345a62ca95d3d3e2fb2c269"
+    },
+    {
+      "at": "2026-09-15T16:09:40.971Z",
+      "path": "/_next/static/media/noto-sans-sc-110-wght-normal.cbb24916.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-2",
+      "resourceType": "font",
+      "bytes": 61472,
+      "sha256": "bbca9081655c45233a25c4cca030c47ebcf2e156eeedd48110836658adb31fa0"
+    },
+    {
+      "at": "2026-09-15T16:09:40.971Z",
+      "path": "/_next/static/media/noto-sans-sc-115-wght-normal.d494d07f.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-2",
+      "resourceType": "font",
+      "bytes": 56508,
+      "sha256": "fb29957c7adccb9a89e34fb28d3d1c7d12bd7401f80c0dba6e1c9e5259cb3262"
+    },
+    {
+      "at": "2026-09-15T16:09:40.971Z",
+      "path": "/_next/static/media/noto-sans-sc-112-wght-normal.4d8fa99b.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-2",
+      "resourceType": "font",
+      "bytes": 57648,
+      "sha256": "34a4580239eae8dc54b726a1e1e9fec266e74225b112063ed93b412d54b97ccd"
+    },
+    {
+      "at": "2026-09-15T16:09:40.971Z",
+      "path": "/_next/static/media/noto-sans-sc-113-wght-normal.58d174d1.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-2",
+      "resourceType": "font",
+      "bytes": 58648,
+      "sha256": "614ab8f616352583f92cc2130fe8812c5aaaa8560b3828de45eefb318be7b503"
+    },
+    {
+      "at": "2026-09-15T16:09:40.972Z",
+      "path": "/_next/static/media/noto-sans-sc-108-wght-normal.8c7c4dad.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-2",
+      "resourceType": "font",
+      "bytes": 64552,
+      "sha256": "91882203459867be07157e9c8d433372b65cd4ce484fda26b97b05ed2cf6290d"
+    },
+    {
+      "at": "2026-09-15T16:09:40.972Z",
+      "path": "/_next/static/media/noto-sans-sc-105-wght-normal.5202d792.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-2",
+      "resourceType": "font",
+      "bytes": 61828,
+      "sha256": "8d8b4e6f4a00621d2be4279e9ba4b07cded89ab6d4018d9b87d2116867ead335"
+    },
+    {
+      "at": "2026-09-15T16:09:40.973Z",
+      "path": "/_next/static/media/noto-sans-sc-109-wght-normal.54798e55.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-2",
+      "resourceType": "font",
+      "bytes": 60372,
+      "sha256": "a91f8b038e5ce10805a173a293484c8c49552c275cf901cdf21324d6dca3ed17"
+    },
+    {
+      "at": "2026-09-15T16:09:40.973Z",
+      "path": "/_next/static/media/noto-sans-sc-101-wght-normal.973dcd0f.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-2",
+      "resourceType": "font",
+      "bytes": 58204,
+      "sha256": "e189b81fc22ca6afcf03a1fcbf8fad93e8272a502d4b23241900113d9ddbe51a"
+    },
+    {
+      "at": "2026-09-15T16:09:41.017Z",
+      "path": "/_next/static/media/noto-serif-sc-117-wght-normal.8f2a718c.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-2",
+      "resourceType": "font",
+      "bytes": 66576,
+      "sha256": "44c0c56034f2906014cd0082c42cef587cd4e2eb24983aca2a10d9805a0f26f6"
+    },
+    {
+      "at": "2026-09-15T16:09:41.032Z",
+      "path": "/",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-2",
+      "resourceType": "fetch"
+    },
+    {
+      "at": "2026-09-15T16:09:41.037Z",
+      "path": "/search",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-2",
+      "resourceType": "fetch"
+    },
+    {
+      "at": "2026-09-15T16:09:41.039Z",
+      "path": "/inbox",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-2",
+      "resourceType": "fetch"
+    },
+    {
+      "at": "2026-09-15T16:09:41.041Z",
+      "path": "/icons/icon-192.png",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-2",
+      "resourceType": "other"
+    },
+    {
+      "at": "2026-09-15T16:09:41.049Z",
+      "path": "/_next/static/chunks/app/(app)/search/page-195baf5521c05d5d.js",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-2",
+      "resourceType": "script",
+      "bytes": 6883,
+      "sha256": "bdd5cade22a527207e58370a726f36352762d4dfa8a54b3f13e18f36e7302f68"
+    },
+    {
+      "at": "2026-09-15T16:09:41.050Z",
+      "path": "/_next/static/chunks/app/(app)/page-546d9e331d248176.js",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-2",
+      "resourceType": "script",
+      "bytes": 2518,
+      "sha256": "d5180b1bf055a5da787cdb28c6d9d53a270b96574d84f47f08756c028524fad2"
+    },
+    {
+      "at": "2026-09-15T16:09:41.050Z",
+      "path": "/_next/static/chunks/app/(app)/inbox/page-681898bb0a303d89.js",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-2",
+      "resourceType": "script",
+      "bytes": 9901,
+      "sha256": "64b66f92275cb539b5cd6af9696fa28329effe538b85f9ffcb6e66c93ea9a9ca"
+    },
+    {
+      "at": "2026-09-15T16:09:41.596Z",
+      "path": "/settings",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-3",
+      "resourceType": "document"
+    },
+    {
+      "at": "2026-09-15T16:09:41.615Z",
+      "path": "/manifest.webmanifest",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-3",
+      "resourceType": "manifest"
+    },
+    {
+      "at": "2026-09-15T16:09:41.617Z",
+      "path": "/_next/static/css/3f43a07db598b6ec.css",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-3",
+      "resourceType": "stylesheet",
+      "bytes": 265193,
+      "sha256": "c6abde282c81005541f6f65e272afcd55639af3bfa15dc0d8dc9ac9ce0840545"
+    },
+    {
+      "at": "2026-09-15T16:09:41.617Z",
+      "path": "/_next/static/chunks/webpack-40deb59ae2a23f6a.js",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-3",
+      "resourceType": "script",
+      "bytes": 5439,
+      "sha256": "257a2ca8397fd5204c57daee63916249d5147cd437e24edc6479530e078a05f0"
+    },
+    {
+      "at": "2026-09-15T16:09:41.618Z",
+      "path": "/_next/static/chunks/main-app-f3336e172256d2ab.js",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-3",
+      "resourceType": "script",
+      "bytes": 572,
+      "sha256": "91801d552d3e97ad6aabb535c2d8eeff31bab152fb2448b8556373894e7d7215"
+    },
+    {
+      "at": "2026-09-15T16:09:41.619Z",
+      "path": "/_next/static/chunks/app/layout-904d69f7d5cdde36.js",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-3",
+      "resourceType": "script",
+      "bytes": 4355,
+      "sha256": "7af05a48067f3cded13eac365fc48045724ff0e6aabdfe5626973fb275dd29d8"
+    },
+    {
+      "at": "2026-09-15T16:09:41.624Z",
+      "path": "/_next/static/chunks/1255-912c63e691e3026b.js",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-3",
+      "resourceType": "script",
+      "bytes": 174199,
+      "sha256": "e2a3ad1de44d9cb2da39d295b95e1849b07d264e4c36dadcb17cea94d87ed990"
+    },
+    {
+      "at": "2026-09-15T16:09:41.625Z",
+      "path": "/_next/static/chunks/2619-04bc32f026a0d946.js",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-3",
+      "resourceType": "script",
+      "bytes": 8564,
+      "sha256": "a9b6c2213ea787a015c0169d198b4a90d7a44a0cc17abb0d132e8362d3016ced"
+    },
+    {
+      "at": "2026-09-15T16:09:41.628Z",
+      "path": "/_next/static/chunks/4bd1b696-100b9d70ed4e49c1.js",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-3",
+      "resourceType": "script",
+      "bytes": 173025,
+      "sha256": "5421e13a91a9389517b66179f3b4b5eaa0d95245438066d4d7b19ac30aeb809b"
+    },
+    {
+      "at": "2026-09-15T16:09:41.638Z",
+      "path": "/_next/static/chunks/5395-343aef0ba32cbeab.js",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-3",
+      "resourceType": "script",
+      "bytes": 148208,
+      "sha256": "fc49683c6bd71c9dfaf4240c931edfdde5d84461bf58a2738a0ba4d391319271"
+    },
+    {
+      "at": "2026-09-15T16:09:41.639Z",
+      "path": "/_next/static/chunks/d3ac728e-c168d39ae19d599f.js",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-3",
+      "resourceType": "script",
+      "bytes": 263817,
+      "sha256": "a2e57f2d74c24ddf8baa04f2695f8df0047a47cd1a8e7d54ba96bb2a6ebc8fdf"
+    },
+    {
+      "at": "2026-09-15T16:09:41.639Z",
+      "path": "/_next/static/chunks/app/(app)/layout-1052a57c6a33ae25.js",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-3",
+      "resourceType": "script",
+      "bytes": 57571,
+      "sha256": "b1cc221bcc4ddeaad30449a351689ebc4683f319ec11e1b0d372c3486f28e5a0"
+    },
+    {
+      "at": "2026-09-15T16:09:41.639Z",
+      "path": "/_next/static/chunks/app/(app)/settings/page-5997b3acd7a84aea.js",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-3",
+      "resourceType": "script",
+      "bytes": 52358,
+      "sha256": "b08b330f007ec1dae4d953ea105536c32122a75e299f0db0d26b68ea4f592b24"
+    },
+    {
+      "at": "2026-09-15T16:09:41.661Z",
+      "path": "/_next/static/media/noto-sans-sc-117-wght-normal.2e4b1f04.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-3",
+      "resourceType": "font",
+      "bytes": 52464,
+      "sha256": "d94b5af0c14838af99bf9855f91e851878726558531ddef5bd2100b70dfbe90c"
+    },
+    {
+      "at": "2026-09-15T16:09:41.667Z",
+      "path": "/_next/static/media/noto-sans-sc-119-wght-normal.affd1213.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-3",
+      "resourceType": "font",
+      "bytes": 76800,
+      "sha256": "b3b2374881f4cd93f239820dfd91f0fde8d52f8f92ba2888f7ab9cba21e4d7eb"
+    },
+    {
+      "at": "2026-09-15T16:09:41.668Z",
+      "path": "/_next/static/media/noto-sans-sc-116-wght-normal.7c86bddd.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-3",
+      "resourceType": "font",
+      "bytes": 52984,
+      "sha256": "a98dc5a726f82141f74a827c443e120709a12fe737fabacf2530927a275fce0d"
+    },
+    {
+      "at": "2026-09-15T16:09:41.697Z",
+      "path": "/_next/static/media/noto-sans-sc-118-wght-normal.fa5a5b16.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-3",
+      "resourceType": "font",
+      "bytes": 46192,
+      "sha256": "76c9ddb85ae4578cccd35ae4f6e6bbffaa2c8c2aec0fea17d3c17c84a3c6f7d1"
+    },
+    {
+      "at": "2026-09-15T16:09:41.697Z",
+      "path": "/_next/static/media/inter-latin-wght-normal.6c596dfc.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-3",
+      "resourceType": "font",
+      "bytes": 48256,
+      "sha256": "3100e775e8616cd2611beecfa23a4263d7037586789b43f035236a2e6fbd4c62"
+    },
+    {
+      "at": "2026-09-15T16:09:41.698Z",
+      "path": "/_next/static/media/noto-sans-sc-104-wght-normal.2958f540.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-3",
+      "resourceType": "font",
+      "bytes": 61588,
+      "sha256": "b0bf80ced89dd61bc3c1427c23203b44413dfef6aafb50da905ab28a7937a923"
+    },
+    {
+      "at": "2026-09-15T16:09:41.698Z",
+      "path": "/_next/static/media/noto-sans-sc-110-wght-normal.cbb24916.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-3",
+      "resourceType": "font",
+      "bytes": 61472,
+      "sha256": "bbca9081655c45233a25c4cca030c47ebcf2e156eeedd48110836658adb31fa0"
+    },
+    {
+      "at": "2026-09-15T16:09:41.698Z",
+      "path": "/_next/static/media/jetbrains-mono-latin-wght-normal.a865edea.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-3",
+      "resourceType": "font",
+      "bytes": 40404,
+      "sha256": "18be452724bfdc236c074ca94a249a7f41a86752c7d04ab258ce9ed5651f6a7e"
+    },
+    {
+      "at": "2026-09-15T16:09:41.699Z",
+      "path": "/_next/static/media/noto-sans-sc-111-wght-normal.3f3c8c90.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-3",
+      "resourceType": "font",
+      "bytes": 62664,
+      "sha256": "372be010ac0e87cb12065a861da39821104a43d68345a62ca95d3d3e2fb2c269"
+    },
+    {
+      "at": "2026-09-15T16:09:41.699Z",
+      "path": "/_next/static/media/noto-sans-sc-115-wght-normal.d494d07f.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-3",
+      "resourceType": "font",
+      "bytes": 56508,
+      "sha256": "fb29957c7adccb9a89e34fb28d3d1c7d12bd7401f80c0dba6e1c9e5259cb3262"
+    },
+    {
+      "at": "2026-09-15T16:09:41.699Z",
+      "path": "/_next/static/media/instrument-serif-latin-400-normal.e872e3f2.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-3",
+      "resourceType": "font",
+      "bytes": 21032,
+      "sha256": "5eb09b5ac0e28b67c2f041c8ba6d244604ca0c0980d65912ab2d47fed84ddc31"
+    },
+    {
+      "at": "2026-09-15T16:09:41.699Z",
+      "path": "/_next/static/media/noto-sans-sc-114-wght-normal.4c8b25a1.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-3",
+      "resourceType": "font",
+      "bytes": 57964,
+      "sha256": "cf7b8344807a316e8db054500a2b44ad9346ffa00763fec203ab5aa1c99ff602"
+    },
+    {
+      "at": "2026-09-15T16:09:41.699Z",
+      "path": "/_next/static/media/noto-sans-sc-112-wght-normal.4d8fa99b.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-3",
+      "resourceType": "font",
+      "bytes": 57648,
+      "sha256": "34a4580239eae8dc54b726a1e1e9fec266e74225b112063ed93b412d54b97ccd"
+    },
+    {
+      "at": "2026-09-15T16:09:41.700Z",
+      "path": "/_next/static/media/noto-sans-sc-113-wght-normal.58d174d1.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-3",
+      "resourceType": "font",
+      "bytes": 58648,
+      "sha256": "614ab8f616352583f92cc2130fe8812c5aaaa8560b3828de45eefb318be7b503"
+    },
+    {
+      "at": "2026-09-15T16:09:41.700Z",
+      "path": "/_next/static/media/noto-sans-sc-105-wght-normal.5202d792.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-3",
+      "resourceType": "font",
+      "bytes": 61828,
+      "sha256": "8d8b4e6f4a00621d2be4279e9ba4b07cded89ab6d4018d9b87d2116867ead335"
+    },
+    {
+      "at": "2026-09-15T16:09:41.702Z",
+      "path": "/_next/static/media/noto-sans-sc-109-wght-normal.54798e55.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-3",
+      "resourceType": "font",
+      "bytes": 60372,
+      "sha256": "a91f8b038e5ce10805a173a293484c8c49552c275cf901cdf21324d6dca3ed17"
+    },
+    {
+      "at": "2026-09-15T16:09:41.706Z",
+      "path": "/_next/static/media/noto-sans-sc-108-wght-normal.8c7c4dad.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-3",
+      "resourceType": "font",
+      "bytes": 64552,
+      "sha256": "91882203459867be07157e9c8d433372b65cd4ce484fda26b97b05ed2cf6290d"
+    },
+    {
+      "at": "2026-09-15T16:09:41.709Z",
+      "path": "/_next/static/media/noto-sans-sc-101-wght-normal.973dcd0f.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-3",
+      "resourceType": "font",
+      "bytes": 58204,
+      "sha256": "e189b81fc22ca6afcf03a1fcbf8fad93e8272a502d4b23241900113d9ddbe51a"
+    },
+    {
+      "at": "2026-09-15T16:09:41.760Z",
+      "path": "/_next/static/media/noto-serif-sc-117-wght-normal.8f2a718c.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-3",
+      "resourceType": "font",
+      "bytes": 66576,
+      "sha256": "44c0c56034f2906014cd0082c42cef587cd4e2eb24983aca2a10d9805a0f26f6"
+    },
+    {
+      "at": "2026-09-15T16:09:41.769Z",
+      "path": "/inbox",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-3",
+      "resourceType": "fetch"
+    },
+    {
+      "at": "2026-09-15T16:09:41.772Z",
+      "path": "/",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-3",
+      "resourceType": "fetch"
+    },
+    {
+      "at": "2026-09-15T16:09:41.775Z",
+      "path": "/search",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-3",
+      "resourceType": "fetch"
+    },
+    {
+      "at": "2026-09-15T16:09:41.777Z",
+      "path": "/icons/icon-192.png",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-3",
+      "resourceType": "other"
+    },
+    {
+      "at": "2026-09-15T16:09:41.784Z",
+      "path": "/_next/static/chunks/app/(app)/page-546d9e331d248176.js",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-3",
+      "resourceType": "script",
+      "bytes": 2518,
+      "sha256": "d5180b1bf055a5da787cdb28c6d9d53a270b96574d84f47f08756c028524fad2"
+    },
+    {
+      "at": "2026-09-15T16:09:41.785Z",
+      "path": "/_next/static/chunks/app/(app)/inbox/page-681898bb0a303d89.js",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-3",
+      "resourceType": "script",
+      "bytes": 9901,
+      "sha256": "64b66f92275cb539b5cd6af9696fa28329effe538b85f9ffcb6e66c93ea9a9ca"
+    },
+    {
+      "at": "2026-09-15T16:09:41.785Z",
+      "path": "/_next/static/chunks/app/(app)/search/page-195baf5521c05d5d.js",
+      "method": "GET",
+      "status": 200,
+      "action": "cold-reload-3",
+      "resourceType": "script",
+      "bytes": 6883,
+      "sha256": "bdd5cade22a527207e58370a726f36352762d4dfa8a54b3f13e18f36e7302f68"
+    },
+    {
+      "at": "2026-09-15T16:09:42.380Z",
+      "path": "/_next/static/media/noto-sans-sc-87-wght-normal.44ffc6ca.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "note-save",
+      "resourceType": "font",
+      "bytes": 8012,
+      "sha256": "0eeffd5daad5c17bba306e06e89e93ac563a497c806c0fa1d4c3a53a8ffa4225"
+    },
+    {
+      "at": "2026-09-15T16:09:42.520Z",
+      "path": "/api/notes",
+      "method": "POST",
+      "status": 201,
+      "action": "note-save",
+      "resourceType": "fetch"
+    },
+    {
+      "at": "2026-09-15T16:09:42.539Z",
+      "path": "/settings",
+      "method": "GET",
+      "status": 200,
+      "action": "note-save",
+      "resourceType": "fetch"
+    },
+    {
+      "at": "2026-09-15T16:09:42.551Z",
+      "path": "/manifest.webmanifest",
+      "method": "GET",
+      "status": 200,
+      "action": "note-save",
+      "resourceType": "manifest"
+    },
+    {
+      "at": "2026-09-15T16:09:42.556Z",
+      "path": "/icons/icon-192.png",
+      "method": "GET",
+      "status": 200,
+      "action": "note-save",
+      "resourceType": "other"
+    }
+  ],
+  "requestFailures": [
+    {
+      "path": "/",
+      "error": "net::ERR_ABORTED",
+      "action": "login"
+    },
+    {
+      "path": "/settings",
+      "error": "net::ERR_ABORTED",
+      "action": "cold-reload-1"
+    },
+    {
+      "path": "/search",
+      "error": "net::ERR_ABORTED",
+      "action": "cold-reload-1"
+    },
+    {
+      "path": "/inbox",
+      "error": "net::ERR_ABORTED",
+      "action": "cold-reload-1"
+    },
+    {
+      "path": "/",
+      "error": "net::ERR_ABORTED",
+      "action": "cold-reload-1"
+    },
+    {
+      "path": "/search",
+      "error": "net::ERR_ABORTED",
+      "action": "cold-reload-2"
+    },
+    {
+      "path": "/search",
+      "error": "net::ERR_ABORTED",
+      "action": "cold-reload-3"
+    },
+    {
+      "path": "/settings",
+      "error": "net::ERR_ABORTED",
+      "action": "note-save"
+    }
+  ],
+  "console": [
+    {
+      "type": "warning",
+      "text": "Service Worker registration blocked by Playwright",
+      "action": "login"
+    },
+    {
+      "type": "warning",
+      "text": "Service Worker registration blocked by Playwright",
+      "action": "settings-save"
+    },
+    {
+      "type": "warning",
+      "text": "Service Worker registration blocked by Playwright",
+      "action": "cold-reload-1"
+    },
+    {
+      "type": "warning",
+      "text": "Service Worker registration blocked by Playwright",
+      "action": "cold-reload-2"
+    },
+    {
+      "type": "warning",
+      "text": "Service Worker registration blocked by Playwright",
+      "action": "cold-reload-3"
+    }
+  ],
+  "pageErrors": [],
+  "blocked": [],
+  "steps": {
+    "login": {
+      "status": 200,
+      "session": "真实浏览器登录，未注入或改写 Cookie"
+    },
+    "settingsSave": {
+      "status": 200,
+      "baseUrl": "http://mockllm:8787/v1",
+      "model": "mock",
+      "savedFields": [
+        "apiKey"
+      ]
+    },
+    "coldReloads": {
+      "count": 3,
+      "reloads": [
+        {
+          "index": 1,
+          "status": 200,
+          "staticResponses": 34
+        },
+        {
+          "index": 2,
+          "status": 200,
+          "staticResponses": 33
+        },
+        {
+          "index": 3,
+          "status": 200,
+          "staticResponses": 33
+        }
+      ]
+    }
+  },
+  "browserVersion": "153.0.8010.36",
+  "currentAction": "note-save",
+  "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ undefined\n- '静态资源限流修复验收：20260915T155500Z-384669e0，保存 mock 设置并连续刷新后，仍可正常记录。'\n\n    at C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-static-repair-20260915T155500Z-384669e0\\browser.cjs:112:12",
+  "finishedAt": "2026-09-15T16:09:43.761Z",
+  "browserClosed": true
+}

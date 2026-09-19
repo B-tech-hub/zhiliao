@@ -1,0 +1,23 @@
+{
+  "step": "resolve-lock",
+  "cwd": "C:/Users/BAIBAI/AppData/Local/Temp/zhiliao-tiptap-wald1s82",
+  "command": [
+    "D:/node.js/node.exe",
+    "D:/node.js/node_modules/npm/bin/npm-cli.js",
+    "install",
+    "--package-lock-only",
+    "--ignore-scripts",
+    "--no-audit",
+    "--no-fund",
+    "--registry=https://registry.npmjs.org",
+    "--fetch-retries=0",
+    "--fetch-timeout=30000"
+  ],
+  "startedUtc": "2026-09-19T02:49:12.872369+00:00",
+  "finishedUtc": "2026-09-19T02:49:16.553460+00:00",
+  "elapsedSeconds": 3.688,
+  "exitCode": 0,
+  "stdout": "resolve-lock.stdout.log",
+  "stderr": "resolve-lock.stderr.log",
+  "lifecycleScriptsDisabled": true
+}

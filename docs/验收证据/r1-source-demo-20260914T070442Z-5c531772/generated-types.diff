@@ -1,0 +1,24 @@
+--- 原候选/next-env.d.ts
++++ 临时运行副本/next-env.d.ts
+@@ -1,6 +1,6 @@
+ /// <reference types="next" />
+ /// <reference types="next/image-types/global" />
+-/// <reference path="./.next/types/routes.d.ts" />
++/// <reference path="./.next-r1/types/routes.d.ts" />
+ 
+ // NOTE: This file should not be edited
+ // see https://nextjs.org/docs/app/api-reference/config/typescript for more information.
+--- 原候选/tsconfig.json
++++ 临时运行副本/tsconfig.json
+@@ -31,9 +31,10 @@
+   "include": [
+     "**/*.ts",
+     "**/*.tsx",
++    ".next-verify/types/**/*.ts",
+     ".next/types/**/*.ts",
+     "next-env.d.ts",
+-    ".next-verify/types/**/*.ts"
++    ".next-r1/types/**/*.ts"
+   ],
+   "exclude": [
+     "node_modules"

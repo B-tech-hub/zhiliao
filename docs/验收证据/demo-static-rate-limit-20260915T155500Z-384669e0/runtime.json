@@ -1,0 +1,1623 @@
+{
+  "runId": "20260915T155500Z-384669e0",
+  "project": "zhiliao-static-repair-20260915t155500z-384669e0",
+  "port": 3313,
+  "attempt": 2,
+  "startedAt": "2026-09-15T16:06:19.276Z",
+  "status": "passed",
+  "baselineCommit": "f213761b795cc020be2122e27301fe4a7c5cf7a0",
+  "commands": [
+    {
+      "args": [
+        "ps",
+        "-a",
+        "--filter",
+        "label=com.docker.compose.project=zhiliao-static-repair-20260915t155500z-384669e0",
+        "--format",
+        "{{.ID}}"
+      ],
+      "elapsedMs": 76,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "ps",
+        "-a",
+        "--filter",
+        "name=zhiliao-static-repair-20260915t155500z-384669e0",
+        "--format",
+        "{{.ID}}"
+      ],
+      "elapsedMs": 69,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "network",
+        "ls",
+        "--filter",
+        "label=com.docker.compose.project=zhiliao-static-repair-20260915t155500z-384669e0",
+        "--format",
+        "{{.ID}}"
+      ],
+      "elapsedMs": 71,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "network",
+        "ls",
+        "--filter",
+        "name=zhiliao-static-repair-20260915t155500z-384669e0",
+        "--format",
+        "{{.ID}}"
+      ],
+      "elapsedMs": 71,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "volume",
+        "ls",
+        "--filter",
+        "label=com.docker.compose.project=zhiliao-static-repair-20260915t155500z-384669e0",
+        "--format",
+        "{{.Name}}"
+      ],
+      "elapsedMs": 70,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "volume",
+        "ls",
+        "--filter",
+        "name=zhiliao-static-repair-20260915t155500z-384669e0",
+        "--format",
+        "{{.Name}}"
+      ],
+      "elapsedMs": 69,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "ps",
+        "-aq",
+        "--no-trunc"
+      ],
+      "elapsedMs": 94,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "container",
+        "inspect",
+        "254c7caca374780a6c1a3bea1c2c6ba59d6ab092de155c34f8efd3cd411532c8",
+        "50a70f44a32e78adf331f7084743f042001eb5b650ee7af849441ed6a14a85c0",
+        "5d05095aa56b26fee8ff02b3372764d8300cc7b1851773eca5ee0a95ed3f675f",
+        "ab1926223971ae43ca775c7078f16057bde76b5e2f53aa6856382830542c3e4a",
+        "cd07490a30d9cd068c4552f0f528dacecd9349eb2a60c1dbf9f8c18333fe83ea",
+        "ea240066dd4a847db38ef758917c36a04be31191329ab6c995bdc94cd83fc721",
+        "f61337186432f4b8be3bba6578ebb2a3f768cd39baf5349a0fc19c53f224ef81"
+      ],
+      "elapsedMs": 83,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "network",
+        "ls",
+        "-q",
+        "--no-trunc"
+      ],
+      "elapsedMs": 68,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "network",
+        "inspect",
+        "199774bd4a2cbb685cdb7bbce25caeae74f37b90322c6c73daafed04d62d3e49",
+        "31a1be3a36c95e48f3374158921a02d969732cd576992974529fb5f8b552bd2e",
+        "37acf5aefebd284f7c13114478c1fb4f5071ea61814fb12921a88a426de3678a",
+        "6c3413f4d4700cb75b3e6305741f40dd56a2de135e802390c9cc1cb99685d0e0",
+        "a172288b901b2a1b791280adbd2c3f169ddab9c45022fdc7541724b99a8f203e",
+        "e79ff43e38552b9a5d6c17a2bf7fd737c8cfbbec49fa7f75e573c2431597771f",
+        "f0ac4100a25e3b2ec5411f6257bb8ab1988435cb6406a0af366ee22eae60119f"
+      ],
+      "elapsedMs": 81,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "volume",
+        "ls",
+        "-q"
+      ],
+      "elapsedMs": 70,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "volume",
+        "inspect",
+        "ai_acknowladge_kb_db",
+        "ai_acknowladge_kb_uploads",
+        "zhiliao-smoke-20260910-081121_smoke_db",
+        "zhiliao-smoke-20260910-081121_smoke_uploads",
+        "zhiliao-smoke-20260910-082135_smoke_db",
+        "zhiliao-smoke-20260910-082135_smoke_uploads",
+        "zhiliao_rc_db",
+        "zhiliao_rc_uploads"
+      ],
+      "elapsedMs": 75,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "image",
+        "ls",
+        "-aq",
+        "--no-trunc"
+      ],
+      "elapsedMs": 127,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "version",
+        "--format",
+        "{{.Server.Version}}"
+      ],
+      "elapsedMs": 94,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "compose",
+        "version",
+        "--short"
+      ],
+      "elapsedMs": 150,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "image",
+        "inspect",
+        "--format",
+        "{{.Id}}",
+        "zhiliao-r1:0.6.1-20260915-093206-7a7ba6b4"
+      ],
+      "elapsedMs": 90,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "compose",
+        "--project-directory",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-static-repair-20260915T155500Z-384669e0\\runtime",
+        "--env-file",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-static-repair-20260915T155500Z-384669e0\\runtime\\demo.env",
+        "-p",
+        "zhiliao-static-repair-20260915t155500z-384669e0",
+        "-f",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-static-repair-20260915T155500Z-384669e0\\runtime\\docker-compose.demo.yml",
+        "config",
+        "--format",
+        "json"
+      ],
+      "elapsedMs": 181,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "compose",
+        "--project-directory",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-static-repair-20260915T155500Z-384669e0\\runtime",
+        "--env-file",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-static-repair-20260915T155500Z-384669e0\\runtime\\demo.env",
+        "-p",
+        "zhiliao-static-repair-20260915t155500z-384669e0",
+        "-f",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-static-repair-20260915T155500Z-384669e0\\runtime\\compose.runtime.json",
+        "config",
+        "--format",
+        "json"
+      ],
+      "elapsedMs": 186,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "image",
+        "inspect",
+        "--format",
+        "{{.Id}}",
+        "nginx:1.30.4-alpine@sha256:dc5069ad14f19660b141b21236140b91656bf89bbc3e2417c70ae650cd66104c"
+      ],
+      "elapsedMs": 95,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "compose",
+        "--project-directory",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-static-repair-20260915T155500Z-384669e0\\runtime",
+        "--env-file",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-static-repair-20260915T155500Z-384669e0\\runtime\\demo.env",
+        "-p",
+        "zhiliao-static-repair-20260915t155500z-384669e0",
+        "-f",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-static-repair-20260915T155500Z-384669e0\\runtime\\compose.runtime.json",
+        "up",
+        "-d",
+        "--no-build",
+        "--pull",
+        "never",
+        "--wait",
+        "--wait-timeout",
+        "180"
+      ],
+      "elapsedMs": 16264,
+      "exitCode": 0,
+      "stderr": "Network zhiliao-static-repair-20260915t155500z-384669e0-net  Creating\n Network zhiliao-static-repair-20260915t155500z-384669e0-net  Created\n Network zhiliao-static-repair-20260915t155500z-384669e0-ingress  Creating\n Network zhiliao-static-repair-20260915t155500z-384669e0-ingress  Created\n Volume zhiliao-static-repair-20260915t155500z-384669e0_demo_db  Creating\n Volume zhiliao-static-repair-20260915t155500z-384669e0_demo_db  Created\n Volume zhiliao-static-repair-20260915t155500z-384669e0_demo_uploads  Creating\n Volume zhiliao-static-repair-20260915t155500z-384669e0_demo_uploads  Created\n Volume zhiliao-static-repair-20260915t155500z-384669e0_demo_notes  Creating\n Volume zhiliao-static-repair-20260915t155500z-384669e0_demo_notes  Created\n Container zhiliao-static-repair-20260915t155500z-384669e0-mockllm-1  Creating\n Container zhiliao-static-repair-20260915t155500z-384669e0-mockllm-1  Created\n Container zhiliao-static-repair-20260915t155500z-384669e0-app-1  Creating\n Container zhiliao-static-repair-20260915t155500z-384669e0-app-1  Created\n Container zhiliao-static-repair-20260915t155500z-384669e0-ingress-1  Creating\n Container zhiliao-static-repair-20260915t155500z-384669e0-ingress-1  Created\n Container zhiliao-static-repair-20260915t155500z-384669e0-mockllm-1  Starting\n Container zhiliao-static-repair-20260915t155500z-384669e0-mockllm-1  Started\n Container zhiliao-static-repair-20260915t155500z-384669e0-mockllm-1  Waiting\n Container zhiliao-static-repair-20260915t155500z-384669e0-mockllm-1  Healthy\n Container zhiliao-static-repair-20260915t155500z-384669e0-app-1  Starting\n Container zhiliao-static-repair-20260915t155500z-384669e0-app-1  Started\n Container zhiliao-static-repair-20260915t155500z-384669e0-app-1  Waiting\n Container zhiliao-static-repair-20260915t155500z-384669e0-app-1  Healthy\n Container zhiliao-static-repair-20260915t155500z-384669e0-ingress-1  Starting\n Container zhiliao-static-repair-20260915t155500z-384669e0-ingress-1  Started\n Container zhiliao-static-repair-20260915t155500z-384669e0-mockllm-1  Waiting\n Container zhiliao-static-repair-20260915t155500z-384669e0-app-1  Waiting\n Container zhiliao-static-repair-20260915t155500z-384669e0-ingress-1  Waiting\n Container zhiliao-static-repair-20260915t155500z-384669e0-mockllm-1  Healthy\n Container zhiliao-static-repair-20260915t155500z-384669e0-app-1  Healthy\n Container zhiliao-static-repair-20260915t155500z-384669e0-ingress-1  Healthy"
+    },
+    {
+      "args": [
+        "ps",
+        "-a",
+        "--filter",
+        "label=com.docker.compose.project=zhiliao-static-repair-20260915t155500z-384669e0",
+        "--format",
+        "{{.ID}}"
+      ],
+      "elapsedMs": 90,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "ps",
+        "-a",
+        "--filter",
+        "name=zhiliao-static-repair-20260915t155500z-384669e0",
+        "--format",
+        "{{.ID}}"
+      ],
+      "elapsedMs": 89,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "network",
+        "ls",
+        "--filter",
+        "label=com.docker.compose.project=zhiliao-static-repair-20260915t155500z-384669e0",
+        "--format",
+        "{{.ID}}"
+      ],
+      "elapsedMs": 72,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "network",
+        "ls",
+        "--filter",
+        "name=zhiliao-static-repair-20260915t155500z-384669e0",
+        "--format",
+        "{{.ID}}"
+      ],
+      "elapsedMs": 70,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "volume",
+        "ls",
+        "--filter",
+        "label=com.docker.compose.project=zhiliao-static-repair-20260915t155500z-384669e0",
+        "--format",
+        "{{.Name}}"
+      ],
+      "elapsedMs": 67,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "volume",
+        "ls",
+        "--filter",
+        "name=zhiliao-static-repair-20260915t155500z-384669e0",
+        "--format",
+        "{{.Name}}"
+      ],
+      "elapsedMs": 72,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "container",
+        "inspect",
+        "--format",
+        "{{json .Config.Labels}}",
+        "8646733acec6"
+      ],
+      "elapsedMs": 74,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "container",
+        "inspect",
+        "--format",
+        "{{json .Config.Labels}}",
+        "5d3868b1495b"
+      ],
+      "elapsedMs": 71,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "container",
+        "inspect",
+        "--format",
+        "{{json .Config.Labels}}",
+        "cef770c253ac"
+      ],
+      "elapsedMs": 76,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "network",
+        "inspect",
+        "--format",
+        "{{json .Labels}}",
+        "be8003cccb1f"
+      ],
+      "elapsedMs": 69,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "network",
+        "inspect",
+        "--format",
+        "{{json .Labels}}",
+        "e9b3d1ddfa2c"
+      ],
+      "elapsedMs": 70,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "volume",
+        "inspect",
+        "--format",
+        "{{json .Labels}}",
+        "zhiliao-static-repair-20260915t155500z-384669e0_demo_db"
+      ],
+      "elapsedMs": 73,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "volume",
+        "inspect",
+        "--format",
+        "{{json .Labels}}",
+        "zhiliao-static-repair-20260915t155500z-384669e0_demo_notes"
+      ],
+      "elapsedMs": 70,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "volume",
+        "inspect",
+        "--format",
+        "{{json .Labels}}",
+        "zhiliao-static-repair-20260915t155500z-384669e0_demo_uploads"
+      ],
+      "elapsedMs": 69,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "container",
+        "inspect",
+        "8646733acec6",
+        "5d3868b1495b",
+        "cef770c253ac"
+      ],
+      "elapsedMs": 76,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "compose",
+        "--project-directory",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-static-repair-20260915T155500Z-384669e0\\runtime",
+        "--env-file",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-static-repair-20260915T155500Z-384669e0\\runtime\\demo.env",
+        "-p",
+        "zhiliao-static-repair-20260915t155500z-384669e0",
+        "-f",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-static-repair-20260915T155500Z-384669e0\\runtime\\compose.runtime.json",
+        "exec",
+        "-T",
+        "app",
+        "node",
+        "-e",
+        "process.stdout.write(require('node:fs').readFileSync('/proc/net/route','utf8'))"
+      ],
+      "elapsedMs": 273,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "compose",
+        "--project-directory",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-static-repair-20260915T155500Z-384669e0\\runtime",
+        "--env-file",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-static-repair-20260915T155500Z-384669e0\\runtime\\demo.env",
+        "-p",
+        "zhiliao-static-repair-20260915t155500z-384669e0",
+        "-f",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-static-repair-20260915T155500Z-384669e0\\runtime\\compose.runtime.json",
+        "exec",
+        "-T",
+        "mockllm",
+        "node",
+        "-e",
+        "process.stdout.write(require('node:fs').readFileSync('/proc/net/route','utf8'))"
+      ],
+      "elapsedMs": 268,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "compose",
+        "--project-directory",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-static-repair-20260915T155500Z-384669e0\\runtime",
+        "--env-file",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-static-repair-20260915T155500Z-384669e0\\runtime\\demo.env",
+        "-p",
+        "zhiliao-static-repair-20260915t155500z-384669e0",
+        "-f",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-static-repair-20260915T155500Z-384669e0\\runtime\\compose.runtime.json",
+        "exec",
+        "-T",
+        "ingress",
+        "nginx",
+        "-t"
+      ],
+      "elapsedMs": 259,
+      "exitCode": 0,
+      "stderr": "nginx: the configuration file /etc/nginx/nginx.conf syntax is ok\nnginx: configuration file /etc/nginx/nginx.conf test is successful"
+    },
+    {
+      "args": [
+        "compose",
+        "--project-directory",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-static-repair-20260915T155500Z-384669e0\\runtime",
+        "--env-file",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-static-repair-20260915T155500Z-384669e0\\runtime\\demo.env",
+        "-p",
+        "zhiliao-static-repair-20260915t155500z-384669e0",
+        "-f",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-static-repair-20260915T155500Z-384669e0\\runtime\\compose.runtime.json",
+        "logs",
+        "--no-color",
+        "--timestamps",
+        "ingress"
+      ],
+      "elapsedMs": 232,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "compose",
+        "--project-directory",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-static-repair-20260915T155500Z-384669e0\\runtime",
+        "--env-file",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-static-repair-20260915T155500Z-384669e0\\runtime\\demo.env",
+        "-p",
+        "zhiliao-static-repair-20260915t155500z-384669e0",
+        "-f",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-static-repair-20260915T155500Z-384669e0\\runtime\\compose.runtime.json",
+        "up",
+        "-d",
+        "--no-deps",
+        "--force-recreate",
+        "--no-build",
+        "--pull",
+        "never",
+        "--wait",
+        "--wait-timeout",
+        "90",
+        "ingress"
+      ],
+      "elapsedMs": 6208,
+      "exitCode": 0,
+      "stderr": "Container zhiliao-static-repair-20260915t155500z-384669e0-ingress-1  Recreate\n Container zhiliao-static-repair-20260915t155500z-384669e0-ingress-1  Recreated\n Container zhiliao-static-repair-20260915t155500z-384669e0-ingress-1  Starting\n Container zhiliao-static-repair-20260915t155500z-384669e0-ingress-1  Started\n Container zhiliao-static-repair-20260915t155500z-384669e0-ingress-1  Waiting\n Container zhiliao-static-repair-20260915t155500z-384669e0-ingress-1  Healthy"
+    },
+    {
+      "args": [
+        "ps",
+        "-a",
+        "--filter",
+        "label=com.docker.compose.project=zhiliao-static-repair-20260915t155500z-384669e0",
+        "--format",
+        "{{.ID}}"
+      ],
+      "elapsedMs": 88,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "ps",
+        "-a",
+        "--filter",
+        "name=zhiliao-static-repair-20260915t155500z-384669e0",
+        "--format",
+        "{{.ID}}"
+      ],
+      "elapsedMs": 97,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "network",
+        "ls",
+        "--filter",
+        "label=com.docker.compose.project=zhiliao-static-repair-20260915t155500z-384669e0",
+        "--format",
+        "{{.ID}}"
+      ],
+      "elapsedMs": 80,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "network",
+        "ls",
+        "--filter",
+        "name=zhiliao-static-repair-20260915t155500z-384669e0",
+        "--format",
+        "{{.ID}}"
+      ],
+      "elapsedMs": 96,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "volume",
+        "ls",
+        "--filter",
+        "label=com.docker.compose.project=zhiliao-static-repair-20260915t155500z-384669e0",
+        "--format",
+        "{{.Name}}"
+      ],
+      "elapsedMs": 79,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "volume",
+        "ls",
+        "--filter",
+        "name=zhiliao-static-repair-20260915t155500z-384669e0",
+        "--format",
+        "{{.Name}}"
+      ],
+      "elapsedMs": 90,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "container",
+        "inspect",
+        "--format",
+        "{{json .Config.Labels}}",
+        "7da26b9d8b8a"
+      ],
+      "elapsedMs": 90,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "container",
+        "inspect",
+        "--format",
+        "{{json .Config.Labels}}",
+        "5d3868b1495b"
+      ],
+      "elapsedMs": 75,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "container",
+        "inspect",
+        "--format",
+        "{{json .Config.Labels}}",
+        "cef770c253ac"
+      ],
+      "elapsedMs": 69,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "network",
+        "inspect",
+        "--format",
+        "{{json .Labels}}",
+        "be8003cccb1f"
+      ],
+      "elapsedMs": 72,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "network",
+        "inspect",
+        "--format",
+        "{{json .Labels}}",
+        "e9b3d1ddfa2c"
+      ],
+      "elapsedMs": 71,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "volume",
+        "inspect",
+        "--format",
+        "{{json .Labels}}",
+        "zhiliao-static-repair-20260915t155500z-384669e0_demo_db"
+      ],
+      "elapsedMs": 74,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "volume",
+        "inspect",
+        "--format",
+        "{{json .Labels}}",
+        "zhiliao-static-repair-20260915t155500z-384669e0_demo_notes"
+      ],
+      "elapsedMs": 68,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "volume",
+        "inspect",
+        "--format",
+        "{{json .Labels}}",
+        "zhiliao-static-repair-20260915t155500z-384669e0_demo_uploads"
+      ],
+      "elapsedMs": 75,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "container",
+        "inspect",
+        "7da26b9d8b8a",
+        "5d3868b1495b",
+        "cef770c253ac"
+      ],
+      "elapsedMs": 75,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "compose",
+        "--project-directory",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-static-repair-20260915T155500Z-384669e0\\runtime",
+        "--env-file",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-static-repair-20260915T155500Z-384669e0\\runtime\\demo.env",
+        "-p",
+        "zhiliao-static-repair-20260915t155500z-384669e0",
+        "-f",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-static-repair-20260915T155500Z-384669e0\\runtime\\compose.runtime.json",
+        "exec",
+        "-T",
+        "ingress",
+        "nginx",
+        "-t"
+      ],
+      "elapsedMs": 257,
+      "exitCode": 0,
+      "stderr": "nginx: the configuration file /etc/nginx/nginx.conf syntax is ok\nnginx: configuration file /etc/nginx/nginx.conf test is successful"
+    },
+    {
+      "args": [
+        "compose",
+        "--project-directory",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-static-repair-20260915T155500Z-384669e0\\runtime",
+        "--env-file",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-static-repair-20260915T155500Z-384669e0\\runtime\\demo.env",
+        "-p",
+        "zhiliao-static-repair-20260915t155500z-384669e0",
+        "-f",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-static-repair-20260915T155500Z-384669e0\\runtime\\compose.runtime.json",
+        "exec",
+        "-T",
+        "ingress",
+        "cat",
+        "/etc/nginx/nginx.conf"
+      ],
+      "elapsedMs": 265,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "compose",
+        "--project-directory",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-static-repair-20260915T155500Z-384669e0\\runtime",
+        "--env-file",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-static-repair-20260915T155500Z-384669e0\\runtime\\demo.env",
+        "-p",
+        "zhiliao-static-repair-20260915t155500z-384669e0",
+        "-f",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-static-repair-20260915T155500Z-384669e0\\runtime\\compose.runtime.json",
+        "logs",
+        "--no-color",
+        "--timestamps",
+        "ingress"
+      ],
+      "elapsedMs": 262,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "compose",
+        "--project-directory",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-static-repair-20260915T155500Z-384669e0\\runtime",
+        "--env-file",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-static-repair-20260915T155500Z-384669e0\\runtime\\demo.env",
+        "-p",
+        "zhiliao-static-repair-20260915t155500z-384669e0",
+        "-f",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-static-repair-20260915T155500Z-384669e0\\runtime\\compose.runtime.json",
+        "logs",
+        "--no-color",
+        "--timestamps",
+        "ingress"
+      ],
+      "elapsedMs": 217,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "ps",
+        "-a",
+        "--filter",
+        "label=com.docker.compose.project=zhiliao-static-repair-20260915t155500z-384669e0",
+        "--format",
+        "{{.ID}}"
+      ],
+      "elapsedMs": 81,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "ps",
+        "-a",
+        "--filter",
+        "name=zhiliao-static-repair-20260915t155500z-384669e0",
+        "--format",
+        "{{.ID}}"
+      ],
+      "elapsedMs": 92,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "network",
+        "ls",
+        "--filter",
+        "label=com.docker.compose.project=zhiliao-static-repair-20260915t155500z-384669e0",
+        "--format",
+        "{{.ID}}"
+      ],
+      "elapsedMs": 77,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "network",
+        "ls",
+        "--filter",
+        "name=zhiliao-static-repair-20260915t155500z-384669e0",
+        "--format",
+        "{{.ID}}"
+      ],
+      "elapsedMs": 69,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "volume",
+        "ls",
+        "--filter",
+        "label=com.docker.compose.project=zhiliao-static-repair-20260915t155500z-384669e0",
+        "--format",
+        "{{.Name}}"
+      ],
+      "elapsedMs": 71,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "volume",
+        "ls",
+        "--filter",
+        "name=zhiliao-static-repair-20260915t155500z-384669e0",
+        "--format",
+        "{{.Name}}"
+      ],
+      "elapsedMs": 92,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "container",
+        "inspect",
+        "--format",
+        "{{json .Config.Labels}}",
+        "7da26b9d8b8a"
+      ],
+      "elapsedMs": 79,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "container",
+        "inspect",
+        "--format",
+        "{{json .Config.Labels}}",
+        "5d3868b1495b"
+      ],
+      "elapsedMs": 71,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "container",
+        "inspect",
+        "--format",
+        "{{json .Config.Labels}}",
+        "cef770c253ac"
+      ],
+      "elapsedMs": 69,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "network",
+        "inspect",
+        "--format",
+        "{{json .Labels}}",
+        "be8003cccb1f"
+      ],
+      "elapsedMs": 68,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "network",
+        "inspect",
+        "--format",
+        "{{json .Labels}}",
+        "e9b3d1ddfa2c"
+      ],
+      "elapsedMs": 73,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "volume",
+        "inspect",
+        "--format",
+        "{{json .Labels}}",
+        "zhiliao-static-repair-20260915t155500z-384669e0_demo_db"
+      ],
+      "elapsedMs": 74,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "volume",
+        "inspect",
+        "--format",
+        "{{json .Labels}}",
+        "zhiliao-static-repair-20260915t155500z-384669e0_demo_notes"
+      ],
+      "elapsedMs": 67,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "volume",
+        "inspect",
+        "--format",
+        "{{json .Labels}}",
+        "zhiliao-static-repair-20260915t155500z-384669e0_demo_uploads"
+      ],
+      "elapsedMs": 68,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "compose",
+        "--project-directory",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-static-repair-20260915T155500Z-384669e0\\runtime",
+        "--env-file",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-static-repair-20260915T155500Z-384669e0\\runtime\\demo.env",
+        "-p",
+        "zhiliao-static-repair-20260915t155500z-384669e0",
+        "-f",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-static-repair-20260915T155500Z-384669e0\\runtime\\compose.runtime.json",
+        "down",
+        "-v",
+        "--timeout",
+        "15"
+      ],
+      "elapsedMs": 15849,
+      "exitCode": 0,
+      "stderr": "Container zhiliao-static-repair-20260915t155500z-384669e0-ingress-1  Stopping\n Container zhiliao-static-repair-20260915t155500z-384669e0-ingress-1  Stopped\n Container zhiliao-static-repair-20260915t155500z-384669e0-ingress-1  Removing\n Container zhiliao-static-repair-20260915t155500z-384669e0-ingress-1  Removed\n Container zhiliao-static-repair-20260915t155500z-384669e0-app-1  Stopping\n Container zhiliao-static-repair-20260915t155500z-384669e0-app-1  Stopped\n Container zhiliao-static-repair-20260915t155500z-384669e0-app-1  Removing\n Container zhiliao-static-repair-20260915t155500z-384669e0-app-1  Removed\n Container zhiliao-static-repair-20260915t155500z-384669e0-mockllm-1  Stopping\n Container zhiliao-static-repair-20260915t155500z-384669e0-mockllm-1  Stopped\n Container zhiliao-static-repair-20260915t155500z-384669e0-mockllm-1  Removing\n Container zhiliao-static-repair-20260915t155500z-384669e0-mockllm-1  Removed\n Network zhiliao-static-repair-20260915t155500z-384669e0-ingress  Removing\n Volume zhiliao-static-repair-20260915t155500z-384669e0_demo_uploads  Removing\n Volume zhiliao-static-repair-20260915t155500z-384669e0_demo_db  Removing\n Network zhiliao-static-repair-20260915t155500z-384669e0-net  Removing\n Volume zhiliao-static-repair-20260915t155500z-384669e0_demo_uploads  Removed\n Volume zhiliao-static-repair-20260915t155500z-384669e0_demo_notes  Removing\n Volume zhiliao-static-repair-20260915t155500z-384669e0_demo_db  Removed\n Volume zhiliao-static-repair-20260915t155500z-384669e0_demo_notes  Removed\n Network zhiliao-static-repair-20260915t155500z-384669e0-ingress  Removed\n Network zhiliao-static-repair-20260915t155500z-384669e0-net  Removed"
+    },
+    {
+      "args": [
+        "ps",
+        "-a",
+        "--filter",
+        "label=com.docker.compose.project=zhiliao-static-repair-20260915t155500z-384669e0",
+        "--format",
+        "{{.ID}}"
+      ],
+      "elapsedMs": 72,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "ps",
+        "-a",
+        "--filter",
+        "name=zhiliao-static-repair-20260915t155500z-384669e0",
+        "--format",
+        "{{.ID}}"
+      ],
+      "elapsedMs": 73,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "network",
+        "ls",
+        "--filter",
+        "label=com.docker.compose.project=zhiliao-static-repair-20260915t155500z-384669e0",
+        "--format",
+        "{{.ID}}"
+      ],
+      "elapsedMs": 67,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "network",
+        "ls",
+        "--filter",
+        "name=zhiliao-static-repair-20260915t155500z-384669e0",
+        "--format",
+        "{{.ID}}"
+      ],
+      "elapsedMs": 66,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "volume",
+        "ls",
+        "--filter",
+        "label=com.docker.compose.project=zhiliao-static-repair-20260915t155500z-384669e0",
+        "--format",
+        "{{.Name}}"
+      ],
+      "elapsedMs": 67,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "volume",
+        "ls",
+        "--filter",
+        "name=zhiliao-static-repair-20260915t155500z-384669e0",
+        "--format",
+        "{{.Name}}"
+      ],
+      "elapsedMs": 68,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "ps",
+        "-aq",
+        "--no-trunc"
+      ],
+      "elapsedMs": 96,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "container",
+        "inspect",
+        "254c7caca374780a6c1a3bea1c2c6ba59d6ab092de155c34f8efd3cd411532c8",
+        "50a70f44a32e78adf331f7084743f042001eb5b650ee7af849441ed6a14a85c0",
+        "5d05095aa56b26fee8ff02b3372764d8300cc7b1851773eca5ee0a95ed3f675f",
+        "ab1926223971ae43ca775c7078f16057bde76b5e2f53aa6856382830542c3e4a",
+        "cd07490a30d9cd068c4552f0f528dacecd9349eb2a60c1dbf9f8c18333fe83ea",
+        "ea240066dd4a847db38ef758917c36a04be31191329ab6c995bdc94cd83fc721",
+        "f61337186432f4b8be3bba6578ebb2a3f768cd39baf5349a0fc19c53f224ef81"
+      ],
+      "elapsedMs": 88,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "network",
+        "ls",
+        "-q",
+        "--no-trunc"
+      ],
+      "elapsedMs": 72,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "network",
+        "inspect",
+        "199774bd4a2cbb685cdb7bbce25caeae74f37b90322c6c73daafed04d62d3e49",
+        "31a1be3a36c95e48f3374158921a02d969732cd576992974529fb5f8b552bd2e",
+        "37acf5aefebd284f7c13114478c1fb4f5071ea61814fb12921a88a426de3678a",
+        "6c3413f4d4700cb75b3e6305741f40dd56a2de135e802390c9cc1cb99685d0e0",
+        "a172288b901b2a1b791280adbd2c3f169ddab9c45022fdc7541724b99a8f203e",
+        "e79ff43e38552b9a5d6c17a2bf7fd737c8cfbbec49fa7f75e573c2431597771f",
+        "f0ac4100a25e3b2ec5411f6257bb8ab1988435cb6406a0af366ee22eae60119f"
+      ],
+      "elapsedMs": 77,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "volume",
+        "ls",
+        "-q"
+      ],
+      "elapsedMs": 68,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "volume",
+        "inspect",
+        "ai_acknowladge_kb_db",
+        "ai_acknowladge_kb_uploads",
+        "zhiliao-smoke-20260910-081121_smoke_db",
+        "zhiliao-smoke-20260910-081121_smoke_uploads",
+        "zhiliao-smoke-20260910-082135_smoke_db",
+        "zhiliao-smoke-20260910-082135_smoke_uploads",
+        "zhiliao_rc_db",
+        "zhiliao_rc_uploads"
+      ],
+      "elapsedMs": 77,
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "image",
+        "ls",
+        "-aq",
+        "--no-trunc"
+      ],
+      "elapsedMs": 131,
+      "exitCode": 0
+    }
+  ],
+  "checks": {
+    "configScope": "仅候选镜像、普通模式、回环验收端口和归属标签改变",
+    "businessContainersHaveNoDefaultRoute": true,
+    "oldSyntax": "passed",
+    "old-static": {
+      "scenario": "old-static",
+      "count": 100,
+      "concurrency": 6,
+      "elapsedMs": 48,
+      "statuses": {
+        "200": 41,
+        "503": 59
+      },
+      "matchedRequestRejections": 59
+    },
+    "newSyntaxAndLoadedConfig": "passed",
+    "new-static": {
+      "scenario": "new-static",
+      "count": 100,
+      "concurrency": 6,
+      "elapsedMs": 78,
+      "statuses": {
+        "200": 100
+      },
+      "matchedRequestRejections": 0
+    },
+    "healthAfterStaticBurst": {
+      "path": "/api/healthz",
+      "status": 200,
+      "contentType": "application/json",
+      "bytes": 11,
+      "sha256": "4062edaf750fb8074e7e83e0c9028c94e32468a8b6f1614774328ef045150f93",
+      "elapsedMs": 6
+    },
+    "dynamic-health": {
+      "scenario": "dynamic-health",
+      "count": 100,
+      "concurrency": 6,
+      "elapsedMs": 147,
+      "statuses": {
+        "200": 41,
+        "503": 59
+      },
+      "matchedRequestRejections": 59
+    },
+    "static-under-load": {
+      "scenario": "static-under-load",
+      "count": 14,
+      "concurrency": 6,
+      "elapsedMs": 12,
+      "statuses": {
+        "200": 14
+      },
+      "matchedRequestRejections": 0
+    },
+    "boundary-0": {
+      "scenario": "boundary-0",
+      "count": 30,
+      "concurrency": 6,
+      "elapsedMs": 5,
+      "statuses": {
+        "503": 30
+      },
+      "matchedRequestRejections": 30
+    },
+    "boundary-1": {
+      "scenario": "boundary-1",
+      "count": 30,
+      "concurrency": 6,
+      "elapsedMs": 5,
+      "statuses": {
+        "503": 30
+      },
+      "matchedRequestRejections": 30
+    },
+    "boundary-2": {
+      "scenario": "boundary-2",
+      "count": 30,
+      "concurrency": 6,
+      "elapsedMs": 5,
+      "statuses": {
+        "503": 30
+      },
+      "matchedRequestRejections": 30
+    },
+    "boundary-3": {
+      "scenario": "boundary-3",
+      "count": 30,
+      "concurrency": 6,
+      "elapsedMs": 5,
+      "statuses": {
+        "503": 30
+      },
+      "matchedRequestRejections": 30
+    },
+    "boundary-4": {
+      "scenario": "boundary-4",
+      "count": 30,
+      "concurrency": 6,
+      "elapsedMs": 21,
+      "statuses": {
+        "400": 1,
+        "503": 29
+      },
+      "matchedRequestRejections": 29
+    },
+    "boundary-5": {
+      "scenario": "boundary-5",
+      "count": 30,
+      "concurrency": 6,
+      "elapsedMs": 5,
+      "statuses": {
+        "503": 30
+      },
+      "matchedRequestRejections": 30
+    },
+    "boundary-6": {
+      "scenario": "boundary-6",
+      "count": 30,
+      "concurrency": 6,
+      "elapsedMs": 5,
+      "statuses": {
+        "503": 30
+      },
+      "matchedRequestRejections": 30
+    },
+    "boundary-7": {
+      "scenario": "boundary-7",
+      "count": 30,
+      "concurrency": 6,
+      "elapsedMs": 5,
+      "statuses": {
+        "503": 30
+      },
+      "matchedRequestRejections": 30
+    },
+    "boundary-8": {
+      "scenario": "boundary-8",
+      "count": 30,
+      "concurrency": 6,
+      "elapsedMs": 5,
+      "statuses": {
+        "503": 30
+      },
+      "matchedRequestRejections": 30
+    },
+    "boundary-9": {
+      "scenario": "boundary-9",
+      "count": 30,
+      "concurrency": 6,
+      "elapsedMs": 6,
+      "statuses": {
+        "503": 30
+      },
+      "matchedRequestRejections": 30
+    },
+    "recoveredHealth": {
+      "path": "/api/healthz",
+      "status": 200,
+      "contentType": "application/json",
+      "bytes": 11,
+      "sha256": "4062edaf750fb8074e7e83e0c9028c94e32468a8b6f1614774328ef045150f93",
+      "elapsedMs": 7
+    },
+    "bodyLimits": [
+      {
+        "path": "/api/healthz",
+        "limitMiB": 8,
+        "status": 413,
+        "sentBodyBytes": 1
+      },
+      {
+        "path": "/api/import",
+        "limitMiB": 200,
+        "status": 413,
+        "sentBodyBytes": 1
+      },
+      {
+        "path": "/api/uploads",
+        "limitMiB": 25,
+        "status": 413,
+        "sentBodyBytes": 1
+      }
+    ],
+    "browser": {
+      "status": "passed",
+      "steps": {
+        "login": {
+          "status": 200,
+          "session": "真实浏览器登录，未注入或改写 Cookie"
+        },
+        "settingsSave": {
+          "status": 200,
+          "baseUrl": "http://mockllm:8787/v1",
+          "model": "mock",
+          "savedFields": [
+            "apiKey"
+          ]
+        },
+        "coldReloads": {
+          "count": 3,
+          "reloads": [
+            {
+              "index": 1,
+              "status": 200,
+              "staticResponses": 34
+            },
+            {
+              "index": 2,
+              "status": 200,
+              "staticResponses": 33
+            },
+            {
+              "index": 3,
+              "status": 200,
+              "staticResponses": 33
+            }
+          ]
+        },
+        "noteSave": {
+          "status": 201,
+          "id": "el22x397om53jf1ah2wy56l9",
+          "contentUnchanged": true,
+          "totalNotes": 1,
+          "verification": "原 POST 201 记录和当前只读数据库核对"
+        },
+        "readbackLogin": {
+          "status": 200,
+          "session": "新浏览器会话真实登录，未注入 Cookie"
+        },
+        "noteOpen": {
+          "status": 200,
+          "id": "el22x397om53jf1ah2wy56l9",
+          "contentVisible": true
+        }
+      },
+      "react418": [],
+      "staticResponses": {
+        "total": 215,
+        "status200": 215,
+        "status503": 0,
+        "bodyReadErrors": 1,
+        "types": {
+          "stylesheet": 7,
+          "script": 92,
+          "font": 116
+        }
+      }
+    }
+  },
+  "cleanup": {
+    "status": "removed",
+    "containers": 3,
+    "volumes": 3,
+    "networks": 2,
+    "portReleased": true,
+    "directoryPendingFinalAudit": true
+  },
+  "scope": "固定 R1 候选的静态请求限流修复；普通模式、本机 mock、最多 6 并发",
+  "limitations": [
+    "未构建、拉取或运行全量门禁；不证明当前全部工作区源码或 GHCR 分发。",
+    "React #418 独立记录；完整 R1、恢复、公网及 Story 2.2 原验收保持。"
+  ],
+  "preservedCounts": {
+    "container": 7,
+    "volume": 8,
+    "network": 7
+  },
+  "engine": "28.4.0",
+  "composeVersion": "2.39.4-desktop.1",
+  "candidateImage": "sha256:8a8f2cd3ec1a26fc68bf04a2661f2306f09bba4b06ba9b1593d74b3f3953deb1",
+  "oldConfigSha256": "a798fd4981ebbced93c5a52150ac34da31b7fcad4f41c8a95e87c15090adde7b",
+  "newConfigSha256": "80e5aff8a60a9d9e2e7acad8ac8effd1d46c59b68a592e714b95a09fff9ac99e",
+  "composeSourceSha256": "af97fe2ae47eb4ff6977500aaf37dd90e9d0381c2396eb4c7eaf6d2a33500c7f",
+  "ingressImage": "sha256:dc5069ad14f19660b141b21236140b91656bf89bbc3e2417c70ae650cd66104c",
+  "servicesBefore": {
+    "ingress": {
+      "id": "8646733acec62dfbe2602afa0b400626653ae6a23626ef6d888ce4d634c31d15",
+      "image": "sha256:dc5069ad14f19660b141b21236140b91656bf89bbc3e2417c70ae650cd66104c",
+      "startedAt": "2026-09-15T16:06:31.748635299Z",
+      "health": "healthy"
+    },
+    "app": {
+      "id": "5d3868b1495bd8939021c37400b822e9c3ff747c8c371e8ee8e102bf83f3a4a0",
+      "image": "sha256:8a8f2cd3ec1a26fc68bf04a2661f2306f09bba4b06ba9b1593d74b3f3953deb1",
+      "startedAt": "2026-09-15T16:06:26.271725358Z",
+      "health": "healthy"
+    },
+    "mockllm": {
+      "id": "cef770c253ace242df2b67f680d10af900c591bfa417b35a2a109ba22e7c3ef5",
+      "image": "sha256:8a8f2cd3ec1a26fc68bf04a2661f2306f09bba4b06ba9b1593d74b3f3953deb1",
+      "startedAt": "2026-09-15T16:06:22.384255578Z",
+      "health": "healthy"
+    }
+  },
+  "assetDiscovery": {
+    "html": "/login",
+    "css": "/_next/static/css/3f43a07db598b6ec.css",
+    "font": "/_next/static/media/KaTeX_AMS-Regular.a79f1c31.woff2",
+    "fontReference": "/_next/static/media/KaTeX_AMS-Regular.a79f1c31.woff2"
+  },
+  "resources": {
+    "/_next/static/chunks/app/(app)/page-546d9e331d248176.js": {
+      "path": "/_next/static/chunks/app/(app)/page-546d9e331d248176.js",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 2518,
+      "sha256": "d5180b1bf055a5da787cdb28c6d9d53a270b96574d84f47f08756c028524fad2",
+      "elapsedMs": 3
+    },
+    "/_next/static/chunks/app/(app)/topics/%5Bid%5D/page-a443cf22ffddee12.js": {
+      "path": "/_next/static/chunks/app/(app)/topics/%5Bid%5D/page-a443cf22ffddee12.js",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 7333,
+      "sha256": "e77d9f4f4c271ea71be25da031d684fbbebb241ff22d87a2358746107048045b",
+      "elapsedMs": 3
+    },
+    "/_next/static/chunks/app/(app)/search/page-195baf5521c05d5d.js": {
+      "path": "/_next/static/chunks/app/(app)/search/page-195baf5521c05d5d.js",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 6883,
+      "sha256": "bdd5cade22a527207e58370a726f36352762d4dfa8a54b3f13e18f36e7302f68",
+      "elapsedMs": 3
+    },
+    "/_next/static/chunks/app/(app)/inbox/page-681898bb0a303d89.js": {
+      "path": "/_next/static/chunks/app/(app)/inbox/page-681898bb0a303d89.js",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 9901,
+      "sha256": "64b66f92275cb539b5cd6af9696fa28329effe538b85f9ffcb6e66c93ea9a9ca",
+      "elapsedMs": 2
+    },
+    "/_next/static/chunks/app/(app)/settings/page-5997b3acd7a84aea.js": {
+      "path": "/_next/static/chunks/app/(app)/settings/page-5997b3acd7a84aea.js",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 52358,
+      "sha256": "b08b330f007ec1dae4d953ea105536c32122a75e299f0db0d26b68ea4f592b24",
+      "elapsedMs": 3
+    },
+    "/_next/static/css/3f43a07db598b6ec.css": {
+      "path": "/_next/static/css/3f43a07db598b6ec.css",
+      "status": 200,
+      "contentType": "text/css; charset=UTF-8",
+      "bytes": 265193,
+      "sha256": "c6abde282c81005541f6f65e272afcd55639af3bfa15dc0d8dc9ac9ce0840545",
+      "elapsedMs": 4
+    },
+    "/_next/static/media/KaTeX_AMS-Regular.a79f1c31.woff2": {
+      "path": "/_next/static/media/KaTeX_AMS-Regular.a79f1c31.woff2",
+      "status": 200,
+      "contentType": "font/woff2",
+      "bytes": 28076,
+      "sha256": "0cdd387c9590a1a9f9794560022dbb59654a7d86f187aa0c81495ad42d3a7308",
+      "elapsedMs": 3
+    }
+  },
+  "servicesAfter": {
+    "ingress": {
+      "id": "7da26b9d8b8a431037152c45c10b75ff51f0bc10c066ba7c9b60c1814854a305",
+      "image": "sha256:dc5069ad14f19660b141b21236140b91656bf89bbc3e2417c70ae650cd66104c",
+      "startedAt": "2026-09-15T16:06:45.819652169Z",
+      "health": "healthy"
+    },
+    "app": {
+      "id": "5d3868b1495bd8939021c37400b822e9c3ff747c8c371e8ee8e102bf83f3a4a0",
+      "image": "sha256:8a8f2cd3ec1a26fc68bf04a2661f2306f09bba4b06ba9b1593d74b3f3953deb1",
+      "startedAt": "2026-09-15T16:06:26.271725358Z",
+      "health": "healthy"
+    },
+    "mockllm": {
+      "id": "cef770c253ace242df2b67f680d10af900c591bfa417b35a2a109ba22e7c3ef5",
+      "image": "sha256:8a8f2cd3ec1a26fc68bf04a2661f2306f09bba4b06ba9b1593d74b3f3953deb1",
+      "startedAt": "2026-09-15T16:06:22.384255578Z",
+      "health": "healthy"
+    }
+  },
+  "boundaries": [
+    {
+      "path": "/settings",
+      "scenario": "boundary-0",
+      "count": 30,
+      "concurrency": 6,
+      "elapsedMs": 5,
+      "statuses": {
+        "503": 30
+      }
+    },
+    {
+      "path": "/api/import",
+      "scenario": "boundary-1",
+      "count": 30,
+      "concurrency": 6,
+      "elapsedMs": 5,
+      "statuses": {
+        "503": 30
+      }
+    },
+    {
+      "path": "/api/uploads",
+      "scenario": "boundary-2",
+      "count": 30,
+      "concurrency": 6,
+      "elapsedMs": 5,
+      "statuses": {
+        "503": 30
+      }
+    },
+    {
+      "path": "/api/example.js",
+      "scenario": "boundary-3",
+      "count": 30,
+      "concurrency": 6,
+      "elapsedMs": 5,
+      "statuses": {
+        "503": 30
+      }
+    },
+    {
+      "path": "/_next/image",
+      "scenario": "boundary-4",
+      "count": 30,
+      "concurrency": 6,
+      "elapsedMs": 21,
+      "statuses": {
+        "400": 1,
+        "503": 29
+      }
+    },
+    {
+      "path": "/_next/data/probe.json",
+      "scenario": "boundary-5",
+      "count": 30,
+      "concurrency": 6,
+      "elapsedMs": 5,
+      "statuses": {
+        "503": 30
+      }
+    },
+    {
+      "path": "/_next/staticx/chunks/probe.js",
+      "scenario": "boundary-6",
+      "count": 30,
+      "concurrency": 6,
+      "elapsedMs": 5,
+      "statuses": {
+        "503": 30
+      }
+    },
+    {
+      "path": "/_next/static/../image",
+      "scenario": "boundary-7",
+      "count": 30,
+      "concurrency": 6,
+      "elapsedMs": 5,
+      "statuses": {
+        "503": 30
+      }
+    },
+    {
+      "path": "/api/healthz?next=/_next/static/probe.js",
+      "scenario": "boundary-8",
+      "count": 30,
+      "concurrency": 6,
+      "elapsedMs": 5,
+      "statuses": {
+        "503": 30
+      }
+    },
+    {
+      "path": "/_NEXT/static/chunks/probe.js",
+      "scenario": "boundary-9",
+      "count": 30,
+      "concurrency": 6,
+      "elapsedMs": 6,
+      "statuses": {
+        "503": 30
+      }
+    }
+  ],
+  "preservation": {
+    "status": "passed",
+    "container": 7,
+    "volume": 8,
+    "network": 7,
+    "imagesUnchanged": true
+  },
+  "finishedAt": "2026-09-15T16:14:16.790Z"
+}

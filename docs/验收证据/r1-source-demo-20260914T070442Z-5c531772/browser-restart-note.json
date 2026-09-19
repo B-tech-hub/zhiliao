@@ -1,0 +1,15 @@
+{
+  "id": "restart-note",
+  "result": {
+    "status": 201,
+    "id": "fu735lj7ygepx87pfd3ub705",
+    "title": "R1验收配置污染：重·AI",
+    "tags": [
+      "羽毛球",
+      "训练"
+    ],
+    "aiStatus": "done",
+    "bodyPreserved": true,
+    "visibleTopic": "羽毛球"
+  }
+}

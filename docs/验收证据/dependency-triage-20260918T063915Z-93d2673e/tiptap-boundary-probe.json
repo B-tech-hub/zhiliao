@@ -1,0 +1,15 @@
+{
+  "packageVersion": "2.27.2",
+  "directHelper": {
+    "prototypeChanged": true,
+    "inheritedCanary": true,
+    "ownCanary": false,
+    "globalPrototypeUnchanged": true
+  },
+  "standardImageSchema": {
+    "retainedSource": true,
+    "inheritedCanary": false,
+    "ownProtoKey": false
+  },
+  "scope": "仅验证已安装 helper 与标准图片 schema；不等同知了全部扩展、HTML 粘贴或浏览器路径验收。"
+}

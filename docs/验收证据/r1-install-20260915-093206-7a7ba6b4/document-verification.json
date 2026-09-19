@@ -1,0 +1,90 @@
+{
+  "runId": "20260915-093206-7a7ba6b4",
+  "timeUtc": "2026-09-15T02:58:23.347432+00:00",
+  "files": [
+    {
+      "file": "docs/R1安装验收准备-2026-09-14.md",
+      "sha256": "55a5b333ed42c1fea28de9c4130054a1ac5d687a4069acf3e4142acdc3a7c4ae",
+      "addedLines": 33,
+      "newRelativeLinks": [
+        "R1安装验收-2026-09-15.md",
+        "R1安装验收-2026-09-15.md"
+      ],
+      "passed": true
+    },
+    {
+      "file": "docs/README.md",
+      "sha256": "32c92a739eef590bc61d4345df016d99b50aabe899e9bc4be4023efce5785783",
+      "addedLines": 2,
+      "newRelativeLinks": [
+        "R1安装验收准备-2026-09-14.md",
+        "R1安装验收-2026-09-15.md"
+      ],
+      "passed": true
+    },
+    {
+      "file": "docs/产品规划/开源发布范围与执行清单-2026-09-13.md",
+      "sha256": "68f52ef208976d6900261924e95e21b807adb34a6ea9896c4f6cd5d324d12ea2",
+      "addedLines": 19,
+      "newRelativeLinks": [
+        "../R1安装验收准备-2026-09-14.md",
+        "../R1安装验收-2026-09-15.md",
+        "#r1-install",
+        "../R1安装验收-2026-09-15.md",
+        "../R1安装验收-2026-09-15.md"
+      ],
+      "passed": true
+    },
+    {
+      "file": "docs/releases/v0.6.1.md",
+      "sha256": "160e255413cdb59045ffde48de692a7a16df9375a0361c304ae9b0b4e7a32327",
+      "addedLines": 3,
+      "newRelativeLinks": [
+        "v0.6.0.md",
+        "../R1安装验收-2026-09-15.md"
+      ],
+      "passed": true
+    },
+    {
+      "file": "docs/R1安装验收-2026-09-15.md",
+      "sha256": "3e55b220e5166cc2f02417979561a2aef191ad281e6b4ab6ebbed5a8395310f6",
+      "addedLines": 134,
+      "newRelativeLinks": [
+        "产品规划/开源发布范围与执行清单-2026-09-13.md#r1-install",
+        "R1安装验收准备-2026-09-14.md",
+        "验收证据/story-2-2-runtime-b2-2026-09-12T11-48-30Z-network.json",
+        "验收证据/r1-install-20260915-093206-7a7ba6b4/compose-runtime-change.txt",
+        "验收证据/r1-install-20260915-093206-7a7ba6b4/config-redacted.json",
+        "验收证据/r1-install-20260915-093206-7a7ba6b4/runtime-business-isolation.json",
+        "验收证据/r1-install-20260915-093206-7a7ba6b4/02-note-without-model.png",
+        "验收证据/r1-install-20260915-093206-7a7ba6b4/04-mock-note.png",
+        "验收证据/r1-install-20260915-093206-7a7ba6b4/cleanup-directory.json",
+        "验收证据/r1-install-20260915-093206-7a7ba6b4/summary.json",
+        "验收证据/r1-install-20260915-093206-7a7ba6b4/build.json",
+        "验收证据/r1-install-20260915-093206-7a7ba6b4/build.log",
+        "验收证据/r1-install-20260915-093206-7a7ba6b4/source-manifest.json",
+        "验收证据/r1-install-20260915-093206-7a7ba6b4/source-snapshot.zip",
+        "验收证据/r1-install-20260915-093206-7a7ba6b4/ingress-config-finding.json",
+        "验收证据/r1-install-20260915-093206-7a7ba6b4/runtime-final-bindings.json",
+        "验收证据/r1-install-20260915-093206-7a7ba6b4/initial-empty-db.json",
+        "验收证据/r1-install-20260915-093206-7a7ba6b4/browser-report.json",
+        "验收证据/r1-install-20260915-093206-7a7ba6b4/browser-actions.jsonl",
+        "验收证据/r1-install-20260915-093206-7a7ba6b4/runtime-before-restart.log",
+        "验收证据/r1-install-20260915-093206-7a7ba6b4/data-without-model.json",
+        "验收证据/r1-install-20260915-093206-7a7ba6b4/data-before-restart.json",
+        "验收证据/r1-install-20260915-093206-7a7ba6b4/data-after-restart.json",
+        "验收证据/r1-install-20260915-093206-7a7ba6b4/preservation-before-documents.json",
+        "验收证据/r1-install-20260915-093206-7a7ba6b4/preservation-final.json",
+        "验收证据/r1-install-20260915-093206-7a7ba6b4/document-verification.json",
+        "验收证据/r1-install-20260915-093206-7a7ba6b4/harness.zip",
+        "验收证据/r1-install-20260915-093206-7a7ba6b4/artifact-manifest.json"
+      ],
+      "passed": true
+    }
+  ],
+  "utf8Lf": true,
+  "fencesPaired": true,
+  "incrementalWhitespacePassed": true,
+  "newLinksPassed": true,
+  "passed": true
+}

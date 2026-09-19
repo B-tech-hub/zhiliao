@@ -1,0 +1,206 @@
+{
+  "observedAtUtc": "2026-09-19T02:36:43.093043+00:00",
+  "head": "f213761b795cc020be2122e27301fe4a7c5cf7a0",
+  "workspaceSha256": {
+    "package.json": "7c203c317d71c869cc217be6b45223d9ec27822168efe500e2c5288f27ed5be7",
+    "package-lock.json": "1ddf494be7e307d78ce79e304d83b5cd567756b8274c7009b1695e877cb0b5b4",
+    "src/components/markdown-editor.tsx": "a7de00ebd7254d8d8beab19d3a02c84567d74b794f985c4e14f0c93c0e83809d",
+    "src/components/mermaid-code-block.tsx": "7c9864d53d34d1bd34e8cd4bc75afd45ea725d629fe069b0e1f997fa64abef20",
+    "src/lib/math.ts": "51f3c19bdf8a7d51d5001a0480fc197d96782eeb91230d15b6bceb7d4ebdb036",
+    "src/lib/import.ts": "26461968f3dcf8af6e9243175c17ae780edcc36bfa30791f98f4be9b81138371",
+    "src/app/api/notes/route.ts": "ccccbe0e1c4e2547ec9486e4e6c67493f5edcb8b46dc121e9bf5709695499a0f",
+    "src/app/api/notes/[id]/route.ts": "3c0c7dbc8679c5e69772ec70be3c0fa15d6394c3b0b0d477fb9c09aabdd960b9",
+    "src/app/api/notes/[id]/append/route.ts": "eb9d33993293ecc73b13f9c5eb8f2700ded8de7e5297ba457e491bddcd94c59c",
+    "src/app/api/external/capture/route.ts": "f07f0100c3b0021e983efe0f1597d72667d7349945971f4eeadc5814bad1f1cf",
+    "src/app/(app)/notes/[id]/note-editor.tsx": "01f0a70abdcf2c3588d2762cd3dbcda5df6d14048d241eb3efa3a4e177e64f25",
+    "node_modules/@tiptap/core/dist/index.js": "5987ddb5f4b5c1ef41614142f1261c5b78be56c6dd39e2d442896e803597735f",
+    "node_modules/@tiptap/core/dist/index.cjs": "8c7f3cb39964a86629774b1e15c4b2f1e4743e8cc0df0cfb0dfcd58bffa0e931"
+  },
+  "installedCore": "2.27.2",
+  "candidateCore": "2.27.3",
+  "candidateGitHead": "0ed4a30a6cda23799a01881f67d01ad218a2ac6d",
+  "tarball": "https://registry.npmjs.org/@tiptap/core/-/core-2.27.3.tgz",
+  "tarballSha256": "a0ec99121a9f7e1dd8d476926596bb79423bff64860d3b6a230e6ed682398a7c",
+  "integritySha512Verified": true,
+  "shasumSha1Verified": true,
+  "artifactChecks": {
+    "src/utilities/mergeAttributes.ts": {
+      "sha256": "3bd0c4db0aeb05f6d1c12e6e22cb3c4ec0704f2b85168bfcf578c2c0840708ce",
+      "prototypeFixPresent": true
+    },
+    "dist/index.js": {
+      "sha256": "bad8f5a54dfabd943298de64dac3aa716ca0d37fb65a07ce11ff71841f2d4b6a",
+      "prototypeFixPresent": true
+    },
+    "dist/index.cjs": {
+      "sha256": "95efb562d6b684daa8b423f850cf565b24193479e53f8b074b2cc578b2b86c69",
+      "prototypeFixPresent": true
+    }
+  },
+  "candidatePeerDependencies": {
+    "@tiptap/pm": "^2.7.0"
+  },
+  "coreConsumers": [
+    {
+      "package": "node_modules/@tiptap/extension-blockquote",
+      "kind": "peerDependencies",
+      "range": "^2.7.0"
+    },
+    {
+      "package": "node_modules/@tiptap/extension-bold",
+      "kind": "peerDependencies",
+      "range": "^2.7.0"
+    },
+    {
+      "package": "node_modules/@tiptap/extension-bubble-menu",
+      "kind": "peerDependencies",
+      "range": "^2.7.0"
+    },
+    {
+      "package": "node_modules/@tiptap/extension-bullet-list",
+      "kind": "peerDependencies",
+      "range": "^2.7.0"
+    },
+    {
+      "package": "node_modules/@tiptap/extension-code",
+      "kind": "peerDependencies",
+      "range": "^2.7.0"
+    },
+    {
+      "package": "node_modules/@tiptap/extension-code-block",
+      "kind": "peerDependencies",
+      "range": "^2.7.0"
+    },
+    {
+      "package": "node_modules/@tiptap/extension-document",
+      "kind": "peerDependencies",
+      "range": "^2.7.0"
+    },
+    {
+      "package": "node_modules/@tiptap/extension-dropcursor",
+      "kind": "peerDependencies",
+      "range": "^2.7.0"
+    },
+    {
+      "package": "node_modules/@tiptap/extension-floating-menu",
+      "kind": "peerDependencies",
+      "range": "^2.7.0"
+    },
+    {
+      "package": "node_modules/@tiptap/extension-gapcursor",
+      "kind": "peerDependencies",
+      "range": "^2.7.0"
+    },
+    {
+      "package": "node_modules/@tiptap/extension-hard-break",
+      "kind": "peerDependencies",
+      "range": "^2.7.0"
+    },
+    {
+      "package": "node_modules/@tiptap/extension-heading",
+      "kind": "peerDependencies",
+      "range": "^2.7.0"
+    },
+    {
+      "package": "node_modules/@tiptap/extension-history",
+      "kind": "peerDependencies",
+      "range": "^2.7.0"
+    },
+    {
+      "package": "node_modules/@tiptap/extension-horizontal-rule",
+      "kind": "peerDependencies",
+      "range": "^2.7.0"
+    },
+    {
+      "package": "node_modules/@tiptap/extension-image",
+      "kind": "peerDependencies",
+      "range": "^2.7.0"
+    },
+    {
+      "package": "node_modules/@tiptap/extension-italic",
+      "kind": "peerDependencies",
+      "range": "^2.7.0"
+    },
+    {
+      "package": "node_modules/@tiptap/extension-link",
+      "kind": "peerDependencies",
+      "range": "^2.7.0"
+    },
+    {
+      "package": "node_modules/@tiptap/extension-list-item",
+      "kind": "peerDependencies",
+      "range": "^2.7.0"
+    },
+    {
+      "package": "node_modules/@tiptap/extension-ordered-list",
+      "kind": "peerDependencies",
+      "range": "^2.7.0"
+    },
+    {
+      "package": "node_modules/@tiptap/extension-paragraph",
+      "kind": "peerDependencies",
+      "range": "^2.7.0"
+    },
+    {
+      "package": "node_modules/@tiptap/extension-placeholder",
+      "kind": "peerDependencies",
+      "range": "^2.7.0"
+    },
+    {
+      "package": "node_modules/@tiptap/extension-strike",
+      "kind": "peerDependencies",
+      "range": "^2.7.0"
+    },
+    {
+      "package": "node_modules/@tiptap/extension-table",
+      "kind": "peerDependencies",
+      "range": "^2.7.0"
+    },
+    {
+      "package": "node_modules/@tiptap/extension-table-cell",
+      "kind": "peerDependencies",
+      "range": "^2.7.0"
+    },
+    {
+      "package": "node_modules/@tiptap/extension-table-header",
+      "kind": "peerDependencies",
+      "range": "^2.7.0"
+    },
+    {
+      "package": "node_modules/@tiptap/extension-table-row",
+      "kind": "peerDependencies",
+      "range": "^2.7.0"
+    },
+    {
+      "package": "node_modules/@tiptap/extension-text",
+      "kind": "peerDependencies",
+      "range": "^2.7.0"
+    },
+    {
+      "package": "node_modules/@tiptap/extension-text-style",
+      "kind": "peerDependencies",
+      "range": "^2.7.0"
+    },
+    {
+      "package": "node_modules/@tiptap/react",
+      "kind": "peerDependencies",
+      "range": "^2.7.0"
+    },
+    {
+      "package": "node_modules/@tiptap/starter-kit",
+      "kind": "dependencies",
+      "range": "^2.27.2"
+    },
+    {
+      "package": "node_modules/tiptap-markdown",
+      "kind": "peerDependencies",
+      "range": "^2.0.3"
+    }
+  ],
+  "officialFixCommit": "01d7af8c983ee5954c63734f4fa46cb23ae3246d",
+  "limits": [
+    "Static reachability and downloaded package inspection only; no product tests or browser probes",
+    "No dependency installation, lock resolution, application source change, build, full tests, Docker or release",
+    "Bulk advisory request includes only @tiptap/core 2.27.3; not a new workspace audit"
+  ]
+}

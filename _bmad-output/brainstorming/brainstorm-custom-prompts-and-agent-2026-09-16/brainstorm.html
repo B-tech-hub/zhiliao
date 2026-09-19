@@ -1,0 +1,667 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <link rel="icon" href="data:,">
+  <meta name="description" content="知了自定义提示词与知识库 Agent 讨论回顾。记录四个核心方向、推演过程、应用场景、维护方案与待定问题。">
+  <title>一个专业的，适合我的人。｜知了 · Agent 构想手记</title>
+  <style>
+    :root {
+      --canvas: #f7f6f3;
+      --paper: #fff;
+      --ink: #2f3437;
+      --subtle: #5f625d;
+      --line: #eaeaea;
+      --action: #1f6c9f;
+      --blue: #e1f3fe;
+      --green: #edf3ec;
+      --green-ink: #346538;
+      --yellow: #fbf3db;
+      --yellow-ink: #775514;
+      --rose: #fdebec;
+      --rose-ink: #9f2f2d;
+      --serif: "Noto Serif SC", "Source Han Serif SC", "Songti SC", "SimSun", serif;
+      --sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      --mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 92px; }
+    body { margin: 0; color: var(--ink); background: var(--canvas); font: 16px/1.8 var(--sans); }
+    ::selection { background: var(--blue); }
+    a { color: var(--action); text-underline-offset: .25em; }
+    a:hover { text-decoration-thickness: 2px; }
+    button { font: inherit; cursor: pointer; }
+    button, a, summary { -webkit-tap-highlight-color: transparent; }
+    :focus-visible { outline: 2px solid var(--action); outline-offset: 5px; }
+    [hidden] { display: none !important; }
+    h1, h2, h3, p, blockquote, figure { margin: 0; }
+    h1, h2, h3 { color: var(--ink); }
+    h2 { font: 600 30px/1.5 var(--serif); letter-spacing: -.025em; }
+    h3 { font-size: 18px; line-height: 1.6; }
+    ul, ol { margin: 0; padding-left: 1.2em; }
+    small { font-size: 13px; }
+    code { font: .9em/1.7 var(--mono); overflow-wrap: anywhere; }
+    .skip { position: fixed; top: -100px; left: 16px; z-index: 100; padding: 12px; background: var(--paper); }
+    .skip:focus { top: 12px; }
+    .sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+    .topbar { position: sticky; top: 0; z-index: 10; border-bottom: 1px solid var(--line); background: var(--canvas); }
+    .topbar-inner { max-width: 1216px; min-height: 72px; margin: auto; padding: 10px 40px; display: flex; align-items: center; gap: 28px; }
+    .brand { display: flex; align-items: center; gap: 12px; flex-shrink: 0; color: var(--ink); text-decoration: none; }
+    .seal { display: grid; place-items: center; width: 36px; height: 40px; border: 1px solid var(--ink); font: 600 25px var(--serif); }
+    .brand-name { display: block; font-size: 14px; letter-spacing: .08em; }
+    .brand-sub { display: block; color: var(--subtle); font: 10px/1.6 var(--mono); letter-spacing: .12em; }
+    .nav { margin-left: auto; display: flex; gap: 22px; }
+    .nav a { min-height: 44px; display: inline-flex; align-items: center; color: var(--subtle); font-size: 13px; text-decoration: none; }
+    .nav a:hover { color: var(--action); }
+    .utility { min-height: 44px; padding: 8px 14px; border: 1px solid var(--ink); border-radius: 4px; background: var(--ink); color: var(--paper); font-size: 13px; white-space: nowrap; }
+    .utility:hover { background: #424747; }
+    .utility:active { transform: scale(.98); }
+    .utility.quiet { background: transparent; color: var(--ink); border-color: var(--line); }
+    .utility.quiet:hover { background: var(--paper); }
+    .page { max-width: 1136px; margin: 0 auto; padding: 0 40px; }
+    .opening { padding: 56px 0 42px; border-bottom: 1px solid var(--line); }
+    .eyebrow { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; color: var(--subtle); font-size: 12px; letter-spacing: .08em; }
+    .date { font-family: var(--mono); letter-spacing: .04em; }
+    .opening-grid { display: grid; grid-template-columns: 1.65fr 1fr; gap: 72px; align-items: center; margin-top: 28px; }
+    h1 { font: 600 48px/1.5 var(--serif); letter-spacing: -.035em; }
+    h1 em { font-style: normal; text-decoration: underline; text-decoration-color: #c5dbe9; text-decoration-thickness: 5px; text-underline-offset: 10px; }
+    .lead { max-width: 36em; margin-top: 24px; color: var(--subtle); font-size: 16px; line-height: 1.95; }
+    .margin-note { border-left: 1px solid var(--line); padding-left: 28px; }
+    .small-label { display: block; color: var(--subtle); font-size: 12px; letter-spacing: .08em; }
+    .margin-note blockquote { margin: 14px 0 16px; font: 500 25px/1.7 var(--serif); }
+    .margin-note p { color: var(--subtle); font-size: 14px; line-height: 1.95; }
+    .status-line { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-top: 30px; color: var(--subtle); font-size: 13px; }
+    .badge { display: inline-flex; align-items: center; padding: 3px 9px; border-radius: 4px; font-size: 11px; line-height: 1.6; white-space: nowrap; letter-spacing: .03em; }
+    .badge.accepted { color: var(--green-ink); background: var(--green); }
+    .badge.candidate { color: var(--action); background: var(--blue); }
+    .badge.pending { color: var(--yellow-ink); background: var(--yellow); }
+    .section { padding: 52px 0; border-bottom: 1px solid var(--line); }
+    .section-head { display: flex; gap: 24px; align-items: flex-end; justify-content: space-between; margin-bottom: 26px; }
+    .section-kicker { margin-bottom: 8px; color: var(--subtle); font: 12px/1.5 var(--mono); letter-spacing: .1em; }
+    .section-intro { margin-top: 10px; max-width: 48em; font-size: 14px; color: var(--subtle); }
+    .core-grid { display: grid; grid-template-columns: 1.15fr 1fr; gap: 16px; }
+    .core-card { display: grid; grid-template-columns: 54px 1fr; gap: 18px; padding: 27px; border: 1px solid #eaeaea; border-radius: 8px; background: var(--paper); }
+    .core-index { color: var(--subtle); font: 400 34px/1.2 var(--serif); }
+    .core-card h3 { margin-bottom: 8px; font-size: 21px; }
+    .core-card p { color: var(--subtle); font-size: 14px; }
+    .core-card .core-line { margin-bottom: 8px; color: var(--ink); font-weight: 600; }
+    .aside-line { margin-top: 18px; color: var(--subtle); font-size: 12px; }
+    .method { display: grid; grid-template-columns: 192px minmax(0, 1fr); gap: 38px; padding: 30px 0; }
+    .method + .method { border-top: 1px solid var(--line); }
+    .method-meta .method-no { color: var(--subtle); font: 12px var(--mono); }
+    .method-meta h3 { margin: 8px 0 7px; font: 600 22px/1.5 var(--serif); }
+    .method-meta p { color: var(--subtle); font-size: 13px; line-height: 1.9; }
+    .method-body { min-width: 0; }
+    .ladder { padding: 0; list-style: none; }
+    .ladder li { display: flex; align-items: baseline; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+    .ladder li:nth-child(2) { margin-left: 24px; }
+    .ladder li:nth-child(3) { margin-left: 48px; }
+    .ladder li:nth-child(4) { margin-left: 72px; border-color: #cbdde8; }
+    .ladder span { flex-shrink: 0; color: var(--subtle); font-size: 11px; }
+    .ladder strong { font-weight: 500; font-size: 15px; }
+    .ladder li:last-child strong { font: 600 23px/1.6 var(--serif); }
+    details { border-bottom: 1px solid var(--line); }
+    summary { display: flex; gap: 16px; align-items: center; min-height: 62px; padding: 12px 0; list-style: none; cursor: pointer; }
+    summary::-webkit-details-marker { display: none; }
+    summary::after { content: "+"; margin-left: auto; flex-shrink: 0; width: 20px; text-align: center; color: var(--subtle); font: 22px/1 var(--mono); }
+    details[open] > summary::after { content: "−"; }
+    .method-letter { display: grid; place-items: center; flex: 0 0 32px; width: 32px; height: 34px; background: var(--paper); border: 1px solid #eaeaea; color: var(--action); font: 500 19px var(--serif); }
+    .summary-title { font-size: 14px; font-weight: 600; }
+    .summary-title span { margin-left: 8px; color: var(--subtle); font-size: 12px; font-weight: 400; }
+    .detail-body { padding: 0 36px 18px 48px; color: var(--subtle); font-size: 14px; line-height: 1.95; }
+    .detail-body .badge { margin-top: 10px; }
+    .detail-body .clarified { display: block; margin-top: 10px; color: var(--ink); font-weight: 500; }
+    .hat-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px 22px; }
+    .hat { border-top: 1px solid var(--line); padding-top: 14px; }
+    .hat-head { display: flex; align-items: center; gap: 9px; margin-bottom: 10px; }
+    .hat-token { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 4px; background: var(--paper); border: 1px solid #eaeaea; font-size: 13px; }
+    .hat-red { background: var(--rose); color: var(--rose-ink); }
+    .hat-yellow { background: var(--yellow); color: var(--yellow-ink); }
+    .hat-black { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+    .hat-green { background: var(--green); color: var(--green-ink); }
+    .hat-blue { background: var(--blue); color: var(--action); }
+    .hat h4 { margin: 0; font-size: 13px; font-weight: 600; }
+    .hat p { color: var(--subtle); font-size: 13px; line-height: 1.9; }
+    .scenes { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .scene { border: 1px solid #eaeaea; border-radius: 8px; padding: 30px; background: var(--paper); }
+    .scene-kind { color: var(--subtle); font: 11px var(--mono); letter-spacing: .12em; }
+    .scene h3 { margin-top: 12px; font: 600 25px/1.5 var(--serif); }
+    .scene > p { margin-top: 12px; color: var(--subtle); font-size: 14px; }
+    .lesson { margin-top: 22px; padding: 0; list-style: none; counter-reset: lesson; }
+    .lesson li { position: relative; padding: 0 0 16px 34px; font-size: 14px; counter-increment: lesson; }
+    .lesson li::before { content: "0" counter(lesson); position: absolute; left: 0; top: 2px; color: var(--action); font: 11px/1.8 var(--mono); }
+    .lesson li + li { border-top: 1px solid var(--line); padding-top: 12px; }
+    .lesson li + li::before { top: 14px; }
+    .scene-note { margin-top: 14px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--subtle); font-size: 12px; line-height: 1.9; }
+    .material-box { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 28px; }
+    .material { padding: 21px 14px; border: 1px solid #eaeaea; background: var(--canvas); text-align: center; }
+    .material small { color: var(--subtle); font-size: 10px; letter-spacing: .1em; }
+    .material strong { display: block; margin-top: 7px; font: 500 19px var(--serif); }
+    .scene-quote { margin-top: 24px; padding-left: 16px; border-left: 2px solid #cbdde8; font: 500 18px/1.85 var(--serif); }
+    .solution-intro { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 24px; color: var(--subtle); font-size: 13px; }
+    .solution { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid #eaeaea; border-radius: 8px; overflow: hidden; background: var(--paper); }
+    .solution-side { padding: 32px; }
+    .solution-side + .solution-side { border-left: 1px solid var(--line); }
+    .solution-side h3 { margin: 9px 0 18px; font: 600 26px var(--serif); }
+    .solution-side .mode { color: var(--subtle); font: 11px var(--mono); letter-spacing: .1em; }
+    .setting-list { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 22px; }
+    .setting-list span { border: 1px solid var(--line); border-radius: 4px; padding: 4px 9px; font-size: 12px; }
+    .solution-side p { color: var(--subtle); font-size: 14px; line-height: 1.95; }
+    .solution-side .rule { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--ink); font-size: 13px; }
+    .solution-footer { grid-column: 1 / -1; padding: 16px 32px; border-top: 1px solid var(--line); background: var(--canvas); font-size: 13px; }
+    .solution-footer strong { font-weight: 600; }
+    .synthesis { margin-top: 28px; display: grid; grid-template-columns: 32px 1fr; gap: 12px; align-items: start; }
+    .synthesis-mark { color: var(--action); font: 52px/.9 var(--serif); }
+    .synthesis blockquote { max-width: 35em; font: 500 23px/1.85 var(--serif); }
+    .open-list { border-top: 1px solid var(--line); }
+    .open-list .detail-body { padding-left: 0; }
+    .question-label { flex: 0 0 62px; color: var(--subtle); font: 11px var(--mono); }
+    .remaining { display: grid; grid-template-columns: 1fr 1.8fr; gap: 28px; margin-top: 30px; padding: 22px 0 0; border-top: 1px solid var(--line); }
+    .remaining h3 { font-size: 13px; }
+    .remaining p { color: var(--subtle); font-size: 12px; line-height: 2; }
+    .foot { padding: 30px 0 44px; color: var(--subtle); font-size: 12px; line-height: 1.9; }
+    .foot-top { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+    .foot strong { color: var(--ink); font-weight: 500; }
+    .reveal.is-visible { animation: arrive 240ms ease-out both; }
+    @keyframes arrive { from { opacity: .65; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+    @media (max-width: 1000px) {
+      .topbar-inner { padding-inline: 26px; gap: 18px; }
+      .nav { gap: 15px; }
+      .page { padding-inline: 28px; }
+      .opening-grid { gap: 35px; grid-template-columns: 1.5fr 1fr; }
+      h1 { font-size: 40px; }
+      .method { grid-template-columns: 160px minmax(0, 1fr); gap: 26px; }
+      .hat-grid { gap: 20px 16px; }
+      .core-card { padding: 23px; gap: 12px; grid-template-columns: 43px 1fr; }
+    }
+    @media (max-width: 760px) {
+      html { scroll-padding-top: 80px; }
+      .topbar-inner { min-height: 66px; padding: 9px 20px; gap: 12px; }
+      .brand-name { font-size: 12px; }
+      .brand-sub { font-size: 9px; }
+      .nav { display: none; }
+      .topbar .utility { margin-left: auto; font-size: 12px; padding-inline: 11px; }
+      .page { padding-inline: 22px; }
+      .opening { padding-top: 35px; }
+      .opening-grid { grid-template-columns: 1fr; gap: 28px; margin-top: 23px; }
+      h1 { font-size: 38px; }
+      .lead { font-size: 15px; }
+      .margin-note { padding-left: 18px; }
+      .margin-note blockquote { font-size: 22px; margin: 7px 0; }
+      .margin-note p { max-width: 34em; font-size: 13px; }
+      .status-line { align-items: flex-start; gap: 10px; }
+      .section { padding-block: 38px; }
+      h2 { font-size: 26px; }
+      .section-head { align-items: flex-start; gap: 16px; flex-wrap: wrap; }
+      .core-grid { grid-template-columns: 1fr; gap: 12px; }
+      .core-card { padding: 23px; grid-template-columns: 43px 1fr; gap: 16px; }
+      .method { grid-template-columns: 1fr; gap: 18px; padding-block: 25px; }
+      .method-meta h3 { display: inline-block; margin: 0 0 0 10px; font-size: 21px; }
+      .method-meta p { margin-top: 9px; }
+      .ladder li { gap: 12px; }
+      .ladder li:nth-child(2) { margin-left: 12px; }
+      .ladder li:nth-child(3) { margin-left: 24px; }
+      .ladder li:nth-child(4) { margin-left: 36px; }
+      .ladder li:last-child strong { font-size: 20px; }
+      .hat-grid { grid-template-columns: 1fr 1fr; gap: 22px; }
+      .scenes { grid-template-columns: 1fr; gap: 18px; }
+      .scene { padding: 25px; }
+      .solution { grid-template-columns: 1fr; }
+      .solution-side { padding: 26px; }
+      .solution-side + .solution-side { border-left: none; border-top: 1px solid var(--line); }
+      .solution-footer { padding: 18px 26px; }
+      .synthesis blockquote { font-size: 21px; }
+      .remaining { grid-template-columns: 1fr; gap: 10px; }
+      .question-label { flex-basis: 47px; }
+      .summary-title span { display: block; margin-left: 0; }
+      .open-list summary { gap: 12px; }
+      .detail-body { padding-right: 10px; }
+    }
+    @media (max-width: 360px) {
+      .page { padding-inline: 18px; }
+      .topbar-inner { padding-inline: 16px; }
+      .brand { gap: 8px; }
+      .brand-sub { letter-spacing: 0; }
+      .seal { width: 30px; height: 36px; font-size: 22px; }
+      h1 { font-size: 33px; }
+      .eyebrow { gap: 8px; font-size: 11px; }
+      .core-card { padding: 19px; grid-template-columns: 34px 1fr; gap: 12px; }
+      .core-index { font-size: 29px; }
+      .core-card h3 { font-size: 20px; }
+      .scene { padding: 22px; }
+      .hat-grid { gap: 20px 16px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
+    @media print {
+      @page { size: A4; margin: 16mm 15mm; }
+      html { scroll-behavior: auto; }
+      body { background: white; font-size: 11px; color: #2f3437; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+      .topbar, .skip, .utility, .sr-only, noscript { display: none !important; }
+      .page { max-width: none; padding: 0; }
+      .opening { padding: 0 0 22px; }
+      .opening-grid { grid-template-columns: 1.6fr 1fr; gap: 24px; margin-top: 18px; }
+      h1 { font-size: 32px; }
+      h2 { font-size: 23px; }
+      .lead { font-size: 12px; margin-top: 15px; }
+      .margin-note blockquote { font-size: 18px; }
+      .margin-note p { font-size: 11px; }
+      .section { padding: 25px 0; }
+      .section-head { margin-bottom: 16px; break-after: avoid; }
+      .core-grid { gap: 10px; grid-template-columns: 1fr 1fr; }
+      .core-card { padding: 18px; grid-template-columns: 35px 1fr; break-inside: avoid; }
+      .core-card h3 { font-size: 17px; }
+      .core-card p { font-size: 11px; }
+      .method { grid-template-columns: 120px minmax(0, 1fr); gap: 23px; }
+      .method-meta h3 { font-size: 18px; }
+      .method-meta p, .hat p { font-size: 11px; }
+      .hat-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .hat { break-inside: avoid; }
+      .scenes { grid-template-columns: 1fr 1fr; gap: 15px; }
+      .scene { padding: 19px; break-inside: avoid; }
+      .scene h3 { font-size: 20px; }
+      .scene > p, .lesson li { font-size: 11px; }
+      .solution { grid-template-columns: 1fr 1fr; }
+      .solution-side { padding: 22px; }
+      .solution-side + .solution-side { border-top: none; border-left: 1px solid var(--line); }
+      .solution-side p { font-size: 11px; }
+      .solution-side h3 { font-size: 22px; }
+      .solution-footer { font-size: 11px; }
+      .synthesis blockquote { font-size: 19px; }
+      summary { min-height: 40px; padding: 8px 0; }
+      summary::after { display: none; }
+      .detail-body { padding-bottom: 12px; font-size: 11px; }
+      details { break-inside: avoid; }
+      details::details-content { content-visibility: visible !important; height: auto !important; }
+      details > :not(summary) { display: block !important; }
+      .reveal { opacity: 1 !important; transform: none !important; animation: none !important; }
+      .foot { padding-bottom: 0; font-size: 10px; }
+      a { color: inherit; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#overview">跳到回顾正文</a>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="#overview" aria-label="知了 Agent 构想手记，返回开头">
+        <span class="seal" aria-hidden="true">知</span>
+        <span><span class="brand-name">知了 · 构想手记</span><span class="brand-sub">知识库 Agent / 2026</span></span>
+      </a>
+      <nav class="nav" aria-label="回顾页目录">
+        <a href="#core">核心</a>
+        <a href="#methods">推演</a>
+        <a href="#scenes">场景</a>
+        <a href="#maintenance">维护</a>
+        <a href="#questions">待解</a>
+      </nav>
+      <button class="utility" type="button" id="print-button" hidden>打印 / 存为 PDF</button>
+    </div>
+  </header>
+
+  <main class="page" id="main">
+    <section class="opening" id="overview" aria-labelledby="page-title">
+      <div class="eyebrow">
+        <span>自定义提示词与知识库 Agent</span>
+        <span class="date">2026.09.16 — 09.18</span>
+      </div>
+      <div class="opening-grid">
+        <div>
+          <h1 id="page-title">一个专业的，<br><em>适合我的人。</em></h1>
+          <p class="lead">让用户长期拥有专业合拍、各有分工、维护省心，并由自己掌控的知识库 Agent。这是本轮讨论收敛出的方向。</p>
+        </div>
+        <aside class="margin-note" aria-label="用户期待">
+          <span class="small-label">这轮讨论的落点</span>
+          <blockquote>“舒适的学习体验。”</blockquote>
+          <p>老师了解我的基础，有我喜欢的性格，采用适合我的教法，也具备对应领域的专业能力。</p>
+        </aside>
+      </div>
+      <div class="status-line">
+        <span class="badge accepted">本轮已收敛</span>
+        <span>四个核心已选定；当前为候选提案，体验与效果仍待验证。</span>
+      </div>
+    </section>
+
+    <section class="section reveal" id="core" aria-labelledby="core-title">
+      <div class="section-head">
+        <div>
+          <p class="section-kicker">01 / 最终选择</p>
+          <h2 id="core-title">四个核心，构成同一份期待。</h2>
+          <p class="section-intro">从六个归纳方向中，用户选定了 2、4、5、6。</p>
+        </div>
+        <span class="badge accepted">用户选定的核心方向</span>
+      </div>
+      <div class="core-grid">
+        <article class="core-card">
+          <span class="core-index" aria-label="原方向 2">02</span>
+          <div>
+            <h3>专业合拍</h3>
+            <p class="core-line">懂专业，也懂我的起点。</p>
+            <p>了解知识基础与本次目标，性格和教法符合偏好。讲解明确、简单、能直接执行，步骤之间衔接清楚。</p>
+          </div>
+        </article>
+        <article class="core-card">
+          <span class="core-index" aria-label="原方向 4">04</span>
+          <div>
+            <h3>领域分工</h3>
+            <p class="core-line">各有专长，各自熟悉一部分笔记。</p>
+            <p>同一个大模型可承载不同领域的 Agent。考研老师与小说创作者，各自从负责的知识中帮助用户取用。</p>
+          </div>
+        </article>
+        <article class="core-card">
+          <span class="core-index" aria-label="原方向 5">05</span>
+          <div>
+            <h3>维护省心</h3>
+            <p class="core-line">持续了解我，维护过程保持简单。</p>
+            <p>将稳定的老师设定与变化的学习档案分开。按需读取相关记录，合并重复内容，更新过时判断。</p>
+          </div>
+        </article>
+        <article class="core-card">
+          <span class="core-index" aria-label="原方向 6">06</span>
+          <div>
+            <h3>用户掌控</h3>
+            <p class="core-line">由我发起，也由我决定停止。</p>
+            <p>用户提出需求，Agent 再响应。需要改变讲法时，说明具体调整，交由用户选择或修正。</p>
+          </div>
+        </article>
+      </div>
+      <p class="aside-line">配套候选仍保留：问答创建 Agent、手动关联知识。它们未被选为本轮核心，也未被否定。</p>
+    </section>
+
+    <section class="section reveal" id="methods" aria-labelledby="methods-title">
+      <div class="section-head">
+        <div>
+          <p class="section-kicker">02 / 想法如何走到这里</p>
+          <h2 id="methods-title">从一个手段，走向一种相处方式。</h2>
+        </div>
+        <button class="utility quiet" type="button" id="expand-button" aria-expanded="false" aria-controls="methods questions" hidden>展开全部细节</button>
+      </div>
+
+      <article class="method" aria-labelledby="ladder-title">
+        <div class="method-meta">
+          <span class="method-no">I</span>
+          <h3 id="ladder-title">Laddering</h3>
+          <p>不断追问“为什么”。<br>从提示词编辑，走到真正想获得的帮助。</p>
+        </div>
+        <div class="method-body">
+          <ol class="ladder" aria-label="需求的四层递进">
+            <li><span>最初的手段</span><strong>自己编辑提示词、设计 Agent</strong></li>
+            <li><span>希望的变化</span><strong>不同领域，获得不同的专业帮助</strong></li>
+            <li><span>个人的需要</span><strong>按我的基础与习惯，讲清楚问题</strong></li>
+            <li><span>真正的期待</span><strong>一个专业的、适合我的人</strong></li>
+          </ol>
+        </div>
+      </article>
+
+      <article class="method" aria-labelledby="scamper-title">
+        <div class="method-meta">
+          <span class="method-no">II</span>
+          <h3 id="scamper-title">SCAMPER</h3>
+          <p>七次换一个角度。<br>展开字母，查看当时留下的想法与澄清。</p>
+        </div>
+        <div class="method-body">
+          <details>
+            <summary><span class="method-letter" aria-hidden="true">S</span><span class="summary-title">用问答“制造老师”<span>Substitute · 替代</span></span></summary>
+            <div class="detail-body">
+              设计一个“制造老师”的 skill，引导用户回答问题，再将回答整理为老师提示词。具体问答方式尚待设计。
+              <br><span class="badge candidate">配套候选</span>
+            </div>
+          </details>
+          <details>
+            <summary><span class="method-letter" aria-hidden="true">C</span><span class="summary-title">把知识点连起来用<span>Combine · 组合</span></span></summary>
+            <div class="detail-body">
+              用户手动关联两条笔记或两个知识点；以后问到其中一项，老师可以带出相关内容。泰勒展开题由此延伸到常见展开式与同类例题。
+              <br><span class="badge candidate">配套候选</span>
+            </div>
+          </details>
+          <details>
+            <summary><span class="method-letter" aria-hidden="true">A</span><span class="summary-title">借用逐个追问的教法<span>Adapt · 借用</span></span></summary>
+            <div class="detail-body">
+              参考 grill-me，一次问一个问题，逐步了解学生的真实想法。开始指导前，问清已有的前置知识和这次对话要完成的明确目标；指导要简单、具体、可执行。
+            </div>
+          </details>
+          <details>
+            <summary><span class="method-letter" aria-hidden="true">M</span><span class="summary-title">把相处时间拉长<span>Modify · 改变尺度</span></span></summary>
+            <div class="detail-body">
+              长期相处中，老师逐步了解学习习惯、更新知识基础判断，自己的教法与风格保持一贯。学生反馈不适应时，先说清具体问题；需要帮助时，由老师提出具体改法供学生选择或调整。
+            </div>
+          </details>
+          <details>
+            <summary><span class="method-letter" aria-hidden="true">P</span><span class="summary-title">让专业人员管理知识库<span>Put to other uses · 另作他用</span></span></summary>
+            <div class="detail-body">
+              Agent 也可以帮助创作。用户写一本小书时，负责这部分素材的 Agent 检索已有的人物形象和剧情构思，让过去的积累进入当下创作。
+            </div>
+          </details>
+          <details>
+            <summary><span class="method-letter" aria-hidden="true">E</span><span class="summary-title">从找素材，延伸到给建议<span>Eliminate · 删减</span></span></summary>
+            <div class="detail-body">
+              当用户需要创作帮助时，具备小说创作能力的 Agent 可结合用户的习惯与笔吻，为作品及人物描写提出建议。
+              <span class="clarified">最终澄清：“用户主动提出，Agent 不需要擅自主张。”</span>
+              无需额外描述检索动作，不等于无需用户发起请求。
+            </div>
+          </details>
+          <details>
+            <summary><span class="method-letter" aria-hidden="true">R</span><span class="summary-title">先体验，再塑造<span>Reverse · 反转顺序</span></span></summary>
+            <div class="detail-body">
+              如果用户还说不清心目中的理想 Agent，可以先用默认助手完成几次真实任务，从体验中逐步认识自己喜欢的老师形象。这是一条按需选择的路径。
+              <br><span class="badge candidate">可选创建路径</span>
+            </div>
+          </details>
+        </div>
+      </article>
+
+      <article class="method" aria-labelledby="hats-title">
+        <div class="method-meta">
+          <span class="method-no">III</span>
+          <h3 id="hats-title">六顶思考帽</h3>
+          <p>将事实、感受、收益与顾虑分开看，再收束方向。</p>
+        </div>
+        <div class="method-body hat-grid">
+          <article class="hat">
+            <div class="hat-head"><span class="hat-token" aria-hidden="true">白</span><h4>事实</h4></div>
+            <p>用户尚未使用知了。“回答枯燥、搬运大段笔记”是偏好描述，不能记作知了的实测反馈。</p>
+          </article>
+          <article class="hat">
+            <div class="hat-head"><span class="hat-token hat-red" aria-hidden="true">红</span><h4>感受</h4></div>
+            <p>期待学习更轻松、更有兴趣。用户表示不想继续时，老师遵循当下指令。</p>
+          </article>
+          <article class="hat">
+            <div class="hat-head"><span class="hat-token hat-yellow" aria-hidden="true">黄</span><h4>收益</h4></div>
+            <p>舒适的学习体验：懂基础、性格合拍、教法合适、专业可靠。</p>
+          </article>
+          <article class="hat">
+            <div class="hat-head"><span class="hat-token hat-black" aria-hidden="true">黑</span><h4>顾虑</h4></div>
+            <p>创建过程可能复杂；自主更新可能使提示词膨胀，手工维护又费时、门槛高。</p>
+          </article>
+          <article class="hat">
+            <div class="hat-head"><span class="hat-token hat-green" aria-hidden="true">绿</span><h4>新办法</h4></div>
+            <p>将稳定老师设定与动态学习档案分开。该建议由教练提出，用户认可为候选方向。</p>
+          </article>
+          <article class="hat">
+            <div class="hat-head"><span class="hat-token hat-blue" aria-hidden="true">蓝</span><h4>取舍</h4></div>
+            <p>选定专业合拍、领域分工、维护省心、用户掌控四个核心，结束本轮发散。</p>
+          </article>
+        </div>
+      </article>
+    </section>
+
+    <section class="section reveal" id="scenes" aria-labelledby="scenes-title">
+      <div class="section-head">
+        <div>
+          <p class="section-kicker">03 / 让构想落在具体事情上</p>
+          <h2 id="scenes-title">一道数学题，一本小书。</h2>
+          <p class="section-intro">讨论中的两个设想场景，用来说明期望的帮助方式。</p>
+        </div>
+      </div>
+      <div class="scenes">
+        <article class="scene">
+          <span class="scene-kind">场景 A / 学习</span>
+          <h3>从泰勒展开题，走到掌握。</h3>
+          <p>老师先了解学生的前置知识与这次目标，再按照适合的教法指导。</p>
+          <ol class="lesson">
+            <li>解答当前问题，带出相关的常见函数展开式。</li>
+            <li>从笔记里找到同类型例题，用两道题作类比。</li>
+            <li>按用户指定的标准，观察能否独立完成同类题，并解释完整思路。</li>
+          </ol>
+          <div class="scene-note"><span class="badge pending">边界待设计</span><br>笔记缺少例题时，用户提出可联网补题。它与现有严格来源问答的规则不同，具体模式与联网方式尚未确定。</div>
+        </article>
+        <article class="scene">
+          <span class="scene-kind">场景 B / 创作</span>
+          <h3>让旧素材进入正在写的小书。</h3>
+          <p>熟悉这部分知识库的 Agent，检索用户此前积累的人物形象与剧情构思，供创作时取用。</p>
+          <div class="material-box" aria-label="用户设想中的两类创作素材">
+            <div class="material"><small>素材 / 01</small><strong>人物形象</strong></div>
+            <div class="material"><small>素材 / 02</small><strong>剧情构思</strong></div>
+          </div>
+          <blockquote class="scene-quote">懂小说创作，也了解我的创作习惯与笔吻。</blockquote>
+          <div class="scene-note">用户提出请求后，Agent 才给出作品或人物描写建议。学习与创作的节奏，都由用户决定。</div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section reveal" id="maintenance" aria-labelledby="maintenance-title">
+      <div class="section-head">
+        <div>
+          <p class="section-kicker">04 / 把两种变化分开</p>
+          <h2 id="maintenance-title">风格保持一贯，了解持续更新。</h2>
+        </div>
+      </div>
+      <div class="solution-intro">
+        <span class="badge accepted">已认可的候选方案</span>
+        <span>教练应请求提出，用户认可；具体更新和纠错规则仍待设计。</span>
+      </div>
+      <div class="solution" role="group" aria-label="稳定老师设定与动态学习档案的分工">
+        <article class="solution-side">
+          <span class="mode">相对稳定 / 角色</span>
+          <h3>老师设定</h3>
+          <div class="setting-list" aria-label="老师设定的内容">
+            <span>性格</span><span>说话风格</span><span>教学方式</span><span>负责领域</span>
+          </div>
+          <p>承接用户喜欢的风格与专业职责，让这位老师在长期使用中保持可辨认的个性。</p>
+          <p class="rule">长期改动先形成具体方案，由用户选择或确认。</p>
+        </article>
+        <article class="solution-side">
+          <span class="mode">持续更新 / 对用户的了解</span>
+          <h3>学习档案</h3>
+          <div class="setting-list" aria-label="学习档案的内容">
+            <span>知识基础</span><span>学习表现</span><span>明确的学习习惯</span>
+          </div>
+          <p>同一事项更新原记录，合并重复内容，替换过时判断，保留简短依据；回答时取用与当前任务有关的部分。</p>
+          <p class="rule">用户通过自然语言提出调整，具体纠错方式尚待确定。</p>
+        </article>
+        <div class="solution-footer"><strong>这两部分共同服务于一件事：</strong>用户长期使用适合自己的 Agent，同时降低维护复杂提示词的负担。</div>
+      </div>
+      <div class="synthesis">
+        <span class="synthesis-mark" aria-hidden="true">“</span>
+        <blockquote>专业合拍的体验、清楚的领域分工、轻松的维护，以及始终由用户掌控的使用过程。</blockquote>
+      </div>
+    </section>
+
+    <section class="section reveal" id="questions" aria-labelledby="questions-title">
+      <div class="section-head">
+        <div>
+          <p class="section-kicker">05 / 留给下一次的页边</p>
+          <h2 id="questions-title">方向已选定，细节留待验证。</h2>
+          <p class="section-intro">这些问题仍然开放；本轮收敛没有将它们视为已经解决。</p>
+        </div>
+      </div>
+      <div class="open-list">
+        <details>
+          <summary><span class="question-label">创建</span><span class="summary-title">怎样降低“制造老师”的门槛？</span></summary>
+          <div class="detail-body">具体问答方式尚未设计，仍需弄清怎样让不熟悉 AI 的用户表达需求，并完成创建。先体验默认助手是已记录的可选路径。</div>
+        </details>
+        <details>
+          <summary><span class="question-label">分工</span><span class="summary-title">怎样确定每个 Agent 负责的范围？</span></summary>
+          <div class="detail-body">用户已选择按领域分工，但笔记与职责范围如何确定，尚未展开为具体方案。</div>
+        </details>
+        <details>
+          <summary><span class="question-label">维护</span><span class="summary-title">学习档案怎样更新，误判怎样纠正？</span></summary>
+          <div class="detail-body">分开管理已获认可。自动更新规则、需要用户确认的具体情形，以及误判知识水平后的便捷纠正方式，仍待设计。</div>
+        </details>
+        <details>
+          <summary><span class="question-label">来源</span><span class="summary-title">联网补题如何保持清楚的来源边界？</span></summary>
+          <div class="detail-body">现有来源问答严格限定在来源集内；已有抓取工具仅处理用户提供的网址。联网寻找新例题仍是候选需求，不能视为当前已具备的能力。</div>
+        </details>
+        <details>
+          <summary><span class="question-label">体验</span><span class="summary-title">这些预期，能否在真实使用中成立？</span></summary>
+          <div class="detail-body">用户尚未实际使用知了。对舒适感、专业能力、学习效率与兴趣的期待，均需后续验证；偏好描述不能作为当前产品的缺陷证据。</div>
+        </details>
+      </div>
+      <div class="remaining">
+        <h3>保留在书签里的三种技法</h3>
+        <p>Worst Possible Idea（最糟糕的点子）、Build on What Works（沿着有效之处继续）、Scenario Cross（交叉场景）本轮未执行。它们保留为今后新会话的可选入口。</p>
+      </div>
+    </section>
+
+    <footer class="foot">
+      <div class="foot-top">
+        <strong>知了 · 自定义提示词与知识库 Agent 讨论回顾</strong>
+        <span class="date">2026.09.18 / 一页留存</span>
+      </div>
+      <p>依据：2026-09-16 开始、2026-09-18 接续并收敛的会话记录。保留单用户、自托管、AI 不覆盖用户正文的产品边界；100 条真实笔记冻结期内仅记录提案。</p>
+      <p>后续可在新会话引用本记录，通过 <code>bmad-product-brief</code> 整理产品简报。本文件可离线阅读，打印时会展开全部细节。</p>
+    </footer>
+  </main>
+  <p class="sr-only" role="status" aria-live="polite" id="interaction-status"></p>
+  <noscript><p class="page foot">本页正文和折叠内容均可直接阅读。可使用浏览器菜单打印或保存为 PDF。</p></noscript>
+  <script>
+    (function () {
+      'use strict';
+      const panels = Array.from(document.querySelectorAll('details'));
+      const expandButton = document.getElementById('expand-button');
+      const printButton = document.getElementById('print-button');
+      const status = document.getElementById('interaction-status');
+      let savedPrintState = null;
+
+      function syncExpandButton() {
+        const allOpen = panels.every(function (panel) { return panel.open; });
+        expandButton.textContent = allOpen ? '收起全部细节' : '展开全部细节';
+        expandButton.setAttribute('aria-expanded', String(allOpen));
+      }
+
+      expandButton.hidden = false;
+      printButton.hidden = false;
+      expandButton.addEventListener('click', function () {
+        const shouldOpen = !panels.every(function (panel) { return panel.open; });
+        panels.forEach(function (panel) { panel.open = shouldOpen; });
+        syncExpandButton();
+        status.textContent = shouldOpen ? '全部推演细节和待定问题已展开。' : '全部细节已收起，核心结论保持可见。';
+      });
+      panels.forEach(function (panel) {
+        panel.addEventListener('toggle', syncExpandButton);
+      });
+
+      printButton.addEventListener('click', function () { window.print(); });
+      window.addEventListener('beforeprint', function () {
+        if (savedPrintState === null) {
+          savedPrintState = panels.map(function (panel) { return panel.open; });
+        }
+        panels.forEach(function (panel) { panel.open = true; });
+      });
+      window.addEventListener('afterprint', function () {
+        if (savedPrintState !== null) {
+          panels.forEach(function (panel, index) { panel.open = savedPrintState[index]; });
+          savedPrintState = null;
+          syncExpandButton();
+        }
+      });
+
+      if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        const observer = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.08 });
+        document.querySelectorAll('.reveal').forEach(function (section) { observer.observe(section); });
+      }
+    }());
+  </script>
+</body>
+</html>

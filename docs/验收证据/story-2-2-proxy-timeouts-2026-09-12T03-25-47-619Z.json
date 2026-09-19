@@ -1,0 +1,169 @@
+{
+  "story": "2.2",
+  "recorded_at": "2026-09-12T03:25:47.621Z",
+  "status": "failed",
+  "project": "zhiliao-demo-proxy-verify-222628e40c64",
+  "run_id": "222628e40c6448430719f7f8843e2ff0",
+  "limits": {
+    "readTimeoutSeconds": 300,
+    "sendTimeoutSeconds": 300,
+    "budgetSeconds": 450
+  },
+  "scenarios": [
+    {
+      "name": "silent",
+      "request_path": "/silent?probe=222628e40c6448430719f7f8843e2ff0-silent",
+      "passed": false,
+      "elapsedSeconds": 285.203,
+      "idle_seconds": 285.203,
+      "log_match": true,
+      "budget_exhausted": false,
+      "log_lines": [
+        "ingress-1  | 2026/09/12 03:30:46 [error] 21#21: *3 upstream timed out (110: Operation timed out) while reading response header from upstream, client: 172.24.0.1, server: _, request: \"GET /silent?probe=222628e40c6448430719f7f8843e2ff0-silent HTTP/1.1\", upstream: \"http://172.24.0.2:3000/silent?probe=222628e40c6448430719f7f8843e2ff0-silent\", host: \"127.0.0.1:3343\"",
+        "ingress-1  | 172.24.0.1 - - [12/Sep/2026:03:30:46 +0000] \"GET /silent?probe=222628e40c6448430719f7f8843e2ff0-silent HTTP/1.1\" 504 167 \"-\" \"-\""
+      ],
+      "reason": "实际空闲时长不在 295 至 330 秒范围内",
+      "observation": {
+        "statusCode": 504,
+        "endedNormally": true,
+        "done": false,
+        "receivedChunks": 1,
+        "heartbeatEvents": 0,
+        "firstBodyMs": 285203,
+        "lastBodyMs": 285203,
+        "maxBodyGapMs": 285203,
+        "uploadBytes": 0,
+        "lastUploadProgressMs": 0,
+        "budgetExhausted": false,
+        "errorCode": null,
+        "elapsedMs": 285203
+      }
+    },
+    {
+      "name": "stream",
+      "request_path": "/stream?probe=222628e40c6448430719f7f8843e2ff0-stream",
+      "passed": false,
+      "elapsedSeconds": 285.201,
+      "idle_seconds": 285.196,
+      "log_match": true,
+      "budget_exhausted": false,
+      "log_lines": [
+        "ingress-1  | 172.24.0.1 - - [12/Sep/2026:03:30:46 +0000] \"GET /stream?probe=222628e40c6448430719f7f8843e2ff0-stream HTTP/1.1\" 200 31 \"-\" \"-\"",
+        "ingress-1  | 2026/09/12 03:30:46 [error] 21#21: *4 upstream timed out (110: Operation timed out) while reading upstream, client: 172.24.0.1, server: _, request: \"GET /stream?probe=222628e40c6448430719f7f8843e2ff0-stream HTTP/1.1\", upstream: \"http://172.24.0.2:3000/stream?probe=222628e40c6448430719f7f8843e2ff0-stream\", host: \"127.0.0.1:3343\""
+      ],
+      "reason": "实际空闲时长不在 295 至 330 秒范围内",
+      "observation": {
+        "statusCode": 200,
+        "endedNormally": false,
+        "done": false,
+        "receivedChunks": 1,
+        "heartbeatEvents": 0,
+        "firstBodyMs": 5,
+        "lastBodyMs": 5,
+        "maxBodyGapMs": 5,
+        "uploadBytes": 0,
+        "lastUploadProgressMs": 0,
+        "budgetExhausted": false,
+        "errorCode": "RESPONSE_ABORTED",
+        "elapsedMs": 285201
+      }
+    },
+    {
+      "name": "heartbeat",
+      "request_path": "/heartbeat?probe=222628e40c6448430719f7f8843e2ff0-heartbeat",
+      "passed": true,
+      "elapsedSeconds": 399.369,
+      "log_match": false,
+      "log_lines": [],
+      "budget_exhausted": false,
+      "observation": {
+        "statusCode": 200,
+        "endedNormally": true,
+        "done": true,
+        "receivedChunks": 7,
+        "heartbeatEvents": 7,
+        "firstBodyMs": 57064,
+        "lastBodyMs": 399369,
+        "maxBodyGapMs": 57085,
+        "uploadBytes": 0,
+        "lastUploadProgressMs": 0,
+        "budgetExhausted": false,
+        "errorCode": null,
+        "elapsedMs": 399369
+      }
+    },
+    {
+      "name": "upload",
+      "request_path": "/upload?probe=222628e40c6448430719f7f8843e2ff0-upload",
+      "passed": false,
+      "elapsedSeconds": 285.245,
+      "idle_seconds": 285.047,
+      "log_match": true,
+      "budget_exhausted": false,
+      "log_lines": [
+        "ingress-1  | 2026/09/12 03:30:46 [error] 21#21: *6 upstream timed out (110: Operation timed out) while sending request to upstream, client: 172.24.0.1, server: _, request: \"POST /upload?probe=222628e40c6448430719f7f8843e2ff0-upload HTTP/1.1\", upstream: \"http://172.24.0.2:3000/upload?probe=222628e40c6448430719f7f8843e2ff0-upload\", host: \"127.0.0.1:3343\"",
+        "ingress-1  | 172.24.0.1 - - [12/Sep/2026:03:30:46 +0000] \"POST /upload?probe=222628e40c6448430719f7f8843e2ff0-upload HTTP/1.1\" 504 167 \"-\" \"-\""
+      ],
+      "reason": "实际空闲时长不在 295 至 330 秒范围内",
+      "observation": {
+        "statusCode": 504,
+        "endedNormally": true,
+        "done": false,
+        "receivedChunks": 1,
+        "heartbeatEvents": 0,
+        "firstBodyMs": 285245,
+        "lastBodyMs": 285245,
+        "maxBodyGapMs": 285245,
+        "uploadBytes": 16318464,
+        "lastUploadProgressMs": 198,
+        "budgetExhausted": false,
+        "errorCode": null,
+        "elapsedMs": 285245
+      }
+    }
+  ],
+  "cleanup": {
+    "status": "removed"
+  },
+  "input_sha256": {
+    "docker-compose.demo.proxy-verify.yml": "db8eed5296212444d435cd378cae07b97d3e8d24f1a58bdb40b16ed4813cb05d",
+    "nginx/demo-proxy.conf": "abae7a74feb2ed1b048b7579348707cc68d9c6a7126baab4356a7d44c7244fb2",
+    "scripts/fixtures/demo-proxy-upstream.mjs": "88298403d5b72a60760c36309639e777fce3859a9c5e076ded9e33ea3a32c169",
+    "nginx/demo.conf": "df240aef6f22929ab6435d4f4a2e3c603baa17a124fe0d9b7f01d10eaa27c093",
+    "scripts/verify-demo-proxy-timeouts.mjs": "d87d7a80852cb21bbd4bf54ece09f7d906736688957a951e93214019592895d7",
+    "scripts/demo-verification-utils.mjs": "77993e60ab31325fe83c09bc03a574f742c04680cb1f2015d221d16b9daf8c0c"
+  },
+  "limitations": [
+    "只验收本机固定 Nginx 与无业务上游的代理时限；不代替应用 SSE、目标主机、业务卷配额或镜像发布验收。"
+  ],
+  "engine": "28.4.0",
+  "compose": "2.39.4-desktop.1",
+  "images": {
+    "ingress": {
+      "reference": "nginx:1.30.4-alpine@sha256:dc5069ad14f19660b141b21236140b91656bf89bbc3e2417c70ae650cd66104c",
+      "id": "sha256:dc5069ad14f19660b141b21236140b91656bf89bbc3e2417c70ae650cd66104c"
+    },
+    "proxy-upstream": {
+      "reference": "zhiliao-demo-verify:story-2-2",
+      "id": "sha256:46f9241b6d2e539ce3a94324c356cf4336f8cf17e0cf59e5b5d920bf9b53769e"
+    }
+  },
+  "resources": [
+    {
+      "type": "container",
+      "id": "1c55e600e205"
+    },
+    {
+      "type": "container",
+      "id": "1d4fc529a570"
+    },
+    {
+      "type": "network",
+      "id": "01efb98a33f7"
+    }
+  ],
+  "ingress_binding": "127.0.0.1:3343",
+  "nginx_syntax": "passed",
+  "nginx_runtime_sha256": "c5bb8391f338dbf8e21e6942af8b3d942b7a20acf3fb93b201eca11b2f95f07a",
+  "finished_at": "2026-09-12T03:32:52.480Z"
+}

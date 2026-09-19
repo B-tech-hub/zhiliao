@@ -1,0 +1,138 @@
+# 知了 · 一键体验（无需 API Key，数据与正式部署完全隔离）
+# 当前为 0.6.1 候选配置；镜像发布及 Story 2.2 原验收完成前，不代表公网可用。
+# 用法：docker compose --env-file demo.env -p zhiliao-demo -f docker-compose.demo.yml up -d
+# 访问 http://localhost:3210 ，登录密码 demo
+# 结束体验：docker compose --env-file demo.env -p zhiliao-demo -f docker-compose.demo.yml down -v（-v 一并清空演示数据）
+name: zhiliao-demo
+
+services:
+  ingress:
+    image: nginx:1.30.4-alpine@sha256:dc5069ad14f19660b141b21236140b91656bf89bbc3e2417c70ae650cd66104c
+    user: "101:101"
+    restart: unless-stopped
+    depends_on:
+      app:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:3210:8080"
+    networks:
+      - ingress_net
+      - demo_net
+    volumes:
+      - ./nginx/demo.conf:/etc/nginx/nginx.conf:ro
+    read_only: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp:size=16m,uid=101,gid=101,noexec,nosuid
+      - /var/cache/nginx:size=256m,uid=101,gid=101,noexec,nosuid
+    pids_limit: 64
+    mem_limit: 128m
+    cpus: 0.25
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "2"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:8080/api/healthz"]
+      interval: 30s
+      timeout: 5s
+      start_period: 20s
+      retries: 3
+
+  app:
+    image: ghcr.io/b-tech-hub/zhiliao:0.6.1
+    # 想本地构建镜像时，注释掉上面 image 行并取消下一行注释：
+    # build: .
+    user: "node"
+    restart: unless-stopped
+    depends_on:
+      mockllm:
+        condition: service_healthy
+    networks:
+      - demo_net
+    environment:
+      DEMO_MODE: "1"
+      APP_PASSWORD: ${DEMO_PASSWORD:-demo}
+      # 启动命令显式使用 demo.env，避免 Docker Compose 自动读取正式 .env。
+      SESSION_SECRET: ${DEMO_SESSION_SECRET:?请设置独立的 DEMO_SESSION_SECRET}
+      LLM_BASE_URL: http://mockllm:8787/v1
+      LLM_API_KEY: demo
+      LLM_MODEL: mock
+    volumes:
+      # 命名卷：兼顾 Windows（SQLite WAL 不支持绑定挂载）与演示数据隔离
+      - demo_db:/data/db
+      - demo_uploads:/data/uploads
+      - demo_notes:/data/notes
+    read_only: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp:size=64m,noexec,nosuid
+    pids_limit: 128
+    mem_limit: 768m
+    cpus: 1.0
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/api/healthz').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      start_period: 30s
+      retries: 5
+
+  # 本地 mock LLM：复用同一镜像内置的零依赖脚本，模拟分类/聚类结果
+  mockllm:
+    image: ghcr.io/b-tech-hub/zhiliao:0.6.1
+    # build: .
+    user: "node"
+    restart: unless-stopped
+    command: ["node", "scripts/mock-llm.mjs"]
+    networks:
+      - demo_net
+    read_only: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp:size=32m,noexec,nosuid
+    pids_limit: 64
+    mem_limit: 256m
+    cpus: 0.5
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "2"
+    healthcheck:
+      # 镜像默认 HEALTHCHECK 探测的是应用端口，对 mock 服务不适用
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:8787/v1/chat/completions',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({messages:[{role:'user',content:'__zhiliao_mock_probe__'}]})}).then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      start_period: 5s
+      retries: 5
+
+volumes:
+  demo_db:
+  demo_uploads:
+  demo_notes:
+
+networks:
+  demo_net:
+    internal: true
+    name: ${COMPOSE_PROJECT_NAME}-net
+    driver_opts:
+      com.docker.network.bridge.gateway_mode_ipv4: isolated
+  ingress_net:
+    # 入口网络必须允许宿主机端口发布；业务网络仍保持 internal 隔离。
+    internal: false
+    name: ${COMPOSE_PROJECT_NAME}-ingress

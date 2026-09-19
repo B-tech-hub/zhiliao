@@ -1,0 +1,15 @@
+{
+  "extends": "D:/ClaudeProjects/ai_acknowladge/tsconfig.json",
+  "compilerOptions": {
+    "incremental": false,
+    "typeRoots": [
+      "D:/ClaudeProjects/ai_acknowladge/node_modules/@types"
+    ]
+  },
+  "include": [],
+  "files": [
+    "D:/ClaudeProjects/ai_acknowladge/src/components/markdown-editor.tsx",
+    "D:/ClaudeProjects/ai_acknowladge/tests/lib/tiptap-security.test.ts",
+    "D:/ClaudeProjects/ai_acknowladge/tests/components/markdown-editor-security.test.tsx"
+  ]
+}

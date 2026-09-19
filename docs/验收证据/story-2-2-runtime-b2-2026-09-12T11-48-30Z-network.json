@@ -1,0 +1,373 @@
+{
+  "story": "2.2",
+  "recorded_at": "2026-09-12T11:48:51.436Z",
+  "status": "passed",
+  "project": "zhiliao-demo-verify-49c029e613bd",
+  "control_project": "zhiliao-demo-network-verify-7d50d44e844c",
+  "run_id": "7d50d44e844cc6edd9641f711065ef04",
+  "services": [
+    "app",
+    "mockllm"
+  ],
+  "targets": [
+    {
+      "name": "metadata-169.254.169.254",
+      "host": "169.254.169.254",
+      "port": 80,
+      "kind": "metadata"
+    },
+    {
+      "name": "metadata-169.254.170.2",
+      "host": "169.254.170.2",
+      "port": 80,
+      "kind": "metadata"
+    },
+    {
+      "name": "host-control",
+      "host": "192.168.65.254",
+      "port": 57541,
+      "kind": "host"
+    },
+    {
+      "name": "private-10",
+      "host": "10.230.250.2",
+      "port": 8790,
+      "kind": "rfc1918"
+    },
+    {
+      "name": "private-172",
+      "host": "172.16.250.2",
+      "port": 8790,
+      "kind": "rfc1918"
+    },
+    {
+      "name": "private-192",
+      "host": "192.168.230.2",
+      "port": 8790,
+      "kind": "rfc1918"
+    }
+  ],
+  "checks": [
+    {
+      "source": "app",
+      "target": "mockllm",
+      "expected": "reachable",
+      "status_code": 200,
+      "passed": true
+    },
+    {
+      "source": "app",
+      "target": "ingress",
+      "expected": "reachable",
+      "status_code": 200,
+      "passed": true
+    },
+    {
+      "source": "mockllm",
+      "target": "app",
+      "expected": "reachable",
+      "status_code": 200,
+      "passed": true
+    },
+    {
+      "source": "mockllm",
+      "target": "ingress",
+      "expected": "reachable",
+      "status_code": 200,
+      "passed": true
+    },
+    {
+      "source": "control-client",
+      "target": "host-control",
+      "expected": "reachable",
+      "passed": true
+    },
+    {
+      "source": "app",
+      "target": "host-control",
+      "expected": "blocked",
+      "classification": "blocked-unreachable",
+      "passed": true,
+      "code": "ENETUNREACH",
+      "route_available": false,
+      "elapsed_ms": 1,
+      "positive_control": true
+    },
+    {
+      "source": "mockllm",
+      "target": "host-control",
+      "expected": "blocked",
+      "classification": "blocked-unreachable",
+      "passed": true,
+      "code": "ENETUNREACH",
+      "route_available": false,
+      "elapsed_ms": 2,
+      "positive_control": true
+    },
+    {
+      "source": "app",
+      "target": "metadata-169.254.169.254",
+      "expected": "blocked",
+      "classification": "blocked-unreachable",
+      "passed": true,
+      "code": "ENETUNREACH",
+      "route_available": false,
+      "elapsed_ms": 1,
+      "positive_control": "允许路径及来源路由"
+    },
+    {
+      "source": "mockllm",
+      "target": "metadata-169.254.169.254",
+      "expected": "blocked",
+      "classification": "blocked-unreachable",
+      "passed": true,
+      "code": "ENETUNREACH",
+      "route_available": false,
+      "elapsed_ms": 2,
+      "positive_control": "允许路径及来源路由"
+    },
+    {
+      "source": "app",
+      "target": "metadata-169.254.170.2",
+      "expected": "blocked",
+      "classification": "blocked-unreachable",
+      "passed": true,
+      "code": "ENETUNREACH",
+      "route_available": false,
+      "elapsed_ms": 1,
+      "positive_control": "允许路径及来源路由"
+    },
+    {
+      "source": "mockllm",
+      "target": "metadata-169.254.170.2",
+      "expected": "blocked",
+      "classification": "blocked-unreachable",
+      "passed": true,
+      "code": "ENETUNREACH",
+      "route_available": false,
+      "elapsed_ms": 1,
+      "positive_control": "允许路径及来源路由"
+    },
+    {
+      "source": "control-client",
+      "target": "private-10",
+      "expected": "reachable",
+      "passed": true,
+      "token_sha256": "85fc00a315b664c5776db02590116c3db6ff47a7525d99dd1be93c7fa958d7fd"
+    },
+    {
+      "source": "app",
+      "target": "private-10",
+      "expected": "blocked",
+      "classification": "blocked-unreachable",
+      "passed": true,
+      "code": "ENETUNREACH",
+      "route_available": false,
+      "elapsed_ms": 1,
+      "positive_control": true
+    },
+    {
+      "source": "mockllm",
+      "target": "private-10",
+      "expected": "blocked",
+      "classification": "blocked-unreachable",
+      "passed": true,
+      "code": "ENETUNREACH",
+      "route_available": false,
+      "elapsed_ms": 1,
+      "positive_control": true
+    },
+    {
+      "source": "control-client",
+      "target": "private-172",
+      "expected": "reachable",
+      "passed": true,
+      "token_sha256": "a5387bdf4a993591a1edf552970332957aafcb71edd7d24b8f19326ba7196dd0"
+    },
+    {
+      "source": "app",
+      "target": "private-172",
+      "expected": "blocked",
+      "classification": "blocked-unreachable",
+      "passed": true,
+      "code": "ENETUNREACH",
+      "route_available": false,
+      "elapsed_ms": 1,
+      "positive_control": true
+    },
+    {
+      "source": "mockllm",
+      "target": "private-172",
+      "expected": "blocked",
+      "classification": "blocked-unreachable",
+      "passed": true,
+      "code": "ENETUNREACH",
+      "route_available": false,
+      "elapsed_ms": 1,
+      "positive_control": true
+    },
+    {
+      "source": "control-client",
+      "target": "private-192",
+      "expected": "reachable",
+      "passed": true,
+      "token_sha256": "5882462912d0a14f483d9d99920564ce0bc9ee9b56f9e59b5b760005c033498e"
+    },
+    {
+      "source": "app",
+      "target": "private-192",
+      "expected": "blocked",
+      "classification": "blocked-unreachable",
+      "passed": true,
+      "code": "ENETUNREACH",
+      "route_available": false,
+      "elapsed_ms": 1,
+      "positive_control": true
+    },
+    {
+      "source": "mockllm",
+      "target": "private-192",
+      "expected": "blocked",
+      "classification": "blocked-unreachable",
+      "passed": true,
+      "code": "ENETUNREACH",
+      "route_available": false,
+      "elapsed_ms": 1,
+      "positive_control": true
+    }
+  ],
+  "input_sha256": {
+    "scripts/verify-demo-network.mjs": "e527300e9a0c26676906a737ab0bd53cacb7e4cee6f6280936f4463eb7eec365",
+    "scripts/demo-verification-utils.mjs": "7f470b62da3ce58fe36354797db426c5e6ba6b9e95e2829ad6ac263861da4665",
+    "docker-compose.demo.yml": "f259c2e5fd7809bc872492c5eb753a5ab54389969c3106a6ff0e926f070455f2",
+    "docker-compose.demo.verify.yml": "2f21847f6798764d6929991855f848f83cd4bfd6345ea4f8638ed2b255de22f1"
+  },
+  "cleanup": {
+    "status": "removed",
+    "resource_count": 6
+  },
+  "limitations": [
+    "仅证明本次 Docker Engine 和已测路径，不代替最终部署主机或正式服务验收。",
+    "宿主机正向对照不可用时保留未完成，不自动改为监听所有网卡。",
+    "TCP 探针不读取元数据内容；单纯超时与连接拒绝均不作为隔离通过。"
+  ],
+  "engine": "28.4.0",
+  "engine_os": "Docker Desktop",
+  "candidate_image_id": "sha256:46f9241b6d2e539ce3a94324c356cf4336f8cf17e0cf59e5b5d920bf9b53769e",
+  "networks_before": [
+    {
+      "id": "a172288b901b2a1b791280adbd2c3f169ddab9c45022fdc7541724b99a8f203e",
+      "name": "ai_acknowladge_default",
+      "internal": false,
+      "subnets": [
+        "172.19.0.0/16"
+      ],
+      "endpoint_ids": []
+    },
+    {
+      "id": "31a1be3a36c95e48f3374158921a02d969732cd576992974529fb5f8b552bd2e",
+      "name": "bilinote_default",
+      "internal": false,
+      "subnets": [
+        "172.18.0.0/16"
+      ],
+      "endpoint_ids": []
+    },
+    {
+      "id": "199774bd4a2cbb685cdb7bbce25caeae74f37b90322c6c73daafed04d62d3e49",
+      "name": "bridge",
+      "internal": false,
+      "subnets": [
+        "172.17.0.0/16"
+      ],
+      "endpoint_ids": []
+    },
+    {
+      "id": "37acf5aefebd284f7c13114478c1fb4f5071ea61814fb12921a88a426de3678a",
+      "name": "host",
+      "internal": false,
+      "subnets": [],
+      "endpoint_ids": []
+    },
+    {
+      "id": "f0ac4100a25e3b2ec5411f6257bb8ab1988435cb6406a0af366ee22eae60119f",
+      "name": "none",
+      "internal": false,
+      "subnets": [],
+      "endpoint_ids": []
+    },
+    {
+      "id": "3abad58b404e3907aae09646eacdb9dec09edc92c6dc769c783897c9d2c8d5ef",
+      "name": "zhiliao-demo-verify-49c029e613bd-ingress",
+      "internal": false,
+      "subnets": [
+        "172.22.0.0/16"
+      ],
+      "endpoint_ids": [
+        "871c1cfb7b7189c51a17fc282ba14064dd3e704fd3d4fc342e060152b1f97d8c"
+      ]
+    },
+    {
+      "id": "8f57bc1f3d0bbc207ae2f2e4a7d247aeee59e9fe592e19d5647f7d76444a89b1",
+      "name": "zhiliao-demo-verify-49c029e613bd-net",
+      "internal": true,
+      "subnets": [
+        "172.23.0.0/16"
+      ],
+      "endpoint_ids": [
+        "7b0be0d2912a2b952cb4fb07c88ff1d6b0e80faa458942d1990a2b4b5da76d7d",
+        "871c1cfb7b7189c51a17fc282ba14064dd3e704fd3d4fc342e060152b1f97d8c",
+        "a00846ff0929bf334f61fb6e33e506abe87abebca3fa577e27edbc4ca341b4d2"
+      ]
+    },
+    {
+      "id": "e79ff43e38552b9a5d6c17a2bf7fd737c8cfbbec49fa7f75e573c2431597771f",
+      "name": "zhiliao-smoke-20260910-081121_default",
+      "internal": false,
+      "subnets": [
+        "172.20.0.0/16"
+      ],
+      "endpoint_ids": []
+    },
+    {
+      "id": "6c3413f4d4700cb75b3e6305741f40dd56a2de135e802390c9cc1cb99685d0e0",
+      "name": "zhiliao-smoke-20260910-082135_default",
+      "internal": false,
+      "subnets": [
+        "172.21.0.0/16"
+      ],
+      "endpoint_ids": []
+    }
+  ],
+  "sources": {
+    "app": {
+      "id": "a00846ff0929bf334f61fb6e33e506abe87abebca3fa577e27edbc4ca341b4d2",
+      "image": "sha256:46f9241b6d2e539ce3a94324c356cf4336f8cf17e0cf59e5b5d920bf9b53769e",
+      "network_id": "8f57bc1f3d0bbc207ae2f2e4a7d247aeee59e9fe592e19d5647f7d76444a89b1",
+      "run_id": "49c029e613bd63e9e686e31f5462eba1"
+    },
+    "mockllm": {
+      "id": "7b0be0d2912a2b952cb4fb07c88ff1d6b0e80faa458942d1990a2b4b5da76d7d",
+      "image": "sha256:46f9241b6d2e539ce3a94324c356cf4336f8cf17e0cf59e5b5d920bf9b53769e",
+      "network_id": "8f57bc1f3d0bbc207ae2f2e4a7d247aeee59e9fe592e19d5647f7d76444a89b1",
+      "run_id": "49c029e613bd63e9e686e31f5462eba1"
+    }
+  },
+  "routes": {
+    "app": "Iface\tDestination\tGateway \tFlags\tRefCnt\tUse\tMetric\tMask\t\tMTU\tWindow\tIRTT                                                       \neth0\t000017AC\t00000000\t0001\t0\t0\t0\t0000FFFF\t0\t0\t0",
+    "mockllm": "Iface\tDestination\tGateway \tFlags\tRefCnt\tUse\tMetric\tMask\t\tMTU\tWindow\tIRTT                                                       \neth0\t000017AC\t00000000\t0001\t0\t0\t0\t0000FFFF\t0\t0\t0"
+  },
+  "control_subnets": [
+    "10.230.250.0/29",
+    "172.16.250.0/29",
+    "192.168.230.0/29"
+  ],
+  "occupied_routes_sha256": "208982fd1befa4f009c904d9cd7f2f0245530a1339611e9b7890425b338a75e0",
+  "host_control": {
+    "bind": "127.0.0.1",
+    "port": 57541,
+    "token_sha256": "4a2046ce8bad75ce6d9449d69e349c607bec89e1c24ddcc40989680d29bee563",
+    "resolved_address": "192.168.65.254"
+  },
+  "finished_at": "2026-09-12T11:49:03.604Z"
+}

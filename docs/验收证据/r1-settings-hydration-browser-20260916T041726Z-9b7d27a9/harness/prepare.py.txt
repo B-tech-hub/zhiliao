@@ -1,0 +1,134 @@
+import hashlib
+import json
+import secrets
+import shutil
+import socket
+import zipfile
+from pathlib import Path
+from r1lib import ROOT, RUN, REPO, docker, git, git_files, now, save, sha, resources, preservation
+
+started = now()
+assert git("rev-parse", "HEAD").strip() == RUN["baseCommit"], "HEAD 与已批准基线不符"
+assert json.loads((REPO / "package.json").read_text(encoding="utf-8"))["version"] == "0.6.1"
+assert not (ROOT / "private" / "preservation-before.json").exists(), "准备阶段不可覆盖既有基线"
+(ROOT / "private").mkdir(exist_ok=True)
+(ROOT / "evidence").mkdir(exist_ok=True)
+with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as probe:
+    probe.bind(("127.0.0.1", RUN["port"]))
+
+before = preservation()
+save(ROOT / "private" / "preservation-before.json", before)
+inventory = resources()
+save(ROOT / "private" / "resources-before.json", inventory)
+for kind, name_key in (("containers", "name"), ("volumes", "Name"), ("networks", "Name")):
+    assert not any(RUN["project"] in item[name_key] for item in inventory[kind]), "本轮资源名称已存在"
+
+spec_text = (REPO / "_bmad-output/implementation-artifacts/spec-r1-settings-hydration-418.md").read_text(encoding="utf-8")
+frozen = spec_text[spec_text.index("<frozen-after-approval"):spec_text.index("</frozen-after-approval>") + len("</frozen-after-approval>")]
+save(ROOT / "private" / "frozen.json", {"sha256": hashlib.sha256(frozen.encode("utf-8")).hexdigest()})
+
+old_manifest = json.loads((REPO / "docs/验收证据/r1-install-20260915-093206-7a7ba6b4/source-manifest.json").read_text(encoding="utf-8"))
+targets = [
+    "src/app/(app)/settings/page.tsx", "src/app/(app)/settings/settings-panel.tsx",
+    "src/app/(app)/settings/api-token-section.tsx", "src/components/note-card.tsx",
+    "src/lib/backup.ts", "src/components/nav.tsx", "src/components/theme-provider.tsx",
+    "src/components/chat/chat-scope.tsx", "package-lock.json",
+]
+matches = {name: sha(REPO / name) == old_manifest[name] for name in targets}
+assert not matches["src/app/(app)/settings/settings-panel.tsx"], "补丁未包含在当前设置组件中"
+assert all(value for key, value in matches.items() if key != "src/app/(app)/settings/settings-panel.tsx")
+
+source = ROOT / "source"
+assert not source.exists(), "源码副本已存在"
+source.mkdir()
+paths = git_files("src", "public", "scripts", "tests")
+paths += [
+    ".dockerignore", ".gitattributes", ".gitignore", "Dockerfile", "LICENSE",
+    "package.json", "package-lock.json", "next.config.ts", "next-env.d.ts",
+    "tsconfig.json", "postcss.config.mjs", "eslint.config.mjs", "vitest.config.mts",
+]
+manifest = {}
+for relative in sorted(set(paths)):
+    original = REPO / relative
+    assert original.is_file() and not original.is_symlink(), relative
+    assert original.resolve().is_relative_to(REPO.resolve()), "构建输入越界"
+    assert not any(part.startswith(".env") or part in (".git", "node_modules", "data") for part in Path(relative).parts)
+    assert original.suffix.lower() not in (".pem", ".key", ".p12", ".pfx", ".crt"), "构建输入包含凭据文件"
+    value = sha(original)
+    copied = source / relative
+    copied.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(original, copied)
+    assert sha(copied) == value and sha(original) == value, "复制期间输入变化"
+    manifest[relative] = value
+save(ROOT / "source-manifest.json", manifest)
+shutil.copy2(ROOT / "source-manifest.json", ROOT / "evidence/source-manifest.json")
+with zipfile.ZipFile(ROOT / "evidence/source-snapshot.zip", "w", compression=zipfile.ZIP_DEFLATED) as archive:
+    for relative in manifest:
+        archive.write(source / relative, relative)
+
+shutil.copy2(REPO / "docker-compose.demo.yml", ROOT / "compose.base.yml")
+(ROOT / "nginx").mkdir()
+shutil.copy2(REPO / "nginx/demo.conf", ROOT / "nginx/demo.conf")
+override = """# 本次隔离验收覆盖；保持仓库入口及业务网络声明。
+x-r1-labels: &r1-labels
+  io.zhiliao.r1.run: ${R1_RUN_ID:?}
+
+services:
+  ingress:
+    labels: *r1-labels
+    ports: !override
+      - "127.0.0.1:${R1_PORT:?}:8080"
+  app:
+    labels: *r1-labels
+    image: ${R1_IMAGE:?}
+    pull_policy: never
+    environment:
+      DEMO_MODE: "0"
+      TZ: UTC
+  mockllm:
+    labels: *r1-labels
+    image: ${R1_IMAGE:?}
+    pull_policy: never
+
+networks:
+  demo_net:
+    labels: *r1-labels
+  ingress_net:
+    labels: *r1-labels
+volumes:
+  demo_db:
+    labels: *r1-labels
+  demo_uploads:
+    labels: *r1-labels
+  demo_notes:
+    labels: *r1-labels
+"""
+(ROOT / "compose.r1.yml").write_text(override, encoding="utf-8", newline="\n")
+save(ROOT / "private/credentials.json", {
+    "password": secrets.token_hex(24),
+    "sessionSecret": secrets.token_hex(32),
+    "mockKey": "r1-local-mock-" + secrets.token_hex(16),
+})
+chrome = Path("C:/Program Files/Google/Chrome/Application/chrome.exe")
+playwright = Path("C:/Users/BAIBAI/AppData/Local/npm-cache/_npx/9833c18b2d85bc59/node_modules/playwright")
+assert chrome.is_file() and (playwright / "package.json").is_file()
+nginx_ref = "nginx:1.30.4-alpine@sha256:dc5069ad14f19660b141b21236140b91656bf89bbc3e2417c70ae650cd66104c"
+nginx = json.loads(docker("image", "inspect", nginx_ref))[0]
+save(ROOT / "evidence/docker-version.json", json.loads(docker("version", "--format", "{{json .}}")))
+summary = {
+    "runId": RUN["runId"], "startedUtc": started, "finishedUtc": now(),
+    "baseCommit": RUN["baseCommit"], "workingTree": True, "version": "0.6.1",
+    "sourceFiles": len(manifest), "sourceManifestSha256": sha(ROOT / "source-manifest.json"),
+    "sourceArchiveSha256": sha(ROOT / "evidence/source-snapshot.zip"),
+    "originalRelevantSourceMatches": matches, "originalEnvOrDataCopied": False,
+    "originalBuildOutputsOrDependenciesCopied": False, "port": RUN["port"], "portFree": True,
+    "originalResourceCounts": {kind: len(inventory[kind]) for kind in inventory},
+    "protectedWorkspaceFiles": len(before["workspace"]), "protectedDataAndEnvFiles": len(before["protected"]),
+    "composeVersion": docker("compose", "version").strip(),
+    "chrome": str(chrome), "playwrightVersion": json.loads((playwright / "package.json").read_text())["version"],
+    "nginxImageId": nginx["Id"], "tempFreeBytes": shutil.disk_usage(ROOT).free,
+    "configSha256": {name: sha(ROOT / name) for name in ("compose.base.yml", "compose.r1.yml", "nginx/demo.conf")},
+}
+save(ROOT / "evidence/preparation.json", summary)
+print(json.dumps(summary, ensure_ascii=False), flush=True)
+

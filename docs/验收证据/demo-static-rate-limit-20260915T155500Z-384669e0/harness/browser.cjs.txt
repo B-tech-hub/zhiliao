@@ -1,0 +1,155 @@
+const assert = require("node:assert/strict");
+const fs = require("node:fs");
+const path = require("node:path");
+const { createHash } = require("node:crypto");
+const { chromium } = require("C:/Users/BAIBAI/AppData/Local/npm-cache/_npx/9833c18b2d85bc59/node_modules/playwright");
+const task = __dirname;
+const state = JSON.parse(fs.readFileSync(path.join(task, "runtime-private.json"), "utf8"));
+const origin = "http://127.0.0.1:" + state.port;
+const evidence = path.join("D:/ClaudeProjects/ai_acknowladge/docs/验收证据", "demo-static-rate-limit-" + state.runId);
+const report = {
+  runId: state.runId, startedAt: new Date().toISOString(), status: "in-progress",
+  browserSurface: "浏览器插件无可用实例，复用已安装的 Chrome/Playwright，独立新目录",
+  httpCacheDisabled: true, serviceWorkers: "block", cookieInjection: false,
+  network: [], requestFailures: [], console: [], pageErrors: [], blocked: [], steps: {},
+};
+const pending = [];
+const redact = value => String(value).replaceAll(state.password, "[REDACTED]").replaceAll(state.secret, "[REDACTED]").replace(/kb_session=[^;\s"]+/g, "kb_session=[REDACTED]");
+const save = () => fs.writeFileSync(path.join(evidence, "browser-report.json"), redact(JSON.stringify(report, null, 2)) + "\n");
+const step = (name, result) => { report.steps[name] = result; console.log(JSON.stringify({ step: name, ...result })); save(); };
+let context, page;
+(async () => {
+  try {
+    assert.equal(state.report.status, "http-passed-awaiting-browser");
+    const profile = path.join(task, "browser-profile");
+    assert.equal(fs.existsSync(profile), false, "浏览器目录必须全新");
+    context = await chromium.launchPersistentContext(profile, {
+      executablePath: "C:/Program Files/Google/Chrome/Application/chrome.exe",
+      headless: true, viewport: { width: 1440, height: 900 }, locale: "zh-CN",
+      colorScheme: "light", serviceWorkers: "block",
+      args: ["--no-proxy-server", "--disable-background-networking", "--disable-component-update", "--disable-sync", "--no-first-run", "--no-default-browser-check"],
+    });
+    report.browserVersion = context.browser().version();
+    page = context.pages()[0] || await context.newPage();
+    page.setDefaultTimeout(20000);
+    page.setDefaultNavigationTimeout(30000);
+    await context.route("**/*", async route => {
+      const url = new URL(route.request().url());
+      if (["http:", "https:"].includes(url.protocol) && url.origin !== origin) {
+        report.blocked.push({ origin: url.origin, path: url.pathname, action: report.currentAction });
+        await route.abort("blockedbyclient");
+      } else await route.continue();
+    });
+    const cdp = await context.newCDPSession(page);
+    await cdp.send("Network.enable");
+    await cdp.send("Network.setCacheDisabled", { cacheDisabled: true });
+    page.on("response", response => {
+      const url = new URL(response.url());
+      const entry = {
+        at: new Date().toISOString(), path: url.pathname, method: response.request().method(),
+        status: response.status(), action: report.currentAction, resourceType: response.request().resourceType(),
+      };
+      report.network.push(entry);
+      if (url.pathname.startsWith("/_next/static/")) pending.push((async () => {
+        try {
+          const body = await response.body();
+          entry.bytes = body.length;
+          entry.sha256 = createHash("sha256").update(body).digest("hex");
+        } catch (error) { entry.bodyReadError = redact(error.message); }
+      })());
+    });
+    page.on("requestfailed", request => report.requestFailures.push({ path: new URL(request.url()).pathname, error: request.failure()?.errorText, action: report.currentAction }));
+    page.on("pageerror", error => report.pageErrors.push({ error: redact(String(error)), action: report.currentAction }));
+    page.on("console", message => { if (["error", "warning"].includes(message.type())) report.console.push({ type: message.type(), text: redact(message.text()), action: report.currentAction }); });
+    report.currentAction = "login";
+    assert.equal((await page.goto(origin + "/login", { waitUntil: "networkidle" })).status(), 200);
+    await page.getByPlaceholder("请输入访问密码", { exact: true }).fill(state.password);
+    const [login] = await Promise.all([
+      page.waitForResponse(response => new URL(response.url()).pathname === "/api/auth/login" && response.request().method() === "POST"),
+      page.getByRole("button", { name: "登录", exact: true }).click(),
+    ]);
+    assert.equal(login.status(), 200);
+    await page.waitForURL(origin + "/");
+    step("login", { status: 200, session: "真实浏览器登录，未注入或改写 Cookie" });
+    report.currentAction = "settings-save";
+    assert.equal((await page.goto(origin + "/settings", { waitUntil: "networkidle" })).status(), 200);
+    const baseInput = page.getByPlaceholder("https://api.openai.com/v1", { exact: true });
+    const modelInput = page.getByPlaceholder("如 gpt-4o-mini", { exact: true });
+    assert.equal(await baseInput.inputValue(), "http://mockllm:8787/v1");
+    assert.equal(await modelInput.inputValue(), "mock");
+    const aiSection = page.locator("section").filter({ has: page.getByRole("heading", { name: "AI 服务", exact: true }) });
+    await aiSection.locator('input[type="password"]').first().fill("demo");
+    const [settings] = await Promise.all([
+      page.waitForResponse(response => new URL(response.url()).pathname === "/api/settings/llm" && response.request().method() === "PATCH"),
+      aiSection.getByRole("button", { name: "保存", exact: true }).first().click(),
+    ]);
+    assert.equal(settings.status(), 200);
+    await page.getByText("✓ 已保存，立即生效", { exact: true }).waitFor();
+    step("settingsSave", { status: 200, baseUrl: await baseInput.inputValue(), model: await modelInput.inputValue(), savedFields: Object.keys(settings.request().postDataJSON()) });
+    const reloads = [];
+    for (let index = 1; index <= 3; index++) {
+      report.currentAction = "cold-reload-" + index;
+      const response = await page.reload({ waitUntil: "networkidle" });
+      assert.equal(response.status(), 200);
+      assert.equal(await baseInput.inputValue(), "http://mockllm:8787/v1");
+      assert.equal(await modelInput.inputValue(), "mock");
+      reloads.push({ index, status: response.status(), staticResponses: report.network.filter(item => item.action === report.currentAction && item.path.startsWith("/_next/static/")).length });
+    }
+    await page.screenshot({ path: path.join(evidence, "settings-after-refresh.png"), fullPage: false });
+    step("coldReloads", { count: reloads.length, reloads });
+    report.currentAction = "note-save";
+    await page.getByRole("button", { name: "快速记录", exact: true }).click();
+    const dialog = page.getByRole("dialog", { name: "快速记录", exact: true });
+    const noteText = "静态资源限流修复验收：" + state.runId + "，保存 mock 设置并连续刷新后，仍可正常记录。";
+    await dialog.getByRole("textbox", { name: "笔记正文", exact: true }).fill(noteText);
+    const [saved] = await Promise.all([
+      page.waitForResponse(response => new URL(response.url()).pathname === "/api/notes" && response.request().method() === "POST"),
+      dialog.getByRole("button", { name: "保存", exact: true }).click(),
+    ]);
+    assert.equal(saved.status(), 201);
+    const note = await saved.json();
+    assert.ok(note.id);
+    assert.equal(note.content, noteText);
+    await dialog.waitFor({ state: "hidden" });
+    step("noteSave", { status: 201, id: note.id, contentUnchanged: true });
+    report.currentAction = "note-open";
+    const opened = await page.goto(origin + "/notes/" + note.id, { waitUntil: "networkidle" });
+    assert.equal(opened.status(), 200);
+    await page.getByText(noteText, { exact: true }).first().waitFor();
+    await page.screenshot({ path: path.join(evidence, "note-after-save.png"), fullPage: false });
+    step("noteOpen", { status: 200, id: note.id, contentVisible: true });
+    await Promise.allSettled(pending);
+    const staticResponses = report.network.filter(item => item.path.startsWith("/_next/static/"));
+    assert.ok(staticResponses.length > 0);
+    assert.equal(staticResponses.some(item => item.status !== 200), false, "静态响应出现非 200");
+    assert.equal(staticResponses.some(item => item.bytes === 0), false, "静态响应为空");
+    assert.equal(report.pageErrors.some(item => /ChunkLoadError|Loading chunk .* failed/.test(item.error)), false);
+    assert.equal(report.pageErrors.some(item => !/Minified React error #418/.test(item.error)), false, "出现新的页面错误");
+    assert.equal(report.blocked.length, 0);
+    report.react418 = report.pageErrors.filter(item => /Minified React error #418/.test(item.error));
+    report.staticResponses = {
+      total: staticResponses.length, status200: staticResponses.filter(item => item.status === 200).length,
+      status503: staticResponses.filter(item => item.status === 503).length,
+      bodyReadErrors: staticResponses.filter(item => item.bodyReadError).length,
+      types: Object.fromEntries([...new Set(staticResponses.map(item => item.resourceType))].map(type => [type, staticResponses.filter(item => item.resourceType === type).length])),
+    };
+    report.status = "passed";
+  } catch (error) {
+    report.status = "failed";
+    report.error = redact(error.stack || error.message);
+    if (page) {
+      try {
+        fs.writeFileSync(path.join(evidence, "browser-failure-dom.txt"), redact(await page.locator("body").innerText()) + "\n");
+        await page.screenshot({ path: path.join(evidence, "browser-failure.png"), fullPage: false });
+      } catch {}
+    }
+  } finally {
+    if (context) await context.close();
+    report.finishedAt = new Date().toISOString();
+    report.browserClosed = true;
+    save();
+    console.log(JSON.stringify({ status: report.status, staticResponses: report.staticResponses, react418: report.react418?.length, error: report.error }));
+    process.exitCode = report.status === "passed" ? 0 : 1;
+  }
+})();
+

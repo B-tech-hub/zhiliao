@@ -57,3 +57,9 @@ context:
   [`llm-config.ts:124`](../../src/lib/llm-config.ts#L124)
 - 直接路由测试覆盖边界
   [`demo-boundary.test.ts:18`](../../tests/api/demo-boundary.test.ts#L18)
+
+### Review Findings
+
+- [x] [Review][Patch] Demo 的 LLM 接入点仍可由 `DEMO_LLM_BASE_URL` 环境变量改写 [src/lib/llm-config.ts:125]：已固定为容器内 mock 端点，并增加回归测试。
+- [x] [Review][Patch] Demo 设置页向浏览器暴露内部 mock 服务地址 [src/app/(app)/settings/page.tsx:26]：已在 Demo 页面侧隐藏内部接入点，仅保留服务端配置。
+- [x] [Review][Patch] Demo 边界测试未覆盖规格要求的完整路径 [tests/api/demo-boundary.test.ts:23]：已覆盖全部高风险入口和普通文本笔记允许路径；局部测试 5 项全部通过。

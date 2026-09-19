@@ -1,0 +1,54 @@
+{
+  "runId": "20260915-093206-7a7ba6b4",
+  "timeUtc": "2026-09-15T02:44:41.451253+00:00",
+  "containers": [
+    {
+      "id": "0b36eccac8c418fa821af15a5600352b3e189ac967fd93be361894fa6c827da5",
+      "service": "ingress",
+      "imageId": "sha256:dc5069ad14f19660b141b21236140b91656bf89bbc3e2417c70ae650cd66104c",
+      "requestedPorts": {
+        "8080/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "3312"
+          }
+        ]
+      },
+      "actualPorts": {
+        "8080/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "3312"
+          }
+        ]
+      },
+      "networks": [
+        "zhiliao-r1-061-20260915-093206-7a7ba6b4-ingress",
+        "zhiliao-r1-061-20260915-093206-7a7ba6b4-net"
+      ],
+      "health": "healthy"
+    },
+    {
+      "id": "ed671d97fca6892aed127be391945da3914a92defdd67e2061af760ab4209c81",
+      "service": "app",
+      "imageId": "sha256:8a8f2cd3ec1a26fc68bf04a2661f2306f09bba4b06ba9b1593d74b3f3953deb1",
+      "requestedPorts": {},
+      "actualPorts": {},
+      "networks": [
+        "zhiliao-r1-061-20260915-093206-7a7ba6b4-net"
+      ],
+      "health": "healthy"
+    },
+    {
+      "id": "9297a2c1e776d8498af5e46d304c3a4ada0d35ead9147b602349f48be6c181b1",
+      "service": "mockllm",
+      "imageId": "sha256:8a8f2cd3ec1a26fc68bf04a2661f2306f09bba4b06ba9b1593d74b3f3953deb1",
+      "requestedPorts": {},
+      "actualPorts": {},
+      "networks": [
+        "zhiliao-r1-061-20260915-093206-7a7ba6b4-net"
+      ],
+      "health": "healthy"
+    }
+  ]
+}

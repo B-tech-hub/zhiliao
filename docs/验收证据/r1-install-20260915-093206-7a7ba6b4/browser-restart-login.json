@@ -1,0 +1,15 @@
+{
+  "timeUtc": "2026-09-15T02:34:56.259Z",
+  "status": 200,
+  "url": "http://127.0.0.1:3312/",
+  "cookiesClearedBeforeLogin": true,
+  "cookieInjected": false,
+  "cookies": [
+    {
+      "name": "kb_session",
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "Lax"
+    }
+  ]
+}

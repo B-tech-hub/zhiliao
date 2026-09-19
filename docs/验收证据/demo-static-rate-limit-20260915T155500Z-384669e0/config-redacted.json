@@ -1,0 +1,247 @@
+{
+  "name": "zhiliao-static-repair-20260915t155500z-384669e0",
+  "networks": {
+    "demo_net": {
+      "name": "zhiliao-static-repair-20260915t155500z-384669e0-net",
+      "driver_opts": {
+        "com.docker.network.bridge.gateway_mode_ipv4": "isolated"
+      },
+      "ipam": {},
+      "internal": true,
+      "labels": {
+        "io.zhiliao.static-repair.run": "20260915T155500Z-384669e0"
+      }
+    },
+    "ingress_net": {
+      "name": "zhiliao-static-repair-20260915t155500z-384669e0-ingress",
+      "ipam": {},
+      "labels": {
+        "io.zhiliao.static-repair.run": "20260915T155500Z-384669e0"
+      }
+    }
+  },
+  "services": {
+    "app": {
+      "cap_drop": [
+        "ALL"
+      ],
+      "cpus": 1,
+      "command": null,
+      "depends_on": {
+        "mockllm": {
+          "condition": "service_healthy",
+          "required": true
+        }
+      },
+      "entrypoint": null,
+      "environment": {
+        "APP_PASSWORD": "[REDACTED]",
+        "DEMO_MODE": "0",
+        "LLM_API_KEY": "demo",
+        "LLM_BASE_URL": "http://mockllm:8787/v1",
+        "LLM_MODEL": "mock",
+        "SESSION_SECRET": "[REDACTED]"
+      },
+      "healthcheck": {
+        "test": [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:3000/api/healthz').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"
+        ],
+        "timeout": "5s",
+        "interval": "30s",
+        "retries": 5,
+        "start_period": "30s"
+      },
+      "image": "zhiliao-r1:0.6.1-20260915-093206-7a7ba6b4",
+      "labels": {
+        "io.zhiliao.static-repair.run": "20260915T155500Z-384669e0"
+      },
+      "logging": {
+        "driver": "json-file",
+        "options": {
+          "max-file": "3",
+          "max-size": "10m"
+        }
+      },
+      "mem_limit": "805306368",
+      "networks": {
+        "demo_net": null
+      },
+      "pids_limit": 128,
+      "read_only": true,
+      "restart": "unless-stopped",
+      "security_opt": [
+        "no-new-privileges:true"
+      ],
+      "tmpfs": [
+        "/tmp:size=64m,noexec,nosuid"
+      ],
+      "user": "node",
+      "volumes": [
+        {
+          "type": "volume",
+          "source": "demo_db",
+          "target": "/data/db",
+          "volume": {}
+        },
+        {
+          "type": "volume",
+          "source": "demo_uploads",
+          "target": "/data/uploads",
+          "volume": {}
+        },
+        {
+          "type": "volume",
+          "source": "demo_notes",
+          "target": "/data/notes",
+          "volume": {}
+        }
+      ]
+    },
+    "ingress": {
+      "cap_drop": [
+        "ALL"
+      ],
+      "cpus": 0.25,
+      "command": null,
+      "depends_on": {
+        "app": {
+          "condition": "service_healthy",
+          "required": true
+        }
+      },
+      "entrypoint": null,
+      "healthcheck": {
+        "test": [
+          "CMD",
+          "wget",
+          "-q",
+          "-O",
+          "/dev/null",
+          "http://127.0.0.1:8080/api/healthz"
+        ],
+        "timeout": "5s",
+        "interval": "30s",
+        "retries": 3,
+        "start_period": "20s"
+      },
+      "image": "nginx:1.30.4-alpine@sha256:dc5069ad14f19660b141b21236140b91656bf89bbc3e2417c70ae650cd66104c",
+      "labels": {
+        "io.zhiliao.static-repair.run": "20260915T155500Z-384669e0"
+      },
+      "logging": {
+        "driver": "json-file",
+        "options": {
+          "max-file": "2",
+          "max-size": "5m"
+        }
+      },
+      "mem_limit": "134217728",
+      "networks": {
+        "demo_net": null,
+        "ingress_net": null
+      },
+      "pids_limit": 64,
+      "ports": [
+        {
+          "mode": "ingress",
+          "host_ip": "127.0.0.1",
+          "target": 8080,
+          "published": "3313",
+          "protocol": "tcp"
+        }
+      ],
+      "read_only": true,
+      "restart": "unless-stopped",
+      "security_opt": [
+        "no-new-privileges:true"
+      ],
+      "tmpfs": [
+        "/tmp:size=16m,uid=101,gid=101,noexec,nosuid",
+        "/var/cache/nginx:size=256m,uid=101,gid=101,noexec,nosuid"
+      ],
+      "user": "101:101",
+      "volumes": [
+        {
+          "type": "bind",
+          "source": "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-static-repair-20260915T155500Z-384669e0\\runtime\\nginx\\demo.conf",
+          "target": "/etc/nginx/nginx.conf",
+          "read_only": true,
+          "bind": {
+            "create_host_path": true
+          }
+        }
+      ]
+    },
+    "mockllm": {
+      "cap_drop": [
+        "ALL"
+      ],
+      "cpus": 0.5,
+      "command": [
+        "node",
+        "scripts/mock-llm.mjs"
+      ],
+      "entrypoint": null,
+      "healthcheck": {
+        "test": [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:8787/v1/chat/completions',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({messages:[{role:'user',content:'__zhiliao_mock_probe__'}]})}).then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"
+        ],
+        "timeout": "5s",
+        "interval": "10s",
+        "retries": 5,
+        "start_period": "5s"
+      },
+      "image": "zhiliao-r1:0.6.1-20260915-093206-7a7ba6b4",
+      "labels": {
+        "io.zhiliao.static-repair.run": "20260915T155500Z-384669e0"
+      },
+      "logging": {
+        "driver": "json-file",
+        "options": {
+          "max-file": "2",
+          "max-size": "5m"
+        }
+      },
+      "mem_limit": "268435456",
+      "networks": {
+        "demo_net": null
+      },
+      "pids_limit": 64,
+      "read_only": true,
+      "restart": "unless-stopped",
+      "security_opt": [
+        "no-new-privileges:true"
+      ],
+      "tmpfs": [
+        "/tmp:size=32m,noexec,nosuid"
+      ],
+      "user": "node"
+    }
+  },
+  "volumes": {
+    "demo_db": {
+      "name": "zhiliao-static-repair-20260915t155500z-384669e0_demo_db",
+      "labels": {
+        "io.zhiliao.static-repair.run": "20260915T155500Z-384669e0"
+      }
+    },
+    "demo_notes": {
+      "name": "zhiliao-static-repair-20260915t155500z-384669e0_demo_notes",
+      "labels": {
+        "io.zhiliao.static-repair.run": "20260915T155500Z-384669e0"
+      }
+    },
+    "demo_uploads": {
+      "name": "zhiliao-static-repair-20260915t155500z-384669e0_demo_uploads",
+      "labels": {
+        "io.zhiliao.static-repair.run": "20260915T155500Z-384669e0"
+      }
+    }
+  }
+}

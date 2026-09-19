@@ -1,0 +1,1 @@
+{"@tiptap/core":[{"id":1158508,"url":"https://github.com/advisories/GHSA-cp6q-959q-f8rh","title":"Tiptap: mergeAttributes() turns an own __proto__ key into inherited executable DOM attributes","severity":"moderate","vulnerable_versions":">=2.0.0-alpha.0 <3.30.4","cwe":["CWE-79","CWE-1321"],"cvss":{"score":0,"vectorString":null}}]}

@@ -1,0 +1,19 @@
+{
+  "step": "component-lint-final",
+  "cwd": "D:/ClaudeProjects/ai_acknowladge",
+  "command": [
+    "D:/node.js/node.exe",
+    "node_modules/eslint/bin/eslint.js",
+    "tests/components/markdown-editor-security.test.tsx",
+    "--max-warnings=0",
+    "--format=json",
+    "--output-file=C:/Users/BAIBAI/AppData/Local/Temp/zhiliao-tiptap-wald1s82/component-lint-final.report.json"
+  ],
+  "startedUtc": "2026-09-19T02:56:47.394423+00:00",
+  "finishedUtc": "2026-09-19T02:56:49.871576+00:00",
+  "elapsedSeconds": 2.469,
+  "exitCode": 0,
+  "stdout": "component-lint-final.stdout.log",
+  "stderr": "component-lint-final.stderr.log",
+  "lifecycleScriptsDisabled": true
+}

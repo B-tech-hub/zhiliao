@@ -1,0 +1,60 @@
+import hashlib, json, pathlib, subprocess, sys
+root = pathlib.Path(r"D:/ClaudeProjects/ai_acknowladge")
+task = pathlib.Path(__file__).parent
+run_id = task.name.removeprefix("zhiliao-static-repair-")
+allowed = {
+    "nginx/demo.conf", "tests/config/demo-compose.test.ts",
+    "README.md", "README.en.md", "CHANGELOG.md", "docs/README.md",
+    "docs/R1安装验收-2026-09-15.md", "docs/releases/v0.6.1.md",
+    "docs/产品规划/开源发布范围与执行清单-2026-09-13.md",
+    "_bmad-output/implementation-artifacts/spec-repair-demo-static-rate-limit.md",
+    "_bmad-output/implementation-artifacts/deferred-work.md",
+}
+evidence_prefix = "docs/验收证据/demo-static-rate-limit-" + run_id + "/"
+def git(*args):
+    return subprocess.check_output(["git", *args], cwd=root)
+def digest(file):
+    h = hashlib.sha256()
+    with file.open("rb") as stream:
+        for chunk in iter(lambda: stream.read(1024 * 1024), b""): h.update(chunk)
+    return h.hexdigest()
+def snapshot():
+    files = {}
+    for name in sorted(set(git("ls-files", "--cached", "--others", "--exclude-standard", "-z").decode("utf8").split("\0")) - {""}):
+        file = root / name
+        if file.is_file(): files[name] = {"sha256": digest(file), "bytes": file.stat().st_size}
+    protected = {}
+    targets = list(root.glob(".env*")) + list(root.glob("demo.env*")) + list(root.glob("data*"))
+    for target in targets:
+        candidates = target.rglob("*") if target.is_dir() else [target]
+        for file in candidates:
+            if file.is_file():
+                stat = file.stat()
+                protected[file.relative_to(root).as_posix()] = {"sha256": digest(file), "bytes": stat.st_size, "mtime_ns": stat.st_mtime_ns}
+    index = pathlib.Path(git("rev-parse", "--git-path", "index").decode().strip())
+    if not index.is_absolute(): index = root / index
+    return {"head": git("rev-parse", "HEAD").decode().strip(), "index_sha256": digest(index), "files": files, "protected": protected}
+def write(file, value):
+    file.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf8", newline="\n")
+if sys.argv[1] == "before":
+    value = snapshot()
+    assert not (task / "before.json").exists()
+    write(task / "before.json", value)
+    for name in allowed:
+        source = root / name
+        if source.is_file():
+            dest = task / "source-before" / name
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            dest.write_bytes(source.read_bytes())
+    print(json.dumps({"source_files": len(value["files"]), "protected_files": len(value["protected"]), "head": value["head"]}))
+else:
+    before = json.loads((task / "before.json").read_text(encoding="utf8"))
+    after = snapshot()
+    changed = sorted(name for name in before["files"] if after["files"].get(name) != before["files"][name])
+    added = sorted(set(after["files"]) - set(before["files"]))
+    unexpected = [name for name in changed if name not in allowed] + [name for name in added if name not in allowed and not name.startswith(evidence_prefix)]
+    result = {"head_unchanged": after["head"] == before["head"], "index_unchanged": after["index_sha256"] == before["index_sha256"], "protected_unchanged": after["protected"] == before["protected"], "changed": changed, "added": added, "unexpected": unexpected, "original_source_files": len(before["files"]), "protected_files": len(before["protected"])}
+    write(task / "preservation.json", result)
+    print(json.dumps(result, ensure_ascii=False))
+    assert result["head_unchanged"] and result["index_unchanged"] and result["protected_unchanged"] and not unexpected
+

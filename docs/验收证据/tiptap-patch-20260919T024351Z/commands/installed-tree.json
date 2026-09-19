@@ -1,0 +1,19 @@
+{
+  "step": "installed-tree",
+  "cwd": "D:/ClaudeProjects/ai_acknowladge",
+  "command": [
+    "D:/node.js/node.exe",
+    "D:/node.js/node_modules/npm/bin/npm-cli.js",
+    "ls",
+    "@tiptap/core",
+    "--all",
+    "--json"
+  ],
+  "startedUtc": "2026-09-19T02:57:34.287766+00:00",
+  "finishedUtc": "2026-09-19T02:57:35.313956+00:00",
+  "elapsedSeconds": 1.031,
+  "exitCode": 0,
+  "stdout": "installed-tree.stdout.log",
+  "stderr": "installed-tree.stderr.log",
+  "lifecycleScriptsDisabled": true
+}

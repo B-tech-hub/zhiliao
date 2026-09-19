@@ -1,0 +1,103 @@
+{
+  "story": "2.2",
+  "recorded_at": "2026-09-12T02:41:22.819Z",
+  "status": "passed",
+  "project": "zhiliao-demo-verify-a2-20260912",
+  "run_id": "ea454295b0c842a9318d3d9a31e6598d",
+  "port": 3342,
+  "scope": "本机候选入口与 HTTP",
+  "checks": {
+    "services_healthy": true,
+    "http": {
+      "health": 200,
+      "oversize": 413,
+      "oversize_response_ms": 4,
+      "sent_body_bytes": 1
+    },
+    "nginx_syntax": "passed",
+    "sse": "not_run"
+  },
+  "cleanup": {
+    "status": "retained"
+  },
+  "limitations": [
+    "本次只验收本机候选镜像，不代表固定的 0.6.0 发布镜像已包含补丁。",
+    "目标主机出站隔离、业务卷磁盘配额及 Nginx 300 秒代理空闲超时尚需专门验收。",
+    "配置及脚本哈希用于关联本次验收输入，不证明候选镜像包含当前全部工作区源码。",
+    "未选择 SSE 检查；不能关闭 SSE 验收项。"
+  ],
+  "engine": "28.4.0",
+  "compose": "2.39.4-desktop.1",
+  "candidate_image_id": "sha256:46f9241b6d2e539ce3a94324c356cf4336f8cf17e0cf59e5b5d920bf9b53769e",
+  "baseline_commit": "f213761b795cc020be2122e27301fe4a7c5cf7a0",
+  "input_sha256": {
+    "docker-compose.demo.yml": "f259c2e5fd7809bc872492c5eb753a5ab54389969c3106a6ff0e926f070455f2",
+    "docker-compose.demo.verify.yml": "2f21847f6798764d6929991855f848f83cd4bfd6345ea4f8638ed2b255de22f1",
+    "nginx/demo.conf": "df240aef6f22929ab6435d4f4a2e3c603baa17a124fe0d9b7f01d10eaa27c093",
+    "scripts/verify-demo-runtime.ps1": "d8d0b56bab5c432ca4ed824ec5780b8360a09d8bd722f2904044289433e57695",
+    "scripts/verify-demo-runtime.mjs": "e302fbb02b0a383ad8fa268b284b9eb307982d0543bea4fc52562344be2ac2b5",
+    "scripts/demo-http-probes.mjs": "420ddcd722ae3f4fca844671f97cecabb398637d557f47b1c3174d2a059be238"
+  },
+  "images": {
+    "app": "zhiliao-demo-verify:story-2-2",
+    "ingress": "nginx:1.30.4-alpine@sha256:dc5069ad14f19660b141b21236140b91656bf89bbc3e2417c70ae650cd66104c",
+    "mockllm": "zhiliao-demo-verify:story-2-2"
+  },
+  "resources": [
+    {
+      "type": "container",
+      "id": "c3d4ba49e936"
+    },
+    {
+      "type": "container",
+      "id": "84f1d147de00"
+    },
+    {
+      "type": "container",
+      "id": "eb03ec409280"
+    },
+    {
+      "type": "network",
+      "id": "b9fe8f5cd150"
+    },
+    {
+      "type": "network",
+      "id": "609bc7bc7fb3"
+    },
+    {
+      "type": "volume",
+      "id": "zhiliao-demo-verify-a2-20260912_demo_db"
+    },
+    {
+      "type": "volume",
+      "id": "zhiliao-demo-verify-a2-20260912_demo_notes"
+    },
+    {
+      "type": "volume",
+      "id": "zhiliao-demo-verify-a2-20260912_demo_uploads"
+    }
+  ],
+  "ingress_binding": "127.0.0.1:3342",
+  "recovery": {
+    "directory": "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-demo-verify-pJg1tC",
+    "run_label": "io.zhiliao.demo-verify.run=ea454295b0c842a9318d3d9a31e6598d",
+    "cleanup_arguments": [
+      "compose",
+      "--project-directory",
+      "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-demo-verify-pJg1tC",
+      "--env-file",
+      "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-demo-verify-pJg1tC\\demo.env",
+      "-p",
+      "zhiliao-demo-verify-a2-20260912",
+      "-f",
+      "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-demo-verify-pJg1tC\\docker-compose.demo.yml",
+      "-f",
+      "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-demo-verify-pJg1tC\\docker-compose.demo.verify.yml",
+      "down",
+      "-v",
+      "--remove-orphans"
+    ],
+    "note": "先核对所有资源的运行标识，再清理；临时目录包含凭据，不应提交或公开。"
+  },
+  "finished_at": "2026-09-12T02:41:43.258Z"
+}

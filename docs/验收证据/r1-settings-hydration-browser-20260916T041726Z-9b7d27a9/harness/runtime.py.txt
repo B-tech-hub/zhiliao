@@ -1,0 +1,175 @@
+import copy
+import json
+import sys
+from r1lib import ROOT, RUN, docker, compose_args, command, now, save, resources
+
+LABEL = "io.zhiliao.r1.run"
+PROJECT_LABEL = "com.docker.compose.project"
+credentials = json.loads((ROOT / "private/credentials.json").read_text(encoding="utf-8"))
+report_path = ROOT / "evidence/runtime.json"
+report = json.loads(report_path.read_text(encoding="utf-8")) if report_path.exists() else {
+    "runId": RUN["runId"], "project": RUN["project"], "port": RUN["port"],
+    "startedUtc": now(), "status": "prepared", "buildCount": 1, "commands": [],
+}
+
+def redact(text):
+    for value in credentials.values():
+        text = str(text).replace(value, "[REDACTED]")
+    return text
+
+def persist():
+    report_path.write_text(redact(json.dumps(report, ensure_ascii=False, indent=2)) + "\n", encoding="utf-8", newline="\n")
+
+def compose(*args, timeout=60):
+    started = now()
+    try:
+        output = command([*compose_args(), *args], timeout=timeout, cwd=ROOT)
+        report["commands"].append({"args": list(args), "startedUtc": started, "finishedUtc": now(), "exitCode": 0})
+        return output
+    except Exception as error:
+        report["commands"].append({"args": list(args), "startedUtc": started, "finishedUtc": now(), "error": redact(str(error))})
+        raise
+    finally:
+        persist()
+
+def owned():
+    found = {}
+    for kind, listing in (("container", ["ps", "-a"]), ("network", ["network", "ls"]), ("volume", ["volume", "ls"])):
+        for selector in ("label=" + PROJECT_LABEL + "=" + RUN["project"], "name=" + RUN["project"]):
+            fmt = "{{.Name}}" if kind == "volume" else "{{.ID}}"
+            for resource_id in docker(*listing, "--filter", selector, "--format", fmt).split():
+                found[(kind, resource_id)] = {"type": kind, "id": resource_id}
+    result = []
+    for entry in found.values():
+        item = json.loads(docker(entry["type"], "inspect", entry["id"]))[0]
+        labels = item["Config"]["Labels"] if entry["type"] == "container" else item["Labels"]
+        assert labels.get(LABEL) == RUN["runId"] and labels.get(PROJECT_LABEL) == RUN["project"], "本轮名称下发现外来资源"
+        result.append({**entry, "inspect": item})
+    return result
+
+def inspect_runtime():
+    items = owned()
+    assert {kind: sum(item["type"] == kind for item in items) for kind in ("container", "volume", "network")} == {
+        "container": 3, "volume": 3, "network": 2,
+    }
+    entries = []
+    for entry in items:
+        if entry["type"] != "container":
+            continue
+        item = entry["inspect"]
+        service = item["Config"]["Labels"]["com.docker.compose.service"]
+        environment = dict(part.split("=", 1) for part in item["Config"]["Env"] if "=" in part)
+        if service in ("app", "mockllm"):
+            assert item["Image"] == RUN["imageId"], "运行容器不是本次候选"
+            assert set(item["NetworkSettings"]["Networks"]) == {RUN["project"] + "-net"}
+        if service == "app":
+            assert environment["TZ"] == "UTC" and environment["DEMO_MODE"] == "0"
+            assert environment["LLM_BASE_URL"] == "http://mockllm:8787/v1"
+            data_mounts = [mount for mount in item["Mounts"] if mount["Type"] != "tmpfs"]
+            assert {mount["Destination"] for mount in data_mounts} == {"/data/db", "/data/uploads", "/data/notes"}
+            assert all(mount["Type"] == "volume" and mount["Name"].startswith(RUN["project"] + "_") for mount in data_mounts)
+            assert all(mount["Destination"] == "/tmp" for mount in item["Mounts"] if mount["Type"] == "tmpfs")
+            RUN["appId"] = item["Id"]
+        assert item["State"]["Status"] == "running" and item["State"]["Health"]["Status"] == "healthy"
+        assert item["HostConfig"]["ReadonlyRootfs"]
+        entries.append({
+            "service": service, "id": item["Id"], "imageId": item["Image"],
+            "startedAt": item["State"]["StartedAt"], "health": item["State"]["Health"]["Status"],
+            "user": item["Config"]["User"], "readOnly": item["HostConfig"]["ReadonlyRootfs"],
+            "networks": list(item["NetworkSettings"]["Networks"]), "ports": item["NetworkSettings"]["Ports"],
+            "mounts": [{"type": mount["Type"], "name": mount.get("Name"), "source": mount["Source"],
+                        "destination": mount["Destination"], "readWrite": mount["RW"]} for mount in item["Mounts"]],
+            "environment": {key: environment[key] for key in ("NODE_ENV", "DEMO_MODE", "TZ", "LLM_BASE_URL", "LLM_MODEL",
+                "DATABASE_PATH", "UPLOAD_DIR", "NOTES_EXPORT_DIR") if key in environment},
+        })
+    save(ROOT / "run.json", RUN)
+    report["containers"] = entries
+    report["resourceCounts"] = {"containers": 3, "volumes": 3, "networks": 2}
+    return entries
+
+mode = sys.argv[1]
+try:
+    if mode == "up":
+        build = json.loads((ROOT / "evidence/build.json").read_text(encoding="utf-8"))
+        assert build["status"] == "passed" and build["imageId"] == RUN["imageId"]
+        assert report["status"] == "prepared" and not owned(), "禁止复用已启动的本轮环境"
+        original = json.loads(command([*compose_args()[:-2], "config", "--format", "json"], cwd=ROOT))
+        actual = json.loads(compose("config", "--format", "json"))
+        expected = copy.deepcopy(original)
+        labels = {LABEL: RUN["runId"]}
+        # Compose 保留标签锚点的顶层扩展，值也必须与本轮标识一致。
+        expected["x-r1-labels"] = labels
+        for service in ("app", "mockllm"):
+            expected["services"][service]["image"] = RUN["imageId"]
+            expected["services"][service]["pull_policy"] = "never"
+        expected["services"]["app"]["environment"].update(DEMO_MODE="0", TZ="UTC")
+        expected["services"]["ingress"]["ports"][0]["published"] = str(RUN["port"])
+        for service in expected["services"].values():
+            service["labels"] = labels
+        for kind in ("volumes", "networks"):
+            for config in expected[kind].values():
+                config["labels"] = labels
+        assert expected == actual, "临时覆盖包含计划外配置变化"
+        assert actual["name"] == RUN["project"]
+        assert actual["networks"]["demo_net"]["internal"] is True
+        assert actual["networks"]["demo_net"]["driver_opts"]["com.docker.network.bridge.gateway_mode_ipv4"] == "isolated"
+        assert actual["networks"]["ingress_net"].get("internal", False) is False
+        assert set(actual["services"]["app"]["networks"]) == {"demo_net"}
+        assert set(actual["services"]["mockllm"]["networks"]) == {"demo_net"}
+        assert actual["services"]["ingress"]["ports"][0]["host_ip"] == "127.0.0.1"
+        for config in actual["volumes"].values():
+            assert config["name"].startswith(RUN["project"] + "_") and not config.get("external", False)
+        public_config = copy.deepcopy(actual)
+        for key in ("APP_PASSWORD", "SESSION_SECRET", "LLM_API_KEY"):
+            if key in public_config["services"]["app"]["environment"]:
+                public_config["services"]["app"]["environment"][key] = "[REDACTED]"
+        save(ROOT / "evidence/config-redacted.json", public_config)
+        report["configurationChecks"] = {"approvedOverlayOnly": True, "serverTimezone": "UTC",
+            "normalMode": True, "loopbackOnly": True, "separateVolumes": True, "mockOnly": True}
+        print(json.dumps({"stage": "starting", "project": RUN["project"], "port": RUN["port"]}), flush=True)
+        compose("up", "-d", "--no-build", "--pull", "never", "--wait", "--wait-timeout", "180", timeout=210)
+        inspect_runtime()
+        report["status"] = "healthy-awaiting-browser"
+    elif mode == "inspect":
+        inspect_runtime()
+    elif mode in ("down", "verify-cleanup"):
+        items = owned()
+        removed = {kind: sum(item["type"] == kind for item in items) for kind in ("container", "volume", "network")}
+        if mode == "verify-cleanup":
+            assert not items and any(entry.get("args", [None])[0] == "down" and entry.get("exitCode") == 0 for entry in report["commands"])
+            removed = {kind: report["resourceCounts"][kind + "s"] for kind in ("container", "volume", "network")}
+        if items:
+            logs = compose("logs", "--no-color", "--timestamps", timeout=30)
+            (ROOT / "evidence/runtime-before-cleanup.log").write_text(redact(logs), encoding="utf-8", newline="\n")
+            compose("down", "-v", "--timeout", "15", timeout=65)
+        assert not owned(), "本轮资源清理后仍有残留"
+        before = json.loads((ROOT / "private/resources-before.json").read_text(encoding="utf-8"))
+        after = resources()
+        # Docker 的 Mounts 数组顺序不固定；只按挂载目标排序，不忽略字段或内容。
+        def normalized(kind, values):
+            values = copy.deepcopy(values)
+            if kind == "containers":
+                for item in values:
+                    item["mounts"].sort(key=lambda mount: mount["Destination"])
+            return values
+        same = {kind: normalized(kind, before[kind]) == normalized(kind, after[kind]) for kind in ("containers", "volumes", "networks")}
+        assert all(same.values()), "既有 Docker 资源发生变化"
+        assert set(before["imageIds"]).issubset(after["imageIds"]), "既有镜像丢失"
+        report["cleanup"] = {"status": "passed", "removed": removed, "ownedRemaining": 0,
+            "existingResourcesUnchanged": same, "existingImagesRetained": True,
+            "candidateImageRetained": RUN["imageId"], "finishedUtc": now(),
+            "mountArrayOrderNormalized": True, "successfulDownReused": mode == "verify-cleanup"}
+        if "failure" in report:
+            report["previousCleanupFailure"] = report.pop("failure")
+        report["status"] = "cleaned"
+    else:
+        raise RuntimeError("未知运行模式")
+except Exception as error:
+    report["failure"] = {"mode": mode, "at": now(), "error": redact(str(error))}
+    report["status"] = "failed"
+    persist()
+    raise
+report["updatedUtc"] = now()
+persist()
+print(json.dumps({"status": report["status"], "mode": mode, "containers": report.get("containers"),
+                  "cleanup": report.get("cleanup")}, ensure_ascii=False), flush=True)

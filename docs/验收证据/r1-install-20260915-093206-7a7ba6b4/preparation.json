@@ -1,0 +1,40 @@
+{
+  "runId": "20260915-093206-7a7ba6b4",
+  "startedUtc": "2026-09-15T01:34:52.110032+00:00",
+  "finishedUtc": "2026-09-15T01:35:02.039608+00:00",
+  "baseCommit": "f213761b795cc020be2122e27301fe4a7c5cf7a0",
+  "version": "0.6.1",
+  "workingTree": true,
+  "sourceFiles": 262,
+  "sourceManifestSha256": "1de98911e22cfca248a709c92d247436d50c862baaa04cd947ea0bf0750cac0d",
+  "sourceArchiveSha256": "fb76293f0c3599e4f5bd142e5c771099606beb06b4556a1b968dc2c52d5d5614",
+  "previousRuntimeFingerprintsMatched": 186,
+  "copiedOriginalEnvOrData": false,
+  "copiedDependenciesOrBuildOutput": false,
+  "dockerInfo": {
+    "cpus": 24,
+    "memoryBytes": 8204206080,
+    "driver": "overlayfs",
+    "os": "linux",
+    "architecture": "x86_64"
+  },
+  "composeVersion": "Docker Compose version v2.39.4-desktop.1",
+  "originalContainerCount": 7,
+  "originalVolumeCount": 8,
+  "originalNetworkCount": 7,
+  "workspaceFilesProtected": 748,
+  "protectedFileHashes": 148,
+  "dataMetadataFiles": 143,
+  "port": 3312,
+  "portFree": true,
+  "browserAlreadyInstalled": true,
+  "playwrightAlreadyInstalled": true,
+  "hostTempDiskFreeBytes": 89436229632,
+  "repositoryDiskFreeBytes": 86108684288,
+  "configSha256": {
+    "base": "e7d18a442c9ee1215cfb8dbecf50f2e97d64ed8bbd1cef6c567557283c729d5e",
+    "override": "a074d126cb68e541a453b5afb0c785e575d50bce13ecee0cc94ff2f1bc1b5b82",
+    "nginx": "a798fd4981ebbced93c5a52150ac34da31b7fcad4f41c8a95e87c15090adde7b",
+    "approvedPlan": "75612cab017229d72c30cfca0f7633aa6cb86b2efce45cd3027f257fffe796a3"
+  }
+}

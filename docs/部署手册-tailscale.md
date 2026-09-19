@@ -4,7 +4,9 @@
 
 ## 这份手册要做成一件什么事
 
-装完之后你会得到：家里电脑上跑着你的私人知识库；手机主屏幕上有一个它的 App 图标，无论在家用 WiFi、还是在外面用流量，点开就能用；数据只存在你自己的电脑里，不经过任何第三方服务器，也完全不暴露在公网上。
+装完之后你会得到：家里电脑上跑着你的私人知识库；手机通过 Tailscale 访问，并可添加主屏幕图标。数据库和图片保存在自己的设备上；启用外部 AI 服务时，相关笔记内容会按功能发送给你选择的模型供应商。Tailscale 的设备通信加密传输，必要时会经过加密中继。
+
+本手册将应用端口限制为本机，再用 Tailscale Serve 提供 tailnet 内的 HTTPS 入口。仅安装 Tailscale 不会关闭原有的局域网端口、路由器转发或其他公网入口；这些入口需要按实际配置核对。
 
 整体结构一张图：
 
@@ -39,7 +41,7 @@
 
 ### 路线图
 
-1 装 Docker → 2 下载代码 → 3 写配置 → 4 启动应用 → 5 配 AI（可跳过）→ 6 Tailscale 组网 → 7 手机装 App → 8 日常维护 → 9 出问题查 FAQ
+1 装 Docker → 2 获取固定版本部署文件 → 3 写配置 → 4 拉取镜像并启动 → 5 配 AI（可跳过）→ 6 Tailscale 组网 → 7 手机装 App → 8 日常维护 → 9 出问题查 FAQ
 
 ---
 
@@ -86,29 +88,30 @@ docker ps
 
 ---
 
-## 第 2 章：下载项目代码
+## 第 2 章：获取固定版本的部署文件
 
-> 这一步在干什么：把应用的"图纸"（源代码）放到电脑上。第 4 章 Docker 会照着图纸把应用"盖"起来（这个过程叫**构建**）。
+本手册的安装步骤继续使用已发布 **v0.6.0**。当前分支已进入 **0.6.1 候选，尚未发布**；不要将当前分支的 Compose 与历史安装包混用。候选变化与待验证范围见 [v0.6.1 草稿](releases/v0.6.1.md)。
 
-### 2.1 下载 ZIP
+> 这一步在干什么：取得 `v0.6.0` 配套的 Compose 和配置模板。第 4 章直接下载 `ghcr.io/b-tech-hub/zhiliao:0.6.0` 预构建镜像，无需在你的电脑上编译源码。
 
-浏览器打开项目仓库页面 `<你的仓库地址>` → 点绿色的 **Code** 按钮 → **Download ZIP**。
+### 2.1 下载固定版本 ZIP
+
+打开 [v0.6.0 发布页](https://github.com/B-tech-hub/zhiliao/releases/tag/v0.6.0)，下载该版本的 **Source code (zip)**，或使用[固定 v0.6.0 ZIP 链接](https://github.com/B-tech-hub/zhiliao/archive/refs/tags/v0.6.0.zip)。不要用仓库默认分支的 **Code → Download ZIP** 代替固定版本。
 
 ### 2.2 解压到一个简单的路径
 
-把 ZIP 解压到一个路径简单的位置，本手册以 `D:\apps\` 为例，解压后得到一个形如 `zhiliao-main` 的文件夹。
+全新安装时把 ZIP 解压到 `D:\apps\`，得到 `zhiliao-0.6.0` 文件夹；可在**第一次启动前**将它命名为 `zhiliao`。下文统一以 `D:\apps\zhiliao` 为例。
 
-> ⚠️ **全手册最重要的警告之一：这个文件夹的名字定下来就不要再改，以后升级也必须覆盖回这同一个文件夹。**
-> Docker 会用"文件夹名"给你的数据打标签；换个文件夹名再启动，等于挂上一套全新的空数据，看起来就像笔记全丢了（原理见第 4 章，自救见 FAQ Q9）。
->
-> 小建议：路径里尽量避免中文和空格（别放"桌面"或"新建文件夹 (2)"里），能少踩很多莫名其妙的坑。
+已有安装应继续使用原目录，**不要求改名**；例如原来是 `D:\apps\zhiliao-main`，后续命令就仍使用它。Compose 的 project 名受 `-p`、`COMPOSE_PROJECT_NAME`、配置和目录名影响，Windows 卷名跟随实际 project；Linux 绑定目录还受原绝对路径影响。升级时要保留原 project、挂载和 `.env`，不能只凭同名文件夹认定接回了原数据。
+
+路径尽量简单。遇到空应用先按 FAQ Q9 核对实际挂载，不要初始化新库或删除旧容器、旧卷。
 
 ### 2.3 进入文件夹并确认内容
 
 PowerShell 里执行（路径按你的实际情况替换）：
 
 ```powershell
-cd D:\apps\zhiliao-main
+cd D:\apps\zhiliao
 dir
 ```
 
@@ -118,9 +121,26 @@ dir
 
 ### 2.4 备选方式：git clone
 
-装了 Git 的读者也可以 `git clone <你的仓库地址>`，效果一样，以后升级直接 `git pull`。没用过 Git 就用上面的 ZIP 方式，不必专门去学。
+已安装 Git 时，可在尚无 `zhiliao` 子目录的位置执行：
+
+```powershell
+git clone --branch v0.6.0 --depth 1 https://github.com/B-tech-hub/zhiliao.git zhiliao
+cd zhiliao
+```
+
+固定 tag 的检出用于复现该版本。以后升级先选择目标 Release 并对比配置，按 §8.2 操作；`git pull` 不负责选择或切换应用镜像版本。
 
 > **Linux/NAS 备注**：`git clone` 或下载 ZIP 解压，其余相同。
+
+### 2.5 锁定镜像与本机端口
+
+`v0.6.0` 历史 tag 内的 Compose 仍引用 `latest`。因此无论用 ZIP 还是 Git 获取，启动前都要打开 `docker-compose.yml`，把现有 `services.app.image` 行改为：
+
+```yaml
+image: ghcr.io/b-tech-hub/zhiliao:0.6.0
+```
+
+再把现有 `ports` 下的 `"3000:3000"` 改为 `"127.0.0.1:3000:3000"`，保留其他配置。这让本机浏览器和 Tailscale Serve 仍能连接，普通局域网地址不直接提供应用入口。不要用这两行片段替换整份文件，也不要取消 `build: .` 的注释；源码构建属于 README 的备用路径。
 
 ---
 
@@ -133,10 +153,12 @@ dir
 ### 3.1 从模板复制出配置文件
 
 ```powershell
-Copy-Item .env.example .env
+if (-not (Test-Path -LiteralPath '.env')) {
+    Copy-Item -LiteralPath '.env.example' -Destination '.env'
+}
 ```
 
-（项目自带模板 `.env.example`，这条命令把它复制一份、改名为 `.env`。）
+（只在 `.env` 不存在时复制模板。已有配置保留原值；升级不要重新覆盖密码、密钥和模型配置。）
 
 ### 3.2 生成随机密钥
 
@@ -193,7 +215,7 @@ PORT=3000
 
 > **建议加一行时区**：容器里默认是 UTC（比北京时间慢 8 小时）。这不影响记笔记，但「每周回顾」是按周分段的——不设时区的话，周一早上 8 点之前记的东西会被算进上一周。在 `.env` 里加一行 `TZ=Asia/Shanghai` 即可（改完需要重启容器，见第 8 章）。
 
-> **Linux/NAS 备注**：`cp .env.example .env`；密钥用 `openssl rand -hex 32` 生成；编辑用 `nano .env`。
+> **Linux/NAS 备注**：首次安装用 `cp -n .env.example .env` 保留已有配置；密钥用 `openssl rand -hex 32` 生成；编辑用 `nano .env`。
 
 ---
 
@@ -203,9 +225,16 @@ PORT=3000
 
 ### 4.1 执行主命令
 
-确认 PowerShell 还在项目文件夹里（不确定就重新 `cd D:\apps\zhiliao-main`），执行：
+确认 PowerShell 还在自己的项目文件夹里（全新安装示例为 `D:\apps\zhiliao`），先核对解析后的镜像：
 
 ```powershell
+docker compose -f docker-compose.yml -f docker-compose.win.yml config --images
+```
+
+输出必须为 `ghcr.io/b-tech-hub/zhiliao:0.6.0`；仍是 `latest` 时返回 §2.5。确认后逐条执行，任何一步失败都先排错：
+
+```powershell
+docker compose -f docker-compose.yml -f docker-compose.win.yml pull app
 docker compose -f docker-compose.yml -f docker-compose.win.yml up -d
 ```
 
@@ -219,7 +248,7 @@ docker compose -f docker-compose.yml -f docker-compose.win.yml up -d
 > **原理：Windows 为什么要叠第二个文件？**
 > 应用的数据库（SQLite）需要一种"共享内存"能力，而 Windows 和容器内 Linux 之间共享文件夹时恰好不支持它（强行用会报 `SQLITE_IOERR_SHMOPEN`）。所以 Windows 上让数据住进 Docker 自己管理的两个"**命名卷**"里：`kb_db`（数据库）和 `kb_uploads`（图片）。
 >
-> 直接后果：**你的数据不在项目文件夹的 `data` 子目录里**，而在 Docker 内部（这也是"文件夹名不能改"的原因——命名卷按"文件夹名"归属）。想导出数据做备份，见 8.3。
+> 数据库与图片位于实际 project 对应的命名卷；增量 Markdown 仍通过 `./data/notes` 绑定到宿主机。卷的逻辑名不等于完整卷名，备份前按 §8.2 核对挂载，恢复见 §8.3。
 
 首次执行要下载镜像，**几分钟属于正常**（取决于网速），等它跑完，最后看到 `Started` 或 `Running` 字样即可。
 
@@ -245,7 +274,7 @@ docker logs --tail 50 zhiliao
 
 > **名词解释**：`localhost` 意思是"这台电脑自己"，`3000` 是应用的"门牌号"（端口）。所以这个地址**只有这台电脑自己打得开，手机现在还打不开——是正常的**，第 6、7 章就是解决这件事。
 
-> **Linux/NAS 备注**：不需要 Windows 补丁文件，直接 `docker compose up -d`；数据落在项目文件夹 `./data/` 里。
+> **Linux/NAS 备注**：不叠加 Windows 文件；依次使用 `docker compose config --images`、`docker compose pull app`、`docker compose up -d`。数据落在项目文件夹 `./data/`，也要完成 §2.5 的版本与端口设置。
 
 ---
 
@@ -292,7 +321,7 @@ docker logs --tail 50 zhiliao
 ## 第 6 章：Tailscale——让手机在任何地方都能连回家
 
 > 这一步在干什么（全手册最关键的一章）：
-> 现在应用只有家里电脑自己能访问。Tailscale 会把你的电脑和手机拉进一个**私人虚拟局域网**——两台设备之间建立端到端加密的直连隧道，不需要公网 IP、不用碰路由器设置，外人完全摸不到你的服务。
+> 完成 §2.5 后，应用端口只绑定本机。Tailscale 将电脑和手机连入同一 tailnet，用端到端加密通信；无法直连时可走加密中继。此路径无需公网 IP 或路由器端口转发，访问权限仍取决于 tailnet 的设备和访问规则。
 > 同时，Tailscale 免费给每台设备一个正规域名（`xxx.ts.net`）并自动签发浏览器信任的 **HTTPS 证书**。浏览器规定只有 HTTPS 网站才允许装成 PWA，所以这一章做完，手机既"连得上"、又"装得了"。个人使用完全免费。
 
 ### 6.1 注册账号
@@ -411,55 +440,55 @@ https://<你的电脑名>.<tailnet名>.ts.net/
 
 ### 8.2 怎么升级新版本
 
-> ⚠️ **先看这个大坑**：Docker 按"文件夹名"归属数据。把新版本解压到**另一个名字的文件夹**里启动，会挂上一套全新的空数据，看起来就像"笔记全没了"（数据其实还在，自救见 FAQ Q9）。
-> 所以记住一条：**升级永远是覆盖回原来那个文件夹，文件夹名保持不变。**
+固定镜像后，单独 `pull` 只获取当前指定版本。升级需要先选择目标已发布版本，并修改 `image:`；不要把它改回 `latest`。
 
-步骤（使用预构建镜像，一般**不需要**重新下载代码）：
+先在原部署目录核对现有容器（默认名 `zhiliao`，自定义过则替换）。下面只显示镜像、project 和挂载，不输出环境变量中的密钥：
 
 ```powershell
-cd D:\apps\zhiliao-main
-docker compose -f docker-compose.yml -f docker-compose.win.yml pull
-docker compose -f docker-compose.yml -f docker-compose.win.yml up -d
+$deployment = @(docker inspect zhiliao | ConvertFrom-Json)
+if ($LASTEXITCODE -ne 0 -or $deployment.Count -ne 1) { throw '无法识别原容器，请先核对容器名。' }
+$projectName = $deployment[0].Config.Labels.'com.docker.compose.project'
+$deployment[0].Config.Image
+$deployment[0].Image
+$projectName
+$deployment[0].Mounts | Select-Object Type, Name, Source, Destination
 ```
 
-数据库结构升级会在启动时自动完成；重建容器**不丢数据**，也不丢没处理完的 AI 任务。
+保留这些记录，以及原 Compose、`.env` 和[数据库/图片配对备份](备份与恢复.md#snapshot-copy)。备份含密钥和正文，保存在自己的受控位置。`projectName` 为空时，先查清原启动方式，不要猜卷名。
 
-> 若某次版本说明（GitHub Release Notes）提到 compose 或配置文件有变化，再从仓库页面下载新版 ZIP，把内容**覆盖**到原文件夹（你的 `.env` 不在 ZIP 里，不会被覆盖），然后执行上面两条命令。
+阅读目标版本的 Release Notes，在原目录对比所需配置修改，保留原挂载、本机端口和 `.env`；只将 `image:` 改为目标固定版本。然后逐条执行：
 
-> 如果你不小心在新文件夹里执行了启动命令，会先看到报错"容器名 zhiliao 已被占用（already in use）"——**这是保护信号，不要照网上偏方删除旧容器**，关掉窗口、回原文件夹操作即可。
+```powershell
+if (-not $projectName) { throw '缺少原 project 名，停止升级。' }
+docker compose -p $projectName -f docker-compose.yml -f docker-compose.win.yml config --images
+docker compose -p $projectName -f docker-compose.yml -f docker-compose.win.yml pull app
+docker compose -p $projectName -f docker-compose.yml -f docker-compose.win.yml up -d
+```
+
+镜像核对须匹配目标版本，拉取失败则停止；原命令另有 `--env-file` 时继续传入原文件。Linux 省略 Windows 文件，但同样保留实际 project 和绑定路径。部署后记录镜像 ID/digest、检查登录、原笔记、图片、搜索、导出和重启持久化。
+
+启动会自动迁移数据库并恢复 AI 任务。**迁移后的数据库不应直接交给旧镜像作为回退。** 失败时先停服务并保护现有数据，用升级前备份在独立目标恢复，见[恢复与回退](备份与恢复.md#isolated-restore)。遇到 `container name zhiliao is already in use` 时先核对原实例，不删除旧容器来绕过冲突。
 
 ### 8.3 数据在哪、怎么备份
 
-你的全部数据在 Docker 的两个命名卷里：
+Windows 主路径有三处数据位置：
 
 - `kb_db`：数据库 + 应用自动做的**每日备份**（数据库快照与图片快照各保留最近 7 份）；
 - `kb_uploads`：笔记里的图片。
+- `./data/notes`：宿主机上的增量 Markdown 导出，仍是绑定目录。
 
-想从某份备份**恢复数据**，完整步骤（含关键的 WAL 文件处理）见 [备份与恢复.md](备份与恢复.md)。
+前两项是逻辑卷名，实际完整卷名用 §8.2 的挂载记录确认。Windows 下命名卷通常位于 Docker 管理的虚拟磁盘中，不能按宿主机 `data/db`、`data/uploads` 查找。
 
-Windows 下它们实际藏在 WSL2 的虚拟磁盘里，不方便直接翻文件夹。想导出到普通目录，用命令：
+在 **设置 → 数据 → 立即备份** 完成后，核对同一 UTC 日期的 `app-YYYY-MM-DD.db` 和完整 `uploads-YYYY-MM-DD/`，再停止源实例，将这两项复制到一个新的受控目录。完整命令、离线恢复、写权限和 WAL/SHM 处理见[备份与恢复](备份与恢复.md#snapshot-copy)。**当天数据库快照加“当前 uploads”不等于配对快照。**
 
-```powershell
-mkdir D:\kb-backup
-docker cp zhiliao:/data/db/backups D:\kb-backup\db-backups
-docker cp zhiliao:/data/uploads D:\kb-backup\uploads
-```
+日常自动备份与原库同盘，不能抵御整机或磁盘损坏；将核对过的配对快照和部署记录再保存到另一台设备或加密异地存储。最近备份时间本身不能证明图片完整。
 
-（把容器里的数据库备份目录和图片目录复制到 `D:\kb-backup`，之后可再拷去网盘或 U 盘。）
-
-> 应用的每日自动备份防的是"数据写坏"，**防不了"整台电脑坏掉或丢失"**——建议每隔一段时间用上面的命令导出一份放到别处。
-
-> ⚠️ **危险操作，永远不要做**：
-> ① 执行 `docker compose down -v`（那个 `-v` 会**删除数据卷**）；
-> ② 在 Docker Desktop 界面里删除 `kb_db` / `kb_uploads` 卷。
-> 这两个操作等于**删光你的全部笔记和图片**。
-
-> **Linux/NAS 备注**：数据就在项目文件夹 `./data/` 下（`db/`、`db/backups/`、`uploads/`），直接复制该目录即可备份。
+正式实例不要执行 `docker compose down -v`，也不要在 Docker Desktop 删除原数据卷。Linux/NAS 的数据通常在原部署目录 `./data/`（含 `db/`、`uploads/`、`notes/`）；整目录冷备必须先停止所有写入进程，保留完整 SQLite 文件集。
 
 ### 8.4 怎么改登录密码
 
 ```powershell
-cd D:\apps\zhiliao-main
+cd D:\apps\zhiliao
 notepad .env
 ```
 
@@ -482,7 +511,7 @@ docker compose -f docker-compose.yml -f docker-compose.win.yml up -d
 | 看应用是否在跑 | `docker ps` |
 | 看应用日志（排错用） | `docker logs --tail 50 zhiliao` |
 | 启动 | `docker compose -f docker-compose.yml -f docker-compose.win.yml up -d` |
-| 升级到新版本 | 先 `docker compose -f docker-compose.yml -f docker-compose.win.yml pull` 再执行上面的启动命令 |
+| 升级到新版本 | 先按 §8.2 备份并更新目标固定版本，核对 project、镜像与挂载，再拉取和启动 |
 | 改 `.env` 后使之生效 | `docker compose -f docker-compose.yml -f docker-compose.win.yml up -d` |
 | 停止应用 | `docker compose -f docker-compose.yml -f docker-compose.win.yml down`（**绝不要加 `-v`**） |
 | 看 HTTPS 转发配置 | `tailscale serve status` |
@@ -496,10 +525,14 @@ docker compose -f docker-compose.yml -f docker-compose.win.yml up -d
 需要证明安装路径可重复时，在仓库根目录执行：
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts/smoke-fresh-install.ps1
+powershell -ExecutionPolicy Bypass -File scripts/smoke-fresh-install.ps1 -Image ghcr.io/b-tech-hub/zhiliao:0.6.0
 ```
 
-脚本使用固定 `v0.6.0` 镜像（本地不存在时尝试拉取）、临时 Compose project、named volume 和临时 Markdown 目录，验证 `/api/healthz`、登录、首条笔记、SQLite/上传目录、导出和重启持久化。它不会读取正式 `.env`、`data/` 或正式 Docker 卷；失败时返回非零并输出容器状态与日志，在验收记录中写明环境、版本、端口、耗时和清理命令。需要排查时加 `-KeepResources` 保留临时资源；不要把一次 `npm run dev` 运行结果替代 Docker 安装验收。
+脚本默认从脚本所属仓库的 `package.json` 读取版本，当前为尚未发布的 `0.6.1`；上面的 `-Image` 明确选择已发布 `0.6.0`。也可指定已生成的固定 RC tag 或 digest；不接受 `latest` 或 `0.6`。增加 `-PrintConfig` 只预览包版本、目标镜像与端口，不创建目录、不读取 Docker 状态、不拉取镜像或启动容器。
+
+获准执行实际冒烟后，脚本在镜像不存在时尝试拉取，使用临时 Compose project、named volume 和临时 Markdown 目录，验证 `/api/healthz`、登录、首条笔记、SQLite/上传目录、导出和重启持久化。它不读取正式 `.env`、`data/` 或正式 Docker 卷；失败时返回非零并输出容器状态与日志，记录脚本包版本、实际目标镜像、环境、端口、耗时和清理命令。需要排查时加 `-KeepResources` 保留临时资源。
+
+[既有安装记录](验收记录-全新环境安装冒烟-2026-09-09.md)使用了已缓存镜像；它不能证明无缓存下载，也不等同于逐步执行本手册。后续分别记录首次获取、Windows/Linux 与恢复实测，未执行的项保留待验证。
 
 ## 第 9 章：常见问题（按症状查）
 
@@ -522,7 +555,7 @@ powershell -ExecutionPolicy Bypass -File scripts/smoke-fresh-install.ps1
 2. 执行 `docker ps -a`（带 `-a` 能看到已停止的容器），找 `zhiliao` 那行的 STATUS；
 3. 若是 `Exited`，看日志 `docker logs --tail 50 zhiliao`，对照处理：
    - 报 `SQLITE_IOERR_SHMOPEN` → 你用的启动命令少了 Windows 补丁文件。改用第 4 章的完整主命令（带两个 `-f`）重跑；
-   - 报 `port is already allocated` → 3000 端口被其他程序占了：关掉那个程序重跑；或把 `docker-compose.yml` 里 `"3000:3000"` 的**左边**改成别的数字（如 `"3001:3000"`），之后本机访问用 `localhost:3001`，第 6 章的转发命令也相应改成 `tailscale serve --bg 3001`；
+   - 报 `port is already allocated` → 先确认占用者；只为当前实例将端口改成 `"127.0.0.1:3001:3000"`，之后本机访问用 `localhost:3001`，第 6 章的转发命令也相应改成 `tailscale serve --bg 3001`，不要停掉归属不明的程序；
    - 报 APP_PASSWORD 相关 → 回 Q2。
 
 ### Q4：手机打不开 https 地址
@@ -567,12 +600,12 @@ powershell -ExecutionPolicy Bypass -File scripts/smoke-fresh-install.ps1
 
 ### Q9：升级/挪动文件夹之后，打开变成了全新的空应用，我的笔记呢？！
 
-**先别慌：数据几乎可以肯定没丢。**原因是新文件夹名让 Docker 挂上了一套新的空数据卷，旧数据还躺在旧卷里。
+先停止新增写入并保留现有容器、卷和目录。project 或挂载变化可能让应用连到新空库，但**仅凭卷名不能证明原数据完整**。
 
-1. 执行 `docker volume ls`，能看到形如 `<原文件夹名>_kb_db` 的卷——那就是你的数据，安然无恙；
-2. 把项目代码放回**和原来一模一样名字**的文件夹。原文件夹已被删也没关系——数据卷存在 Docker 内部，认"名字"不认文件夹本体，重建一个同名文件夹即可；
-3. 在这个文件夹里重跑主命令（见 8.2），打开应用，笔记就回来了；
-4. 以后升级记住一条：**永远覆盖原文件夹**（见 8.2 的警告）。
+1. 用 `docker ps -a` 找到旧容器；按 §8.2 读取它的镜像、Compose project 与 `/data/db`、`/data/uploads`、`/data/notes` 实际挂载。
+2. 对照升级前记录。Windows 用 `docker volume ls` / `docker volume inspect <已核对的完整卷名>` 确认原卷仍存在；Linux 核对原绑定目录的绝对路径，移动目录不能只看末尾名字。
+3. 原数据及映射确认后，在原部署目录使用原 project、环境文件和挂载重新连接。不要删除旧容器来消除名称冲突，也不要把新空库覆盖到旧位置。
+4. 找不到原数据、怀疑数据库损坏或不清楚应接哪个卷时，保留现场并按[隔离恢复](备份与恢复.md#isolated-restore)核验备份；把实际结果记录下来，再决定是否切换。
 
 ### 已知小瑕疵（不用修）
 

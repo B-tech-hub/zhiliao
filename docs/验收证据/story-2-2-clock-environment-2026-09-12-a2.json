@@ -1,0 +1,50 @@
+{
+  "story": "2.2",
+  "recorded_at": "2026-09-12T04:15:22.861Z",
+  "status": "observed",
+  "scope": "只读核对时钟源和运行环境；未切换时钟源、启动时间服务或重启 WSL",
+  "clocksource_current": "tsc",
+  "clocksource_available": [
+    "tsc",
+    "hyperv_clocksource_tsc_page",
+    "hyperv_clocksource_msr",
+    "acpi_pm"
+  ],
+  "kernel_clock_messages": [
+    "[    0.000000] Hyper-V: privilege flags low 0xae7f, high 0x3b8030, hints 0x9a4e24, misc 0xe0bed7b2",
+    "[    0.000000] Hyper-V: Nested features: 0x3e0101",
+    "[    0.000000] Hyper-V: LAPIC Timer Frequency: 0xc3500",
+    "[    0.000000] Hyper-V: Using hypercall for remote TLB flush",
+    "[    0.000000] clocksource: hyperv_clocksource_tsc_page: mask: 0xffffffffffffffff max_cycles: 0x24e6a1710, max_idle_ns: 440795202120 ns",
+    "[    0.000000] clocksource: hyperv_clocksource_msr: mask: 0xffffffffffffffff max_cycles: 0x24e6a1710, max_idle_ns: 440795202120 ns",
+    "[    0.025000] TSC deadline timer available",
+    "[    0.025018] clocksource: refined-jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 7645519600211568 ns",
+    "[    0.027484] Hyper-V: PV spinlocks enabled",
+    "[    0.082948] Hyper-V: Host Build 10.0.26100.9444-9-0",
+    "[    0.082950] Hyper-V: enabling crash_kexec_post_notifiers",
+    "[    0.082997] Hyper-V: Disabling IBT because of Hyper-V bug",
+    "[    0.082998] Hyper-V: Using IPI hypercalls",
+    "[    0.083075] clocksource: tsc-early: mask: 0xffffffffffffffff max_cycles: 0x22df0f35937, max_idle_ns: 440795269039 ns",
+    "[    0.120707] clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 7645041785100000 ns",
+    "[    0.147981] clocksource: Switched to clocksource tsc-early",
+    "[    0.158670] clocksource: acpi_pm: mask: 0xffffff max_cycles: 0xffffff, max_idle_ns: 2085701024 ns",
+    "[    0.163754] clocksource: tsc: mask: 0xffffffffffffffff max_cycles: 0x22df0f35937, max_idle_ns: 440795269039 ns",
+    "[    0.165371] clocksource: Switched to clocksource tsc"
+  ],
+  "wsl_version": {
+    "exit_code": 0,
+    "output": "WSL 版本: 2.5.10.0\r\n内核版本: 6.6.87.2-1\r\nWSLg 版本: 1.0.66\r\nMSRDC 版本: 1.2.6074\r\nDirect3D 版本: 1.611.1-81528511\r\nDXCore 版本: 10.0.26100.1-240331-1435.ge-release\r\nWindows: 10.0.26200.9445"
+  },
+  "running_distributions": {
+    "exit_code": 0,
+    "output": "Ubuntu-24.04\r\ndocker-desktop"
+  },
+  "windows_time_status": {
+    "exit_code": 2147943462,
+    "output": "发生下列错误: 服务尚未启动。 (0x80070426)"
+  },
+  "limitations": [
+    "Windows 时间服务状态不能单独解释单调计时偏差。",
+    "切换 Linux 时钟源会影响共用 WSL 内核，需要独立维护批准；候选时钟源尚未验证。"
+  ]
+}

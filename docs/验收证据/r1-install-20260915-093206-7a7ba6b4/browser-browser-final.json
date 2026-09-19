@@ -1,0 +1,85 @@
+{
+  "timeUtc": "2026-09-15T02:39:16.169Z",
+  "browserVersion": "153.0.8010.36",
+  "blockedExternalRequests": 0,
+  "pageErrors": [
+    {
+      "kind": "pageerror",
+      "error": "Error: Minified React error #418; visit https://react.dev/errors/418?args[]=text&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.",
+      "action": "mock-settings"
+    },
+    {
+      "kind": "pageerror",
+      "error": "ChunkLoadError: Loading chunk 9415 failed.\n(error: http://127.0.0.1:3312/_next/static/chunks/app/(app)/page-546d9e331d248176.js)",
+      "action": "mock-note"
+    }
+  ],
+  "httpErrors": [
+    {
+      "time": "2026-09-15T02:20:27.700Z",
+      "path": "/api/auth/login",
+      "method": "POST",
+      "status": 401,
+      "action": "login"
+    },
+    {
+      "time": "2026-09-15T02:24:39.451Z",
+      "path": "/_next/static/chunks/app/(app)/page-546d9e331d248176.js",
+      "method": "GET",
+      "status": 503,
+      "action": "mock-settings"
+    },
+    {
+      "time": "2026-09-15T02:24:39.451Z",
+      "path": "/_next/static/chunks/app/(app)/topics/%5Bid%5D/page-a443cf22ffddee12.js",
+      "method": "GET",
+      "status": 503,
+      "action": "mock-settings"
+    },
+    {
+      "time": "2026-09-15T02:24:39.455Z",
+      "path": "/_next/static/chunks/app/(app)/search/page-195baf5521c05d5d.js",
+      "method": "GET",
+      "status": 503,
+      "action": "mock-settings"
+    },
+    {
+      "time": "2026-09-15T02:24:39.457Z",
+      "path": "/_next/static/chunks/app/(app)/inbox/page-681898bb0a303d89.js",
+      "method": "GET",
+      "status": 503,
+      "action": "mock-settings"
+    },
+    {
+      "time": "2026-09-15T02:30:29.614Z",
+      "path": "/_next/static/chunks/app/(app)/settings/page-5997b3acd7a84aea.js",
+      "method": "GET",
+      "status": 503,
+      "action": "mock-note"
+    },
+    {
+      "time": "2026-09-15T02:30:29.615Z",
+      "path": "/_next/static/chunks/app/(app)/topics/%5Bid%5D/page-a443cf22ffddee12.js",
+      "method": "GET",
+      "status": 503,
+      "action": "mock-note"
+    }
+  ],
+  "steps": [
+    "login-page",
+    "login",
+    "first-note",
+    "search-without-model",
+    "export-without-model",
+    "topic-created",
+    "mock-settings",
+    "mock-note-failure",
+    "recover-page",
+    "mock-note",
+    "mock-completed",
+    "before-restart",
+    "restart-login",
+    "restart-notes",
+    "export-after-restart"
+  ]
+}

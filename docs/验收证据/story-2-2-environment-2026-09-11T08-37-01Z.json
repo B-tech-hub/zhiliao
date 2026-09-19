@@ -1,0 +1,149 @@
+{
+  "story": "2.2",
+  "kind": "只读环境调查",
+  "recorded_at": "2026-09-11T08:37:01Z",
+  "scope": "当前 Windows 工作站及其本地 Docker Engine；不代表公网目标环境已验收",
+  "host": {
+    "operating_system": "Microsoft Windows 11 家庭版 中文版",
+    "version": "10.0.26200",
+    "architecture": "64-bit"
+  },
+  "docker": {
+    "context": "desktop-linux",
+    "endpoint": "npipe:////./pipe/dockerDesktopLinuxEngine",
+    "engine_version": "28.4.0",
+    "compose_version": "2.39.4-desktop.1",
+    "operating_system": "Docker Desktop",
+    "os_type": "linux",
+    "architecture": "x86_64",
+    "kernel_version": "6.6.87.2-microsoft-standard-WSL2",
+    "root_directory": "/var/lib/docker",
+    "storage_driver": "overlayfs",
+    "driver_type": "io.containerd.snapshotter.v1",
+    "desktop_containerd_snapshotter_enabled": true,
+    "configured_contexts": [
+      {
+        "name": "default",
+        "current": false,
+        "endpoint": "npipe:////./pipe/docker_engine"
+      },
+      {
+        "name": "desktop-linux",
+        "current": true,
+        "endpoint": "npipe:////./pipe/dockerDesktopLinuxEngine"
+      }
+    ]
+  },
+  "existing_project_containers": [
+    {
+      "id": "254c7caca374780a6c1a3bea1c2c6ba59d6ab092de155c34f8efd3cd411532c8",
+      "name": "/zhiliao",
+      "image": "ghcr.io/b-tech-hub/zhiliao:latest",
+      "status": "exited",
+      "exit_code": 0,
+      "project": "ai_acknowladge",
+      "service": "app",
+      "working_directory": "D:\\ClaudeProjects\\ai_acknowladge",
+      "config_files": "D:\\ClaudeProjects\\ai_acknowladge\\docker-compose.yml",
+      "network_mode": "ai_acknowladge_default",
+      "mounts": [
+        {
+          "Destination": "/data/db",
+          "Mode": "rw",
+          "Propagation": "rprivate",
+          "RW": true,
+          "Source": "D:\\ClaudeProjects\\ai_acknowladge\\data\\db",
+          "Type": "bind"
+        },
+        {
+          "Destination": "/data/uploads",
+          "Mode": "rw",
+          "Propagation": "rprivate",
+          "RW": true,
+          "Source": "D:\\ClaudeProjects\\ai_acknowladge\\data\\uploads",
+          "Type": "bind"
+        }
+      ]
+    },
+    {
+      "id": "ea240066dd4a847db38ef758917c36a04be31191329ab6c995bdc94cd83fc721",
+      "name": "/zhiliao-rc",
+      "image": "zhiliao:rc",
+      "status": "exited",
+      "exit_code": 255,
+      "project": null,
+      "service": null,
+      "working_directory": null,
+      "config_files": null,
+      "network_mode": "bridge",
+      "mounts": [
+        {
+          "Destination": "/data/db",
+          "Driver": "local",
+          "Mode": "z",
+          "Name": "zhiliao_rc_db",
+          "Propagation": "",
+          "RW": true,
+          "Source": "/var/lib/docker/volumes/zhiliao_rc_db/_data",
+          "Type": "volume"
+        },
+        {
+          "Destination": "/data/uploads",
+          "Driver": "local",
+          "Mode": "z",
+          "Name": "zhiliao_rc_uploads",
+          "Propagation": "",
+          "RW": true,
+          "Source": "/var/lib/docker/volumes/zhiliao_rc_uploads/_data",
+          "Type": "volume"
+        }
+      ]
+    }
+  ],
+  "demo_volumes": {
+    "declared": [
+      "demo_db",
+      "demo_uploads",
+      "demo_notes"
+    ],
+    "compose_configured_capacity_limits": null,
+    "compose_driver_options": null,
+    "existing_names_matching_demo": [],
+    "interpretation": "主 Demo Compose 只声明三个 named volume，未配置逐卷容量上限；本机 Demo 验收卷已清理。"
+  },
+  "deployment_target_discovery": {
+    "ssh_config_present": false,
+    "remote_docker_context_present": false,
+    "issue": {
+      "url": "https://github.com/B-tech-hub/zhiliao/issues/5",
+      "state": "OPEN",
+      "comments_count": 0,
+      "concrete_host_recorded": false,
+      "concrete_domain_recorded": false
+    },
+    "local_plan": "docs/Issue执行计划-2026-08-29.md:248",
+    "conclusion": "当前可确认的验收环境是本机，且与仓库主 Compose 创建的既有实例共用 Docker Engine；所查部署计划、Issue 和连接配置没有指定公网目标主机。"
+  },
+  "sources": [
+    "Get-CimInstance Win32_OperatingSystem",
+    "docker context ls",
+    "docker info（系统和存储驱动字段）",
+    "docker compose version --short",
+    "docker ps -a",
+    "docker container inspect zhiliao zhiliao-rc（部署标签与挂载元数据）",
+    "docker volume ls --filter name=demo",
+    "docker-compose.demo.yml 的 volumes 声明",
+    "Docker Desktop settings-store.json 的 UseContainerdSnapshotter 字段",
+    "当前用户 SSH config 文件存在性",
+    "gh issue view 5 --json number,title,state,body,comments"
+  ],
+  "input_sha256": {
+    "docker-compose.demo.yml": "f259c2e5fd7809bc872492c5eb753a5ab54389969c3106a6ff0e926f070455f2"
+  },
+  "limitations": [
+    "现有实例均已停止；共用 Engine 的事实不证明并行运行时的网络隔离。",
+    "没有执行构建、容器启动、网络阻断、配额触发、300 秒代理空闲超时或发布。",
+    "本机环境不能自动视为已确定的公网部署主机。",
+    "逐卷配额的数值与实施方式需要形成方案，不能从 Docker 存储驱动名称推断已经生效。"
+  ]
+}

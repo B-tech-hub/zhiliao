@@ -1,0 +1,47 @@
+$ErrorActionPreference = 'Stop'
+$r1ExpectedRunId = '20260916T041726Z-9b7d27a9'
+$r1RequestedPath = 'C:/Users/BAIBAI/AppData/Local/Temp/zhiliao-r1-hydration-20260916T041726Z-9b7d27a9'
+$r1ResolvedPath = (Resolve-Path -LiteralPath $r1RequestedPath).ProviderPath
+$r1TempRoot = (Resolve-Path -LiteralPath $env:TEMP).ProviderPath.TrimEnd('\')
+if ([System.IO.Path]::GetDirectoryName($r1ResolvedPath) -ine $r1TempRoot) { throw '临时目录父路径不符，停止清理' }
+if ([System.IO.Path]::GetFileName($r1ResolvedPath) -cne ('zhiliao-r1-hydration-' + $r1ExpectedRunId)) { throw '临时目录名称不符' }
+$r1State = Get-Content -Raw -Encoding UTF8 -LiteralPath (Join-Path $r1ResolvedPath 'run.json') | ConvertFrom-Json
+if ($r1State.runId -cne $r1ExpectedRunId) { throw '运行标识不符' }
+$r1Repository = (Resolve-Path -LiteralPath $r1State.repository).ProviderPath
+if ($r1Repository -ine 'D:\ClaudeProjects\ai_acknowladge') { throw '仓库路径不符' }
+$r1EvidencePath = [System.IO.Path]::GetFullPath((Join-Path $r1Repository $r1State.evidence))
+$r1EvidenceRoot = [System.IO.Path]::GetFullPath((Join-Path $r1Repository 'docs/验收证据'))
+if ([System.IO.Path]::GetDirectoryName($r1EvidencePath) -ine $r1EvidenceRoot) { throw '证据目录不符' }
+$r1Archive = Get-Content -Raw -Encoding UTF8 -LiteralPath (Join-Path $r1EvidencePath 'archive-checks.json') | ConvertFrom-Json
+$r1Runtime = Get-Content -Raw -Encoding UTF8 -LiteralPath (Join-Path $r1EvidencePath 'runtime.json') | ConvertFrom-Json
+$r1Protection = Get-Content -Raw -Encoding UTF8 -LiteralPath (Join-Path $r1EvidencePath 'preservation-final.json') | ConvertFrom-Json
+if ($r1Archive.runId -cne $r1ExpectedRunId -or $r1Runtime.cleanup.status -ne 'passed' -or $r1Protection.status -ne 'passed') { throw '归档或保护核对未完成' }
+$r1LiveProcesses = @(Get-CimInstance Win32_Process | Where-Object {
+    $_.ProcessId -ne $PID -and $_.Name -in @('node.exe','python.exe','pythonw.exe','chrome.exe','docker.exe') -and
+    $_.CommandLine -and $_.CommandLine.Replace('/', '\').IndexOf($r1ResolvedPath, [System.StringComparison]::OrdinalIgnoreCase) -ge 0
+})
+if ($r1LiveProcesses.Count -ne 0) { throw '本轮仍有活动进程，停止目录清理' }
+foreach ($r1Type in @('container','network','volume')) {
+    if ($r1Type -eq 'container') {
+        $r1Remaining = @(docker --context desktop-linux ps -aq --filter ('label=com.docker.compose.project=' + $r1State.project))
+    } else {
+        $r1Remaining = @(docker --context desktop-linux $r1Type ls -q --filter ('label=com.docker.compose.project=' + $r1State.project))
+    }
+    if ($LASTEXITCODE -ne 0 -or @($r1Remaining | Where-Object { $_ }).Count -ne 0) { throw '本轮 Docker 资源尚未清空' }
+}
+Remove-Item -LiteralPath $r1ResolvedPath -Recurse -Force
+if (Test-Path -LiteralPath $r1ResolvedPath) { throw '临时目录清理失败' }
+$r1Cleanup = [ordered]@{
+    runId=$r1ExpectedRunId; status='passed'; finishedUtc=(Get-Date).ToUniversalTime().ToString('o');
+    removedDirectory=$r1ResolvedPath; activeTaskProcesses=0; ownedDockerResources=0;
+    privateCredentialsRemoved=$true; browserProfilesRemoved=$true; sourceCopyRemoved=$true;
+    evidenceRetained=$r1EvidencePath; candidateImageRetained=$r1State.imageId
+}
+$r1CleanupPath = Join-Path $r1EvidencePath 'cleanup-directory.json'
+[System.IO.File]::WriteAllText($r1CleanupPath, (($r1Cleanup | ConvertTo-Json -Depth 4).Replace("`r`n", "`n") + "`n"), [System.Text.UTF8Encoding]::new($false))
+$r1ManifestPath = Join-Path $r1EvidencePath 'artifact-manifest.json'
+$r1Manifest = Get-Content -Raw -Encoding UTF8 -LiteralPath $r1ManifestPath | ConvertFrom-Json
+$r1CleanupDigest = [pscustomobject]@{sha256=(Get-FileHash -LiteralPath $r1CleanupPath -Algorithm SHA256).Hash.ToLowerInvariant();bytes=(Get-Item -LiteralPath $r1CleanupPath).Length}
+$r1Manifest | Add-Member -NotePropertyName 'cleanup-directory.json' -NotePropertyValue $r1CleanupDigest
+[System.IO.File]::WriteAllText($r1ManifestPath, (($r1Manifest | ConvertTo-Json -Depth 5).Replace("`r`n", "`n") + "`n"), [System.Text.UTF8Encoding]::new($false))
+$r1Cleanup | ConvertTo-Json -Depth 4

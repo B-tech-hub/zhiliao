@@ -1,0 +1,241 @@
+{
+    "timeUtc":  "2026-09-14T08:36:08.123358+00:00",
+    "scope":  "本轮文档增量及新增验收记录；不含完整构建或全量测试",
+    "commands":  {
+                     "timeUtc":  "2026-09-14T08:34:54.893Z",
+                     "networkMode":  "npm offline，禁用 update notifier；使用已有依赖",
+                     "vitest":  {
+                                    "command":  "npx --no-install vitest run tests/docs/first-use-guide.test.ts --maxWorkers=1",
+                                    "exitCode":  0,
+                                    "output":  "(!) Your Vite config uses features that are unsupported by `configLoader: \u0027native\u0027`, which is planned to become the default in a future major version of Vite:\n  - `__dirname` (vitest.config.mts:17:32). Use `import.meta.dirname` instead\nSet `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.\n\n RUN  v4.1.10 {项目目录}\n\n\n Test Files  1 passed (1)\n      Tests  8 passed (8)\n   Start at  16:30:29\n   Duration  322ms (transform 30ms, setup 42ms, import 42ms, tests 31ms, environment 0ms)\n\n",
+                                    "testFiles":  1,
+                                    "testsPassed":  8
+                                },
+                     "eslint":  {
+                                    "command":  "npx --no-install eslint tests/docs/first-use-guide.test.ts",
+                                    "exitCode":  0,
+                                    "output":  ""
+                                }
+                 },
+    "filesChecked":  [
+                         {
+                             "file":  "README.md",
+                             "utf8":  true,
+                             "lfOnly":  true,
+                             "noBom":  true,
+                             "finalNewline":  true,
+                             "addedLinesWithoutTrailingWhitespace":  true,
+                             "balancedCodeFences":  true,
+                             "incrementalGitWhitespaceCheck":  true
+                         },
+                         {
+                             "file":  "README.en.md",
+                             "utf8":  true,
+                             "lfOnly":  true,
+                             "noBom":  true,
+                             "finalNewline":  true,
+                             "addedLinesWithoutTrailingWhitespace":  true,
+                             "balancedCodeFences":  true,
+                             "incrementalGitWhitespaceCheck":  true
+                         },
+                         {
+                             "file":  "docs/首次使用与故障排查.md",
+                             "utf8":  true,
+                             "lfOnly":  true,
+                             "noBom":  true,
+                             "finalNewline":  true,
+                             "addedLinesWithoutTrailingWhitespace":  true,
+                             "balancedCodeFences":  true,
+                             "incrementalGitWhitespaceCheck":  true
+                         },
+                         {
+                             "file":  "tests/docs/first-use-guide.test.ts",
+                             "utf8":  true,
+                             "lfOnly":  true,
+                             "noBom":  true,
+                             "finalNewline":  true,
+                             "addedLinesWithoutTrailingWhitespace":  true,
+                             "incrementalGitWhitespaceCheck":  true
+                         },
+                         {
+                             "file":  "CHANGELOG.md",
+                             "utf8":  true,
+                             "lfOnly":  true,
+                             "noBom":  true,
+                             "finalNewline":  true,
+                             "addedLinesWithoutTrailingWhitespace":  true,
+                             "balancedCodeFences":  true,
+                             "incrementalGitWhitespaceCheck":  true
+                         },
+                         {
+                             "file":  "docs/releases/v0.6.1.md",
+                             "utf8":  true,
+                             "lfOnly":  true,
+                             "noBom":  true,
+                             "finalNewline":  true,
+                             "addedLinesWithoutTrailingWhitespace":  true,
+                             "balancedCodeFences":  true,
+                             "incrementalGitWhitespaceCheck":  true
+                         },
+                         {
+                             "file":  "docs/README.md",
+                             "utf8":  true,
+                             "lfOnly":  true,
+                             "noBom":  true,
+                             "finalNewline":  true,
+                             "addedLinesWithoutTrailingWhitespace":  true,
+                             "balancedCodeFences":  true,
+                             "incrementalGitWhitespaceCheck":  true
+                         },
+                         {
+                             "file":  "docs/产品规划/开源发布范围与执行清单-2026-09-13.md",
+                             "utf8":  true,
+                             "lfOnly":  true,
+                             "noBom":  true,
+                             "finalNewline":  true,
+                             "addedLinesWithoutTrailingWhitespace":  true,
+                             "balancedCodeFences":  true,
+                             "incrementalGitWhitespaceCheck":  true
+                         },
+                         {
+                             "file":  "_bmad-output/implementation-artifacts/spec-r1-source-demo-wiring.md",
+                             "utf8":  true,
+                             "lfOnly":  true,
+                             "noBom":  true,
+                             "finalNewline":  true,
+                             "addedLinesWithoutTrailingWhitespace":  true,
+                             "balancedCodeFences":  true,
+                             "incrementalGitWhitespaceCheck":  true
+                         },
+                         {
+                             "file":  "docs/R1源码Demo接线验收-2026-09-14.md",
+                             "utf8":  true,
+                             "lfOnly":  true,
+                             "noBom":  true,
+                             "finalNewline":  true,
+                             "addedLinesWithoutTrailingWhitespace":  true,
+                             "balancedCodeFences":  true
+                         }
+                     ],
+    "newRelativeLinksChecked":  [
+                                    {
+                                        "from":  "README.md",
+                                        "target":  "docs/R1源码Demo接线验收-2026-09-14.md",
+                                        "exists":  true
+                                    },
+                                    {
+                                        "from":  "README.en.md",
+                                        "target":  "docs/R1源码Demo接线验收-2026-09-14.md",
+                                        "exists":  true
+                                    },
+                                    {
+                                        "from":  "docs/首次使用与故障排查.md",
+                                        "target":  "R1源码Demo接线验收-2026-09-14.md",
+                                        "exists":  true
+                                    },
+                                    {
+                                        "from":  "CHANGELOG.md",
+                                        "target":  "docs/R1源码Demo接线验收-2026-09-14.md",
+                                        "exists":  true
+                                    },
+                                    {
+                                        "from":  "docs/releases/v0.6.1.md",
+                                        "target":  "../R1源码Demo接线验收-2026-09-14.md",
+                                        "exists":  true
+                                    },
+                                    {
+                                        "from":  "docs/README.md",
+                                        "target":  "R1源码Demo接线验收-2026-09-14.md",
+                                        "exists":  true
+                                    },
+                                    {
+                                        "from":  "docs/产品规划/开源发布范围与执行清单-2026-09-13.md",
+                                        "target":  "../R1源码Demo接线验收-2026-09-14.md",
+                                        "exists":  true
+                                    },
+                                    {
+                                        "from":  "docs/产品规划/开源发布范围与执行清单-2026-09-13.md",
+                                        "target":  "../R1源码Demo接线验收-2026-09-14.md",
+                                        "exists":  true
+                                    },
+                                    {
+                                        "from":  "_bmad-output/implementation-artifacts/spec-r1-source-demo-wiring.md",
+                                        "target":  "../../docs/R1源码Demo接线验收-2026-09-14.md",
+                                        "exists":  true
+                                    },
+                                    {
+                                        "from":  "docs/R1源码Demo接线验收-2026-09-14.md",
+                                        "target":  "../_bmad-output/implementation-artifacts/spec-r1-source-demo-wiring.md",
+                                        "exists":  true
+                                    },
+                                    {
+                                        "from":  "docs/R1源码Demo接线验收-2026-09-14.md",
+                                        "target":  "验收证据/r1-source-demo-20260914T070442Z-5c531772/generated-types.diff",
+                                        "exists":  true
+                                    },
+                                    {
+                                        "from":  "docs/R1源码Demo接线验收-2026-09-14.md",
+                                        "target":  "验收证据/r1-source-demo-20260914T070442Z-5c531772/03-note.png",
+                                        "exists":  true
+                                    },
+                                    {
+                                        "from":  "docs/R1源码Demo接线验收-2026-09-14.md",
+                                        "target":  "验收证据/r1-source-demo-20260914T070442Z-5c531772/08-restart-note.png",
+                                        "exists":  true
+                                    },
+                                    {
+                                        "from":  "docs/R1源码Demo接线验收-2026-09-14.md",
+                                        "target":  "验收证据/r1-source-demo-20260914T070442Z-5c531772/summary.json",
+                                        "exists":  true
+                                    },
+                                    {
+                                        "from":  "docs/R1源码Demo接线验收-2026-09-14.md",
+                                        "target":  "验收证据/r1-source-demo-20260914T070442Z-5c531772/browser-report.json",
+                                        "exists":  true
+                                    },
+                                    {
+                                        "from":  "docs/R1源码Demo接线验收-2026-09-14.md",
+                                        "target":  "验收证据/r1-source-demo-20260914T070442Z-5c531772/boundary-sideeffects.json",
+                                        "exists":  true
+                                    },
+                                    {
+                                        "from":  "docs/R1源码Demo接线验收-2026-09-14.md",
+                                        "target":  "验收证据/r1-source-demo-20260914T070442Z-5c531772/data-checks.json",
+                                        "exists":  true
+                                    },
+                                    {
+                                        "from":  "docs/R1源码Demo接线验收-2026-09-14.md",
+                                        "target":  "验收证据/r1-source-demo-20260914T070442Z-5c531772/preservation-before-documents.json",
+                                        "exists":  true
+                                    },
+                                    {
+                                        "from":  "docs/R1源码Demo接线验收-2026-09-14.md",
+                                        "target":  "验收证据/r1-source-demo-20260914T070442Z-5c531772/harness.zip",
+                                        "exists":  true
+                                    },
+                                    {
+                                        "from":  "docs/R1源码Demo接线验收-2026-09-14.md",
+                                        "target":  "验收证据/r1-source-demo-20260914T070442Z-5c531772/artifact-manifest.json",
+                                        "exists":  true
+                                    }
+                                ],
+    "issues":  [
+
+               ],
+    "invalidRelativeLinks":  [
+
+                             ],
+    "auxiliaryCheckAdjustment":  "首次收尾辅助脚本误按 Roadmap 定位英文 README；改用实际 Project status 区段后复核。该次中断未修改业务或受保护文件。",
+    "passed":  true,
+    "completionAddendum":  {
+                               "timeUtc":  "2026-09-14T08:41:05.2058631Z",
+                               "scope":  "Final acceptance record after cleanup",
+                               "utf8NoBomAndLf":  true,
+                               "balancedCodeFences":  true,
+                               "noTrailingWhitespace":  true,
+                               "relativeLinksChecked":  14,
+                               "allTargetsExist":  true,
+                               "recordSha256":  "f1d0c3652e1297ebd852a0a9a86839ae99365a6aa4e6aa72da0eeb039d96c488",
+                               "passed":  true
+                           }
+}

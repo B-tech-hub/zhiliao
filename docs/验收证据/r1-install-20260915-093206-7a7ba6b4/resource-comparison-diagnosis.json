@@ -1,0 +1,11 @@
+{
+  "differences": [
+    {
+      "container": "5d05095aa56b",
+      "field": "mounts",
+      "equalIgnoringOrder": true,
+      "countBefore": 3,
+      "countAfter": 3
+    }
+  ]
+}

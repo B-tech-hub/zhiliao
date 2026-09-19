@@ -1,0 +1,85 @@
+{
+  "story": "2.2",
+  "recorded_at": "2026-09-12T11:18:44.438075+00:00",
+  "scope": "Windows Docker Desktop 本机体验和验收；只读核对",
+  "status": "read_only_completed",
+  "user_decisions": {
+    "deployment": "本机 Windows Docker Desktop",
+    "access": "先仅本机体验和验收",
+    "implementation": "方案确认后再实施",
+    "agents": "single"
+  },
+  "ubuntu": {
+    "exit_code": 0,
+    "stdout": "{\"docker\": {\"exit_code\": 0, \"stdout\": \"e5262d0e-6b32-4eaa-84a8-def4855f847e|docker-desktop|Docker Desktop|28.4.0|/var/lib/docker\", \"stderr\": \"\"}, \"tools\": {\"docker\": \"/usr/bin/docker\", \"findmnt\": \"/usr/bin/findmnt\", \"xfs_quota\": null, \"xfs_io\": null, \"mkfs.xfs\": null, \"flock\": \"/usr/bin/flock\"}}",
+    "stderr": "wsl: 检测到 localhost 代理配置，但未镜像到 WSL。NAT 模式下的 WSL 不支持 localhost 代理。"
+  },
+  "windows_engine": {
+    "exit_code": 0,
+    "stdout": "e5262d0e-6b32-4eaa-84a8-def4855f847e|docker-desktop|Docker Desktop|28.4.0|/var/lib/docker",
+    "stderr": ""
+  },
+  "volumes": [
+    {
+      "name_sha256": "bc181e1b1e8030bfb3896296969ba1ad3c02a752472de1e2972178c51879b2e6",
+      "exit_code": 0,
+      "stdout": "local|local|null",
+      "stderr": ""
+    },
+    {
+      "name_sha256": "67dcddc99efa4b4aa4a7e73d47d917314c70f9c0a4a5451f51bc39d5720a5f3e",
+      "exit_code": 0,
+      "stdout": "local|local|null",
+      "stderr": ""
+    },
+    {
+      "name_sha256": "b693f31b1bc12cab06df8596316c6530facc66a209c718a310d892657d04c809",
+      "exit_code": 0,
+      "stdout": "local|local|null",
+      "stderr": ""
+    },
+    {
+      "name_sha256": "8c657931a815075fa557aceb17fc4e00852b91aa95eb14d05152c7e5a215f65c",
+      "exit_code": 0,
+      "stdout": "local|local|null",
+      "stderr": ""
+    },
+    {
+      "name_sha256": "ca8a07bbfdff91b842efb8510f78939bf6ca7aa2dc24130144efb0b8e23b05d0",
+      "exit_code": 0,
+      "stdout": "local|local|null",
+      "stderr": ""
+    },
+    {
+      "name_sha256": "fe21511d16e2d870ff14bec45c99ddde020fb6f36cadd695df84b52ba1a6beef",
+      "exit_code": 0,
+      "stdout": "local|local|null",
+      "stderr": ""
+    },
+    {
+      "name_sha256": "82b1f84a90131937a298880159314db01745c75f2f724e0ae209ba2fe399ba39",
+      "exit_code": 0,
+      "stdout": "local|local|null",
+      "stderr": ""
+    },
+    {
+      "name_sha256": "bd78dfb2bd134afb3507d0990a233bad6b70fb37c9657083c914231380caadf0",
+      "exit_code": 0,
+      "stdout": "local|local|null",
+      "stderr": ""
+    }
+  ],
+  "supersedes": "story-2-2-b1-b2-preflight-2026-09-12T11-15-29Z.json 中 Ubuntu Engine/工具存在性两项；首次使用 -- 进入默认 shell 导致参数解析失真，此次 --exec python3 直接传递命令参数",
+  "limitations": [
+    "未执行卷创建、配额写入或真实容量触发",
+    "volume 元数据仅说明驱动与选项，不单独证明底层文件系统没有其他限额"
+  ],
+  "unrun": [
+    "应用实现",
+    "容器启停",
+    "系统或存储修改",
+    "重型验证",
+    "构建及发布"
+  ],
+  "same_engine": true
+}

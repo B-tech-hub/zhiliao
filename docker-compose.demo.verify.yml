@@ -1,0 +1,37 @@
+# 本地候选镜像验收覆盖，需与 docker-compose.demo.yml 一起使用。
+# 构建：docker compose --env-file demo.env -p zhiliao-demo-verify -f docker-compose.demo.yml -f docker-compose.demo.verify.yml build app
+# 启动：docker compose --env-file demo.env -p zhiliao-demo-verify -f docker-compose.demo.yml -f docker-compose.demo.verify.yml up -d
+# 清理：docker compose --env-file demo.env -p zhiliao-demo-verify -f docker-compose.demo.yml -f docker-compose.demo.verify.yml down -v
+# 自动复验由 scripts/verify-demo-runtime.ps1 生成独立 project、端口与运行标识。
+x-verify-labels: &verify-labels
+  io.zhiliao.demo-verify.run: ${DEMO_VERIFY_RUN_ID:-manual}
+
+services:
+  ingress:
+    labels: *verify-labels
+    ports: !override
+      - "127.0.0.1:${DEMO_VERIFY_PORT:-3322}:8080"
+  app:
+    labels: *verify-labels
+    image: zhiliao-demo-verify:story-2-2
+    build:
+      context: .
+    pull_policy: never
+  mockllm:
+    labels: *verify-labels
+    image: zhiliao-demo-verify:story-2-2
+    pull_policy: never
+
+networks:
+  demo_net:
+    labels: *verify-labels
+  ingress_net:
+    labels: *verify-labels
+
+volumes:
+  demo_db:
+    labels: *verify-labels
+  demo_uploads:
+    labels: *verify-labels
+  demo_notes:
+    labels: *verify-labels

@@ -1,0 +1,66 @@
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - `__dirname` (vitest.config.mts:17:32). Use `import.meta.dirname` instead
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/components/markdown-editor-security.test.tsx > 真实编辑器安全边界：Mermaid=false > 初次加载不保留危险属性，正常内容完整
+ FAIL  tests/components/markdown-editor-security.test.tsx > 真实编辑器安全边界：Mermaid=true > 初次加载不保留危险属性，正常内容完整
+AssertionError: expected '' to be '图片说明' // Object.is equality
+
+- Expected
++ Received
+
+- 图片说明
+
+ ❯ assertSafeAndUseful tests/components/markdown-editor-security.test.tsx:59:60
+     57|     expect(root.textContent).toContain("安全正文");
+     58|     expect(root.querySelector("a")?.getAttribute("href")).toBe("https:…
+     59|     expect(root.querySelector("img")?.getAttribute("alt")).toBe("图片说明"…
+       |                                                            ^
+     60|     expect(root.querySelector("td")?.textContent).toBe("单元格");
+     61|     expect(root.querySelector("pre code")?.textContent).toContain("A--…
+ ❯ tests/components/markdown-editor-security.test.tsx:81:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  tests/components/markdown-editor-security.test.tsx > 真实编辑器安全边界：Mermaid=false > 图片属性、公式、表格、链接及围栏保存重开后保真
+AssertionError: expected undefined to be '单元格' // Object.is equality
+
+- Expected:
+"单元格"
+
++ Received:
+undefined
+
+ ❯ assertSafeAndUseful tests/components/markdown-editor-security.test.tsx:60:51
+     58|     expect(root.querySelector("a")?.getAttribute("href")).toBe("https:…
+     59|     expect(root.querySelector("img")?.getAttribute("alt")).toBe("图片说明"…
+     60|     expect(root.querySelector("td")?.textContent).toBe("单元格");
+       |                                                   ^
+     61|     expect(root.querySelector("pre code")?.textContent).toContain("A--…
+     62|   }
+ ❯ tests/components/markdown-editor-security.test.tsx:120:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  tests/components/markdown-editor-security.test.tsx > 真实编辑器安全边界：Mermaid=true > 图片属性、公式、表格、链接及围栏保存重开后保真
+AssertionError: expected undefined to be '单元格' // Object.is equality
+
+- Expected:
+"单元格"
+
++ Received:
+undefined
+
+ ❯ assertSafeAndUseful tests/components/markdown-editor-security.test.tsx:60:51
+     58|     expect(root.querySelector("a")?.getAttribute("href")).toBe("https:…
+     59|     expect(root.querySelector("img")?.getAttribute("alt")).toBe("图片说明"…
+     60|     expect(root.querySelector("td")?.textContent).toBe("单元格");
+       |                                                   ^
+     61|     expect(root.querySelector("pre code")?.textContent).toContain("A--…
+     62|   }
+ ❯ tests/components/markdown-editor-security.test.tsx:120:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+

@@ -1,0 +1,212 @@
+{
+  "timeUtc": "2026-09-15T02:11:20.755640+00:00",
+  "containers": [
+    {
+      "name": "/zhiliao-r1-061-20260915-093206-7a7ba6b4-ingress-1",
+      "image": "sha256:dc5069ad14f19660b141b21236140b91656bf89bbc3e2417c70ae650cd66104c",
+      "state": "running",
+      "networkMode": "zhiliao-r1-061-20260915-093206-7a7ba6b4-net",
+      "requestedPorts": {
+        "8080/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "3312"
+          }
+        ]
+      },
+      "actualPorts": {
+        "8080/tcp": []
+      },
+      "networks": {
+        "zhiliao-r1-061-20260915-093206-7a7ba6b4-ingress": {
+          "IPAMConfig": null,
+          "Links": null,
+          "Aliases": [
+            "zhiliao-r1-061-20260915-093206-7a7ba6b4-ingress-1",
+            "ingress"
+          ],
+          "MacAddress": "86:de:7c:9a:24:1b",
+          "DriverOpts": null,
+          "GwPriority": 0,
+          "NetworkID": "80ea5107fee33d29414341de427da441cac9184ebb1ab98267abace3c9fabbd0",
+          "EndpointID": "8fb85ec8b0957153bd6bfb28b432d5b9d77af79fcf0d238c136941bdb766d2c9",
+          "Gateway": "",
+          "IPAddress": "172.23.0.2",
+          "IPPrefixLen": 16,
+          "IPv6Gateway": "",
+          "GlobalIPv6Address": "",
+          "GlobalIPv6PrefixLen": 0,
+          "DNSNames": [
+            "zhiliao-r1-061-20260915-093206-7a7ba6b4-ingress-1",
+            "ingress",
+            "5c7d7921ad51"
+          ]
+        },
+        "zhiliao-r1-061-20260915-093206-7a7ba6b4-net": {
+          "IPAMConfig": null,
+          "Links": null,
+          "Aliases": [
+            "zhiliao-r1-061-20260915-093206-7a7ba6b4-ingress-1",
+            "ingress"
+          ],
+          "MacAddress": "ca:bd:07:1a:fb:69",
+          "DriverOpts": null,
+          "GwPriority": 0,
+          "NetworkID": "7a0c5947cb517e34b54b059bd6d091bbf092e7b809406957032e0eaa822918cb",
+          "EndpointID": "c2ffb14f19d652d2e7a413a601b4f576a8e00058ecd2d29dbb06bb260840fbb6",
+          "Gateway": "",
+          "IPAddress": "172.22.0.3",
+          "IPPrefixLen": 16,
+          "IPv6Gateway": "",
+          "GlobalIPv6Address": "",
+          "GlobalIPv6PrefixLen": 0,
+          "DNSNames": [
+            "zhiliao-r1-061-20260915-093206-7a7ba6b4-ingress-1",
+            "ingress",
+            "5c7d7921ad51"
+          ]
+        }
+      }
+    },
+    {
+      "name": "/zhiliao-r1-061-20260915-093206-7a7ba6b4-app-1",
+      "image": "sha256:8a8f2cd3ec1a26fc68bf04a2661f2306f09bba4b06ba9b1593d74b3f3953deb1",
+      "state": "running",
+      "networkMode": "zhiliao-r1-061-20260915-093206-7a7ba6b4-net",
+      "requestedPorts": {},
+      "actualPorts": {},
+      "networks": {
+        "zhiliao-r1-061-20260915-093206-7a7ba6b4-net": {
+          "IPAMConfig": null,
+          "Links": null,
+          "Aliases": [
+            "zhiliao-r1-061-20260915-093206-7a7ba6b4-app-1",
+            "app"
+          ],
+          "MacAddress": "e2:85:d2:17:ec:ab",
+          "DriverOpts": null,
+          "GwPriority": 0,
+          "NetworkID": "7a0c5947cb517e34b54b059bd6d091bbf092e7b809406957032e0eaa822918cb",
+          "EndpointID": "0b1b8ed89a3026736d3d342c0cfaa29c097d70088d74a63248474bf32263bde8",
+          "Gateway": "",
+          "IPAddress": "172.22.0.2",
+          "IPPrefixLen": 16,
+          "IPv6Gateway": "",
+          "GlobalIPv6Address": "",
+          "GlobalIPv6PrefixLen": 0,
+          "DNSNames": [
+            "zhiliao-r1-061-20260915-093206-7a7ba6b4-app-1",
+            "app",
+            "15541f15034b"
+          ]
+        }
+      }
+    },
+    {
+      "name": "/zhiliao-r1-061-20260915-093206-7a7ba6b4-mockllm-1",
+      "image": "sha256:8a8f2cd3ec1a26fc68bf04a2661f2306f09bba4b06ba9b1593d74b3f3953deb1",
+      "state": "running",
+      "networkMode": "zhiliao-r1-061-20260915-093206-7a7ba6b4-net",
+      "requestedPorts": {},
+      "actualPorts": {},
+      "networks": {
+        "zhiliao-r1-061-20260915-093206-7a7ba6b4-net": {
+          "IPAMConfig": null,
+          "Links": null,
+          "Aliases": [
+            "zhiliao-r1-061-20260915-093206-7a7ba6b4-mockllm-1",
+            "mockllm"
+          ],
+          "MacAddress": "4e:02:af:69:69:4f",
+          "DriverOpts": null,
+          "GwPriority": 0,
+          "NetworkID": "7a0c5947cb517e34b54b059bd6d091bbf092e7b809406957032e0eaa822918cb",
+          "EndpointID": "bfb28ad208f8f7090050d11239132000a5064e0cd6090602806ef1c30dd11f9c",
+          "Gateway": "",
+          "IPAddress": "172.22.0.1",
+          "IPPrefixLen": 16,
+          "IPv6Gateway": "",
+          "GlobalIPv6Address": "",
+          "GlobalIPv6PrefixLen": 0,
+          "DNSNames": [
+            "zhiliao-r1-061-20260915-093206-7a7ba6b4-mockllm-1",
+            "mockllm",
+            "af2d64478780"
+          ]
+        }
+      }
+    }
+  ],
+  "networks": [
+    {
+      "Name": "zhiliao-r1-061-20260915-093206-7a7ba6b4-ingress",
+      "Id": "80ea5107fee33d29414341de427da441cac9184ebb1ab98267abace3c9fabbd0",
+      "Internal": true,
+      "Options": {
+        "com.docker.network.enable_ipv4": "true",
+        "com.docker.network.enable_ipv6": "false"
+      },
+      "IPAM": {
+        "Driver": "default",
+        "Options": null,
+        "Config": [
+          {
+            "Subnet": "172.23.0.0/16",
+            "Gateway": "172.23.0.1"
+          }
+        ]
+      },
+      "Containers": {
+        "5c7d7921ad51e93c3cb267766fc14d834809cbb9274855833edb4a0a3333ad3b": {
+          "Name": "zhiliao-r1-061-20260915-093206-7a7ba6b4-ingress-1",
+          "EndpointID": "8fb85ec8b0957153bd6bfb28b432d5b9d77af79fcf0d238c136941bdb766d2c9",
+          "MacAddress": "86:de:7c:9a:24:1b",
+          "IPv4Address": "172.23.0.2/16",
+          "IPv6Address": ""
+        }
+      }
+    },
+    {
+      "Name": "zhiliao-r1-061-20260915-093206-7a7ba6b4-net",
+      "Id": "7a0c5947cb517e34b54b059bd6d091bbf092e7b809406957032e0eaa822918cb",
+      "Internal": true,
+      "Options": {
+        "com.docker.network.bridge.gateway_mode_ipv4": "isolated",
+        "com.docker.network.enable_ipv4": "true",
+        "com.docker.network.enable_ipv6": "false"
+      },
+      "IPAM": {
+        "Driver": "default",
+        "Options": null,
+        "Config": [
+          {
+            "Subnet": "172.22.0.0/16"
+          }
+        ]
+      },
+      "Containers": {
+        "15541f15034b51e3b0acb96e27ff79bb32ff997982d6a543843ca67ab11066b9": {
+          "Name": "zhiliao-r1-061-20260915-093206-7a7ba6b4-app-1",
+          "EndpointID": "0b1b8ed89a3026736d3d342c0cfaa29c097d70088d74a63248474bf32263bde8",
+          "MacAddress": "e2:85:d2:17:ec:ab",
+          "IPv4Address": "172.22.0.2/16",
+          "IPv6Address": ""
+        },
+        "5c7d7921ad51e93c3cb267766fc14d834809cbb9274855833edb4a0a3333ad3b": {
+          "Name": "zhiliao-r1-061-20260915-093206-7a7ba6b4-ingress-1",
+          "EndpointID": "c2ffb14f19d652d2e7a413a601b4f576a8e00058ecd2d29dbb06bb260840fbb6",
+          "MacAddress": "ca:bd:07:1a:fb:69",
+          "IPv4Address": "172.22.0.3/16",
+          "IPv6Address": ""
+        },
+        "af2d644787801339ba8fc4223cf8d9d0511cb9fbac1a3c36bc406e696dab73ae": {
+          "Name": "zhiliao-r1-061-20260915-093206-7a7ba6b4-mockllm-1",
+          "EndpointID": "bfb28ad208f8f7090050d11239132000a5064e0cd6090602806ef1c30dd11f9c",
+          "MacAddress": "4e:02:af:69:69:4f",
+          "IPv4Address": "172.22.0.1/16",
+          "IPv6Address": ""
+        }
+      }
+    }
+  ]
+}

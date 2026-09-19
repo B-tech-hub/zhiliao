@@ -1,0 +1,10 @@
+--- approved/compose.r1.yml
++++ executed/compose.r1.yml
+@@ -40,6 +40,7 @@
+   demo_net:
+     labels: *r1-labels
+   ingress_net:
++    internal: false
+     labels: *r1-labels
+ 
+ volumes: !override

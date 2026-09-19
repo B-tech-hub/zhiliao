@@ -1,0 +1,117 @@
+import hashlib, json, pathlib, re, shutil, subprocess, sys
+root = pathlib.Path(r"D:/ClaudeProjects/ai_acknowladge")
+task = pathlib.Path(r"C:/Users/BAIBAI/AppData/Local/Temp/zhiliao-static-repair-20260915T155500Z-384669e0")
+evidence = root / "docs/验收证据/demo-static-rate-limit-20260915T155500Z-384669e0"
+final = "--final" in sys.argv
+def read_json(file): return json.loads(file.read_text(encoding="utf8"))
+def sha(file): return hashlib.sha256(file.read_bytes()).hexdigest()
+def save(file, value): file.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf8", newline="\n")
+runtime = read_json(evidence / "runtime.json")
+browser = read_json(evidence / "browser-report.json")
+vitest = read_json(evidence / "vitest-results.json")
+assert runtime["status"] == "passed" and runtime["cleanup"]["status"] == "removed"
+assert runtime["preservation"]["status"] == "passed"
+assert browser["status"] == "passed" and browser["browserClosed"]
+assert browser["steps"]["coldReloads"]["count"] == 3
+assert browser["steps"]["noteSave"]["status"] == 201 and browser["steps"]["noteOpen"]["contentVisible"]
+assert vitest["numPassedTests"] == 20 and vitest["numFailedTests"] == 0 and vitest["numPendingTests"] == 0
+assert sha(root / "nginx/demo.conf") == runtime["newConfigSha256"]
+assert sha(root / "docker-compose.demo.yml") == runtime["composeSourceSha256"]
+assert runtime["checks"]["old-static"]["matchedRequestRejections"] == 59
+assert runtime["checks"]["new-static"]["statuses"] == {"200": 100}
+assert runtime["checks"]["dynamic-health"]["matchedRequestRejections"] == 59
+assert runtime["checks"]["static-under-load"]["statuses"] == {"200": 14}
+for index in range(10): assert runtime["checks"]["boundary-" + str(index)]["matchedRequestRejections"] > 0
+for item in runtime["checks"]["bodyLimits"]: assert item["status"] == 413
+for scenario in ["new-static", "static-under-load"]:
+    data = read_json(evidence / (scenario + ".json"))
+    for item in data["requests"]:
+        original = runtime["resources"][item["path"].split("?")[0]]
+        assert item["status"] == 200 and item["sha256"] == original["sha256"] and item["bytes"] == original["bytes"]
+assets = [item for item in browser["network"] if item["path"].startswith("/_next/static/")]
+assert len(assets) == 215 and all(item["status"] == 200 for item in assets)
+assert not any("ChunkLoadError" in item["error"] for item in browser["pageErrors"])
+for source in evidence.rglob("*.log"):
+    target = source.with_suffix(source.suffix + ".txt")
+    if not target.exists(): shutil.copyfile(source, target)
+source_files = [
+    "nginx/demo.conf", "tests/config/demo-compose.test.ts", "README.md", "README.en.md", "CHANGELOG.md",
+    "docs/README.md", "docs/R1安装验收-2026-09-15.md", "docs/releases/v0.6.1.md",
+    "docs/产品规划/开源发布范围与执行清单-2026-09-13.md",
+    "_bmad-output/implementation-artifacts/deferred-work.md",
+    "_bmad-output/implementation-artifacts/spec-repair-demo-static-rate-limit.md",
+]
+for name in source_files:
+    data = (root / name).read_bytes()
+    text = data.decode("utf8")
+    assert not data.startswith(b"\xef\xbb\xbf") and b"\r" not in data, name
+    assert "\ufffd" not in text, name
+for name in ["nginx/demo.conf", "tests/config/demo-compose.test.ts"]:
+    for line in (root / name).read_text(encoding="utf8").splitlines():
+        if line.lstrip().startswith(("#", "//")): line.encode("gb2312")
+spec = (root / source_files[-1]).read_text(encoding="utf8")
+frozen = re.search(r"<frozen-after-approval.*?</frozen-after-approval>", spec, re.S).group()
+frozen_sha = hashlib.sha256(frozen.encode()).hexdigest()
+head = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=root, text=True).strip()
+index_path = pathlib.Path(subprocess.check_output(["git", "rev-parse", "--git-path", "index"], cwd=root, text=True).strip())
+if not index_path.is_absolute(): index_path = root / index_path
+index_sha = sha(index_path)
+assert head == runtime["baselineCommit"]
+if not final:
+    private = read_json(task / "runtime-private.json")
+    sensitive = [private["password"].encode(), private["secret"].encode()]
+    for file in evidence.rglob("*"):
+        if file.is_file():
+            data = file.read_bytes()
+            assert not any(value in data for value in sensitive), file.name
+            if file.suffix in {".json", ".md", ".txt", ".conf", ".diff", ".log"}:
+                assert "\ufffd" not in data.decode("utf8"), file.name
+    for name in ["runtime.mjs", "browser.cjs", "browser-resume.cjs", "workspace.py", "archive-attempt.cjs"]:
+        assert sha(task / name) == sha(evidence / "harness" / (name + ".txt"))
+    preservation = read_json(task / "preservation.json")
+    assert preservation["head_unchanged"] and preservation["index_unchanged"] and preservation["protected_unchanged"] and not preservation["unexpected"]
+    save(evidence / "preservation.json", preservation)
+    save(evidence / "pre-cleanup-audit.json", {
+        "status": "passed", "head": head, "indexSha256": index_sha, "frozenIntentSha256": frozen_sha,
+        "sensitiveValuesFound": False, "archivedScriptsMatchExecutedFiles": True,
+        "changedSourceFiles": len(preservation["changed"]), "protectedFiles": preservation["protected_files"],
+        "runtimeChecks": "passed", "commentsGb2312Compatible": True, "utf8Lf": True,
+    })
+    print(json.dumps({"status": "passed", "phase": "pre-cleanup", "changedSourceFiles": len(preservation["changed"]), "sensitiveValuesFound": False}))
+else:
+    prior = read_json(evidence / "pre-cleanup-audit.json")
+    assert prior["status"] == "passed" and prior["indexSha256"] == index_sha and prior["frozenIntentSha256"] == frozen_sha
+    cleanup = read_json(evidence / "cleanup-directory.json")
+    assert cleanup["status"] == "removed" and not task.exists()
+    current = None
+    additions = {}
+    for line in (evidence / "task-changes.diff").read_text(encoding="utf8").splitlines():
+        if line.startswith("+++ b/"): current = line[6:]
+        elif line.startswith("+") and not line.startswith("+++") and current and current.endswith(".md"):
+            additions.setdefault(current, []).append(line[1:])
+    additions["docs/验收证据/demo-static-rate-limit-20260915T155500Z-384669e0/harness/README.md"] = [(evidence / "harness/README.md").read_text(encoding="utf8")]
+    checked = 0
+    for name, lines in additions.items():
+        for match in re.finditer(r"\]\(([^)]+)\)", "\n".join(lines)):
+            target = match.group(1).strip("<>")
+            if re.match(r"^[a-z]+://", target): continue
+            dest, _, anchor = target.partition("#")
+            file = (root / name).parent / dest if dest else root / name
+            assert file.exists(), (name, target)
+            if anchor.startswith("demo-"):
+                assert 'id="' + anchor + '"' in file.read_text(encoding="utf8"), (name, target)
+            checked += 1
+    result = {
+        "status": "passed", "relatedTestsPassed": 20, "relatedTestsSkipped": 0,
+        "httpMatrix": "passed", "browserStaticResponses200": 215, "browserChunkLoadErrors": 0,
+        "react418": "本轮未出现，仍独立待处理", "utf8Lf": True, "commentsGb2312Compatible": True,
+        "addedRelativeLinksChecked": checked, "temporaryDirectoryRemoved": True,
+        "headUnchanged": True, "indexUnchanged": True, "frozenIntentUnchanged": True,
+        "sourceSha256": {name: sha(root / name) for name in source_files},
+        "limits": ["浏览器 1 条字体响应正文因后续导航无法采集；保留原错误，HTTP 样本正文哈希另行通过。", "未运行 build、全量测试、长时或完整安装/发布验收。"],
+    }
+    save(evidence / "final-checks.json", result)
+    manifest = {file.relative_to(evidence).as_posix(): {"sha256": sha(file), "bytes": file.stat().st_size} for file in sorted(evidence.rglob("*")) if file.is_file() and file.name != "artifact-manifest.json" and file.suffix != ".log"}
+    save(evidence / "artifact-manifest.json", {"scope": "本次可归档证据；原始 .log 已按字节复制为 .log.txt", "files": manifest})
+    print(json.dumps({"status": "passed", "links": checked, "artifacts": len(manifest), "tests": 20, "temporaryDirectoryRemoved": True}))
+

@@ -1,0 +1,811 @@
+{
+  "scenario": "new-static",
+  "count": 100,
+  "concurrency": 6,
+  "elapsedMs": 78,
+  "statuses": {
+    "200": 100
+  },
+  "requests": [
+    {
+      "path": "/_next/static/chunks/app/(app)/page-546d9e331d248176.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=0",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 2518,
+      "sha256": "d5180b1bf055a5da787cdb28c6d9d53a270b96574d84f47f08756c028524fad2",
+      "elapsedMs": 5
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/topics/%5Bid%5D/page-a443cf22ffddee12.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=1",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 7333,
+      "sha256": "e77d9f4f4c271ea71be25da031d684fbbebb241ff22d87a2358746107048045b",
+      "elapsedMs": 5
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/search/page-195baf5521c05d5d.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=2",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 6883,
+      "sha256": "bdd5cade22a527207e58370a726f36352762d4dfa8a54b3f13e18f36e7302f68",
+      "elapsedMs": 7
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/inbox/page-681898bb0a303d89.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=3",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 9901,
+      "sha256": "64b66f92275cb539b5cd6af9696fa28329effe538b85f9ffcb6e66c93ea9a9ca",
+      "elapsedMs": 8
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/settings/page-5997b3acd7a84aea.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=4",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 52358,
+      "sha256": "b08b330f007ec1dae4d953ea105536c32122a75e299f0db0d26b68ea4f592b24",
+      "elapsedMs": 9
+    },
+    {
+      "path": "/_next/static/css/3f43a07db598b6ec.css?probe=20260915T155500Z-384669e0&scenario=new-static&i=5",
+      "status": 200,
+      "contentType": "text/css; charset=UTF-8",
+      "bytes": 265193,
+      "sha256": "c6abde282c81005541f6f65e272afcd55639af3bfa15dc0d8dc9ac9ce0840545",
+      "elapsedMs": 8
+    },
+    {
+      "path": "/_next/static/media/KaTeX_AMS-Regular.a79f1c31.woff2?probe=20260915T155500Z-384669e0&scenario=new-static&i=6",
+      "status": 200,
+      "contentType": "font/woff2",
+      "bytes": 28076,
+      "sha256": "0cdd387c9590a1a9f9794560022dbb59654a7d86f187aa0c81495ad42d3a7308",
+      "elapsedMs": 4
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/page-546d9e331d248176.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=7",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 2518,
+      "sha256": "d5180b1bf055a5da787cdb28c6d9d53a270b96574d84f47f08756c028524fad2",
+      "elapsedMs": 4
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/topics/%5Bid%5D/page-a443cf22ffddee12.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=8",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 7333,
+      "sha256": "e77d9f4f4c271ea71be25da031d684fbbebb241ff22d87a2358746107048045b",
+      "elapsedMs": 3
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/search/page-195baf5521c05d5d.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=9",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 6883,
+      "sha256": "bdd5cade22a527207e58370a726f36352762d4dfa8a54b3f13e18f36e7302f68",
+      "elapsedMs": 3
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/inbox/page-681898bb0a303d89.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=10",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 9901,
+      "sha256": "64b66f92275cb539b5cd6af9696fa28329effe538b85f9ffcb6e66c93ea9a9ca",
+      "elapsedMs": 3
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/settings/page-5997b3acd7a84aea.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=11",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 52358,
+      "sha256": "b08b330f007ec1dae4d953ea105536c32122a75e299f0db0d26b68ea4f592b24",
+      "elapsedMs": 3
+    },
+    {
+      "path": "/_next/static/css/3f43a07db598b6ec.css?probe=20260915T155500Z-384669e0&scenario=new-static&i=12",
+      "status": 200,
+      "contentType": "text/css; charset=UTF-8",
+      "bytes": 265193,
+      "sha256": "c6abde282c81005541f6f65e272afcd55639af3bfa15dc0d8dc9ac9ce0840545",
+      "elapsedMs": 6
+    },
+    {
+      "path": "/_next/static/media/KaTeX_AMS-Regular.a79f1c31.woff2?probe=20260915T155500Z-384669e0&scenario=new-static&i=13",
+      "status": 200,
+      "contentType": "font/woff2",
+      "bytes": 28076,
+      "sha256": "0cdd387c9590a1a9f9794560022dbb59654a7d86f187aa0c81495ad42d3a7308",
+      "elapsedMs": 3
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/page-546d9e331d248176.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=14",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 2518,
+      "sha256": "d5180b1bf055a5da787cdb28c6d9d53a270b96574d84f47f08756c028524fad2",
+      "elapsedMs": 3
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/topics/%5Bid%5D/page-a443cf22ffddee12.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=15",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 7333,
+      "sha256": "e77d9f4f4c271ea71be25da031d684fbbebb241ff22d87a2358746107048045b",
+      "elapsedMs": 3
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/search/page-195baf5521c05d5d.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=16",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 6883,
+      "sha256": "bdd5cade22a527207e58370a726f36352762d4dfa8a54b3f13e18f36e7302f68",
+      "elapsedMs": 4
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/inbox/page-681898bb0a303d89.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=17",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 9901,
+      "sha256": "64b66f92275cb539b5cd6af9696fa28329effe538b85f9ffcb6e66c93ea9a9ca",
+      "elapsedMs": 4
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/settings/page-5997b3acd7a84aea.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=18",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 52358,
+      "sha256": "b08b330f007ec1dae4d953ea105536c32122a75e299f0db0d26b68ea4f592b24",
+      "elapsedMs": 4
+    },
+    {
+      "path": "/_next/static/css/3f43a07db598b6ec.css?probe=20260915T155500Z-384669e0&scenario=new-static&i=19",
+      "status": 200,
+      "contentType": "text/css; charset=UTF-8",
+      "bytes": 265193,
+      "sha256": "c6abde282c81005541f6f65e272afcd55639af3bfa15dc0d8dc9ac9ce0840545",
+      "elapsedMs": 7
+    },
+    {
+      "path": "/_next/static/media/KaTeX_AMS-Regular.a79f1c31.woff2?probe=20260915T155500Z-384669e0&scenario=new-static&i=20",
+      "status": 200,
+      "contentType": "font/woff2",
+      "bytes": 28076,
+      "sha256": "0cdd387c9590a1a9f9794560022dbb59654a7d86f187aa0c81495ad42d3a7308",
+      "elapsedMs": 4
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/page-546d9e331d248176.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=21",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 2518,
+      "sha256": "d5180b1bf055a5da787cdb28c6d9d53a270b96574d84f47f08756c028524fad2",
+      "elapsedMs": 4
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/topics/%5Bid%5D/page-a443cf22ffddee12.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=22",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 7333,
+      "sha256": "e77d9f4f4c271ea71be25da031d684fbbebb241ff22d87a2358746107048045b",
+      "elapsedMs": 4
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/search/page-195baf5521c05d5d.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=23",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 6883,
+      "sha256": "bdd5cade22a527207e58370a726f36352762d4dfa8a54b3f13e18f36e7302f68",
+      "elapsedMs": 4
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/inbox/page-681898bb0a303d89.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=24",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 9901,
+      "sha256": "64b66f92275cb539b5cd6af9696fa28329effe538b85f9ffcb6e66c93ea9a9ca",
+      "elapsedMs": 4
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/settings/page-5997b3acd7a84aea.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=25",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 52358,
+      "sha256": "b08b330f007ec1dae4d953ea105536c32122a75e299f0db0d26b68ea4f592b24",
+      "elapsedMs": 3
+    },
+    {
+      "path": "/_next/static/css/3f43a07db598b6ec.css?probe=20260915T155500Z-384669e0&scenario=new-static&i=26",
+      "status": 200,
+      "contentType": "text/css; charset=UTF-8",
+      "bytes": 265193,
+      "sha256": "c6abde282c81005541f6f65e272afcd55639af3bfa15dc0d8dc9ac9ce0840545",
+      "elapsedMs": 7
+    },
+    {
+      "path": "/_next/static/media/KaTeX_AMS-Regular.a79f1c31.woff2?probe=20260915T155500Z-384669e0&scenario=new-static&i=27",
+      "status": 200,
+      "contentType": "font/woff2",
+      "bytes": 28076,
+      "sha256": "0cdd387c9590a1a9f9794560022dbb59654a7d86f187aa0c81495ad42d3a7308",
+      "elapsedMs": 3
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/page-546d9e331d248176.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=28",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 2518,
+      "sha256": "d5180b1bf055a5da787cdb28c6d9d53a270b96574d84f47f08756c028524fad2",
+      "elapsedMs": 4
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/topics/%5Bid%5D/page-a443cf22ffddee12.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=29",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 7333,
+      "sha256": "e77d9f4f4c271ea71be25da031d684fbbebb241ff22d87a2358746107048045b",
+      "elapsedMs": 4
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/search/page-195baf5521c05d5d.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=30",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 6883,
+      "sha256": "bdd5cade22a527207e58370a726f36352762d4dfa8a54b3f13e18f36e7302f68",
+      "elapsedMs": 4
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/inbox/page-681898bb0a303d89.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=31",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 9901,
+      "sha256": "64b66f92275cb539b5cd6af9696fa28329effe538b85f9ffcb6e66c93ea9a9ca",
+      "elapsedMs": 4
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/settings/page-5997b3acd7a84aea.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=32",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 52358,
+      "sha256": "b08b330f007ec1dae4d953ea105536c32122a75e299f0db0d26b68ea4f592b24",
+      "elapsedMs": 3
+    },
+    {
+      "path": "/_next/static/css/3f43a07db598b6ec.css?probe=20260915T155500Z-384669e0&scenario=new-static&i=33",
+      "status": 200,
+      "contentType": "text/css; charset=UTF-8",
+      "bytes": 265193,
+      "sha256": "c6abde282c81005541f6f65e272afcd55639af3bfa15dc0d8dc9ac9ce0840545",
+      "elapsedMs": 6
+    },
+    {
+      "path": "/_next/static/media/KaTeX_AMS-Regular.a79f1c31.woff2?probe=20260915T155500Z-384669e0&scenario=new-static&i=34",
+      "status": 200,
+      "contentType": "font/woff2",
+      "bytes": 28076,
+      "sha256": "0cdd387c9590a1a9f9794560022dbb59654a7d86f187aa0c81495ad42d3a7308",
+      "elapsedMs": 3
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/page-546d9e331d248176.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=35",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 2518,
+      "sha256": "d5180b1bf055a5da787cdb28c6d9d53a270b96574d84f47f08756c028524fad2",
+      "elapsedMs": 3
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/topics/%5Bid%5D/page-a443cf22ffddee12.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=36",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 7333,
+      "sha256": "e77d9f4f4c271ea71be25da031d684fbbebb241ff22d87a2358746107048045b",
+      "elapsedMs": 3
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/search/page-195baf5521c05d5d.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=37",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 6883,
+      "sha256": "bdd5cade22a527207e58370a726f36352762d4dfa8a54b3f13e18f36e7302f68",
+      "elapsedMs": 4
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/inbox/page-681898bb0a303d89.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=38",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 9901,
+      "sha256": "64b66f92275cb539b5cd6af9696fa28329effe538b85f9ffcb6e66c93ea9a9ca",
+      "elapsedMs": 3
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/settings/page-5997b3acd7a84aea.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=39",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 52358,
+      "sha256": "b08b330f007ec1dae4d953ea105536c32122a75e299f0db0d26b68ea4f592b24",
+      "elapsedMs": 4
+    },
+    {
+      "path": "/_next/static/css/3f43a07db598b6ec.css?probe=20260915T155500Z-384669e0&scenario=new-static&i=40",
+      "status": 200,
+      "contentType": "text/css; charset=UTF-8",
+      "bytes": 265193,
+      "sha256": "c6abde282c81005541f6f65e272afcd55639af3bfa15dc0d8dc9ac9ce0840545",
+      "elapsedMs": 6
+    },
+    {
+      "path": "/_next/static/media/KaTeX_AMS-Regular.a79f1c31.woff2?probe=20260915T155500Z-384669e0&scenario=new-static&i=41",
+      "status": 200,
+      "contentType": "font/woff2",
+      "bytes": 28076,
+      "sha256": "0cdd387c9590a1a9f9794560022dbb59654a7d86f187aa0c81495ad42d3a7308",
+      "elapsedMs": 4
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/page-546d9e331d248176.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=42",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 2518,
+      "sha256": "d5180b1bf055a5da787cdb28c6d9d53a270b96574d84f47f08756c028524fad2",
+      "elapsedMs": 4
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/topics/%5Bid%5D/page-a443cf22ffddee12.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=43",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 7333,
+      "sha256": "e77d9f4f4c271ea71be25da031d684fbbebb241ff22d87a2358746107048045b",
+      "elapsedMs": 4
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/search/page-195baf5521c05d5d.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=44",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 6883,
+      "sha256": "bdd5cade22a527207e58370a726f36352762d4dfa8a54b3f13e18f36e7302f68",
+      "elapsedMs": 4
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/inbox/page-681898bb0a303d89.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=45",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 9901,
+      "sha256": "64b66f92275cb539b5cd6af9696fa28329effe538b85f9ffcb6e66c93ea9a9ca",
+      "elapsedMs": 3
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/settings/page-5997b3acd7a84aea.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=46",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 52358,
+      "sha256": "b08b330f007ec1dae4d953ea105536c32122a75e299f0db0d26b68ea4f592b24",
+      "elapsedMs": 3
+    },
+    {
+      "path": "/_next/static/css/3f43a07db598b6ec.css?probe=20260915T155500Z-384669e0&scenario=new-static&i=47",
+      "status": 200,
+      "contentType": "text/css; charset=UTF-8",
+      "bytes": 265193,
+      "sha256": "c6abde282c81005541f6f65e272afcd55639af3bfa15dc0d8dc9ac9ce0840545",
+      "elapsedMs": 6
+    },
+    {
+      "path": "/_next/static/media/KaTeX_AMS-Regular.a79f1c31.woff2?probe=20260915T155500Z-384669e0&scenario=new-static&i=48",
+      "status": 200,
+      "contentType": "font/woff2",
+      "bytes": 28076,
+      "sha256": "0cdd387c9590a1a9f9794560022dbb59654a7d86f187aa0c81495ad42d3a7308",
+      "elapsedMs": 4
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/page-546d9e331d248176.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=49",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 2518,
+      "sha256": "d5180b1bf055a5da787cdb28c6d9d53a270b96574d84f47f08756c028524fad2",
+      "elapsedMs": 5
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/topics/%5Bid%5D/page-a443cf22ffddee12.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=50",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 7333,
+      "sha256": "e77d9f4f4c271ea71be25da031d684fbbebb241ff22d87a2358746107048045b",
+      "elapsedMs": 4
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/search/page-195baf5521c05d5d.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=51",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 6883,
+      "sha256": "bdd5cade22a527207e58370a726f36352762d4dfa8a54b3f13e18f36e7302f68",
+      "elapsedMs": 5
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/inbox/page-681898bb0a303d89.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=52",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 9901,
+      "sha256": "64b66f92275cb539b5cd6af9696fa28329effe538b85f9ffcb6e66c93ea9a9ca",
+      "elapsedMs": 5
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/settings/page-5997b3acd7a84aea.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=53",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 52358,
+      "sha256": "b08b330f007ec1dae4d953ea105536c32122a75e299f0db0d26b68ea4f592b24",
+      "elapsedMs": 4
+    },
+    {
+      "path": "/_next/static/css/3f43a07db598b6ec.css?probe=20260915T155500Z-384669e0&scenario=new-static&i=54",
+      "status": 200,
+      "contentType": "text/css; charset=UTF-8",
+      "bytes": 265193,
+      "sha256": "c6abde282c81005541f6f65e272afcd55639af3bfa15dc0d8dc9ac9ce0840545",
+      "elapsedMs": 6
+    },
+    {
+      "path": "/_next/static/media/KaTeX_AMS-Regular.a79f1c31.woff2?probe=20260915T155500Z-384669e0&scenario=new-static&i=55",
+      "status": 200,
+      "contentType": "font/woff2",
+      "bytes": 28076,
+      "sha256": "0cdd387c9590a1a9f9794560022dbb59654a7d86f187aa0c81495ad42d3a7308",
+      "elapsedMs": 4
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/page-546d9e331d248176.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=56",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 2518,
+      "sha256": "d5180b1bf055a5da787cdb28c6d9d53a270b96574d84f47f08756c028524fad2",
+      "elapsedMs": 4
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/topics/%5Bid%5D/page-a443cf22ffddee12.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=57",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 7333,
+      "sha256": "e77d9f4f4c271ea71be25da031d684fbbebb241ff22d87a2358746107048045b",
+      "elapsedMs": 4
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/search/page-195baf5521c05d5d.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=58",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 6883,
+      "sha256": "bdd5cade22a527207e58370a726f36352762d4dfa8a54b3f13e18f36e7302f68",
+      "elapsedMs": 4
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/inbox/page-681898bb0a303d89.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=59",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 9901,
+      "sha256": "64b66f92275cb539b5cd6af9696fa28329effe538b85f9ffcb6e66c93ea9a9ca",
+      "elapsedMs": 4
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/settings/page-5997b3acd7a84aea.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=60",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 52358,
+      "sha256": "b08b330f007ec1dae4d953ea105536c32122a75e299f0db0d26b68ea4f592b24",
+      "elapsedMs": 4
+    },
+    {
+      "path": "/_next/static/css/3f43a07db598b6ec.css?probe=20260915T155500Z-384669e0&scenario=new-static&i=61",
+      "status": 200,
+      "contentType": "text/css; charset=UTF-8",
+      "bytes": 265193,
+      "sha256": "c6abde282c81005541f6f65e272afcd55639af3bfa15dc0d8dc9ac9ce0840545",
+      "elapsedMs": 6
+    },
+    {
+      "path": "/_next/static/media/KaTeX_AMS-Regular.a79f1c31.woff2?probe=20260915T155500Z-384669e0&scenario=new-static&i=62",
+      "status": 200,
+      "contentType": "font/woff2",
+      "bytes": 28076,
+      "sha256": "0cdd387c9590a1a9f9794560022dbb59654a7d86f187aa0c81495ad42d3a7308",
+      "elapsedMs": 4
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/page-546d9e331d248176.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=63",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 2518,
+      "sha256": "d5180b1bf055a5da787cdb28c6d9d53a270b96574d84f47f08756c028524fad2",
+      "elapsedMs": 4
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/topics/%5Bid%5D/page-a443cf22ffddee12.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=64",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 7333,
+      "sha256": "e77d9f4f4c271ea71be25da031d684fbbebb241ff22d87a2358746107048045b",
+      "elapsedMs": 4
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/search/page-195baf5521c05d5d.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=65",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 6883,
+      "sha256": "bdd5cade22a527207e58370a726f36352762d4dfa8a54b3f13e18f36e7302f68",
+      "elapsedMs": 5
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/inbox/page-681898bb0a303d89.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=66",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 9901,
+      "sha256": "64b66f92275cb539b5cd6af9696fa28329effe538b85f9ffcb6e66c93ea9a9ca",
+      "elapsedMs": 3
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/settings/page-5997b3acd7a84aea.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=67",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 52358,
+      "sha256": "b08b330f007ec1dae4d953ea105536c32122a75e299f0db0d26b68ea4f592b24",
+      "elapsedMs": 2
+    },
+    {
+      "path": "/_next/static/css/3f43a07db598b6ec.css?probe=20260915T155500Z-384669e0&scenario=new-static&i=68",
+      "status": 200,
+      "contentType": "text/css; charset=UTF-8",
+      "bytes": 265193,
+      "sha256": "c6abde282c81005541f6f65e272afcd55639af3bfa15dc0d8dc9ac9ce0840545",
+      "elapsedMs": 7
+    },
+    {
+      "path": "/_next/static/media/KaTeX_AMS-Regular.a79f1c31.woff2?probe=20260915T155500Z-384669e0&scenario=new-static&i=69",
+      "status": 200,
+      "contentType": "font/woff2",
+      "bytes": 28076,
+      "sha256": "0cdd387c9590a1a9f9794560022dbb59654a7d86f187aa0c81495ad42d3a7308",
+      "elapsedMs": 3
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/page-546d9e331d248176.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=70",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 2518,
+      "sha256": "d5180b1bf055a5da787cdb28c6d9d53a270b96574d84f47f08756c028524fad2",
+      "elapsedMs": 4
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/topics/%5Bid%5D/page-a443cf22ffddee12.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=71",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 7333,
+      "sha256": "e77d9f4f4c271ea71be25da031d684fbbebb241ff22d87a2358746107048045b",
+      "elapsedMs": 4
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/search/page-195baf5521c05d5d.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=72",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 6883,
+      "sha256": "bdd5cade22a527207e58370a726f36352762d4dfa8a54b3f13e18f36e7302f68",
+      "elapsedMs": 5
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/inbox/page-681898bb0a303d89.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=73",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 9901,
+      "sha256": "64b66f92275cb539b5cd6af9696fa28329effe538b85f9ffcb6e66c93ea9a9ca",
+      "elapsedMs": 5
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/settings/page-5997b3acd7a84aea.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=74",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 52358,
+      "sha256": "b08b330f007ec1dae4d953ea105536c32122a75e299f0db0d26b68ea4f592b24",
+      "elapsedMs": 6
+    },
+    {
+      "path": "/_next/static/css/3f43a07db598b6ec.css?probe=20260915T155500Z-384669e0&scenario=new-static&i=75",
+      "status": 200,
+      "contentType": "text/css; charset=UTF-8",
+      "bytes": 265193,
+      "sha256": "c6abde282c81005541f6f65e272afcd55639af3bfa15dc0d8dc9ac9ce0840545",
+      "elapsedMs": 7
+    },
+    {
+      "path": "/_next/static/media/KaTeX_AMS-Regular.a79f1c31.woff2?probe=20260915T155500Z-384669e0&scenario=new-static&i=76",
+      "status": 200,
+      "contentType": "font/woff2",
+      "bytes": 28076,
+      "sha256": "0cdd387c9590a1a9f9794560022dbb59654a7d86f187aa0c81495ad42d3a7308",
+      "elapsedMs": 4
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/page-546d9e331d248176.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=77",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 2518,
+      "sha256": "d5180b1bf055a5da787cdb28c6d9d53a270b96574d84f47f08756c028524fad2",
+      "elapsedMs": 4
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/topics/%5Bid%5D/page-a443cf22ffddee12.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=78",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 7333,
+      "sha256": "e77d9f4f4c271ea71be25da031d684fbbebb241ff22d87a2358746107048045b",
+      "elapsedMs": 4
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/search/page-195baf5521c05d5d.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=79",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 6883,
+      "sha256": "bdd5cade22a527207e58370a726f36352762d4dfa8a54b3f13e18f36e7302f68",
+      "elapsedMs": 4
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/inbox/page-681898bb0a303d89.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=80",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 9901,
+      "sha256": "64b66f92275cb539b5cd6af9696fa28329effe538b85f9ffcb6e66c93ea9a9ca",
+      "elapsedMs": 5
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/settings/page-5997b3acd7a84aea.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=81",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 52358,
+      "sha256": "b08b330f007ec1dae4d953ea105536c32122a75e299f0db0d26b68ea4f592b24",
+      "elapsedMs": 5
+    },
+    {
+      "path": "/_next/static/css/3f43a07db598b6ec.css?probe=20260915T155500Z-384669e0&scenario=new-static&i=82",
+      "status": 200,
+      "contentType": "text/css; charset=UTF-8",
+      "bytes": 265193,
+      "sha256": "c6abde282c81005541f6f65e272afcd55639af3bfa15dc0d8dc9ac9ce0840545",
+      "elapsedMs": 8
+    },
+    {
+      "path": "/_next/static/media/KaTeX_AMS-Regular.a79f1c31.woff2?probe=20260915T155500Z-384669e0&scenario=new-static&i=83",
+      "status": 200,
+      "contentType": "font/woff2",
+      "bytes": 28076,
+      "sha256": "0cdd387c9590a1a9f9794560022dbb59654a7d86f187aa0c81495ad42d3a7308",
+      "elapsedMs": 6
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/page-546d9e331d248176.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=84",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 2518,
+      "sha256": "d5180b1bf055a5da787cdb28c6d9d53a270b96574d84f47f08756c028524fad2",
+      "elapsedMs": 6
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/topics/%5Bid%5D/page-a443cf22ffddee12.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=85",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 7333,
+      "sha256": "e77d9f4f4c271ea71be25da031d684fbbebb241ff22d87a2358746107048045b",
+      "elapsedMs": 5
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/search/page-195baf5521c05d5d.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=86",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 6883,
+      "sha256": "bdd5cade22a527207e58370a726f36352762d4dfa8a54b3f13e18f36e7302f68",
+      "elapsedMs": 5
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/inbox/page-681898bb0a303d89.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=87",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 9901,
+      "sha256": "64b66f92275cb539b5cd6af9696fa28329effe538b85f9ffcb6e66c93ea9a9ca",
+      "elapsedMs": 4
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/settings/page-5997b3acd7a84aea.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=88",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 52358,
+      "sha256": "b08b330f007ec1dae4d953ea105536c32122a75e299f0db0d26b68ea4f592b24",
+      "elapsedMs": 4
+    },
+    {
+      "path": "/_next/static/css/3f43a07db598b6ec.css?probe=20260915T155500Z-384669e0&scenario=new-static&i=89",
+      "status": 200,
+      "contentType": "text/css; charset=UTF-8",
+      "bytes": 265193,
+      "sha256": "c6abde282c81005541f6f65e272afcd55639af3bfa15dc0d8dc9ac9ce0840545",
+      "elapsedMs": 7
+    },
+    {
+      "path": "/_next/static/media/KaTeX_AMS-Regular.a79f1c31.woff2?probe=20260915T155500Z-384669e0&scenario=new-static&i=90",
+      "status": 200,
+      "contentType": "font/woff2",
+      "bytes": 28076,
+      "sha256": "0cdd387c9590a1a9f9794560022dbb59654a7d86f187aa0c81495ad42d3a7308",
+      "elapsedMs": 4
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/page-546d9e331d248176.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=91",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 2518,
+      "sha256": "d5180b1bf055a5da787cdb28c6d9d53a270b96574d84f47f08756c028524fad2",
+      "elapsedMs": 4
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/topics/%5Bid%5D/page-a443cf22ffddee12.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=92",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 7333,
+      "sha256": "e77d9f4f4c271ea71be25da031d684fbbebb241ff22d87a2358746107048045b",
+      "elapsedMs": 4
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/search/page-195baf5521c05d5d.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=93",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 6883,
+      "sha256": "bdd5cade22a527207e58370a726f36352762d4dfa8a54b3f13e18f36e7302f68",
+      "elapsedMs": 4
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/inbox/page-681898bb0a303d89.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=94",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 9901,
+      "sha256": "64b66f92275cb539b5cd6af9696fa28329effe538b85f9ffcb6e66c93ea9a9ca",
+      "elapsedMs": 4
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/settings/page-5997b3acd7a84aea.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=95",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 52358,
+      "sha256": "b08b330f007ec1dae4d953ea105536c32122a75e299f0db0d26b68ea4f592b24",
+      "elapsedMs": 4
+    },
+    {
+      "path": "/_next/static/css/3f43a07db598b6ec.css?probe=20260915T155500Z-384669e0&scenario=new-static&i=96",
+      "status": 200,
+      "contentType": "text/css; charset=UTF-8",
+      "bytes": 265193,
+      "sha256": "c6abde282c81005541f6f65e272afcd55639af3bfa15dc0d8dc9ac9ce0840545",
+      "elapsedMs": 5
+    },
+    {
+      "path": "/_next/static/media/KaTeX_AMS-Regular.a79f1c31.woff2?probe=20260915T155500Z-384669e0&scenario=new-static&i=97",
+      "status": 200,
+      "contentType": "font/woff2",
+      "bytes": 28076,
+      "sha256": "0cdd387c9590a1a9f9794560022dbb59654a7d86f187aa0c81495ad42d3a7308",
+      "elapsedMs": 3
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/page-546d9e331d248176.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=98",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 2518,
+      "sha256": "d5180b1bf055a5da787cdb28c6d9d53a270b96574d84f47f08756c028524fad2",
+      "elapsedMs": 4
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/topics/%5Bid%5D/page-a443cf22ffddee12.js?probe=20260915T155500Z-384669e0&scenario=new-static&i=99",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "bytes": 7333,
+      "sha256": "e77d9f4f4c271ea71be25da031d684fbbebb241ff22d87a2358746107048045b",
+      "elapsedMs": 3
+    }
+  ]
+}

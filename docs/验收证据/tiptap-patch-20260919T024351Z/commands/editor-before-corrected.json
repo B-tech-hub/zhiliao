@@ -1,0 +1,20 @@
+{
+  "step": "editor-before-corrected",
+  "cwd": "D:/ClaudeProjects/ai_acknowladge",
+  "command": [
+    "D:/node.js/node.exe",
+    "node_modules/vitest/vitest.mjs",
+    "run",
+    "tests/components/markdown-editor-security.test.tsx",
+    "--maxWorkers=1",
+    "--reporter=json",
+    "--outputFile=C:/Users/BAIBAI/AppData/Local/Temp/zhiliao-tiptap-wald1s82/editor-before-corrected.report.json"
+  ],
+  "startedUtc": "2026-09-19T02:48:45.072060+00:00",
+  "finishedUtc": "2026-09-19T02:48:49.649902+00:00",
+  "elapsedSeconds": 4.578,
+  "exitCode": 1,
+  "stdout": "editor-before-corrected.stdout.log",
+  "stderr": "editor-before-corrected.stderr.log",
+  "lifecycleScriptsDisabled": true
+}

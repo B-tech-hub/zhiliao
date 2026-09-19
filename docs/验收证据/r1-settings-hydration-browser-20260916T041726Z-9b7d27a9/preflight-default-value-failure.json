@@ -1,0 +1,41 @@
+{
+  "runId": "20260916T041726Z-9b7d27a9",
+  "project": "zhiliao-r1-hydration-20260916t041726z-9b7d27a9",
+  "port": 3316,
+  "startedUtc": "2026-09-16T04:26:05.073995+00:00",
+  "status": "failed",
+  "buildCount": 1,
+  "commands": [
+    {
+      "args": [
+        "config",
+        "--format",
+        "json"
+      ],
+      "startedUtc": "2026-09-16T04:26:10.456036+00:00",
+      "finishedUtc": "2026-09-16T04:26:11.906079+00:00",
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "config",
+        "--format",
+        "json"
+      ],
+      "startedUtc": "2026-09-16T04:28:14.265872+00:00",
+      "finishedUtc": "2026-09-16T04:28:15.651781+00:00",
+      "exitCode": 0
+    }
+  ],
+  "previousPreflightFailure": {
+    "mode": "up",
+    "at": "2026-09-16T04:26:11.908101+00:00",
+    "error": "临时覆盖包含计划外配置变化"
+  },
+  "preflightCorrection": "Compose 保留顶层 x-r1-labels 标签锚点，预期值补上同一运行标识；首次失败发生在启动容器之前。",
+  "failure": {
+    "mode": "up",
+    "at": "2026-09-16T04:28:15.652971+00:00",
+    "error": "'internal'"
+  }
+}

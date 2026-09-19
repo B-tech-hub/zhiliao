@@ -1,0 +1,94 @@
+{
+  "id": "boundary-complete",
+  "result": {
+    "results": [
+      {
+        "name": "llm-patch",
+        "url": "/api/settings/llm",
+        "method": "PATCH",
+        "status": 403,
+        "body": "{\"error\":\"体验模式不支持此操作\"}"
+      },
+      {
+        "name": "llm-delete",
+        "url": "/api/settings/llm",
+        "method": "DELETE",
+        "status": 403,
+        "body": "{\"error\":\"体验模式不支持此操作\"}"
+      },
+      {
+        "name": "tokens-list",
+        "url": "/api/settings/tokens",
+        "method": "GET",
+        "status": 403,
+        "body": "{\"error\":\"体验模式不支持此操作\"}"
+      },
+      {
+        "name": "tokens-create",
+        "url": "/api/settings/tokens",
+        "method": "POST",
+        "status": 403,
+        "body": "{\"error\":\"体验模式不支持此操作\"}"
+      },
+      {
+        "name": "tokens-revoke",
+        "url": "/api/settings/tokens?id=r1-absent-token",
+        "method": "DELETE",
+        "status": 403,
+        "body": "{\"error\":\"体验模式不支持此操作\"}"
+      },
+      {
+        "name": "export",
+        "url": "/api/export",
+        "method": "GET",
+        "status": 403,
+        "body": "{\"error\":\"体验模式不支持此操作\"}"
+      },
+      {
+        "name": "backup",
+        "url": "/api/backup",
+        "method": "POST",
+        "status": 403,
+        "body": "{\"error\":\"体验模式不支持此操作\"}"
+      },
+      {
+        "name": "embedding-list",
+        "url": "/api/embedding/backfill",
+        "method": "GET",
+        "status": 403,
+        "body": "{\"error\":\"体验模式不支持此操作\"}"
+      },
+      {
+        "name": "embedding-start",
+        "url": "/api/embedding/backfill",
+        "method": "POST",
+        "status": 403,
+        "body": "{\"error\":\"体验模式不支持此操作\"}"
+      },
+      {
+        "name": "import",
+        "url": "/api/import",
+        "method": "POST",
+        "status": 403,
+        "body": "{\"error\":\"体验模式不支持此操作\"}"
+      },
+      {
+        "name": "llm-test",
+        "url": "/api/llm/test",
+        "method": "POST",
+        "status": 403,
+        "body": "{\"error\":\"体验模式不支持此操作\"}"
+      },
+      {
+        "name": "upload",
+        "url": "/api/uploads",
+        "method": "POST",
+        "status": 403,
+        "body": "{\"error\":\"体验模式不支持此操作\"}"
+      }
+    ],
+    "all403": true,
+    "zipBytes": 226,
+    "pngBytes": 90
+  }
+}

@@ -1,0 +1,662 @@
+{
+    "runId":  "20260914T070442Z-5c531772",
+    "candidate":  {
+                      "version":  "0.6.1",
+                      "head":  "f213761b795cc020be2122e27301fe4a7c5cf7a0",
+                      "workingTree":  true,
+                      "runtimeFiles":  186,
+                      "unchangedRuntimeFiles":  184,
+                      "generatedTypeFileChanges":  [
+                                                       "next-env.d.ts",
+                                                       "tsconfig.json"
+                                                   ]
+                  },
+    "scope":  "Windows 本机受控源码 Demo；固定本机 mock；不是发布、Docker、无缓存安装或完整 R1 工作包验收",
+    "environment":  {
+                        "node":  "22.19.0",
+                        "next":  "15.5.23",
+                        "browser":  "153.0.8010.36",
+                        "headless":  true,
+                        "viewport":  {
+                                         "width":  1440,
+                                         "height":  900
+                                     },
+                        "dependencyMethod":  "复制现有 node_modules",
+                        "application":  "http://127.0.0.1:3311",
+                        "mock":  "http://127.0.0.1:8787/v1"
+                    },
+    "startup":  {
+                    "initialBeforeBrowserRecovery":  {
+                                                         "timeUtc":  "2026-09-14T07:14:51.1516974Z",
+                                                         "listeners":  [
+                                                                           {
+                                                                               "LocalAddress":  "127.0.0.1",
+                                                                               "LocalPort":  8787,
+                                                                               "OwningProcess":  31772
+                                                                           },
+                                                                           {
+                                                                               "LocalAddress":  "127.0.0.1",
+                                                                               "LocalPort":  3311,
+                                                                               "OwningProcess":  34984
+                                                                           }
+                                                                       ],
+                                                         "health":  {
+                                                                        "ok":  true
+                                                                    },
+                                                         "elapsedSeconds":  50.079764999999995,
+                                                         "phase":  "cold",
+                                                         "status":  200
+                                                     },
+                    "browserCold":  {
+                                        "timeUtc":  "2026-09-14T07:34:33.2674705Z",
+                                        "listeners":  [
+                                                          {
+                                                              "LocalAddress":  "127.0.0.1",
+                                                              "LocalPort":  8787,
+                                                              "OwningProcess":  15096
+                                                          },
+                                                          {
+                                                              "LocalAddress":  "127.0.0.1",
+                                                              "LocalPort":  3311,
+                                                              "OwningProcess":  5096
+                                                          }
+                                                      ],
+                                        "health":  {
+                                                       "ok":  true
+                                                   },
+                                        "elapsedSeconds":  13.6412373,
+                                        "phase":  "cold",
+                                        "status":  200
+                                    },
+                    "pollutedRestart":  {
+                                            "timeUtc":  "2026-09-14T08:00:33.6439896Z",
+                                            "listeners":  [
+                                                              {
+                                                                  "LocalAddress":  "127.0.0.1",
+                                                                  "LocalPort":  8787,
+                                                                  "OwningProcess":  60736
+                                                              },
+                                                              {
+                                                                  "LocalAddress":  "127.0.0.1",
+                                                                  "LocalPort":  3311,
+                                                                  "OwningProcess":  32644
+                                                              }
+                                                          ],
+                                            "health":  {
+                                                           "ok":  true
+                                                       },
+                                            "elapsedSeconds":  15.037856699999999,
+                                            "phase":  "restart",
+                                            "status":  200
+                                        }
+                },
+    "browser":  {
+                    "loginPage":  {
+                                      "status":  200,
+                                      "url":  "http://127.0.0.1:3311/login"
+                                  },
+                    "login":  {
+                                  "hostPasswordStatus":  401,
+                                  "demoPasswordStatus":  200,
+                                  "url":  "http://127.0.0.1:3311/"
+                              },
+                    "firstNote":  {
+                                      "status":  201,
+                                      "id":  "eifme1synnzp9q0y8o314hkw",
+                                      "title":  "R1验收冷启动：今晚·AI",
+                                      "tags":  [
+                                                   "羽毛球",
+                                                   "训练"
+                                               ],
+                                      "topicId":  "b2m5ni7f25w10ix7vgpq87bi",
+                                      "aiStatus":  "done",
+                                      "bodyPreserved":  true,
+                                      "visibleTopic":  "羽毛球"
+                                  },
+                    "suggestionsBefore":  {
+                                              "acceptButtons":  2,
+                                              "run":  true,
+                                              "cook":  true
+                                          },
+                    "suggestionsAfter":  {
+                                             "remainingCook":  true,
+                                             "runTopic":  "跑步5",
+                                             "inbox":  "未分类3"
+                                         },
+                    "search":  {
+                                   "query":  "杀球",
+                                   "firstNotePresent":  true,
+                                   "resultText":  "R1验收冷启动：今晚·AI15:39R1验收冷启动：今晚羽毛球多球训练，杀球终于有点下压了。羽毛球羽毛球训练",
+                                   "reopened":  true
+                               },
+                    "settings":  {
+                                     "hiddenLocalMock":  true,
+                                     "hiddenContainerMock":  true,
+                                     "hiddenCanary":  true
+                                 },
+                    "boundary":  {
+                                     "results":  [
+                                                     {
+                                                         "name":  "llm-patch",
+                                                         "url":  "/api/settings/llm",
+                                                         "method":  "PATCH",
+                                                         "status":  403,
+                                                         "body":  "{\"error\":\"体验模式不支持此操作\"}"
+                                                     },
+                                                     {
+                                                         "name":  "llm-delete",
+                                                         "url":  "/api/settings/llm",
+                                                         "method":  "DELETE",
+                                                         "status":  403,
+                                                         "body":  "{\"error\":\"体验模式不支持此操作\"}"
+                                                     },
+                                                     {
+                                                         "name":  "tokens-list",
+                                                         "url":  "/api/settings/tokens",
+                                                         "method":  "GET",
+                                                         "status":  403,
+                                                         "body":  "{\"error\":\"体验模式不支持此操作\"}"
+                                                     },
+                                                     {
+                                                         "name":  "tokens-create",
+                                                         "url":  "/api/settings/tokens",
+                                                         "method":  "POST",
+                                                         "status":  403,
+                                                         "body":  "{\"error\":\"体验模式不支持此操作\"}"
+                                                     },
+                                                     {
+                                                         "name":  "tokens-revoke",
+                                                         "url":  "/api/settings/tokens?id=r1-absent-token",
+                                                         "method":  "DELETE",
+                                                         "status":  403,
+                                                         "body":  "{\"error\":\"体验模式不支持此操作\"}"
+                                                     },
+                                                     {
+                                                         "name":  "export",
+                                                         "url":  "/api/export",
+                                                         "method":  "GET",
+                                                         "status":  403,
+                                                         "body":  "{\"error\":\"体验模式不支持此操作\"}"
+                                                     },
+                                                     {
+                                                         "name":  "backup",
+                                                         "url":  "/api/backup",
+                                                         "method":  "POST",
+                                                         "status":  403,
+                                                         "body":  "{\"error\":\"体验模式不支持此操作\"}"
+                                                     },
+                                                     {
+                                                         "name":  "embedding-list",
+                                                         "url":  "/api/embedding/backfill",
+                                                         "method":  "GET",
+                                                         "status":  403,
+                                                         "body":  "{\"error\":\"体验模式不支持此操作\"}"
+                                                     },
+                                                     {
+                                                         "name":  "embedding-start",
+                                                         "url":  "/api/embedding/backfill",
+                                                         "method":  "POST",
+                                                         "status":  403,
+                                                         "body":  "{\"error\":\"体验模式不支持此操作\"}"
+                                                     },
+                                                     {
+                                                         "name":  "import",
+                                                         "url":  "/api/import",
+                                                         "method":  "POST",
+                                                         "status":  403,
+                                                         "body":  "{\"error\":\"体验模式不支持此操作\"}"
+                                                     },
+                                                     {
+                                                         "name":  "llm-test",
+                                                         "url":  "/api/llm/test",
+                                                         "method":  "POST",
+                                                         "status":  403,
+                                                         "body":  "{\"error\":\"体验模式不支持此操作\"}"
+                                                     },
+                                                     {
+                                                         "name":  "upload",
+                                                         "url":  "/api/uploads",
+                                                         "method":  "POST",
+                                                         "status":  403,
+                                                         "body":  "{\"error\":\"体验模式不支持此操作\"}"
+                                                     }
+                                                 ],
+                                     "all403":  true,
+                                     "zipBytes":  226,
+                                     "pngBytes":  90
+                                 },
+                    "beforeRestart":  {
+                                          "noteCount":  17,
+                                          "ids":  [
+                                                      "cr0dnhyn4hduva1vhrg63dyn",
+                                                      "eifme1synnzp9q0y8o314hkw",
+                                                      "feebaey0c5yrzziciutvf1fj",
+                                                      "fg0hpdtc0qu05ck23ijc23il",
+                                                      "fn0gtqpvvbtb8b3ohnv9xowh",
+                                                      "fx2kdc04okk5y41r6zqled5v",
+                                                      "htmpc7pr2m5h6sg8h8fu27j1",
+                                                      "in9nuq7zpm91dkl94n1heir2",
+                                                      "j86xi1u1l187xm5hzdbcklo9",
+                                                      "jc3niz4rzkzxl0rs8b4dm4ob",
+                                                      "lkpk8gbzjm0jy1rztj2zx071",
+                                                      "mjns80q5krtytzrga8yqbmyc",
+                                                      "nek5ibxb8lygyrj7impy3gyn",
+                                                      "rb3hss2qzaspxp0kn2xhg2qh",
+                                                      "sx0tkkaj24akub5ebb18j984",
+                                                      "w7vzqffb2mzfyqbo34fs832y",
+                                                      "wsyc3qpp2tlu1szq83j6e9kp"
+                                                  ],
+                                          "firstNoteId":  "eifme1synnzp9q0y8o314hkw"
+                                      },
+                    "restartPreservation":  {
+                                                "status":  200,
+                                                "sameIds":  true,
+                                                "countBefore":  17,
+                                                "countAfter":  17,
+                                                "firstNoteBodyPreserved":  true,
+                                                "sessionPreserved":  true
+                                            },
+                    "secondNote":  {
+                                       "status":  201,
+                                       "id":  "fu735lj7ygepx87pfd3ub705",
+                                       "title":  "R1验收配置污染：重·AI",
+                                       "tags":  [
+                                                    "羽毛球",
+                                                    "训练"
+                                                ],
+                                       "aiStatus":  "done",
+                                       "bodyPreserved":  true,
+                                       "visibleTopic":  "羽毛球"
+                                   },
+                    "restartSettings":  {
+                                            "fields":  {
+                                                           "text":  "mock",
+                                                           "vision":  "",
+                                                           "image":  "",
+                                                           "reasoning":  "",
+                                                           "embedding":  ""
+                                                       },
+                                            "hiddenMockEndpoints":  true,
+                                            "hiddenCanary":  true,
+                                            "additionalModelsDisabled":  true
+                                        },
+                    "browserCompleted":  {
+                                             "pageErrors":  0,
+                                             "blockedPageRequests":  0,
+                                             "completed":  true
+                                         }
+                },
+    "data":  {
+                 "noteCount":  18,
+                 "pollutionKeys":  [
+                                       {
+                                           "key":  "llm_base_url",
+                                           "preserved":  true
+                                       },
+                                       {
+                                           "key":  "llm_api_key",
+                                           "preserved":  true
+                                       },
+                                       {
+                                           "key":  "llm_model",
+                                           "preserved":  true
+                                       },
+                                       {
+                                           "key":  "vision_base_url",
+                                           "preserved":  true
+                                       },
+                                       {
+                                           "key":  "vision_api_key",
+                                           "preserved":  true
+                                       },
+                                       {
+                                           "key":  "vision_model",
+                                           "preserved":  true
+                                       },
+                                       {
+                                           "key":  "image_base_url",
+                                           "preserved":  true
+                                       },
+                                       {
+                                           "key":  "image_api_key",
+                                           "preserved":  true
+                                       },
+                                       {
+                                           "key":  "image_model",
+                                           "preserved":  true
+                                       },
+                                       {
+                                           "key":  "reasoning_base_url",
+                                           "preserved":  true
+                                       },
+                                       {
+                                           "key":  "reasoning_api_key",
+                                           "preserved":  true
+                                       },
+                                       {
+                                           "key":  "reasoning_model",
+                                           "preserved":  true
+                                       },
+                                       {
+                                           "key":  "embedding_base_url",
+                                           "preserved":  true
+                                       },
+                                       {
+                                           "key":  "embedding_api_key",
+                                           "preserved":  true
+                                       },
+                                       {
+                                           "key":  "embedding_model",
+                                           "preserved":  true
+                                       }
+                                   ],
+                 "notes":  [
+                               {
+                                   "phase":  "cold",
+                                   "id":  "eifme1synnzp9q0y8o314hkw",
+                                   "title":  "R1验收冷启动：今晚·AI",
+                                   "status":  "done",
+                                   "topic":  "羽毛球",
+                                   "bodyPreserved":  true,
+                                   "markdownCount":  1,
+                                   "markdownBodyPreserved":  true,
+                                   "markdownPath":  "data-demo/notes/羽毛球/R1验收冷启动：今晚·AI-eifme1synnzp9q0y8o314hkw.md"
+                               },
+                               {
+                                   "phase":  "restart",
+                                   "id":  "fu735lj7ygepx87pfd3ub705",
+                                   "title":  "R1验收配置污染：重·AI",
+                                   "status":  "done",
+                                   "topic":  "羽毛球",
+                                   "bodyPreserved":  true,
+                                   "markdownCount":  1,
+                                   "markdownBodyPreserved":  true,
+                                   "markdownPath":  "data-demo/notes/羽毛球/R1验收配置污染：重·AI-fu735lj7ygepx87pfd3ub705.md"
+                               }
+                           ],
+                 "canaryDirectoryCreated":  false,
+                 "formalDataDirectoryCreated":  false,
+                 "failedJobs":  0,
+                 "timeUtc":  "2026-09-14T08:11:31.001Z",
+                 "passed":  true
+             },
+    "boundarySideEffects":  {
+                                "tableCount":  21,
+                                "tablesEqual":  true,
+                                "filesEqual":  true,
+                                "fileCount":  17
+                            },
+    "network":  {
+                    "cold":  {
+                                 "modelRequestsIncludingProbes":  23,
+                                 "modelResponses":  21,
+                                 "modelTargets":  [
+                                                      "http://127.0.0.1:8787"
+                                                  ],
+                                 "modelResponseStatuses":  [
+                                                               200
+                                                           ],
+                                 "blocked":  [
+                                                 {
+                                                     "time":  "2026-09-14T07:34:22.755Z",
+                                                     "pid":  5096,
+                                                     "ppid":  38224,
+                                                     "event":  "blocked",
+                                                     "kind":  "fetch",
+                                                     "host":  "registry.npmjs.org"
+                                                 }
+                                             ],
+                                 "effectiveNextEnvironment":  [
+                                                                  {
+                                                                      "time":  "2026-09-14T07:34:20.592Z",
+                                                                      "pid":  38224,
+                                                                      "ppid":  61132,
+                                                                      "event":  "process",
+                                                                      "entry":  "next",
+                                                                      "cwd":  "{验收目录}\\candidate",
+                                                                      "demoMode":  "1",
+                                                                      "demoRuntime":  "local",
+                                                                      "passwordIsDemo":  true,
+                                                                      "sessionIsDemo":  true,
+                                                                      "databasePath":  "./data-demo/db/app.db",
+                                                                      "uploadDir":  "./data-demo/uploads",
+                                                                      "notesDir":  "./data-demo/notes",
+                                                                      "llmBaseUrl":  "http://127.0.0.1:8787/v1",
+                                                                      "llmKeyIsDemo":  true,
+                                                                      "llmModel":  "mock"
+                                                                  }
+                                                              ]
+                             },
+                    "restart":  {
+                                    "modelRequestsIncludingProbes":  6,
+                                    "modelResponses":  4,
+                                    "modelTargets":  [
+                                                         "http://127.0.0.1:8787"
+                                                     ],
+                                    "modelResponseStatuses":  [
+                                                                  200
+                                                              ],
+                                    "blocked":  [
+                                                    {
+                                                        "time":  "2026-09-14T08:00:22.567Z",
+                                                        "pid":  32644,
+                                                        "ppid":  38772,
+                                                        "event":  "blocked",
+                                                        "kind":  "fetch",
+                                                        "host":  "registry.npmjs.org"
+                                                    }
+                                                ],
+                                    "effectiveNextEnvironment":  [
+                                                                     {
+                                                                         "time":  "2026-09-14T08:00:20.310Z",
+                                                                         "pid":  38772,
+                                                                         "ppid":  64092,
+                                                                         "event":  "process",
+                                                                         "entry":  "next",
+                                                                         "cwd":  "{验收目录}\\candidate",
+                                                                         "demoMode":  "1",
+                                                                         "demoRuntime":  "local",
+                                                                         "passwordIsDemo":  true,
+                                                                         "sessionIsDemo":  true,
+                                                                         "databasePath":  "./data-demo/db/app.db",
+                                                                         "uploadDir":  "./data-demo/uploads",
+                                                                         "notesDir":  "./data-demo/notes",
+                                                                         "llmBaseUrl":  "http://127.0.0.1:8787/v1",
+                                                                         "llmKeyIsDemo":  true,
+                                                                         "llmModel":  "mock"
+                                                                     }
+                                                                 ]
+                                }
+                },
+    "browserPageErrors":  [
+
+                          ],
+    "browserBlockedRequests":  [
+
+                               ],
+    "unexpectedHttpFailures":  [
+
+                               ],
+    "preservationBeforeDocuments":  {
+                                        "phase":  "before-documents",
+                                        "workspaceFilesChecked":  687,
+                                        "workspaceChanged":  [
+
+                                                             ],
+                                        "workspaceAdded":  [
+
+                                                           ],
+                                        "headUnchanged":  true,
+                                        "indexUnchanged":  true,
+                                        "protectedHashFilesChecked":  51,
+                                        "protectedHashChangedCount":  0,
+                                        "dataFilesChecked":  143,
+                                        "dataMetadataUnchanged":  true,
+                                        "candidateRuntimeChanged":  [
+                                                                        "next-env.d.ts",
+                                                                        "tsconfig.json"
+                                                                    ],
+                                        "passed":  true
+                                    },
+    "serviceCleanup":  {
+                           "cold":  {
+                                        "phase":  "cold",
+                                        "stopped":  [
+                                                        {
+                                                            "name":  "node.exe",
+                                                            "pid":  62384
+                                                        },
+                                                        {
+                                                            "name":  "node.exe",
+                                                            "pid":  5096
+                                                        },
+                                                        {
+                                                            "name":  "node.exe",
+                                                            "pid":  38224
+                                                        },
+                                                        {
+                                                            "name":  "node.exe",
+                                                            "pid":  15096
+                                                        }
+                                                    ],
+                                        "remainingListeners":  [
+
+                                                               ],
+                                        "timeUtc":  "2026-09-14T08:00:11.4234920Z",
+                                        "passed":  true
+                                    },
+                           "restart":  {
+                                           "phase":  "restart",
+                                           "stopped":  [
+                                                           {
+                                                               "name":  "node.exe",
+                                                               "pid":  58896
+                                                           },
+                                                           {
+                                                               "name":  "node.exe",
+                                                               "pid":  32644
+                                                           },
+                                                           {
+                                                               "name":  "node.exe",
+                                                               "pid":  38772
+                                                           },
+                                                           {
+                                                               "name":  "node.exe",
+                                                               "pid":  60736
+                                                           }
+                                                       ],
+                                           "remainingListeners":  [
+
+                                                                  ],
+                                           "timeUtc":  "2026-09-14T08:10:11.9248377Z",
+                                           "passed":  true
+                                       },
+                           "browserClosed":  true
+                       },
+    "limitations":  [
+                        "Next 开发模式的 npm 版本查询被运行保护在外连前阻断；保留拦截记录。",
+                        "监听回环和拒绝外连来自本轮附加保护，不是产品原生网络隔离结论。",
+                        "mock 探测单次超时待办未修复，外部启动等待预算为 180 秒。",
+                        "本次使用复制依赖、开发模式、桌面 headless Chrome，未运行完整门禁或容器。"
+                    ],
+    "harnessAdjustments":  [
+                               "PowerShell 5.1 临时控制脚本使用 UTF-8 BOM；修正 NODE_OPTIONS Windows 路径转义。",
+                               "MCP 浏览器通道关闭后切换为本机现有 Playwright/Chrome；失败尝试和首次成功启动分别留证。",
+                               "浏览器定位器改用页面实际无名称的 combobox；Fetch 响应状态使用 status 属性。",
+                               "上传夹具在实际请求前经 sharp 解码并生成有效的 90 字节 PNG。"
+                           ],
+    "runtimePassed":  true,
+    "documentVerification":  {
+                                 "evidence":  "document-verification.json",
+                                 "vitestFiles":  1,
+                                 "vitestPassed":  8,
+                                 "eslintPassed":  true,
+                                 "documentFilesChecked":  10,
+                                 "finalRecordLinksChecked":  14,
+                                 "passed":  true
+                             },
+    "preservationFinal":  {
+                              "timeUtc":  "2026-09-14T08:36:08.736791+00:00",
+                              "phase":  "文档同步后、清理临时目录前",
+                              "workspaceOriginalFilesChecked":  687,
+                              "workspaceOriginalFilesUnchanged":  678,
+                              "allowedChangedFiles":  [
+                                                          "README.md",
+                                                          "README.en.md",
+                                                          "docs/首次使用与故障排查.md",
+                                                          "tests/docs/first-use-guide.test.ts",
+                                                          "CHANGELOG.md",
+                                                          "docs/releases/v0.6.1.md",
+                                                          "docs/README.md",
+                                                          "docs/产品规划/开源发布范围与执行清单-2026-09-13.md",
+                                                          "_bmad-output/implementation-artifacts/spec-r1-source-demo-wiring.md"
+                                                      ],
+                              "actualAllowedChangedFiles":  [
+                                                                "CHANGELOG.md",
+                                                                "README.en.md",
+                                                                "README.md",
+                                                                "_bmad-output/implementation-artifacts/spec-r1-source-demo-wiring.md",
+                                                                "docs/README.md",
+                                                                "docs/releases/v0.6.1.md",
+                                                                "docs/产品规划/开源发布范围与执行清单-2026-09-13.md",
+                                                                "docs/首次使用与故障排查.md",
+                                                                "tests/docs/first-use-guide.test.ts"
+                                                            ],
+                              "unexpectedChangedCount":  0,
+                              "unexpectedAddedCount":  0,
+                              "allowedNewReport":  "docs/R1源码Demo接线验收-2026-09-14.md",
+                              "allowedNewEvidenceDirectory":  "docs/验收证据/r1-source-demo-20260914T070442Z-5c531772/",
+                              "headUnchanged":  true,
+                              "indexUnchanged":  true,
+                              "documentSnapshotsMatchRunBaseline":  true,
+                              "protectedHashFilesChecked":  51,
+                              "protectedHashFilesAndSetUnchanged":  true,
+                              "dataFilesChecked":  143,
+                              "dataMetadataUnchanged":  true,
+                              "history":  {
+                                              "specPreviousContentUnchanged":  true,
+                                              "frozenSpecBlocksUnchanged":  true,
+                                              "readmeRoadmapUnchanged":  true,
+                                              "englishReadmeProjectStatusUnchanged":  true,
+                                              "releasedChangelogUnchanged":  true,
+                                              "storySprintFilesUnchanged":  true,
+                                              "storySprintFilesChecked":  74
+                                          },
+                              "privatePathInventoryArchived":  false,
+                              "passed":  true
+                          },
+    "temporaryDirectoryCleanup":  {
+                                      "runId":  "20260914T070442Z-5c531772",
+                                      "timeUtc":  "2026-09-14T08:39:06.9756713Z",
+                                      "target":  "%TEMP%/zhiliao-r1-061-20260914T070442Z-5c531772",
+                                      "markerMatched":  true,
+                                      "exactPathAndTempParentVerified":  true,
+                                      "reparsePoints":  0,
+                                      "archivedRuntimeArtifactsVerified":  62,
+                                      "matchingRunProcessesBefore":  0,
+                                      "recordedRunProcessesStillPresent":  0,
+                                      "listenersBefore":  [
+
+                                                          ],
+                                      "removed":  true,
+                                      "matchingRunProcessesAfter":  0,
+                                      "listenersAfter":  [
+
+                                                         ],
+                                      "elapsedSeconds":  23.138,
+                                      "deletionErrorType":  null,
+                                      "scope":  [
+                                                    "candidate",
+                                                    "copied dependencies",
+                                                    "temporary data",
+                                                    "browser profile",
+                                                    "cache",
+                                                    "fixtures",
+                                                    "helper scripts",
+                                                    "private preservation baseline"
+                                                ],
+                                      "passed":  true
+                                  },
+    "completedUtc":  "2026-09-14T08:41:05.2814598Z",
+    "completed":  true
+}

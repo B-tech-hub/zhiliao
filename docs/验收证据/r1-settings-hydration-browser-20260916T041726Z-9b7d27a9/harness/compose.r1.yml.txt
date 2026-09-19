@@ -1,0 +1,33 @@
+# 本次隔离验收覆盖；保持仓库入口及业务网络声明。
+x-r1-labels: &r1-labels
+  io.zhiliao.r1.run: ${R1_RUN_ID:?}
+
+services:
+  ingress:
+    labels: *r1-labels
+    ports: !override
+      - "127.0.0.1:${R1_PORT:?}:8080"
+  app:
+    labels: *r1-labels
+    image: ${R1_IMAGE:?}
+    pull_policy: never
+    environment:
+      DEMO_MODE: "0"
+      TZ: UTC
+  mockllm:
+    labels: *r1-labels
+    image: ${R1_IMAGE:?}
+    pull_policy: never
+
+networks:
+  demo_net:
+    labels: *r1-labels
+  ingress_net:
+    labels: *r1-labels
+volumes:
+  demo_db:
+    labels: *r1-labels
+  demo_uploads:
+    labels: *r1-labels
+  demo_notes:
+    labels: *r1-labels

@@ -1,0 +1,205 @@
+{
+  "story": "2.2",
+  "recorded_at": "2026-09-12T11:47:41.272440+00:00",
+  "status": "ready",
+  "scope": "已批准的 Windows Docker Desktop 本机 B2 验收前只读基线",
+  "context": "desktop-linux",
+  "engine": "e5262d0e-6b32-4eaa-84a8-def4855f847e|docker-desktop|28.4.0|Docker Desktop",
+  "compose": "2.39.4-desktop.1",
+  "candidate_image_id": "sha256:46f9241b6d2e539ce3a94324c356cf4336f8cf17e0cf59e5b5d920bf9b53769e",
+  "nginx_image_id": "sha256:dc5069ad14f19660b141b21236140b91656bf89bbc3e2417c70ae650cd66104c",
+  "port": 3322,
+  "port_available": true,
+  "containers": [
+    {
+      "id": "cd07490a30d9cd068c4552f0f528dacecd9349eb2a60c1dbf9f8c18333fe83ea",
+      "state": "exited",
+      "metadata_sha256": "a297dc5b53acb84529ea1e465e25093f42263ed834d033d31e178292ac4f2f8d"
+    },
+    {
+      "id": "5d05095aa56b26fee8ff02b3372764d8300cc7b1851773eca5ee0a95ed3f675f",
+      "state": "exited",
+      "metadata_sha256": "a4fad8fcae7de2d2a580ec75606b304925c81e8abd12e83275e8198d99afb344"
+    },
+    {
+      "id": "254c7caca374780a6c1a3bea1c2c6ba59d6ab092de155c34f8efd3cd411532c8",
+      "state": "exited",
+      "metadata_sha256": "91aca3c619e87c0ce712f363241a589030d90a795c2f7f85dcfc50f7ad2ed985"
+    },
+    {
+      "id": "ea240066dd4a847db38ef758917c36a04be31191329ab6c995bdc94cd83fc721",
+      "state": "exited",
+      "metadata_sha256": "e8631505818338f4ce89c1bb047ec3a89301c18fb353b99ab310cef012c312dc"
+    },
+    {
+      "id": "50a70f44a32e78adf331f7084743f042001eb5b650ee7af849441ed6a14a85c0",
+      "state": "exited",
+      "metadata_sha256": "c3d6ee61b29c1d95d8b89079087bb01b3605ecc55d1c2400d27b2eaeaabc2b67"
+    },
+    {
+      "id": "ab1926223971ae43ca775c7078f16057bde76b5e2f53aa6856382830542c3e4a",
+      "state": "exited",
+      "metadata_sha256": "5d57b9a3ce0dc6a466685e6443c0bc5167b2e7bfad6df0dd582aee8714b0f421"
+    },
+    {
+      "id": "f61337186432f4b8be3bba6578ebb2a3f768cd39baf5349a0fc19c53f224ef81",
+      "state": "exited",
+      "metadata_sha256": "c565dd511e25cf8313a9120b9eb849719f5249bf688e4e66b388c667352074b8"
+    }
+  ],
+  "volumes": [
+    {
+      "name_sha256": "bc181e1b1e8030bfb3896296969ba1ad3c02a752472de1e2972178c51879b2e6",
+      "metadata_sha256": "9d1084a37462d31406e812fd1e70df479a80ee4083f659b8c9010a3dc6070341"
+    },
+    {
+      "name_sha256": "67dcddc99efa4b4aa4a7e73d47d917314c70f9c0a4a5451f51bc39d5720a5f3e",
+      "metadata_sha256": "12923f5a2ef671694e3ea944b10ee3310a0e0fe30d40cb0f7bc43ddb224193a6"
+    },
+    {
+      "name_sha256": "b693f31b1bc12cab06df8596316c6530facc66a209c718a310d892657d04c809",
+      "metadata_sha256": "6192df49f26b392583649db55cbbbcd9c0aaea0915a6078520862056d553514e"
+    },
+    {
+      "name_sha256": "8c657931a815075fa557aceb17fc4e00852b91aa95eb14d05152c7e5a215f65c",
+      "metadata_sha256": "cec574495ccaaba428aad22a0654cf159c7043c7da44483309cc4a717ba43798"
+    },
+    {
+      "name_sha256": "ca8a07bbfdff91b842efb8510f78939bf6ca7aa2dc24130144efb0b8e23b05d0",
+      "metadata_sha256": "93a600590c76421c5e8cbb9f6c1b1c782a6dddc016924fc17d7db70c08a06572"
+    },
+    {
+      "name_sha256": "fe21511d16e2d870ff14bec45c99ddde020fb6f36cadd695df84b52ba1a6beef",
+      "metadata_sha256": "00ed5bd723d5e01cdf3f2db7ec2b8f0db7e9007f62a2f8c3d5dc42701e063a7a"
+    },
+    {
+      "name_sha256": "82b1f84a90131937a298880159314db01745c75f2f724e0ae209ba2fe399ba39",
+      "metadata_sha256": "2d9ad2b415086e9cccdf8f3270778ac29152f0ac37b030e6783b6c7563857db4"
+    },
+    {
+      "name_sha256": "bd78dfb2bd134afb3507d0990a233bad6b70fb37c9657083c914231380caadf0",
+      "metadata_sha256": "ced318219e9375e9af914924940e3822404f4520a50c334d211f7775658a60e0"
+    }
+  ],
+  "networks": [
+    {
+      "id": "a172288b901b2a1b791280adbd2c3f169ddab9c45022fdc7541724b99a8f203e",
+      "metadata_sha256": "b5ba154acda606afdecf7d5b0e3f039524a064c0b5a8b7e93e1078e15ef2e135"
+    },
+    {
+      "id": "31a1be3a36c95e48f3374158921a02d969732cd576992974529fb5f8b552bd2e",
+      "metadata_sha256": "83887efbf5108614ae1294209ef35c2f0de9c027c876ad6c660e1d8f37b4eb34"
+    },
+    {
+      "id": "199774bd4a2cbb685cdb7bbce25caeae74f37b90322c6c73daafed04d62d3e49",
+      "metadata_sha256": "af6fc171a954b40aba0801c377b229430ca55db223e6da2cc487312a7a73f06b"
+    },
+    {
+      "id": "37acf5aefebd284f7c13114478c1fb4f5071ea61814fb12921a88a426de3678a",
+      "metadata_sha256": "29982db2eb06a75c96a7300f4e88274b08538eef2341f213a621c8f2b7149f9c"
+    },
+    {
+      "id": "f0ac4100a25e3b2ec5411f6257bb8ab1988435cb6406a0af366ee22eae60119f",
+      "metadata_sha256": "823d543c89e740edd5ab009897cf6e2a35025b0c8a3eae6f0017b257dddd20da"
+    },
+    {
+      "id": "e79ff43e38552b9a5d6c17a2bf7fd737c8cfbbec49fa7f75e573c2431597771f",
+      "metadata_sha256": "ffd4f169772a1c5b62188ef58bb7efdc8d7110ee78ba3ee7fc40f42de1c0481b"
+    },
+    {
+      "id": "6c3413f4d4700cb75b3e6305741f40dd56a2de135e802390c9cc1cb99685d0e0",
+      "metadata_sha256": "74521cd30e8961ea899452cd833e910224ce5427237879b7d25d35fb584637e3"
+    }
+  ],
+  "files": {
+    ".dockerignore": "859c037c021f8004b5785e9134e38425d4cf4c54c8416a625707e13c6a1637e4",
+    ".gitignore": "1782f3e74113b3febf8659bb4c3dc607c9e3873cd38829ab7326da580e075e03",
+    "README.en.md": "8bb9762df377e4a8dadca32d398d6fb11db03b9a5130e15a238e618d3a62c978",
+    "README.md": "19dd198f7d8bf8050762182fe343870399b54c731938deda259c4bf191a3f923",
+    "_bmad-output/implementation-artifacts/spec-2-1-server-demo-boundary.md": "002a58d4db6835ca57c2672ddce0a1c8fc3c4ce23e640e823725174c36cf68f4",
+    "_bmad-output/implementation-artifacts/spec-2-2-isolate-demo-deployment-and-limit-resources.md": "becb7fff900516f93ab0b9a69cb59d8fb82ecf1ed7acc4a4f50e817dc92b7db7",
+    "_bmad-output/implementation-artifacts/sprint-status.yaml": "f57d67e4aa00f8b9cca4fac87d947580ea7d01facac70d4de13888f86ada78bf",
+    "docker-compose.demo.proxy-verify.yml": "db8eed5296212444d435cd378cae07b97d3e8d24f1a58bdb40b16ed4813cb05d",
+    "docker-compose.demo.verify.yml": "2f21847f6798764d6929991855f848f83cd4bfd6345ea4f8638ed2b255de22f1",
+    "docker-compose.demo.yml": "f259c2e5fd7809bc872492c5eb753a5ab54389969c3106a6ff0e926f070455f2",
+    "docs/Demo部署隔离验收-2026-09-10.md": "eaea9dec96d2bbd57136f66dd143e9fc4375b6bd8e4090b25de823989be3c28f",
+    "docs/README.md": "ad0fe9d1dc8e81f5ad361d0675bed07b8c789fbf8530741fd6b7458e1ad2f62d",
+    "docs/Story-2.2-剩余验收实施方案-2026-09-11.md": "63da27174ed36f3a81bc3cb78bc99ae0da5287fad6862edfc6e1fe366432968e",
+    "docs/adr/0026-demo-ingress-isolation.md": "803c2ef2c81879905d61573ae7ad3e716889ed03da846385c25fdd43f476df25",
+    "docs/首次使用与故障排查.md": "3b667d628395288c0d5a194183381825e6c01427462fbb7ab9c7bcc138b4f590",
+    "docs/验收证据/story-2-2-b1-b2-preflight-2026-09-12T11-15-29Z.json": "07b60583b434b0e5fe62dc3cc4b99378385a692f5c32ac94e86abe29d8d59d30",
+    "docs/验收证据/story-2-2-b1-b2-target-2026-09-12T11-18-44Z.json": "f0abd8a4c7ea374a43286d7b0835d73cea2b1a24c7d8c54ed6bb7f43397c37eb",
+    "docs/验收证据/story-2-2-chrony-attribution-2026-09-12T07-45-32-076Z.json": "50afaa74c85cd5db5841a8e9d1d3a3332ac74b497fd9856c97dffe791f3d15be",
+    "docs/验收证据/story-2-2-chronyd-maintenance-2026-09-12T08-47-30-618Z.json": "97a7bc38ea3df71e15394060007cb5103223c882556e1734ad06e5485adf8fed",
+    "docs/验收证据/story-2-2-chronyd-preflight-2026-09-12T08-12-50-069Z.json": "67bc8e5f397a17a1afddc069455698198608fc408a0c1736d75acfef4f535705",
+    "docs/验收证据/story-2-2-chronyd-preflight-2026-09-12T08-18-12-242Z.json": "15e18a826a17f89a310208ce77e42d82216aa8d5e1755a10bbe7c500fb82d8f4",
+    "docs/验收证据/story-2-2-cleanup-2026-09-12-a2.json": "3776b40ef26b14d20d8c6bf80bfb28ede059764e02c602961bec08cde20d8d21",
+    "docs/验收证据/story-2-2-clock-2026-09-12T03-44-50-581Z.json": "f5513284bca9806b410df289eff9fe14aecce2cb5de5576931a82da1c019863c",
+    "docs/验收证据/story-2-2-clock-diagnostics-2026-09-12T04-59-16-594Z.json": "7da80f4332426bdd3919b35b72a2d593ba71b1dd0f2815aaa8feabc261fc825f",
+    "docs/验收证据/story-2-2-clock-environment-2026-09-12-a2.json": "bdf2529ab06e45466b416f58229025f4def1a160f18fbc77797d910802ba6aa1",
+    "docs/验收证据/story-2-2-clock-maintenance-2026-09-12T04-36-26-291Z.json": "2ff072b07c85559631be36fdb40d8ffe94a4888f750a8e9319f8fec46f262b36",
+    "docs/验收证据/story-2-2-clock-maintenance-2026-09-12T04-53-42-385Z.json": "df7c326afe5acce2a2315a16955dbfa52f57de869b45324831203d8e32cd74b5",
+    "docs/验收证据/story-2-2-environment-2026-09-11T08-37-01Z.json": "d78972e0f1272655f9cfd8f466930d527befac5301984e11728415c0bff3ae99",
+    "docs/验收证据/story-2-2-network-2026-09-12-a2-final.json": "10a67ce81458721c89424b8717e931dcff2d44cea1c4b838dd28e9a107bab323",
+    "docs/验收证据/story-2-2-network-2026-09-12-a2-final2.json": "8f97f80a4c3a403e66b0329e0eb7f8c2d8c6a4bd084a1be16c79e449ea97c9ea",
+    "docs/验收证据/story-2-2-network-2026-09-12-a2-rerun.json": "da30ef2a6f76b2a693cc096d202848a7bfd5c10a75d926e796ddea6e500d7754",
+    "docs/验收证据/story-2-2-network-2026-09-12-a2.json": "7f63e343c871a16edf0b36a2040708372119d73cfd01d65117d4265e4c204da8",
+    "docs/验收证据/story-2-2-network-2026-09-12T03-38-29-471Z.json": "4db8a31ab30be38a413a32e38078106f8d466ed6acb365650f4a2f3c9b64c45f",
+    "docs/验收证据/story-2-2-normal-clock-2026-09-12T09-35-59-307Z.json": "2fed1b4e1a95e24b0258a9b3e07ce079ce1f0948a4e4cffc2e1c9c9b56c210af",
+    "docs/验收证据/story-2-2-post-restart-a2-2026-09-12T09-42-13-440Z.json": "ea3a4bd84a4f8a97e9c2e0fd5ebbb6da0cc927d4bf04a4dfff99c191c39758cb",
+    "docs/验收证据/story-2-2-post-restart-cleanup-2026-09-12-a2.json": "2873286aa7aa4c631efead72bfb7ab6e783ca08585011aa8b1c81037ee6dd13b",
+    "docs/验收证据/story-2-2-preservation-2026-09-12-a2.json": "286ed069ebfdae26f7bf222f87c554c4f579a2131a7e9bfbcd6ffc46443a1399",
+    "docs/验收证据/story-2-2-proxy-timeouts-2026-09-12-a2-debug.json": "b896d0e8ba31f3f50c8ee8953e5c26190f45a80aa42615351f62fb52e6f87bab",
+    "docs/验收证据/story-2-2-proxy-timeouts-2026-09-12-a2.json": "0dcaf2eeaaf63deb3974b6a7d6043e13caca07422f65ca2f62150f25e659469f",
+    "docs/验收证据/story-2-2-proxy-timeouts-2026-09-12T03-25-47-619Z.json": "569805cd8aa7341bc0c43244267802433af14ae18eb3671f07a12808ef60e1bd",
+    "docs/验收证据/story-2-2-proxy-timeouts-2026-09-12T09-42-14-119Z.json": "92d2e3ddadcce20e92fbec472266daf598e66fc6782b544575fca0d00fbb5973",
+    "docs/验收证据/story-2-2-root-channel-2026-09-12T09-31-24-902Z.json": "74fe81085e2ed413541db673d806e90862eb9952e2033e4da2f43c398b7595a4",
+    "docs/验收证据/story-2-2-root-channel-audit-2026-09-12T09-33-17-334Z.json": "41a02c4ae740e97f2c88265a2057b008adc554a514c7f5fa6409c89827bbab40",
+    "docs/验收证据/story-2-2-runtime-2026-09-10.json": "8febd1d0c876bfe2b1db1230e36a341b60cb4e4023adcaf3636a4ab751dc8e95",
+    "docs/验收证据/story-2-2-runtime-2026-09-11.json": "4c95c9ee95ce03f2c69d2cc1f97c2e72338b83b3847ae3fd51fc8d91425daf21",
+    "docs/验收证据/story-2-2-runtime-2026-09-11T07-56-56-279Z-ccefbb73.json": "270c7cacbcd01e3586b4ad2b08cdf9c76f4a10ee3c00a3e220be3c946441a7b2",
+    "docs/验收证据/story-2-2-runtime-2026-09-12T02-41-22-818Z-ea454295.json": "b685fdab2491a6f2c5dd0dde67242c492f4cb240dd6765589cfc845ebb411409",
+    "docs/验收证据/story-2-2-tick-maintenance-2026-09-12T05-48-48-326Z.json": "39d1394e690c4ba7cc626aadba5ea88c707a54b991740db22e4a2210a19f8a54",
+    "docs/验收证据/story-2-2-tick-trace-2026-09-12T06-33-12-041Z.json": "0afa0cdaf8d4b182f6e627a9d7cf044f5079eaf27a883c310ce5d922623d4d1c",
+    "docs/验收证据/story-2-2-tick-trace-2026-09-12T06-45-28-312Z.json": "195f8e68f64ed59b65751a4d0ddabeaee164ef14ad6039fa6201bb1907f32968",
+    "docs/验收证据/story-2-2-tick-trace-2026-09-12T06-55-37-663Z.json": "3c7bb803c43e4cec421bc60f63398d652cbb7a830a6c3c08fe17b7cf1d71c4a1",
+    "docs/验收证据/story-2-2-wsl-recovery-2026-09-12T09-05-03-097Z.json": "3860f352c51080121591a6d3a5871d6284f4a8446404c485c97b42d10ec77a6b",
+    "docs/验收证据/story-2-2-wsl-recovery-2026-09-12T09-22-02-992Z.json": "7d514725ac2802041a42d49c17657cb8c1d13314851d27b684b0d2cc5707de97",
+    "nginx/demo-proxy.conf": "abae7a74feb2ed1b048b7579348707cc68d9c6a7126baab4356a7d44c7244fb2",
+    "nginx/demo.conf": "df240aef6f22929ab6435d4f4a2e3c603baa17a124fe0d9b7f01d10eaa27c093",
+    "scripts/demo-http-probes.mjs": "420ddcd722ae3f4fca844671f97cecabb398637d557f47b1c3174d2a059be238",
+    "scripts/demo-verification-utils.mjs": "7f470b62da3ce58fe36354797db426c5e6ba6b9e95e2829ad6ac263861da4665",
+    "scripts/fixtures/demo-proxy-upstream.mjs": "88298403d5b72a60760c36309639e777fce3859a9c5e076ded9e33ea3a32c169",
+    "scripts/verify-demo-network.mjs": "e527300e9a0c26676906a737ab0bd53cacb7e4cee6f6280936f4463eb7eec365",
+    "scripts/verify-demo-proxy-timeouts.mjs": "71c54bff2a8a4116356553646f8d0423b84cad078818fba52076f58c00e49d5f",
+    "scripts/verify-demo-runtime.mjs": "2aa4e0cda25106f8455ab254235f2d9318bd78bfa1732f82cb05de8d684687de",
+    "scripts/verify-demo-runtime.ps1": "b3dba9d058602697c10d5adedfd75f57712b214737abd40fadcbe41e4b44d2aa",
+    "src/app/(app)/settings/page.tsx": "bc7e0dba9a0d9a20d3c7fb3f64157ac0e4d3001e6355e64e53b6b982f2ded46c",
+    "src/lib/llm-config.ts": "c9a363404fe78da50278237704b60514b8c230cb8153cedc46713f0e3ef3899c",
+    "src/middleware.ts": "1b51fa7f95a90e8bcc94609cd2d2b820fea838503538a3932c2ef3ee64bc2d22",
+    "tests/api/demo-boundary.test.ts": "b407ff9ec6d62487f93ea31e871900351af2a72600377a6294dcc5f20c3ecaf3",
+    "tests/config/demo-compose-cli.test.ts": "72d843c79718b696b0e0cdc160bf6bfa9955d86fb9fe4ad66c3f9c54e939f07b",
+    "tests/config/demo-compose.test.ts": "3fdb83014d468880f7c7ae47079fe3aee46d0fc961ed48ae9327a664f116b9eb",
+    "tests/config/demo-http-probes.test.ts": "a87870b73cee2b98a3b43764b5044ea3caa86fa177c5dc87e1e2f25eb1d17479",
+    "tests/config/demo-network.test.ts": "1947f17a5b0de61df6d6715e39c8bedd49b14c6c9452de02de6245e162f26757",
+    "tests/config/demo-proxy-timeouts.test.ts": "0e4cb091ac0d6b7ce04cb8f29e27e35ab1aea5bcb972dc765e20f242a1014238",
+    "tests/config/demo-runtime.test.ts": "f5bef04eb58551a35369c677c62839203af60665ea0ff2237fe41ffe07e0096e",
+    "tests/docs/first-use-guide.test.ts": "3ea645b8cc0227b0fd80944a26975194e03b4141b2f5a1da37b61a8faa3a3649"
+  },
+  "baseline_commit": "f213761b795cc020be2122e27301fe4a7c5cf7a0",
+  "validation": {
+    "tests": 52,
+    "test_files": [
+      "tests/config/demo-runtime.test.ts",
+      "tests/config/demo-network.test.ts",
+      "tests/docs/first-use-guide.test.ts"
+    ],
+    "node_syntax": "passed",
+    "powershell_syntax": "passed"
+  },
+  "limits": [
+    "不构建、拉取、发布镜像",
+    "不启停既有实例、不修改系统或时钟",
+    "不做配额触发或长时代理复验"
+  ]
+}

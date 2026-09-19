@@ -1,0 +1,132 @@
+[
+  {
+    "runId": "r1-install-20260915-093206-7a7ba6b4",
+    "files": [
+      {
+        "path": "package.json",
+        "recordedSha256": "a2e5e801f8711c43a0b1f236cfd1067643a89d9cb89c123b4e55a66e6a1cc802",
+        "currentSha256": "a2e5e801f8711c43a0b1f236cfd1067643a89d9cb89c123b4e55a66e6a1cc802",
+        "match": true
+      },
+      {
+        "path": "package-lock.json",
+        "recordedSha256": "72fc3d00abb257d53aca7faed33951cd7e3642d3e77217fc991b6f3707db0166",
+        "currentSha256": "72fc3d00abb257d53aca7faed33951cd7e3642d3e77217fc991b6f3707db0166",
+        "match": true
+      },
+      {
+        "path": "Dockerfile",
+        "recordedSha256": "19b26ee235928d6d360edc9b5c803427302eb90d9a8dc8d231482ba6380e6668",
+        "currentSha256": "19b26ee235928d6d360edc9b5c803427302eb90d9a8dc8d231482ba6380e6668",
+        "match": true
+      },
+      {
+        "path": "next.config.ts",
+        "recordedSha256": "9109fce04503dfd0418039f7f979789e6b4c723adbad1ad815766753132ce63a",
+        "currentSha256": "9109fce04503dfd0418039f7f979789e6b4c723adbad1ad815766753132ce63a",
+        "match": true
+      },
+      {
+        "path": "src/middleware.ts",
+        "recordedSha256": "fb6c42e968769ec66bf2a9b0a90628a3496421ce68c854b1dde5a114b24243b4",
+        "currentSha256": "fb6c42e968769ec66bf2a9b0a90628a3496421ce68c854b1dde5a114b24243b4",
+        "match": true
+      },
+      {
+        "path": "src/components/markdown-editor.tsx",
+        "recordedSha256": "a7de00ebd7254d8d8beab19d3a02c84567d74b794f985c4e14f0c93c0e83809d",
+        "currentSha256": "a7de00ebd7254d8d8beab19d3a02c84567d74b794f985c4e14f0c93c0e83809d",
+        "match": true
+      },
+      {
+        "path": "src/lib/vision-images.ts",
+        "recordedSha256": "613b6bb318a6f15313c4e8995458d829f71a463062c51d0326b3cdc618aa0980",
+        "currentSha256": "613b6bb318a6f15313c4e8995458d829f71a463062c51d0326b3cdc618aa0980",
+        "match": true
+      },
+      {
+        "path": "src/lib/auth.ts",
+        "recordedSha256": "05f0a2d7691f1a3077fa682b60380780346f1db844a56a3f3c45b3aa087fbbe6",
+        "currentSha256": "05f0a2d7691f1a3077fa682b60380780346f1db844a56a3f3c45b3aa087fbbe6",
+        "match": true
+      },
+      {
+        "path": "src/lib/version.ts",
+        "recordedSha256": "6a0d725baa4c29a7921a2dfa81014305d87fab998ece20f06b409ad447e8edd3",
+        "currentSha256": "6a0d725baa4c29a7921a2dfa81014305d87fab998ece20f06b409ad447e8edd3",
+        "match": true
+      },
+      {
+        "path": "src/app/api/uploads/route.ts",
+        "recordedSha256": "1ca579d20145ae7efbc540bd2bd3ebad2d2faca193a0da793f47ac842b26c7c3",
+        "currentSha256": "1ca579d20145ae7efbc540bd2bd3ebad2d2faca193a0da793f47ac842b26c7c3",
+        "match": true
+      }
+    ]
+  },
+  {
+    "runId": "r1-settings-hydration-browser-20260916T041726Z-9b7d27a9",
+    "files": [
+      {
+        "path": "package.json",
+        "recordedSha256": "a2e5e801f8711c43a0b1f236cfd1067643a89d9cb89c123b4e55a66e6a1cc802",
+        "currentSha256": "a2e5e801f8711c43a0b1f236cfd1067643a89d9cb89c123b4e55a66e6a1cc802",
+        "match": true
+      },
+      {
+        "path": "package-lock.json",
+        "recordedSha256": "72fc3d00abb257d53aca7faed33951cd7e3642d3e77217fc991b6f3707db0166",
+        "currentSha256": "72fc3d00abb257d53aca7faed33951cd7e3642d3e77217fc991b6f3707db0166",
+        "match": true
+      },
+      {
+        "path": "Dockerfile",
+        "recordedSha256": "19b26ee235928d6d360edc9b5c803427302eb90d9a8dc8d231482ba6380e6668",
+        "currentSha256": "19b26ee235928d6d360edc9b5c803427302eb90d9a8dc8d231482ba6380e6668",
+        "match": true
+      },
+      {
+        "path": "next.config.ts",
+        "recordedSha256": "9109fce04503dfd0418039f7f979789e6b4c723adbad1ad815766753132ce63a",
+        "currentSha256": "9109fce04503dfd0418039f7f979789e6b4c723adbad1ad815766753132ce63a",
+        "match": true
+      },
+      {
+        "path": "src/middleware.ts",
+        "recordedSha256": "fb6c42e968769ec66bf2a9b0a90628a3496421ce68c854b1dde5a114b24243b4",
+        "currentSha256": "fb6c42e968769ec66bf2a9b0a90628a3496421ce68c854b1dde5a114b24243b4",
+        "match": true
+      },
+      {
+        "path": "src/components/markdown-editor.tsx",
+        "recordedSha256": "a7de00ebd7254d8d8beab19d3a02c84567d74b794f985c4e14f0c93c0e83809d",
+        "currentSha256": "a7de00ebd7254d8d8beab19d3a02c84567d74b794f985c4e14f0c93c0e83809d",
+        "match": true
+      },
+      {
+        "path": "src/lib/vision-images.ts",
+        "recordedSha256": "613b6bb318a6f15313c4e8995458d829f71a463062c51d0326b3cdc618aa0980",
+        "currentSha256": "613b6bb318a6f15313c4e8995458d829f71a463062c51d0326b3cdc618aa0980",
+        "match": true
+      },
+      {
+        "path": "src/lib/auth.ts",
+        "recordedSha256": "05f0a2d7691f1a3077fa682b60380780346f1db844a56a3f3c45b3aa087fbbe6",
+        "currentSha256": "05f0a2d7691f1a3077fa682b60380780346f1db844a56a3f3c45b3aa087fbbe6",
+        "match": true
+      },
+      {
+        "path": "src/lib/version.ts",
+        "recordedSha256": "6a0d725baa4c29a7921a2dfa81014305d87fab998ece20f06b409ad447e8edd3",
+        "currentSha256": "6a0d725baa4c29a7921a2dfa81014305d87fab998ece20f06b409ad447e8edd3",
+        "match": true
+      },
+      {
+        "path": "src/app/api/uploads/route.ts",
+        "recordedSha256": "1ca579d20145ae7efbc540bd2bd3ebad2d2faca193a0da793f47ac842b26c7c3",
+        "currentSha256": "1ca579d20145ae7efbc540bd2bd3ebad2d2faca193a0da793f47ac842b26c7c3",
+        "match": true
+      }
+    ]
+  }
+]

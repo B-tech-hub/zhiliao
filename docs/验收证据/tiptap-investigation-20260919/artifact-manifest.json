@@ -1,0 +1,12 @@
+{
+  "core-2.27.3.advisory.json": "a7afb16d969a611c6afa3d4c04b4618b350ab19422ff9aba4e2eee7453929a19",
+  "core-2.27.3.registry.json": "67b9f51d9b91a8bb1e3dab6c360a4dbb6f202da55c8bdf798023bd8a73242131",
+  "dist-index.cjs.excerpt.txt": "0aad0c3aea1039ded2b8b6c4dfe018636042a3720dac8710fb875f2b346b3341",
+  "dist-index.js.excerpt.txt": "0aad0c3aea1039ded2b8b6c4dfe018636042a3720dac8710fb875f2b346b3341",
+  "mergeAttributes-2.27.3.ts.txt": "3bd0c4db0aeb05f6d1c12e6e22cb3c4ec0704f2b85168bfcf578c2c0840708ce",
+  "mergeAttributes-source.diff.txt": "7c0770ffedfe22fed0387a72798a021d217f71e0c963990082043971c4632922",
+  "README.md": "ef20b42c0f520b6035d7106f3c71972262bf89369b572da75fca54992eb24a7c",
+  "summary.json": "09d2838e0354c90b0a12e662419f62540b3c917dac049b177bfa4015f0d153f8",
+  "upstream-fix-commit.json": "c36a76acefe54659dccff2eabd2b67c805f3c40871f1c071947ab640fc4cf561",
+  "verification.json": "fd17a1b1bab2a43705398718212f84c7a9d321e736d0e9a129de5d7d12d786ac"
+}

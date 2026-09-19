@@ -23,6 +23,8 @@
 # 例外是 .env.example（不含真实值），下面显式放行。
 .env*
 !.env.example
+/demo.env
+/demo.env.*
 
 # misc
 .DS_Store

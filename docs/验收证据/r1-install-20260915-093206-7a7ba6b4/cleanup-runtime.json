@@ -1,0 +1,12 @@
+{
+  "runId": "20260915-093206-7a7ba6b4",
+  "timeUtc": "2026-09-15T02:41:41.174019+00:00",
+  "containersRemoved": 3,
+  "volumesRemoved": 2,
+  "networksRemoved": 2,
+  "remainingOwnedResources": 0,
+  "portReleased": true,
+  "imageRetained": "sha256:8a8f2cd3ec1a26fc68bf04a2661f2306f09bba4b06ba9b1593d74b3f3953deb1",
+  "temporaryDirectoryRemoved": false,
+  "passed": true
+}

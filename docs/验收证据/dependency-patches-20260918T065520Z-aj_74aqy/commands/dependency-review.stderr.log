@@ -1,0 +1,23 @@
+node:internal/assert/utils:273
+    throw err;
+    ^
+
+AssertionError [ERR_ASSERTION]: node_modules/@img/sharp-win32-ia32
+    at Object.<anonymous> (C:\Users\BAIBAI\AppData\Local\Temp\dependency-patches-20260918T065520Z-aj_74aqy\review-dependencies.cjs:20:28)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)
+    at node:internal/main/run_main_module:36:49 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v22.19.0

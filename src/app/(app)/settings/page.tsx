@@ -4,7 +4,7 @@ import { getQueueStats } from "@/lib/ai/worker";
 import { getLastReviewWeek, isWeeklyReviewEnabled } from "@/lib/ai/weekly-review";
 import { getLastBackupAt } from "@/lib/backup";
 import { getTrashCount } from "@/lib/trash";
-import { getImageConfig, getLlmConfig, getVisionConfig, getReasoningConfig, getEmbeddingConfig } from "@/lib/llm-config";
+import { getImageConfig, getLlmBaseUrlForClient, getLlmConfig, getVisionConfig, getReasoningConfig, getEmbeddingConfig } from "@/lib/llm-config";
 import { SettingsPanel } from "./settings-panel";
 import { listApiTokens } from "@/lib/api-token";
 import { isCorrectionLearningEnabled } from "@/lib/correction-learning";
@@ -22,11 +22,13 @@ function maskKey(key: string | null): string {
 export default function SettingsPage() {
   const db = getDb();
   const rows = getTopicsWithCounts();
+  const demoMode = process.env.DEMO_MODE === "1";
 
   const config = getLlmConfig();
   const llm = {
     configured: Boolean(config.baseUrl && config.apiKey && config.model),
-    baseUrl: config.baseUrl ?? "",
+    // 内部 mock 主机名只供服务端使用，不发送到浏览器。
+    baseUrl: getLlmBaseUrlForClient(config, demoMode),
     model: config.model ?? "",
     apiKeyMasked: maskKey(config.apiKey),
     hasDbConfig: config.hasDbConfig,

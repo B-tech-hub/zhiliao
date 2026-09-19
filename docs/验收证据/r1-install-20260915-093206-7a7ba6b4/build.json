@@ -1,0 +1,29 @@
+{
+  "runId": "20260915-093206-7a7ba6b4",
+  "startedUtc": "2026-09-15T01:36:29.818510+00:00",
+  "imageTag": "zhiliao-r1:0.6.1-20260915-093206-7a7ba6b4",
+  "sourceManifestSha256": "1de98911e22cfca248a709c92d247436d50c862baaa04cd947ea0bf0750cac0d",
+  "status": "passed",
+  "platform": "linux/amd64",
+  "exitCode": 0,
+  "imageId": "sha256:8a8f2cd3ec1a26fc68bf04a2661f2306f09bba4b06ba9b1593d74b3f3953deb1",
+  "created": "2026-09-15T02:06:37.184179816Z",
+  "repoTags": [
+    "zhiliao-r1:0.6.1-20260915-093206-7a7ba6b4"
+  ],
+  "repoDigests": [
+    "zhiliao-r1@sha256:8a8f2cd3ec1a26fc68bf04a2661f2306f09bba4b06ba9b1593d74b3f3953deb1"
+  ],
+  "labels": {
+    "io.zhiliao.r1.base-commit": "f213761b795cc020be2122e27301fe4a7c5cf7a0",
+    "io.zhiliao.r1.run": "20260915-093206-7a7ba6b4",
+    "io.zhiliao.r1.source-sha256": "1de98911e22cfca248a709c92d247436d50c862baaa04cd947ea0bf0750cac0d",
+    "io.zhiliao.r1.working-tree": "true"
+  },
+  "cachedStepCount": 1,
+  "baseReferences": [
+    "node:22-bookworm-slim@sha256:83f487e0a63425e5b4d146fb5e5be574bcbe1b7b843d3ebafdd95eaf7767a7e5"
+  ],
+  "elapsedSeconds": 1814.75,
+  "finishedUtc": "2026-09-15T02:06:44.570937+00:00"
+}

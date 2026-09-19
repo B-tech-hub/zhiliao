@@ -1,0 +1,293 @@
+import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
+import fs from "node:fs";
+import http from "node:http";
+import net from "node:net";
+import os from "node:os";
+import path from "node:path";
+import { performance } from "node:perf_hooks";
+import { fileURLToPath } from "node:url";
+import { randomBytes } from "node:crypto";
+import {
+  runDocker, cleanDockerEnvironment, verificationResources, removeOwnedTemp,
+} from "file:///D:/ClaudeProjects/ai_acknowladge/scripts/demo-verification-utils.mjs";
+
+const root = "D:/ClaudeProjects/ai_acknowladge";
+const task = path.dirname(fileURLToPath(import.meta.url));
+const runId = path.basename(task).replace("zhiliao-ingress-repair-", "");
+const project = "zhiliao-ingress-repair-" + runId.toLowerCase();
+const evidence = path.join(root, "docs", "验收证据", "demo-ingress-repair-" + runId);
+const imageTag = "zhiliao-r1:0.6.1-20260915-093206-7a7ba6b4";
+const expectedImage = "sha256:8a8f2cd3ec1a26fc68bf04a2661f2306f09bba4b06ba9b1593d74b3f3953deb1";
+const label = "io.zhiliao.ingress-repair.run";
+const inputs = ["docker-compose.demo.yml", "nginx/demo.conf"];
+const env = cleanDockerEnvironment();
+const password = randomBytes(24).toString("hex");
+const secret = randomBytes(32).toString("hex");
+const sha = (value) => createHash("sha256").update(value).digest("hex");
+const redact = (value) => String(value).replaceAll(password, "[REDACTED]").replaceAll(secret, "[REDACTED]");
+const stable = (value) => JSON.stringify(canonical(value));
+function canonical(value) {
+  if (Array.isArray(value)) return value.map(canonical);
+  if (value && typeof value === "object") return Object.fromEntries(Object.entries(value).sort(([a],[b]) => a.localeCompare(b)).map(([key,item]) => [key,canonical(item)]));
+  return value;
+}
+const report = {
+  runId, project, status: "failed", startedAt: new Date().toISOString(),
+  scope: "仓库 Demo 网络及默认 3210 入口；仅本机固定候选",
+  baselineCommit: JSON.parse(fs.readFileSync(path.join(task, "before.json"), "utf8")).head,
+  commands: [], inputSha256: {}, checks: {}, cleanup: { status: "not_started" },
+  limitations: [
+    "本次使用已有 linux/amd64 本地候选，不证明 GHCR 0.6.1 可获取或当前全部工作区源码已构建。",
+    "本次只验收入口端口、健康检查和业务网络配置及默认路由；不重复旧 20 项网络对照或长时代理验收。",
+    "静态资源 503、React #418、完整安装恢复、公网及发布门禁仍保留。",
+  ],
+};
+async function invoke(args, timeoutMs = 15000) {
+  const started = performance.now();
+  try {
+    const result = await runDocker(args, { env, timeoutMs });
+    report.commands.push({ args, elapsedMs: Math.round(performance.now() - started), status: "passed" });
+    return result;
+  } catch (error) {
+    report.commands.push({ args, elapsedMs: Math.round(performance.now() - started), status: "failed", error: redact(error.message) });
+    throw error;
+  }
+}
+const owned = verificationResources(invoke, project, runId, label);
+const lines = (value) => value.split(/\r?\n/).filter(Boolean).sort();
+async function preservedResources() {
+  const result = {};
+  for (const type of ["container", "network", "volume"]) {
+    const ids = lines(await invoke(type === "container" ? ["ps", "-aq", "--no-trunc"] :
+      [type, "ls", "-q", ...(type === "network" ? ["--no-trunc"] : [])]));
+    const values = ids.length ? JSON.parse(await invoke([type, "inspect", ...ids])) : [];
+    result[type] = {};
+    for (const item of values) {
+      let projection = item;
+      if (type === "container") projection = {
+        Id: item.Id, Name: item.Name, Image: item.Image, Config: item.Config, HostConfig: item.HostConfig,
+        Mounts: [...item.Mounts].sort((a,b) => a.Destination.localeCompare(b.Destination)),
+        Networks: item.NetworkSettings.Networks, Ports: item.NetworkSettings.Ports, RestartCount: item.RestartCount,
+        State: Object.fromEntries(["Status","Running","Paused","Restarting","OOMKilled","Dead","Pid","StartedAt","FinishedAt"].map(key => [key,item.State[key]])),
+      };
+      result[type][item.Id ?? item.Name] = sha(stable(projection));
+    }
+  }
+  result.images = lines(await invoke(["image", "ls", "-aq", "--no-trunc"]));
+  return canonical(result);
+}
+async function assertPortFree() {
+  await new Promise((resolve,reject) => {
+    const server = net.createServer();
+    server.once("error", reject);
+    server.listen({ host: "127.0.0.1", port: 3210, exclusive: true }, () => server.close(error => error ? reject(error) : resolve()));
+  });
+}
+async function health() {
+  return await new Promise((resolve,reject) => {
+    const started = performance.now();
+    const request = http.get("http://127.0.0.1:3210/api/healthz", { agent: false }, response => {
+      let body = "";
+      response.setEncoding("utf8");
+      response.on("data", chunk => {
+        body += chunk;
+        if (body.length > 8192) request.destroy(new Error("Health response exceeded budget"));
+      });
+      response.on("end", () => resolve({ status: response.statusCode, body, elapsedMs: Math.round(performance.now() - started) }));
+      response.on("error", reject);
+    });
+    request.setTimeout(10000, () => request.destroy(new Error("Health request timeout")));
+    request.on("error", reject);
+  });
+}
+function configChecks(config) {
+  assert.deepEqual(Object.keys(config.services).sort(), ["app", "ingress", "mockllm"]);
+  assert.equal(config.networks.demo_net.internal, true);
+  assert.equal(config.networks.demo_net.driver_opts["com.docker.network.bridge.gateway_mode_ipv4"], "isolated");
+  assert.ok(config.networks.ingress_net.internal === false || config.networks.ingress_net.internal === undefined);
+  assert.deepEqual(Object.keys(config.services.app.networks), ["demo_net"]);
+  assert.deepEqual(Object.keys(config.services.mockllm.networks), ["demo_net"]);
+  assert.deepEqual(Object.keys(config.services.ingress.networks).sort(), ["demo_net", "ingress_net"]);
+  const ports = config.services.ingress.ports;
+  assert.equal(ports.length, 1);
+  assert.equal(ports[0].host_ip, "127.0.0.1");
+  assert.equal(ports[0].target, 8080);
+  assert.equal(String(ports[0].published), "3210");
+  assert.equal(config.services.app.ports, undefined);
+  assert.equal(config.services.mockllm.ports, undefined);
+  assert.deepEqual(Object.keys(config.volumes).sort(), ["demo_db", "demo_notes", "demo_uploads"]);
+  for (const [key, volume] of Object.entries(config.volumes)) assert.equal(volume.name, project + "_" + key);
+  assert.equal(config.networks.demo_net.name, project + "-net");
+  assert.equal(config.networks.ingress_net.name, project + "-ingress");
+}
+function publishedPorts(container) {
+  return Object.fromEntries(Object.entries(container.NetworkSettings.Ports ?? {}).filter(([,value]) => value?.length));
+}
+let work;
+let compose;
+let upAttempted = false;
+let preserved;
+let stage = "preflight";
+try {
+  assert.equal(fs.existsSync(evidence), false, "Evidence path already exists");
+  await assertPortFree();
+  assert.deepEqual(await owned.list(), []);
+  preserved = await preservedResources();
+  fs.writeFileSync(path.join(task, "docker-before.json"), stable(preserved) + "\n", {flag:"wx"});
+  report.preservedCounts = Object.fromEntries(["container","volume","network"].map(type => [type,Object.keys(preserved[type]).length]));
+  report.engine = await invoke(["version", "--format", "{{.Server.Version}}"]);
+  report.composeVersion = await invoke(["compose", "version", "--short"]);
+  report.candidateImageId = await invoke(["image", "inspect", "--format", "{{.Id}}", imageTag]);
+  assert.equal(report.candidateImageId, expectedImage);
+  work = fs.mkdtempSync(path.join(os.tmpdir(), "zhiliao-ingress-smoke-"));
+  fs.mkdirSync(path.join(work, "nginx"));
+  for (const file of inputs) {
+    const content = fs.readFileSync(path.join(root,file));
+    report.inputSha256[file] = sha(content);
+    fs.writeFileSync(path.join(work,file), content, {flag:"wx"});
+  }
+  fs.writeFileSync(path.join(work, "owner.json"), JSON.stringify({ project, runId }) + "\n", {flag:"wx"});
+  const envFile = path.join(work, "demo.env");
+  fs.writeFileSync(envFile, "DEMO_PASSWORD=" + password + "\nDEMO_SESSION_SECRET=" + secret + "\n", {flag:"wx", mode:0o600});
+  const baseArgs = ["compose", "--project-directory", work, "--env-file", envFile, "-p", project, "-f", path.join(work,"docker-compose.demo.yml")];
+  const base = JSON.parse(await invoke([...baseArgs, "config", "--format", "json"]));
+  configChecks(base);
+  report.checks.baseConfig = "passed";
+  const overlay = {
+    services: {
+      ingress: {labels:{[label]:runId}}, app: {image:imageTag, labels:{[label]:runId}}, mockllm: {image:imageTag, labels:{[label]:runId}},
+    },
+    networks: {demo_net:{labels:{[label]:runId}}, ingress_net:{labels:{[label]:runId}}},
+    volumes: Object.fromEntries(["demo_db","demo_uploads","demo_notes"].map(name => [name,{labels:{[label]:runId}}])),
+  };
+  const overlayPath = path.join(work, "compose.runtime.json");
+  fs.writeFileSync(overlayPath, JSON.stringify(overlay,null,2)+"\n", {flag:"wx"});
+  compose = [...baseArgs, "-f", overlayPath];
+  const config = JSON.parse(await invoke([...compose, "config", "--format", "json"]));
+  configChecks(config);
+  const normalized = structuredClone(config);
+  for (const kind of ["services","networks","volumes"]) for (const item of Object.values(normalized[kind])) {
+    delete item.labels[label];
+    if (Object.keys(item.labels).length === 0) delete item.labels;
+  }
+  normalized.services.app.image = base.services.app.image;
+  normalized.services.mockllm.image = base.services.mockllm.image;
+  assert.deepEqual(normalized, base, "Runtime overlay changed fields other than images and ownership labels");
+  report.checks.overlayScope = "images_and_ownership_labels_only";
+  assert.equal(config.services.app.environment.DEMO_MODE, "1");
+  assert.equal(config.services.app.environment.SESSION_SECRET, secret);
+  assert.equal(config.services.app.environment.APP_PASSWORD, password);
+  assert.equal(config.services.app.environment.LLM_BASE_URL, "http://mockllm:8787/v1");
+  assert.equal(config.services.app.image, imageTag);
+  assert.equal(config.services.mockllm.image, imageTag);
+  report.ingressImageId = await invoke(["image", "inspect", "--format", "{{.Id}}", config.services.ingress.image]);
+  assert.equal(config.services.app.volumes.length,3);
+  for (const mount of config.services.app.volumes) {
+    assert.equal(mount.type, "volume");
+    assert.equal(Object.hasOwn(preserved.volume, config.volumes[mount.source].name), false);
+  }
+  assert.equal(config.services.mockllm.volumes, undefined);
+  assert.equal(config.services.ingress.volumes.length,1);
+  assert.equal(config.services.ingress.volumes[0].read_only,true);
+  assert.equal(path.resolve(config.services.ingress.volumes[0].source),path.join(work,"nginx","demo.conf"));
+  fs.mkdirSync(evidence);
+  fs.writeFileSync(path.join(evidence,"compose.runtime.json"), JSON.stringify(overlay,null,2)+"\n", {flag:"wx"});
+  fs.writeFileSync(path.join(evidence,"config-redacted.json"), redact(JSON.stringify(config,null,2))+"\n", {flag:"wx"});
+  stage = "startup";
+  console.log(JSON.stringify({stage,project,port:3210,build:false,pull:false}));
+  upAttempted = true;
+  const startup = performance.now();
+  await invoke([...compose,"up","-d","--no-build","--pull","never","--wait","--wait-timeout","180"],195000);
+  report.startupElapsedMs = Math.round(performance.now() - startup);
+  const resources = await owned.list();
+  await owned.assertOwned(resources);
+  assert.equal(resources.filter(item => item.type === "container").length,3);
+  assert.equal(resources.filter(item => item.type === "network").length,2);
+  assert.equal(resources.filter(item => item.type === "volume").length,3);
+  const containers = JSON.parse(await invoke(["container","inspect",...resources.filter(item=>item.type==="container").map(item=>item.id)]));
+  const byService = Object.fromEntries(containers.map(item => [item.Config.Labels["com.docker.compose.service"],item]));
+  report.services = {};
+  for (const [service,item] of Object.entries(byService)) {
+    assert.equal(item.State.Health.Status,"healthy");
+    assert.equal(item.State.Running,true);
+    report.services[service] = {id:item.Id,image:item.Image,health:item.State.Health.Status,ports:publishedPorts(item),networks:Object.keys(item.NetworkSettings.Networks).sort()};
+  }
+  assert.equal(byService.app.Image,expectedImage);
+  assert.equal(byService.mockllm.Image,expectedImage);
+  assert.deepEqual(publishedPorts(byService.ingress),{"8080/tcp":[{HostIp:"127.0.0.1",HostPort:"3210"}]});
+  report.ingressBinding = await invoke([...compose,"port","ingress","8080"]);
+  assert.equal(report.ingressBinding,"127.0.0.1:3210");
+  for (const service of ["app","mockllm"]) {
+    assert.deepEqual(publishedPorts(byService[service]),{});
+    assert.deepEqual(Object.keys(byService[service].NetworkSettings.Networks),[project+"-net"]);
+    const routes = await invoke(["exec",byService[service].Id,"node","-e","process.stdout.write(require('node:fs').readFileSync('/proc/net/route','utf8'))"]);
+    assert.equal(routes.trim().split(/\r?\n/).slice(1).some(line => line.trim().split(/\s+/)[1] === "00000000"),false);
+    report.services[service].defaultRoute = false;
+    report.services[service].routeTable = routes;
+  }
+  const [business] = JSON.parse(await invoke(["network","inspect",project+"-net"]));
+  const [ingress] = JSON.parse(await invoke(["network","inspect",project+"-ingress"]));
+  assert.equal(business.Internal,true);
+  assert.equal(business.Options["com.docker.network.bridge.gateway_mode_ipv4"],"isolated");
+  assert.equal(ingress.Internal,false);
+  report.networks = {business:{internal:business.Internal,gatewayMode:business.Options["com.docker.network.bridge.gateway_mode_ipv4"],ipam:business.IPAM.Config},ingress:{internal:ingress.Internal}};
+  report.checks.servicesAndIsolation = "passed";
+  stage = "health";
+  report.checks.health = await health();
+  assert.equal(report.checks.health.status,200);
+  await invoke([...compose,"exec","-T","ingress","nginx","-t"]);
+  report.checks.nginxSyntax = "passed";
+  report.status = "passed";
+  console.log(JSON.stringify({stage:"checks_passed",health:report.checks.health.status,binding:report.ingressBinding}));
+} catch (error) {
+  report.failedStage = stage;
+  report.error = redact(error.stack ?? error.message);
+  if (upAttempted) {
+    try { report.failureLogs = redact(await invoke([...compose,"logs","--no-color","--tail","100"])); }
+    catch (logError) { report.logError = redact(logError.message); }
+  }
+} finally {
+  console.log(JSON.stringify({stage:"cleanup",upAttempted}));
+  try {
+    if (upAttempted) {
+      const remaining = await owned.list();
+      await owned.assertOwned(remaining);
+      if (remaining.length) await invoke([...compose,"down","-v","--timeout","15"],45000);
+      assert.deepEqual(await owned.list(),[]);
+      await assertPortFree();
+      report.cleanup = {status:"removed",containers:3,volumes:3,networks:2,port3210Released:true};
+    }
+    if (work) {
+      assert.deepEqual(JSON.parse(fs.readFileSync(path.join(work,"owner.json"),"utf8")),{project,runId});
+      removeOwnedTemp(work,"zhiliao-ingress-smoke-");
+      report.cleanup.temporaryDirectoryRemoved = true;
+    }
+  } catch (error) {
+    report.status = "failed";
+    report.cleanup = {status:"failed",error:redact(error.message),directory:work,project,runId};
+  }
+  if (preserved) {
+    try {
+      const after = await preservedResources();
+      assert.deepEqual(after,preserved,"Pre-existing Docker resources changed");
+      report.preservation = {status:"passed",...report.preservedCounts,imagesUnchanged:true};
+    } catch (error) {
+      report.status = "failed";
+      report.preservation = {status:"failed",error:redact(error.message)};
+    }
+  }
+  try {
+    for (const file of inputs) assert.equal(sha(fs.readFileSync(path.join(root,file))),report.inputSha256[file]);
+    report.checks.repositoryInputsUnchangedDuringRuntime = true;
+  } catch (error) {
+    report.status = "failed";
+    report.inputError = redact(error.message);
+  }
+  report.finishedAt = new Date().toISOString();
+  fs.mkdirSync(evidence,{recursive:true});
+  fs.writeFileSync(path.join(evidence,"runtime.json"),redact(JSON.stringify(report,null,2))+"\n",{flag:"wx"});
+  console.log(JSON.stringify({status:report.status,evidence,cleanup:report.cleanup,preservation:report.preservation,error:report.error}));
+}
+process.exitCode = report.status === "passed" ? 0 : 1;
+

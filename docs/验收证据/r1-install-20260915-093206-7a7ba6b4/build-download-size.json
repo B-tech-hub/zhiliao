@@ -1,0 +1,19 @@
+{
+  "timeUtc": "2026-09-15T01:58:52.421645+00:00",
+  "exitCode": 0,
+  "tarHeaders": [
+    {
+      "name": "package/package.json",
+      "bytes": 440
+    },
+    {
+      "name": "package/README.md",
+      "bytes": 84
+    },
+    {
+      "name": "package/next-swc.linux-x64-musl.node",
+      "bytes": 142958640
+    }
+  ],
+  "currentNodeStat": "112828583 1789437532"
+}

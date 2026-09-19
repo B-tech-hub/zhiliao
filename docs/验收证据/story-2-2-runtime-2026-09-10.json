@@ -1,0 +1,364 @@
+{
+    "story":  "2.2",
+    "conclusion":  "运行验收未通过，Story 保持 review。",
+    "recordedAt":  "2026-09-10T15:53:40.235Z",
+    "baselineCommit":  "f213761b795cc020be2122e27301fe4a7c5cf7a0",
+    "scope":  "本地候选镜像及专用 Docker project；HTTP 复核走 app 容器回环入口，未执行公网验收。",
+    "environment":  {
+                        "dockerEngine":  "28.4.0",
+                        "dockerCompose":  "2.39.4",
+                        "project":  "zhiliao-demo-verify"
+                    },
+    "builds":  {
+                   "image":  "zhiliao-demo-verify:story-2-2",
+                   "firstCandidateImageId":  "sha256:82e382c55094d36e4022c4c370a12745e42db123cd818994ddc1ff509f27f15b",
+                   "deleteFixCandidateImageId":  "sha256:46f9241b6d2e539ce3a94324c356cf4336f8cf17e0cf59e5b5d920bf9b53769e",
+                   "deleteFixCandidateOutput":  [
+                                                    "#11 19.91  ✓ Compiled successfully in 16.7s",
+                                                    "#11 19.91    Linting and checking validity of types ...",
+                                                    "#11 27.12  ✓ Generating static pages (28/28)",
+                                                    "#17 exporting manifest list sha256:46f9241b6d2e539ce3a94324c356cf4336f8cf17e0cf59e5b5d920bf9b53769e",
+                                                    "#17 naming to docker.io/library/zhiliao-demo-verify:story-2-2 done"
+                                                ],
+                   "outputSource":  "本轮终端中已回显并核对的最新候选构建片段；两次完整原始日志未归档。首次候选的镜像标识同时见 initialHostHttpAndResourceChecks。"
+               },
+    "localChecks":  {
+                        "api":  {
+                                    "passed":  18,
+                                    "scope":  "tests/api/demo-boundary.test.ts；空 DELETE 修复后的局部回归"
+                                },
+                        "compose":  {
+                                        "passed":  7,
+                                        "scope":  "两个 tests/config/demo-compose 测试文件；沿用未变化的配置验证"
+                                    },
+                        "docs":  {
+                                     "passed":  6,
+                                     "scope":  "tests/docs/first-use-guide.test.ts；运行发现同步到入口文档后重跑，6 项全部通过",
+                                     "checkedAtBeijing":  "2026-09-11 00:04:45 +08:00"
+                                 },
+                        "note":  "局部测试结果来自本轮相应文件的最近一次执行，并非全量测试。"
+                    },
+    "initialHostHttpAndResourceChecks":  {
+                                             "time":  "2026-09-10T15:07:22.421Z",
+                                             "checks":  [
+                                                            {
+                                                                "name":  "health",
+                                                                "passed":  false,
+                                                                "error":  "fetch failed"
+                                                            },
+                                                            {
+                                                                "name":  "unauthenticated_notes",
+                                                                "passed":  false,
+                                                                "error":  "fetch failed"
+                                                            },
+                                                            {
+                                                                "name":  "login",
+                                                                "passed":  false,
+                                                                "error":  "fetch failed"
+                                                            },
+                                                            {
+                                                                "name":  "container_boundary zhiliao-demo-verify-app-1",
+                                                                "passed":  true,
+                                                                "detail":  {
+                                                                               "image":  "sha256:82e382c55094d36e4022c4c370a12745e42db123cd818994ddc1ff509f27f15b",
+                                                                               "user":  "node",
+                                                                               "limits":  {
+                                                                                              "memory.max":  "805306368",
+                                                                                              "pids.max":  "128",
+                                                                                              "cpu.max":  "100000 100000"
+                                                                                          },
+                                                                               "ports":  {
+                                                                                             "3000/tcp":  [
+                                                                                                              {
+                                                                                                                  "HostIp":  "127.0.0.1",
+                                                                                                                  "HostPort":  "3322"
+                                                                                                              }
+                                                                                                          ]
+                                                                                         }
+                                                                           }
+                                                            },
+                                                            {
+                                                                "name":  "container_boundary zhiliao-demo-verify-mockllm-1",
+                                                                "passed":  true,
+                                                                "detail":  {
+                                                                               "image":  "sha256:82e382c55094d36e4022c4c370a12745e42db123cd818994ddc1ff509f27f15b",
+                                                                               "user":  "node",
+                                                                               "limits":  {
+                                                                                              "memory.max":  "268435456",
+                                                                                              "pids.max":  "64",
+                                                                                              "cpu.max":  "50000 100000"
+                                                                                          },
+                                                                               "ports":  {
+
+                                                                                         }
+                                                                           }
+                                                            },
+                                                            {
+                                                                "name":  "read_only_root_rejects_write",
+                                                                "passed":  true,
+                                                                "detail":  {
+                                                                               "error":  "EROFS"
+                                                                           }
+                                                            },
+                                                            {
+                                                                "name":  "mock_tmpfs_enforces_32_mib",
+                                                                "passed":  true,
+                                                                "detail":  {
+                                                                               "code":  "ENOSPC",
+                                                                               "bytes":  33554432
+                                                                           }
+                                                            }
+                                                        ]
+                                         },
+    "networkIngressDifferential":  [
+                                       {
+                                           "internal":  true,
+                                           "insideStatus":  200,
+                                           "publishedPorts":  {
+                                                                  "3000/tcp":  [
+
+                                                                               ]
+                                                              },
+                                           "hostStatus":  null,
+                                           "hostError":  "ECONNREFUSED"
+                                       },
+                                       {
+                                           "internal":  false,
+                                           "insideStatus":  200,
+                                           "publishedPorts":  {
+                                                                  "3000/tcp":  [
+                                                                                   {
+                                                                                       "HostIp":  "127.0.0.1",
+                                                                                       "HostPort":  "3323"
+                                                                                   }
+                                                                               ]
+                                                              },
+                                           "hostStatus":  200,
+                                           "hostError":  null
+                                       }
+                                   ],
+    "networkEgressAndHost":  {
+                                 "hostControl":  {
+                                                     "status":  200,
+                                                     "body":  "isolated-host-control"
+                                                 },
+                                 "demoToHost":  {
+                                                    "status":  200,
+                                                    "body":  "isolated-host-control"
+                                                },
+                                 "appEgress":  [
+                                                   {
+                                                       "host":  "169.254.169.254",
+                                                       "result":  "ENETUNREACH"
+                                                   },
+                                                   {
+                                                       "host":  "169.254.170.2",
+                                                       "result":  "ENETUNREACH"
+                                                   },
+                                                   {
+                                                       "host":  "10.0.0.1",
+                                                       "result":  "ENETUNREACH"
+                                                   },
+                                                   {
+                                                       "host":  "172.16.0.1",
+                                                       "result":  "ENETUNREACH"
+                                                   },
+                                                   {
+                                                       "host":  "192.168.0.1",
+                                                       "result":  "ENETUNREACH"
+                                                   }
+                                               ],
+                                 "mockllmEgress":  [
+                                                       {
+                                                           "host":  "169.254.169.254",
+                                                           "result":  "ENETUNREACH"
+                                                       },
+                                                       {
+                                                           "host":  "169.254.170.2",
+                                                           "result":  "ENETUNREACH"
+                                                       },
+                                                       {
+                                                           "host":  "10.0.0.1",
+                                                           "result":  "ENETUNREACH"
+                                                       },
+                                                       {
+                                                           "host":  "172.16.0.1",
+                                                           "result":  "ENETUNREACH"
+                                                       },
+                                                       {
+                                                           "host":  "192.168.0.1",
+                                                           "result":  "ENETUNREACH"
+                                                       }
+                                                   ],
+                                 "networkInternal":  true
+                             },
+    "httpAfterDeleteFix":  {
+                               "time":  "2026-09-10T15:48:10.773Z",
+                               "checks":  [
+                                              {
+                                                  "name":  "health",
+                                                  "passed":  true,
+                                                  "detail":  {
+                                                                 "status":  200
+                                                             }
+                                              },
+                                              {
+                                                  "name":  "unauthenticated_notes",
+                                                  "passed":  true,
+                                                  "detail":  {
+                                                                 "status":  401
+                                                             }
+                                              },
+                                              {
+                                                  "name":  "login",
+                                                  "passed":  true,
+                                                  "detail":  {
+                                                                 "status":  200,
+                                                                 "sessionCreated":  true
+                                                             }
+                                              },
+                                              {
+                                                  "name":  "restricted PATCH /api/settings/llm",
+                                                  "passed":  true,
+                                                  "detail":  {
+                                                                 "status":  403
+                                                             }
+                                              },
+                                              {
+                                                  "name":  "restricted DELETE /api/settings/llm",
+                                                  "passed":  true,
+                                                  "detail":  {
+                                                                 "status":  403
+                                                             }
+                                              },
+                                              {
+                                                  "name":  "restricted GET /api/settings/tokens",
+                                                  "passed":  true,
+                                                  "detail":  {
+                                                                 "status":  403
+                                                             }
+                                              },
+                                              {
+                                                  "name":  "restricted POST /api/settings/tokens",
+                                                  "passed":  true,
+                                                  "detail":  {
+                                                                 "status":  403
+                                                             }
+                                              },
+                                              {
+                                                  "name":  "restricted DELETE /api/settings/tokens?id=fixture",
+                                                  "passed":  true,
+                                                  "detail":  {
+                                                                 "status":  403
+                                                             }
+                                              },
+                                              {
+                                                  "name":  "restricted GET /api/export",
+                                                  "passed":  true,
+                                                  "detail":  {
+                                                                 "status":  403
+                                                             }
+                                              },
+                                              {
+                                                  "name":  "restricted POST /api/backup",
+                                                  "passed":  true,
+                                                  "detail":  {
+                                                                 "status":  403
+                                                             }
+                                              },
+                                              {
+                                                  "name":  "restricted GET /api/embedding/backfill",
+                                                  "passed":  true,
+                                                  "detail":  {
+                                                                 "status":  403
+                                                             }
+                                              },
+                                              {
+                                                  "name":  "restricted POST /api/embedding/backfill",
+                                                  "passed":  true,
+                                                  "detail":  {
+                                                                 "status":  403
+                                                             }
+                                              },
+                                              {
+                                                  "name":  "restricted POST /api/import",
+                                                  "passed":  true,
+                                                  "detail":  {
+                                                                 "status":  403
+                                                             }
+                                              },
+                                              {
+                                                  "name":  "restricted POST /api/uploads",
+                                                  "passed":  true,
+                                                  "detail":  {
+                                                                 "status":  403
+                                                             }
+                                              },
+                                              {
+                                                  "name":  "restricted POST /api/llm/test",
+                                                  "passed":  true,
+                                                  "detail":  {
+                                                                 "status":  403
+                                                             }
+                                              },
+                                              {
+                                                  "name":  "create_note_and_mock_ai",
+                                                  "passed":  true,
+                                                  "detail":  {
+                                                                 "created":  201,
+                                                                 "aiStatus":  "done",
+                                                                 "contentPreserved":  true
+                                                             }
+                                              },
+                                              {
+                                                  "name":  "chunked_without_content_length",
+                                                  "passed":  true,
+                                                  "detail":  {
+                                                                 "status":  411
+                                                             }
+                                              },
+                                              {
+                                                  "name":  "declared_body_above_200_mib",
+                                                  "passed":  false,
+                                                  "error":  "HTTP probe timed out"
+                                              }
+                                          ],
+                               "passed":  17,
+                               "failed":  1,
+                               "note":  "超大声明探针只发送 1 字节，等待 5 秒；超时作为失败保留。"
+                           },
+    "cleanup":  {
+                    "status":  "已清理",
+                    "completedAt":  "2026-09-10T15:55:38.8879612Z",
+                    "removedContainers":  [
+                                              "zhiliao-demo-verify-app-1",
+                                              "zhiliao-demo-verify-mockllm-1"
+                                          ],
+                    "removedVolumes":  [
+                                           "zhiliao-demo-verify_demo_db",
+                                           "zhiliao-demo-verify_demo_notes",
+                                           "zhiliao-demo-verify_demo_uploads"
+                                       ],
+                    "removedNetworks":  [
+                                            "zhiliao-demo-verify-net"
+                                        ],
+                    "remainingProjectContainers":  [
+
+                                                   ],
+                    "remainingProjectVolumes":  [
+
+                                                ],
+                    "remainingProjectNetworks":  [
+
+                                                 ],
+                    "temporaryDirectoryRemoved":  true,
+                    "temporaryCredentialsRemoved":  true,
+                    "existingSmokeContainersUnchanged":  true,
+                    "existingSmokeContainers":  [
+                                                    "zhiliao-smoke-20260910-082135-app-1",
+                                                    "zhiliao-smoke-20260910-081121-app-1"
+                                                ],
+                    "candidateImageRetained":  true
+                },
+    "exclusions":  "不保存临时凭据、Cookie、容器完整环境变量、用户笔记或宿主机实际网桥地址。"
+}

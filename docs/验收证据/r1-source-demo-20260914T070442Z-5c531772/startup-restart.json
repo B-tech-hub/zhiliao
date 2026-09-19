@@ -1,0 +1,21 @@
+{
+  "timeUtc": "2026-09-14T08:00:33.6439896Z",
+  "listeners": [
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 8787,
+      "OwningProcess": 60736
+    },
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 3311,
+      "OwningProcess": 32644
+    }
+  ],
+  "health": {
+    "ok": true
+  },
+  "elapsedSeconds": 15.037856699999999,
+  "phase": "restart",
+  "status": 200
+}

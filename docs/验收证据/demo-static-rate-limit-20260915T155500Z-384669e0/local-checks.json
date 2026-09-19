@@ -1,0 +1,18 @@
+{
+  "scope": "仅本次配置测试文件；单 worker、文件顺序执行",
+  "checks": [
+    {
+      "command": "npm test -- tests/config/demo-compose.test.ts --maxWorkers=1 --no-file-parallelism --reporter=default --reporter=json --outputFile=docs/验收证据/demo-static-rate-limit-20260915T155500Z-384669e0/vitest-results.json",
+      "startedAt": "2026-09-15T16:23:46.312Z",
+      "exitCode": 0,
+      "output": "\n> zhiliao@0.6.1 test\n> vitest run tests/config/demo-compose.test.ts --maxWorkers=1 --no-file-parallelism --reporter=default --reporter=json --outputFile=docs/验收证据/demo-static-rate-limit-20260915T155500Z-384669e0/vitest-results.json\n\n(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:\n  - `__dirname` (vitest.config.mts:17:32). Use `import.meta.dirname` instead\nSet `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.\n\n RUN  v4.1.10 D:/ClaudeProjects/ai_acknowladge\n\n ✓ tests/config/demo-compose.test.ts (20 tests) 9ms\n\n Test Files  1 passed (1)\n      Tests  20 passed (20)\n   Start at  00:23:47\n   Duration  857ms (transform 74ms, setup 38ms, import 607ms, tests 9ms, environment 0ms)\n\nJSON report written to D:/ClaudeProjects/ai_acknowladge/docs/验收证据/demo-static-rate-limit-20260915T155500Z-384669e0/vitest-results.json\n"
+    },
+    {
+      "command": "node node_modules/eslint/bin/eslint.js tests/config/demo-compose.test.ts",
+      "startedAt": "2026-09-15T16:23:48.484Z",
+      "exitCode": 0,
+      "output": ""
+    }
+  ]
+}
+

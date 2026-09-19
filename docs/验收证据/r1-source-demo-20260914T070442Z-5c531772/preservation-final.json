@@ -1,0 +1,50 @@
+{
+  "timeUtc": "2026-09-14T08:36:08.736791+00:00",
+  "phase": "文档同步后、清理临时目录前",
+  "workspaceOriginalFilesChecked": 687,
+  "workspaceOriginalFilesUnchanged": 678,
+  "allowedChangedFiles": [
+    "README.md",
+    "README.en.md",
+    "docs/首次使用与故障排查.md",
+    "tests/docs/first-use-guide.test.ts",
+    "CHANGELOG.md",
+    "docs/releases/v0.6.1.md",
+    "docs/README.md",
+    "docs/产品规划/开源发布范围与执行清单-2026-09-13.md",
+    "_bmad-output/implementation-artifacts/spec-r1-source-demo-wiring.md"
+  ],
+  "actualAllowedChangedFiles": [
+    "CHANGELOG.md",
+    "README.en.md",
+    "README.md",
+    "_bmad-output/implementation-artifacts/spec-r1-source-demo-wiring.md",
+    "docs/README.md",
+    "docs/releases/v0.6.1.md",
+    "docs/产品规划/开源发布范围与执行清单-2026-09-13.md",
+    "docs/首次使用与故障排查.md",
+    "tests/docs/first-use-guide.test.ts"
+  ],
+  "unexpectedChangedCount": 0,
+  "unexpectedAddedCount": 0,
+  "allowedNewReport": "docs/R1源码Demo接线验收-2026-09-14.md",
+  "allowedNewEvidenceDirectory": "docs/验收证据/r1-source-demo-20260914T070442Z-5c531772/",
+  "headUnchanged": true,
+  "indexUnchanged": true,
+  "documentSnapshotsMatchRunBaseline": true,
+  "protectedHashFilesChecked": 51,
+  "protectedHashFilesAndSetUnchanged": true,
+  "dataFilesChecked": 143,
+  "dataMetadataUnchanged": true,
+  "history": {
+    "specPreviousContentUnchanged": true,
+    "frozenSpecBlocksUnchanged": true,
+    "readmeRoadmapUnchanged": true,
+    "englishReadmeProjectStatusUnchanged": true,
+    "releasedChangelogUnchanged": true,
+    "storySprintFilesUnchanged": true,
+    "storySprintFilesChecked": 74
+  },
+  "privatePathInventoryArchived": false,
+  "passed": true
+}

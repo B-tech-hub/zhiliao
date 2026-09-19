@@ -1,0 +1,709 @@
+{
+  "story": "2.2",
+  "recorded_at": "2026-09-12T06:55:37.663Z",
+  "status": "completed",
+  "run_id": "74e96582a651",
+  "group": "zhiliao_a2_tick_74e96582a651",
+  "baseline_commit": "f213761b795cc020be2122e27301fe4a7c5cf7a0",
+  "authorization": "用户在最长 30 秒内核跟踪方案后回复“继续确认”；仅本次跟踪配置与清理，不写时钟参数、不启停服务或重启",
+  "scope": "使用私有 tracefs 实例记录 do_adjtimex 入口与返回，核对 ADJ_TICK 请求，单次有界采集",
+  "host": {
+    "platform": "win32",
+    "release": "10.0.26200",
+    "node": "v22.19.0"
+  },
+  "source_file": "zhiliao-a2-tick-trace-20260912.mjs",
+  "source_sha256": "4259965fd623068d5ee8ebb07882ed67cfe30cdfab8e52a3622c19677144fd9c",
+  "maintenance_source": "import fs from 'node:fs';\nimport path from 'node:path';\nimport os from 'node:os';\nimport crypto from 'node:crypto';\nimport { spawn, execFile } from 'node:child_process';\nimport { promisify } from 'node:util';\nimport { fileURLToPath } from 'node:url';\n\nconst execFileAsync = promisify(execFile);\nconst root = 'D:/ClaudeProjects/ai_acknowladge';\nconst sourcePath = fileURLToPath(import.meta.url);\nconst pythonPath = sourcePath.replace(/\\.mjs$/, '.py');\nconst source = fs.readFileSync(sourcePath, 'utf8');\nconst pythonSource = fs.readFileSync(pythonPath, 'utf8');\nconst sha = (value) => crypto.createHash('sha256').update(value).digest('hex');\nconst runId = crypto.randomBytes(6).toString('hex');\nconst group = 'zhiliao_a2_tick_' + runId;\nconst priorPath = path.join(root, 'docs/验收证据/story-2-2-tick-maintenance-2026-09-12T05-48-48-326Z.json');\nconst prior = JSON.parse(fs.readFileSync(priorPath, 'utf8'));\nconst files = [...new Set([...prior.preservation.files.map((entry) => entry.path),\n  ...fs.readdirSync(path.join(root, 'docs/验收证据')).filter((file) => /^story-2-2.*\\.json$/.test(file)).map((file) => 'docs/验收证据/' + file)])];\nconst report = {\n  story: '2.2', recorded_at: new Date().toISOString(), status: 'failed',\n  run_id: runId, group, baseline_commit: prior.baseline_commit,\n  authorization: '用户在最长 30 秒内核跟踪方案后回复“继续确认”；仅本次跟踪配置与清理，不写时钟参数、不启停服务或重启',\n  scope: '使用私有 tracefs 实例记录 do_adjtimex 入口与返回，核对 ADJ_TICK 请求，单次有界采集',\n  host: { platform: process.platform, release: os.release(), node: process.version },\n  source_file: path.basename(sourcePath), source_sha256: sha(source), maintenance_source: source,\n  python_source_file: path.basename(pythonPath), python_source_sha256: sha(pythonSource), python_source: pythonSource,\n  prior_maintenance_sha256: sha(fs.readFileSync(priorPath)),\n  preparation_fix: '首次准备阶段修正 open(a) 的 EINVAL；第二次按进程名匹配只读对照未成功，2.1 秒内停止并清理。本次按同源 mono_raw 调用时间窗唯一匹配只读对照，时长缩为 25 秒，两段实际采集合计保持在 30 秒以内',\n  prior_trace_attempt_sha256: sha(fs.readFileSync(path.join(root, 'docs/验收证据/story-2-2-tick-trace-2026-09-12T06-33-12-041Z.json'))),\n  prior_incomplete_trace_sha256: sha(fs.readFileSync(path.join(root, 'docs/验收证据/story-2-2-tick-trace-2026-09-12T06-45-28-312Z.json'))),\n  capture_budget_ms: 30000, planned_guest_capture_ms: 25000, previous_capture_host_upper_ms: 2096.9204,\n  proxy: { status: 'not_run', reason: '本轮仅跟踪，尚未修复计时偏差' },\n  limitations: ['本次跟踪不证明时钟已修复或 A2 代理时限通过。', 'trace_pid 为内核任务标识，跨 PID 命名空间的数字匹配或截断名称不能单独证明进程身份。']\n};\nconst evidencePath = path.join(root, 'docs/验收证据/story-2-2-tick-trace-' + report.recorded_at.replaceAll(':', '-').replace('.', '-') + '.json');\nconst format = '{\"id\":{{json .Id}},\"name\":{{json .Name}},\"image\":{{json .Image}},\"status\":{{json .State.Status}},\"exit_code\":{{json .State.ExitCode}},\"started_at\":{{json .State.StartedAt}},\"finished_at\":{{json .State.FinishedAt}},\"project\":{{json (index .Config.Labels \"com.docker.compose.project\")}},\"mounts\":{{json .Mounts}},\"networks\":{{json .NetworkSettings.Networks}}}';\nasync function invoke(file, args) {\n  const result = await execFileAsync(file, args, { cwd: root, windowsHide: true, encoding: 'utf8', timeout: 10000, maxBuffer: 1024 * 1024 });\n  return result.stdout.trim();\n}\nasync function containers() {\n  const ids = (await invoke('docker', ['ps', '-a', '--no-trunc', '--format', '{{.ID}}'])).split(/\\r?\\n/).filter(Boolean);\n  if (!ids.length) return [];\n  const rows = (await invoke('docker', ['container', 'inspect', '--format', format, ...ids])).split(/\\r?\\n/).filter(Boolean).map(JSON.parse);\n  for (const row of rows) {\n    row.mounts.sort((a, b) => a.Destination.localeCompare(b.Destination));\n    row.networks = Object.keys(row.networks ?? {}).sort();\n  }\n  return rows.sort((a, b) => a.id.localeCompare(b.id));\n}\nfunction hashes() {\n  return files.map((file) => ({ path: file, sha256: sha(fs.readFileSync(path.join(root, file))) }));\n}\nasync function runProbe() {\n  const bootstrap = 'import base64,sys;exec(compile(base64.b64decode(sys.stdin.buffer.readline()),\"story_2_2_tick_trace\",\"exec\"))';\n  const child = spawn('wsl.exe', ['-d', 'Ubuntu-24.04', '-u', 'root', '--', 'python3', '-u', '-c', bootstrap, group],\n    { cwd: root, windowsHide: true, stdio: ['pipe', 'pipe', 'pipe'] });\n  let start;\n  let timer;\n  let readyTimer;\n  let stream = '';\n  let bytes = 0;\n  let result;\n  let protocolError;\n  const errors = [];\n  child.stdin.on('error', (error) => { protocolError ??= error.message; });\n  const stop = () => { if (!child.stdin.destroyed) child.stdin.end('{\"command\":\"stop\"}\\n'); };\n  process.once('SIGINT', stop);\n  child.stderr.on('data', (chunk) => { if (errors.reduce((n,b)=>n+b.length,0) < 65536) errors.push(chunk); });\n  const completion = new Promise((resolve, reject) => {\n    child.on('error', reject);\n    child.on('close', (code) => resolve(code));\n  });\n  child.stdout.on('data', (chunk) => {\n    try {\n      bytes += chunk.length;\n      if (bytes > 2 * 1024 * 1024) throw new Error('跟踪协议输出超限');\n      stream += chunk.toString('utf8');\n      let newline;\n      while ((newline = stream.indexOf('\\n')) >= 0) {\n        const line = stream.slice(0, newline).trim();\n        stream = stream.slice(newline + 1);\n        if (!line) continue;\n        const message = JSON.parse(line);\n        if (message.kind === 'ready') {\n          if (start) throw new Error('重复 ready');\n          clearTimeout(readyTimer);\n          report.buffer_total_kib = message.buffer_total_kib;\n          start = process.hrtime.bigint();\n          timer = setTimeout(stop, 27000);\n          child.stdin.write('{\"command\":\"start\"}\\n');\n          console.log('开始本次有界跟踪，最多 30 秒。');\n        } else if (message.kind === 'control_verified') {\n          console.log('只读对照已配对：trace PID ' + message.trace_pid + '，Ubuntu PID ' + message.local_pid + '。');\n        } else if (message.kind === 'tick_write') {\n          console.log('捕获 ADJ_TICK：PID ' + message.trace_pid + '，' + message.comm + '，tick=' + message.tick + '，返回=' + message.result + '。');\n        } else if (message.kind === 'trace_stopped') {\n          clearTimeout(timer);\n          report.enabled_duration_host_upper_ms = Number(process.hrtime.bigint() - start) / 1e6;\n          console.log('本次跟踪已停止，正在核对清理。');\n        } else if (message.kind === 'result') {\n          result = message.report;\n        }\n      }\n    } catch (error) {\n      protocolError ??= error.message;\n      stop();\n    }\n  });\n  readyTimer = setTimeout(stop, 10000);\n  child.stdin.write(Buffer.from(pythonSource, 'utf8').toString('base64') + '\\n');\n  const code = await completion;\n  clearTimeout(timer);\n  clearTimeout(readyTimer);\n  process.removeListener('SIGINT', stop);\n  child.stdin.destroy();\n  report.probe_exit_code = code;\n  report.trace = result ?? { status: 'failed', error: '探针没有返回结果' };\n  if (protocolError) report.protocol_error = protocolError;\n  const stderr = Buffer.concat(errors);\n  if (stderr.length) report.probe_stderr = stderr.includes(0) ? stderr.toString('utf16le') : stderr.toString('utf8');\n  report.total_capture_host_upper_ms = (report.enabled_duration_host_upper_ms ?? 0) + report.previous_capture_host_upper_ms;\n  if (code === 0 && !protocolError && report.total_capture_host_upper_ms <= 30000) report.status = 'completed';\n}\n\nlet baselineContainers;\nlet baselineFiles;\ntry {\n  if (fs.existsSync(evidencePath)) throw new Error('证据文件已存在');\n  const head = await invoke('git', ['rev-parse', 'HEAD']);\n  if (head !== report.baseline_commit) throw new Error('Git 基线变化');\n  baselineContainers = await containers();\n  baselineFiles = hashes();\n  console.log('保留基线：' + baselineContainers.length + ' 个既有容器，' + baselineFiles.length + ' 个文件。');\n  await runProbe();\n} catch (error) {\n  report.error = String(error.message ?? error);\n} finally {\n  try {\n    if (baselineContainers && baselineFiles) {\n      const afterContainers = await containers();\n      const afterFiles = hashes();\n      const comparedContainers = baselineContainers.map((before) => {\n        const after = afterContainers.find((row) => row.id === before.id);\n        const changed = Object.keys(before).filter((field) => JSON.stringify(before[field]) !== JSON.stringify(after?.[field]));\n        return { id: before.id, name: before.name, unchanged: changed.length === 0, changed_fields: changed };\n      });\n      const comparedFiles = baselineFiles.map((before) => ({\n        path: before.path, sha256_before: before.sha256,\n        sha256_after: afterFiles.find((file) => file.path === before.path)?.sha256\n      }));\n      const added = afterContainers.filter((row) => !baselineContainers.some((before) => before.id === row.id)).map((row) => row.id);\n      report.preservation = {\n        containers: comparedContainers, files: comparedFiles, new_container_ids: added,\n        normalization: '挂载按 Destination 排序，网络名排序；只读比较容器元数据与文件哈希',\n        passed: !added.length && comparedContainers.every((row) => row.unchanged) &&\n          comparedFiles.every((row) => row.sha256_before === row.sha256_after)\n      };\n      if (!report.preservation.passed) report.status = 'failed';\n    }\n  } catch (error) {\n    report.preservation = { passed: false, error: String(error.message ?? error) };\n    report.status = 'failed';\n  }\n  report.finished_at = new Date().toISOString();\n  fs.writeFileSync(evidencePath, JSON.stringify(report, null, 2) + '\\n', { encoding: 'utf8', flag: 'wx' });\n  console.log(JSON.stringify({ status: report.status, trace_status: report.trace?.status,\n    write_calls: report.trace?.writes?.length ?? 0, cleanup: report.trace?.cleanup,\n    preserved: report.preservation?.passed, evidence: evidencePath,\n    error: report.error ?? report.trace?.error ?? report.protocol_error ?? null }));\n}\nprocess.exitCode = report.status === 'completed' ? 0 : 1;\n",
+  "python_source_file": "zhiliao-a2-tick-trace-20260912.py",
+  "python_source_sha256": "3da2e24575a386d27781b4368bb32fe468b129b14a4235ee6a9707b33badda0b",
+  "python_source": "import ctypes\nimport errno\nimport json\nimport os\nimport pathlib\nimport re\nimport selectors\nimport signal\nimport sys\nimport time\n\nROOT = pathlib.Path(\"/sys/kernel/tracing\")\nNAME = sys.argv[1]\nassert re.fullmatch(r\"zhiliao_a2_tick_[0-9a-f]{12}\", NAME)\nINSTANCE = ROOT / \"instances\" / NAME\nCOMM = \"a2tick_\" + NAME[-8:]\nLIMIT = 1024 * 1024\nSTATE = {\"status\": \"failed\", \"instance\": str(INSTANCE), \"group\": NAME,\n         \"clock_parameters_written\": False, \"source_mode\": \"read_only_adjtimex\",\n         \"control\": None, \"writes\": [], \"counts\": {\"enter\": 0, \"leave\": 0},\n         \"issues\": [], \"raw_bytes\": 0, \"cleanup\": {\"status\": \"not_started\"}}\nCREATED = False\nREGISTERED = []\nENABLED = False\nPIPE = None\nSELECTOR = None\nPENDING = {}\nCONTROL_PENDING = []\nBUFFER = b\"\"\nSTART_RAW = None\n\n\ndef now():\n    return time.clock_gettime(time.CLOCK_MONOTONIC_RAW)\n\n\ndef emit(kind, **values):\n    print(json.dumps({\"kind\": kind, **values}, ensure_ascii=False), flush=True)\n\n\ndef read(file):\n    return pathlib.Path(file).read_text().strip()\n\n\ndef write(file, value):\n    with open(file, \"w\") as output:\n        output.write(str(value) + \"\\n\")\n\n\ndef append_event(value):\n    # 跟踪文件不支持追加打开时的定位，直接追加本次指令，保留原清单。\n    descriptor = os.open(ROOT / \"kprobe_events\", os.O_WRONLY | os.O_APPEND | os.O_CLOEXEC)\n    try:\n        data = (value + \"\\n\").encode(\"ascii\")\n        if os.write(descriptor, data) != len(data):\n            raise RuntimeError(\"动态事件指令没有完整写入\")\n    finally:\n        os.close(descriptor)\n\n\ndef identity(pid):\n    base = pathlib.Path(\"/proc\") / str(pid)\n    fields = {}\n    for line in read(base / \"status\").splitlines():\n        key, separator, value = line.partition(\":\")\n        if separator and key in (\"Name\", \"Pid\", \"Tgid\", \"PPid\", \"NSpid\", \"NStgid\"):\n            fields[key] = value.strip()\n    return {\"lookup_pid\": pid, \"fields\": fields,\n            \"exe\": os.readlink(base / \"exe\"),\n            \"pid_namespace\": os.readlink(base / \"ns/pid\"),\n            \"start_ticks\": read(base / \"stat\").rsplit(\")\", 1)[1].split()[19]}\n\n\ndef global_state():\n    return {\"current_tracer\": read(ROOT / \"current_tracer\"),\n            \"tracing_on\": read(ROOT / \"tracing_on\"),\n            \"trace_clock\": read(ROOT / \"trace_clock\"),\n            \"kprobe_events\": read(ROOT / \"kprobe_events\"),\n            \"adjtimex_enable\": read(ROOT / \"events/syscalls/sys_enter_adjtimex/enable\"),\n            \"clock_adjtime_enable\": read(ROOT / \"events/syscalls/sys_enter_clock_adjtime/enable\"),\n            \"instances\": sorted(p.name for p in (ROOT / \"instances\").iterdir() if p.name != NAME)}\n\n\nclass Timeval(ctypes.Structure):\n    _fields_ = [(\"tv_sec\", ctypes.c_long), (\"tv_usec\", ctypes.c_long)]\n\n\nclass TimexPrefix(ctypes.Structure):\n    _fields_ = [(\"modes\", ctypes.c_uint), (\"offset\", ctypes.c_long),\n                (\"freq\", ctypes.c_long), (\"maxerror\", ctypes.c_long),\n                (\"esterror\", ctypes.c_long), (\"status\", ctypes.c_int),\n                (\"constant\", ctypes.c_long), (\"precision\", ctypes.c_long),\n                (\"tolerance\", ctypes.c_long), (\"time\", Timeval),\n                (\"tick\", ctypes.c_long)]\n\n\nLIBC = ctypes.CDLL(None, use_errno=True)\nLIBC.adjtimex.argtypes = [ctypes.c_void_p]\nLIBC.adjtimex.restype = ctypes.c_int\nLIBC.prctl.argtypes = [ctypes.c_int, ctypes.c_void_p, ctypes.c_ulong,\n                      ctypes.c_ulong, ctypes.c_ulong]\nLIBC.prctl.restype = ctypes.c_int\n\n\ndef query_timex():\n    # 全零缓冲只查询参数，没有任何设置分支。\n    buffer = ctypes.create_string_buffer(1024)\n    assert TimexPrefix.from_buffer(buffer).modes == 0\n    ctypes.set_errno(0)\n    result = LIBC.adjtimex(ctypes.byref(buffer))\n    error = ctypes.get_errno()\n    value = TimexPrefix.from_buffer_copy(buffer.raw)\n    if result < 0:\n        raise OSError(error, os.strerror(error))\n    return {\"modes_input\": 0, \"result\": result, \"errno\": error,\n            \"tick_us\": value.tick, \"freq_scaled_ppm\": value.freq,\n            \"status\": value.status}\n\n\nLINE = re.compile(\n    r\"^\\s*(?P<comm>.+)-(?P<pid>\\d+)\\s+(?:\\([^)]*\\)\\s+)?\"\n    r\"\\[(?P<cpu>\\d+)\\].*?\\s(?P<time>\\d+\\.\\d+):\\s+\"\n    r\"(?:(?:[A-Za-z0-9_]+):)?(?P<event>enter|leave):\\s+(?P<payload>.*)$\")\n\n\ndef number(text):\n    return int(text, 16 if text.lower().startswith(\"0x\") else 10)\n\n\ndef consume_line(line):\n    if not line.strip():\n        return\n    match = LINE.match(line)\n    if not match:\n        if \"LOST\" in line:\n            STATE[\"issues\"].append(\"trace_pipe reported lost events\")\n            return\n        raise RuntimeError(\"无法解析本次跟踪行: \" + line[:200])\n    values = match.groupdict()\n    pid = int(values[\"pid\"])\n    event = values[\"event\"]\n    record = {\"trace_pid\": pid, \"comm\": values[\"comm\"].strip(),\n              \"cpu\": int(values[\"cpu\"]), \"time\": values[\"time\"]}\n    STATE[\"counts\"][event] += 1\n    if event == \"enter\":\n        modes = re.search(r\"\\bmodes=(0x[0-9a-fA-F]+|\\d+)\\b\", values[\"payload\"])\n        tick = re.search(r\"\\btick=(-?\\d+)\\b\", values[\"payload\"])\n        if not modes or not tick:\n            raise RuntimeError(\"入口事件缺少已约定字段\")\n        record.update({\"modes\": number(modes[1]), \"requested_tick\": int(tick[1])})\n        if pid in PENDING:\n            STATE[\"issues\"].append(\"同一线程缺少返回配对: \" + str(pid))\n        record[\"raw_enter\"] = line\n        PENDING[pid] = record\n        return\n    result = re.search(r\"\\bresult=(-?\\d+|0x[0-9a-fA-F]+)\\b\", values[\"payload\"])\n    if not result:\n        raise RuntimeError(\"返回事件缺少返回值\")\n    incoming = PENDING.pop(pid, None)\n    if incoming is None:\n        STATE.setdefault(\"unpaired_returns\", 0)\n        STATE[\"unpaired_returns\"] += 1\n        return\n    raw_result = number(result[1])\n    # do_adjtimex 返回 C int；保留原始寄存器值并按低 32 位解释。\n    signed_result = ctypes.c_int32(raw_result & 0xffffffff).value\n    incoming.update({\"return_time\": record[\"time\"], \"return_cpu\": record[\"cpu\"],\n                     \"raw_return_value\": raw_result, \"result\": signed_result,\n                     \"successful_return\": signed_result >= 0, \"raw_leave\": line})\n    window = STATE.get(\"control_window\")\n    if (incoming[\"modes\"] == 0 and window is not None and\n            window[\"before\"] - 0.000001 <= float(incoming[\"time\"]) and\n            float(incoming[\"return_time\"]) <= window[\"after\"] + 0.000001):\n        CONTROL_PENDING.append(incoming)\n    elif incoming[\"modes\"] & 0x4000:\n        STATE[\"writes\"].append(incoming)\n        emit(\"tick_write\", trace_pid=pid, comm=incoming[\"comm\"],\n             modes=incoming[\"modes\"], tick=incoming[\"requested_tick\"],\n             result=signed_result)\n\n\ndef drain():\n    global BUFFER\n    while True:\n        try:\n            chunk = os.read(PIPE, 65536)\n        except BlockingIOError:\n            return\n        if not chunk:\n            return\n        STATE[\"raw_bytes\"] += len(chunk)\n        if STATE[\"raw_bytes\"] > LIMIT:\n            raise RuntimeError(\"跟踪导出超出 1 MiB 上限\")\n        BUFFER += chunk\n        while b\"\\n\" in BUFFER:\n            line, BUFFER = BUFFER.split(b\"\\n\", 1)\n            consume_line(line.decode(\"utf-8\", errors=\"strict\"))\n\n\ndef stop_trace():\n    global ENABLED\n    if CREATED and INSTANCE.exists():\n        write(INSTANCE / \"tracing_on\", 0)\n        for event in (\"enter\", \"leave\"):\n            target = INSTANCE / \"events\" / NAME / event / \"enable\"\n            if target.exists():\n                write(target, 0)\n    if ENABLED:\n        ENABLED = False\n        STATE[\"enabled_duration_raw_seconds\"] = now() - START_RAW\n        emit(\"trace_stopped\", duration_raw_seconds=STATE[\"enabled_duration_raw_seconds\"])\n\n\ndef cleanup():\n    global PIPE\n    failures = []\n    try:\n        stop_trace()\n    except Exception as error:\n        failures.append(\"停止跟踪: \" + str(error))\n    if SELECTOR is not None:\n        SELECTOR.close()\n    if PIPE is not None:\n        os.close(PIPE)\n        PIPE = None\n    if CREATED:\n        try:\n            assert INSTANCE.parent == ROOT / \"instances\"\n            INSTANCE.rmdir()\n        except Exception as error:\n            failures.append(\"删除本次实例: \" + str(error))\n    for event in reversed(REGISTERED):\n        try:\n            append_event(\"-:\" + NAME + \"/\" + event)\n        except Exception as error:\n            failures.append(\"删除本次事件 \" + event + \": \" + str(error))\n    try:\n        remaining = [line for line in read(ROOT / \"kprobe_events\").splitlines()\n                     if \":\" + NAME + \"/\" in line]\n        after = global_state()\n        STATE[\"global_after\"] = after\n        STATE[\"global_unchanged\"] = after == STATE.get(\"global_before\")\n        if INSTANCE.exists() or remaining:\n            failures.append(\"本次跟踪资源有残留\")\n        if not STATE[\"global_unchanged\"]:\n            failures.append(\"既有全局跟踪状态发生变化\")\n        STATE[\"cleanup\"] = {\"status\": \"removed\" if not failures else \"failed\",\n                            \"instance_exists\": INSTANCE.exists(),\n                            \"remaining_events\": remaining, \"errors\": failures}\n    except Exception as error:\n        failures.append(str(error))\n        STATE[\"cleanup\"] = {\"status\": \"failed\", \"errors\": failures}\n\n\ndef interrupted(signum, _frame):\n    raise RuntimeError(\"收到中断信号 \" + str(signum))\n\n\nsignal.signal(signal.SIGTERM, interrupted)\nsignal.signal(signal.SIGINT, interrupted)\ntry:\n    assert ctypes.sizeof(ctypes.c_long) == 8\n    assert TimexPrefix.modes.offset == 0 and TimexPrefix.tick.offset == 88\n    assert os.sysconf(\"SC_CLK_TCK\") == 100\n    assert os.uname().machine == \"x86_64\"\n    assert not INSTANCE.exists()\n    assert \"do_adjtimex\" in {line.split()[0] for line in read(ROOT / \"available_filter_functions\").splitlines()}\n    assert os.cpu_count() * 64 <= 8192\n    STATE[\"kernel\"] = os.uname().release\n    STATE[\"global_before\"] = global_state()\n    assert not any(\":\" + NAME + \"/\" in line for line in STATE[\"global_before\"][\"kprobe_events\"].splitlines())\n    STATE[\"clocksource_before\"] = read(\"/sys/devices/system/clocksource/clocksource0/current_clocksource\")\n    STATE[\"timex_before\"] = query_timex()\n    assert LIBC.prctl(15, ctypes.c_char_p(COMM.encode()), 0, 0, 0) == 0\n    STATE[\"self_identity\"] = identity(os.getpid())\n    INSTANCE.mkdir()\n    CREATED = True\n    write(INSTANCE / \"tracing_on\", 0)\n    assert read(INSTANCE / \"current_tracer\") == \"nop\"\n    write(INSTANCE / \"buffer_size_kb\", 64)\n    total = int(read(INSTANCE / \"buffer_total_size_kb\").split()[0])\n    assert 0 < total <= 8192\n    STATE[\"buffer_total_kib\"] = total\n    assert \"mono_raw\" in read(INSTANCE / \"trace_clock\").replace(\"[\", \"\").replace(\"]\", \"\").split()\n    write(INSTANCE / \"trace_clock\", \"mono_raw\")\n    definitions = {\n        \"enter\": \"p:\" + NAME + \"/enter do_adjtimex modes=+0($arg1):u32 tick=+88($arg1):s64\",\n        \"leave\": \"r:\" + NAME + \"/leave do_adjtimex result=$retval:s64\"}\n    STATE[\"definitions\"] = definitions\n    for event, definition in definitions.items():\n        append_event(definition)\n        REGISTERED.append(event)\n        assert read(ROOT / \"events\" / NAME / event / \"enable\") == \"0\"\n        for other in STATE[\"global_before\"][\"instances\"]:\n            assert read(ROOT / \"instances\" / other / \"events\" / NAME / event / \"enable\") == \"0\"\n    formats = {event: read(INSTANCE / \"events\" / NAME / event / \"format\") for event in definitions}\n    STATE[\"event_formats\"] = formats\n    for field, size in ((\"modes\", 4), (\"tick\", 8)):\n        assert re.search(r\"field:[^;\\n]*\\b\" + field + r\";\\s*offset:\\d+;\\s*size:\" + str(size) + r\";\", formats[\"enter\"])\n    assert re.search(r\"field:[^;\\n]*\\bresult;\\s*offset:\\d+;\\s*size:8;\", formats[\"leave\"])\n    PIPE = os.open(INSTANCE / \"trace_pipe\", os.O_RDONLY | os.O_NONBLOCK)\n    SELECTOR = selectors.DefaultSelector()\n    SELECTOR.register(PIPE, selectors.EVENT_READ, \"trace\")\n    SELECTOR.register(sys.stdin, selectors.EVENT_READ, \"command\")\n    emit(\"ready\", name=NAME, buffer_total_kib=total)\n    command = json.loads(sys.stdin.buffer.readline())\n    if command.get(\"command\") != \"start\":\n        raise RuntimeError(\"跟踪未收到启动命令\")\n    START_RAW = now()\n    ENABLED = True\n    write(INSTANCE / \"events\" / NAME / \"leave\" / \"enable\", 1)\n    write(INSTANCE / \"events\" / NAME / \"enter\" / \"enable\", 1)\n    write(INSTANCE / \"tracing_on\", 1)\n    emit(\"trace_started\")\n    before_control = now()\n    STATE[\"control_query\"] = query_timex()\n    STATE[\"control_window\"] = {\"before\": before_control, \"after\": now(),\n                               \"clock\": \"CLOCK_MONOTONIC_RAW\", \"rounding_seconds\": 0.000001}\n    end_at = START_RAW + 25.0\n    while now() < end_at:\n        for key, _ in SELECTOR.select(timeout=min(0.1, max(0, end_at - now()))):\n            if key.data == \"trace\":\n                drain()\n            else:\n                command_line = sys.stdin.buffer.readline()\n                if not command_line:\n                    raise RuntimeError(\"宿主机连接已关闭\")\n                if json.loads(command_line).get(\"command\") == \"stop\":\n                    STATE[\"stop_reason\"] = \"host_deadline\"\n                    end_at = now()\n        if CONTROL_PENDING and STATE[\"control\"] is None:\n            assert len(CONTROL_PENDING) == 1\n            control = CONTROL_PENDING[0]\n            assert control[\"requested_tick\"] == 0\n            assert control[\"result\"] == STATE[\"control_query\"][\"result\"]\n            STATE[\"control\"] = control\n            emit(\"control_verified\", trace_pid=control[\"trace_pid\"],\n                 local_pid=os.getpid(), result=control[\"result\"])\n        if STATE[\"control\"] is None and now() - START_RAW > 2.0:\n            raise RuntimeError(\"只读对照未能在 2 秒内完成入口和返回核对\")\n    STATE.setdefault(\"stop_reason\", \"bounded_capture_complete\")\n    stop_trace()\n    drain()\n    if BUFFER:\n        STATE[\"issues\"].append(\"结束时存在未完成的跟踪行\")\n    if PENDING:\n        STATE[\"issues\"].append(\"结束时存在未配对的入口\")\n    statistics = {}\n    for file in sorted((INSTANCE / \"per_cpu\").glob(\"cpu*/stats\")):\n        values = {}\n        for line in read(file).splitlines():\n            key, separator, value = line.partition(\":\")\n            if separator and key.strip() in (\"overrun\", \"commit overrun\", \"dropped events\"):\n                values[key.strip()] = int(value.strip())\n        statistics[file.parent.name] = values\n        if any(values.values()):\n            STATE[\"issues\"].append(\"缓冲发生丢失: \" + file.parent.name)\n    STATE[\"buffer_loss_stats\"] = statistics\n    profiles = [line for line in read(ROOT / \"kprobe_profile\").splitlines() if NAME in line]\n    STATE[\"kprobe_profile\"] = profiles\n    for line in profiles:\n        if int(line.split()[-1]) != 0:\n            STATE[\"issues\"].append(\"动态探针有漏记\")\n    STATE[\"timex_after\"] = query_timex()\n    STATE[\"clocksource_after\"] = read(\"/sys/devices/system/clocksource/clocksource0/current_clocksource\")\n    STATE[\"status\"] = \"captured\" if STATE[\"writes\"] else \"no_tick_write_captured\"\n    if STATE[\"issues\"] or STATE[\"control\"] is None:\n        STATE[\"status\"] = \"incomplete\"\nexcept Exception as error:\n    STATE[\"error\"] = type(error).__name__ + \": \" + str(error)\nfinally:\n    cleanup()\n    if STATE[\"cleanup\"][\"status\"] != \"removed\":\n        STATE[\"status\"] = \"failed\"\n    emit(\"result\", report=STATE)\nsys.exit(0 if STATE[\"status\"] in (\"captured\", \"no_tick_write_captured\") else 1)\n",
+  "prior_maintenance_sha256": "39d1394e690c4ba7cc626aadba5ea88c707a54b991740db22e4a2210a19f8a54",
+  "preparation_fix": "首次准备阶段修正 open(a) 的 EINVAL；第二次按进程名匹配只读对照未成功，2.1 秒内停止并清理。本次按同源 mono_raw 调用时间窗唯一匹配只读对照，时长缩为 25 秒，两段实际采集合计保持在 30 秒以内",
+  "prior_trace_attempt_sha256": "0afa0cdaf8d4b182f6e627a9d7cf044f5079eaf27a883c310ce5d922623d4d1c",
+  "prior_incomplete_trace_sha256": "195f8e68f64ed59b65751a4d0ddabeaee164ef14ad6039fa6201bb1907f32968",
+  "capture_budget_ms": 30000,
+  "planned_guest_capture_ms": 25000,
+  "previous_capture_host_upper_ms": 2096.9204,
+  "proxy": {
+    "status": "not_run",
+    "reason": "本轮仅跟踪，尚未修复计时偏差"
+  },
+  "limitations": [
+    "本次跟踪不证明时钟已修复或 A2 代理时限通过。",
+    "trace_pid 为内核任务标识，跨 PID 命名空间的数字匹配或截断名称不能单独证明进程身份。"
+  ],
+  "buffer_total_kib": 1608,
+  "enabled_duration_host_upper_ms": 25009.5751,
+  "probe_exit_code": 0,
+  "trace": {
+    "status": "captured",
+    "instance": "/sys/kernel/tracing/instances/zhiliao_a2_tick_74e96582a651",
+    "group": "zhiliao_a2_tick_74e96582a651",
+    "clock_parameters_written": false,
+    "source_mode": "read_only_adjtimex",
+    "control": {
+      "trace_pid": 42098,
+      "comm": "<...>",
+      "cpu": 8,
+      "time": "78509.158126",
+      "modes": 0,
+      "requested_tick": 0,
+      "raw_enter": "           <...>-42098   [008] ..... 78509.158126: enter: (do_adjtimex+0x4/0x340) modes=0 tick=0",
+      "return_time": "78509.158133",
+      "return_cpu": 8,
+      "raw_return_value": 0,
+      "result": 0,
+      "successful_return": true,
+      "raw_leave": "           <...>-42098   [008] ..... 78509.158133: leave: (posix_clock_realtime_adj+0x15/0x20 <- do_adjtimex) result=0"
+    },
+    "writes": [
+      {
+        "trace_pid": 308,
+        "comm": "chronyd",
+        "cpu": 0,
+        "time": "78512.737551",
+        "modes": 16386,
+        "requested_tick": 10324,
+        "raw_enter": "         chronyd-308     [000] ..... 78512.737551: enter: (do_adjtimex+0x4/0x340) modes=16386 tick=10324",
+        "return_time": "78512.737552",
+        "return_cpu": 0,
+        "raw_return_value": 0,
+        "result": 0,
+        "successful_return": true,
+        "raw_leave": "         chronyd-308     [000] ..... 78512.737552: leave: (posix_clock_realtime_adj+0x15/0x20 <- do_adjtimex) result=0"
+      },
+      {
+        "trace_pid": 308,
+        "comm": "chronyd",
+        "cpu": 0,
+        "time": "78512.737553",
+        "modes": 16386,
+        "requested_tick": 10324,
+        "raw_enter": "         chronyd-308     [000] ..... 78512.737553: enter: (do_adjtimex+0x4/0x340) modes=16386 tick=10324",
+        "return_time": "78512.737554",
+        "return_cpu": 0,
+        "raw_return_value": 0,
+        "result": 0,
+        "successful_return": true,
+        "raw_leave": "         chronyd-308     [000] ..... 78512.737554: leave: (posix_clock_realtime_adj+0x15/0x20 <- do_adjtimex) result=0"
+      },
+      {
+        "trace_pid": 308,
+        "comm": "chronyd",
+        "cpu": 0,
+        "time": "78520.712116",
+        "modes": 16386,
+        "requested_tick": 10324,
+        "raw_enter": "         chronyd-308     [000] ..... 78520.712116: enter: (do_adjtimex+0x4/0x340) modes=16386 tick=10324",
+        "return_time": "78520.712119",
+        "return_cpu": 0,
+        "raw_return_value": 0,
+        "result": 0,
+        "successful_return": true,
+        "raw_leave": "         chronyd-308     [000] ..... 78520.712119: leave: (posix_clock_realtime_adj+0x15/0x20 <- do_adjtimex) result=0"
+      },
+      {
+        "trace_pid": 308,
+        "comm": "chronyd",
+        "cpu": 0,
+        "time": "78520.712120",
+        "modes": 16386,
+        "requested_tick": 10324,
+        "raw_enter": "         chronyd-308     [000] ..... 78520.712120: enter: (do_adjtimex+0x4/0x340) modes=16386 tick=10324",
+        "return_time": "78520.712122",
+        "return_cpu": 0,
+        "raw_return_value": 0,
+        "result": 0,
+        "successful_return": true,
+        "raw_leave": "         chronyd-308     [000] ..... 78520.712122: leave: (posix_clock_realtime_adj+0x15/0x20 <- do_adjtimex) result=0"
+      },
+      {
+        "trace_pid": 308,
+        "comm": "chronyd",
+        "cpu": 18,
+        "time": "78528.654442",
+        "modes": 16386,
+        "requested_tick": 10324,
+        "raw_enter": "         chronyd-308     [018] ..... 78528.654442: enter: (do_adjtimex+0x4/0x340) modes=16386 tick=10324",
+        "return_time": "78528.654444",
+        "return_cpu": 18,
+        "raw_return_value": 0,
+        "result": 0,
+        "successful_return": true,
+        "raw_leave": "         chronyd-308     [018] ..... 78528.654444: leave: (posix_clock_realtime_adj+0x15/0x20 <- do_adjtimex) result=0"
+      },
+      {
+        "trace_pid": 308,
+        "comm": "chronyd",
+        "cpu": 18,
+        "time": "78528.654445",
+        "modes": 16386,
+        "requested_tick": 10322,
+        "raw_enter": "         chronyd-308     [018] ..... 78528.654445: enter: (do_adjtimex+0x4/0x340) modes=16386 tick=10322",
+        "return_time": "78528.654446",
+        "return_cpu": 18,
+        "raw_return_value": 0,
+        "result": 0,
+        "successful_return": true,
+        "raw_leave": "         chronyd-308     [018] ..... 78528.654446: leave: (posix_clock_realtime_adj+0x15/0x20 <- do_adjtimex) result=0"
+      }
+    ],
+    "counts": {
+      "enter": 13,
+      "leave": 13
+    },
+    "issues": [],
+    "raw_bytes": 2862,
+    "cleanup": {
+      "status": "removed",
+      "instance_exists": false,
+      "remaining_events": [],
+      "errors": []
+    },
+    "kernel": "6.6.87.2-microsoft-standard-WSL2",
+    "global_before": {
+      "current_tracer": "nop",
+      "tracing_on": "1",
+      "trace_clock": "[local] global counter uptime perf mono mono_raw boot tai x86-tsc",
+      "kprobe_events": "",
+      "adjtimex_enable": "0",
+      "clock_adjtime_enable": "0",
+      "instances": []
+    },
+    "clocksource_before": "tsc",
+    "timex_before": {
+      "modes_input": 0,
+      "result": 0,
+      "errno": 0,
+      "tick_us": 10324,
+      "freq_scaled_ppm": -6540712,
+      "status": 8193
+    },
+    "self_identity": {
+      "lookup_pid": 5563,
+      "fields": {
+        "Name": "a2tick_6582a651",
+        "Tgid": "5563",
+        "Pid": "5563",
+        "PPid": "5557",
+        "NStgid": "5563",
+        "NSpid": "5563"
+      },
+      "exe": "/usr/bin/python3.12",
+      "pid_namespace": "pid:[4026532235]",
+      "start_ticks": "7963116"
+    },
+    "buffer_total_kib": 1608,
+    "definitions": {
+      "enter": "p:zhiliao_a2_tick_74e96582a651/enter do_adjtimex modes=+0($arg1):u32 tick=+88($arg1):s64",
+      "leave": "r:zhiliao_a2_tick_74e96582a651/leave do_adjtimex result=$retval:s64"
+    },
+    "event_formats": {
+      "enter": "name: enter\nID: 2682\nformat:\n\tfield:unsigned short common_type;\toffset:0;\tsize:2;\tsigned:0;\n\tfield:unsigned char common_flags;\toffset:2;\tsize:1;\tsigned:0;\n\tfield:unsigned char common_preempt_count;\toffset:3;\tsize:1;\tsigned:0;\n\tfield:int common_pid;\toffset:4;\tsize:4;\tsigned:1;\n\n\tfield:unsigned long __probe_ip;\toffset:8;\tsize:8;\tsigned:0;\n\tfield:u32 modes;\toffset:16;\tsize:4;\tsigned:0;\n\tfield:s64 tick;\toffset:20;\tsize:8;\tsigned:1;\n\nprint fmt: \"(%lx) modes=%u tick=%Ld\", REC->__probe_ip, REC->modes, REC->tick",
+      "leave": "name: leave\nID: 2683\nformat:\n\tfield:unsigned short common_type;\toffset:0;\tsize:2;\tsigned:0;\n\tfield:unsigned char common_flags;\toffset:2;\tsize:1;\tsigned:0;\n\tfield:unsigned char common_preempt_count;\toffset:3;\tsize:1;\tsigned:0;\n\tfield:int common_pid;\toffset:4;\tsize:4;\tsigned:1;\n\n\tfield:unsigned long __probe_func;\toffset:8;\tsize:8;\tsigned:0;\n\tfield:unsigned long __probe_ret_ip;\toffset:16;\tsize:8;\tsigned:0;\n\tfield:s64 result;\toffset:24;\tsize:8;\tsigned:1;\n\nprint fmt: \"(%lx <- %lx) result=%Ld\", REC->__probe_func, REC->__probe_ret_ip, REC->result"
+    },
+    "control_query": {
+      "modes_input": 0,
+      "result": 0,
+      "errno": 0,
+      "tick_us": 10324,
+      "freq_scaled_ppm": -6540712,
+      "status": 8193
+    },
+    "control_window": {
+      "before": 78509.158100379,
+      "after": 78509.158138985,
+      "clock": "CLOCK_MONOTONIC_RAW",
+      "rounding_seconds": 0.000001
+    },
+    "stop_reason": "bounded_capture_complete",
+    "enabled_duration_raw_seconds": 25.008782510005403,
+    "buffer_loss_stats": {
+      "cpu0": {
+        "overrun": 0,
+        "commit overrun": 0,
+        "dropped events": 0
+      },
+      "cpu1": {
+        "overrun": 0,
+        "commit overrun": 0,
+        "dropped events": 0
+      },
+      "cpu10": {
+        "overrun": 0,
+        "commit overrun": 0,
+        "dropped events": 0
+      },
+      "cpu11": {
+        "overrun": 0,
+        "commit overrun": 0,
+        "dropped events": 0
+      },
+      "cpu12": {
+        "overrun": 0,
+        "commit overrun": 0,
+        "dropped events": 0
+      },
+      "cpu13": {
+        "overrun": 0,
+        "commit overrun": 0,
+        "dropped events": 0
+      },
+      "cpu14": {
+        "overrun": 0,
+        "commit overrun": 0,
+        "dropped events": 0
+      },
+      "cpu15": {
+        "overrun": 0,
+        "commit overrun": 0,
+        "dropped events": 0
+      },
+      "cpu16": {
+        "overrun": 0,
+        "commit overrun": 0,
+        "dropped events": 0
+      },
+      "cpu17": {
+        "overrun": 0,
+        "commit overrun": 0,
+        "dropped events": 0
+      },
+      "cpu18": {
+        "overrun": 0,
+        "commit overrun": 0,
+        "dropped events": 0
+      },
+      "cpu19": {
+        "overrun": 0,
+        "commit overrun": 0,
+        "dropped events": 0
+      },
+      "cpu2": {
+        "overrun": 0,
+        "commit overrun": 0,
+        "dropped events": 0
+      },
+      "cpu20": {
+        "overrun": 0,
+        "commit overrun": 0,
+        "dropped events": 0
+      },
+      "cpu21": {
+        "overrun": 0,
+        "commit overrun": 0,
+        "dropped events": 0
+      },
+      "cpu22": {
+        "overrun": 0,
+        "commit overrun": 0,
+        "dropped events": 0
+      },
+      "cpu23": {
+        "overrun": 0,
+        "commit overrun": 0,
+        "dropped events": 0
+      },
+      "cpu3": {
+        "overrun": 0,
+        "commit overrun": 0,
+        "dropped events": 0
+      },
+      "cpu4": {
+        "overrun": 0,
+        "commit overrun": 0,
+        "dropped events": 0
+      },
+      "cpu5": {
+        "overrun": 0,
+        "commit overrun": 0,
+        "dropped events": 0
+      },
+      "cpu6": {
+        "overrun": 0,
+        "commit overrun": 0,
+        "dropped events": 0
+      },
+      "cpu7": {
+        "overrun": 0,
+        "commit overrun": 0,
+        "dropped events": 0
+      },
+      "cpu8": {
+        "overrun": 0,
+        "commit overrun": 0,
+        "dropped events": 0
+      },
+      "cpu9": {
+        "overrun": 0,
+        "commit overrun": 0,
+        "dropped events": 0
+      }
+    },
+    "kprobe_profile": [],
+    "timex_after": {
+      "modes_input": 0,
+      "result": 0,
+      "errno": 0,
+      "tick_us": 10322,
+      "freq_scaled_ppm": 2783832,
+      "status": 0
+    },
+    "clocksource_after": "tsc",
+    "global_after": {
+      "current_tracer": "nop",
+      "tracing_on": "1",
+      "trace_clock": "[local] global counter uptime perf mono mono_raw boot tai x86-tsc",
+      "kprobe_events": "",
+      "adjtimex_enable": "0",
+      "clock_adjtime_enable": "0",
+      "instances": []
+    },
+    "global_unchanged": true
+  },
+  "probe_stderr": "wsl: 检测到 localhost 代理配置，但未镜像到 WSL。NAT 模式下的 WSL 不支持 localhost 代理。\r\n",
+  "total_capture_host_upper_ms": 27106.495499999997,
+  "preservation": {
+    "containers": [
+      {
+        "id": "254c7caca374780a6c1a3bea1c2c6ba59d6ab092de155c34f8efd3cd411532c8",
+        "name": "/zhiliao",
+        "unchanged": true,
+        "changed_fields": []
+      },
+      {
+        "id": "50a70f44a32e78adf331f7084743f042001eb5b650ee7af849441ed6a14a85c0",
+        "name": "/bilinote-nginx",
+        "unchanged": true,
+        "changed_fields": []
+      },
+      {
+        "id": "5d05095aa56b26fee8ff02b3372764d8300cc7b1851773eca5ee0a95ed3f675f",
+        "name": "/zhiliao-smoke-20260910-081121-app-1",
+        "unchanged": true,
+        "changed_fields": []
+      },
+      {
+        "id": "ab1926223971ae43ca775c7078f16057bde76b5e2f53aa6856382830542c3e4a",
+        "name": "/bilinote-frontend",
+        "unchanged": true,
+        "changed_fields": []
+      },
+      {
+        "id": "cd07490a30d9cd068c4552f0f528dacecd9349eb2a60c1dbf9f8c18333fe83ea",
+        "name": "/zhiliao-smoke-20260910-082135-app-1",
+        "unchanged": true,
+        "changed_fields": []
+      },
+      {
+        "id": "ea240066dd4a847db38ef758917c36a04be31191329ab6c995bdc94cd83fc721",
+        "name": "/zhiliao-rc",
+        "unchanged": true,
+        "changed_fields": []
+      },
+      {
+        "id": "f61337186432f4b8be3bba6578ebb2a3f768cd39baf5349a0fc19c53f224ef81",
+        "name": "/bilinote-backend",
+        "unchanged": true,
+        "changed_fields": []
+      }
+    ],
+    "files": [
+      {
+        "path": ".dockerignore",
+        "sha256_before": "859c037c021f8004b5785e9134e38425d4cf4c54c8416a625707e13c6a1637e4",
+        "sha256_after": "859c037c021f8004b5785e9134e38425d4cf4c54c8416a625707e13c6a1637e4"
+      },
+      {
+        "path": ".gitignore",
+        "sha256_before": "1782f3e74113b3febf8659bb4c3dc607c9e3873cd38829ab7326da580e075e03",
+        "sha256_after": "1782f3e74113b3febf8659bb4c3dc607c9e3873cd38829ab7326da580e075e03"
+      },
+      {
+        "path": "Dockerfile",
+        "sha256_before": "19b26ee235928d6d360edc9b5c803427302eb90d9a8dc8d231482ba6380e6668",
+        "sha256_after": "19b26ee235928d6d360edc9b5c803427302eb90d9a8dc8d231482ba6380e6668"
+      },
+      {
+        "path": "README.en.md",
+        "sha256_before": "8d3003e3bb47685b2e6cd5369ed0fa5477a14835770e663653537d84de19b4fc",
+        "sha256_after": "8d3003e3bb47685b2e6cd5369ed0fa5477a14835770e663653537d84de19b4fc"
+      },
+      {
+        "path": "README.md",
+        "sha256_before": "20f0c9229aabe090e4b508efb1a222c83c96382c846391ed0888b290ca7d0a0c",
+        "sha256_after": "20f0c9229aabe090e4b508efb1a222c83c96382c846391ed0888b290ca7d0a0c"
+      },
+      {
+        "path": "_bmad-output/implementation-artifacts/spec-2-1-server-demo-boundary.md",
+        "sha256_before": "002a58d4db6835ca57c2672ddce0a1c8fc3c4ce23e640e823725174c36cf68f4",
+        "sha256_after": "002a58d4db6835ca57c2672ddce0a1c8fc3c4ce23e640e823725174c36cf68f4"
+      },
+      {
+        "path": "_bmad-output/implementation-artifacts/spec-2-2-isolate-demo-deployment-and-limit-resources.md",
+        "sha256_before": "6995823ddf0604e1c56ef3d3c7c7240724550d4015227eb120ef33cadc9050d5",
+        "sha256_after": "6995823ddf0604e1c56ef3d3c7c7240724550d4015227eb120ef33cadc9050d5"
+      },
+      {
+        "path": "_bmad-output/implementation-artifacts/sprint-status.yaml",
+        "sha256_before": "951d4bae2bf48517ad12d28da36fb078184abcce0a4d887ed8cea77573929e1a",
+        "sha256_after": "951d4bae2bf48517ad12d28da36fb078184abcce0a4d887ed8cea77573929e1a"
+      },
+      {
+        "path": "docker-compose.demo.proxy-verify.yml",
+        "sha256_before": "db8eed5296212444d435cd378cae07b97d3e8d24f1a58bdb40b16ed4813cb05d",
+        "sha256_after": "db8eed5296212444d435cd378cae07b97d3e8d24f1a58bdb40b16ed4813cb05d"
+      },
+      {
+        "path": "docker-compose.demo.verify.yml",
+        "sha256_before": "2f21847f6798764d6929991855f848f83cd4bfd6345ea4f8638ed2b255de22f1",
+        "sha256_after": "2f21847f6798764d6929991855f848f83cd4bfd6345ea4f8638ed2b255de22f1"
+      },
+      {
+        "path": "docker-compose.demo.yml",
+        "sha256_before": "f259c2e5fd7809bc872492c5eb753a5ab54389969c3106a6ff0e926f070455f2",
+        "sha256_after": "f259c2e5fd7809bc872492c5eb753a5ab54389969c3106a6ff0e926f070455f2"
+      },
+      {
+        "path": "docker-compose.yml",
+        "sha256_before": "70e6867a5e5e686c835c0830d96229440aa6be5f58a132a978002f40e82bfd4b",
+        "sha256_after": "70e6867a5e5e686c835c0830d96229440aa6be5f58a132a978002f40e82bfd4b"
+      },
+      {
+        "path": "docs/Demo部署隔离验收-2026-09-10.md",
+        "sha256_before": "67bda55751445f9ddc826b4062de10aace5a2091f4ff7e3bcf8077cd8b12376c",
+        "sha256_after": "67bda55751445f9ddc826b4062de10aace5a2091f4ff7e3bcf8077cd8b12376c"
+      },
+      {
+        "path": "docs/README.md",
+        "sha256_before": "8d5191d4726fba32b94a9e9fb567a8a1103bda20377846a534fe5074ec2329bd",
+        "sha256_after": "8d5191d4726fba32b94a9e9fb567a8a1103bda20377846a534fe5074ec2329bd"
+      },
+      {
+        "path": "docs/Story-2.2-剩余验收实施方案-2026-09-11.md",
+        "sha256_before": "e973207216356bd65f8006e17b0e525ed1cd66e2f06bb75ba5c7737a972884ff",
+        "sha256_after": "e973207216356bd65f8006e17b0e525ed1cd66e2f06bb75ba5c7737a972884ff"
+      },
+      {
+        "path": "docs/adr/0026-demo-ingress-isolation.md",
+        "sha256_before": "3f93dc8508c54da6858d45fbcd7a374c74ee77d6c1e1d230b3308f38271d2ff6",
+        "sha256_after": "3f93dc8508c54da6858d45fbcd7a374c74ee77d6c1e1d230b3308f38271d2ff6"
+      },
+      {
+        "path": "docs/首次使用与故障排查.md",
+        "sha256_before": "6daedac6cdaa7182c2596f315c157b608490961fb6fd998ef2b67f790a660dfd",
+        "sha256_after": "6daedac6cdaa7182c2596f315c157b608490961fb6fd998ef2b67f790a660dfd"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-cleanup-2026-09-12-a2.json",
+        "sha256_before": "3776b40ef26b14d20d8c6bf80bfb28ede059764e02c602961bec08cde20d8d21",
+        "sha256_after": "3776b40ef26b14d20d8c6bf80bfb28ede059764e02c602961bec08cde20d8d21"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-clock-2026-09-12T03-44-50-581Z.json",
+        "sha256_before": "f5513284bca9806b410df289eff9fe14aecce2cb5de5576931a82da1c019863c",
+        "sha256_after": "f5513284bca9806b410df289eff9fe14aecce2cb5de5576931a82da1c019863c"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-clock-diagnostics-2026-09-12T04-59-16-594Z.json",
+        "sha256_before": "7da80f4332426bdd3919b35b72a2d593ba71b1dd0f2815aaa8feabc261fc825f",
+        "sha256_after": "7da80f4332426bdd3919b35b72a2d593ba71b1dd0f2815aaa8feabc261fc825f"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-clock-environment-2026-09-12-a2.json",
+        "sha256_before": "bdf2529ab06e45466b416f58229025f4def1a160f18fbc77797d910802ba6aa1",
+        "sha256_after": "bdf2529ab06e45466b416f58229025f4def1a160f18fbc77797d910802ba6aa1"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-clock-maintenance-2026-09-12T04-36-26-291Z.json",
+        "sha256_before": "2ff072b07c85559631be36fdb40d8ffe94a4888f750a8e9319f8fec46f262b36",
+        "sha256_after": "2ff072b07c85559631be36fdb40d8ffe94a4888f750a8e9319f8fec46f262b36"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-clock-maintenance-2026-09-12T04-53-42-385Z.json",
+        "sha256_before": "df7c326afe5acce2a2315a16955dbfa52f57de869b45324831203d8e32cd74b5",
+        "sha256_after": "df7c326afe5acce2a2315a16955dbfa52f57de869b45324831203d8e32cd74b5"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-environment-2026-09-11T08-37-01Z.json",
+        "sha256_before": "d78972e0f1272655f9cfd8f466930d527befac5301984e11728415c0bff3ae99",
+        "sha256_after": "d78972e0f1272655f9cfd8f466930d527befac5301984e11728415c0bff3ae99"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-network-2026-09-12-a2-final.json",
+        "sha256_before": "10a67ce81458721c89424b8717e931dcff2d44cea1c4b838dd28e9a107bab323",
+        "sha256_after": "10a67ce81458721c89424b8717e931dcff2d44cea1c4b838dd28e9a107bab323"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-network-2026-09-12-a2-final2.json",
+        "sha256_before": "8f97f80a4c3a403e66b0329e0eb7f8c2d8c6a4bd084a1be16c79e449ea97c9ea",
+        "sha256_after": "8f97f80a4c3a403e66b0329e0eb7f8c2d8c6a4bd084a1be16c79e449ea97c9ea"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-network-2026-09-12-a2-rerun.json",
+        "sha256_before": "da30ef2a6f76b2a693cc096d202848a7bfd5c10a75d926e796ddea6e500d7754",
+        "sha256_after": "da30ef2a6f76b2a693cc096d202848a7bfd5c10a75d926e796ddea6e500d7754"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-network-2026-09-12-a2.json",
+        "sha256_before": "7f63e343c871a16edf0b36a2040708372119d73cfd01d65117d4265e4c204da8",
+        "sha256_after": "7f63e343c871a16edf0b36a2040708372119d73cfd01d65117d4265e4c204da8"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-network-2026-09-12T03-38-29-471Z.json",
+        "sha256_before": "4db8a31ab30be38a413a32e38078106f8d466ed6acb365650f4a2f3c9b64c45f",
+        "sha256_after": "4db8a31ab30be38a413a32e38078106f8d466ed6acb365650f4a2f3c9b64c45f"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-preservation-2026-09-12-a2.json",
+        "sha256_before": "286ed069ebfdae26f7bf222f87c554c4f579a2131a7e9bfbcd6ffc46443a1399",
+        "sha256_after": "286ed069ebfdae26f7bf222f87c554c4f579a2131a7e9bfbcd6ffc46443a1399"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-proxy-timeouts-2026-09-12-a2-debug.json",
+        "sha256_before": "b896d0e8ba31f3f50c8ee8953e5c26190f45a80aa42615351f62fb52e6f87bab",
+        "sha256_after": "b896d0e8ba31f3f50c8ee8953e5c26190f45a80aa42615351f62fb52e6f87bab"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-proxy-timeouts-2026-09-12-a2.json",
+        "sha256_before": "0dcaf2eeaaf63deb3974b6a7d6043e13caca07422f65ca2f62150f25e659469f",
+        "sha256_after": "0dcaf2eeaaf63deb3974b6a7d6043e13caca07422f65ca2f62150f25e659469f"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-proxy-timeouts-2026-09-12T03-25-47-619Z.json",
+        "sha256_before": "569805cd8aa7341bc0c43244267802433af14ae18eb3671f07a12808ef60e1bd",
+        "sha256_after": "569805cd8aa7341bc0c43244267802433af14ae18eb3671f07a12808ef60e1bd"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-runtime-2026-09-10.json",
+        "sha256_before": "8febd1d0c876bfe2b1db1230e36a341b60cb4e4023adcaf3636a4ab751dc8e95",
+        "sha256_after": "8febd1d0c876bfe2b1db1230e36a341b60cb4e4023adcaf3636a4ab751dc8e95"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-runtime-2026-09-11.json",
+        "sha256_before": "4c95c9ee95ce03f2c69d2cc1f97c2e72338b83b3847ae3fd51fc8d91425daf21",
+        "sha256_after": "4c95c9ee95ce03f2c69d2cc1f97c2e72338b83b3847ae3fd51fc8d91425daf21"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-runtime-2026-09-11T07-56-56-279Z-ccefbb73.json",
+        "sha256_before": "270c7cacbcd01e3586b4ad2b08cdf9c76f4a10ee3c00a3e220be3c946441a7b2",
+        "sha256_after": "270c7cacbcd01e3586b4ad2b08cdf9c76f4a10ee3c00a3e220be3c946441a7b2"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-runtime-2026-09-12T02-41-22-818Z-ea454295.json",
+        "sha256_before": "b685fdab2491a6f2c5dd0dde67242c492f4cb240dd6765589cfc845ebb411409",
+        "sha256_after": "b685fdab2491a6f2c5dd0dde67242c492f4cb240dd6765589cfc845ebb411409"
+      },
+      {
+        "path": "nginx/demo-proxy.conf",
+        "sha256_before": "abae7a74feb2ed1b048b7579348707cc68d9c6a7126baab4356a7d44c7244fb2",
+        "sha256_after": "abae7a74feb2ed1b048b7579348707cc68d9c6a7126baab4356a7d44c7244fb2"
+      },
+      {
+        "path": "nginx/demo.conf",
+        "sha256_before": "df240aef6f22929ab6435d4f4a2e3c603baa17a124fe0d9b7f01d10eaa27c093",
+        "sha256_after": "df240aef6f22929ab6435d4f4a2e3c603baa17a124fe0d9b7f01d10eaa27c093"
+      },
+      {
+        "path": "package-lock.json",
+        "sha256_before": "d16a6af6d2342a702ac0d49b20f7201b9db1ed9f98ebdf4eaa6c3faa5e7d3598",
+        "sha256_after": "d16a6af6d2342a702ac0d49b20f7201b9db1ed9f98ebdf4eaa6c3faa5e7d3598"
+      },
+      {
+        "path": "package.json",
+        "sha256_before": "93e20900fa70d3674f04c022f733eb78528b21ed67b0ce8a7c0f69ec245cd42e",
+        "sha256_after": "93e20900fa70d3674f04c022f733eb78528b21ed67b0ce8a7c0f69ec245cd42e"
+      },
+      {
+        "path": "scripts/demo-http-probes.mjs",
+        "sha256_before": "420ddcd722ae3f4fca844671f97cecabb398637d557f47b1c3174d2a059be238",
+        "sha256_after": "420ddcd722ae3f4fca844671f97cecabb398637d557f47b1c3174d2a059be238"
+      },
+      {
+        "path": "scripts/demo-verification-utils.mjs",
+        "sha256_before": "7f470b62da3ce58fe36354797db426c5e6ba6b9e95e2829ad6ac263861da4665",
+        "sha256_after": "7f470b62da3ce58fe36354797db426c5e6ba6b9e95e2829ad6ac263861da4665"
+      },
+      {
+        "path": "scripts/fixtures/demo-proxy-upstream.mjs",
+        "sha256_before": "88298403d5b72a60760c36309639e777fce3859a9c5e076ded9e33ea3a32c169",
+        "sha256_after": "88298403d5b72a60760c36309639e777fce3859a9c5e076ded9e33ea3a32c169"
+      },
+      {
+        "path": "scripts/verify-demo-network.mjs",
+        "sha256_before": "e527300e9a0c26676906a737ab0bd53cacb7e4cee6f6280936f4463eb7eec365",
+        "sha256_after": "e527300e9a0c26676906a737ab0bd53cacb7e4cee6f6280936f4463eb7eec365"
+      },
+      {
+        "path": "scripts/verify-demo-proxy-timeouts.mjs",
+        "sha256_before": "71c54bff2a8a4116356553646f8d0423b84cad078818fba52076f58c00e49d5f",
+        "sha256_after": "71c54bff2a8a4116356553646f8d0423b84cad078818fba52076f58c00e49d5f"
+      },
+      {
+        "path": "scripts/verify-demo-runtime.mjs",
+        "sha256_before": "e302fbb02b0a383ad8fa268b284b9eb307982d0543bea4fc52562344be2ac2b5",
+        "sha256_after": "e302fbb02b0a383ad8fa268b284b9eb307982d0543bea4fc52562344be2ac2b5"
+      },
+      {
+        "path": "scripts/verify-demo-runtime.ps1",
+        "sha256_before": "d8d0b56bab5c432ca4ed824ec5780b8360a09d8bd722f2904044289433e57695",
+        "sha256_after": "d8d0b56bab5c432ca4ed824ec5780b8360a09d8bd722f2904044289433e57695"
+      },
+      {
+        "path": "src/app/(app)/settings/page.tsx",
+        "sha256_before": "bc7e0dba9a0d9a20d3c7fb3f64157ac0e4d3001e6355e64e53b6b982f2ded46c",
+        "sha256_after": "bc7e0dba9a0d9a20d3c7fb3f64157ac0e4d3001e6355e64e53b6b982f2ded46c"
+      },
+      {
+        "path": "src/lib/llm-config.ts",
+        "sha256_before": "c9a363404fe78da50278237704b60514b8c230cb8153cedc46713f0e3ef3899c",
+        "sha256_after": "c9a363404fe78da50278237704b60514b8c230cb8153cedc46713f0e3ef3899c"
+      },
+      {
+        "path": "src/middleware.ts",
+        "sha256_before": "1b51fa7f95a90e8bcc94609cd2d2b820fea838503538a3932c2ef3ee64bc2d22",
+        "sha256_after": "1b51fa7f95a90e8bcc94609cd2d2b820fea838503538a3932c2ef3ee64bc2d22"
+      },
+      {
+        "path": "tests/api/demo-boundary.test.ts",
+        "sha256_before": "b407ff9ec6d62487f93ea31e871900351af2a72600377a6294dcc5f20c3ecaf3",
+        "sha256_after": "b407ff9ec6d62487f93ea31e871900351af2a72600377a6294dcc5f20c3ecaf3"
+      },
+      {
+        "path": "tests/config/demo-network.test.ts",
+        "sha256_before": "1947f17a5b0de61df6d6715e39c8bedd49b14c6c9452de02de6245e162f26757",
+        "sha256_after": "1947f17a5b0de61df6d6715e39c8bedd49b14c6c9452de02de6245e162f26757"
+      },
+      {
+        "path": "tests/config/demo-proxy-timeouts.test.ts",
+        "sha256_before": "0e4cb091ac0d6b7ce04cb8f29e27e35ab1aea5bcb972dc765e20f242a1014238",
+        "sha256_after": "0e4cb091ac0d6b7ce04cb8f29e27e35ab1aea5bcb972dc765e20f242a1014238"
+      },
+      {
+        "path": "tests/docs/first-use-guide.test.ts",
+        "sha256_before": "3ea645b8cc0227b0fd80944a26975194e03b4141b2f5a1da37b61a8faa3a3649",
+        "sha256_after": "3ea645b8cc0227b0fd80944a26975194e03b4141b2f5a1da37b61a8faa3a3649"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-tick-maintenance-2026-09-12T05-48-48-326Z.json",
+        "sha256_before": "39d1394e690c4ba7cc626aadba5ea88c707a54b991740db22e4a2210a19f8a54",
+        "sha256_after": "39d1394e690c4ba7cc626aadba5ea88c707a54b991740db22e4a2210a19f8a54"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-tick-trace-2026-09-12T06-33-12-041Z.json",
+        "sha256_before": "0afa0cdaf8d4b182f6e627a9d7cf044f5079eaf27a883c310ce5d922623d4d1c",
+        "sha256_after": "0afa0cdaf8d4b182f6e627a9d7cf044f5079eaf27a883c310ce5d922623d4d1c"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-tick-trace-2026-09-12T06-45-28-312Z.json",
+        "sha256_before": "195f8e68f64ed59b65751a4d0ddabeaee164ef14ad6039fa6201bb1907f32968",
+        "sha256_after": "195f8e68f64ed59b65751a4d0ddabeaee164ef14ad6039fa6201bb1907f32968"
+      }
+    ],
+    "new_container_ids": [],
+    "normalization": "挂载按 Destination 排序，网络名排序；只读比较容器元数据与文件哈希",
+    "passed": true
+  },
+  "finished_at": "2026-09-12T06:56:03.738Z"
+}

@@ -1,0 +1,52 @@
+import json
+import re
+import shutil
+from pathlib import Path
+from r1lib import ROOT, RUN, REPO, now, save, sha
+
+source = ROOT / "evidence"
+target = REPO / RUN["evidence"]
+assert target.resolve().is_relative_to((REPO / "docs/验收证据").resolve())
+if target.exists():
+    assert json.loads((target / "archive-checks.json").read_text(encoding="utf-8"))["runId"] == RUN["runId"]
+target.mkdir(parents=True, exist_ok=True)
+credentials = json.loads((ROOT / "private/credentials.json").read_text(encoding="utf-8"))
+text_suffixes = {".json", ".log", ".txt", ".md", ".yml", ".yaml"}
+copied = []
+redacted_files = []
+for original in sorted(source.rglob("*")):
+    if not original.is_file():
+        continue
+    assert not original.is_symlink()
+    relative = original.relative_to(source)
+    output = target / relative
+    output.parent.mkdir(parents=True, exist_ok=True)
+    if original.suffix in text_suffixes:
+        content = original.read_text(encoding="utf-8")
+        safe = content
+        for secret in credentials.values():
+            safe = safe.replace(secret, "[REDACTED]")
+        safe = re.sub(r"kb_session=[^;\s\"]+", "kb_session=[REDACTED]", safe)
+        if safe != content:
+            redacted_files.append(relative.as_posix())
+        output.write_text(safe, encoding="utf-8", newline="\n")
+    else:
+        shutil.copy2(original, output)
+        assert sha(output) == sha(original)
+    copied.append(relative.as_posix())
+harness = target / "harness"
+harness.mkdir(exist_ok=True)
+for name in ("r1lib.py", "prepare.py", "build.py", "runtime.py", "browser.cjs", "audit.py", "contact-sheets.py", "archive.py", "static-checks.py", "cleanup-directory.ps1",
+             "compose.base.yml", "compose.r1.yml", "nginx/demo.conf"):
+    original = ROOT / name
+    output = harness / (name.replace("/", "-") + ".txt")
+    text = original.read_text(encoding="utf-8")
+    assert not any(secret in text for secret in credentials.values()), "辅助脚本包含本轮凭据"
+    output.write_text(text, encoding="utf-8", newline="\n")
+save(target / "archive-checks.json", {"runId": RUN["runId"], "updatedUtc": now(),
+    "copiedEvidenceFiles": len(copied), "redactedFiles": redacted_files,
+    "privateConfigurationArchived": False, "browserProfilesArchived": False, "backupDatabaseArchived": False})
+manifest = {file.relative_to(target).as_posix(): {"sha256": sha(file), "bytes": file.stat().st_size}
+            for file in sorted(target.rglob("*")) if file.is_file() and file.name != "artifact-manifest.json"}
+save(target / "artifact-manifest.json", manifest)
+print(json.dumps({"target": str(target), "files": len(manifest), "redactedFiles": redacted_files}, ensure_ascii=False))

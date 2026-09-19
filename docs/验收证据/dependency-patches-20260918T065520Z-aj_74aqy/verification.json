@@ -1,0 +1,163 @@
+{
+  "checkedUtc": "2026-09-18T07:37:20.823525+00:00",
+  "result": "通过；本轮依赖补丁及局部验证完成，未判定发布就绪。",
+  "specStatus": "done",
+  "singleAgentReview": true,
+  "baselineFiles": 981,
+  "unchangedBaselineFiles": 972,
+  "ownedModifiedFiles": 8,
+  "concurrentExternalFiles": 1,
+  "changes": [
+    {
+      "path": "_bmad-output/brainstorming/brainstorm-custom-prompts-and-agent-2026-09-16/.memlog.md",
+      "beforeSha256": "d9a325cd5b6630493e6a9795ca1c71dbb77910c420d437b8e608a2ff794403c4",
+      "afterSha256": "5ad05b69df70b3ea50c7a3902ec8e32480f763ffd85d8b4be7691f1ac8bca3b7",
+      "attribution": "同期外部变化，保留"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/spec-r1-dependency-security-patches.md",
+      "beforeSha256": "ff24436f33ecae5aca72aaa02c7e61052a6354340ef4263bd2463b13342caa11",
+      "afterSha256": "f2fcdce193af95f98fb22692206ca67838ef2ac8fe05634a688cbc32a3a8d114",
+      "attribution": "本轮"
+    },
+    {
+      "path": "docs/releases/v0.6.1.md",
+      "beforeSha256": "33a5ca13265ddb2bbde9bb5c993b4838b89e6d015900513933ac0deb9800474e",
+      "afterSha256": "e5ae54de760db76be1c3ca73e2f595819bdbacc797c8e4a5fd39be51db2bdf56",
+      "attribution": "本轮"
+    },
+    {
+      "path": "docs/产品规划/开源发布范围与执行清单-2026-09-13.md",
+      "beforeSha256": "26fe2e515c25f5c5d08742d90bebf338559f79fc13c299e80d0696b74bf6e8d8",
+      "afterSha256": "6a5aaabaec65b2679580b65bfef1b1b4f89a4bc81d0ab6db56d00ff0802a84f9",
+      "attribution": "本轮"
+    },
+    {
+      "path": "docs/依赖告警分诊-2026-09-18.md",
+      "beforeSha256": "566eec1271968c4ac3d1818b08bbecd2bc0543ef779db1503f263405343c738f",
+      "afterSha256": "d2d9ec584799f7ffc82ef157393237b327df05b6e31b0d209b67aba365c847fb",
+      "attribution": "本轮"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "beforeSha256": "ce902ee3a8599f241187bff431df91cd276438bcec781f2d64963f5e17b79f85",
+      "afterSha256": "aeeb91ceeacfbcf6c9072ca821e9db9d27552b269062e2d0295d279fb8d746ed",
+      "attribution": "本轮"
+    },
+    {
+      "path": "docs/README.md",
+      "beforeSha256": "1ab7088353bc3764270c323fd7d8074945f44f8a0c0fce78238b7182224c20a1",
+      "afterSha256": "2328f7838001a0f63047a5491a425098957f3b134d3f6890ac57780ef35eb49b",
+      "attribution": "本轮"
+    },
+    {
+      "path": "package-lock.json",
+      "beforeSha256": "72fc3d00abb257d53aca7faed33951cd7e3642d3e77217fc991b6f3707db0166",
+      "afterSha256": "1ddf494be7e307d78ce79e304d83b5cd567756b8274c7009b1695e877cb0b5b4",
+      "attribution": "本轮"
+    },
+    {
+      "path": "package.json",
+      "beforeSha256": "a2e5e801f8711c43a0b1f236cfd1067643a89d9cb89c123b4e55a66e6a1cc802",
+      "afterSha256": "7c203c317d71c869cc217be6b45223d9ec27822168efe500e2c5288f27ed5be7",
+      "attribution": "本轮"
+    }
+  ],
+  "concurrentExternalAdditions": [
+    {
+      "path": "_bmad-output/brainstorming/brainstorm-custom-prompts-and-agent-2026-09-16/brainstorm.html",
+      "sha256": "431254d34b26176673a9c450513747959c698c466fb4a13851ab1abf990e0082",
+      "attribution": "同期外部新增，保留"
+    }
+  ],
+  "newFilesLocation": "docs/验收证据/dependency-patches-20260918T065520Z-aj_74aqy/",
+  "evidenceFilesVisibleToGit": true,
+  "oldEvidenceFilesPreserved": 325,
+  "head": "f213761b795cc020be2122e27301fe4a7c5cf7a0",
+  "headUnchanged": true,
+  "indexUnchanged": true,
+  "businessSourcesUnchanged": true,
+  "storyAndSprintUnchanged": true,
+  "nativeModuleHashesPreserved": true,
+  "frozenBlockUnchangedDuringFinalization": true,
+  "frozenBlockSha256": "50bf7370f9af3b8a340597bfd57211f80bb6f74735bfecb2585bb9554f5c8063",
+  "approvedScopeFrozenTextPreserved": "冻结块原文（含原确认前 reason）保留；批准记录、执行勾选与审查结果写在冻结块外。",
+  "utf8LfCheckedFiles": [
+    "package.json",
+    "package-lock.json",
+    "CHANGELOG.md",
+    "docs/README.md",
+    "docs/releases/v0.6.1.md",
+    "docs/产品规划/开源发布范围与执行清单-2026-09-13.md",
+    "docs/依赖告警分诊-2026-09-18.md",
+    "_bmad-output/implementation-artifacts/spec-r1-dependency-security-patches.md",
+    "docs/验收证据/dependency-patches-20260918T065520Z-aj_74aqy/README.md",
+    "docs/验收证据/dependency-patches-20260918T065520Z-aj_74aqy/review.md",
+    "docs/验收证据/dependency-patches-20260918T065520Z-aj_74aqy/.gitignore"
+  ],
+  "rawEvidencePreserved": [
+    "commands/audit-all-after.json",
+    "commands/audit-all-after.stderr.log",
+    "commands/audit-all-after.stdout.log",
+    "commands/audit-production-after.json",
+    "commands/audit-production-after.stderr.log",
+    "commands/audit-production-after.stdout.log",
+    "commands/dependency-review-platform-aware.json",
+    "commands/dependency-review-platform-aware.stderr.log",
+    "commands/dependency-review-platform-aware.stdout.log",
+    "commands/dependency-review.json",
+    "commands/dependency-review.stderr.log",
+    "commands/dependency-review.stdout.log",
+    "commands/install-reviewed-lock.json",
+    "commands/install-reviewed-lock.stderr.log",
+    "commands/install-reviewed-lock.stdout.log",
+    "commands/lock-consistency.json",
+    "commands/lock-consistency.stderr.log",
+    "commands/lock-consistency.stdout.log",
+    "commands/resolve-lock-bounded-peers.json",
+    "commands/resolve-lock-bounded-peers.stderr.log",
+    "commands/resolve-lock-bounded-peers.stdout.log",
+    "commands/resolve-lock-dedupe.json",
+    "commands/resolve-lock-dedupe.stderr.log",
+    "commands/resolve-lock-dedupe.stdout.log",
+    "commands/resolve-lock-pinned-vite.json",
+    "commands/resolve-lock-pinned-vite.stderr.log",
+    "commands/resolve-lock-pinned-vite.stdout.log",
+    "commands/resolve-lock.json",
+    "commands/resolve-lock.stderr.log",
+    "commands/resolve-lock.stdout.log",
+    "commands/sharp-runtime.json",
+    "commands/sharp-runtime.stderr.log",
+    "commands/sharp-runtime.stdout.log",
+    "commands/targeted-lint.json",
+    "commands/targeted-lint.stderr.log",
+    "commands/targeted-lint.stdout.log",
+    "commands/targeted-tests.json",
+    "commands/targeted-tests.stderr.log",
+    "commands/targeted-tests.stdout.log",
+    "commands/version-check.json",
+    "commands/version-check.stderr.log",
+    "commands/version-check.stdout.log",
+    "baseline-meta.json",
+    "workspace-before.json",
+    "installed-manifest.json",
+    "applied-manifest.json",
+    "lock-scope-review.json",
+    "targeted-tests.report.json",
+    "targeted-lint.report.json"
+  ],
+  "rawEvidenceNote": "原始命令元数据和日志保持原字节，不为 LF 检查重写原始证据。",
+  "documentLinks": {
+    "markdownFiles": 8,
+    "localLinksChecked": 181,
+    "anchorsChecked": 41,
+    "missing": []
+  },
+  "gitDiffCheckExitCode": 0,
+  "verificationPolicy": "复用已通过的 65 项定向回归、8 文件 lint、版本和双范围审计；收尾只作文件、依赖关系及文档核对，没有重复重验证。",
+  "workflowAdaptations": [
+    "用户要求单 Agent，未启动审查子 Agent。",
+    "无 story_key，未同步 Story/Sprint。",
+    "用户范围为依赖、文档及局部验证，未提交、推送、发布或启动 IDE。"
+  ]
+}

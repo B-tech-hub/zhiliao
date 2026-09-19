@@ -1,0 +1,33 @@
+{
+  "status": "passed",
+  "relatedTestsPassed": 20,
+  "relatedTestsSkipped": 0,
+  "httpMatrix": "passed",
+  "browserStaticResponses200": 215,
+  "browserChunkLoadErrors": 0,
+  "react418": "本轮未出现，仍独立待处理",
+  "utf8Lf": true,
+  "commentsGb2312Compatible": true,
+  "addedRelativeLinksChecked": 43,
+  "temporaryDirectoryRemoved": true,
+  "headUnchanged": true,
+  "indexUnchanged": true,
+  "frozenIntentUnchanged": true,
+  "sourceSha256": {
+    "nginx/demo.conf": "80e5aff8a60a9d9e2e7acad8ac8effd1d46c59b68a592e714b95a09fff9ac99e",
+    "tests/config/demo-compose.test.ts": "d77ea83abe870a60cb548dc310685049da8f65c048d462692aed0c1251d26a59",
+    "README.md": "eb94fdb97ce81649dadec6f6a3fcf262f68a9b54164169ae6aac3d3209e2fbe3",
+    "README.en.md": "73dadb15c5a314476baf2914ac118a479b0044c75410c703bfb647cd3efcb3d5",
+    "CHANGELOG.md": "d4f431ae37ae280008fcf0fd8fd80452f313a572101cdd8428b58da731d55fd2",
+    "docs/README.md": "55a81cedffddac562cc1f6719a9d1fccefc802c9ee0a9eb7c15c6f3aaf9d4881",
+    "docs/R1安装验收-2026-09-15.md": "fd1b0ce90c726d7df27b943409841610e6ce550e5cd8973ca3c988a1ddc522b8",
+    "docs/releases/v0.6.1.md": "f128bae0911d6dce6787150fe08501406ac3b6d9c649ffbd3f583705c8334284",
+    "docs/产品规划/开源发布范围与执行清单-2026-09-13.md": "2edcb10e2fd4a73066467918150cce9d923856117df82d78a6835f75726e3934",
+    "_bmad-output/implementation-artifacts/deferred-work.md": "9d7daddaa86ebf98d697717b6d1ef64e49b4de937db50ce3b4ab3dab6bffb0e1",
+    "_bmad-output/implementation-artifacts/spec-repair-demo-static-rate-limit.md": "70cef2df707fb5cbf8d796120acbf42c26e59a3720cd913fb75752698955897f"
+  },
+  "limits": [
+    "浏览器 1 条字体响应正文因后续导航无法采集；保留原错误，HTTP 样本正文哈希另行通过。",
+    "未运行 build、全量测试、长时或完整安装/发布验收。"
+  ]
+}

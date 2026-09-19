@@ -1,0 +1,13 @@
+{
+  "status": "passed",
+  "head": "f213761b795cc020be2122e27301fe4a7c5cf7a0",
+  "indexSha256": "73dfe17c3c9dbf96154c42c45f09379ec12dd0ac15ff49d6067e3909791f1515",
+  "frozenIntentSha256": "016e087f848b35dd4135acf02be768714d9be5309343f8b9d23b7c53e6d799a0",
+  "sensitiveValuesFound": false,
+  "archivedScriptsMatchExecutedFiles": true,
+  "changedSourceFiles": 10,
+  "protectedFiles": 148,
+  "runtimeChecks": "passed",
+  "commentsGb2312Compatible": true,
+  "utf8Lf": true
+}

@@ -1,0 +1,2106 @@
+{
+  "root": "{验收目录}",
+  "network": [
+    {
+      "time": "2026-09-14T07:35:00.062Z",
+      "path": "/login",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:35:00.088Z",
+      "path": "/_next/static/chunks/src_app_globals_91e4631d.css",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:35:00.096Z",
+      "path": "/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_57d40746._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:35:00.112Z",
+      "path": "/_next/static/chunks/node_modules_%40swc_helpers_cjs_b3dc30d6._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:35:00.113Z",
+      "path": "/_next/static/chunks/node_modules_next_dist_b0daae9a._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:35:00.141Z",
+      "path": "/_next/static/chunks/node_modules_next_dist_compiled_5150ccfd._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:35:00.150Z",
+      "path": "/_next/static/chunks/_a0ff3932._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:35:00.150Z",
+      "path": "/_next/static/chunks/turbopack-_cdba956c._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:35:00.152Z",
+      "path": "/_next/static/chunks/src_app_icon_svg_mjs_32921ff1._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:35:00.152Z",
+      "path": "/_next/static/chunks/node_modules_next_dist_client_cf1d9188._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:35:00.153Z",
+      "path": "/_next/static/chunks/node_modules_next_dist_8db7fb1f._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:35:00.153Z",
+      "path": "/_next/static/chunks/src_app_layout_tsx_0a548d63._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:35:00.153Z",
+      "path": "/_next/static/chunks/_8aa1ee89._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:35:00.153Z",
+      "path": "/_next/static/chunks/_f460a91e._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:35:00.153Z",
+      "path": "/_next/static/chunks/src_app_login_page_tsx_5a1cf0d1._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:35:00.153Z",
+      "path": "/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:35:00.153Z",
+      "path": "/_next/static/chunks/node_modules_next_dist_client_components_builtin_global-error_5a1cf0d1.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:35:00.154Z",
+      "path": "/_next/static/chunks/node_modules_next_dist_compiled_next-devtools_index_a9cb0712.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:35:00.218Z",
+      "path": "/_next/static/media/instrument-serif-latin-400-normal.60c916e2.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:35:00.225Z",
+      "path": "/_next/static/media/inter-latin-wght-normal.c757f81b.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:35:00.227Z",
+      "path": "/_next/static/media/noto-sans-sc-119-wght-normal.00c2030a.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:35:00.234Z",
+      "path": "/_next/static/media/noto-sans-sc-118-wght-normal.37668df1.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:35:00.235Z",
+      "path": "/_next/static/media/noto-sans-sc-117-wght-normal.33bc3e63.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:35:00.239Z",
+      "path": "/_next/static/media/noto-sans-sc-115-wght-normal.2d0a4ff0.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:35:00.244Z",
+      "path": "/_next/static/media/noto-sans-sc-114-wght-normal.e4030818.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:35:00.245Z",
+      "path": "/_next/static/media/noto-sans-sc-113-wght-normal.3e627507.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:35:00.250Z",
+      "path": "/_next/static/media/noto-sans-sc-111-wght-normal.86747b13.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:35:00.256Z",
+      "path": "/_next/static/media/noto-sans-sc-116-wght-normal.e9f8f25c.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:35:00.256Z",
+      "path": "/_next/static/media/noto-serif-sc-118-wght-normal.2477722d.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:35:00.282Z",
+      "path": "/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_285433b7._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:35:00.282Z",
+      "path": "/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_c8c997ce._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:37:00.382Z",
+      "path": "/api/auth/login",
+      "method": "POST",
+      "status": 401
+    },
+    {
+      "time": "2026-09-14T07:37:00.846Z",
+      "path": "/api/auth/login",
+      "method": "POST",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:37:02.651Z",
+      "path": "/_next/static/chunks/src_app_globals_91e4631d.css",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:37:02.820Z",
+      "path": "/",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:37:02.835Z",
+      "path": "/_next/static/chunks/src_app_(app)_layout_tsx_5a1cf0d1._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:37:02.842Z",
+      "path": "/_next/static/chunks/src_app_(app)_page_tsx_d0292a8a._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:37:02.843Z",
+      "path": "/_next/static/chunks/node_modules_micromark-core-commonmark_dev_lib_fc41dd51._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:37:02.846Z",
+      "path": "/_next/static/chunks/src_97671805._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:37:02.882Z",
+      "path": "/_next/static/chunks/node_modules_katex_dist_katex_mjs_b8ab5b3b._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:37:02.884Z",
+      "path": "/_next/static/chunks/node_modules_de6f44d8._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:37:03.088Z",
+      "path": "/_next/static/chunks/src_app_globals_91e4631d.css",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:37:03.563Z",
+      "path": "/",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:37:03.694Z",
+      "path": "/_next/static/chunks/src_app_(app)_layout_tsx_5a1cf0d1._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:37:03.698Z",
+      "path": "/_next/static/chunks/src_app_(app)_page_tsx_d0292a8a._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:37:03.700Z",
+      "path": "/_next/static/chunks/src_97671805._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:37:03.700Z",
+      "path": "/_next/static/chunks/node_modules_micromark-core-commonmark_dev_lib_fc41dd51._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:37:03.707Z",
+      "path": "/_next/static/media/jetbrains-mono-latin-wght-normal.1afd078f.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:37:03.710Z",
+      "path": "/_next/static/media/noto-sans-sc-110-wght-normal.bd1756ce.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:37:03.714Z",
+      "path": "/_next/static/media/noto-sans-sc-104-wght-normal.3d49457a.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:37:03.721Z",
+      "path": "/_next/static/chunks/node_modules_katex_dist_katex_mjs_b8ab5b3b._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:37:03.725Z",
+      "path": "/_next/static/chunks/node_modules_de6f44d8._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:37:04.253Z",
+      "path": "/manifest.webmanifest",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:37:04.259Z",
+      "path": "/icons/icon-192.png",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:38:33.317Z",
+      "path": "/_next/static/media/noto-sans-sc-87-wght-normal.6c397e6e.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:39:57.488Z",
+      "path": "/api/notes",
+      "method": "POST",
+      "status": 201
+    },
+    {
+      "time": "2026-09-14T07:39:58.036Z",
+      "path": "/api/notes",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:39:58.282Z",
+      "path": "/",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:39:58.515Z",
+      "path": "/api/notes",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:39:58.739Z",
+      "path": "/manifest.webmanifest",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:39:58.746Z",
+      "path": "/icons/icon-192.png",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:40:02.981Z",
+      "path": "/_next/static/chunks/src_app_globals_91e4631d.css",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:40:04.081Z",
+      "path": "/notes/eifme1synnzp9q0y8o314hkw",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:40:04.120Z",
+      "path": "/_next/static/chunks/src_app_globals_91e4631d.css",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:40:04.123Z",
+      "path": "/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_57d40746._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:40:04.132Z",
+      "path": "/_next/static/chunks/node_modules_next_dist_compiled_5150ccfd._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:40:04.140Z",
+      "path": "/_next/static/chunks/node_modules_next_dist_b0daae9a._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:40:04.145Z",
+      "path": "/_next/static/chunks/node_modules_next_dist_client_cf1d9188._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:40:04.145Z",
+      "path": "/_next/static/chunks/_a0ff3932._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:40:04.145Z",
+      "path": "/_next/static/chunks/node_modules_%40swc_helpers_cjs_b3dc30d6._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:40:04.182Z",
+      "path": "/_next/static/chunks/src_app_icon_svg_mjs_32921ff1._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:40:04.182Z",
+      "path": "/_next/static/chunks/turbopack-_cdba956c._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:40:04.182Z",
+      "path": "/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:40:04.182Z",
+      "path": "/_next/static/chunks/_8aa1ee89._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:40:04.182Z",
+      "path": "/_next/static/chunks/node_modules_next_dist_8db7fb1f._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:40:04.186Z",
+      "path": "/_next/static/chunks/src_app_layout_tsx_0a548d63._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:40:04.186Z",
+      "path": "/_next/static/chunks/src_97671805._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:40:04.186Z",
+      "path": "/_next/static/chunks/src_app_(app)_layout_tsx_5a1cf0d1._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:40:04.186Z",
+      "path": "/_next/static/chunks/node_modules_micromark-core-commonmark_dev_lib_fc41dd51._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:40:04.186Z",
+      "path": "/_next/static/chunks/node_modules_next_dist_client_components_builtin_global-error_5a1cf0d1.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:40:04.186Z",
+      "path": "/_next/static/chunks/src_components_markdown-editor_tsx_de6483ee._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:40:04.186Z",
+      "path": "/_next/static/chunks/_9e0bca41._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:40:04.186Z",
+      "path": "/_next/static/chunks/node_modules_next_dist_compiled_next-devtools_index_a9cb0712.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:40:04.186Z",
+      "path": "/_next/static/chunks/src_app_(app)_notes_%5Bid%5D_page_tsx_d0292a8a._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:40:04.186Z",
+      "path": "/_next/static/chunks/node_modules_katex_dist_katex_mjs_b8ab5b3b._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:40:04.186Z",
+      "path": "/_next/static/chunks/node_modules_de6f44d8._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:40:04.211Z",
+      "path": "/_next/static/media/inter-latin-wght-normal.c757f81b.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:40:04.211Z",
+      "path": "/_next/static/media/jetbrains-mono-latin-wght-normal.1afd078f.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:40:04.211Z",
+      "path": "/_next/static/media/instrument-serif-latin-400-normal.60c916e2.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:40:04.211Z",
+      "path": "/_next/static/media/noto-sans-sc-118-wght-normal.37668df1.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:40:04.211Z",
+      "path": "/_next/static/media/noto-sans-sc-117-wght-normal.33bc3e63.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:40:04.230Z",
+      "path": "/_next/static/media/noto-sans-sc-116-wght-normal.e9f8f25c.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:40:04.230Z",
+      "path": "/_next/static/media/noto-sans-sc-114-wght-normal.e4030818.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:40:04.230Z",
+      "path": "/_next/static/media/noto-sans-sc-110-wght-normal.bd1756ce.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:40:04.230Z",
+      "path": "/_next/static/media/noto-sans-sc-115-wght-normal.2d0a4ff0.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:40:04.231Z",
+      "path": "/_next/static/media/noto-sans-sc-104-wght-normal.3d49457a.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:40:04.237Z",
+      "path": "/_next/static/media/noto-sans-sc-119-wght-normal.00c2030a.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:40:04.244Z",
+      "path": "/_next/static/media/noto-sans-sc-113-wght-normal.3e627507.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:40:04.261Z",
+      "path": "/_next/static/media/noto-serif-sc-119-wght-normal.19ad7ef8.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:40:04.261Z",
+      "path": "/_next/static/media/noto-serif-sc-118-wght-normal.2477722d.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:40:04.262Z",
+      "path": "/_next/static/media/noto-serif-sc-114-wght-normal.a9004f1a.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:40:04.262Z",
+      "path": "/_next/static/media/noto-serif-sc-116-wght-normal.8e47048d.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:40:04.266Z",
+      "path": "/_next/static/media/noto-serif-sc-113-wght-normal.50ee5a70.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:40:04.314Z",
+      "path": "/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_285433b7._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:40:04.315Z",
+      "path": "/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_c8c997ce._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:40:04.337Z",
+      "path": "/_next/static/chunks/node_modules_mermaid_dist_mermaid_core_mjs_938263ae._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:40:04.341Z",
+      "path": "/_next/static/chunks/node_modules_%40popperjs_core_lib_a6f1ab07._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:40:04.344Z",
+      "path": "/_next/static/chunks/node_modules_entities_lib_esm_6f35499b._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:40:04.345Z",
+      "path": "/_next/static/chunks/node_modules_markdown-it_b1618df4._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:40:04.345Z",
+      "path": "/_next/static/chunks/node_modules_%40tiptap_core_dist_index_4fbaf11d.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:40:04.346Z",
+      "path": "/_next/static/chunks/src_001f99f5._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:40:04.346Z",
+      "path": "/_next/static/chunks/node_modules_prosemirror-view_dist_index_21ada2c5.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:40:04.348Z",
+      "path": "/_next/static/chunks/src_components_markdown-editor_tsx_d61a99dd._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:40:04.370Z",
+      "path": "/_next/static/chunks/node_modules_fb0de45a._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:40:06.699Z",
+      "path": "/api/notes/eifme1synnzp9q0y8o314hkw/related",
+      "method": "POST",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:40:06.732Z",
+      "path": "/_next/static/media/noto-sans-sc-112-wght-normal.c1d50eab.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:40:06.738Z",
+      "path": "/_next/static/media/noto-sans-sc-107-wght-normal.f775354e.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:40:06.738Z",
+      "path": "/_next/static/media/noto-sans-sc-101-wght-normal.c745cec3.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:40:06.743Z",
+      "path": "/_next/static/media/noto-sans-sc-111-wght-normal.86747b13.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:40:06.747Z",
+      "path": "/_next/static/media/noto-sans-sc-106-wght-normal.d1ab18bc.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:40:06.750Z",
+      "path": "/_next/static/media/noto-sans-sc-108-wght-normal.4473971f.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:40:06.750Z",
+      "path": "/_next/static/media/noto-sans-sc-109-wght-normal.0aa05c8e.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:40:06.756Z",
+      "path": "/_next/static/media/noto-sans-sc-105-wght-normal.f17f9af5.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:42:42.345Z",
+      "path": "/inbox",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:42:42.382Z",
+      "path": "/_next/static/chunks/src_app_(app)_inbox_page_tsx_d0292a8a._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:42:42.383Z",
+      "path": "/_next/static/chunks/src_0ffbdb66._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:42:42.697Z",
+      "path": "/_next/static/chunks/src_app_(app)_inbox_page_tsx_d0292a8a._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:42:42.697Z",
+      "path": "/_next/static/chunks/src_0ffbdb66._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:42:42.765Z",
+      "path": "/manifest.webmanifest",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:42:42.769Z",
+      "path": "/icons/icon-192.png",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:45:35.551Z",
+      "path": "/api/suggestions/j3x5yrwsvhpwxdhvwacc3qb9/accept",
+      "method": "POST",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:45:35.769Z",
+      "path": "/inbox",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:45:36.232Z",
+      "path": "/manifest.webmanifest",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:45:36.239Z",
+      "path": "/icons/icon-192.png",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:45:37.702Z",
+      "path": "/search",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:45:37.762Z",
+      "path": "/_next/static/chunks/src_4b4f13c1._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:45:37.791Z",
+      "path": "/_next/static/chunks/src_app_(app)_search_page_tsx_d0292a8a._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:45:38.044Z",
+      "path": "/_next/static/media/noto-serif-sc-117-wght-normal.289b2a85.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:45:38.082Z",
+      "path": "/_next/static/chunks/src_app_(app)_search_page_tsx_d0292a8a._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:45:38.083Z",
+      "path": "/_next/static/chunks/src_4b4f13c1._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:45:38.106Z",
+      "path": "/manifest.webmanifest",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:45:38.111Z",
+      "path": "/icons/icon-192.png",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:48:22.179Z",
+      "path": "/api/search",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:48:22.846Z",
+      "path": "/notes/eifme1synnzp9q0y8o314hkw",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:48:23.297Z",
+      "path": "/manifest.webmanifest",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:48:23.301Z",
+      "path": "/icons/icon-192.png",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:48:24.179Z",
+      "path": "/api/notes/eifme1synnzp9q0y8o314hkw/related",
+      "method": "POST",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:49:52.691Z",
+      "path": "/settings",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:49:52.709Z",
+      "path": "/_next/static/chunks/src_app_(app)_settings_page_tsx_d0292a8a._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:49:52.721Z",
+      "path": "/_next/static/chunks/src_b4aff413._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:49:52.817Z",
+      "path": "/_next/static/chunks/src_app_(app)_settings_page_tsx_d0292a8a._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:49:52.817Z",
+      "path": "/_next/static/chunks/src_b4aff413._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:49:53.115Z",
+      "path": "/manifest.webmanifest",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:49:53.119Z",
+      "path": "/icons/icon-192.png",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T07:51:47.749Z",
+      "path": "/api/settings/llm",
+      "method": "PATCH",
+      "status": 403
+    },
+    {
+      "time": "2026-09-14T07:54:55.337Z",
+      "path": "/api/settings/llm",
+      "method": "PATCH",
+      "status": 403
+    },
+    {
+      "time": "2026-09-14T07:54:55.344Z",
+      "path": "/api/settings/llm",
+      "method": "DELETE",
+      "status": 403
+    },
+    {
+      "time": "2026-09-14T07:54:55.351Z",
+      "path": "/api/settings/tokens",
+      "method": "GET",
+      "status": 403
+    },
+    {
+      "time": "2026-09-14T07:54:55.359Z",
+      "path": "/api/settings/tokens",
+      "method": "POST",
+      "status": 403
+    },
+    {
+      "time": "2026-09-14T07:54:55.371Z",
+      "path": "/api/settings/tokens",
+      "method": "DELETE",
+      "status": 403
+    },
+    {
+      "time": "2026-09-14T07:54:55.377Z",
+      "path": "/api/export",
+      "method": "GET",
+      "status": 403
+    },
+    {
+      "time": "2026-09-14T07:54:55.384Z",
+      "path": "/api/backup",
+      "method": "POST",
+      "status": 403
+    },
+    {
+      "time": "2026-09-14T07:54:55.391Z",
+      "path": "/api/embedding/backfill",
+      "method": "GET",
+      "status": 403
+    },
+    {
+      "time": "2026-09-14T07:54:55.398Z",
+      "path": "/api/embedding/backfill",
+      "method": "POST",
+      "status": 403
+    },
+    {
+      "time": "2026-09-14T07:54:55.405Z",
+      "path": "/api/import",
+      "method": "POST",
+      "status": 403
+    },
+    {
+      "time": "2026-09-14T07:54:55.412Z",
+      "path": "/api/llm/test",
+      "method": "POST",
+      "status": 403
+    },
+    {
+      "time": "2026-09-14T07:54:55.420Z",
+      "path": "/api/uploads",
+      "method": "POST",
+      "status": 403
+    },
+    {
+      "time": "2026-09-14T07:59:08.843Z",
+      "path": "/api/notes",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:05.160Z",
+      "path": "/notes/eifme1synnzp9q0y8o314hkw",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:05.187Z",
+      "path": "/_next/static/chunks/src_app_globals_91e4631d.css",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:05.191Z",
+      "path": "/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_57d40746._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:05.202Z",
+      "path": "/_next/static/chunks/node_modules_next_dist_compiled_5150ccfd._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:05.215Z",
+      "path": "/_next/static/chunks/node_modules_%40swc_helpers_cjs_b3dc30d6._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:05.216Z",
+      "path": "/_next/static/chunks/_a0ff3932._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:05.239Z",
+      "path": "/_next/static/chunks/node_modules_next_dist_b0daae9a._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:05.239Z",
+      "path": "/_next/static/chunks/node_modules_next_dist_client_cf1d9188._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:05.241Z",
+      "path": "/_next/static/chunks/src_app_icon_svg_mjs_32921ff1._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:05.241Z",
+      "path": "/_next/static/chunks/turbopack-_cdba956c._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:05.242Z",
+      "path": "/_next/static/chunks/_8aa1ee89._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:05.242Z",
+      "path": "/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:05.242Z",
+      "path": "/_next/static/chunks/node_modules_next_dist_8db7fb1f._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:05.242Z",
+      "path": "/_next/static/chunks/src_app_layout_tsx_0a548d63._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:05.242Z",
+      "path": "/_next/static/chunks/src_app_(app)_layout_tsx_5a1cf0d1._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:05.242Z",
+      "path": "/_next/static/chunks/src_97671805._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:05.242Z",
+      "path": "/_next/static/chunks/node_modules_micromark-core-commonmark_dev_lib_fc41dd51._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:05.242Z",
+      "path": "/_next/static/chunks/node_modules_next_dist_client_components_builtin_global-error_5a1cf0d1.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:05.243Z",
+      "path": "/_next/static/chunks/src_components_markdown-editor_tsx_de6483ee._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:05.243Z",
+      "path": "/_next/static/chunks/_9e0bca41._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:05.243Z",
+      "path": "/_next/static/chunks/src_app_(app)_notes_%5Bid%5D_page_tsx_d0292a8a._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:05.243Z",
+      "path": "/_next/static/chunks/node_modules_next_dist_compiled_next-devtools_index_a9cb0712.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:05.316Z",
+      "path": "/_next/static/media/inter-latin-wght-normal.c757f81b.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:05.316Z",
+      "path": "/_next/static/media/jetbrains-mono-latin-wght-normal.1afd078f.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:05.316Z",
+      "path": "/_next/static/media/instrument-serif-latin-400-normal.60c916e2.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:05.316Z",
+      "path": "/_next/static/media/noto-sans-sc-118-wght-normal.37668df1.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:05.316Z",
+      "path": "/_next/static/media/noto-sans-sc-114-wght-normal.e4030818.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:05.317Z",
+      "path": "/_next/static/media/noto-sans-sc-117-wght-normal.33bc3e63.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:05.317Z",
+      "path": "/_next/static/media/noto-sans-sc-116-wght-normal.e9f8f25c.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:05.317Z",
+      "path": "/_next/static/media/noto-sans-sc-110-wght-normal.bd1756ce.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:05.317Z",
+      "path": "/_next/static/media/noto-sans-sc-113-wght-normal.3e627507.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:05.317Z",
+      "path": "/_next/static/media/noto-sans-sc-115-wght-normal.2d0a4ff0.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:05.317Z",
+      "path": "/_next/static/media/noto-sans-sc-104-wght-normal.3d49457a.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:05.317Z",
+      "path": "/_next/static/media/noto-sans-sc-119-wght-normal.00c2030a.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:05.323Z",
+      "path": "/_next/static/chunks/node_modules_katex_dist_katex_mjs_b8ab5b3b._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:05.323Z",
+      "path": "/_next/static/chunks/node_modules_de6f44d8._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:05.358Z",
+      "path": "/_next/static/media/noto-serif-sc-119-wght-normal.19ad7ef8.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:05.361Z",
+      "path": "/_next/static/media/noto-serif-sc-118-wght-normal.2477722d.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:05.364Z",
+      "path": "/_next/static/media/noto-serif-sc-116-wght-normal.8e47048d.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:05.373Z",
+      "path": "/_next/static/media/noto-serif-sc-114-wght-normal.a9004f1a.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:05.373Z",
+      "path": "/_next/static/media/noto-serif-sc-113-wght-normal.50ee5a70.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:05.414Z",
+      "path": "/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_285433b7._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:05.414Z",
+      "path": "/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_c8c997ce._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:05.442Z",
+      "path": "/_next/static/chunks/node_modules_mermaid_dist_mermaid_core_mjs_938263ae._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:05.451Z",
+      "path": "/_next/static/chunks/node_modules_%40popperjs_core_lib_a6f1ab07._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:05.452Z",
+      "path": "/_next/static/chunks/node_modules_entities_lib_esm_6f35499b._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:05.454Z",
+      "path": "/_next/static/chunks/node_modules_%40tiptap_core_dist_index_4fbaf11d.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:05.455Z",
+      "path": "/_next/static/chunks/node_modules_prosemirror-view_dist_index_21ada2c5.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:05.456Z",
+      "path": "/_next/static/chunks/node_modules_markdown-it_b1618df4._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:05.459Z",
+      "path": "/_next/static/chunks/src_components_markdown-editor_tsx_d61a99dd._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:05.460Z",
+      "path": "/_next/static/chunks/src_001f99f5._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:05.484Z",
+      "path": "/_next/static/chunks/node_modules_fb0de45a._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:06.217Z",
+      "path": "/api/notes",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:06.248Z",
+      "path": "/_next/static/media/noto-sans-sc-87-wght-normal.6c397e6e.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:07.914Z",
+      "path": "/api/notes/eifme1synnzp9q0y8o314hkw/related",
+      "method": "POST",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:07.944Z",
+      "path": "/_next/static/media/noto-sans-sc-107-wght-normal.f775354e.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:07.950Z",
+      "path": "/_next/static/media/noto-sans-sc-112-wght-normal.c1d50eab.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:07.950Z",
+      "path": "/_next/static/media/noto-sans-sc-101-wght-normal.c745cec3.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:07.956Z",
+      "path": "/_next/static/media/noto-sans-sc-108-wght-normal.4473971f.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:07.956Z",
+      "path": "/_next/static/media/noto-sans-sc-106-wght-normal.d1ab18bc.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:07.961Z",
+      "path": "/_next/static/media/noto-sans-sc-111-wght-normal.86747b13.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:07.966Z",
+      "path": "/_next/static/media/noto-sans-sc-105-wght-normal.f17f9af5.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:03:07.971Z",
+      "path": "/_next/static/media/noto-sans-sc-109-wght-normal.0aa05c8e.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:11.378Z",
+      "path": "/api/notes",
+      "method": "POST",
+      "status": 201
+    },
+    {
+      "time": "2026-09-14T08:04:11.846Z",
+      "path": "/api/notes",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:12.202Z",
+      "path": "/api/notes",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:12.714Z",
+      "path": "/notes/eifme1synnzp9q0y8o314hkw",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:13.255Z",
+      "path": "/manifest.webmanifest",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:13.261Z",
+      "path": "/icons/icon-192.png",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:13.802Z",
+      "path": "/notes/fu735lj7ygepx87pfd3ub705",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:13.826Z",
+      "path": "/_next/static/chunks/src_app_globals_91e4631d.css",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:13.831Z",
+      "path": "/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_57d40746._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:13.848Z",
+      "path": "/_next/static/chunks/node_modules_%40swc_helpers_cjs_b3dc30d6._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:13.848Z",
+      "path": "/_next/static/chunks/node_modules_next_dist_b0daae9a._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:13.848Z",
+      "path": "/_next/static/chunks/node_modules_next_dist_compiled_5150ccfd._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:13.848Z",
+      "path": "/_next/static/chunks/_a0ff3932._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:13.872Z",
+      "path": "/_next/static/chunks/node_modules_next_dist_client_cf1d9188._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:13.872Z",
+      "path": "/_next/static/chunks/turbopack-_cdba956c._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:13.872Z",
+      "path": "/_next/static/chunks/src_app_icon_svg_mjs_32921ff1._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:13.872Z",
+      "path": "/_next/static/chunks/node_modules_next_dist_8db7fb1f._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:13.872Z",
+      "path": "/_next/static/chunks/_8aa1ee89._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:13.872Z",
+      "path": "/_next/static/chunks/src_app_layout_tsx_0a548d63._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:13.873Z",
+      "path": "/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:13.873Z",
+      "path": "/_next/static/chunks/src_97671805._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:13.873Z",
+      "path": "/_next/static/chunks/node_modules_micromark-core-commonmark_dev_lib_fc41dd51._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:13.873Z",
+      "path": "/_next/static/chunks/src_app_(app)_layout_tsx_5a1cf0d1._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:13.875Z",
+      "path": "/_next/static/chunks/node_modules_next_dist_client_components_builtin_global-error_5a1cf0d1.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:13.876Z",
+      "path": "/_next/static/chunks/src_components_markdown-editor_tsx_de6483ee._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:13.880Z",
+      "path": "/_next/static/chunks/_9e0bca41._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:13.888Z",
+      "path": "/_next/static/chunks/node_modules_next_dist_compiled_next-devtools_index_a9cb0712.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:13.910Z",
+      "path": "/_next/static/media/inter-latin-wght-normal.c757f81b.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:13.911Z",
+      "path": "/_next/static/media/jetbrains-mono-latin-wght-normal.1afd078f.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:13.911Z",
+      "path": "/_next/static/media/instrument-serif-latin-400-normal.60c916e2.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:13.911Z",
+      "path": "/_next/static/media/noto-sans-sc-118-wght-normal.37668df1.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:13.911Z",
+      "path": "/_next/static/media/noto-sans-sc-117-wght-normal.33bc3e63.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:13.913Z",
+      "path": "/_next/static/media/noto-sans-sc-116-wght-normal.e9f8f25c.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:13.931Z",
+      "path": "/_next/static/media/noto-sans-sc-114-wght-normal.e4030818.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:13.931Z",
+      "path": "/_next/static/media/noto-sans-sc-110-wght-normal.bd1756ce.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:13.931Z",
+      "path": "/_next/static/media/noto-sans-sc-113-wght-normal.3e627507.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:13.931Z",
+      "path": "/_next/static/media/noto-sans-sc-115-wght-normal.2d0a4ff0.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:13.931Z",
+      "path": "/_next/static/media/noto-sans-sc-104-wght-normal.3d49457a.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:13.932Z",
+      "path": "/_next/static/chunks/src_app_(app)_notes_%5Bid%5D_page_tsx_d0292a8a._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:13.933Z",
+      "path": "/_next/static/media/noto-sans-sc-119-wght-normal.00c2030a.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:13.933Z",
+      "path": "/_next/static/chunks/node_modules_katex_dist_katex_mjs_b8ab5b3b._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:13.937Z",
+      "path": "/_next/static/chunks/node_modules_de6f44d8._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:13.946Z",
+      "path": "/_next/static/media/noto-serif-sc-118-wght-normal.2477722d.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:13.946Z",
+      "path": "/_next/static/media/noto-serif-sc-117-wght-normal.289b2a85.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:13.950Z",
+      "path": "/_next/static/media/noto-serif-sc-116-wght-normal.8e47048d.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:13.952Z",
+      "path": "/_next/static/media/noto-serif-sc-119-wght-normal.19ad7ef8.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:13.956Z",
+      "path": "/_next/static/media/noto-serif-sc-112-wght-normal.44bf8938.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:13.964Z",
+      "path": "/_next/static/media/noto-serif-sc-110-wght-normal.0c3544d4.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:13.995Z",
+      "path": "/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_285433b7._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:13.995Z",
+      "path": "/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_c8c997ce._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:14.010Z",
+      "path": "/_next/static/chunks/node_modules_mermaid_dist_mermaid_core_mjs_938263ae._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:14.015Z",
+      "path": "/_next/static/chunks/node_modules_%40popperjs_core_lib_a6f1ab07._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:14.016Z",
+      "path": "/_next/static/chunks/node_modules_entities_lib_esm_6f35499b._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:14.016Z",
+      "path": "/_next/static/chunks/node_modules_%40tiptap_core_dist_index_4fbaf11d.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:14.017Z",
+      "path": "/_next/static/chunks/node_modules_markdown-it_b1618df4._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:14.019Z",
+      "path": "/_next/static/chunks/node_modules_prosemirror-view_dist_index_21ada2c5.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:14.020Z",
+      "path": "/_next/static/chunks/src_components_markdown-editor_tsx_d61a99dd._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:14.021Z",
+      "path": "/_next/static/chunks/src_001f99f5._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:14.039Z",
+      "path": "/_next/static/chunks/node_modules_fb0de45a._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:14.077Z",
+      "path": "/_next/static/media/noto-sans-sc-112-wght-normal.c1d50eab.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:15.261Z",
+      "path": "/api/notes/fu735lj7ygepx87pfd3ub705/related",
+      "method": "POST",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:15.290Z",
+      "path": "/_next/static/media/noto-sans-sc-108-wght-normal.4473971f.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:15.294Z",
+      "path": "/_next/static/media/noto-sans-sc-106-wght-normal.d1ab18bc.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:15.295Z",
+      "path": "/_next/static/media/noto-sans-sc-107-wght-normal.f775354e.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:04:15.299Z",
+      "path": "/_next/static/media/noto-sans-sc-101-wght-normal.c745cec3.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:06:31.326Z",
+      "path": "/settings",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:06:31.370Z",
+      "path": "/_next/static/chunks/src_app_(app)_settings_page_tsx_d0292a8a._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:06:31.379Z",
+      "path": "/_next/static/chunks/src_b4aff413._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:06:31.705Z",
+      "path": "/_next/static/chunks/src_app_(app)_settings_page_tsx_d0292a8a._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:06:31.706Z",
+      "path": "/_next/static/chunks/src_b4aff413._.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:06:31.712Z",
+      "path": "/manifest.webmanifest",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:06:31.719Z",
+      "path": "/_next/static/media/noto-sans-sc-111-wght-normal.86747b13.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:06:31.720Z",
+      "path": "/icons/icon-192.png",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:06:31.730Z",
+      "path": "/_next/static/media/noto-sans-sc-105-wght-normal.f17f9af5.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "time": "2026-09-14T08:06:31.730Z",
+      "path": "/_next/static/media/noto-sans-sc-109-wght-normal.0aa05c8e.woff2",
+      "method": "GET",
+      "status": 200
+    }
+  ],
+  "console": [
+    {
+      "type": "error",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+    }
+  ],
+  "errors": [],
+  "blocked": [],
+  "steps": {
+    "loginPage": {
+      "status": 200,
+      "url": "http://127.0.0.1:3311/login"
+    },
+    "login": {
+      "hostPasswordStatus": 401,
+      "demoPasswordStatus": 200,
+      "url": "http://127.0.0.1:3311/"
+    },
+    "firstNote": {
+      "status": 201,
+      "id": "eifme1synnzp9q0y8o314hkw",
+      "title": "R1验收冷启动：今晚·AI",
+      "tags": [
+        "羽毛球",
+        "训练"
+      ],
+      "topicId": "b2m5ni7f25w10ix7vgpq87bi",
+      "aiStatus": "done",
+      "bodyPreserved": true,
+      "visibleTopic": "羽毛球"
+    },
+    "suggestionsBefore": {
+      "acceptButtons": 2,
+      "run": true,
+      "cook": true
+    },
+    "suggestionsAfter": {
+      "remainingCook": true,
+      "runTopic": "跑步5",
+      "inbox": "未分类3"
+    },
+    "search": {
+      "query": "杀球",
+      "firstNotePresent": true,
+      "resultText": "R1验收冷启动：今晚·AI15:39R1验收冷启动：今晚羽毛球多球训练，杀球终于有点下压了。羽毛球羽毛球训练",
+      "reopened": true
+    },
+    "settings": {
+      "hiddenLocalMock": true,
+      "hiddenContainerMock": true,
+      "hiddenCanary": true
+    },
+    "boundary": {
+      "results": [
+        {
+          "name": "llm-patch",
+          "url": "/api/settings/llm",
+          "method": "PATCH",
+          "status": 403,
+          "body": "{\"error\":\"体验模式不支持此操作\"}"
+        },
+        {
+          "name": "llm-delete",
+          "url": "/api/settings/llm",
+          "method": "DELETE",
+          "status": 403,
+          "body": "{\"error\":\"体验模式不支持此操作\"}"
+        },
+        {
+          "name": "tokens-list",
+          "url": "/api/settings/tokens",
+          "method": "GET",
+          "status": 403,
+          "body": "{\"error\":\"体验模式不支持此操作\"}"
+        },
+        {
+          "name": "tokens-create",
+          "url": "/api/settings/tokens",
+          "method": "POST",
+          "status": 403,
+          "body": "{\"error\":\"体验模式不支持此操作\"}"
+        },
+        {
+          "name": "tokens-revoke",
+          "url": "/api/settings/tokens?id=r1-absent-token",
+          "method": "DELETE",
+          "status": 403,
+          "body": "{\"error\":\"体验模式不支持此操作\"}"
+        },
+        {
+          "name": "export",
+          "url": "/api/export",
+          "method": "GET",
+          "status": 403,
+          "body": "{\"error\":\"体验模式不支持此操作\"}"
+        },
+        {
+          "name": "backup",
+          "url": "/api/backup",
+          "method": "POST",
+          "status": 403,
+          "body": "{\"error\":\"体验模式不支持此操作\"}"
+        },
+        {
+          "name": "embedding-list",
+          "url": "/api/embedding/backfill",
+          "method": "GET",
+          "status": 403,
+          "body": "{\"error\":\"体验模式不支持此操作\"}"
+        },
+        {
+          "name": "embedding-start",
+          "url": "/api/embedding/backfill",
+          "method": "POST",
+          "status": 403,
+          "body": "{\"error\":\"体验模式不支持此操作\"}"
+        },
+        {
+          "name": "import",
+          "url": "/api/import",
+          "method": "POST",
+          "status": 403,
+          "body": "{\"error\":\"体验模式不支持此操作\"}"
+        },
+        {
+          "name": "llm-test",
+          "url": "/api/llm/test",
+          "method": "POST",
+          "status": 403,
+          "body": "{\"error\":\"体验模式不支持此操作\"}"
+        },
+        {
+          "name": "upload",
+          "url": "/api/uploads",
+          "method": "POST",
+          "status": 403,
+          "body": "{\"error\":\"体验模式不支持此操作\"}"
+        }
+      ],
+      "all403": true,
+      "zipBytes": 226,
+      "pngBytes": 90
+    },
+    "beforeRestart": {
+      "noteCount": 17,
+      "ids": [
+        "cr0dnhyn4hduva1vhrg63dyn",
+        "eifme1synnzp9q0y8o314hkw",
+        "feebaey0c5yrzziciutvf1fj",
+        "fg0hpdtc0qu05ck23ijc23il",
+        "fn0gtqpvvbtb8b3ohnv9xowh",
+        "fx2kdc04okk5y41r6zqled5v",
+        "htmpc7pr2m5h6sg8h8fu27j1",
+        "in9nuq7zpm91dkl94n1heir2",
+        "j86xi1u1l187xm5hzdbcklo9",
+        "jc3niz4rzkzxl0rs8b4dm4ob",
+        "lkpk8gbzjm0jy1rztj2zx071",
+        "mjns80q5krtytzrga8yqbmyc",
+        "nek5ibxb8lygyrj7impy3gyn",
+        "rb3hss2qzaspxp0kn2xhg2qh",
+        "sx0tkkaj24akub5ebb18j984",
+        "w7vzqffb2mzfyqbo34fs832y",
+        "wsyc3qpp2tlu1szq83j6e9kp"
+      ],
+      "firstNoteId": "eifme1synnzp9q0y8o314hkw"
+    },
+    "restartPreservation": {
+      "status": 200,
+      "sameIds": true,
+      "countBefore": 17,
+      "countAfter": 17,
+      "firstNoteBodyPreserved": true,
+      "sessionPreserved": true
+    },
+    "secondNote": {
+      "status": 201,
+      "id": "fu735lj7ygepx87pfd3ub705",
+      "title": "R1验收配置污染：重·AI",
+      "tags": [
+        "羽毛球",
+        "训练"
+      ],
+      "aiStatus": "done",
+      "bodyPreserved": true,
+      "visibleTopic": "羽毛球"
+    },
+    "restartSettings": {
+      "fields": {
+        "text": "mock",
+        "vision": "",
+        "image": "",
+        "reasoning": "",
+        "embedding": ""
+      },
+      "hiddenMockEndpoints": true,
+      "hiddenCanary": true,
+      "additionalModelsDisabled": true
+    },
+    "browserCompleted": {
+      "pageErrors": 0,
+      "blockedPageRequests": 0,
+      "completed": true
+    }
+  },
+  "startedUtc": "2026-09-14T07:33:21.202Z",
+  "transport": "local-playwright-stdin",
+  "driverPid": 29792,
+  "browserVersion": "153.0.8010.36",
+  "firstContent": "R1验收冷启动：今晚羽毛球多球训练，杀球终于有点下压了。",
+  "firstNoteId": "eifme1synnzp9q0y8o314hkw",
+  "secondContent": "R1验收配置污染：重启后继续羽毛球多球训练，保持杀球动作稳定。",
+  "secondNoteId": "fu735lj7ygepx87pfd3ub705",
+  "finishedUtc": "2026-09-14T08:10:02.704Z"
+}

@@ -1,0 +1,43 @@
+
+ RUN  v4.1.11 D:/ClaudeProjects/ai_acknowladge
+
+stdout | tests/components/markdown-editor-security.test.tsx > 真实编辑器安全边界：Mermaid=false > 初次加载不保留危险属性，正常内容完整
+{"json":{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"安全正文 "},{"type":"text","marks":[{"type":"link","attrs":{"href":"https://example.invalid/note","target":"_blank","rel":"noopener noreferrer","class":null}}],"text":"正常链接"},{"type":"text","text":" "},{"type":"math","attrs":{"latex":"x^2","display":false}}]},{"type":"image","attrs":{"src":"/api/images/test.png","alt":"图片说明","title":null,"width":"50%","align":"center"}},{"type":"table","content":[{"type":"tableRow","content":[{"type":"tableHeader","attrs":{"colspan":1,"rowspan":1,"colwidth":null},"content":[{"type":"paragraph","content":[{"type":"text","text":"表头"}]}]}]},{"type":"tableRow","content":[{"type":"tableCell","attrs":{"colspan":1,"rowspan":1,"colwidth":null},"content":[{"type":"paragraph","content":[{"type":"text","text":"单元格"}]}]}]}]},{"type":"codeBlock","attrs":{"language":"mermaid"},"content":[{"type":"text","text":"graph TD\nA-->B"}]}]},"html":"<p>安全正文 <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://example.invalid/note\">正常链接</a> <span data-math=\"\" data-latex=\"x^2\" data-display=\"false\" class=\"math-node\"></span></p><img src=\"/api/images/test.png\" alt=\"图片说明\" width=\"50%\" style=\"display: block; margin-left: auto; margin-right: auto;\"><table style=\"min-width: 25px;\"><colgroup><col style=\"min-width: 25px;\"></colgroup><tbody><tr><th colspan=\"1\" rowspan=\"1\"><p>表头</p></th></tr><tr><td colspan=\"1\" rowspan=\"1\"><p>单元格</p></td></tr></tbody></table><pre><code class=\"language-mermaid\">graph TD\nA--&gt;B</code></pre>","markdown":"安全正文 [正常链接](https://example.invalid/note) $x^2$\n\n![图片说明](/api/images/test.png)| 表头 |\n| --- |\n| 单元格 |\n\n```mermaid\ngraph TD\nA-->B\n```"}
+
+stdout | tests/components/markdown-editor-security.test.tsx > 真实编辑器安全边界：Mermaid=false > 图片属性、公式、表格、链接及围栏保存重开后保真
+{"saved":"安全正文 [正常链接](https://example.invalid/note) $x^2$\n\n![图片说明](/api/images/test.png)| 表头 |\n| --- |\n| 单元格 |\n\n```mermaid\ngraph TD\nA-->B\n```"}
+
+stdout | tests/components/markdown-editor-security.test.tsx > 真实编辑器安全边界：Mermaid=true > 初次加载不保留危险属性，正常内容完整
+{"json":{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"安全正文 "},{"type":"text","marks":[{"type":"link","attrs":{"href":"https://example.invalid/note","target":"_blank","rel":"noopener noreferrer","class":null}}],"text":"正常链接"},{"type":"text","text":" "},{"type":"math","attrs":{"latex":"x^2","display":false}}]},{"type":"image","attrs":{"src":"/api/images/test.png","alt":"图片说明","title":null,"width":"50%","align":"center"}},{"type":"table","content":[{"type":"tableRow","content":[{"type":"tableHeader","attrs":{"colspan":1,"rowspan":1,"colwidth":null},"content":[{"type":"paragraph","content":[{"type":"text","text":"表头"}]}]}]},{"type":"tableRow","content":[{"type":"tableCell","attrs":{"colspan":1,"rowspan":1,"colwidth":null},"content":[{"type":"paragraph","content":[{"type":"text","text":"单元格"}]}]}]}]},{"type":"codeBlock","attrs":{"language":"mermaid"},"content":[{"type":"text","text":"graph TD\nA-->B"}]}]},"html":"<p>安全正文 <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://example.invalid/note\">正常链接</a> <span data-math=\"\" data-latex=\"x^2\" data-display=\"false\" class=\"math-node\"></span></p><img src=\"/api/images/test.png\" alt=\"图片说明\" width=\"50%\" style=\"display: block; margin-left: auto; margin-right: auto;\"><table style=\"min-width: 25px;\"><colgroup><col style=\"min-width: 25px;\"></colgroup><tbody><tr><th colspan=\"1\" rowspan=\"1\"><p>表头</p></th></tr><tr><td colspan=\"1\" rowspan=\"1\"><p>单元格</p></td></tr></tbody></table><pre><code class=\"language-mermaid\">graph TD\nA--&gt;B</code></pre>","markdown":"安全正文 [正常链接](https://example.invalid/note) $x^2$\n\n![图片说明](/api/images/test.png)| 表头 |\n| --- |\n| 单元格 |\n\n```mermaid\ngraph TD\nA-->B\n```"}
+
+ × tests/components/markdown-editor-security.test.tsx > 真实编辑器安全边界：Mermaid=false > 初次加载不保留危险属性，正常内容完整 162ms
+   → expected '' to be '图片说明' // Object.is equality
+ ↓ tests/components/markdown-editor-security.test.tsx > 真实编辑器安全边界：Mermaid=false > 外部正文同步通过实际 setContent 路径过滤属性
+ ↓ tests/components/markdown-editor-security.test.tsx > 真实编辑器安全边界：Mermaid=false > text 粘贴通过真实事件和 schema
+ ↓ tests/components/markdown-editor-security.test.tsx > 真实编辑器安全边界：Mermaid=false > html 粘贴通过真实事件和 schema
+ ↓ tests/components/markdown-editor-security.test.tsx > 真实编辑器安全边界：Mermaid=false > context 粘贴通过真实事件和 schema
+ ↓ tests/components/markdown-editor-security.test.tsx > 真实编辑器安全边界：Mermaid=false > text 拖放通过真实事件和 schema
+ ↓ tests/components/markdown-editor-security.test.tsx > 真实编辑器安全边界：Mermaid=false > html 拖放通过真实事件和 schema
+ × tests/components/markdown-editor-security.test.tsx > 真实编辑器安全边界：Mermaid=false > 图片属性、公式、表格、链接及围栏保存重开后保真 80ms
+   → expected undefined to be '单元格' // Object.is equality
+ ↓ tests/components/markdown-editor-security.test.tsx > 真实编辑器安全边界：Mermaid=false > 无表头表格退回 HTML 后仍可往返
+stdout | tests/components/markdown-editor-security.test.tsx > 真实编辑器安全边界：Mermaid=true > 图片属性、公式、表格、链接及围栏保存重开后保真
+{"saved":"安全正文 [正常链接](https://example.invalid/note) $x^2$\n\n![图片说明](/api/images/test.png)| 表头 |\n| --- |\n| 单元格 |\n\n```mermaid\ngraph TD\nA-->B\n```"}
+
+ × tests/components/markdown-editor-security.test.tsx > 真实编辑器安全边界：Mermaid=true > 初次加载不保留危险属性，正常内容完整 51ms
+   → expected '' to be '图片说明' // Object.is equality
+ ↓ tests/components/markdown-editor-security.test.tsx > 真实编辑器安全边界：Mermaid=true > 外部正文同步通过实际 setContent 路径过滤属性
+ ↓ tests/components/markdown-editor-security.test.tsx > 真实编辑器安全边界：Mermaid=true > text 粘贴通过真实事件和 schema
+ ↓ tests/components/markdown-editor-security.test.tsx > 真实编辑器安全边界：Mermaid=true > html 粘贴通过真实事件和 schema
+ ↓ tests/components/markdown-editor-security.test.tsx > 真实编辑器安全边界：Mermaid=true > context 粘贴通过真实事件和 schema
+ ↓ tests/components/markdown-editor-security.test.tsx > 真实编辑器安全边界：Mermaid=true > text 拖放通过真实事件和 schema
+ ↓ tests/components/markdown-editor-security.test.tsx > 真实编辑器安全边界：Mermaid=true > html 拖放通过真实事件和 schema
+ × tests/components/markdown-editor-security.test.tsx > 真实编辑器安全边界：Mermaid=true > 图片属性、公式、表格、链接及围栏保存重开后保真 1300ms
+   → expected undefined to be '单元格' // Object.is equality
+ ↓ tests/components/markdown-editor-security.test.tsx > 真实编辑器安全边界：Mermaid=true > 无表头表格退回 HTML 后仍可往返
+
+ Test Files  1 failed (1)
+      Tests  4 failed | 14 skipped (18)
+   Start at  10:48:04
+   Duration  3.51s (transform 101ms, setup 20ms, import 614ms, tests 1.59s, environment 1.09s)
+

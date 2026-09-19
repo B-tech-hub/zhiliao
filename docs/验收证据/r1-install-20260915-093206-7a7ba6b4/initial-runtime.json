@@ -1,0 +1,179 @@
+{
+  "runId": "20260915-093206-7a7ba6b4",
+  "phase": "initial",
+  "timeUtc": "2026-09-15T02:18:26.850994+00:00",
+  "containers": [
+    {
+      "id": "7c97da1e7cda7caff8883650b7990ef1775372bbdf783eb052a0ec2179bf760e",
+      "service": "ingress",
+      "name": "/zhiliao-r1-061-20260915-093206-7a7ba6b4-ingress-1",
+      "imageId": "sha256:dc5069ad14f19660b141b21236140b91656bf89bbc3e2417c70ae650cd66104c",
+      "health": "healthy",
+      "networks": [
+        "zhiliao-r1-061-20260915-093206-7a7ba6b4-ingress",
+        "zhiliao-r1-061-20260915-093206-7a7ba6b4-net"
+      ],
+      "portBindings": {
+        "8080/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "3312"
+          }
+        ]
+      },
+      "mounts": [
+        {
+          "Type": "bind",
+          "Source": "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-r1-install-061-20260915-093206-7a7ba6b4\\nginx\\demo.conf",
+          "Destination": "/etc/nginx/nginx.conf",
+          "Mode": "ro",
+          "RW": false,
+          "Propagation": "rprivate"
+        }
+      ],
+      "readOnly": true,
+      "memoryLimit": 134217728,
+      "nanoCpus": 250000000
+    },
+    {
+      "id": "1a91341e927bdb0b0cdd12f0166ca536e79dda60c6f80744b97489c214961e40",
+      "service": "app",
+      "name": "/zhiliao-r1-061-20260915-093206-7a7ba6b4-app-1",
+      "imageId": "sha256:8a8f2cd3ec1a26fc68bf04a2661f2306f09bba4b06ba9b1593d74b3f3953deb1",
+      "health": "healthy",
+      "networks": [
+        "zhiliao-r1-061-20260915-093206-7a7ba6b4-net"
+      ],
+      "portBindings": {},
+      "mounts": [
+        {
+          "Type": "volume",
+          "Name": "zhiliao-r1-061-20260915-093206-7a7ba6b4_install_db",
+          "Source": "/var/lib/docker/volumes/zhiliao-r1-061-20260915-093206-7a7ba6b4_install_db/_data",
+          "Destination": "/data/db",
+          "Driver": "local",
+          "Mode": "rw",
+          "RW": true,
+          "Propagation": ""
+        },
+        {
+          "Type": "volume",
+          "Name": "zhiliao-r1-061-20260915-093206-7a7ba6b4_install_uploads",
+          "Source": "/var/lib/docker/volumes/zhiliao-r1-061-20260915-093206-7a7ba6b4_install_uploads/_data",
+          "Destination": "/data/uploads",
+          "Driver": "local",
+          "Mode": "rw",
+          "RW": true,
+          "Propagation": ""
+        },
+        {
+          "Type": "bind",
+          "Source": "/run/desktop/mnt/host/c/Users/BAIBAI/AppData/Local/Temp/zhiliao-r1-install-061-20260915-093206-7a7ba6b4/notes",
+          "Destination": "/data/notes",
+          "Mode": "rw",
+          "RW": true,
+          "Propagation": "rprivate"
+        }
+      ],
+      "readOnly": true,
+      "memoryLimit": 805306368,
+      "nanoCpus": 1000000000
+    },
+    {
+      "id": "eaaefb0a6e4af03303d3748e6fe51d8e9f9c4da07b080e2d2db7a1864ff49db6",
+      "service": "mockllm",
+      "name": "/zhiliao-r1-061-20260915-093206-7a7ba6b4-mockllm-1",
+      "imageId": "sha256:8a8f2cd3ec1a26fc68bf04a2661f2306f09bba4b06ba9b1593d74b3f3953deb1",
+      "health": "healthy",
+      "networks": [
+        "zhiliao-r1-061-20260915-093206-7a7ba6b4-net"
+      ],
+      "portBindings": {},
+      "mounts": [],
+      "readOnly": true,
+      "memoryLimit": 268435456,
+      "nanoCpus": 500000000
+    }
+  ],
+  "volumes": [
+    {
+      "name": "zhiliao-r1-061-20260915-093206-7a7ba6b4_install_db",
+      "labels": {
+        "com.docker.compose.config-hash": "ececf5e88be4694d97d1e61a923d93acef468c3e3db65f516c3a393c5205187f",
+        "com.docker.compose.project": "zhiliao-r1-061-20260915-093206-7a7ba6b4",
+        "com.docker.compose.version": "2.39.4",
+        "com.docker.compose.volume": "install_db",
+        "io.zhiliao.r1.run": "20260915-093206-7a7ba6b4"
+      }
+    },
+    {
+      "name": "zhiliao-r1-061-20260915-093206-7a7ba6b4_install_uploads",
+      "labels": {
+        "com.docker.compose.config-hash": "6edc23646d6ef2cbfe898bf20b31f452f3dd855f910373e701d8641edc93d0a5",
+        "com.docker.compose.project": "zhiliao-r1-061-20260915-093206-7a7ba6b4",
+        "com.docker.compose.version": "2.39.4",
+        "com.docker.compose.volume": "install_uploads",
+        "io.zhiliao.r1.run": "20260915-093206-7a7ba6b4"
+      }
+    }
+  ],
+  "networks": [
+    {
+      "id": "3685df7f2ea18da7f031f4ffe554e9a1455c7c411816dcc2f5aadab77488857d",
+      "name": "zhiliao-r1-061-20260915-093206-7a7ba6b4-ingress",
+      "internal": false,
+      "options": {
+        "com.docker.network.enable_ipv4": "true",
+        "com.docker.network.enable_ipv6": "false"
+      },
+      "ipam": {
+        "Driver": "default",
+        "Options": null,
+        "Config": [
+          {
+            "Subnet": "172.23.0.0/16",
+            "Gateway": "172.23.0.1"
+          }
+        ]
+      }
+    },
+    {
+      "id": "117193eb0c993967bfdc5c874aab3c4cdbdba1a40e304a9534dcb58a930d04a8",
+      "name": "zhiliao-r1-061-20260915-093206-7a7ba6b4-net",
+      "internal": true,
+      "options": {
+        "com.docker.network.bridge.gateway_mode_ipv4": "isolated",
+        "com.docker.network.enable_ipv4": "true",
+        "com.docker.network.enable_ipv6": "false"
+      },
+      "ipam": {
+        "Driver": "default",
+        "Options": null,
+        "Config": [
+          {
+            "Subnet": "172.22.0.0/16"
+          }
+        ]
+      }
+    }
+  ],
+  "health": {
+    "status": 200,
+    "body": {
+      "ok": true
+    }
+  },
+  "mcp": {
+    "status": 200,
+    "result": {
+      "protocolVersion": "2025-03-26",
+      "serverInfo": {
+        "name": "zhiliao",
+        "version": "0.6.1"
+      },
+      "capabilities": {
+        "tools": {}
+      }
+    }
+  }
+}

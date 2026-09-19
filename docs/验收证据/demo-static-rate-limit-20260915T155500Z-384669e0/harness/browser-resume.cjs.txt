@@ -1,0 +1,112 @@
+const assert = require("node:assert/strict");
+const fs = require("node:fs");
+const path = require("node:path");
+const { createHash } = require("node:crypto");
+const { spawnSync } = require("node:child_process");
+const { chromium } = require("C:/Users/BAIBAI/AppData/Local/npm-cache/_npx/9833c18b2d85bc59/node_modules/playwright");
+const task = __dirname;
+const state = JSON.parse(fs.readFileSync(path.join(task, "runtime-private.json"), "utf8"));
+const origin = "http://127.0.0.1:" + state.port;
+const evidence = path.join("D:/ClaudeProjects/ai_acknowladge/docs/验收证据", "demo-static-rate-limit-" + state.runId);
+const file = path.join(evidence, "browser-report.json");
+const report = JSON.parse(fs.readFileSync(file, "utf8"));
+assert.equal(report.status, "failed");
+assert.equal(report.steps.coldReloads.count, 3);
+assert.ok(report.network.some(item => item.path === "/api/notes" && item.method === "POST" && item.status === 201));
+fs.copyFileSync(file, path.join(evidence, "browser-initial-attempt.json"), fs.constants.COPYFILE_EXCL);
+report.toolingNotes = ["首段完成真实登录、保存设置、三次禁用缓存刷新及笔记 POST 201；探针误把仅返回 id 的创建响应当成完整笔记而停止。保留首段结果，后续只读数据库并用新浏览器会话重开已保存笔记，不重复设置刷新或新建笔记。"];
+report.initialAttemptReport = "browser-initial-attempt.json";
+delete report.error;
+report.status = "in-progress";
+report.currentAction = "note-readback";
+const noteText = "静态资源限流修复验收：" + state.runId + "，保存 mock 设置并连续刷新后，仍可正常记录。";
+const encoded = Buffer.from(noteText).toString("base64");
+const query = "const D=require('better-sqlite3');const db=new D(process.env.DATABASE_PATH,{readonly:true,fileMustExist:true});const rows=db.prepare('SELECT id, content FROM notes WHERE content = ?').all(Buffer.from('" + encoded + "','base64').toString('utf8'));console.log(JSON.stringify({rows,total:db.prepare('SELECT COUNT(*) AS count FROM notes').get().count}));db.close();";
+const env = Object.fromEntries(Object.entries(process.env).filter(([key]) => !/^(DEMO_|COMPOSE_)/i.test(key)));
+const result = spawnSync("docker", [...state.compose, "exec", "-T", "app", "node", "-e", query], { encoding: "utf8", env, windowsHide: true, timeout: 20000 });
+assert.equal(result.status, 0, result.stderr);
+const readback = JSON.parse(result.stdout);
+assert.equal(readback.rows.length, 1);
+assert.equal(readback.total, 1);
+assert.equal(readback.rows[0].content, noteText);
+const noteId = readback.rows[0].id;
+fs.writeFileSync(path.join(evidence, "note-readback.json"), JSON.stringify({ id: noteId, totalNotes: readback.total, contentUnchanged: true, contentSha256: createHash("sha256").update(noteText).digest("hex"), source: "本轮独立 app 数据卷，只读查询" }, null, 2) + "\n");
+report.steps.noteSave = { status: 201, id: noteId, contentUnchanged: true, totalNotes: 1, verification: "原 POST 201 记录和当前只读数据库核对" };
+const pending = [];
+const redact = value => String(value).replaceAll(state.password, "[REDACTED]").replaceAll(state.secret, "[REDACTED]");
+const save = () => fs.writeFileSync(file, redact(JSON.stringify(report, null, 2)) + "\n");
+let context, page;
+(async () => {
+  try {
+    const profile = path.join(task, "browser-profile-readback");
+    assert.equal(fs.existsSync(profile), false);
+    context = await chromium.launchPersistentContext(profile, {
+      executablePath: "C:/Program Files/Google/Chrome/Application/chrome.exe", headless: true,
+      viewport: { width: 1440, height: 900 }, locale: "zh-CN", colorScheme: "light", serviceWorkers: "block",
+      args: ["--no-proxy-server", "--disable-background-networking", "--disable-component-update", "--disable-sync", "--no-first-run", "--no-default-browser-check"],
+    });
+    page = context.pages()[0] || await context.newPage();
+    page.setDefaultTimeout(20000);
+    page.setDefaultNavigationTimeout(30000);
+    await context.route("**/*", async route => {
+      const url = new URL(route.request().url());
+      if (["http:", "https:"].includes(url.protocol) && url.origin !== origin) {
+        report.blocked.push({ origin: url.origin, path: url.pathname, action: report.currentAction });
+        await route.abort("blockedbyclient");
+      } else await route.continue();
+    });
+    const cdp = await context.newCDPSession(page);
+    await cdp.send("Network.enable");
+    await cdp.send("Network.setCacheDisabled", { cacheDisabled: true });
+    page.on("response", response => {
+      const url = new URL(response.url());
+      const entry = { at: new Date().toISOString(), path: url.pathname, method: response.request().method(), status: response.status(), action: report.currentAction, resourceType: response.request().resourceType() };
+      report.network.push(entry);
+      if (entry.path.startsWith("/_next/static/")) pending.push((async () => {
+        try { const body = await response.body(); entry.bytes = body.length; entry.sha256 = createHash("sha256").update(body).digest("hex"); }
+        catch (error) { entry.bodyReadError = redact(error.message); }
+      })());
+    });
+    page.on("requestfailed", request => report.requestFailures.push({ path: new URL(request.url()).pathname, error: request.failure()?.errorText, action: report.currentAction }));
+    page.on("pageerror", error => report.pageErrors.push({ error: redact(String(error)), action: report.currentAction }));
+    page.on("console", message => { if (["error", "warning"].includes(message.type())) report.console.push({ type: message.type(), text: redact(message.text()), action: report.currentAction }); });
+    report.currentAction = "readback-login";
+    assert.equal((await page.goto(origin + "/login", { waitUntil: "networkidle" })).status(), 200);
+    await page.getByPlaceholder("请输入访问密码", { exact: true }).fill(state.password);
+    const [login] = await Promise.all([
+      page.waitForResponse(response => new URL(response.url()).pathname === "/api/auth/login" && response.request().method() === "POST"),
+      page.getByRole("button", { name: "登录", exact: true }).click(),
+    ]);
+    assert.equal(login.status(), 200);
+    await page.waitForURL(origin + "/");
+    report.steps.readbackLogin = { status: 200, session: "新浏览器会话真实登录，未注入 Cookie" };
+    report.currentAction = "note-open";
+    assert.equal((await page.goto(origin + "/notes/" + noteId, { waitUntil: "networkidle" })).status(), 200);
+    await page.getByText(noteText, { exact: true }).first().waitFor();
+    await page.screenshot({ path: path.join(evidence, "note-after-save.png"), fullPage: false });
+    report.steps.noteOpen = { status: 200, id: noteId, contentVisible: true };
+    await Promise.allSettled(pending);
+    const assets = report.network.filter(item => item.path.startsWith("/_next/static/"));
+    assert.ok(assets.length > 0);
+    assert.equal(assets.some(item => item.status !== 200), false);
+    assert.equal(assets.some(item => item.bytes === 0), false);
+    assert.equal(report.pageErrors.some(item => /ChunkLoadError|Loading chunk .* failed/.test(item.error)), false);
+    assert.equal(report.pageErrors.some(item => !/Minified React error #418/.test(item.error)), false);
+    assert.equal(report.blocked.length, 0);
+    report.react418 = report.pageErrors.filter(item => /Minified React error #418/.test(item.error));
+    report.staticResponses = { total: assets.length, status200: assets.filter(item => item.status === 200).length, status503: assets.filter(item => item.status === 503).length, bodyReadErrors: assets.filter(item => item.bodyReadError).length, types: Object.fromEntries([...new Set(assets.map(item => item.resourceType))].map(type => [type, assets.filter(item => item.resourceType === type).length])) };
+    report.status = "passed";
+  } catch (error) {
+    report.status = "failed";
+    report.error = redact(error.stack || error.message);
+    if (page) { try { await page.screenshot({ path: path.join(evidence, "browser-readback-failure.png") }); fs.writeFileSync(path.join(evidence, "browser-readback-failure-dom.txt"), redact(await page.locator("body").innerText())); } catch {} }
+  } finally {
+    if (context) await context.close();
+    report.finishedAt = new Date().toISOString();
+    report.browserClosed = true;
+    save();
+    console.log(JSON.stringify({ status: report.status, noteId, staticResponses: report.staticResponses, react418: report.react418?.length, error: report.error }));
+    process.exitCode = report.status === "passed" ? 0 : 1;
+  }
+})();
+

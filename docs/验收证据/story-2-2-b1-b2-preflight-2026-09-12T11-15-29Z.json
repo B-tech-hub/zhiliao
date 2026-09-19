@@ -1,0 +1,106 @@
+{
+  "story": "2.2",
+  "recorded_at": "2026-09-12T11:15:25.294028+00:00",
+  "scope": "当前工作站只读调查；最终部署目标未提供",
+  "status": "local_context_only",
+  "operations": {
+    "contexts": {
+      "exit_code": 0,
+      "stdout": "{\"Current\":false,\"Description\":\"Current DOCKER_HOST based configuration\",\"DockerEndpoint\":\"npipe:////./pipe/docker_engine\",\"Error\":\"\",\"Name\":\"default\"}\n{\"Current\":true,\"Description\":\"Docker Desktop\",\"DockerEndpoint\":\"npipe:////./pipe/dockerDesktopLinuxEngine\",\"Error\":\"\",\"Name\":\"desktop-linux\"}",
+      "stderr": ""
+    },
+    "engine": {
+      "exit_code": 0,
+      "stdout": "e5262d0e-6b32-4eaa-84a8-def4855f847e|docker-desktop|Docker Desktop|linux|x86_64|/var/lib/docker|overlayfs|[[\"driver-type\",\"io.containerd.snapshotter.v1\"]]",
+      "stderr": ""
+    },
+    "security": {
+      "exit_code": 0,
+      "stdout": "[\"name=seccomp,profile=builtin\",\"name=cgroupns\"]",
+      "stderr": ""
+    },
+    "versions": {
+      "exit_code": 0,
+      "stdout": "{\"Client\":{\"Version\":\"28.4.0\",\"ApiVersion\":\"1.51\",\"DefaultAPIVersion\":\"1.51\",\"GitCommit\":\"d8eb465\",\"GoVersion\":\"go1.24.7\",\"Os\":\"windows\",\"Arch\":\"amd64\",\"BuildTime\":\"Wed Sep  3 20:59:40 2025\",\"Context\":\"desktop-linux\"},\"Server\":{\"Platform\":{\"Name\":\"Docker Desktop 4.46.0 (204649)\"},\"Components\":[{\"Name\":\"Engine\",\"Version\":\"28.4.0\",\"Details\":{\"ApiVersion\":\"1.51\",\"Arch\":\"amd64\",\"BuildTime\":\"Wed Sep  3 20:57:37 2025\",\"Experimental\":\"false\",\"GitCommit\":\"249d679\",\"GoVersion\":\"go1.24.7\",\"KernelVersion\":\"6.6.87.2-microsoft-standard-WSL2\",\"MinAPIVersion\":\"1.24\",\"Os\":\"linux\"}},{\"Name\":\"containerd\",\"Version\":\"1.7.27\",\"Details\":{\"GitCommit\":\"05044ec0a9a75232cad458027ca83437aae3f4da\"}},{\"Name\":\"runc\",\"Version\":\"1.2.5\",\"Details\":{\"GitCommit\":\"v1.2.5-0-g59923ef\"}},{\"Name\":\"docker-init\",\"Version\":\"0.19.0\",\"Details\":{\"GitCommit\":\"de40ad0\"}}],\"Version\":\"28.4.0\",\"ApiVersion\":\"1.51\",\"MinAPIVersion\":\"1.24\",\"GitCommit\":\"249d679\",\"GoVersion\":\"go1.24.7\",\"Os\":\"linux\",\"Arch\":\"amd64\",\"KernelVersion\":\"6.6.87.2-microsoft-standard-WSL2\",\"BuildTime\":\"2025-09-03T20:57:37.000000000+00:00\"}}",
+      "stderr": ""
+    },
+    "compose": {
+      "exit_code": 0,
+      "stdout": "2.39.4-desktop.1",
+      "stderr": ""
+    },
+    "ubuntu_os": {
+      "exit_code": 0,
+      "stdout": "PRETTY_NAME=\"Ubuntu 24.04.3 LTS\"\nNAME=\"Ubuntu\"\nVERSION_ID=\"24.04\"\nVERSION=\"24.04.3 LTS (Noble Numbat)\"\nVERSION_CODENAME=noble\nID=ubuntu\nID_LIKE=debian\nHOME_URL=\"https://www.ubuntu.com/\"\nSUPPORT_URL=\"https://help.ubuntu.com/\"\nBUG_REPORT_URL=\"https://bugs.launchpad.net/ubuntu/\"\nPRIVACY_POLICY_URL=\"https://www.ubuntu.com/legal/terms-and-policies/privacy-policy\"\nUBUNTU_CODENAME=noble\nLOGO=ubuntu-logo",
+      "stderr": "w\u0000s\u0000l\u0000:\u0000 \u0000�hKm0R \u0000l\u0000o\u0000c\u0000a\u0000l\u0000h\u0000o\u0000s\u0000t\u0000 \u0000�N\u0006tM�n\f�FO*g\\��P0R \u0000W\u0000S\u0000L\u0000\u00020N\u0000A\u0000T\u0000 \u0000!j\u000f_\u000bN�v \u0000W\u0000S\u0000L\u0000 \u0000\rN/e\u0001c \u0000l\u0000o\u0000c\u0000a\u0000l\u0000h\u0000o\u0000s\u0000t\u0000 \u0000�N\u0006t\u00020\r\u0000\n\u0000"
+    },
+    "ubuntu_engine": {
+      "exit_code": 127,
+      "stdout": "",
+      "stderr": "w\u0000s\u0000l\u0000:\u0000 \u0000�hKm0R \u0000l\u0000o\u0000c\u0000a\u0000l\u0000h\u0000o\u0000s\u0000t\u0000 \u0000�N\u0006tM�n\f�FO*g\\��P0R \u0000W\u0000S\u0000L\u0000\u00020N\u0000A\u0000T\u0000 \u0000!j\u000f_\u000bN�v \u0000W\u0000S\u0000L\u0000 \u0000\rN/e\u0001c \u0000l\u0000o\u0000c\u0000a\u0000l\u0000h\u0000o\u0000s\u0000t\u0000 \u0000�N\u0006t\u00020\r\u0000\n\u0000/bin/bash: line 1: {{.DockerRootDir}}: command not found\n/bin/bash: line 1: {{.ServerVersion}}: command not found\n/bin/bash: line 1: {{.OperatingSystem}}: command not found\n/bin/bash: line 1: {{.Name}}: command not found"
+    },
+    "ubuntu_quota_tools": {
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "w\u0000s\u0000l\u0000:\u0000 \u0000�hKm0R \u0000l\u0000o\u0000c\u0000a\u0000l\u0000h\u0000o\u0000s\u0000t\u0000 \u0000�N\u0006tM�n\f�FO*g\\��P0R \u0000W\u0000S\u0000L\u0000\u00020N\u0000A\u0000T\u0000 \u0000!j\u000f_\u000bN�v \u0000W\u0000S\u0000L\u0000 \u0000\rN/e\u0001c \u0000l\u0000o\u0000c\u0000a\u0000l\u0000h\u0000o\u0000s\u0000t\u0000 \u0000�N\u0006t\u00020\r\u0000\n\u0000"
+    },
+    "containers": {
+      "exit_code": 0,
+      "stdout": "cd07490a30d9cd068c4552f0f528dacecd9349eb2a60c1dbf9f8c18333fe83ea|ghcr.io/b-tech-hub/zhiliao:0.6.0|exited\n5d05095aa56b26fee8ff02b3372764d8300cc7b1851773eca5ee0a95ed3f675f|ghcr.io/b-tech-hub/zhiliao:0.6.0|exited\n254c7caca374780a6c1a3bea1c2c6ba59d6ab092de155c34f8efd3cd411532c8|ghcr.io/b-tech-hub/zhiliao:latest|exited\nea240066dd4a847db38ef758917c36a04be31191329ab6c995bdc94cd83fc721|zhiliao:rc|exited\n50a70f44a32e78adf331f7084743f042001eb5b650ee7af849441ed6a14a85c0|nginx:1.25-alpine|exited\nab1926223971ae43ca775c7078f16057bde76b5e2f53aa6856382830542c3e4a|sha256:84a489d914ecbfb47da5c1f930d22006cfb3da341600694b9c56ed182e84f505|exited\nf61337186432f4b8be3bba6578ebb2a3f768cd39baf5349a0fc19c53f224ef81|bilinote-backend|exited",
+      "stderr": ""
+    },
+    "candidate": {
+      "exit_code": 0,
+      "stdout": "sha256:46f9241b6d2e539ce3a94324c356cf4336f8cf17e0cf59e5b5d920bf9b53769e|linux|amd64|node",
+      "stderr": ""
+    },
+    "git_head": {
+      "exit_code": 0,
+      "stdout": "f213761b795cc020be2122e27301fe4a7c5cf7a0",
+      "stderr": ""
+    },
+    "git_status": {
+      "exit_code": 0,
+      "stdout": "## main...origin/main [ahead 4]\n M .dockerignore\n M .gitignore\n M README.en.md\n M README.md\n M _bmad-output/implementation-artifacts/spec-2-1-server-demo-boundary.md\n M _bmad-output/implementation-artifacts/sprint-status.yaml\n M docker-compose.demo.yml\n M docs/README.md\n M docs/首次使用与故障排查.md\n M src/app/(app)/settings/page.tsx\n M src/lib/llm-config.ts\n M src/middleware.ts\n M tests/api/demo-boundary.test.ts\n M tests/docs/first-use-guide.test.ts\n?? _bmad-output/implementation-artifacts/spec-2-2-isolate-demo-deployment-and-limit-resources.md\n?? docker-compose.demo.proxy-verify.yml\n?? docker-compose.demo.verify.yml\n?? docs/Demo部署隔离验收-2026-09-10.md\n?? docs/Story-2.2-剩余验收实施方案-2026-09-11.md\n?? docs/adr/0026-demo-ingress-isolation.md\n?? docs/验收证据/\n?? nginx/\n?? scripts/demo-http-probes.mjs\n?? scripts/demo-verification-utils.mjs\n?? scripts/fixtures/\n?? scripts/verify-demo-network.mjs\n?? scripts/verify-demo-proxy-timeouts.mjs\n?? scripts/verify-demo-runtime.mjs\n?? scripts/verify-demo-runtime.ps1\n?? tests/config/",
+      "stderr": ""
+    },
+    "wsl": {
+      "exit_code": 0,
+      "stdout": "NAME              STATE           VERSION\r\n* Ubuntu-24.04      Running         2\r\n  docker-desktop    Running         2",
+      "stderr": ""
+    },
+    "desktop_data_mounts": {
+      "exit_code": 0,
+      "stdout": "/dev/sde /mnt/docker-desktop-disk ext4 rw,relatime 0 0\n/dev/sde /mnt/docker-desktop-disk ext4 rw,relatime 0 0\n/dev/sde /tmp/docker-desktop-root/mnt/docker-desktop-disk ext4 rw,relatime 0 0\n/dev/sde /tmp/docker-desktop-root/run/desktop/mnt/docker-desktop-disk ext4 rw,relatime 0 0",
+      "stderr": "w\u0000s\u0000l\u0000:\u0000 \u0000�hKm0R \u0000l\u0000o\u0000c\u0000a\u0000l\u0000h\u0000o\u0000s\u0000t\u0000 \u0000�N\u0006tM�n\f�FO*g\\��P0R \u0000W\u0000S\u0000L\u0000\u00020N\u0000A\u0000T\u0000 \u0000!j\u000f_\u000bN�v \u0000W\u0000S\u0000L\u0000 \u0000\rN/e\u0001c \u0000l\u0000o\u0000c\u0000a\u0000l\u0000h\u0000o\u0000s\u0000t\u0000 \u0000�N\u0006t\u00020\r\u0000\n\u0000"
+    }
+  },
+  "trellis_present": false,
+  "target_environment": {
+    "identity": null,
+    "engine": null,
+    "filesystem": null,
+    "quota_enforcement": null,
+    "production_colocation": null,
+    "https_entry": null,
+    "reason": "现有仓库与 Docker contexts 不能确认最终主机；已请求维护者补充。"
+  },
+  "input_sha256": {
+    "docker-compose.demo.yml": "f259c2e5fd7809bc872492c5eb753a5ab54389969c3106a6ff0e926f070455f2",
+    "docker-compose.demo.verify.yml": "2f21847f6798764d6929991855f848f83cd4bfd6345ea4f8638ed2b255de22f1",
+    "nginx/demo.conf": "df240aef6f22929ab6435d4f4a2e3c603baa17a124fe0d9b7f01d10eaa27c093",
+    "scripts/verify-demo-network.mjs": "e527300e9a0c26676906a737ab0bd53cacb7e4cee6f6280936f4463eb7eec365",
+    "scripts/demo-verification-utils.mjs": "7f470b62da3ce58fe36354797db426c5e6ba6b9e95e2829ad6ac263861da4665",
+    "src/app/api/auth/login/route.ts": "6ba86e976e0d4309afc9a5c2539d46c7154853d5aa803a8ff58d059e6777fda7"
+  },
+  "preserved_frozen_sha256": "eed2c9154e2d284ac4af7a501f4f537ddc2fbf58a7d8c6c3eadeba948fe3a1de",
+  "unrun": [
+    "容器启动或停止",
+    "网络和卷创建",
+    "配额设置或容量触发",
+    "系统配置或存储变更",
+    "远程连接和 DNS/HTTPS 变更",
+    "构建、全量测试和发布"
+  ],
+  "collection_note": "首次采集完成只读命令后，因 PowerShell 默认管道编码把中文路径替换为问号，证据写入失败；未创建文件。此次显式采用 UTF-8 管道重新采集。"
+}

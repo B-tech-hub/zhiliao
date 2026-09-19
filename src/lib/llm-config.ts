@@ -87,6 +87,10 @@ export interface LlmConfig {
   hasDbConfig: boolean;
 }
 
+export function getLlmBaseUrlForClient(config: Pick<LlmConfig, "baseUrl">, demoMode: boolean): string {
+  return demoMode ? "" : (config.baseUrl ?? "");
+}
+
 export type EmbeddingConfigSource = LlmConfigSource;
 export interface EmbeddingConfig {
   baseUrl: string | null;
@@ -132,7 +136,8 @@ export function isEmbeddingConfigured(): boolean {
 export function getLlmConfig(): LlmConfig {
   if (isDemoMode()) {
     return {
-      baseUrl: process.env.DEMO_LLM_BASE_URL?.trim() || "http://mockllm:8787/v1",
+      // Demo 只在固定的本机与容器 mock 之间选择，不接受可改写的模型地址。
+      baseUrl: process.env.DEMO_RUNTIME === "local" ? "http://127.0.0.1:8787/v1" : "http://mockllm:8787/v1",
       apiKey: "demo",
       model: "mock",
       sources: { baseUrl: "env", apiKey: "env", model: "env" },

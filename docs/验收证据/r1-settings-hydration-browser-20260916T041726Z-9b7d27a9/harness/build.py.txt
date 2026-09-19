@@ -1,0 +1,72 @@
+import json
+import re
+import subprocess
+import sys
+import time
+from r1lib import ROOT, RUN, DOCKER, HIDDEN, clean_env, docker, now, save, sha
+
+manifest = json.loads((ROOT / "source-manifest.json").read_text(encoding="utf-8"))
+for p, h in manifest.items():
+    if sha(ROOT / "source" / p) != h:
+        raise RuntimeError("构建前源码副本变化。")
+started_file = ROOT / "private" / "build-started.json"
+if started_file.exists():
+    raise RuntimeError("本轮构建已开始过，不自动重复构建。")
+source_sha = sha(ROOT / "source-manifest.json")
+args = [
+    DOCKER, "--context", "desktop-linux", "build",
+    "--platform", "linux/amd64", "--progress=plain",
+    "--label", "io.zhiliao.r1.run=" + RUN["runId"],
+    "--label", "io.zhiliao.r1.source-sha256=" + source_sha,
+    "--label", "io.zhiliao.r1.base-commit=" + RUN["baseCommit"],
+    "--label", "io.zhiliao.r1.working-tree=true",
+    "--iidfile", str(ROOT / "image-id.txt"), "--tag", RUN["imageTag"], str(ROOT / "source"),
+]
+report = {"runId": RUN["runId"], "startedUtc": now(), "imageTag": RUN["imageTag"], "sourceManifestSha256": source_sha, "status": "running", "platform": "linux/amd64"}
+save(started_file, report)
+save(ROOT / "evidence" / "build.json", report)
+start = time.monotonic()
+try:
+    with (ROOT / "evidence" / "build.log").open("wb") as log:
+        process = subprocess.Popen(args, cwd=ROOT, env=clean_env(), stdout=subprocess.PIPE, stderr=subprocess.STDOUT, creationflags=HIDDEN)
+        save(ROOT / "private" / "build-process.json", {"pid": process.pid, "startedUtc": now()})
+        for line in iter(process.stdout.readline, b""):
+            log.write(line)
+            log.flush()
+            sys.stdout.buffer.write(line)
+            sys.stdout.buffer.flush()
+        code = process.wait()
+    report["exitCode"] = code
+    report["status"] = "passed" if code == 0 else "failed"
+    if code == 0:
+        iid = (ROOT / "image-id.txt").read_text(encoding="utf-8").strip()
+        actual = json.loads(docker("image", "inspect", iid))[0]
+        if actual["Id"] != iid or actual["Config"]["Labels"]["io.zhiliao.r1.run"] != RUN["runId"]:
+            raise RuntimeError("构建镜像身份不符。")
+        if actual["Os"] != "linux" or actual["Architecture"] != "amd64":
+            raise RuntimeError("镜像平台不符。")
+        report["imageId"] = iid
+        report["created"] = actual["Created"]
+        report["repoTags"] = actual["RepoTags"]
+        report["repoDigests"] = actual.get("RepoDigests", [])
+        report["labels"] = actual["Config"]["Labels"]
+        RUN["imageId"] = iid
+        save(ROOT / "run.json", RUN)
+        credentials = json.loads((ROOT / "private" / "credentials.json").read_text(encoding="utf-8"))
+        env_lines = [
+            "R1_RUN_ID=" + RUN["runId"], "R1_IMAGE=" + iid, "R1_PORT=" + str(RUN["port"]),
+            "DEMO_PASSWORD=" + credentials["password"], "DEMO_SESSION_SECRET=" + credentials["sessionSecret"],
+        ]
+        (ROOT / "r1.env").write_text("\n".join(env_lines) + "\n", encoding="utf-8", newline="\n")
+    log_text = (ROOT / "evidence" / "build.log").read_text(encoding="utf-8", errors="replace")
+    report["cachedStepCount"] = len(re.findall(r"(?m)^#[0-9]+ CACHED", log_text))
+    report["baseReferences"] = sorted(set(re.findall(r"node:22-bookworm-slim@sha256:[a-f0-9]{64}", log_text)))
+    report["elapsedSeconds"] = round(time.monotonic() - start, 3)
+    report["finishedUtc"] = now()
+    save(ROOT / "evidence" / "build.json", report)
+    print(json.dumps(report, ensure_ascii=False), flush=True)
+    sys.exit(code)
+except Exception as e:
+    report.update(status="failed", error=str(e), finishedUtc=now(), elapsedSeconds=round(time.monotonic() - start, 3))
+    save(ROOT / "evidence" / "build.json", report)
+    raise

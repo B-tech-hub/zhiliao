@@ -1,0 +1,50 @@
+{
+  "services": {
+    "ingress": {
+      "labels": {
+        "io.zhiliao.ingress-repair.run": "20260915T145944Z-b56abe15"
+      }
+    },
+    "app": {
+      "image": "zhiliao-r1:0.6.1-20260915-093206-7a7ba6b4",
+      "labels": {
+        "io.zhiliao.ingress-repair.run": "20260915T145944Z-b56abe15"
+      }
+    },
+    "mockllm": {
+      "image": "zhiliao-r1:0.6.1-20260915-093206-7a7ba6b4",
+      "labels": {
+        "io.zhiliao.ingress-repair.run": "20260915T145944Z-b56abe15"
+      }
+    }
+  },
+  "networks": {
+    "demo_net": {
+      "labels": {
+        "io.zhiliao.ingress-repair.run": "20260915T145944Z-b56abe15"
+      }
+    },
+    "ingress_net": {
+      "labels": {
+        "io.zhiliao.ingress-repair.run": "20260915T145944Z-b56abe15"
+      }
+    }
+  },
+  "volumes": {
+    "demo_db": {
+      "labels": {
+        "io.zhiliao.ingress-repair.run": "20260915T145944Z-b56abe15"
+      }
+    },
+    "demo_uploads": {
+      "labels": {
+        "io.zhiliao.ingress-repair.run": "20260915T145944Z-b56abe15"
+      }
+    },
+    "demo_notes": {
+      "labels": {
+        "io.zhiliao.ingress-repair.run": "20260915T145944Z-b56abe15"
+      }
+    }
+  }
+}

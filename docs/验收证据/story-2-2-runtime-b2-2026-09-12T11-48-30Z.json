@@ -1,0 +1,121 @@
+{
+  "story": "2.2",
+  "recorded_at": "2026-09-12T11:48:30.851Z",
+  "status": "passed",
+  "project": "zhiliao-demo-verify-49c029e613bd",
+  "run_id": "49c029e613bd63e9e686e31f5462eba1",
+  "port": 3322,
+  "scope": "本机候选入口、HTTP 和 SSE及本机网络对照",
+  "checks": {
+    "services_healthy": true,
+    "http": {
+      "health": 200,
+      "oversize": 413,
+      "oversize_response_ms": 2,
+      "sent_body_bytes": 1
+    },
+    "nginx_syntax": "passed",
+    "sse": {
+      "completed": {
+        "first_event_ms": 66,
+        "first_delta_ms": 84,
+        "event_count": 13,
+        "delta_count": 10,
+        "max_event_gap_ms": 18,
+        "delta_batches": 10,
+        "duration_ms": 236,
+        "cancelled": false,
+        "done": true
+      },
+      "cancellation": {
+        "first_event_ms": 56,
+        "first_delta_ms": 74,
+        "event_count": 3,
+        "delta_count": 1,
+        "max_event_gap_ms": 18,
+        "delta_batches": 1,
+        "duration_ms": 74,
+        "cancelled": true,
+        "done": false
+      },
+      "health_after_cancel": 200
+    },
+    "network": {
+      "status": "passed",
+      "evidence": "D:\\ClaudeProjects\\ai_acknowladge\\docs\\验收证据\\story-2-2-runtime-b2-2026-09-12T11-48-30Z-network.json",
+      "observed_status": "passed",
+      "check_count": 20,
+      "cleanup": {
+        "status": "removed",
+        "resource_count": 6
+      },
+      "control_project": "zhiliao-demo-network-verify-7d50d44e844c",
+      "control_run_id": "7d50d44e844cc6edd9641f711065ef04",
+      "evidence_sha256": "530ca26b34d0b3c87458446ff2848b4e65cf5364349ab6ecf3618f8f6c5b27a3"
+    }
+  },
+  "cleanup": {
+    "status": "removed"
+  },
+  "limitations": [
+    "本次只验收本机候选镜像，不代表固定的 0.6.0 发布镜像已包含补丁。",
+    "业务卷硬配额、实际正式服务隔离、公网 HTTPS 和补丁镜像发布仍未完成；本机所选检查通过不代表 Story 全部完成。",
+    "本工具不复验 Nginx 300 秒代理空闲超时，应另查专用代理验收证据。",
+    "配置及脚本哈希用于关联本次验收输入，不证明候选镜像包含当前全部工作区源码。"
+  ],
+  "engine": "28.4.0",
+  "compose": "2.39.4-desktop.1",
+  "candidate_image_id": "sha256:46f9241b6d2e539ce3a94324c356cf4336f8cf17e0cf59e5b5d920bf9b53769e",
+  "baseline_commit": "f213761b795cc020be2122e27301fe4a7c5cf7a0",
+  "input_sha256": {
+    "docker-compose.demo.yml": "f259c2e5fd7809bc872492c5eb753a5ab54389969c3106a6ff0e926f070455f2",
+    "docker-compose.demo.verify.yml": "2f21847f6798764d6929991855f848f83cd4bfd6345ea4f8638ed2b255de22f1",
+    "nginx/demo.conf": "df240aef6f22929ab6435d4f4a2e3c603baa17a124fe0d9b7f01d10eaa27c093",
+    "scripts/verify-demo-runtime.ps1": "b3dba9d058602697c10d5adedfd75f57712b214737abd40fadcbe41e4b44d2aa",
+    "scripts/verify-demo-runtime.mjs": "2aa4e0cda25106f8455ab254235f2d9318bd78bfa1732f82cb05de8d684687de",
+    "scripts/demo-http-probes.mjs": "420ddcd722ae3f4fca844671f97cecabb398637d557f47b1c3174d2a059be238",
+    "scripts/verify-demo-network.mjs": "e527300e9a0c26676906a737ab0bd53cacb7e4cee6f6280936f4463eb7eec365",
+    "scripts/demo-verification-utils.mjs": "7f470b62da3ce58fe36354797db426c5e6ba6b9e95e2829ad6ac263861da4665"
+  },
+  "images": {
+    "app": "zhiliao-demo-verify:story-2-2",
+    "ingress": "nginx:1.30.4-alpine@sha256:dc5069ad14f19660b141b21236140b91656bf89bbc3e2417c70ae650cd66104c",
+    "mockllm": "zhiliao-demo-verify:story-2-2"
+  },
+  "resources": [
+    {
+      "type": "container",
+      "id": "871c1cfb7b71"
+    },
+    {
+      "type": "container",
+      "id": "a00846ff0929"
+    },
+    {
+      "type": "container",
+      "id": "7b0be0d2912a"
+    },
+    {
+      "type": "network",
+      "id": "3abad58b404e"
+    },
+    {
+      "type": "network",
+      "id": "8f57bc1f3d0b"
+    },
+    {
+      "type": "volume",
+      "id": "zhiliao-demo-verify-49c029e613bd_demo_db"
+    },
+    {
+      "type": "volume",
+      "id": "zhiliao-demo-verify-49c029e613bd_demo_notes"
+    },
+    {
+      "type": "volume",
+      "id": "zhiliao-demo-verify-49c029e613bd_demo_uploads"
+    }
+  ],
+  "ingress_binding": "127.0.0.1:3322",
+  "finished_at": "2026-09-12T11:49:16.494Z"
+}

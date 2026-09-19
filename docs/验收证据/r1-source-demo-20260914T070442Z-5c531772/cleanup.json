@@ -1,0 +1,32 @@
+{
+    "runId":  "20260914T070442Z-5c531772",
+    "timeUtc":  "2026-09-14T08:39:06.9756713Z",
+    "target":  "%TEMP%/zhiliao-r1-061-20260914T070442Z-5c531772",
+    "markerMatched":  true,
+    "exactPathAndTempParentVerified":  true,
+    "reparsePoints":  0,
+    "archivedRuntimeArtifactsVerified":  62,
+    "matchingRunProcessesBefore":  0,
+    "recordedRunProcessesStillPresent":  0,
+    "listenersBefore":  [
+
+                        ],
+    "removed":  true,
+    "matchingRunProcessesAfter":  0,
+    "listenersAfter":  [
+
+                       ],
+    "elapsedSeconds":  23.138,
+    "deletionErrorType":  null,
+    "scope":  [
+                  "candidate",
+                  "copied dependencies",
+                  "temporary data",
+                  "browser profile",
+                  "cache",
+                  "fixtures",
+                  "helper scripts",
+                  "private preservation baseline"
+              ],
+    "passed":  true
+}

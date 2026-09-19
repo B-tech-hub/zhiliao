@@ -1,0 +1,962 @@
+{
+  "runId": "20260915T145944Z-b56abe15",
+  "project": "zhiliao-ingress-repair-20260915t145944z-b56abe15",
+  "status": "passed",
+  "startedAt": "2026-09-15T15:06:38.267Z",
+  "scope": "仓库 Demo 网络及默认 3210 入口；仅本机固定候选",
+  "baselineCommit": "f213761b795cc020be2122e27301fe4a7c5cf7a0",
+  "commands": [
+    {
+      "args": [
+        "ps",
+        "-a",
+        "--filter",
+        "label=com.docker.compose.project=zhiliao-ingress-repair-20260915t145944z-b56abe15",
+        "--format",
+        "{{.ID}}"
+      ],
+      "elapsedMs": 85,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "ps",
+        "-a",
+        "--filter",
+        "name=zhiliao-ingress-repair-20260915t145944z-b56abe15",
+        "--format",
+        "{{.ID}}"
+      ],
+      "elapsedMs": 72,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "network",
+        "ls",
+        "--filter",
+        "label=com.docker.compose.project=zhiliao-ingress-repair-20260915t145944z-b56abe15",
+        "--format",
+        "{{.ID}}"
+      ],
+      "elapsedMs": 72,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "network",
+        "ls",
+        "--filter",
+        "name=zhiliao-ingress-repair-20260915t145944z-b56abe15",
+        "--format",
+        "{{.ID}}"
+      ],
+      "elapsedMs": 69,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "volume",
+        "ls",
+        "--filter",
+        "label=com.docker.compose.project=zhiliao-ingress-repair-20260915t145944z-b56abe15",
+        "--format",
+        "{{.Name}}"
+      ],
+      "elapsedMs": 71,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "volume",
+        "ls",
+        "--filter",
+        "name=zhiliao-ingress-repair-20260915t145944z-b56abe15",
+        "--format",
+        "{{.Name}}"
+      ],
+      "elapsedMs": 66,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "ps",
+        "-aq",
+        "--no-trunc"
+      ],
+      "elapsedMs": 94,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "container",
+        "inspect",
+        "254c7caca374780a6c1a3bea1c2c6ba59d6ab092de155c34f8efd3cd411532c8",
+        "50a70f44a32e78adf331f7084743f042001eb5b650ee7af849441ed6a14a85c0",
+        "5d05095aa56b26fee8ff02b3372764d8300cc7b1851773eca5ee0a95ed3f675f",
+        "ab1926223971ae43ca775c7078f16057bde76b5e2f53aa6856382830542c3e4a",
+        "cd07490a30d9cd068c4552f0f528dacecd9349eb2a60c1dbf9f8c18333fe83ea",
+        "ea240066dd4a847db38ef758917c36a04be31191329ab6c995bdc94cd83fc721",
+        "f61337186432f4b8be3bba6578ebb2a3f768cd39baf5349a0fc19c53f224ef81"
+      ],
+      "elapsedMs": 102,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "network",
+        "ls",
+        "-q",
+        "--no-trunc"
+      ],
+      "elapsedMs": 68,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "network",
+        "inspect",
+        "199774bd4a2cbb685cdb7bbce25caeae74f37b90322c6c73daafed04d62d3e49",
+        "31a1be3a36c95e48f3374158921a02d969732cd576992974529fb5f8b552bd2e",
+        "37acf5aefebd284f7c13114478c1fb4f5071ea61814fb12921a88a426de3678a",
+        "6c3413f4d4700cb75b3e6305741f40dd56a2de135e802390c9cc1cb99685d0e0",
+        "a172288b901b2a1b791280adbd2c3f169ddab9c45022fdc7541724b99a8f203e",
+        "e79ff43e38552b9a5d6c17a2bf7fd737c8cfbbec49fa7f75e573c2431597771f",
+        "f0ac4100a25e3b2ec5411f6257bb8ab1988435cb6406a0af366ee22eae60119f"
+      ],
+      "elapsedMs": 75,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "volume",
+        "ls",
+        "-q"
+      ],
+      "elapsedMs": 71,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "volume",
+        "inspect",
+        "ai_acknowladge_kb_db",
+        "ai_acknowladge_kb_uploads",
+        "zhiliao-smoke-20260910-081121_smoke_db",
+        "zhiliao-smoke-20260910-081121_smoke_uploads",
+        "zhiliao-smoke-20260910-082135_smoke_db",
+        "zhiliao-smoke-20260910-082135_smoke_uploads",
+        "zhiliao_rc_db",
+        "zhiliao_rc_uploads"
+      ],
+      "elapsedMs": 80,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "image",
+        "ls",
+        "-aq",
+        "--no-trunc"
+      ],
+      "elapsedMs": 132,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "version",
+        "--format",
+        "{{.Server.Version}}"
+      ],
+      "elapsedMs": 92,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "compose",
+        "version",
+        "--short"
+      ],
+      "elapsedMs": 145,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "image",
+        "inspect",
+        "--format",
+        "{{.Id}}",
+        "zhiliao-r1:0.6.1-20260915-093206-7a7ba6b4"
+      ],
+      "elapsedMs": 87,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "compose",
+        "--project-directory",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-ingress-smoke-aCqBAV",
+        "--env-file",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-ingress-smoke-aCqBAV\\demo.env",
+        "-p",
+        "zhiliao-ingress-repair-20260915t145944z-b56abe15",
+        "-f",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-ingress-smoke-aCqBAV\\docker-compose.demo.yml",
+        "config",
+        "--format",
+        "json"
+      ],
+      "elapsedMs": 180,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "compose",
+        "--project-directory",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-ingress-smoke-aCqBAV",
+        "--env-file",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-ingress-smoke-aCqBAV\\demo.env",
+        "-p",
+        "zhiliao-ingress-repair-20260915t145944z-b56abe15",
+        "-f",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-ingress-smoke-aCqBAV\\docker-compose.demo.yml",
+        "-f",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-ingress-smoke-aCqBAV\\compose.runtime.json",
+        "config",
+        "--format",
+        "json"
+      ],
+      "elapsedMs": 183,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "image",
+        "inspect",
+        "--format",
+        "{{.Id}}",
+        "nginx:1.30.4-alpine@sha256:dc5069ad14f19660b141b21236140b91656bf89bbc3e2417c70ae650cd66104c"
+      ],
+      "elapsedMs": 96,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "compose",
+        "--project-directory",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-ingress-smoke-aCqBAV",
+        "--env-file",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-ingress-smoke-aCqBAV\\demo.env",
+        "-p",
+        "zhiliao-ingress-repair-20260915t145944z-b56abe15",
+        "-f",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-ingress-smoke-aCqBAV\\docker-compose.demo.yml",
+        "-f",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-ingress-smoke-aCqBAV\\compose.runtime.json",
+        "up",
+        "-d",
+        "--no-build",
+        "--pull",
+        "never",
+        "--wait",
+        "--wait-timeout",
+        "180"
+      ],
+      "elapsedMs": 17290,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "ps",
+        "-a",
+        "--filter",
+        "label=com.docker.compose.project=zhiliao-ingress-repair-20260915t145944z-b56abe15",
+        "--format",
+        "{{.ID}}"
+      ],
+      "elapsedMs": 79,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "ps",
+        "-a",
+        "--filter",
+        "name=zhiliao-ingress-repair-20260915t145944z-b56abe15",
+        "--format",
+        "{{.ID}}"
+      ],
+      "elapsedMs": 96,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "network",
+        "ls",
+        "--filter",
+        "label=com.docker.compose.project=zhiliao-ingress-repair-20260915t145944z-b56abe15",
+        "--format",
+        "{{.ID}}"
+      ],
+      "elapsedMs": 76,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "network",
+        "ls",
+        "--filter",
+        "name=zhiliao-ingress-repair-20260915t145944z-b56abe15",
+        "--format",
+        "{{.ID}}"
+      ],
+      "elapsedMs": 69,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "volume",
+        "ls",
+        "--filter",
+        "label=com.docker.compose.project=zhiliao-ingress-repair-20260915t145944z-b56abe15",
+        "--format",
+        "{{.Name}}"
+      ],
+      "elapsedMs": 69,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "volume",
+        "ls",
+        "--filter",
+        "name=zhiliao-ingress-repair-20260915t145944z-b56abe15",
+        "--format",
+        "{{.Name}}"
+      ],
+      "elapsedMs": 153,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "container",
+        "inspect",
+        "--format",
+        "{{json .Config.Labels}}",
+        "825e39010f5f"
+      ],
+      "elapsedMs": 108,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "container",
+        "inspect",
+        "--format",
+        "{{json .Config.Labels}}",
+        "16980b98aae4"
+      ],
+      "elapsedMs": 73,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "container",
+        "inspect",
+        "--format",
+        "{{json .Config.Labels}}",
+        "35cd5932b1e8"
+      ],
+      "elapsedMs": 68,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "network",
+        "inspect",
+        "--format",
+        "{{json .Labels}}",
+        "71b356a2dde8"
+      ],
+      "elapsedMs": 69,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "network",
+        "inspect",
+        "--format",
+        "{{json .Labels}}",
+        "3aaf5e8d759b"
+      ],
+      "elapsedMs": 71,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "volume",
+        "inspect",
+        "--format",
+        "{{json .Labels}}",
+        "zhiliao-ingress-repair-20260915t145944z-b56abe15_demo_db"
+      ],
+      "elapsedMs": 72,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "volume",
+        "inspect",
+        "--format",
+        "{{json .Labels}}",
+        "zhiliao-ingress-repair-20260915t145944z-b56abe15_demo_notes"
+      ],
+      "elapsedMs": 68,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "volume",
+        "inspect",
+        "--format",
+        "{{json .Labels}}",
+        "zhiliao-ingress-repair-20260915t145944z-b56abe15_demo_uploads"
+      ],
+      "elapsedMs": 68,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "container",
+        "inspect",
+        "825e39010f5f",
+        "16980b98aae4",
+        "35cd5932b1e8"
+      ],
+      "elapsedMs": 76,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "compose",
+        "--project-directory",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-ingress-smoke-aCqBAV",
+        "--env-file",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-ingress-smoke-aCqBAV\\demo.env",
+        "-p",
+        "zhiliao-ingress-repair-20260915t145944z-b56abe15",
+        "-f",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-ingress-smoke-aCqBAV\\docker-compose.demo.yml",
+        "-f",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-ingress-smoke-aCqBAV\\compose.runtime.json",
+        "port",
+        "ingress",
+        "8080"
+      ],
+      "elapsedMs": 181,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "exec",
+        "16980b98aae4d1f880a295e842224e4df573c4f4bd3fd3fdf9283e70549314ea",
+        "node",
+        "-e",
+        "process.stdout.write(require('node:fs').readFileSync('/proc/net/route','utf8'))"
+      ],
+      "elapsedMs": 157,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "exec",
+        "35cd5932b1e898812754ab0e9b36994250c9c9872a15a3e4c7daec89953ae23c",
+        "node",
+        "-e",
+        "process.stdout.write(require('node:fs').readFileSync('/proc/net/route','utf8'))"
+      ],
+      "elapsedMs": 154,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "network",
+        "inspect",
+        "zhiliao-ingress-repair-20260915t145944z-b56abe15-net"
+      ],
+      "elapsedMs": 68,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "network",
+        "inspect",
+        "zhiliao-ingress-repair-20260915t145944z-b56abe15-ingress"
+      ],
+      "elapsedMs": 71,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "compose",
+        "--project-directory",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-ingress-smoke-aCqBAV",
+        "--env-file",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-ingress-smoke-aCqBAV\\demo.env",
+        "-p",
+        "zhiliao-ingress-repair-20260915t145944z-b56abe15",
+        "-f",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-ingress-smoke-aCqBAV\\docker-compose.demo.yml",
+        "-f",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-ingress-smoke-aCqBAV\\compose.runtime.json",
+        "exec",
+        "-T",
+        "ingress",
+        "nginx",
+        "-t"
+      ],
+      "elapsedMs": 258,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "ps",
+        "-a",
+        "--filter",
+        "label=com.docker.compose.project=zhiliao-ingress-repair-20260915t145944z-b56abe15",
+        "--format",
+        "{{.ID}}"
+      ],
+      "elapsedMs": 79,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "ps",
+        "-a",
+        "--filter",
+        "name=zhiliao-ingress-repair-20260915t145944z-b56abe15",
+        "--format",
+        "{{.ID}}"
+      ],
+      "elapsedMs": 89,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "network",
+        "ls",
+        "--filter",
+        "label=com.docker.compose.project=zhiliao-ingress-repair-20260915t145944z-b56abe15",
+        "--format",
+        "{{.ID}}"
+      ],
+      "elapsedMs": 66,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "network",
+        "ls",
+        "--filter",
+        "name=zhiliao-ingress-repair-20260915t145944z-b56abe15",
+        "--format",
+        "{{.ID}}"
+      ],
+      "elapsedMs": 68,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "volume",
+        "ls",
+        "--filter",
+        "label=com.docker.compose.project=zhiliao-ingress-repair-20260915t145944z-b56abe15",
+        "--format",
+        "{{.Name}}"
+      ],
+      "elapsedMs": 68,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "volume",
+        "ls",
+        "--filter",
+        "name=zhiliao-ingress-repair-20260915t145944z-b56abe15",
+        "--format",
+        "{{.Name}}"
+      ],
+      "elapsedMs": 68,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "container",
+        "inspect",
+        "--format",
+        "{{json .Config.Labels}}",
+        "825e39010f5f"
+      ],
+      "elapsedMs": 75,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "container",
+        "inspect",
+        "--format",
+        "{{json .Config.Labels}}",
+        "16980b98aae4"
+      ],
+      "elapsedMs": 67,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "container",
+        "inspect",
+        "--format",
+        "{{json .Config.Labels}}",
+        "35cd5932b1e8"
+      ],
+      "elapsedMs": 68,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "network",
+        "inspect",
+        "--format",
+        "{{json .Labels}}",
+        "71b356a2dde8"
+      ],
+      "elapsedMs": 77,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "network",
+        "inspect",
+        "--format",
+        "{{json .Labels}}",
+        "3aaf5e8d759b"
+      ],
+      "elapsedMs": 70,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "volume",
+        "inspect",
+        "--format",
+        "{{json .Labels}}",
+        "zhiliao-ingress-repair-20260915t145944z-b56abe15_demo_db"
+      ],
+      "elapsedMs": 67,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "volume",
+        "inspect",
+        "--format",
+        "{{json .Labels}}",
+        "zhiliao-ingress-repair-20260915t145944z-b56abe15_demo_notes"
+      ],
+      "elapsedMs": 68,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "volume",
+        "inspect",
+        "--format",
+        "{{json .Labels}}",
+        "zhiliao-ingress-repair-20260915t145944z-b56abe15_demo_uploads"
+      ],
+      "elapsedMs": 67,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "compose",
+        "--project-directory",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-ingress-smoke-aCqBAV",
+        "--env-file",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-ingress-smoke-aCqBAV\\demo.env",
+        "-p",
+        "zhiliao-ingress-repair-20260915t145944z-b56abe15",
+        "-f",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-ingress-smoke-aCqBAV\\docker-compose.demo.yml",
+        "-f",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-ingress-smoke-aCqBAV\\compose.runtime.json",
+        "down",
+        "-v",
+        "--timeout",
+        "15"
+      ],
+      "elapsedMs": 15909,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "ps",
+        "-a",
+        "--filter",
+        "label=com.docker.compose.project=zhiliao-ingress-repair-20260915t145944z-b56abe15",
+        "--format",
+        "{{.ID}}"
+      ],
+      "elapsedMs": 77,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "ps",
+        "-a",
+        "--filter",
+        "name=zhiliao-ingress-repair-20260915t145944z-b56abe15",
+        "--format",
+        "{{.ID}}"
+      ],
+      "elapsedMs": 68,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "network",
+        "ls",
+        "--filter",
+        "label=com.docker.compose.project=zhiliao-ingress-repair-20260915t145944z-b56abe15",
+        "--format",
+        "{{.ID}}"
+      ],
+      "elapsedMs": 66,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "network",
+        "ls",
+        "--filter",
+        "name=zhiliao-ingress-repair-20260915t145944z-b56abe15",
+        "--format",
+        "{{.ID}}"
+      ],
+      "elapsedMs": 66,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "volume",
+        "ls",
+        "--filter",
+        "label=com.docker.compose.project=zhiliao-ingress-repair-20260915t145944z-b56abe15",
+        "--format",
+        "{{.Name}}"
+      ],
+      "elapsedMs": 66,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "volume",
+        "ls",
+        "--filter",
+        "name=zhiliao-ingress-repair-20260915t145944z-b56abe15",
+        "--format",
+        "{{.Name}}"
+      ],
+      "elapsedMs": 67,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "ps",
+        "-aq",
+        "--no-trunc"
+      ],
+      "elapsedMs": 94,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "container",
+        "inspect",
+        "254c7caca374780a6c1a3bea1c2c6ba59d6ab092de155c34f8efd3cd411532c8",
+        "50a70f44a32e78adf331f7084743f042001eb5b650ee7af849441ed6a14a85c0",
+        "5d05095aa56b26fee8ff02b3372764d8300cc7b1851773eca5ee0a95ed3f675f",
+        "ab1926223971ae43ca775c7078f16057bde76b5e2f53aa6856382830542c3e4a",
+        "cd07490a30d9cd068c4552f0f528dacecd9349eb2a60c1dbf9f8c18333fe83ea",
+        "ea240066dd4a847db38ef758917c36a04be31191329ab6c995bdc94cd83fc721",
+        "f61337186432f4b8be3bba6578ebb2a3f768cd39baf5349a0fc19c53f224ef81"
+      ],
+      "elapsedMs": 81,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "network",
+        "ls",
+        "-q",
+        "--no-trunc"
+      ],
+      "elapsedMs": 65,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "network",
+        "inspect",
+        "199774bd4a2cbb685cdb7bbce25caeae74f37b90322c6c73daafed04d62d3e49",
+        "31a1be3a36c95e48f3374158921a02d969732cd576992974529fb5f8b552bd2e",
+        "37acf5aefebd284f7c13114478c1fb4f5071ea61814fb12921a88a426de3678a",
+        "6c3413f4d4700cb75b3e6305741f40dd56a2de135e802390c9cc1cb99685d0e0",
+        "a172288b901b2a1b791280adbd2c3f169ddab9c45022fdc7541724b99a8f203e",
+        "e79ff43e38552b9a5d6c17a2bf7fd737c8cfbbec49fa7f75e573c2431597771f",
+        "f0ac4100a25e3b2ec5411f6257bb8ab1988435cb6406a0af366ee22eae60119f"
+      ],
+      "elapsedMs": 75,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "volume",
+        "ls",
+        "-q"
+      ],
+      "elapsedMs": 65,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "volume",
+        "inspect",
+        "ai_acknowladge_kb_db",
+        "ai_acknowladge_kb_uploads",
+        "zhiliao-smoke-20260910-081121_smoke_db",
+        "zhiliao-smoke-20260910-081121_smoke_uploads",
+        "zhiliao-smoke-20260910-082135_smoke_db",
+        "zhiliao-smoke-20260910-082135_smoke_uploads",
+        "zhiliao_rc_db",
+        "zhiliao_rc_uploads"
+      ],
+      "elapsedMs": 76,
+      "status": "passed"
+    },
+    {
+      "args": [
+        "image",
+        "ls",
+        "-aq",
+        "--no-trunc"
+      ],
+      "elapsedMs": 123,
+      "status": "passed"
+    }
+  ],
+  "inputSha256": {
+    "docker-compose.demo.yml": "af97fe2ae47eb4ff6977500aaf37dd90e9d0381c2396eb4c7eaf6d2a33500c7f",
+    "nginx/demo.conf": "a798fd4981ebbced93c5a52150ac34da31b7fcad4f41c8a95e87c15090adde7b"
+  },
+  "checks": {
+    "baseConfig": "passed",
+    "overlayScope": "images_and_ownership_labels_only",
+    "servicesAndIsolation": "passed",
+    "health": {
+      "status": 200,
+      "body": "{\"ok\":true}",
+      "elapsedMs": 9
+    },
+    "nginxSyntax": "passed",
+    "repositoryInputsUnchangedDuringRuntime": true
+  },
+  "cleanup": {
+    "status": "removed",
+    "containers": 3,
+    "volumes": 3,
+    "networks": 2,
+    "port3210Released": true,
+    "temporaryDirectoryRemoved": true
+  },
+  "limitations": [
+    "本次使用已有 linux/amd64 本地候选，不证明 GHCR 0.6.1 可获取或当前全部工作区源码已构建。",
+    "本次只验收入口端口、健康检查和业务网络配置及默认路由；不重复旧 20 项网络对照或长时代理验收。",
+    "静态资源 503、React #418、完整安装恢复、公网及发布门禁仍保留。"
+  ],
+  "preservedCounts": {
+    "container": 7,
+    "volume": 8,
+    "network": 7
+  },
+  "engine": "28.4.0",
+  "composeVersion": "2.39.4-desktop.1",
+  "candidateImageId": "sha256:8a8f2cd3ec1a26fc68bf04a2661f2306f09bba4b06ba9b1593d74b3f3953deb1",
+  "ingressImageId": "sha256:dc5069ad14f19660b141b21236140b91656bf89bbc3e2417c70ae650cd66104c",
+  "startupElapsedMs": 17290,
+  "services": {
+    "ingress": {
+      "id": "825e39010f5f03dc7ed266ba914d425a7eecbaf2f4950138f92f6bb79793451e",
+      "image": "sha256:dc5069ad14f19660b141b21236140b91656bf89bbc3e2417c70ae650cd66104c",
+      "health": "healthy",
+      "ports": {
+        "8080/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "3210"
+          }
+        ]
+      },
+      "networks": [
+        "zhiliao-ingress-repair-20260915t145944z-b56abe15-ingress",
+        "zhiliao-ingress-repair-20260915t145944z-b56abe15-net"
+      ]
+    },
+    "app": {
+      "id": "16980b98aae4d1f880a295e842224e4df573c4f4bd3fd3fdf9283e70549314ea",
+      "image": "sha256:8a8f2cd3ec1a26fc68bf04a2661f2306f09bba4b06ba9b1593d74b3f3953deb1",
+      "health": "healthy",
+      "ports": {},
+      "networks": [
+        "zhiliao-ingress-repair-20260915t145944z-b56abe15-net"
+      ],
+      "defaultRoute": false,
+      "routeTable": "Iface\tDestination\tGateway \tFlags\tRefCnt\tUse\tMetric\tMask\t\tMTU\tWindow\tIRTT                                                       \neth0\t000016AC\t00000000\t0001\t0\t0\t0\t0000FFFF\t0\t0\t0"
+    },
+    "mockllm": {
+      "id": "35cd5932b1e898812754ab0e9b36994250c9c9872a15a3e4c7daec89953ae23c",
+      "image": "sha256:8a8f2cd3ec1a26fc68bf04a2661f2306f09bba4b06ba9b1593d74b3f3953deb1",
+      "health": "healthy",
+      "ports": {},
+      "networks": [
+        "zhiliao-ingress-repair-20260915t145944z-b56abe15-net"
+      ],
+      "defaultRoute": false,
+      "routeTable": "Iface\tDestination\tGateway \tFlags\tRefCnt\tUse\tMetric\tMask\t\tMTU\tWindow\tIRTT                                                       \neth0\t000016AC\t00000000\t0001\t0\t0\t0\t0000FFFF\t0\t0\t0"
+    }
+  },
+  "ingressBinding": "127.0.0.1:3210",
+  "networks": {
+    "business": {
+      "internal": true,
+      "gatewayMode": "isolated",
+      "ipam": [
+        {
+          "Subnet": "172.22.0.0/16"
+        }
+      ]
+    },
+    "ingress": {
+      "internal": false
+    }
+  },
+  "preservation": {
+    "status": "passed",
+    "container": 7,
+    "volume": 8,
+    "network": 7,
+    "imagesUnchanged": true
+  },
+  "finishedAt": "2026-09-15T15:07:17.450Z"
+}

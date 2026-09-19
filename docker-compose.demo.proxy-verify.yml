@@ -1,0 +1,58 @@
+# 代理空闲时限专用验收 project；不挂载业务卷，不使用正式配置。
+name: zhiliao-demo-proxy-verify
+services:
+  proxy-upstream:
+    image: ${DEMO_VERIFY_IMAGE:-zhiliao-demo-verify:story-2-2}
+    command: ["node", "/opt/demo-proxy-upstream.mjs"]
+    volumes:
+      - ./scripts/fixtures/demo-proxy-upstream.mjs:/opt/demo-proxy-upstream.mjs:ro
+    networks: [proxy_net]
+    read_only: true
+    tmpfs: ["/tmp:size=16m,noexec,nosuid"]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    pids_limit: 32
+    mem_limit: 128m
+    cpus: 0.25
+    logging:
+      driver: json-file
+      options: {max-size: "1m", max-file: "1"}
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    labels:
+      io.zhiliao.demo-proxy-verify.run: ${DEMO_VERIFY_RUN_ID:-manual}
+  ingress:
+    image: nginx:1.30.4-alpine@sha256:dc5069ad14f19660b141b21236140b91656bf89bbc3e2417c70ae650cd66104c
+    depends_on:
+      proxy-upstream:
+        condition: service_healthy
+    ports: ["127.0.0.1:${DEMO_VERIFY_PORT:-3333}:8080"]
+    volumes:
+      - ./nginx/demo-proxy.conf:/etc/nginx/nginx.conf:ro
+    networks: [proxy_net]
+    read_only: true
+    tmpfs: ["/tmp:size=16m,uid=101,gid=101,noexec,nosuid", "/var/cache/nginx:size=64m,uid=101,gid=101,noexec,nosuid"]
+    user: "101:101"
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    pids_limit: 32
+    mem_limit: 128m
+    cpus: 0.25
+    logging:
+      driver: json-file
+      options: {max-size: "1m", max-file: "1"}
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:8080/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    labels:
+      io.zhiliao.demo-proxy-verify.run: ${DEMO_VERIFY_RUN_ID:-manual}
+networks:
+  proxy_net:
+    name: ${COMPOSE_PROJECT_NAME}-proxy-net
+    labels:
+      io.zhiliao.demo-proxy-verify.run: ${DEMO_VERIFY_RUN_ID:-manual}

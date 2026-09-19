@@ -29,7 +29,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 # - Retrospective appends its action items to action_items; the status view surfaces open ones
 generated: 09-09-2026 16:00
-last_updated: 09-10-2026 10:41
+last_updated: 09-19-2026 23:30
 project: 知了
 project_key: ZHILIAO
 tracking_system: file-system
@@ -42,8 +42,38 @@ development_status:
   epic-1-retrospective: optional
 
   epic-2: in-progress
-  2-1-建立服务端-demo-能力边界: review
-  2-2-隔离-demo-部署并限制资源: backlog
+  2-1-建立服务端-demo-能力边界: done
+  2-2-隔离-demo-部署并限制资源: review
+  # 本轮已确认目标为 Windows Docker Desktop、先仅本机体验和验收，保持单 Agent。
+  # 只读复核两侧 Docker 客户端为同一 Engine；数据盘为 ext4，普通 local 业务卷硬配额未落实。
+  # 原 XFS 方案转为条件性参考；用户已确认 B2 统一网络选项、局部回归及一次本机验收和清理。
+  # B2 已完成：PowerShell/Node 新增可选网络阶段，异步等待完整结果及控制资源清理，关联独立报告和哈希。
+  # 19:44 入口、网络与文档三个文件 52 项局部回归通过；Node/PowerShell 语法与参数透传检查通过。
+  # 19:48 至 19:49 一次本机验收通过：三服务健康，127.0.0.1:3322 入口 200/413，SSE 首段正文 84 毫秒。
+  # SSE 共 10 批正文、236 毫秒正常 done，中断后健康 200；4 条互通、4 个正向对照、12 条负向路径全部通过。
+  # 本轮网络负向均为 ENETUNREACH；Demo 和控制资源已清理，7 个容器、8 个卷、7 个网络元数据保持原样。
+  # 运行前 73 个文件哈希未变，之后才同步结果文档；没有读取或校验正式业务数据内容。
+  # 四份 B2 JSON 见 docs/Demo部署隔离验收-2026-09-10.md#b2-local；未构建、拉取、重跑 A2 长时场景或发布。
+  # 20:09 收尾文档 6 项通过；16 文件编码、相对链接/新增锚点、42 份 JSON 与 Story/Sprint YAML 解析均通过。
+  # 单 Agent 自审完成，8 项运行输入及网络报告哈希一致；其余 61 个保留文件、基线与冻结块未变。
+  # git diff --check 通过；B2 仅关闭本机已测路径，Story 继续 review，不进入 2.3。
+  # 原硬配额、实际正式网络、公网 HTTPS 和新固定镜像门槛保留，Story 继续 review。
+  # 9 月 12 日 A2 本机网络 20 项已通过，作为重启前环境证据保留，不推断新启动周期或目标主机全部路径。
+  # 首轮三项代理时限约 285 秒失败；各次时钟源、tick、chronyd 跟踪和通道中断记录均原样保留。
+  # 17:22 至 17:23 获准执行一次 WSL shutdown 并恢复 Docker Desktop 与 Ubuntu，Engine 保持 28.4.0。
+  # 根 shell 可连续重连，重新核实 chronyd PID 305、版本 4.1 与 Hyper-V PHC 活动配置。
+  # 两段正常计时最大偏差约 0.589% / 0.029%，均通过 1%；本轮无需暂停 chronyd 或写时钟参数。
+  # 17:42 至 17:49 原四场景全部通过：空闲超时 298.662 / 298.645 / 298.541 秒，日志匹配。
+  # 长心跳 417.985 秒、7 次事件、正常 done；300 秒配置、295 至 330 秒容差、450 秒预算和 32 MiB 上限未改。
+  # 14 段运行中计时监测均在 1% 内；专用资源与 10 个辅助文件已清理，7 个既有容器和文档同步前的 68 个文件未变。
+  # 首次 Docker 停止状态误判与根 PID 汇总解析错误分别留存原始记录及修正证据。
+  # 上述 A2 收尾阶段按未变输入复用局部代码回归、lint 与严格类型检查，当时只做文档局部回归，未运行完整门禁。
+  # 当前实际正式服务隔离、业务卷配额、HTTPS 和补丁镜像发布仍待完成，不宣称长期计时已修复。
+  # 18:04 文档 6 项通过；9 份文件编码、288 个相对链接、12 处锚点引用及 36 份 JSON 解析均通过。
+  # 存证源码哈希、其余 59 个保留文件、冻结块与原始基线未变，git diff --check 通过。
+  # 状态保持 review；完整证据见 docs/Demo部署隔离验收-2026-09-10.md。
+  # 2026-09-19 CR 补丁已落地：包装脚本清理宿主 DEMO_*/COMPOSE_*、入口 X-Forwarded-For 改为 $remote_addr、HTTP 超限矩阵、进程树与中断后 down。
+  # 原验收（目标主机隔离、业务卷配额、0.6.1 digest/HTTPS）仍未完成，保持 review，不进入 2.3。
   2-3-建立重置-健康检查与故障恢复手册: backlog
   epic-2-retrospective: optional
 

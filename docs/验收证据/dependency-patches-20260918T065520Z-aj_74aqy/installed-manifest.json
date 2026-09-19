@@ -1,0 +1,61 @@
+{
+  "packageSha256": "7c203c317d71c869cc217be6b45223d9ec27822168efe500e2c5288f27ed5be7",
+  "lockSha256": "1ddf494be7e307d78ce79e304d83b5cd567756b8274c7009b1695e877cb0b5b4",
+  "applicationVersion": "0.6.1",
+  "installedVersions": [
+    {
+      "name": "next",
+      "locked": "15.5.24",
+      "installed": "15.5.24"
+    },
+    {
+      "name": "eslint-config-next",
+      "locked": "15.5.24",
+      "installed": "15.5.24"
+    },
+    {
+      "name": "@next/eslint-plugin-next",
+      "locked": "15.5.24",
+      "installed": "15.5.24"
+    },
+    {
+      "name": "@next/env",
+      "locked": "15.5.24",
+      "installed": "15.5.24"
+    },
+    {
+      "name": "@next/swc-win32-x64-msvc",
+      "locked": "15.5.24",
+      "installed": "15.5.24"
+    },
+    {
+      "name": "sharp",
+      "locked": "0.35.4",
+      "installed": "0.35.4"
+    },
+    {
+      "name": "@img/sharp-win32-x64",
+      "locked": "0.35.4",
+      "installed": "0.35.4"
+    },
+    {
+      "name": "js-yaml",
+      "locked": "4.3.2",
+      "installed": "4.3.2"
+    },
+    {
+      "name": "vitest",
+      "locked": "4.1.11",
+      "installed": "4.1.11"
+    },
+    {
+      "name": "@vitest/mocker",
+      "locked": "4.1.11",
+      "installed": "4.1.11"
+    }
+  ],
+  "databaseNativeModulesPreserved": true,
+  "linuxX64AndArm64Locked": true,
+  "installPreservedReviewedManifestBytes": true,
+  "lineEndingsNormalizedToLf": true
+}

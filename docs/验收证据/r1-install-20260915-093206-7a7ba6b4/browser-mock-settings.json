@@ -1,0 +1,8 @@
+{
+  "timeUtc": "2026-09-15T02:24:39.423Z",
+  "status": 200,
+  "baseUrl": "http://mockllm:8787/v1",
+  "model": "mock",
+  "keySynthetic": true,
+  "readBackAfterReload": true
+}

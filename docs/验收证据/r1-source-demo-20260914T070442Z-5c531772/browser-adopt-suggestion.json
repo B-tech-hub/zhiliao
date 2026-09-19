@@ -1,0 +1,16 @@
+{
+  "id": "adopt-suggestion",
+  "result": {
+    "before": {
+      "acceptButtons": 2,
+      "run": true,
+      "cook": true
+    },
+    "after": {
+      "remainingCook": true,
+      "runTopic": "跑步5",
+      "inbox": "未分类3"
+    },
+    "snapshot": "- main:\n  - paragraph: 知了\n  - heading \"未分类\" [level=1]\n  - button \"让 AI 帮我整理\"\n  - paragraph: AI 拿不准归属的笔记会先留在这里\n  - paragraph: 建议新建主题「下厨」\n  - paragraph: 多条笔记与做饭相关\n  - list:\n    - listitem:\n      - checkbox [checked]\n      - text: 周末逛菜市场买了排骨·AI\n    - listitem:\n      - checkbox [checked]\n      - text: 学做菜第二天：番茄炒·AI\n    - listitem:\n      - checkbox [checked]\n      - text: 第一次做饭挑战可乐鸡·AI\n  - button \"采纳\"\n  - button \"忽略全部建议\"\n  - checkbox\n  - link \"周末逛菜市场买了排骨·AI 15:34 记录 测试\":\n    - /url: /notes/sx0tkkaj24akub5ebb18j984\n    - paragraph: 周末逛菜市场买了排骨·AI\n    - text: 15:34 记录 测试\n  - checkbox\n  - link \"学做菜第二天：番茄炒·AI 15:34 记录 测试\":\n    - /url: /notes/w7vzqffb2mzfyqbo34fs832y\n    - paragraph: 学做菜第二天：番茄炒·AI\n    - text: 15:34 记录 测试\n  - checkbox\n  - link \"第一次做饭挑战可乐鸡·AI 15:34 记录 测试\":\n    - /url: /notes/nek5ibxb8lygyrj7impy3gyn\n    - paragraph: 第一次做饭挑战可乐鸡·AI\n    - text: 15:34 记录 测试"
+  }
+}

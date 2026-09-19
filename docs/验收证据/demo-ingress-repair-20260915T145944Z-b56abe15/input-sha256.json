@@ -1,0 +1,8 @@
+{
+  "docker-compose.demo.yml": "af97fe2ae47eb4ff6977500aaf37dd90e9d0381c2396eb4c7eaf6d2a33500c7f",
+  "nginx/demo.conf": "a798fd4981ebbced93c5a52150ac34da31b7fcad4f41c8a95e87c15090adde7b",
+  "tests/config/demo-compose.test.ts": "f94e171ddde740ce806db67cc0bc1a79191531cdbca99dc3d4f0162462ee9625",
+  "tests/config/demo-compose-cli.test.ts": "78d3a457e0d6d05e1608a68c11e4a85e630fa10735c96139fa98eb0c2c513c40",
+  "vitest.config.mts": "386c7045e405d0855313ad030d87e72394cea3926ff1c2a80a2285895524c4d3",
+  "scripts/demo-verification-utils.mjs": "7f470b62da3ce58fe36354797db426c5e6ba6b9e95e2829ad6ac263861da4665"
+}

@@ -288,6 +288,7 @@ function WeeklyReviewCard({ review }: { review: ReviewInfo }) {
 
 /* 数据区块：数据信任功能的聚合入口——手动备份、导出、回收站 */
 function DataSection({ lastBackupAt, trashCount }: { lastBackupAt: number | null; trashCount: number }) {
+  const [isMounted, setIsMounted] = useState(false);
   const [backedUpAt, setBackedUpAt] = useState(lastBackupAt);
   const [backingUp, setBackingUp] = useState(false);
   const [backupResult, setBackupResult] = useState("");
@@ -296,6 +297,10 @@ function DataSection({ lastBackupAt, trashCount }: { lastBackupAt: number | null
   const [overwrite, setOverwrite] = useState(false);
   const [runAi, setRunAi] = useState(false);
   const fileInput = useRef<HTMLInputElement>(null);
+
+  // 本地时间取决于时区和当前日期，挂载前使用固定占位，保持两端首帧一致。
+  useEffect(() => setIsMounted(true), []);
+  const backupTime = backedUpAt === null ? "从未备份" : isMounted ? formatTime(backedUpAt) : "—";
 
   async function backupNow() {
     setBackingUp(true);
@@ -363,7 +368,7 @@ function DataSection({ lastBackupAt, trashCount }: { lastBackupAt: number | null
             {backingUp ? "备份中…" : "立即备份"}
           </button>
           <span className="font-mono text-ink-48">
-            最近备份：{backedUpAt ? formatTime(backedUpAt) : "从未备份"}
+            最近备份：{backupTime}
           </span>
           {backupResult && (
             <span className={backupResult.startsWith("✕") ? "text-danger" : "text-ink-80"}>

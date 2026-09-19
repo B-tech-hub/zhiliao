@@ -1,0 +1,151 @@
+{
+  "story": "2.2",
+  "recorded_at": "2026-09-12T02:46:13.779Z",
+  "status": "failed",
+  "project": "zhiliao-demo-verify-a2-20260912",
+  "run_id": "2dc1fb042c193086e74621d320f10f73",
+  "services": [
+    "app",
+    "mockllm"
+  ],
+  "targets": [
+    {
+      "name": "metadata-169.254.169.254",
+      "host": "169.254.169.254",
+      "port": 80,
+      "kind": "metadata"
+    },
+    {
+      "name": "metadata-169.254.170.2",
+      "host": "169.254.170.2",
+      "port": 80,
+      "kind": "metadata"
+    },
+    {
+      "name": "private-10",
+      "host": "10.254.254.254",
+      "port": 80,
+      "kind": "rfc1918"
+    },
+    {
+      "name": "private-172",
+      "host": "172.31.254.254",
+      "port": 80,
+      "kind": "rfc1918"
+    },
+    {
+      "name": "private-192",
+      "host": "192.168.254.254",
+      "port": 80,
+      "kind": "rfc1918"
+    }
+  ],
+  "checks": [
+    {
+      "source": "app",
+      "target": "host-control",
+      "expected": "reachable",
+      "result": "ETIMEDOUT",
+      "passed": false
+    },
+    {
+      "source": "app",
+      "target": "metadata-169.254.169.254",
+      "expected": "blocked",
+      "classification": "probe-error",
+      "passed": false,
+      "reason": "Docker exec -i 失败：1"
+    },
+    {
+      "source": "app",
+      "target": "metadata-169.254.170.2",
+      "expected": "blocked",
+      "classification": "probe-error",
+      "passed": false,
+      "reason": "Docker exec -i 失败：1"
+    },
+    {
+      "source": "app",
+      "target": "private-10",
+      "expected": "blocked",
+      "classification": "probe-error",
+      "passed": false,
+      "reason": "Docker exec -i 失败：1"
+    },
+    {
+      "source": "app",
+      "target": "private-172",
+      "expected": "blocked",
+      "classification": "probe-error",
+      "passed": false,
+      "reason": "Docker exec -i 失败：1"
+    },
+    {
+      "source": "app",
+      "target": "private-192",
+      "expected": "blocked",
+      "classification": "probe-error",
+      "passed": false,
+      "reason": "Docker exec -i 失败：1"
+    },
+    {
+      "source": "mockllm",
+      "target": "host-control",
+      "expected": "reachable",
+      "result": "ETIMEDOUT",
+      "passed": false
+    },
+    {
+      "source": "mockllm",
+      "target": "metadata-169.254.169.254",
+      "expected": "blocked",
+      "classification": "probe-error",
+      "passed": false,
+      "reason": "Docker exec -i 失败：1"
+    },
+    {
+      "source": "mockllm",
+      "target": "metadata-169.254.170.2",
+      "expected": "blocked",
+      "classification": "probe-error",
+      "passed": false,
+      "reason": "Docker exec -i 失败：1"
+    },
+    {
+      "source": "mockllm",
+      "target": "private-10",
+      "expected": "blocked",
+      "classification": "probe-error",
+      "passed": false,
+      "reason": "Docker exec -i 失败：1"
+    },
+    {
+      "source": "mockllm",
+      "target": "private-172",
+      "expected": "blocked",
+      "classification": "probe-error",
+      "passed": false,
+      "reason": "Docker exec -i 失败：1"
+    },
+    {
+      "source": "mockllm",
+      "target": "private-192",
+      "expected": "blocked",
+      "classification": "probe-error",
+      "passed": false,
+      "reason": "Docker exec -i 失败：1"
+    }
+  ],
+  "limitations": [
+    "本工具只记录同一 Docker Engine 上的对照路径，不能替代最终部署主机验收。",
+    "宿主机正向对照不可用时不会把监听所有网卡作为替代方案。"
+  ],
+  "cleanup": {
+    "status": "not_applicable"
+  },
+  "host_control": {
+    "bind": "127.0.0.1",
+    "port": 63229,
+    "token_sha256": "b5aaf96fa7e35cbbe7293ded3c5167006e648a1703f66f54449faf7de2759cf0"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "story": "2.2",
+  "recorded_at": "2026-09-12T02:49:33.844Z",
+  "status": "failed",
+  "project": "zhiliao-demo-proxy-verify-a2-20260912",
+  "run_id": "a66cde4f1b8de497181f6ad87f84b704",
+  "limits": {
+    "readTimeoutSeconds": 300,
+    "sendTimeoutSeconds": 300,
+    "budgetSeconds": 450
+  },
+  "scenarios": [],
+  "cleanup": {
+    "status": "not_started"
+  },
+  "input_sha256": {
+    "docker-compose.demo.proxy-verify.yml": "f1f1047a2f2b0670ffcf487e559325e41177a5efc45c64d75dc379400f55c7b3",
+    "nginx/demo-proxy.conf": "abae7a74feb2ed1b048b7579348707cc68d9c6a7126baab4356a7d44c7244fb2",
+    "scripts/fixtures/demo-proxy-upstream.mjs": "6b53bd3190ff70255fee95db6c619f36fdd922f8eef0b9673f342a6372945ec3"
+  },
+  "error": "Docker compose --project-directory 失败：1"
+}

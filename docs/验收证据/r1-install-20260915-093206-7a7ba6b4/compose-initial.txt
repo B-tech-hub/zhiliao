@@ -1,0 +1,49 @@
+x-r1-labels: &r1-labels
+  io.zhiliao.r1.run: ${R1_RUN_ID:?}
+
+services:
+  ingress:
+    labels: *r1-labels
+    restart: "no"
+    pull_policy: never
+    ports: !override
+      - "127.0.0.1:${R1_PORT:?}:8080"
+  app:
+    labels: *r1-labels
+    image: ${R1_IMAGE:?}
+    pull_policy: never
+    restart: "no"
+    environment: !override
+      NODE_ENV: production
+      DEMO_MODE: "0"
+      APP_PASSWORD: ${DEMO_PASSWORD:?}
+      SESSION_SECRET: ${DEMO_SESSION_SECRET:?}
+      DATABASE_PATH: /data/db/app.db
+      UPLOAD_DIR: /data/uploads
+      NOTES_EXPORT_DIR: /data/notes
+      TZ: UTC
+      NEXT_TELEMETRY_DISABLED: "1"
+      LLM_BASE_URL: ""
+      LLM_API_KEY: ""
+      LLM_MODEL: ""
+    volumes: !override
+      - install_db:/data/db
+      - install_uploads:/data/uploads
+      - ./notes:/data/notes
+  mockllm:
+    labels: *r1-labels
+    image: ${R1_IMAGE:?}
+    pull_policy: never
+    restart: "no"
+
+networks:
+  demo_net:
+    labels: *r1-labels
+  ingress_net:
+    labels: *r1-labels
+
+volumes: !override
+  install_db:
+    labels: *r1-labels
+  install_uploads:
+    labels: *r1-labels

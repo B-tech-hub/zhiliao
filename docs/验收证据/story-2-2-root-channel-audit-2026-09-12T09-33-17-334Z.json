@@ -1,0 +1,76 @@
+{
+  "story": "2.2",
+  "recorded_at": "2026-09-12T09:33:17.334Z",
+  "status": "passed",
+  "scope": "仅复核既有原始输出；不新增根通道连接、信号或时钟写入",
+  "input": "docs/验收证据/story-2-2-root-channel-2026-09-12T09-31-24-902Z.json",
+  "input_sha256": "74fe81085e2ed413541db673d806e90862eb9952e2033e4da2f43c398b7595a4",
+  "correction": "首轮汇总正则要求 PID 标记位于行首，实际前面有 shell 提示符；原始两次命令均返回 0，完成标记完整，PID 均为 1895。保留原失败报告并新增本复核记录。",
+  "shell_pid_parser": "\\bA2_SHELL_PID=(\\d+)(?=\\n|$)",
+  "connections": [
+    {
+      "shell_pid": "1895",
+      "prompt_received_before_commands": true,
+      "completion_marker_matched": true,
+      "shell_command_exit_code": 0,
+      "forwarding_process": {
+        "pid": 65096,
+        "code": null,
+        "signal": "SIGTERM"
+      }
+    },
+    {
+      "shell_pid": "1895",
+      "prompt_received_before_commands": true,
+      "completion_marker_matched": true,
+      "shell_command_exit_code": 0,
+      "forwarding_process": {
+        "pid": 29336,
+        "code": null,
+        "signal": "SIGTERM"
+      }
+    }
+  ],
+  "same_root_shell_reconnected": true,
+  "identity": {
+    "root_pid_namespace": "pid:[4026531836]",
+    "python_pid_namespace": "pid:[4026531836]",
+    "root_proc_fd_verified": true,
+    "python_pid": 1937,
+    "uid": 0,
+    "pidfd_send_signal_available": true,
+    "boot_id": "6ac3fe53-9499-4a8d-979d-ea444e813d9f",
+    "python_version": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+    "chronyd": {
+      "pid": 305,
+      "exe": "/usr/sbin/chronyd",
+      "cmdline": [
+        "/sbin/chronyd"
+      ],
+      "state": "S",
+      "ppid": 1,
+      "start_ticks": "49",
+      "pid_namespace": "pid:[4026531836]",
+      "mount_namespace": "mnt:[4026531841]",
+      "exe_metadata": {
+        "device": 27,
+        "inode": 4244,
+        "size": 320600,
+        "mtime_ns": "1700011187000000000"
+      },
+      "raw_stat": "305 (chronyd) S 1 304 304 0 -1 4194624 63 0 7 0 3 6 0 0 20 0 1 0 49 4395008 432 18446744073709551615 93853396881408 93853397092225 140737074984912 0 0 0 65536 4096 16391 1 0 0 17 20 0 0 0 0 0 93853397174384 93853397176992 93853828956160 140737074986937 140737074986951 140737074986951 140737074986986 0",
+      "status": "Name:\tchronyd\nUmask:\t0022\nState:\tS (sleeping)\nTgid:\t305\nNgid:\t0\nPid:\t305\nPPid:\t1\nTracerPid:\t0\nUid:\t999\t999\t999\t999\nGid:\t999\t999\t999\t999\nFDSize:\t64\nGroups:\t \nNStgid:\t305\nNSpid:\t305\nNSpgid:\t304\nNSsid:\t304\nKthread:\t0\nVmPeak:\t    4292 kB\nVmSize:\t    4292 kB\nVmLck:\t       0 kB\nVmPin:\t       0 kB\nVmHWM:\t    1728 kB\nVmRSS:\t    1728 kB\nRssAnon:\t       0 kB\nRssFile:\t    1728 kB\nRssShmem:\t       0 kB\nVmData:\t     244 kB\nVmStk:\t     132 kB\nVmExe:\t     208 kB\nVmLib:\t    2316 kB\nVmPTE:\t      52 kB\nVmSwap:\t       0 kB\nHugetlbPages:\t       0 kB\nCoreDumping:\t0\nTHP_enabled:\t1\nuntag_mask:\t0xffffffffffffffff\nThreads:\t1\nSigQ:\t0/31257\nSigPnd:\t0000000000000000\nShdPnd:\t0000000000000000\nSigBlk:\t0000000000010000\nSigIgn:\t0000000000001000\nSigCgt:\t0000000000004007\nCapInh:\t0000000000000000\nCapPrm:\t0000000002000400\nCapEff:\t0000000002000400\nCapBnd:\t000001ffffffffff\nCapAmb:\t0000000000000000\nNoNewPrivs:\t0\nSeccomp:\t0\nSeccomp_filters:\t0\nSpeculation_Store_Bypass:\tthread vulnerable\nSpeculationIndirectBranch:\tconditional enabled\nCpus_allowed:\tffffff\nCpus_allowed_list:\t0-23\nMems_allowed:\t00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000001\nMems_allowed_list:\t0\nvoluntary_ctxt_switches:\t1974\nnonvoluntary_ctxt_switches:\t0\n",
+      "configuration_path": "/etc/chrony.conf",
+      "configuration": "driftfile /var/lib/chrony/drift\nmakestep 1.0 3\nrtcsync\nleapsectz right/UTC\nlogdir /var/log/chrony\nrefclock PHC /dev/ptp0 poll 3 dpoll -2 offset 0\n",
+      "pidfd_open_verified": true
+    },
+    "clocksource": "tsc",
+    "phc_clock_name": "hyperv",
+    "raw_ns": "483493078920"
+  },
+  "ubuntu_namespace": "pid:[4026532219]",
+  "ubuntu_root_from_kernel": "/proc/1079/root",
+  "active_configuration_verified": true,
+  "signals_sent": [],
+  "clock_writes": []
+}

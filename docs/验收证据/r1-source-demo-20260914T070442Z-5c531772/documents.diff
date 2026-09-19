@@ -1,0 +1,128 @@
+--- 验收前/README.md
++++ 验收后/README.md
+@@ -57,7 +57,7 @@
+ > 演示中的 AI 是本地 mock（按关键词模拟判断），只为展示产品流程；真实效果取决于你接入的 LLM（见下文「LLM 供应商切换」）。
+ > 按上述隔离步骤首次启动时，数据库、上传和 Markdown 均位于这个独立 checkout 的 `./data-demo/`。停止该 Demo 后可重置这个隔离目录。若以前按旧命令运行过，`./data/notes` 可能已有导出；仅删除 `data-demo` 不代表完整重置，先核对目录归属，不删除正式目录。
+ 
+-当前 **0.6.1 候选源码**已修复 Demo 接线：`npm run demo` 自动设置 `DEMO_RUNTIME=local`，固定连接 `http://127.0.0.1:8787/v1`；容器未设置标记时，以及标记非法时，固定连接 `http://mockllm:8787/v1`。两种 Demo 都忽略数据库和环境中的外部模型地址，禁用附加模型。上方 clone 命令继续获取历史 v0.6.0；本轮局部回归不代表当前候选已完成实际启动或浏览器闭环，见 [R1 结果与验收边界](docs/产品规划/开源发布范围与执行清单-2026-09-13.md#r1-source-demo)。
++当前 **0.6.1 候选源码**已修复 Demo 接线：`npm run demo` 自动设置 `DEMO_RUNTIME=local`，固定连接 `http://127.0.0.1:8787/v1`；容器未设置标记时，以及标记非法时，固定连接 `http://mockllm:8787/v1`。两种 Demo 都忽略数据库和环境中的外部模型地址，禁用附加模型。上方 clone 命令继续获取历史 v0.6.0；2026-09-14 已完成 Windows 本机受控环境中的源码启动、浏览器闭环、配置污染和 403 验收，见 [R1 结果与验收边界](docs/产品规划/开源发布范围与执行清单-2026-09-13.md#r1-source-demo)及[实测记录](docs/R1源码Demo接线验收-2026-09-14.md)。本次使用临时副本和附加运行保护，不代表无缓存安装、Docker 或发布验收通过。
+ 
+ 当前源码启动器固定 `APP_PASSWORD=demo`、演示专用会话密钥及 `./data-demo/` 路径，覆盖宿主同名配置；`PORT` 等未固定变量仍可透传。Docker Demo 的密码继续通过专用 `demo.env` 中的 `DEMO_PASSWORD` 设置。
+ 
+--- 验收前/README.en.md
++++ 验收后/README.en.md
+@@ -73,7 +73,7 @@
+ 
+ On a first run using the isolated steps above, the database, uploads, and Markdown all stay under that checkout's `./data-demo/`. Stop that Demo before resetting its isolated directory. Previous runs of the old commands may already have exported files to `./data/notes`: deleting only `data-demo` is not a complete reset. Check directory ownership and preserve production data.
+ 
+-In the current **unreleased 0.6.1 source**, `npm run demo` sets `DEMO_RUNTIME=local` and selects the fixed `http://127.0.0.1:8787/v1` mock endpoint. Missing or invalid runtime markers select the fixed container endpoint, `http://mockllm:8787/v1`. Both Demo modes ignore external model settings from the database and environment and disable additional models. The clone command above still selects historical v0.6.0. Local regression checks do not establish that the current candidate passes actual startup or the browser flow; see the [R1 results and verification scope](docs/产品规划/开源发布范围与执行清单-2026-09-13.md#r1-source-demo) (Chinese).
++In the current **unreleased 0.6.1 source**, `npm run demo` sets `DEMO_RUNTIME=local` and selects the fixed `http://127.0.0.1:8787/v1` mock endpoint. Missing or invalid runtime markers select the fixed container endpoint, `http://mockllm:8787/v1`. Both Demo modes ignore external model settings from the database and environment and disable additional models. The clone command above still selects historical v0.6.0. On September 14, the candidate passed a controlled local Windows source Demo check covering startup, the browser flow, conflicting model settings, and forbidden endpoints; see the [R1 results and verification scope](docs/产品规划/开源发布范围与执行清单-2026-09-13.md#r1-source-demo) and [runtime record](docs/R1源码Demo接线验收-2026-09-14.md) (Chinese). This used a temporary copy and an additional runtime guard; it does not establish clean-install, Docker, native network-isolation, or release readiness.
+ 
+ The current source launcher enforces `APP_PASSWORD=demo`, a dedicated Demo session secret, and paths under `./data-demo/`, overriding conflicting host values. Unfixed variables such as `PORT` still pass through. The Docker Demo password remains configurable through `DEMO_PASSWORD` in its dedicated `demo.env`.
+ 
+--- 验收前/docs/首次使用与故障排查.md
++++ 验收后/docs/首次使用与故障排查.md
+@@ -2,7 +2,7 @@
+ 
+ 本教程面向已经按 **v0.6.0** 启动知了、并能打开登录页的用户。按“先完成一次，再理解配置，最后排错”的顺序阅读；不需要真实 API Key，也不会要求修改运行时或重建正式数据。
+ 
+-当前工作区目标为 **0.6.1 候选，尚未发布**。本教程的普通安装继续采用已发布 v0.6.0；当前分支的主/Demo Compose 已指向待发布 0.6.1，不能直接套用为旧版配置。当前候选的源码 Demo 接线已修复，实际启动与浏览器闭环仍待验收，见 [R1 结果与边界](产品规划/开源发布范围与执行清单-2026-09-13.md#r1-source-demo)。
++当前工作区目标为 **0.6.1 候选，尚未发布**。本教程的普通安装继续采用已发布 v0.6.0；当前分支的主/Demo Compose 已指向待发布 0.6.1，不能直接套用为旧版配置。当前候选的源码 Demo 接线已修复，已在 Windows 本机受控环境完成实际启动与浏览器验收，见 [R1 结果与边界](产品规划/开源发布范围与执行清单-2026-09-13.md#r1-source-demo)及[实测记录](R1源码Demo接线验收-2026-09-14.md)。该次使用临时副本和附加运行保护，不代表 Docker、安装、恢复或发布验收通过。
+ 
+ 当前免费试用采用你自己设备上的自托管实例；公网 Demo 后移。软件按 MIT 免费使用，设备与自选模型费用按实际情况承担。完成主流程后，可继续阅读[数据出口与恢复](备份与恢复.md)，并按[免费反馈说明](产品规划/开源发布范围与执行清单-2026-09-13.md#free-feedback)记录安装、找回笔记、来源问答或恢复中的具体阻断。未配置模型时仍可保存、关键词搜索和导出；mock 演示只证明流程，不代表真实模型效果。
+ 
+--- 验收前/tests/docs/first-use-guide.test.ts
++++ 验收后/tests/docs/first-use-guide.test.ts
+@@ -98,7 +98,7 @@
+       expect(source).toContain("v0.6.0");
+     }
+     expect(guide).toContain("缺省或非法标记均选择容器");
+-    expect(guide).toContain("实际启动与浏览器闭环仍待验收");
++    expect(guide).toContain("已在 Windows 本机受控环境完成实际启动与浏览器验收");
+     expect(guide).toContain("v0.6.0 源码 Demo 允许宿主环境覆盖");
+     expect(fs.readFileSync(path.resolve(process.cwd(), "README.md"), "utf8"))
+       .toContain("v0.6.0 源码启动器允许宿主环境覆盖");
+--- 验收前/CHANGELOG.md
++++ 验收后/CHANGELOG.md
+@@ -14,7 +14,7 @@
+ 
+ ### 修复
+ 
+-- 修复当前候选源码 `npm run demo` 启动本机 mock、应用却访问容器名的问题：启动器设置 `DEMO_RUNTIME=local`，应用仅在固定本机/容器 mock 地址中选择，缺省或非法标记保持容器地址。数据库/环境中的外部模型配置仍被忽略，凭据与数据隔离、附加模型禁用及服务端防护保持；[R1 局部验证](docs/产品规划/开源发布范围与执行清单-2026-09-13.md#r1-source-demo)不替代实际启动、浏览器、Docker 或发布验收。
++- 修复当前候选源码 `npm run demo` 启动本机 mock、应用却访问容器名的问题：启动器设置 `DEMO_RUNTIME=local`，应用仅在固定本机/容器 mock 地址中选择，缺省或非法标记保持容器地址。数据库/环境中的外部模型配置仍被忽略，凭据与数据隔离、附加模型禁用及服务端防护保持；[R1 局部验证](docs/产品规划/开源发布范围与执行清单-2026-09-13.md#r1-source-demo)之外，已补充 [Windows 本机受控源码验收](docs/R1源码Demo接线验收-2026-09-14.md)；Docker、完整安装/恢复和发布验收仍待完成。
+ - 修复搜索候选在相关性排序前被截断的问题：先限定有效笔记与来源范围，再按 BM25 选候选并统计命中词；大量来源外结果不再挤掉来源内笔记。130 篇固定语料下，助手前五命中由 5/13 提升至 12/13。
+ - 修复长文只能读取前 6000 字符的问题：`read_note` 支持通过 `offset` / `nextOffset` 续读，保留单次预算、来源校验与旧调用兼容；中文及 emoji 页边界不丢字，长标题和标签不再挤掉正文。
+ - 修复收件箱、主题笔记和笔记编辑页在存在 Embedding 向量时的 Next.js 渲染错误：不再把 SQLite `embedding` 二进制字段传给客户端组件。
+--- 验收前/docs/releases/v0.6.1.md
++++ 验收后/docs/releases/v0.6.1.md
+@@ -16,7 +16,7 @@
+ 
+ [执行清单](../产品规划/开源发布范围与执行清单-2026-09-13.md)中搜索续读、手机捕获、Demo 服务端及隔离改动仍需关联最终候选差异、审查与证据；未审查工作区不因版本升级整体获准发布。
+ 
+-- **源码 Demo 的静态接线冲突已修复，实际启动与浏览器闭环仍待验收。** [R1 结果](../产品规划/开源发布范围与执行清单-2026-09-13.md#r1-source-demo)记录了模拟子进程的启动器参数检查、模型配置及两种 Demo 模式防护回归；不代表真实 Next/mock 服务、当前候选镜像或浏览器主流程通过。
++- **源码 Demo 已通过 Windows 本机受控源码验收。** [R1 结果](../产品规划/开源发布范围与执行清单-2026-09-13.md#r1-source-demo)与[实测记录](../R1源码Demo接线验收-2026-09-14.md)分别记录局部回归和实际 Next/mock 启动、浏览器闭环、配置污染及十二项 403 检查。本次使用复制依赖和附加运行保护，不代表原生网络隔离、当前候选镜像、完整安装/恢复或发布门禁通过。
+ - MCP 入口鉴权与 `get_knowledge`/`search_knowledge` 语义另行分诊；版本统一不代表 MCP 全部契约已修复。
+ - Story 2.2 的配额、实际正式服务边界、HTTPS、补丁镜像与最终启动路径等全部原验收仍保留。本机历史 A2/B2 不能证明 0.6.1 镜像或公网部署通过。
+ - R1/R3 局部验证不替代无缓存安装、升级/恢复彩排、双架构镜像及 manifest 核对、RC 冒烟和完整门禁。详见 [R1 规格](../../_bmad-output/implementation-artifacts/spec-r1-source-demo-wiring.md)与 [R3 规格](../../_bmad-output/implementation-artifacts/spec-r3-version-consistency.md)。
+--- 验收前/docs/README.md
++++ 验收后/docs/README.md
+@@ -8,7 +8,7 @@
+ |---|---|
+ | [产品规划交付包](产品规划/README.md) | 本轮规划结论、阅读顺序、交付边界和与现有 Roadmap/ADR 的关系 |
+ | [开源发布范围与执行清单](产品规划/开源发布范围与执行清单-2026-09-13.md) | 当前行动入口：R0 范围与证据、安装恢复/版本任务、免费反馈和远程 Issue 交接 |
+-| [R1 源码 Demo 接线规格](../_bmad-output/implementation-artifacts/spec-r1-source-demo-wiring.md) | 已批准的固定本机/容器 mock 接线、配置与防护回归；局部结果不替代真实启动或发布验收 |
++| [R1 源码 Demo 接线规格](../_bmad-output/implementation-artifacts/spec-r1-source-demo-wiring.md) | 已批准的固定本机/容器 mock 接线、局部回归与 Windows 本机受控源码验收；安装及发布门禁另验 |
+ | [R3 版本一致规格](../_bmad-output/implementation-artifacts/spec-r3-version-consistency.md) | 已批准的 0.6.1 版本来源、MCP 握手、分发校验和局部验证范围；独立于 Story/Sprint 状态 |
+ | [已批准的开源优先范围调整](../_bmad-output/planning-artifacts/sprint-change-proposal-2026-09-12-open-source-first.md) | 开源交付先行，公网和收费后移；依赖修改、验收保留及审批交接记录 |
+ | [原 Story 2.2 分期提案](../_bmad-output/planning-artifacts/sprint-change-proposal-2026-09-12.md) | 历史论证与原验收保护；排期及部分依赖由已批准补充提案调整 |
+@@ -33,6 +33,7 @@
+ | 文档 | 内容 |
+ |---|---|
+ | [首次使用与故障排查](首次使用与故障排查.md) | 面向首次使用者的登录、首条笔记、AI 整理、主题与搜索闭环，以及按症状排错、实例隔离和安全边界 |
++| [R1 源码 Demo 接线验收](R1源码Demo接线验收-2026-09-14.md) | 当前 0.6.1 候选的 Windows 本机受控启动、浏览器闭环、配置污染、403 与清理；不替代安装或发布 |
+ | [Demo 部署隔离验收](Demo部署隔离验收-2026-09-10.md#b2-local) | Story 2.2 的 B2 本机 HTTP/SSE、20 项网络对照及资源保留核对；保留 A2 历史证据与硬配额、公网、发布门槛 |
+ | [Story 2.2 剩余验收实施方案](Story-2.2-剩余验收实施方案-2026-09-11.md#b1-b2-windows-local) | Windows Docker Desktop、仅本机体验；B2 统一网络入口及一次本机验收已完成，B1 硬配额、实际正式网络、公网和发布仍保留 |
+ | [部署手册-tailscale.md](部署手册-tailscale.md) | Windows 主线与 Linux/NAS 备注：固定 v0.6.0 文件及镜像锁定、本机端口、首次启动、Tailscale/PWA、保留原 project/挂载的升级与排错 |
+--- 验收前/docs/产品规划/开源发布范围与执行清单-2026-09-13.md
++++ 验收后/docs/产品规划/开源发布范围与执行清单-2026-09-13.md
+@@ -47,7 +47,7 @@
+ | R2-恢复说明 | 文档已修订，恢复实测另记 | Windows/Linux 配对取出、空目标恢复、HEIC 原件、实际卷名、写权限、WAL/SHM、模型联网条件及失败回退已写入手册；配置静态检查不替代 R2-出口与恢复 |
+ | R2-出口与恢复 | 待候选和隔离目标明确 | 增量 Markdown、ZIP 往返/判重、数据库加完整图片快照分别验收；真实恢复后打开笔记/图片、搜索及会话。ZIP 不替代完整恢复，同盘副本不替代异地备份 |
+ | R3-版本一致 | 0.6.1 已实施，局部验证通过 | 统一 package/lockfile、MCP 静态版本、Compose、安装脚本与发布校验；见[规格](../../_bmad-output/implementation-artifacts/spec-r3-version-consistency.md)。旧版安装入口保留，MCP 鉴权/工具语义另行分诊 |
+-| R1-源码 Demo 接线 | 接线已修复，实际启动仍待验收 | 启动器自动选择固定本机 mock，容器/非法标记回退与 Demo 防护保持；[局部验证记录](#r1-source-demo)不替代真实启动、浏览器闭环、安装或发布验收 |
++| R1-源码 Demo 接线 | Windows 本机受控源码验收通过 | [实测记录](../R1源码Demo接线验收-2026-09-14.md)覆盖启动、浏览器、配置污染和十二项 403；[局部证据](#r1-source-demo)继续按原范围解释，安装、Docker 和发布另验 |
+ | R3-发布准备 | 待候选与审查明确 | 完成原四条门禁、升级/恢复彩排、双架构镜像与 manifest 核对、RC 冒烟；RC 与正式 tag 同提交。新版本另建 Release Notes，旧 tag 和历史证据不覆盖 |
+ | R4-免费反馈 | 方案已批准，尚未邀请或开始观察 | 在固定版本可交付后按第 4 节执行；以实际尝试与阻断推动缺陷/文档修正，人数和 30 天观察不是发布前置条件 |
+ | #4 / #10 | 持续保留原验收 | 真实手机、蜂窝网络、Token 吊销及连续 7 天每天至少一条真实手机记录；真实笔记计数不合并多个试用者的库 |
+@@ -182,3 +182,13 @@
+ 主 Agent 已核对审查修正，R1 规格标记为 `done` 并补充审阅顺序。本次接线修复、局部验证和文档交付完成；真实启动、浏览器闭环与完整发布门禁继续待验收，不推进其他 R1 工作包或 Story/Sprint。
+ 
+ 最终与实施前 685 文件快照核对：14 份既有文件修改、2 份新增、671 份哈希不变，没有缺失文件或范围外变化；HEAD、索引、冻结块、既有待办及 R0/R3 历史记录保持。生产代码仍只有两处接线修改，既有探测单次超时问题另列待办。第一轮 77 项与审查后四份 64 项沿用各自证据，不相加充当一次完整验证；本轮未提交、推送或发布。
++
++### R1 本机受控源码验收（2026-09-14）
++
++用户审核隔离环境、启动命令、浏览器步骤与清理范围后，明确同意执行。单 Agent 使用当前候选的独立副本、现有依赖和本机 mock，完成实际启动、登录、记录整理、主题建议、搜索重开、十二项受限请求与配置污染后重启，详见[验收记录](../R1源码Demo接线验收-2026-09-14.md)。
++
++假宿主密码返回 401，demo 登录成功；两条新笔记的正文与 Markdown 一致。采纳跑步建议迁移 5 条，下厨建议保留。十二项请求均返回 403，前后 21 张表和 17 个数据文件哈希一致。数据库保留五组 15 项假配置时，模型仍固定为本机 mock，四组附加模型禁用；重启前后 17 条笔记 ID 一致，没有重复播种。
++
++本次额外运行保护负责回环监听及拒绝外连，Next 开发模式的 npm 版本查询被阻断，不是产品原生网络隔离结论。临时副本的两个生成类型文件由 Next 自动调整，业务源码保持。运行阶段结束时，原工作区 687 个文件、HEAD、索引及环境/数据保护基线通过；服务和浏览器已关闭，目录清理与文档复验见验收记录。
++
++此次只补齐 R1 源码 Demo 的本机受控证据，不关闭 R1 安装、完整核心闭环、R2、R3 发布准备或 Story 2.2 的剩余验收。原 77/64/18 项局部证据各自保留，不合计为一次测试；Story/Sprint 和历史记录保持。
+--- 验收前/_bmad-output/implementation-artifacts/spec-r1-source-demo-wiring.md
++++ 验收后/_bmad-output/implementation-artifacts/spec-r1-source-demo-wiring.md
+@@ -187,3 +187,15 @@
+ 
+ - 校验双语说明、旧版隔离命令和版本边界。
+   [first-use-guide.test.ts:90](../../tests/docs/first-use-guide.test.ts#L90)
++
++## 本机受控源码验收（2026-09-14）
++
++用户先确认隔离方案，再明确允许执行；通过 bmad-checkpoint-preview 单 Agent 完成，记录见 [R1 源码 Demo 接线验收](../../docs/R1源码Demo接线验收-2026-09-14.md)。本节补充实际运行证据，以上实现与局部验证的历史叙述保留原义。
++
++- 使用当前 0.6.1 候选独立副本和复制依赖，实际执行原 npm run demo；应用 3311、mock 8787 均经附加保护限制在回环监听。
++- 假宿主配置被启动器覆盖；demo 登录、保存、AI 整理、主题建议、搜索重开均通过。两条验收笔记的数据库正文与唯一 Markdown 副本保持一致。
++- 八类受限入口、十二项方法均返回 403，含有效 ZIP 与 PNG；前后 21 张表和 17 个数据文件内容哈希一致。服务端读取正文的细节仍复用已有局部测试，HTTP 观察不替代这一证据。
++- 临时数据库保留五组 15 项合成污染配置；重启后仍使用固定本机 mock，附加模型禁用，原 17 条笔记 ID 与会话保留，没有重复播种。
++- 运行阶段结束时，原工作区 687 个文件、HEAD、索引及环境/数据保护基线通过。Next 只改动临时副本的两个生成类型文件；业务实现未修改。服务与浏览器已关闭，最终目录清理及文档检查见验收记录。
++- Next 开发模式的 npm 版本查询在外连前被附加保护阻断，不能据此声称原启动器天然网络隔离。探测单次超时待办保持，验收采用外部 180 秒启动预算。
++- 未运行 build、全量测试、Docker、真实模型、安装/恢复或发布；不推进其他 R1 工作包、Story/Sprint，也不改冻结块和历史证据。

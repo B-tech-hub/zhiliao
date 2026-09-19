@@ -1,0 +1,26 @@
+{
+  "runId": "20260915-093206-7a7ba6b4",
+  "timeUtc": "2026-09-15T02:44:41.432334+00:00",
+  "originalResult": "三个容器健康，但实际宿主端口映射为空，回环请求被拒绝",
+  "approvedTemplateIngressInternal": true,
+  "oldB2IngressInternal": false,
+  "oldB2NetworkReportSha256": "530ca26b34d0b3c87458446ff2848b4e65cf5364349ab6ecf3618f8f6c5b27a3",
+  "executedTemporaryOverride": {
+    "networks.ingress_net.internal": false
+  },
+  "businessNetworkRemainsInternalIsolated": true,
+  "repositoryComposeModified": false,
+  "candidateRebuilt": false,
+  "originalFailureEvidence": [
+    "runtime-start-failure.json",
+    "host-probe-diagnosis.json",
+    "runtime-network-diagnosis.json"
+  ],
+  "correctionEvidence": [
+    "compose-runtime-change.txt",
+    "config-redacted.json",
+    "initial-runtime.json",
+    "runtime-business-isolation.json"
+  ],
+  "remaining": "仓库默认 Compose 仍保留 internal:true；本轮通过只适用于记录的临时入口修正"
+}

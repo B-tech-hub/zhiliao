@@ -1,0 +1,178 @@
+{
+  "verifiedUtc": "2026-09-19T03:08:58.880256+00:00",
+  "result": "通过",
+  "method": "机械核对已有报告、文件哈希和文档链接；未重新运行测试、lint、类型检查或审计。",
+  "head": "f213761b795cc020be2122e27301fe4a7c5cf7a0",
+  "indexSha256": "73dfe17c3c9dbf96154c42c45f09379ec12dd0ac15ff49d6067e3909791f1515",
+  "baselineFileCount": 1062,
+  "unchangedBaselineFileCount": 1051,
+  "changedBaselineFiles": {
+    "CHANGELOG.md": "13e6d57507312e1f640e768fe13bdbd635fb69e5b8dadeea78fc1c7b85cbf933",
+    "_bmad-output/implementation-artifacts/spec-r1-tiptap-residual-risk.md": "4ab5aec5074e6840ee61ba3d1e581ccfff187a2f6e2ef17fb7c20a71ac9dea9e",
+    "docs/README.md": "002e9ab5301f94a2caa6df714cd30a1bfcdc8b1b37e7d1e0d02f9c1228ba94df",
+    "docs/TipTap残余风险调查-2026-09-19.md": "cb765cabb7e65f1a09f3312d3b123d616ee4f381f23c9bd272eaf1b1b4805cad",
+    "docs/adr/0002-image-attrs-inline-html.md": "21a95315a0494f1324631964b10f84e6e17a434979be032c78f080981540a795",
+    "docs/releases/v0.6.1.md": "996103daf7d91bfc5a27d5cc2a699fb7d23992966b0ee60c45bf7528b099d3bf",
+    "docs/产品规划/开源发布范围与执行清单-2026-09-13.md": "ad67b464b42189426e592473ee9d7ab1ea8b8d56c6ddaa8a3cca217cfbff0f04",
+    "docs/依赖告警分诊-2026-09-18.md": "40df9636b0dbc39dbc78e57fa76de08f6f8e532a5e3f95b727edf4aff70fc1ce",
+    "package-lock.json": "ec395b6392eae245af76f37d75dd6e1dd5465915884f38c985e479928df49fd6",
+    "package.json": "8e0d7f1d8f8a80eec1faccffce59439ebf448b4e4e18599cfb8aa8abab69a4f8",
+    "src/components/markdown-editor.tsx": "428d62baf0d501024c8793d372b53596bbea68526274ac400d441bcd5a2e6e93"
+  },
+  "newSourceFiles": {
+    "tests/components/markdown-editor-security.test.tsx": "a2056ca7130c2b3b16c13bbc6aba4bf6cb1dc8164a5cac19b5199be0dc510086",
+    "tests/lib/tiptap-security.test.ts": "d61c8073ccee6cebc5b64263f754f2c4e94883925ff5fd832d79baae8dc22555"
+  },
+  "scope": "既有文件仅批准范围内的 11 个发生变化；新增源码仅两份测试，其余新增文件均在本轮证据目录。",
+  "packageSha256": {
+    "package.json": "8e0d7f1d8f8a80eec1faccffce59439ebf448b4e4e18599cfb8aa8abab69a4f8",
+    "package-lock.json": "ec395b6392eae245af76f37d75dd6e1dd5465915884f38c985e479928df49fd6"
+  },
+  "applicationVersion": "0.6.1",
+  "installedCoreVersion": "2.27.3",
+  "utf8LfWithoutBomFiles": [
+    "CHANGELOG.md",
+    "_bmad-output/implementation-artifacts/spec-r1-tiptap-residual-risk.md",
+    "docs/README.md",
+    "docs/TipTap残余风险调查-2026-09-19.md",
+    "docs/adr/0002-image-attrs-inline-html.md",
+    "docs/releases/v0.6.1.md",
+    "docs/产品规划/开源发布范围与执行清单-2026-09-13.md",
+    "docs/依赖告警分诊-2026-09-18.md",
+    "docs/验收证据/tiptap-patch-20260919T024351Z/.gitignore",
+    "docs/验收证据/tiptap-patch-20260919T024351Z/README.md",
+    "docs/验收证据/tiptap-patch-20260919T024351Z/review.md",
+    "docs/验收证据/tiptap-patch-20260919T024351Z/summary.json",
+    "package-lock.json",
+    "package.json",
+    "src/components/markdown-editor.tsx",
+    "tests/components/markdown-editor-security.test.tsx",
+    "tests/lib/tiptap-security.test.ts"
+  ],
+  "rawEvidenceEncodingNote": "原始命令元数据、日志及快照保留采集时字节；部分含 Windows CRLF，不作文本规范转换。",
+  "relativeLinkCheckCount": 172,
+  "checkedResultAndLineAnchors": [
+    {
+      "source": "CHANGELOG.md",
+      "target": "docs/TipTap残余风险调查-2026-09-19.md#tiptap-patch-result"
+    },
+    {
+      "source": "_bmad-output/implementation-artifacts/spec-r1-tiptap-residual-risk.md",
+      "target": "../../src/components/markdown-editor.tsx#L72"
+    },
+    {
+      "source": "_bmad-output/implementation-artifacts/spec-r1-tiptap-residual-risk.md",
+      "target": "../../package.json#L81"
+    },
+    {
+      "source": "_bmad-output/implementation-artifacts/spec-r1-tiptap-residual-risk.md",
+      "target": "../../tests/lib/tiptap-security.test.ts#L10"
+    },
+    {
+      "source": "_bmad-output/implementation-artifacts/spec-r1-tiptap-residual-risk.md",
+      "target": "../../tests/components/markdown-editor-security.test.tsx#L78"
+    },
+    {
+      "source": "_bmad-output/implementation-artifacts/spec-r1-tiptap-residual-risk.md",
+      "target": "../../docs/验收证据/tiptap-patch-20260919T024351Z/README.md#L1"
+    },
+    {
+      "source": "docs/README.md",
+      "target": "TipTap残余风险调查-2026-09-19.md#tiptap-patch-result"
+    },
+    {
+      "source": "docs/TipTap残余风险调查-2026-09-19.md",
+      "target": "#tiptap-patch-result"
+    },
+    {
+      "source": "docs/adr/0002-image-attrs-inline-html.md",
+      "target": "../TipTap残余风险调查-2026-09-19.md#tiptap-patch-result"
+    },
+    {
+      "source": "docs/releases/v0.6.1.md",
+      "target": "../TipTap残余风险调查-2026-09-19.md#tiptap-patch-result"
+    },
+    {
+      "source": "docs/产品规划/开源发布范围与执行清单-2026-09-13.md",
+      "target": "../TipTap残余风险调查-2026-09-19.md#tiptap-patch-result"
+    },
+    {
+      "source": "docs/依赖告警分诊-2026-09-18.md",
+      "target": "TipTap残余风险调查-2026-09-19.md#tiptap-patch-result"
+    },
+    {
+      "source": "docs/验收证据/tiptap-patch-20260919T024351Z/README.md",
+      "target": "../../TipTap残余风险调查-2026-09-19.md#tiptap-patch-result"
+    }
+  ],
+  "testReportSha256": "8eb0afd1879943c79218d95e38844c5473ba989ebfce4a4291e68e0e82f30ab4",
+  "tests": {
+    "total": 49,
+    "passed": 49,
+    "failed": 0,
+    "pending": 0,
+    "todo": 0,
+    "files": 4
+  },
+  "successfulCommandEvidence": {
+    "targeted-final": {
+      "exitCode": 0,
+      "finishedUtc": "2026-09-19T03:02:01.565642+00:00"
+    },
+    "targeted-lint": {
+      "exitCode": 0,
+      "finishedUtc": "2026-09-19T02:55:34.916420+00:00"
+    },
+    "review-lint": {
+      "exitCode": 0,
+      "finishedUtc": "2026-09-19T03:02:05.951570+00:00"
+    },
+    "review-types": {
+      "exitCode": 0,
+      "finishedUtc": "2026-09-19T03:02:03.386002+00:00"
+    },
+    "version-check": {
+      "exitCode": 0,
+      "finishedUtc": "2026-09-19T02:55:36.954548+00:00"
+    },
+    "installed-tree": {
+      "exitCode": 0,
+      "finishedUtc": "2026-09-19T02:57:35.313956+00:00"
+    }
+  },
+  "auditSummary": {
+    "audit-all": {
+      "counts": {
+        "info": 0,
+        "low": 0,
+        "moderate": 32,
+        "high": 0,
+        "critical": 0,
+        "total": 32
+      },
+      "advisories": [
+        "https://github.com/advisories/GHSA-cp6q-959q-f8rh"
+      ]
+    },
+    "audit-production": {
+      "counts": {
+        "info": 0,
+        "low": 0,
+        "moderate": 32,
+        "high": 0,
+        "critical": 0,
+        "total": 32
+      },
+      "advisories": [
+        "https://github.com/advisories/GHSA-cp6q-959q-f8rh"
+      ]
+    }
+  },
+  "singleAgent": true,
+  "buildRun": false,
+  "fullTestsRun": false,
+  "browserRun": false,
+  "releaseRun": false,
+  "committed": false,
+  "pushed": false
+}

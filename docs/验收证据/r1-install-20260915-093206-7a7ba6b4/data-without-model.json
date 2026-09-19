@@ -1,0 +1,49 @@
+{
+  "runId": "20260915-093206-7a7ba6b4",
+  "phase": "without-model",
+  "timeUtc": "2026-09-15T02:23:54.529164+00:00",
+  "db": {
+    "notes": [
+      {
+        "id": "ox6f52w66q7g9ldv1jt1am52",
+        "title": "",
+        "content": "R1 安装验收：无模型也能保存和找回",
+        "topic_id": "inbox",
+        "ai_status": "pending",
+        "tags": []
+      }
+    ],
+    "topics": [
+      {
+        "id": "inbox",
+        "name": "未分类",
+        "is_system": 1
+      }
+    ],
+    "models": []
+  },
+  "markdown": [
+    {
+      "noteId": "ox6f52w66q7g9ldv1jt1am52",
+      "path": "未分类/无标题-ox6f52w66q7g9ldv1jt1am52.md",
+      "sha256": "19e9c7dd13e5c1671d53c1488c307e2b0167e823af98b5b69030d218a581d384",
+      "bodyMatches": true
+    }
+  ],
+  "zip": {
+    "file": "export-without-model.zip",
+    "sha256": "a8e6b6c6537d35d75d180e250e4d8112a95bbd7f93f12d53fffdf4b92bf3dc10",
+    "bytes": 375,
+    "crcPassed": true,
+    "notes": [
+      {
+        "noteId": "ox6f52w66q7g9ldv1jt1am52",
+        "entry": "未分类/无标题-ox6f52w66q7g9ldv1jt1am52.md",
+        "bodyMatches": true
+      }
+    ]
+  },
+  "uploadMarker": null,
+  "passed": true,
+  "scope": "本轮合成笔记、Markdown、ZIP 下载及挂载持久化；不是导回或完整恢复"
+}

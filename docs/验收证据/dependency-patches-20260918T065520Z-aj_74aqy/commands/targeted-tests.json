@@ -1,0 +1,24 @@
+{
+  "step": "targeted-tests",
+  "cwd": "D:\\ClaudeProjects\\ai_acknowladge",
+  "command": [
+    "D:\\node.js\\node.exe",
+    "D:\\ClaudeProjects\\ai_acknowladge\\node_modules\\vitest\\vitest.mjs",
+    "run",
+    "tests/lib/auth.test.ts",
+    "tests/lib/vision-images.test.ts",
+    "tests/api/demo-boundary.test.ts",
+    "tests/components/settings-panel-hydration.test.tsx",
+    "--maxWorkers=1",
+    "--reporter=default",
+    "--reporter=json",
+    "--outputFile.json=C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\dependency-patches-20260918T065520Z-aj_74aqy\\targeted-tests.report.json"
+  ],
+  "startedUtc": "2026-09-18T07:07:33.053252+00:00",
+  "finishedUtc": "2026-09-18T07:08:15.845807+00:00",
+  "elapsedSeconds": 42.792,
+  "exitCode": 0,
+  "stdout": "targeted-tests.stdout.log",
+  "stderr": "targeted-tests.stderr.log",
+  "lifecycleScriptsDisabled": true
+}

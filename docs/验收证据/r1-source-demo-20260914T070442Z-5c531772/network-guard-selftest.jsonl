@@ -1,0 +1,14 @@
+{"time": "2026-09-14T07:10:57.532Z", "pid": 53480, "ppid": 69140, "event": "process", "entry": "guard-selftest.cjs", "cwd": "{验收目录}", "passwordIsDemo": false, "sessionIsDemo": false, "llmKeyIsDemo": false}
+{"time": "2026-09-14T07:10:57.537Z", "pid": 53480, "ppid": 69140, "event": "listen-request", "port": 0, "host": "127.0.0.1"}
+{"time": "2026-09-14T07:10:57.542Z", "pid": 53480, "ppid": 69140, "event": "listening", "address": {"address": "127.0.0.1", "family": "IPv4", "port": 51123}}
+{"time": "2026-09-14T07:10:57.572Z", "pid": 53480, "ppid": 69140, "event": "blocked", "kind": "fetch", "host": "r1-guard-check.invalid"}
+{"time": "2026-09-14T07:10:57.572Z", "pid": 53480, "ppid": 69140, "event": "blocked", "kind": "model-target", "host": "http://127.0.0.1:18787"}
+{"time": "2026-09-14T07:10:57.573Z", "pid": 53480, "ppid": 69140, "event": "blocked", "kind": "tcp", "host": "192.0.2.1"}
+{"time": "2026-09-14T07:10:57.573Z", "pid": 53480, "ppid": 69140, "event": "blocked", "kind": "dns", "host": "r1-guard-check.invalid"}
+{"time": "2026-09-14T07:13:52.980Z", "pid": 51432, "ppid": 70040, "event": "process", "entry": "guard-selftest.cjs", "cwd": "{验收目录}", "passwordIsDemo": false, "sessionIsDemo": false, "llmKeyIsDemo": false}
+{"time": "2026-09-14T07:13:52.983Z", "pid": 51432, "ppid": 70040, "event": "listen-request", "port": 0, "host": "127.0.0.1"}
+{"time": "2026-09-14T07:13:52.989Z", "pid": 51432, "ppid": 70040, "event": "listening", "address": {"address": "127.0.0.1", "family": "IPv4", "port": 49843}}
+{"time": "2026-09-14T07:13:53.020Z", "pid": 51432, "ppid": 70040, "event": "blocked", "kind": "fetch", "host": "r1-guard-check.invalid"}
+{"time": "2026-09-14T07:13:53.020Z", "pid": 51432, "ppid": 70040, "event": "blocked", "kind": "model-target", "host": "http://127.0.0.1:18787"}
+{"time": "2026-09-14T07:13:53.020Z", "pid": 51432, "ppid": 70040, "event": "blocked", "kind": "tcp", "host": "192.0.2.1"}
+{"time": "2026-09-14T07:13:53.021Z", "pid": 51432, "ppid": 70040, "event": "blocked", "kind": "dns", "host": "r1-guard-check.invalid"}

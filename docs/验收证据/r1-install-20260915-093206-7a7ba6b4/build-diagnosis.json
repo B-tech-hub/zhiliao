@@ -1,0 +1,38 @@
+{
+  "runId": "20260915-093206-7a7ba6b4",
+  "timeUtc": "2026-09-15T02:44:41.453270+00:00",
+  "buildAttempts": 1,
+  "observedBottleneck": "npm ci 下载并解压 @next/swc-linux-x64-musl@15.5.23 较慢；文件与网络字节持续增长",
+  "hypotheses": [
+    {
+      "name": "依赖下载等待",
+      "result": "支持：npm 日志、打开的下载文件、TCP 连接与连续文件增长吻合"
+    },
+    {
+      "name": "原生编译耗时",
+      "result": "采样期未支持：仅 npm ci，无编译子进程"
+    },
+    {
+      "name": "资源或输出停滞",
+      "result": "未发现 OOM；文件持续增长，不能仅凭控制台静默判定停滞"
+    }
+  ],
+  "npmCiSeconds": 1704.8,
+  "nextBuildSeconds": 45.6,
+  "dependenciesChanged": false,
+  "proxyOrSystemConfigurationChanged": false,
+  "npmLogScope": "npm-ci-debug.log 为运行中采集的部分日志；最终退出与完整构建输出见 build.log",
+  "npmAutomaticAudit": {
+    "total": 37,
+    "moderate": 34,
+    "high": 2,
+    "critical": 1,
+    "triaged": false
+  },
+  "buildWarnings": [
+    "libheif-js 动态 require",
+    "package.json 的 version 命名导入",
+    "jose 在 Edge Runtime 引用 CompressionStream/DecompressionStream"
+  ],
+  "proxyWarningScope": "WSL 提示 localhost 代理未映射，但本轮没有证明它是下载缓慢的根因"
+}

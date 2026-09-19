@@ -1,0 +1,143 @@
+{
+  "runId": "dependency-triage-20260918T063915Z-93d2673e",
+  "status": "triage-complete-remediation-pending-approval",
+  "head": "f213761b795cc020be2122e27301fe4a7c5cf7a0",
+  "workingTreeHasPreexistingChanges": true,
+  "applicationVersion": "0.6.1",
+  "nodeVersion": "22.19.0",
+  "npmVersion": "10.9.3",
+  "hostPlatform": "win32",
+  "packageSha256": "a2e5e801f8711c43a0b1f236cfd1067643a89d9cb89c123b4e55a66e6a1cc802",
+  "lockSha256": "72fc3d00abb257d53aca7faed33951cd7e3642d3e77217fc991b6f3707db0166",
+  "audits": [
+    {
+      "scope": "all",
+      "command": "npm.cmd audit --json --package-lock-only --include=dev --include=optional --include=peer --ignore-scripts --registry=https://registry.npmjs.org --fetch-retries=0 --fetch-timeout=20000",
+      "startedUtc": "2026-09-18T06:39:15.5869685Z",
+      "finishedUtc": "2026-09-18T06:39:36.7594934Z",
+      "exitCode": 1,
+      "vulnerabilities": {
+        "info": 0,
+        "low": 0,
+        "moderate": 34,
+        "high": 2,
+        "critical": 1,
+        "total": 37
+      }
+    },
+    {
+      "scope": "production",
+      "command": "npm.cmd audit --json --package-lock-only --omit=dev --include=optional --include=peer --ignore-scripts --registry=https://registry.npmjs.org --fetch-retries=0 --fetch-timeout=20000",
+      "startedUtc": "2026-09-18T06:40:16.7482162Z",
+      "finishedUtc": "2026-09-18T06:40:19.4051896Z",
+      "exitCode": 1,
+      "vulnerabilities": {
+        "info": 0,
+        "low": 0,
+        "moderate": 32,
+        "high": 1,
+        "critical": 1,
+        "total": 34
+      }
+    }
+  ],
+  "uniqueAdvisories": [
+    "https://github.com/advisories/GHSA-2883-xcg3-v3hh",
+    "https://github.com/advisories/GHSA-2xp9-vwfh-vxw4",
+    "https://github.com/advisories/GHSA-82fw-gwwq-j7x9",
+    "https://github.com/advisories/GHSA-cp6q-959q-f8rh",
+    "https://github.com/advisories/GHSA-p293-qw3h-jr36",
+    "https://github.com/advisories/GHSA-rgj7-g3m4-5g8c"
+  ],
+  "allOnlyPackages": [
+    "@vitest/mocker",
+    "js-yaml",
+    "vitest"
+  ],
+  "retrievals": [
+    {
+      "file": "advisories/GHSA-2883-xcg3-v3hh.json",
+      "url": "https://api.github.com/advisories/GHSA-2883-xcg3-v3hh",
+      "savedUtc": "2026-09-18T06:40:52.662468+00:00",
+      "sha256": "ca30af1df1262ce05f0c492fb4733fa1f2860745a89d5dc5a59a07542072ad56"
+    },
+    {
+      "file": "advisories/GHSA-2xp9-vwfh-vxw4.json",
+      "url": "https://api.github.com/advisories/GHSA-2xp9-vwfh-vxw4",
+      "savedUtc": "2026-09-18T06:40:40.545581+00:00",
+      "sha256": "f98c65b8173104d92b97a0781f626e6b715b91adbbf3ede07b90f76bfd74a424"
+    },
+    {
+      "file": "advisories/GHSA-82fw-gwwq-j7x9.json",
+      "url": "https://api.github.com/advisories/GHSA-82fw-gwwq-j7x9",
+      "savedUtc": "2026-09-18T06:40:58.044373+00:00",
+      "sha256": "a4cf3e2fcfddc3e839a5411d01f4203e10d359a6effe2fed8cbc2aaf7ce9887d"
+    },
+    {
+      "file": "advisories/GHSA-cp6q-959q-f8rh.json",
+      "url": "https://api.github.com/advisories/GHSA-cp6q-959q-f8rh",
+      "savedUtc": "2026-09-18T06:40:52.834218+00:00",
+      "sha256": "6218be4dbf8c976057f72f837f986a04492502e6c32c36c22875b2d2683dcef1"
+    },
+    {
+      "file": "advisories/GHSA-p293-qw3h-jr36.json",
+      "url": "https://api.github.com/advisories/GHSA-p293-qw3h-jr36",
+      "savedUtc": "2026-09-18T06:40:40.546581+00:00",
+      "sha256": "dad0039482ca752547c8ef2fb359d01cbc321a71048fe7740223caed207ca0fb"
+    },
+    {
+      "file": "advisories/GHSA-rgj7-g3m4-5g8c.json",
+      "url": "https://api.github.com/advisories/GHSA-rgj7-g3m4-5g8c",
+      "savedUtc": "2026-09-18T06:40:40.466386+00:00",
+      "sha256": "9608faf7bf8d6ad522670a05d9444aed16d34e3dc933b873aadaf943ca79aa94"
+    },
+    {
+      "file": "registry/registry-eslint-config-next-15.5.24.json",
+      "url": "https://registry.npmjs.org/eslint-config-next/15.5.24",
+      "savedUtc": "2026-09-18T06:42:08.711293+00:00",
+      "sha256": "98e2132502dbf2871194fe2306558ae0ecd046de63a3043a56d568f7d363a467"
+    },
+    {
+      "file": "registry/registry-js-yaml-4.3.2.json",
+      "url": "https://registry.npmjs.org/js-yaml/4.3.2",
+      "savedUtc": "2026-09-18T06:42:08.701030+00:00",
+      "sha256": "970a78cb315f1ce5f66885117f37a28e90e43ad7150fe172e826e87a11aca06e"
+    },
+    {
+      "file": "registry/registry-next-15.5.24.json",
+      "url": "https://registry.npmjs.org/next/15.5.24",
+      "savedUtc": "2026-09-18T06:42:08.699993+00:00",
+      "sha256": "508f122d28aa20dc74572b49b46460f7300a437d884a5208fc2907c5fa8e5acf"
+    },
+    {
+      "file": "registry/registry-sharp-0.35.4.json",
+      "url": "https://registry.npmjs.org/sharp/0.35.4",
+      "savedUtc": "2026-09-18T06:42:08.878583+00:00",
+      "sha256": "d300df4698d4b409ff1631274c755333f27d7f35ba2e5ce11704b525b2f294d1"
+    },
+    {
+      "file": "registry/registry-vitest-4.1.11.json",
+      "url": "https://registry.npmjs.org/vitest/4.1.11",
+      "savedUtc": "2026-09-18T06:42:08.782818+00:00",
+      "sha256": "48432f161ab45f60344d096cb21f7022450d2707159234ce51e420ffdabe8068"
+    }
+  ],
+  "probe": {
+    "exitCode": 0,
+    "kind": "in-memory-marker-only",
+    "applicationBrowserCoverage": false,
+    "initialHarnessFailure": "ERR_PACKAGE_PATH_NOT_EXPORTED for @tiptap/core/package.json; metadata read corrected before successful rerun"
+  },
+  "executed": {
+    "dependencyInstall": false,
+    "dependencyUpgrade": false,
+    "lifecycleScripts": false,
+    "applicationTests": false,
+    "build": false,
+    "docker": false,
+    "browser": false,
+    "realModel": false,
+    "restore": false,
+    "publish": false
+  }
+}

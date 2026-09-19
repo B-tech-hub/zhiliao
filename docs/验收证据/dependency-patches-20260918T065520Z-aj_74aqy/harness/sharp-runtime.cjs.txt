@@ -1,0 +1,7 @@
+const sharp = require(require.resolve('sharp', { paths: [process.cwd()] }));
+
+process.stdout.write(JSON.stringify({
+  platform: process.platform,
+  arch: process.arch,
+  versions: sharp.versions,
+}, null, 2) + '\n');

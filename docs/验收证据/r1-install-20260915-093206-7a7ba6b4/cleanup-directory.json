@@ -1,0 +1,14 @@
+{
+    "runId":  "20260915-093206-7a7ba6b4",
+    "timeUtc":  "2026-09-15T03:06:55.1038238Z",
+    "temporaryDirectory":  "%TEMP%/zhiliao-r1-install-061-20260915-093206-7a7ba6b4",
+    "temporaryDirectoryRemoved":  true,
+    "resolvedTargetAndTempParentChecked":  true,
+    "reparsePoints":  0,
+    "relatedProcesses":  0,
+    "archiveFilesVerifiedBeforeRemoval":  86,
+    "remainingDockerResources":  0,
+    "portReleased":  true,
+    "retainedImageId":  "sha256:8a8f2cd3ec1a26fc68bf04a2661f2306f09bba4b06ba9b1593d74b3f3953deb1",
+    "passed":  true
+}

@@ -1,0 +1,39 @@
+import assert from "node:assert/strict";
+import fs from "node:fs";
+import path from "node:path";
+import { createRequire } from "node:module";
+
+const require = createRequire(path.join(process.cwd(), "package.json"));
+const { mergeAttributes, getSchema } = require("@tiptap/core");
+const StarterKit = require("@tiptap/starter-kit").default;
+const Image = require("@tiptap/extension-image").default;
+// 仅使用内存标记，不创建浏览器、不执行事件处理器或读取业务数据。
+const attrs = JSON.parse('{"src":"/triage.png","__proto__":{"triageCanary":"present"}}');
+const merged = mergeAttributes(attrs);
+const schema = getSchema([StarterKit, Image]);
+const node = schema.nodeFromJSON({ type: "image", attrs });
+const rendered = schema.nodes.image.spec.toDOM(node)[1];
+const result = {
+  packageVersion: JSON.parse(fs.readFileSync(path.join(process.cwd(), "node_modules/@tiptap/core/package.json"), "utf8")).version,
+  directHelper: {
+    prototypeChanged: Object.getPrototypeOf(merged) === attrs.__proto__,
+    inheritedCanary: merged.triageCanary === "present",
+    ownCanary: Object.hasOwn(merged, "triageCanary"),
+    globalPrototypeUnchanged: !Object.hasOwn(Object.prototype, "triageCanary"),
+  },
+  standardImageSchema: {
+    retainedSource: rendered.src === "/triage.png",
+    inheritedCanary: "triageCanary" in rendered,
+    ownProtoKey: Object.hasOwn(rendered, "__proto__"),
+  },
+  scope: "仅验证已安装 helper 与标准图片 schema；不等同知了全部扩展、HTML 粘贴或浏览器路径验收。",
+};
+assert.equal(result.directHelper.prototypeChanged, true);
+assert.equal(result.directHelper.inheritedCanary, true);
+assert.equal(result.directHelper.ownCanary, false);
+assert.equal(result.directHelper.globalPrototypeUnchanged, true);
+assert.equal(result.standardImageSchema.retainedSource, true);
+assert.equal(result.standardImageSchema.inheritedCanary, false);
+assert.equal(result.standardImageSchema.ownProtoKey, false);
+fs.writeFileSync(process.argv[2], JSON.stringify(result, null, 2) + "\n");
+process.stdout.write(JSON.stringify(result) + "\n");

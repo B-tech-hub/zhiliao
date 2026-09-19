@@ -1,0 +1,23 @@
+{
+  "step": "resolve-lock-bounded-peers",
+  "cwd": "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\dependency-patches-20260918T065520Z-aj_74aqy\\resolver",
+  "command": [
+    "D:\\node.js\\node.exe",
+    "D:\\node.js\\node_modules\\npm\\bin\\npm-cli.js",
+    "install",
+    "--package-lock-only",
+    "--ignore-scripts",
+    "--no-audit",
+    "--no-fund",
+    "--registry=https://registry.npmjs.org",
+    "--fetch-retries=0",
+    "--fetch-timeout=30000"
+  ],
+  "startedUtc": "2026-09-18T07:01:42.891796+00:00",
+  "finishedUtc": "2026-09-18T07:02:12.925014+00:00",
+  "elapsedSeconds": 30.033,
+  "exitCode": 0,
+  "stdout": "resolve-lock-bounded-peers.stdout.log",
+  "stderr": "resolve-lock-bounded-peers.stderr.log",
+  "lifecycleScriptsDisabled": true
+}

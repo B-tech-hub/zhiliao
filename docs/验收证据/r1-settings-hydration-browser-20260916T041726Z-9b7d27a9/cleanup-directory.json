@@ -1,0 +1,13 @@
+{
+    "runId":  "20260916T041726Z-9b7d27a9",
+    "status":  "passed",
+    "finishedUtc":  "2026-09-16T05:05:13.3458019Z",
+    "removedDirectory":  "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-r1-hydration-20260916T041726Z-9b7d27a9",
+    "activeTaskProcesses":  0,
+    "ownedDockerResources":  0,
+    "privateCredentialsRemoved":  true,
+    "browserProfilesRemoved":  true,
+    "sourceCopyRemoved":  true,
+    "evidenceRetained":  "D:\\ClaudeProjects\\ai_acknowladge\\docs\\验收证据\\r1-settings-hydration-browser-20260916T041726Z-9b7d27a9",
+    "candidateImageRetained":  "sha256:c54958650c37439cf5d734070be78ab56d6ca87f9dc5c85cd3d7b8dbcdba3548"
+}

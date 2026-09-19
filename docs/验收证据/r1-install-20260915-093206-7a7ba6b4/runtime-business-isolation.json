@@ -1,0 +1,24 @@
+{
+  "timeUtc": "2026-09-15T02:22:04.657624+00:00",
+  "services": {
+    "app": {
+      "networks": [
+        "zhiliao-r1-061-20260915-093206-7a7ba6b4-net"
+      ],
+      "ports": {},
+      "defaultRoutePresent": false,
+      "routeTable": "Iface\tDestination\tGateway \tFlags\tRefCnt\tUse\tMetric\tMask\t\tMTU\tWindow\tIRTT                                                       \neth0\t000016AC\t00000000\t0001\t0\t0\t0\t0000FFFF\t0\t0\t0                                                                               \n",
+      "imageId": "sha256:8a8f2cd3ec1a26fc68bf04a2661f2306f09bba4b06ba9b1593d74b3f3953deb1"
+    },
+    "mockllm": {
+      "networks": [
+        "zhiliao-r1-061-20260915-093206-7a7ba6b4-net"
+      ],
+      "ports": {},
+      "defaultRoutePresent": false,
+      "routeTable": "Iface\tDestination\tGateway \tFlags\tRefCnt\tUse\tMetric\tMask\t\tMTU\tWindow\tIRTT                                                       \neth0\t000016AC\t00000000\t0001\t0\t0\t0\t0000FFFF\t0\t0\t0                                                                               \n",
+      "imageId": "sha256:8a8f2cd3ec1a26fc68bf04a2661f2306f09bba4b06ba9b1593d74b3f3953deb1"
+    }
+  },
+  "passed": true
+}

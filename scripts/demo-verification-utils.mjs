@@ -1,0 +1,132 @@
+import { spawn } from "node:child_process";
+import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+export const REPO_ROOT = fileURLToPath(new URL("../", import.meta.url));
+export const CANDIDATE_IMAGE = "zhiliao-demo-verify:story-2-2";
+export const PROJECT_LABEL = "com.docker.compose.project";
+
+export function killProcessTree(child) {
+  const pid = typeof child === "number" ? child : child?.pid;
+  if (!Number.isInteger(pid) || pid <= 0) return;
+  if (process.platform === "win32") {
+    spawn("taskkill", ["/pid", String(pid), "/T", "/F"], { windowsHide: true, stdio: "ignore" });
+    return;
+  }
+  try { process.kill(-pid, "SIGKILL"); }
+  catch {
+    try { process.kill(pid, "SIGKILL"); }
+    catch { /* 进程可能已经退出 */ }
+  }
+}
+
+export function attachVerificationSignals(onAbort) {
+  let stopped = false;
+  const handler = (signal) => {
+    if (stopped) return;
+    stopped = true;
+    onAbort(String(signal));
+  };
+  process.on("SIGINT", handler);
+  process.on("SIGTERM", handler);
+  return () => {
+    stopped = true;
+    process.off("SIGINT", handler);
+    process.off("SIGTERM", handler);
+  };
+}
+
+// 宿主机对照服务与探针共用事件循环，等待 Docker 时必须继续处理连接。
+/**
+ * @param {string} command
+ * @param {string[]} args
+ * @param {{env?: NodeJS.ProcessEnv, input?: string, timeoutMs?: number, signal?: AbortSignal}} options
+ * @returns {Promise<string>}
+ */
+export function runProcess(command, args, { env, input, timeoutMs = 15000, signal } = {}) {
+  return new Promise((resolve, reject) => {
+    if (signal?.aborted) {
+      reject(new Error("验收被中断"));
+      return;
+    }
+    const child = spawn(command, args, {
+      cwd: REPO_ROOT, env, windowsHide: true, stdio: "pipe",
+      detached: process.platform !== "win32",
+    });
+    let stdout = "";
+    let stderr = "";
+    let failure;
+    const stop = (error) => {
+      failure ??= error;
+      killProcessTree(child);
+    };
+    const timer = setTimeout(() => stop(new Error(command + " 执行超时")), timeoutMs);
+    const onAbort = () => stop(new Error("验收被中断"));
+    signal?.addEventListener("abort", onAbort, { once: true });
+    const collect = (target) => (chunk) => {
+      if (target === "stdout") stdout += chunk;
+      else stderr += chunk;
+      if (stdout.length + stderr.length > 2 * 1024 * 1024) stop(new Error(command + " 输出超出验收预算"));
+    };
+    child.stdout.setEncoding("utf8").on("data", collect("stdout"));
+    child.stderr.setEncoding("utf8").on("data", collect("stderr"));
+    child.stdin.on("error", (error) => { failure ??= error; });
+    child.on("error", (error) => {
+      clearTimeout(timer);
+      signal?.removeEventListener("abort", onAbort);
+      reject(error);
+    });
+    child.on("close", (code) => {
+      clearTimeout(timer);
+      signal?.removeEventListener("abort", onAbort);
+      if (failure || code !== 0) reject(failure ?? new Error(command + " " + args.slice(0, 2).join(" ") + " 失败：" + code));
+      else resolve(stdout.trim());
+    });
+    child.stdin.end(input);
+  });
+}
+
+export function runDocker(args, options) {
+  return runProcess("docker", args, options);
+}
+
+export function cleanDockerEnvironment() {
+  const env = { ...process.env };
+  for (const key of Object.keys(env)) if (/^(DEMO_|COMPOSE_)/i.test(key)) delete env[key];
+  return env;
+}
+
+export function verificationResources(invoke, project, runId, runLabel) {
+  async function list() {
+    const found = new Map();
+    for (const type of ["container", "network", "volume"]) {
+      const command = type === "container" ? ["ps", "-a"] : [type, "ls"];
+      for (const filter of ["label=" + PROJECT_LABEL + "=" + project, "name=" + project]) {
+        const output = await invoke([...command, "--filter", filter, "--format", type === "volume" ? "{{.Name}}" : "{{.ID}}"]);
+        for (const id of output.split(/\r?\n/).filter(Boolean)) found.set(type + ":" + id, { type, id });
+      }
+    }
+    return [...found.values()];
+  }
+
+  async function assertOwned(items) {
+    for (const { type, id } of items) {
+      const format = type === "container" ? "{{json .Config.Labels}}" : "{{json .Labels}}";
+      const labels = JSON.parse(await invoke([type, "inspect", "--format", format, id]));
+      if (labels?.[runLabel] !== runId || labels?.[PROJECT_LABEL] !== project) {
+        throw new Error("发现外来资源，停止自动清理：" + type + " " + id);
+      }
+    }
+  }
+  return { list, assertOwned };
+}
+
+export function removeOwnedTemp(directory, prefix) {
+  const resolved = fs.realpathSync(directory);
+  if (path.dirname(resolved) !== fs.realpathSync(os.tmpdir()) || !path.basename(resolved).startsWith(prefix)) {
+    throw new Error("临时目录超出本次验收范围，停止清理");
+  }
+  fs.rmSync(resolved, { recursive: true });
+}

@@ -1,0 +1,136 @@
+{
+  "status": "passed",
+  "checkedAt": "2026-09-15T15:28:23.817Z",
+  "baselineCommit": "f213761b795cc020be2122e27301fe4a7c5cf7a0",
+  "specStatus": "done",
+  "frozenIntentUnchanged": true,
+  "headAndIndexUnchanged": true,
+  "preexistingFiles": 838,
+  "changedFiles": [
+    "_bmad-output/implementation-artifacts/spec-repair-demo-ingress-config.md",
+    "docs/R1安装验收-2026-09-15.md",
+    "docs/releases/v0.6.1.md",
+    "docs/产品规划/开源发布范围与执行清单-2026-09-13.md",
+    "tests/config/demo-compose-cli.test.ts",
+    "tests/config/demo-compose.test.ts",
+    "CHANGELOG.md",
+    "docs/README.md"
+  ],
+  "deletedFiles": [
+    "tests/config/demo-compose.test.mjs"
+  ],
+  "unchangedPreexistingFiles": 829,
+  "unexpectedChanges": [],
+  "newFilesOnlyInEvidenceDirectory": true,
+  "documentFormat": "UTF-8 without BOM, LF; matched code fences",
+  "formatFiles": [
+    "docker-compose.demo.yml",
+    "tests/config/demo-compose.test.ts",
+    "tests/config/demo-compose-cli.test.ts",
+    "_bmad-output/implementation-artifacts/spec-repair-demo-ingress-config.md",
+    "docs/releases/v0.6.1.md",
+    "CHANGELOG.md",
+    "docs/README.md",
+    "docs/R1安装验收-2026-09-15.md",
+    "docs/产品规划/开源发布范围与执行清单-2026-09-13.md"
+  ],
+  "addedLocalLinksChecked": 18,
+  "links": [
+    {
+      "file": "_bmad-output/implementation-artifacts/spec-repair-demo-ingress-config.md",
+      "target": "../../docs/验收证据/demo-ingress-repair-20260915T145944Z-b56abe15/runtime.json"
+    },
+    {
+      "file": "_bmad-output/implementation-artifacts/spec-repair-demo-ingress-config.md",
+      "target": "../../docs/验收证据/demo-ingress-repair-20260915T145944Z-b56abe15/vitest-results.json"
+    },
+    {
+      "file": "_bmad-output/implementation-artifacts/spec-repair-demo-ingress-config.md",
+      "target": "../../docs/R1安装验收-2026-09-15.md#demo-ingress-repair"
+    },
+    {
+      "file": "_bmad-output/implementation-artifacts/spec-repair-demo-ingress-config.md",
+      "target": "../../docs/验收证据/demo-ingress-repair-20260915T145944Z-b56abe15/review.md"
+    },
+    {
+      "file": "_bmad-output/implementation-artifacts/spec-repair-demo-ingress-config.md",
+      "target": "../../docker-compose.demo.yml#L135"
+    },
+    {
+      "file": "_bmad-output/implementation-artifacts/spec-repair-demo-ingress-config.md",
+      "target": "../../docs/R1安装验收-2026-09-15.md#L140"
+    },
+    {
+      "file": "_bmad-output/implementation-artifacts/spec-repair-demo-ingress-config.md",
+      "target": "../../tests/config/demo-compose-cli.test.ts#L102"
+    },
+    {
+      "file": "_bmad-output/implementation-artifacts/spec-repair-demo-ingress-config.md",
+      "target": "../../tests/config/demo-compose.test.ts#L43"
+    },
+    {
+      "file": "docs/releases/v0.6.1.md",
+      "target": "../R1安装验收-2026-09-15.md#demo-ingress-repair"
+    },
+    {
+      "file": "CHANGELOG.md",
+      "target": "docs/R1安装验收-2026-09-15.md#demo-ingress-repair"
+    },
+    {
+      "file": "docs/R1安装验收-2026-09-15.md",
+      "target": "#demo-ingress-repair"
+    },
+    {
+      "file": "docs/R1安装验收-2026-09-15.md",
+      "target": "../_bmad-output/implementation-artifacts/spec-repair-demo-ingress-config.md"
+    },
+    {
+      "file": "docs/R1安装验收-2026-09-15.md",
+      "target": "验收证据/demo-ingress-repair-20260915T145944Z-b56abe15/runtime.json"
+    },
+    {
+      "file": "docs/R1安装验收-2026-09-15.md",
+      "target": "验收证据/demo-ingress-repair-20260915T145944Z-b56abe15/vitest-results.json"
+    },
+    {
+      "file": "docs/R1安装验收-2026-09-15.md",
+      "target": "验收证据/demo-ingress-repair-20260915T145944Z-b56abe15/compose.runtime.json"
+    },
+    {
+      "file": "docs/R1安装验收-2026-09-15.md",
+      "target": "验收证据/demo-ingress-repair-20260915T145944Z-b56abe15/config-redacted.json"
+    },
+    {
+      "file": "docs/R1安装验收-2026-09-15.md",
+      "target": "验收证据/demo-ingress-repair-20260915T145944Z-b56abe15/runtime-harness.mjs.txt"
+    },
+    {
+      "file": "docs/产品规划/开源发布范围与执行清单-2026-09-13.md",
+      "target": "../R1安装验收-2026-09-15.md#demo-ingress-repair"
+    }
+  ],
+  "gitDiffCheck": "passed",
+  "localTests": {
+    "command": "node node_modules/vitest/vitest.mjs run tests/config/demo-compose.test.ts tests/config/demo-compose-cli.test.ts --maxWorkers=1 --no-file-parallelism",
+    "environment": {
+      "REQUIRE_DOCKER_COMPOSE": "1"
+    },
+    "passed": 9,
+    "failed": 0,
+    "skipped": 0,
+    "report": "vitest-results.json"
+  },
+  "eslint": {
+    "command": "node node_modules/eslint/bin/eslint.js tests/config/demo-compose.test.ts tests/config/demo-compose-cli.test.ts",
+    "exitCode": 0,
+    "source": "本轮会话已执行命令的退出结果"
+  },
+  "runtime": {
+    "report": "runtime.json",
+    "status": "passed",
+    "inputsStillMatch": true
+  },
+  "archiveScriptsByteIdentical": true,
+  "reviewMode": "同一 Agent 顺序审查，未使用子 Agent",
+  "delivery": "工作区交付；未提交、推送或发布"
+}

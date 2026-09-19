@@ -1,0 +1,143 @@
+{
+    "runId":  "20260915-093206-7a7ba6b4",
+    "timeUtc":  "2026-09-15T02:44:41.463517+00:00",
+    "status":  "completed-with-findings",
+    "conclusion":  "按临时入口修正完成 Windows Docker Desktop 本机安装主流程；原模板入口与浏览器异常仍须处理，R1 整体未关闭",
+    "singleAgent":  true,
+    "models":  "仅本机 mock",
+    "imageId":  "sha256:8a8f2cd3ec1a26fc68bf04a2661f2306f09bba4b06ba9b1593d74b3f3953deb1",
+    "imageTag":  "zhiliao-r1:0.6.1-20260915-093206-7a7ba6b4",
+    "baseCommit":  "f213761b795cc020be2122e27301fe4a7c5cf7a0",
+    "workingTree":  true,
+    "platform":  "linux/amd64",
+    "sourceFiles":  262,
+    "sourceFilesUnchanged":  true,
+    "sourceManifestSha256":  "1de98911e22cfca248a709c92d247436d50c862baaa04cd947ea0bf0750cac0d",
+    "checks":  {
+                   "build":  true,
+                   "originalTemplateIngress":  false,
+                   "temporaryCorrectedIngress":  true,
+                   "emptyDatabaseAndVersion":  true,
+                   "realBrowserLogin":  true,
+                   "saveWithoutModel":  true,
+                   "keywordSearchAndReopen":  true,
+                   "markdownAndZip":  true,
+                   "mockProcessingAndBodyPreservation":  true,
+                   "recreationPersistence":  true,
+                   "browserWithoutErrors":  false
+               },
+    "timingSeconds":  {
+                          "build":  1814.75,
+                          "npmCi":  1704.8,
+                          "nextBuild":  45.6,
+                          "initialUp":  21.328,
+                          "correctedUp":  16.922,
+                          "loginToFirstSave":  29.665,
+                          "correctedHealthyToFirstSave":  150.998,
+                          "restartDown":  15.484,
+                          "restartUp":  16.438
+                      },
+    "notes":  [
+                  {
+                      "id":  "mkh5swgf5bcho7oqg19vfbfz",
+                      "aiStatus":  "done",
+                      "title":  "R1 安装验收：今晚·AI",
+                      "bodyMatches":  true
+                  },
+                  {
+                      "id":  "ox6f52w66q7g9ldv1jt1am52",
+                      "aiStatus":  "done",
+                      "title":  "R1 安装验收：无模·AI",
+                      "bodyMatches":  true
+                  }
+              ],
+    "exports":  [
+                    {
+                        "file":  "export-without-model.zip",
+                        "sha256":  "a8e6b6c6537d35d75d180e250e4d8112a95bbd7f93f12d53fffdf4b92bf3dc10",
+                        "bytes":  375,
+                        "crcPassed":  true,
+                        "notes":  [
+                                      {
+                                          "noteId":  "ox6f52w66q7g9ldv1jt1am52",
+                                          "entry":  "未分类/无标题-ox6f52w66q7g9ldv1jt1am52.md",
+                                          "bodyMatches":  true
+                                      }
+                                  ]
+                    },
+                    {
+                        "file":  "export-after-restart.zip",
+                        "sha256":  "2d191025857784876acff04c8e6758a9aaf25079fcd01a2e79e2b60e878a3b20",
+                        "bytes":  861,
+                        "crcPassed":  true,
+                        "notes":  [
+                                      {
+                                          "noteId":  "ox6f52w66q7g9ldv1jt1am52",
+                                          "entry":  "未分类/R1 安装验收：无模·AI-ox6f52w66q7g9ldv1jt1am52.md",
+                                          "bodyMatches":  true
+                                      },
+                                      {
+                                          "noteId":  "mkh5swgf5bcho7oqg19vfbfz",
+                                          "entry":  "羽毛球/R1 安装验收：今晚·AI-mkh5swgf5bcho7oqg19vfbfz.md",
+                                          "bodyMatches":  true
+                                      }
+                                  ]
+                    }
+                ],
+    "browser":  {
+                    "version":  "153.0.8010.36",
+                    "httpStatusCounts":  {
+                                             "307":  2,
+                                             "200":  283,
+                                             "401":  1,
+                                             "201":  3,
+                                             "503":  6
+                                         },
+                    "pageErrors":  [
+                                       {
+                                           "kind":  "pageerror",
+                                           "error":  "Error: Minified React error #418; visit https://react.dev/errors/418?args[]=text\u0026args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.",
+                                           "action":  "mock-settings"
+                                       },
+                                       {
+                                           "kind":  "pageerror",
+                                           "error":  "ChunkLoadError: Loading chunk 9415 failed.\n(error: http://127.0.0.1:3312/_next/static/chunks/app/(app)/page-546d9e331d248176.js)",
+                                           "action":  "mock-note"
+                                       }
+                                   ],
+                    "blockedExternalRequests":  0,
+                    "cookieInjected":  false,
+                    "serviceWorkerBlockedByHarness":  true
+                },
+    "limitations":  [
+                        "原 Compose 的入口内网标记尚未修复；本轮仅更改临时覆盖，不能宣称原模板直接启动通过",
+                        "静态资源共六次 503，日志匹配 Nginx 限流；首轮导致 ChunkLoadError 和一次操作超时，刷新后恢复",
+                        "设置页刷新出现一次 React #418，具体不一致字段未定位",
+                        "浏览器路由拦截会关闭 HTTP 缓存，故本次 503 不能直接推定普通缓存浏览器的发生率",
+                        "npm ci 自带审计报告 37 项，含 1 critical 和 2 high；未做依赖漏洞分诊或修复",
+                        "已有构建缓存命中，不是无缓存分发获取；本地 image ID 不是 GHCR 发布摘要",
+                        "未覆盖独立 Linux、ARM64、R2 恢复、来源问答/模型失败全矩阵、真实模型效果、完整门禁或发布"
+                    ],
+    "cleanup":  {
+                    "runId":  "20260915-093206-7a7ba6b4",
+                    "timeUtc":  "2026-09-15T02:41:41.174019+00:00",
+                    "containersRemoved":  3,
+                    "volumesRemoved":  2,
+                    "networksRemoved":  2,
+                    "remainingOwnedResources":  0,
+                    "portReleased":  true,
+                    "imageRetained":  "sha256:8a8f2cd3ec1a26fc68bf04a2661f2306f09bba4b06ba9b1593d74b3f3953deb1",
+                    "temporaryDirectoryRemoved":  true,
+                    "passed":  true,
+                    "directoryEvidence":  "cleanup-directory.json"
+                },
+    "visualReview":  {
+                         "singleAgent":  true,
+                         "files":  [
+                                       "02-note-without-model.png",
+                                       "04-mock-note.png"
+                                   ],
+                         "bodyAndMetadataVisible":  true
+                     },
+    "finalizedUtc":  "2026-09-15T03:06:55.1038238Z"
+}

@@ -1,0 +1,303 @@
+{
+  "story": "2.2",
+  "recorded_at": "2026-09-12T09:35:59.307Z",
+  "status": "passed",
+  "scope": "重启后正常环境的两段 20 秒只读对照；不暂停进程、不写时钟参数、不启动代理。",
+  "channel_input": "docs/验收证据/story-2-2-root-channel-audit-2026-09-12T09-33-17-334Z.json",
+  "channel_input_sha256": "41a02c4ae740e97f2c88265a2057b008adc554a514c7f5fa6409c89827bbab40",
+  "boot_id": "6ac3fe53-9499-4a8d-979d-ea444e813d9f",
+  "source_file": "zhiliao-a2-normal-clock-20260912.mjs",
+  "source_sha256": "8511f725dfb8a96e7f9bff7eadecb0d6c16020109bada9b48366dd9f573e4a41",
+  "maintenance_source": "import fs from 'node:fs';\nimport path from 'node:path';\nimport crypto from 'node:crypto';\nimport { fileURLToPath } from 'node:url';\nimport { setTimeout as delay } from 'node:timers/promises';\nimport { openClockProbe, compareClocks } from './zhiliao-a2-clock-probe-20260912.mjs';\n\nconst repo = 'D:/ClaudeProjects/ai_acknowladge';\nconst sourcePath = fileURLToPath(import.meta.url);\nconst sha = bytes => crypto.createHash('sha256').update(bytes).digest('hex');\nconst input = 'docs/验收证据/story-2-2-clock-diagnostics-2026-09-12T04-59-16-594Z.json';\nconst diagnosis = JSON.parse(fs.readFileSync(path.join(repo, input), 'utf8'));\nconst channelInput = 'docs/验收证据/story-2-2-root-channel-audit-2026-09-12T09-33-17-334Z.json';\nconst channel = JSON.parse(fs.readFileSync(path.join(repo, channelInput), 'utf8'));\nif (channel.status !== 'passed' || sha(diagnosis.python_probe) !== diagnosis.python_probe_sha256) throw new Error('只读前提未通过');\nconst source = fs.readFileSync(sourcePath, 'utf8');\nconst probeModule = fs.readFileSync(new URL('./zhiliao-a2-clock-probe-20260912.mjs', import.meta.url), 'utf8');\nconst report = {\n  story: '2.2', recorded_at: new Date().toISOString(), status: 'failed',\n  scope: '重启后正常环境的两段 20 秒只读对照；不暂停进程、不写时钟参数、不启动代理。',\n  channel_input: channelInput, channel_input_sha256: sha(fs.readFileSync(path.join(repo, channelInput))),\n  boot_id: channel.identity.boot_id, source_file: path.basename(sourcePath), source_sha256: sha(source), maintenance_source: source,\n  clock_probe_module: probeModule, clock_probe_module_sha256: sha(probeModule),\n  python_probe: diagnosis.python_probe, python_probe_sha256: diagnosis.python_probe_sha256,\n  maximum_relative_error: 0.01, interval_ms: 20000, samples: [], intervals: [], signals_sent: [], clock_writes: [],\n};\nconst evidencePath = path.join(repo, 'docs/验收证据/story-2-2-normal-clock-' + report.recorded_at.replace(/[:.]/g, '-') + '.json');\nif (fs.existsSync(evidencePath)) throw new Error('证据已存在');\nlet probe;\ntry {\n  probe = openClockProbe(diagnosis.python_probe, repo);\n  await probe.sample();\n  let before = await probe.endpoint();\n  console.log(JSON.stringify({stage: 'normal_clock_started', at: new Date().toISOString(), tick: before.guest.timex.tick_us}));\n  for (let index = 0; index < 2; index++) {\n    await delay(20000);\n    const after = await probe.endpoint();\n    const interval = compareClocks(before, after);\n    report.intervals.push(interval);\n    console.log(JSON.stringify({stage: 'normal_clock_interval', index: index + 1, ...interval, tick: after.guest.timex.tick_us}));\n    before = after;\n  }\n  report.status = report.intervals.every(value => value.passed) ? 'passed' : 'failed';\n} catch (error) { report.error = error.message; }\nfinally {\n  if (probe) { report.probe_exit = await probe.close(); report.samples = probe.samples; }\n  report.finished_at = new Date().toISOString();\n  fs.writeFileSync(evidencePath, JSON.stringify(report, null, 2) + '\\n', {flag: 'wx'});\n  console.log(JSON.stringify({stage: 'finished', status: report.status, evidence: path.relative(repo, evidencePath).replaceAll('\\\\', '/')}));\n}\nprocess.exitCode = report.status === 'passed' ? 0 : 1;\n",
+  "clock_probe_module": "import { spawn } from 'node:child_process';\nimport { createInterface } from 'node:readline';\nimport { setTimeout as delay } from 'node:timers/promises';\n\nexport function compareClocks(before, after) {\n  const lower = after.host_before_ms - before.host_after_ms;\n  const upper = after.host_after_ms - before.host_before_ms;\n  if (!(lower > 0 && upper >= lower)) throw new Error('宿主机采样区间无效');\n  const clocks = {};\n  for (const name of ['monotonic_ns', 'raw_ns']) {\n    const guestMs = Number(BigInt(after.guest[name]) - BigInt(before.guest[name])) / 1e6;\n    const errorLower = guestMs / upper - 1;\n    const errorUpper = guestMs / lower - 1;\n    clocks[name] = {guest_ms: guestMs, relative_error_lower: errorLower, relative_error_upper: errorUpper,\n      passed: errorLower >= -0.01 && errorUpper <= 0.01};\n  }\n  return {before_id: before.guest.id, after_id: after.guest.id, host_lower_ms: lower, host_upper_ms: upper,\n    clocks, passed: Object.values(clocks).every(value => value.passed)};\n}\n\nexport function openClockProbe(source, cwd) {\n  const child = spawn('wsl.exe', ['-d', 'Ubuntu-24.04', '-u', 'root', '--', 'python3', '-u', '-c', source], {\n    cwd, windowsHide: true, stdio: ['pipe', 'pipe', 'pipe'],\n  });\n  const pending = new Map();\n  const samples = [];\n  let failure, sequence = 0, expectedClose = false;\n  const stderr = [];\n  const fail = error => {\n    if (!expectedClose) failure ??= error;\n    for (const item of pending.values()) { clearTimeout(item.timer); item.reject(error); }\n    pending.clear();\n  };\n  child.on('error', fail);\n  child.stdin.on('error', fail);\n  child.stderr.on('data', data => { if (stderr.reduce((total, value) => total + value.length, 0) < 8192) stderr.push(data); });\n  const closed = new Promise(resolve => child.on('close', (code, signal) => { fail(new Error('只读探针结束')); resolve({code, signal}); }));\n  const lines = createInterface({input: child.stdout, crlfDelay: Infinity});\n  lines.on('line', line => {\n    const hostAfter = performance.now();\n    try {\n      const guest = JSON.parse(line);\n      const item = pending.get(guest.id);\n      if (!item) return;\n      if (guest.timex.modes_input !== 0 || guest.timex.result < 0) throw new Error('只读 adjtimex 结果异常');\n      pending.delete(guest.id);\n      clearTimeout(item.timer);\n      const sample = {host_before_ms: item.before, host_after_ms: hostAfter, round_trip_ms: hostAfter - item.before, guest};\n      samples.push(sample);\n      item.resolve(sample);\n    } catch (error) { fail(error); }\n  });\n  async function sample() {\n    if (failure) throw failure;\n    const id = 'a2-' + (++sequence);\n    return new Promise((resolve, reject) => {\n      const timer = setTimeout(() => { pending.delete(id); reject(new Error('只读探针 5 秒未响应')); }, 5000);\n      pending.set(id, {resolve, reject, timer, before: performance.now()});\n      child.stdin.write(id + '\\n');\n    });\n  }\n  async function endpoint() {\n    const group = [];\n    for (let i = 0; i < 3; i++) { group.push(await sample()); if (i < 2) await delay(10); }\n    return group.sort((a, b) => a.round_trip_ms - b.round_trip_ms)[0];\n  }\n  async function close() {\n    expectedClose = true;\n    child.stdin.end();\n    const timer = setTimeout(() => child.kill(), 3000);\n    const result = await closed;\n    clearTimeout(timer);\n    lines.close();\n    return {...result, windows_pid: child.pid, stderr_base64: Buffer.concat(stderr).toString('base64')};\n  }\n  return {sample, endpoint, close, samples};\n}\n",
+  "clock_probe_module_sha256": "94989705f7904bb4310e5472204efc44e5895ab6bef5e383497d62ef760933f8",
+  "python_probe": "\nimport ctypes, json, os, sys, time\nfrom pathlib import Path\nclass Timeval(ctypes.Structure):\n    _fields_ = [(\"tv_sec\", ctypes.c_long), (\"tv_usec\", ctypes.c_long)]\nclass TimexPrefix(ctypes.Structure):\n    _fields_ = [(\"modes\", ctypes.c_uint), (\"offset\", ctypes.c_long), (\"freq\", ctypes.c_long),\n                (\"maxerror\", ctypes.c_long), (\"esterror\", ctypes.c_long), (\"status\", ctypes.c_int),\n                (\"constant\", ctypes.c_long), (\"precision\", ctypes.c_long), (\"tolerance\", ctypes.c_long),\n                (\"time\", Timeval), (\"tick\", ctypes.c_long)]\nassert ctypes.sizeof(ctypes.c_long) == 8\nlibc = ctypes.CDLL(None, use_errno=True)\nlibc.adjtimex.argtypes = [ctypes.c_void_p]\nlibc.adjtimex.restype = ctypes.c_int\nfor incoming in sys.stdin:\n    buf = ctypes.create_string_buffer(1024)\n    result = libc.adjtimex(ctypes.byref(buf))\n    value = TimexPrefix.from_buffer_copy(buf.raw)\n    print(json.dumps({\n        \"id\": incoming.strip(),\n        \"monotonic_ns\": str(time.clock_gettime_ns(time.CLOCK_MONOTONIC)),\n        \"raw_ns\": str(time.clock_gettime_ns(time.CLOCK_MONOTONIC_RAW)),\n        \"realtime_ns\": str(time.clock_gettime_ns(time.CLOCK_REALTIME)),\n        \"clocksource\": Path(\"/sys/devices/system/clocksource/clocksource0/current_clocksource\").read_text().strip(),\n        \"timex\": {\"modes_input\": 0, \"result\": result, \"errno\": ctypes.get_errno(),\n                  \"user_hz\": os.sysconf(\"SC_CLK_TCK\"), \"tick_us\": value.tick,\n                  \"freq_scaled_ppm\": value.freq, \"freq_ppm\": value.freq / 65536,\n                  \"status\": value.status, \"offset\": value.offset}\n    }), flush=True)\n",
+  "python_probe_sha256": "57ab2341b1163b4fe5d4f7f1dfa9a531fa67398edb592415a60a4c435d25e218",
+  "maximum_relative_error": 0.01,
+  "interval_ms": 20000,
+  "samples": [
+    {
+      "host_before_ms": 37.9386,
+      "host_after_ms": 155.351,
+      "round_trip_ms": 117.41239999999999,
+      "guest": {
+        "id": "a2-1",
+        "monotonic_ns": "759685030286",
+        "raw_ns": "757498585987",
+        "realtime_ns": "1789205759355251198",
+        "clocksource": "tsc",
+        "timex": {
+          "modes_input": 0,
+          "result": 0,
+          "errno": 0,
+          "user_hz": 100,
+          "tick_us": 10157,
+          "freq_scaled_ppm": -9609584,
+          "freq_ppm": -146.630615234375,
+          "status": 8193,
+          "offset": -202013876
+        }
+      }
+    },
+    {
+      "host_before_ms": 155.503,
+      "host_after_ms": 155.8604,
+      "round_trip_ms": 0.3574000000000126,
+      "guest": {
+        "id": "a2-2",
+        "monotonic_ns": "759686124458",
+        "raw_ns": "757499694758",
+        "realtime_ns": "1789205759356345140",
+        "clocksource": "tsc",
+        "timex": {
+          "modes_input": 0,
+          "result": 0,
+          "errno": 0,
+          "user_hz": 100,
+          "tick_us": 10157,
+          "freq_scaled_ppm": -9609584,
+          "freq_ppm": -146.630615234375,
+          "status": 8193,
+          "offset": -202013876
+        }
+      }
+    },
+    {
+      "host_before_ms": 171.9748,
+      "host_after_ms": 172.5105,
+      "round_trip_ms": 0.5357000000000198,
+      "guest": {
+        "id": "a2-3",
+        "monotonic_ns": "759702407017",
+        "raw_ns": "757516197403",
+        "realtime_ns": "1789205759372628177",
+        "clocksource": "tsc",
+        "timex": {
+          "modes_input": 0,
+          "result": 0,
+          "errno": 0,
+          "user_hz": 100,
+          "tick_us": 10157,
+          "freq_scaled_ppm": -9609584,
+          "freq_ppm": -146.630615234375,
+          "status": 8193,
+          "offset": -202013876
+        }
+      }
+    },
+    {
+      "host_before_ms": 184.365,
+      "host_after_ms": 184.8494,
+      "round_trip_ms": 0.4843999999999937,
+      "guest": {
+        "id": "a2-4",
+        "monotonic_ns": "759714625160",
+        "raw_ns": "757528580032",
+        "realtime_ns": "1789205759384846071",
+        "clocksource": "tsc",
+        "timex": {
+          "modes_input": 0,
+          "result": 0,
+          "errno": 0,
+          "user_hz": 100,
+          "tick_us": 10157,
+          "freq_scaled_ppm": -9609584,
+          "freq_ppm": -146.630615234375,
+          "status": 8193,
+          "offset": -202013876
+        }
+      }
+    },
+    {
+      "host_before_ms": 20194.728,
+      "host_after_ms": 20197.6948,
+      "round_trip_ms": 2.9668000000019674,
+      "guest": {
+        "id": "a2-5",
+        "monotonic_ns": "779843643877",
+        "raw_ns": "777540077008",
+        "realtime_ns": "1789205779513866684",
+        "clocksource": "tsc",
+        "timex": {
+          "modes_input": 0,
+          "result": 0,
+          "errno": 0,
+          "user_hz": 100,
+          "tick_us": 10169,
+          "freq_scaled_ppm": -114757,
+          "freq_ppm": -1.7510528564453125,
+          "status": 0,
+          "offset": -13981
+        }
+      }
+    },
+    {
+      "host_before_ms": 20213.8839,
+      "host_after_ms": 20214.687,
+      "round_trip_ms": 0.8031000000009954,
+      "guest": {
+        "id": "a2-6",
+        "monotonic_ns": "779862132829",
+        "raw_ns": "777558294036",
+        "realtime_ns": "1789205779532355253",
+        "clocksource": "tsc",
+        "timex": {
+          "modes_input": 0,
+          "result": 0,
+          "errno": 0,
+          "user_hz": 100,
+          "tick_us": 10169,
+          "freq_scaled_ppm": -114757,
+          "freq_ppm": -1.7510528564453125,
+          "status": 0,
+          "offset": -13981
+        }
+      }
+    },
+    {
+      "host_before_ms": 20229.0383,
+      "host_after_ms": 20229.7494,
+      "round_trip_ms": 0.7111000000004424,
+      "guest": {
+        "id": "a2-7",
+        "monotonic_ns": "779877456588",
+        "raw_ns": "777573392203",
+        "realtime_ns": "1789205779547678388",
+        "clocksource": "tsc",
+        "timex": {
+          "modes_input": 0,
+          "result": 0,
+          "errno": 0,
+          "user_hz": 100,
+          "tick_us": 10169,
+          "freq_scaled_ppm": -114757,
+          "freq_ppm": -1.7510528564453125,
+          "status": 0,
+          "offset": -13981
+        }
+      }
+    },
+    {
+      "host_before_ms": 40234.6689,
+      "host_after_ms": 40235.8795,
+      "round_trip_ms": 1.2106000000057975,
+      "guest": {
+        "id": "a2-8",
+        "monotonic_ns": "799878001823",
+        "raw_ns": "797579214673",
+        "realtime_ns": "1789205799455478211",
+        "clocksource": "tsc",
+        "timex": {
+          "modes_input": 0,
+          "result": 0,
+          "errno": 0,
+          "user_hz": 100,
+          "tick_us": 10157,
+          "freq_scaled_ppm": -875903,
+          "freq_ppm": -13.365219116210938,
+          "status": 0,
+          "offset": -49788
+        }
+      }
+    },
+    {
+      "host_before_ms": 40251.0864,
+      "host_after_ms": 40251.604,
+      "round_trip_ms": 0.51759999999922,
+      "guest": {
+        "id": "a2-9",
+        "monotonic_ns": "799894291866",
+        "raw_ns": "797595364126",
+        "realtime_ns": "1789205799471765820",
+        "clocksource": "tsc",
+        "timex": {
+          "modes_input": 0,
+          "result": 0,
+          "errno": 0,
+          "user_hz": 100,
+          "tick_us": 10157,
+          "freq_scaled_ppm": -875903,
+          "freq_ppm": -13.365219116210938,
+          "status": 0,
+          "offset": -49788
+        }
+      }
+    },
+    {
+      "host_before_ms": 40266.4798,
+      "host_after_ms": 40267.0609,
+      "round_trip_ms": 0.5810999999957858,
+      "guest": {
+        "id": "a2-10",
+        "monotonic_ns": "799909826770",
+        "raw_ns": "797610767106",
+        "realtime_ns": "1789205799487301035",
+        "clocksource": "tsc",
+        "timex": {
+          "modes_input": 0,
+          "result": 0,
+          "errno": 0,
+          "user_hz": 100,
+          "tick_us": 10157,
+          "freq_scaled_ppm": -875903,
+          "freq_ppm": -13.365219116210938,
+          "status": 0,
+          "offset": -49788
+        }
+      }
+    }
+  ],
+  "intervals": [
+    {
+      "before_id": "a2-2",
+      "after_id": "a2-7",
+      "host_lower_ms": 20073.1779,
+      "host_upper_ms": 20074.2464,
+      "clocks": {
+        "monotonic_ns": {
+          "guest_ms": 20191.33213,
+          "relative_error_lower": 0.0058326338965331015,
+          "relative_error_upper": 0.0058861746051679376,
+          "passed": true
+        },
+        "raw_ns": {
+          "guest_ms": 20073.697445,
+          "relative_error_lower": -0.000027346232035818652,
+          "relative_error_upper": 0.000025882548472910827,
+          "passed": true
+        }
+      },
+      "passed": true
+    },
+    {
+      "before_id": "a2-7",
+      "after_id": "a2-9",
+      "host_lower_ms": 20021.337,
+      "host_upper_ms": 20022.5657,
+      "clocks": {
+        "monotonic_ns": {
+          "guest_ms": 20016.835278,
+          "relative_error_lower": -0.00028619818687869447,
+          "relative_error_upper": -0.0002248462228072734,
+          "passed": true
+        },
+        "raw_ns": {
+          "guest_ms": 20021.971923,
+          "relative_error_lower": -0.00002965539026789088,
+          "relative_error_upper": 0.00003171231771381677,
+          "passed": true
+        }
+      },
+      "passed": true
+    }
+  ],
+  "signals_sent": [],
+  "clock_writes": [],
+  "probe_exit": {
+    "code": 0,
+    "signal": null,
+    "windows_pid": 70584,
+    "stderr_base64": "dwBzAGwAOgAgAMBoS20wUiAAbABvAGMAYQBsAGgAbwBzAHQAIADjTgZ0TZFufwz/Rk8qZ1yVz1AwUiAAVwBTAEwAAjBOAEEAVAAgACFqD18LToR2IABXAFMATAAgAA1OL2UBYyAAbABvAGMAYQBsAGgAbwBzAHQAIADjTgZ0AjANAAoA"
+  },
+  "finished_at": "2026-09-12T09:36:39.570Z"
+}

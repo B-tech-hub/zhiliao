@@ -1,0 +1,207 @@
+{
+  "runId": "20260916T041726Z-9b7d27a9",
+  "project": "zhiliao-r1-hydration-20260916t041726z-9b7d27a9",
+  "port": 3316,
+  "startedUtc": "2026-09-16T04:26:05.073995+00:00",
+  "status": "failed",
+  "buildCount": 1,
+  "commands": [
+    {
+      "args": [
+        "config",
+        "--format",
+        "json"
+      ],
+      "startedUtc": "2026-09-16T04:26:10.456036+00:00",
+      "finishedUtc": "2026-09-16T04:26:11.906079+00:00",
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "config",
+        "--format",
+        "json"
+      ],
+      "startedUtc": "2026-09-16T04:28:14.265872+00:00",
+      "finishedUtc": "2026-09-16T04:28:15.651781+00:00",
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "config",
+        "--format",
+        "json"
+      ],
+      "startedUtc": "2026-09-16T04:28:56.028090+00:00",
+      "finishedUtc": "2026-09-16T04:28:57.195468+00:00",
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "up",
+        "-d",
+        "--no-build",
+        "--pull",
+        "never",
+        "--wait",
+        "--wait-timeout",
+        "180"
+      ],
+      "startedUtc": "2026-09-16T04:28:57.198608+00:00",
+      "finishedUtc": "2026-09-16T04:29:15.155879+00:00",
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "logs",
+        "--no-color",
+        "--timestamps"
+      ],
+      "startedUtc": "2026-09-16T04:32:23.350847+00:00",
+      "finishedUtc": "2026-09-16T04:32:24.749851+00:00",
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "down",
+        "-v",
+        "--timeout",
+        "15"
+      ],
+      "startedUtc": "2026-09-16T04:32:24.751859+00:00",
+      "finishedUtc": "2026-09-16T04:32:41.560987+00:00",
+      "exitCode": 0
+    }
+  ],
+  "preflightCorrection": "Compose 保留顶层 x-r1-labels，且省略默认 internal:false；两次脚本预检失败均发生在容器启动之前，原始记录单独保留。",
+  "preflightFailures": [
+    {
+      "mode": "up",
+      "at": "2026-09-16T04:26:11.908101+00:00",
+      "error": "临时覆盖包含计划外配置变化"
+    },
+    {
+      "mode": "up",
+      "at": "2026-09-16T04:28:15.652971+00:00",
+      "error": "'internal'"
+    }
+  ],
+  "configurationChecks": {
+    "approvedOverlayOnly": true,
+    "serverTimezone": "UTC",
+    "normalMode": true,
+    "loopbackOnly": true,
+    "separateVolumes": true,
+    "mockOnly": true
+  },
+  "containers": [
+    {
+      "service": "ingress",
+      "id": "c83071fc440767f7d8ab7ee2c791d17b33f4819365746ef411f234e0ee16272a",
+      "imageId": "sha256:dc5069ad14f19660b141b21236140b91656bf89bbc3e2417c70ae650cd66104c",
+      "startedAt": "2026-09-16T04:29:08.971074902Z",
+      "health": "healthy",
+      "user": "101:101",
+      "readOnly": true,
+      "networks": [
+        "zhiliao-r1-hydration-20260916t041726z-9b7d27a9-ingress",
+        "zhiliao-r1-hydration-20260916t041726z-9b7d27a9-net"
+      ],
+      "ports": {
+        "8080/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "3316"
+          }
+        ]
+      },
+      "mounts": [
+        {
+          "type": "bind",
+          "name": null,
+          "source": "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-r1-hydration-20260916T041726Z-9b7d27a9\\nginx\\demo.conf",
+          "destination": "/etc/nginx/nginx.conf",
+          "readWrite": false
+        }
+      ],
+      "environment": {}
+    },
+    {
+      "service": "app",
+      "id": "78a97295a2629059a10fa6e835bc36c447cf99ddba1e6bf663d4f5e8670c5979",
+      "imageId": "sha256:c54958650c37439cf5d734070be78ab56d6ca87f9dc5c85cd3d7b8dbcdba3548",
+      "startedAt": "2026-09-16T04:29:03.274718923Z",
+      "health": "healthy",
+      "user": "node",
+      "readOnly": true,
+      "networks": [
+        "zhiliao-r1-hydration-20260916t041726z-9b7d27a9-net"
+      ],
+      "ports": {},
+      "mounts": [
+        {
+          "type": "volume",
+          "name": "zhiliao-r1-hydration-20260916t041726z-9b7d27a9_demo_uploads",
+          "source": "/var/lib/docker/volumes/zhiliao-r1-hydration-20260916t041726z-9b7d27a9_demo_uploads/_data",
+          "destination": "/data/uploads",
+          "readWrite": true
+        },
+        {
+          "type": "volume",
+          "name": "zhiliao-r1-hydration-20260916t041726z-9b7d27a9_demo_notes",
+          "source": "/var/lib/docker/volumes/zhiliao-r1-hydration-20260916t041726z-9b7d27a9_demo_notes/_data",
+          "destination": "/data/notes",
+          "readWrite": true
+        },
+        {
+          "type": "volume",
+          "name": "zhiliao-r1-hydration-20260916t041726z-9b7d27a9_demo_db",
+          "source": "/var/lib/docker/volumes/zhiliao-r1-hydration-20260916t041726z-9b7d27a9_demo_db/_data",
+          "destination": "/data/db",
+          "readWrite": true
+        }
+      ],
+      "environment": {
+        "NODE_ENV": "production",
+        "DEMO_MODE": "0",
+        "TZ": "UTC",
+        "LLM_BASE_URL": "http://mockllm:8787/v1",
+        "LLM_MODEL": "mock",
+        "DATABASE_PATH": "/data/db/app.db",
+        "UPLOAD_DIR": "/data/uploads",
+        "NOTES_EXPORT_DIR": "/data/notes"
+      }
+    },
+    {
+      "service": "mockllm",
+      "id": "9fe4c8403332e04bfbb806742dabd3642944d6358a6d7909bf2e46bb02ef0c89",
+      "imageId": "sha256:c54958650c37439cf5d734070be78ab56d6ca87f9dc5c85cd3d7b8dbcdba3548",
+      "startedAt": "2026-09-16T04:28:59.680550413Z",
+      "health": "healthy",
+      "user": "node",
+      "readOnly": true,
+      "networks": [
+        "zhiliao-r1-hydration-20260916t041726z-9b7d27a9-net"
+      ],
+      "ports": {},
+      "mounts": [],
+      "environment": {
+        "NODE_ENV": "production",
+        "DATABASE_PATH": "/data/db/app.db",
+        "UPLOAD_DIR": "/data/uploads",
+        "NOTES_EXPORT_DIR": "/data/notes"
+      }
+    }
+  ],
+  "resourceCounts": {
+    "containers": 3,
+    "volumes": 3,
+    "networks": 2
+  },
+  "updatedUtc": "2026-09-16T04:32:13.493042+00:00",
+  "failure": {
+    "mode": "down",
+    "at": "2026-09-16T04:32:49.369479+00:00",
+    "error": "既有 Docker 资源发生变化"
+  }
+}

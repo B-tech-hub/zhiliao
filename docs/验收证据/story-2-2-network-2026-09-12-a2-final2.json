@@ -1,0 +1,141 @@
+{
+  "story": "2.2",
+  "recorded_at": "2026-09-12T02:48:44.558Z",
+  "status": "failed",
+  "project": "zhiliao-demo-verify-a2-20260912",
+  "run_id": "44c919415cce8850d2b4299f60784bd4",
+  "services": [
+    "app",
+    "mockllm"
+  ],
+  "targets": [
+    {
+      "name": "metadata-169.254.169.254",
+      "host": "169.254.169.254",
+      "port": 80,
+      "kind": "metadata"
+    },
+    {
+      "name": "metadata-169.254.170.2",
+      "host": "169.254.170.2",
+      "port": 80,
+      "kind": "metadata"
+    },
+    {
+      "name": "private-10",
+      "host": "10.254.254.254",
+      "port": 80,
+      "kind": "rfc1918"
+    },
+    {
+      "name": "private-172",
+      "host": "172.31.254.254",
+      "port": 80,
+      "kind": "rfc1918"
+    },
+    {
+      "name": "private-192",
+      "host": "192.168.254.254",
+      "port": 80,
+      "kind": "rfc1918"
+    }
+  ],
+  "checks": [
+    {
+      "source": "app",
+      "target": "host-control",
+      "expected": "reachable",
+      "result": "ETIMEDOUT",
+      "passed": false
+    },
+    {
+      "source": "app",
+      "target": "metadata-169.254.169.254",
+      "expected": "blocked",
+      "classification": "blocked-unreachable",
+      "passed": true
+    },
+    {
+      "source": "app",
+      "target": "metadata-169.254.170.2",
+      "expected": "blocked",
+      "classification": "blocked-unreachable",
+      "passed": true
+    },
+    {
+      "source": "app",
+      "target": "private-10",
+      "expected": "blocked",
+      "classification": "blocked-unreachable",
+      "passed": true
+    },
+    {
+      "source": "app",
+      "target": "private-172",
+      "expected": "blocked",
+      "classification": "blocked-unreachable",
+      "passed": true
+    },
+    {
+      "source": "app",
+      "target": "private-192",
+      "expected": "blocked",
+      "classification": "blocked-unreachable",
+      "passed": true
+    },
+    {
+      "source": "mockllm",
+      "target": "host-control",
+      "expected": "reachable",
+      "result": "ETIMEDOUT",
+      "passed": false
+    },
+    {
+      "source": "mockllm",
+      "target": "metadata-169.254.169.254",
+      "expected": "blocked",
+      "classification": "blocked-unreachable",
+      "passed": true
+    },
+    {
+      "source": "mockllm",
+      "target": "metadata-169.254.170.2",
+      "expected": "blocked",
+      "classification": "blocked-unreachable",
+      "passed": true
+    },
+    {
+      "source": "mockllm",
+      "target": "private-10",
+      "expected": "blocked",
+      "classification": "blocked-unreachable",
+      "passed": true
+    },
+    {
+      "source": "mockllm",
+      "target": "private-172",
+      "expected": "blocked",
+      "classification": "blocked-unreachable",
+      "passed": true
+    },
+    {
+      "source": "mockllm",
+      "target": "private-192",
+      "expected": "blocked",
+      "classification": "blocked-unreachable",
+      "passed": true
+    }
+  ],
+  "limitations": [
+    "本工具只记录同一 Docker Engine 上的对照路径，不能替代最终部署主机验收。",
+    "宿主机正向对照不可用时不会把监听所有网卡作为替代方案。"
+  ],
+  "cleanup": {
+    "status": "not_applicable"
+  },
+  "host_control": {
+    "bind": "127.0.0.1",
+    "port": 51967,
+    "token_sha256": "2feb464a715e752c651b09af65901094fcac960df5177a1c5ee23d694fe568bb"
+  }
+}

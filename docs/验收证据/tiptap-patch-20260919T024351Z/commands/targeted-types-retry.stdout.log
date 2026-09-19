@@ -1,0 +1,3 @@
+tests/components/markdown-editor-security.test.tsx(122,19): error TS2339: Property 'style' does not exist on type 'Element'.
+tests/components/markdown-editor-security.test.tsx(123,19): error TS2339: Property 'style' does not exist on type 'Element'.
+tests/lib/tiptap-security.test.ts(2,31): error TS2307: Cannot find module 'node:module' or its corresponding type declarations.

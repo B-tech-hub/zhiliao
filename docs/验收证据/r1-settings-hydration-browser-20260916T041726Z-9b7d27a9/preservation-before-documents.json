@@ -1,0 +1,21 @@
+{
+  "runId": "20260916T041726Z-9b7d27a9",
+  "phase": "before-documents",
+  "checkedAtUtc": "2026-09-16T04:39:15.082275+00:00",
+  "headUnchanged": true,
+  "indexUnchanged": true,
+  "protectedEnvAndDataUnchanged": true,
+  "dataMetadataUnchanged": true,
+  "protectedWorkspaceFiles": 910,
+  "protectedEnvAndDataFiles": 148,
+  "candidateSourceFiles": 263,
+  "sourceDrift": [],
+  "frozenSpecUnchanged": true,
+  "changed": [
+    "_bmad-output/implementation-artifacts/spec-r1-settings-hydration-418.md",
+    "docs/R1设置页刷新React418调查-2026-09-16.md"
+  ],
+  "added": [],
+  "unexpected": [],
+  "status": "passed"
+}

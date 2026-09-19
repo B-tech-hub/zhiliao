@@ -1,0 +1,68 @@
+process.env.NODE_ENV = "development";
+const fs = require("node:fs");
+const ts = require("typescript");
+const React = require("react");
+const { renderToString } = require("react-dom/server");
+const { JSDOM } = require("jsdom");
+let clockNow = Date.parse("2026-09-15T02:24:39.423Z");
+class ProbeDate extends Date {
+  constructor(...args) { super(...(args.length ? args : [clockNow])); }
+  static now() { return clockNow; }
+}
+function declaration(file, name) {
+  const source = ts.createSourceFile(file, fs.readFileSync(file, "utf8"), ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+  const found = source.statements.find(node => ts.isFunctionDeclaration(node) && node.name?.text === name);
+  if (!found) throw new Error("Missing function: " + name);
+  return found.getText(source).replace(/^export\s+/, "");
+}
+const formatSource = ts.transpileModule(declaration("src/components/note-card.tsx", "formatTime"), { compilerOptions: { target: ts.ScriptTarget.ES2022 } }).outputText;
+const formatTime = new Function("Date", formatSource + "\nreturn formatTime;")(ProbeDate);
+const sectionSource = ts.transpileModule("export " + declaration("src/app/(app)/settings/settings-panel.tsx", "DataSection"), {
+  compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.CommonJS, jsx: ts.JsxEmit.ReactJSX }
+}).outputText;
+const sectionModule = { exports: {} };
+const ProbeLink = ({ children, href, className }) => React.createElement("a", { href, className }, children);
+new Function("require", "exports", "useState", "useRef", "formatTime", "Link", sectionSource)(
+  require, sectionModule.exports, React.useState, React.useRef, formatTime, ProbeLink
+);
+const { DataSection } = sectionModule.exports;
+const originalTz = process.env.TZ;
+const before = "2026-09-15T02:24:39.423Z";
+const exampleBackup = Date.parse("2026-09-15T02:22:55.452Z");
+const cases = [
+  { name: "no-backup-different-zones", backup: null, serverTz: "UTC", clientTz: "Asia/Shanghai", serverNow: before, clientNow: before },
+  { name: "backup-same-zone", backup: exampleBackup, serverTz: "UTC", clientTz: "UTC", serverNow: before, clientNow: before },
+  { name: "backup-different-zones", backup: exampleBackup, serverTz: "UTC", clientTz: "Asia/Shanghai", serverNow: before, clientNow: before },
+  { name: "backup-cross-midnight", backup: Date.parse("2026-09-14T23:59:00Z"), serverTz: "UTC", clientTz: "UTC", serverNow: "2026-09-14T23:59:59Z", clientNow: "2026-09-15T00:00:01Z" }
+];
+(async () => {
+  const results = [];
+  for (const entry of cases) {
+    process.env.TZ = entry.serverTz;
+    clockNow = Date.parse(entry.serverNow);
+    const element = React.createElement(DataSection, { lastBackupAt: entry.backup, trashCount: 0 });
+    const serverText = entry.backup === null ? null : formatTime(entry.backup);
+    const html = renderToString(element);
+    const dom = new JSDOM("<!doctype html><html><body><div id='probe-root'>" + html + "</div></body></html>", { url: "http://127.0.0.1/" });
+    globalThis.window = dom.window;
+    globalThis.document = dom.window.document;
+    globalThis.IS_REACT_ACT_ENVIRONMENT = true;
+    process.env.TZ = entry.clientTz;
+    clockNow = Date.parse(entry.clientNow);
+    const clientText = entry.backup === null ? null : formatTime(entry.backup);
+    const errors = [];
+    let root;
+    await React.act(async () => {
+      root = require("react-dom/client").hydrateRoot(document.getElementById("probe-root"), element, {
+        onRecoverableError: (error, info) => errors.push({ message: error.message, componentStack: info.componentStack })
+      });
+    });
+    results.push({ ...entry, serverText, clientText, recoverableErrorCount: errors.length, errors });
+    await React.act(async () => root.unmount());
+    dom.window.close();
+  }
+  console.log(JSON.stringify({ node: process.version, react: require("react/package.json").version, reactDom: require("react-dom/package.json").version, scope: "In-memory source function extraction; no Next server, browser, filesystem writes, database or network; backup timestamp is a synthetic sample based on the log time, not the original file mtime.", results }, null, 2));
+})().catch(error => { console.error(error); process.exitCode = 1; }).finally(() => {
+  if (originalTz === undefined) delete process.env.TZ;
+  else process.env.TZ = originalTz;
+});

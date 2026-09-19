@@ -1,0 +1,113 @@
+import hashlib
+import json
+import os
+import subprocess
+from datetime import datetime, timezone
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent
+RUN = json.loads((ROOT / "run.json").read_text(encoding="utf-8-sig"))
+REPO = Path(RUN["repository"])
+DOCKER = r"C:\Program Files\Docker\Docker\resources\bin\docker.exe"
+HIDDEN = getattr(subprocess, "CREATE_NO_WINDOW", 0)
+
+def now():
+    return datetime.now(timezone.utc).isoformat()
+
+def sha(path):
+    h = hashlib.sha256()
+    with Path(path).open("rb") as f:
+        for chunk in iter(lambda: f.read(1024 * 1024), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+def save(path, data):
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
+
+def clean_env():
+    allowed = {
+        "PATH", "SYSTEMROOT", "WINDIR", "COMSPEC", "TEMP", "TMP", "PATHEXT",
+        "USERPROFILE", "HOMEDRIVE", "HOMEPATH", "LOCALAPPDATA", "APPDATA",
+        "PROGRAMFILES", "PROGRAMFILES(X86)", "PROGRAMW6432",
+        "COMMONPROGRAMFILES", "COMMONPROGRAMFILES(X86)", "COMMONPROGRAMW6432",
+        "SYSTEMDRIVE", "OS", "PROCESSOR_ARCHITECTURE", "NUMBER_OF_PROCESSORS",
+    }
+    env = {k: v for k, v in os.environ.items() if k.upper() in allowed}
+    env["GIT_OPTIONAL_LOCKS"] = "0"
+    env["PYTHONIOENCODING"] = "utf-8"
+    return env
+
+def command(args, timeout=60, cwd=None):
+    result = subprocess.run(
+        [str(x) for x in args], cwd=cwd or REPO, env=clean_env(),
+        capture_output=True, timeout=timeout, creationflags=HIDDEN,
+    )
+    if result.returncode:
+        message = result.stderr.decode("utf-8", errors="replace")[-3000:]
+        raise RuntimeError(f"命令失败，退出码 {result.returncode}: {args[0]}\n{message}")
+    return result.stdout.decode("utf-8", errors="strict")
+
+def docker(*args, timeout=60):
+    return command([DOCKER, "--context", "desktop-linux", *args], timeout=timeout)
+
+def git(*args):
+    return command(["git", "-c", "core.quotePath=false", *args])
+
+def git_files(*paths):
+    result = git("ls-files", "-z", "--cached", "--others", "--exclude-standard", "--", *paths)
+    return sorted(set(x for x in result.split("\0") if x))
+
+def compose_args():
+    return [
+        DOCKER, "--context", "desktop-linux", "compose",
+        "--project-name", RUN["project"], "--project-directory", str(ROOT),
+        "--env-file", str(ROOT / "r1.env"),
+        "-f", str(ROOT / "compose.base.yml"), "-f", str(ROOT / "compose.r1.yml"),
+    ]
+
+def resources():
+    container_ids = docker("ps", "-aq", "--no-trunc").split()
+    fmt = '{"id":{{json .Id}},"name":{{json .Name}},"image":{{json .Image}},"created":{{json .Created}},"status":{{json .State.Status}},"startedAt":{{json .State.StartedAt}},"finishedAt":{{json .State.FinishedAt}},"mounts":{{json .Mounts}},"networks":{{json .NetworkSettings.Networks}},"labels":{{json .Config.Labels}}}'
+    containers = [json.loads(line) for line in docker("container", "inspect", "--format", fmt, *container_ids).splitlines()] if container_ids else []
+    volume_names = docker("volume", "ls", "-q").split()
+    volumes = json.loads(docker("volume", "inspect", *volume_names)) if volume_names else []
+    network_ids = docker("network", "ls", "-q", "--no-trunc").split()
+    networks = json.loads(docker("network", "inspect", *network_ids)) if network_ids else []
+    return {
+        "containers": sorted(containers, key=lambda v: v["id"]),
+        "volumes": sorted(volumes, key=lambda v: v["Name"]),
+        "networks": sorted(networks, key=lambda v: v["Id"]),
+        "imageIds": sorted(set(docker("image", "ls", "-q", "--no-trunc").split())),
+    }
+
+def preservation():
+    workspace = {}
+    for relative in git_files():
+        p = REPO / relative
+        if p.is_file():
+            workspace[relative] = sha(p)
+    protected = {}
+    data_metadata = {}
+    for item in REPO.iterdir():
+        if item.is_file() and (item.name.startswith(".env") or item.name.startswith("demo.env")):
+            protected[item.name] = sha(item)
+        if item.is_dir() and (item.name == "data" or item.name.startswith("data-")):
+            for p in sorted(item.rglob("*")):
+                if p.is_symlink():
+                    raise RuntimeError("数据保护目录存在符号链接。")
+                if not p.is_file():
+                    continue
+                rel = p.relative_to(REPO).as_posix()
+                st = p.stat()
+                data_metadata[rel] = {"bytes": st.st_size, "mtimeNs": st.st_mtime_ns}
+                protected[rel] = sha(p)
+    return {
+        "timeUtc": now(), "head": git("rev-parse", "HEAD").strip(),
+        "indexSha256": sha(REPO / ".git" / "index"),
+        "workspace": workspace, "protected": protected, "dataMetadata": data_metadata,
+    }
+
+def counts(items):
+    return {k: len(v) for k, v in items.items() if isinstance(v, (dict, list))}

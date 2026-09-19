@@ -1,0 +1,25 @@
+{
+  "runId": "20260916T041726Z-9b7d27a9",
+  "project": "zhiliao-r1-hydration-20260916t041726z-9b7d27a9",
+  "port": 3316,
+  "startedUtc": "2026-09-16T04:26:05.073995+00:00",
+  "status": "failed",
+  "buildCount": 1,
+  "commands": [
+    {
+      "args": [
+        "config",
+        "--format",
+        "json"
+      ],
+      "startedUtc": "2026-09-16T04:26:10.456036+00:00",
+      "finishedUtc": "2026-09-16T04:26:11.906079+00:00",
+      "exitCode": 0
+    }
+  ],
+  "failure": {
+    "mode": "up",
+    "at": "2026-09-16T04:26:11.908101+00:00",
+    "error": "临时覆盖包含计划外配置变化"
+  }
+}

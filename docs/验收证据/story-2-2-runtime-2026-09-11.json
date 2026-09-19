@@ -1,0 +1,28 @@
+{
+  "date": "2026-09-11",
+  "engine": "Docker Engine 28.4.0",
+  "compose": "Docker Compose 2.39.4",
+  "project": "zhiliao-demo-runtime",
+  "image": "zhiliao-demo-verify:story-2-2",
+  "image_digest": "sha256:46f9241b6d2e539ce3a94324c356cf4336f8cf17e0cf59e5b5d920bf9b53769e",
+  "results": {
+    "services_healthy": true,
+    "ingress_health_http": 200,
+    "oversize_request_http": 413,
+    "nginx_config_test": true,
+    "app_to_mockllm": 200,
+    "app_to_metadata": "blocked",
+    "app_to_demo_gateway": "blocked",
+    "app_host_ports": [],
+    "mockllm_host_ports": [],
+    "ingress_host_binding": "127.0.0.1:3322->8080/tcp",
+    "resource_limits": "matched_compose",
+    "readonly_rootfs": true,
+    "cleanup": "containers networks volumes and temporary credentials removed"
+  },
+  "limitations": [
+    "本证据来自本机候选镜像，不代表 ghcr.io/b-tech-hub/zhiliao:0.6.0 已包含补丁。",
+    "业务 named volume 磁盘配额尚未由 Compose 跨平台可靠表达。",
+    "SSE 入口自动化回归仍需在持续运行环境中执行。"
+  ]
+}

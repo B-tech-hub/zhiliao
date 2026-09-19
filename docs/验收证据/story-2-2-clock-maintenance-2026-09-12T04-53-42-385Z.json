@@ -1,0 +1,591 @@
+{
+  "story": "2.2",
+  "recorded_at": "2026-09-12T04:53:42.386Z",
+  "status": "failed",
+  "run_id": "ea7811f7e26872a033b703b476916a47",
+  "project": "zhiliao-demo-clock-verify-ea7811f7e268",
+  "scope": "用户批准 acpi_pm 方案后，临时切换共用 WSL 时钟源；计时误差通过后才复验 A2 代理，最终恢复 tsc",
+  "authorization": "已批准本轮 acpi_pm 临时维护与 A2 复验；不含持久启动参数、WSL 升级、重启、构建、全量测试或发布",
+  "host": {
+    "platform": "win32",
+    "release": "10.0.26200",
+    "node": "v22.19.0"
+  },
+  "source_file": "zhiliao-demo-clock-acpi-pm-a2-20260912.mjs",
+  "source_sha256": "43f112643712812a4f3b92af7b50455a4e8dcb93740d524e1850c9911328ee12",
+  "maintenance_source": "import fs from 'node:fs';\nimport path from 'node:path';\nimport os from 'node:os';\nimport net from 'node:net';\nimport { createHash, randomBytes } from 'node:crypto';\nimport { spawn } from 'node:child_process';\nimport { createInterface } from 'node:readline';\nimport { pathToFileURL, fileURLToPath } from 'node:url';\nimport { setTimeout as delay } from 'node:timers/promises';\n\nconst repo = 'D:/ClaudeProjects/ai_acknowladge';\nconst { runProcess, runDocker, cleanDockerEnvironment, verificationResources } = await import(pathToFileURL(path.join(repo, 'scripts/demo-verification-utils.mjs')));\nconst { verifyDemoProxyTimeouts } = await import(pathToFileURL(path.join(repo, 'scripts/verify-demo-proxy-timeouts.mjs')));\nconst env = cleanDockerEnvironment();\nconst runId = randomBytes(16).toString('hex');\nconst project = 'zhiliao-demo-clock-verify-' + runId.slice(0, 12);\nconst runLabel = 'io.zhiliao.demo-clock-verify.run';\nconst clockPath = '/sys/devices/system/clocksource/clocksource0/current_clocksource';\nconst target = 'acpi_pm';\nconst evidenceDir = path.join(repo, 'docs/验收证据');\nconst evidencePath = path.join(evidenceDir, 'story-2-2-clock-maintenance-' + new Date().toISOString().replace(/[:.]/g, '-') + '.json');\nconst relative = (file) => path.relative(repo, file).replaceAll('\\\\', '/');\nconst hash = (file) => createHash('sha256').update(fs.readFileSync(file)).digest('hex');\nconst invoke = (args, timeoutMs = 15000) => runDocker(args, { env, timeoutMs });\nconst wsl = (args, input) => runProcess('wsl.exe', ['-d', 'docker-desktop', '-u', 'root', '--', ...args], { env, input, timeoutMs: 15000 });\nconst readClock = () => wsl(['cat', clockPath]);\nconst writeClock = (value) => {\n  if (!['tsc', target].includes(value)) throw new Error('拒绝范围外时钟源');\n  return wsl(['sh', '-s'], 'set -eu\\necho ' + value + ' > ' + clockPath + '\\ncat ' + clockPath + '\\n');\n};\nconst resources = verificationResources(invoke, project, runId, runLabel);\nconst progress = (event) => console.log(JSON.stringify({ at: new Date().toISOString(), ...event }));\nconst containerFormat = '{\"id\":{{json .Id}},\"name\":{{json .Name}},\"image\":{{json .Image}},\"status\":{{json .State.Status}},\"exit_code\":{{json .State.ExitCode}},\"started_at\":{{json .State.StartedAt}},\"finished_at\":{{json .State.FinishedAt}},\"project\":{{json (index .Config.Labels \"com.docker.compose.project\")}},\"mounts\":{{json .Mounts}},\"networks\":{{json .NetworkSettings.Networks}}}';\nasync function containers() {\n  const ids = (await invoke(['ps', '-a', '--no-trunc', '--format', '{{.ID}}'])).split(/\\r?\\n/).filter(Boolean);\n  if (!ids.length) return [];\n  return (await invoke(['container', 'inspect', '--format', containerFormat, ...ids])).split(/\\r?\\n/).filter(Boolean).map((line) => {\n    const item = JSON.parse(line);\n    item.mounts.sort((a, b) => a.Destination.localeCompare(b.Destination));\n    item.networks = Object.keys(item.networks ?? {}).sort();\n    return item;\n  }).sort((a, b) => a.id.localeCompare(b.id));\n}\nconst report = {\n  story: '2.2', recorded_at: new Date().toISOString(), status: 'failed', run_id: runId, project,\n  scope: '用户批准 acpi_pm 方案后，临时切换共用 WSL 时钟源；计时误差通过后才复验 A2 代理，最终恢复 tsc',\n  authorization: '已批准本轮 acpi_pm 临时维护与 A2 复验；不含持久启动参数、WSL 升级、重启、构建、全量测试或发布',\n  host: { platform: process.platform, release: os.release(), node: process.version },\n  source_file: path.basename(fileURLToPath(import.meta.url)), source_sha256: hash(fileURLToPath(import.meta.url)),\n  maintenance_source: fs.readFileSync(fileURLToPath(import.meta.url), 'utf8'),\n  clock: { path: clockPath, requested: target, switch_attempted: false, restore: { status: 'not_needed' } },\n  timing: { interval_ms: 20000, maximum_relative_error: 0.01, status: 'not_run', samples: [], intervals: [] },\n  proxy: { status: 'not_run', reason: '必须先通过计时门槛' },\n  cleanup: { status: 'not_started' }, limitations: [\n    '本次是临时时钟源对照；恢复 tsc 后不能推断原环境长期计时已修复。',\n    '不替代最终主机隔离、业务卷配额、HTTPS 与补丁镜像发布验收。'\n  ]\n};\nlet beforeContainers;\nlet protectedFiles;\nlet probe;\nlet closeProbe;\nlet startedProbe = false;\nconst probeSource = \"const fs=require('node:fs');const r=require('node:readline').createInterface({input:process.stdin,crlfDelay:Infinity});r.on('line',id=>{const clocksource=fs.readFileSync('/sys/devices/system/clocksource/clocksource0/current_clocksource','utf8').trim();process.stdout.write(JSON.stringify({id,clocksource,wall_ms:Date.now(),monotonic_ns:process.hrtime.bigint().toString()})+'\\\\n')});\";\nreport.timing.guest_probe = probeSource;\ntry {\n  if (fs.existsSync(evidencePath)) throw new Error('证据路径已经存在');\n  report.baseline_commit = await runProcess('git', ['rev-parse', 'HEAD'], { env });\n  beforeContainers = await containers();\n  if (beforeContainers.some((item) => item.status === 'running')) throw new Error('发现运行中的既有容器，停止本次计时维护');\n  const prior = JSON.parse(fs.readFileSync(path.join(evidenceDir, 'story-2-2-preservation-2026-09-12-a2.json'), 'utf8'));\n  const keep = new Set(prior.protected_files.map((item) => item.path));\n  for (const file of fs.readdirSync(evidenceDir).filter((item) => item.endsWith('.json'))) keep.add('docs/验收证据/' + file);\n  for (const file of ['README.md', 'README.en.md', '.dockerignore', '.gitignore', 'docs/README.md', 'docs/首次使用与故障排查.md', 'docs/Demo部署隔离验收-2026-09-10.md', 'docs/Story-2.2-剩余验收实施方案-2026-09-11.md', 'docs/adr/0026-demo-ingress-isolation.md', '_bmad-output/implementation-artifacts/spec-2-2-isolate-demo-deployment-and-limit-resources.md', '_bmad-output/implementation-artifacts/sprint-status.yaml', 'scripts/demo-verification-utils.mjs', 'scripts/verify-demo-network.mjs', 'scripts/verify-demo-proxy-timeouts.mjs', 'scripts/fixtures/demo-proxy-upstream.mjs', 'nginx/demo-proxy.conf', 'docker-compose.demo.proxy-verify.yml', 'tests/config/demo-network.test.ts', 'tests/config/demo-proxy-timeouts.test.ts', 'tests/docs/first-use-guide.test.ts']) keep.add(file);\n  protectedFiles = [...keep].sort().map((file) => ({ path: file, sha256_before: hash(path.join(repo, file)) }));\n  report.clock.original = await readClock();\n  report.clock.available = (await wsl(['cat', '/sys/devices/system/clocksource/clocksource0/available_clocksource'])).split(/\\s+/);\n  report.kernel = await wsl(['uname', '-r']);\n  if (report.clock.original !== 'tsc' || !report.clock.available.includes(target)) throw new Error('时钟源前提已变化，停止维护');\n  report.candidate_image_id = await invoke(['image', 'inspect', '--format', '{{.Id}}', 'zhiliao-demo-verify:story-2-2']);\n  if (report.candidate_image_id !== 'sha256:46f9241b6d2e539ce3a94324c356cf4336f8cf17e0cf59e5b5d920bf9b53769e') throw new Error('候选镜像与 A2 历史来源不一致');\n  const imageVolumes = JSON.parse(await invoke(['image', 'inspect', '--format', '{{json .Config.Volumes}}', report.candidate_image_id]));\n  if (imageVolumes && Object.keys(imageVolumes).length) throw new Error('候选含镜像卷声明，拒绝启动计时探针');\n  report.nginx_image_id = await invoke(['image', 'inspect', '--format', '{{.Id}}', 'nginx:1.30.4-alpine@sha256:dc5069ad14f19660b141b21236140b91656bf89bbc3e2417c70ae650cd66104c']);\n  await new Promise((resolve, reject) => {\n    const server = net.createServer();\n    server.once('error', reject);\n    server.listen(3333, '127.0.0.1', () => server.close((error) => error ? reject(error) : resolve()));\n  });\n  if ((await resources.list()).length) throw new Error('计时探针 project 已存在资源');\n  startedProbe = true;\n  report.probe_container_id = await invoke(['run', '-d', '--pull=never', '--name', project + '-probe', '--label', 'com.docker.compose.project=' + project, '--label', runLabel + '=' + runId, '--network', 'none', '--read-only', '--no-healthcheck', '--user', '1001:1001', '--cap-drop', 'ALL', '--security-opt', 'no-new-privileges:true', '--pids-limit', '32', '--memory', '128m', '--cpus', '0.25', '--log-driver', 'json-file', '--log-opt', 'max-size=1m', '--log-opt', 'max-file=1', '--entrypoint', 'node', report.candidate_image_id, '-e', 'setInterval(() => {}, 60000)']);\n  report.probe_resources = await resources.list();\n  await resources.assertOwned(report.probe_resources);\n  if (report.probe_resources.length !== 1 || report.probe_resources[0].type !== 'container') throw new Error('计时探针资源数量不符合预期');\n  const probeMounts = JSON.parse(await invoke(['container', 'inspect', '--format', '{{json .Mounts}}', report.probe_container_id]));\n  if (probeMounts.length) throw new Error('计时探针挂载不为空');\n  report.probe_boundary = { network: 'none', mounts: probeMounts, memory_bytes: 128 * 1024 * 1024, cpus: 0.25, pids_limit: 32 };\n  probe = spawn('docker', ['exec', '-i', report.probe_container_id, 'node', '-e', probeSource], { cwd: repo, env, windowsHide: true, stdio: 'pipe' });\n  const pending = new Map();\n  let sequence = 0;\n  let probeFailure;\n  const failPending = (error) => { probeFailure = error; for (const { reject } of pending.values()) reject(error); pending.clear(); };\n  const closed = new Promise((resolve) => probe.once('close', (code) => { failPending(new Error('计时探针已退出：' + code)); resolve(code); }));\n  probe.on('error', failPending);\n  probe.stdin.on('error', failPending);\n  probe.stderr.resume();\n  const lines = createInterface({ input: probe.stdout, crlfDelay: Infinity });\n  lines.on('line', (line) => {\n    const hostAfter = { wall_ms: Date.now(), monotonic_ms: performance.now() };\n    try {\n      const guest = JSON.parse(line);\n      const request = pending.get(guest.id);\n      if (!request) return;\n      pending.delete(guest.id);\n      request.resolve({ host_before: request.before, host_after: hostAfter, round_trip_ms: hostAfter.monotonic_ms - request.before.monotonic_ms, guest });\n    } catch (error) { failPending(error); }\n  });\n  const sample = () => new Promise((resolve, reject) => {\n    if (probeFailure) { reject(probeFailure); return; }\n    const id = String(++sequence);\n    const timer = setTimeout(() => { pending.delete(id); reject(new Error('计时探针采样超时')); }, 10000);\n    pending.set(id, { before: { wall_ms: Date.now(), monotonic_ms: performance.now() }, resolve: (value) => { clearTimeout(timer); resolve(value); }, reject: (error) => { clearTimeout(timer); reject(error); } });\n    probe.stdin.write(id + '\\n');\n  });\n  closeProbe = async () => {\n    probe.stdin.end();\n    let timer;\n    const code = await Promise.race([closed, new Promise((resolve) => { timer = setTimeout(() => { probe.kill(); resolve('timeout'); }, 5000); })]);\n    clearTimeout(timer);\n    lines.close();\n    if (code !== 0) throw new Error('计时采样进程结束异常：' + code);\n  };\n  report.timing.warmup = await sample();\n  report.clock.switch_attempted = true;\n  report.clock.switched_at = new Date().toISOString();\n  report.clock.switch_output = await writeClock(target);\n  report.clock.after_switch = await readClock();\n  if (report.clock.after_switch !== target) throw new Error('时钟源切换后读回不匹配');\n  progress({ stage: 'clock_switched', clocksource: report.clock.after_switch });\n  const bestSample = async () => {\n    const candidates = [];\n    for (let i = 0; i < 3; i++) candidates.push(await sample());\n    report.timing.samples.push(...candidates);\n    if (candidates.some((item) => item.guest.clocksource !== target)) throw new Error('采样期间时钟源发生变化');\n    return candidates.reduce((best, item) => item.round_trip_ms < best.round_trip_ms ? item : best);\n  };\n  let previous = await bestSample();\n  for (let i = 0; i < 2; i++) {\n    await delay(20000);\n    const next = await bestSample();\n    const hostMin = next.host_before.monotonic_ms - previous.host_after.monotonic_ms;\n    const hostMax = next.host_after.monotonic_ms - previous.host_before.monotonic_ms;\n    const guestMs = Number(BigInt(next.guest.monotonic_ns) - BigInt(previous.guest.monotonic_ns)) / 1e6;\n    const lower = guestMs / hostMax;\n    const upper = guestMs / hostMin;\n    const worstError = Math.max(Math.abs(lower - 1), Math.abs(upper - 1));\n    const interval = { sample_ids: [previous.guest.id, next.guest.id], host_min_ms: hostMin, host_max_ms: hostMax, guest_ms: guestMs, guest_to_host_ratio_min: lower, guest_to_host_ratio_max: upper, maximum_relative_error: worstError, passed: hostMin > 0 && worstError <= 0.01 };\n    report.timing.intervals.push(interval);\n    progress({ stage: 'clock_interval', interval: i + 1, ...interval });\n    previous = next;\n  }\n  report.timing.status = report.timing.intervals.every((item) => item.passed) ? 'passed' : 'failed';\n  await closeProbe();\n  closeProbe = undefined;\n  if (report.timing.status !== 'passed') throw new Error('计时差不能确认不超过 1%，按方案停止长时复验');\n  progress({ stage: 'proxy_reverification_started', clocksource: await readClock() });\n  const verified = await verifyDemoProxyTimeouts({ port: 3333 }, { onProgress: (event) => progress({ stage: 'proxy', ...event }) });\n  report.proxy = { status: verified.report.status, exit_code: verified.exitCode, evidence: relative(verified.evidencePath), cleanup: verified.report.cleanup };\n  report.clock.after_proxy = await readClock();\n  if (report.clock.after_proxy !== target) throw new Error('代理复验期间时钟源发生变化');\n  if (verified.exitCode !== 0) throw new Error('代理复验或资源清理仍有未通过项');\n  report.status = 'passed';\n} catch (error) {\n  report.error = String(error.message ?? error);\n  progress({ stage: 'failed', error: report.error });\n} finally {\n  try {\n    if (closeProbe) await closeProbe();\n  } catch (error) { report.probe_close_error = String(error.message ?? error); report.status = 'failed'; }\n  try {\n    if (startedProbe) {\n      const items = await resources.list();\n      await resources.assertOwned(items);\n      if (items.some((item) => item.type !== 'container')) throw new Error('出现范围外计时探针资源');\n      for (const item of items) await invoke(['container', 'rm', '--force', item.id]);\n      report.cleanup.remaining = await resources.list();\n      if (report.cleanup.remaining.length) throw new Error('计时探针仍有残留');\n      report.cleanup.status = 'removed';\n    }\n  } catch (error) { report.cleanup = { status: 'failed', error: String(error.message ?? error) }; report.status = 'failed'; }\n  finally {\n    if (report.clock.switch_attempted) {\n      try {\n        try { report.clock.restore.before = await readClock(); }\n        catch (error) { report.clock.restore.before_read_error = String(error.message ?? error); }\n        report.clock.restore.output = await writeClock('tsc');\n        report.clock.restore.after = await readClock();\n        if (report.clock.restore.after !== 'tsc') throw new Error('恢复 tsc 后读回不匹配');\n        report.clock.restore.status = 'restored';\n        progress({ stage: 'clock_restored', clocksource: report.clock.restore.after });\n      } catch (error) { report.clock.restore.status = 'failed'; report.clock.restore.error = String(error.message ?? error); report.status = 'failed'; }\n    }\n  }\n  if (report.clock.restore.status !== 'failed' && beforeContainers && protectedFiles) {\n    try {\n      const after = await containers();\n      report.preservation = {\n        containers: beforeContainers.map((item) => {\n          const current = after.find((candidate) => candidate.id === item.id);\n          return { id: item.id, name: item.name, unchanged: JSON.stringify(item) === JSON.stringify(current), changed_fields: Object.keys(item).filter((key) => JSON.stringify(item[key]) !== JSON.stringify(current?.[key])) };\n        }),\n        files: protectedFiles.map((item) => ({ ...item, sha256_after: hash(path.join(repo, item.path)) })),\n        normalization: '挂载按 Destination 排序，网络名称排序；仅比较元数据与源文件哈希，不读取正式数据内容'\n      };\n      report.preservation.passed = report.preservation.containers.every((item) => item.unchanged) && report.preservation.files.every((item) => item.sha256_before === item.sha256_after);\n      if (!report.preservation.passed) { report.status = 'failed'; report.preservation.error = '发现既有元数据或保留文件发生变化'; }\n    } catch (error) { report.preservation = { passed: false, error: String(error.message ?? error) }; report.status = 'failed'; }\n  }\n  report.finished_at = new Date().toISOString();\n  fs.writeFileSync(evidencePath, JSON.stringify(report, null, 2) + '\\n', { flag: 'wx' });\n  progress({ stage: 'finished', status: report.status, evidence: relative(evidencePath), restore: report.clock.restore.status, cleanup: report.cleanup.status });\n  process.exitCode = report.status === 'passed' ? 0 : 1;\n}\n",
+  "clock": {
+    "path": "/sys/devices/system/clocksource/clocksource0/current_clocksource",
+    "requested": "acpi_pm",
+    "switch_attempted": true,
+    "restore": {
+      "status": "restored",
+      "before": "acpi_pm",
+      "output": "tsc",
+      "after": "tsc"
+    },
+    "original": "tsc",
+    "available": [
+      "tsc",
+      "hyperv_clocksource_tsc_page",
+      "hyperv_clocksource_msr",
+      "acpi_pm"
+    ],
+    "switched_at": "2026-09-12T04:53:44.909Z",
+    "switch_output": "acpi_pm",
+    "after_switch": "acpi_pm"
+  },
+  "timing": {
+    "interval_ms": 20000,
+    "maximum_relative_error": 0.01,
+    "status": "failed",
+    "samples": [
+      {
+        "host_before": {
+          "wall_ms": 1789188825128,
+          "monotonic_ms": 2781.7859
+        },
+        "host_after": {
+          "wall_ms": 1789188825129,
+          "monotonic_ms": 2783.1839
+        },
+        "round_trip_ms": 1.3980000000001382,
+        "guest": {
+          "id": "2",
+          "clocksource": "acpi_pm",
+          "wall_ms": 1789188825219,
+          "monotonic_ns": "72023014645715"
+        }
+      },
+      {
+        "host_before": {
+          "wall_ms": 1789188825129,
+          "monotonic_ms": 2783.2414
+        },
+        "host_after": {
+          "wall_ms": 1789188825130,
+          "monotonic_ms": 2784.057
+        },
+        "round_trip_ms": 0.815599999999904,
+        "guest": {
+          "id": "3",
+          "clocksource": "acpi_pm",
+          "wall_ms": 1789188825220,
+          "monotonic_ns": "72023015693417"
+        }
+      },
+      {
+        "host_before": {
+          "wall_ms": 1789188825130,
+          "monotonic_ms": 2784.0974
+        },
+        "host_after": {
+          "wall_ms": 1789188825131,
+          "monotonic_ms": 2785.0935
+        },
+        "round_trip_ms": 0.9960999999998421,
+        "guest": {
+          "id": "4",
+          "clocksource": "acpi_pm",
+          "wall_ms": 1789188825221,
+          "monotonic_ns": "72023016707728"
+        }
+      },
+      {
+        "host_before": {
+          "wall_ms": 1789188845135,
+          "monotonic_ms": 22789.1712
+        },
+        "host_after": {
+          "wall_ms": 1789188845146,
+          "monotonic_ms": 22800.0737
+        },
+        "round_trip_ms": 10.902500000000146,
+        "guest": {
+          "id": "5",
+          "clocksource": "acpi_pm",
+          "wall_ms": 1789188844817,
+          "monotonic_ns": "72043974437468"
+        }
+      },
+      {
+        "host_before": {
+          "wall_ms": 1789188845146,
+          "monotonic_ms": 22800.1616
+        },
+        "host_after": {
+          "wall_ms": 1789188845148,
+          "monotonic_ms": 22801.4225
+        },
+        "round_trip_ms": 1.2609000000011292,
+        "guest": {
+          "id": "6",
+          "clocksource": "acpi_pm",
+          "wall_ms": 1789188844823,
+          "monotonic_ns": "72043980135341"
+        }
+      },
+      {
+        "host_before": {
+          "wall_ms": 1789188845148,
+          "monotonic_ms": 22801.4725
+        },
+        "host_after": {
+          "wall_ms": 1789188845150,
+          "monotonic_ms": 22803.6643
+        },
+        "round_trip_ms": 2.1918000000005122,
+        "guest": {
+          "id": "7",
+          "clocksource": "acpi_pm",
+          "wall_ms": 1789188844824,
+          "monotonic_ns": "72043981259116"
+        }
+      },
+      {
+        "host_before": {
+          "wall_ms": 1789188865162,
+          "monotonic_ms": 42816.0301
+        },
+        "host_after": {
+          "wall_ms": 1789188865166,
+          "monotonic_ms": 42819.4565
+        },
+        "round_trip_ms": 3.4263999999966472,
+        "guest": {
+          "id": "8",
+          "clocksource": "acpi_pm",
+          "wall_ms": 1789188865193,
+          "monotonic_ns": "72064939448164"
+        }
+      },
+      {
+        "host_before": {
+          "wall_ms": 1789188865166,
+          "monotonic_ms": 42819.546
+        },
+        "host_after": {
+          "wall_ms": 1789188865167,
+          "monotonic_ms": 42820.5786
+        },
+        "round_trip_ms": 1.032599999998638,
+        "guest": {
+          "id": "9",
+          "clocksource": "acpi_pm",
+          "wall_ms": 1789188865195,
+          "monotonic_ns": "72064941096273"
+        }
+      },
+      {
+        "host_before": {
+          "wall_ms": 1789188865167,
+          "monotonic_ms": 42820.6497
+        },
+        "host_after": {
+          "wall_ms": 1789188865168,
+          "monotonic_ms": 42821.7416
+        },
+        "round_trip_ms": 1.0918999999994412,
+        "guest": {
+          "id": "10",
+          "clocksource": "acpi_pm",
+          "wall_ms": 1789188865196,
+          "monotonic_ns": "72064942177268"
+        }
+      }
+    ],
+    "intervals": [
+      {
+        "sample_ids": [
+          "3",
+          "6"
+        ],
+        "host_min_ms": 20016.1046,
+        "host_max_ms": 20018.1811,
+        "guest_ms": 20964.441924,
+        "guest_to_host_ratio_min": 1.0472700701064193,
+        "guest_to_host_ratio_max": 1.0473787154369687,
+        "maximum_relative_error": 0.0473787154369687,
+        "passed": false
+      },
+      {
+        "sample_ids": [
+          "6",
+          "9"
+        ],
+        "host_min_ms": 20018.1235,
+        "host_max_ms": 20020.417,
+        "guest_ms": 20960.960932,
+        "guest_to_host_ratio_min": 1.046979237845046,
+        "guest_to_host_ratio_max": 1.0470991914901515,
+        "maximum_relative_error": 0.047099191490151515,
+        "passed": false
+      }
+    ],
+    "guest_probe": "const fs=require('node:fs');const r=require('node:readline').createInterface({input:process.stdin,crlfDelay:Infinity});r.on('line',id=>{const clocksource=fs.readFileSync('/sys/devices/system/clocksource/clocksource0/current_clocksource','utf8').trim();process.stdout.write(JSON.stringify({id,clocksource,wall_ms:Date.now(),monotonic_ns:process.hrtime.bigint().toString()})+'\\n')});",
+    "warmup": {
+      "host_before": {
+        "wall_ms": 1789188824669,
+        "monotonic_ms": 2322.5082
+      },
+      "host_after": {
+        "wall_ms": 1789188824909,
+        "monotonic_ms": 2562.9414
+      },
+      "round_trip_ms": 240.43319999999994,
+      "guest": {
+        "id": "1",
+        "clocksource": "tsc",
+        "wall_ms": 1789188824986,
+        "monotonic_ns": "72022781736639"
+      }
+    }
+  },
+  "proxy": {
+    "status": "not_run",
+    "reason": "必须先通过计时门槛"
+  },
+  "cleanup": {
+    "status": "removed",
+    "remaining": []
+  },
+  "limitations": [
+    "本次是临时时钟源对照；恢复 tsc 后不能推断原环境长期计时已修复。",
+    "不替代最终主机隔离、业务卷配额、HTTPS 与补丁镜像发布验收。"
+  ],
+  "baseline_commit": "f213761b795cc020be2122e27301fe4a7c5cf7a0",
+  "kernel": "6.6.87.2-microsoft-standard-WSL2",
+  "candidate_image_id": "sha256:46f9241b6d2e539ce3a94324c356cf4336f8cf17e0cf59e5b5d920bf9b53769e",
+  "nginx_image_id": "sha256:dc5069ad14f19660b141b21236140b91656bf89bbc3e2417c70ae650cd66104c",
+  "probe_container_id": "a18c731706abd66e455623430004be30b5ab5e6bfe72fbacfe50d1d39d29db2e",
+  "probe_resources": [
+    {
+      "type": "container",
+      "id": "a18c731706ab"
+    }
+  ],
+  "probe_boundary": {
+    "network": "none",
+    "mounts": [],
+    "memory_bytes": 134217728,
+    "cpus": 0.25,
+    "pids_limit": 32
+  },
+  "error": "计时差不能确认不超过 1%，按方案停止长时复验",
+  "preservation": {
+    "containers": [
+      {
+        "id": "254c7caca374780a6c1a3bea1c2c6ba59d6ab092de155c34f8efd3cd411532c8",
+        "name": "/zhiliao",
+        "unchanged": true,
+        "changed_fields": []
+      },
+      {
+        "id": "50a70f44a32e78adf331f7084743f042001eb5b650ee7af849441ed6a14a85c0",
+        "name": "/bilinote-nginx",
+        "unchanged": true,
+        "changed_fields": []
+      },
+      {
+        "id": "5d05095aa56b26fee8ff02b3372764d8300cc7b1851773eca5ee0a95ed3f675f",
+        "name": "/zhiliao-smoke-20260910-081121-app-1",
+        "unchanged": true,
+        "changed_fields": []
+      },
+      {
+        "id": "ab1926223971ae43ca775c7078f16057bde76b5e2f53aa6856382830542c3e4a",
+        "name": "/bilinote-frontend",
+        "unchanged": true,
+        "changed_fields": []
+      },
+      {
+        "id": "cd07490a30d9cd068c4552f0f528dacecd9349eb2a60c1dbf9f8c18333fe83ea",
+        "name": "/zhiliao-smoke-20260910-082135-app-1",
+        "unchanged": true,
+        "changed_fields": []
+      },
+      {
+        "id": "ea240066dd4a847db38ef758917c36a04be31191329ab6c995bdc94cd83fc721",
+        "name": "/zhiliao-rc",
+        "unchanged": true,
+        "changed_fields": []
+      },
+      {
+        "id": "f61337186432f4b8be3bba6578ebb2a3f768cd39baf5349a0fc19c53f224ef81",
+        "name": "/bilinote-backend",
+        "unchanged": true,
+        "changed_fields": []
+      }
+    ],
+    "files": [
+      {
+        "path": ".dockerignore",
+        "sha256_before": "859c037c021f8004b5785e9134e38425d4cf4c54c8416a625707e13c6a1637e4",
+        "sha256_after": "859c037c021f8004b5785e9134e38425d4cf4c54c8416a625707e13c6a1637e4"
+      },
+      {
+        "path": ".gitignore",
+        "sha256_before": "1782f3e74113b3febf8659bb4c3dc607c9e3873cd38829ab7326da580e075e03",
+        "sha256_after": "1782f3e74113b3febf8659bb4c3dc607c9e3873cd38829ab7326da580e075e03"
+      },
+      {
+        "path": "Dockerfile",
+        "sha256_before": "19b26ee235928d6d360edc9b5c803427302eb90d9a8dc8d231482ba6380e6668",
+        "sha256_after": "19b26ee235928d6d360edc9b5c803427302eb90d9a8dc8d231482ba6380e6668"
+      },
+      {
+        "path": "README.en.md",
+        "sha256_before": "6f1479b591600f9d70ce5be0d8490606cc2204e70847e58acae4290ee1baab4f",
+        "sha256_after": "6f1479b591600f9d70ce5be0d8490606cc2204e70847e58acae4290ee1baab4f"
+      },
+      {
+        "path": "README.md",
+        "sha256_before": "acaed4890a739cb5d126231e405b0cafa7d15882d5be4fc3094672e8ef35b695",
+        "sha256_after": "acaed4890a739cb5d126231e405b0cafa7d15882d5be4fc3094672e8ef35b695"
+      },
+      {
+        "path": "_bmad-output/implementation-artifacts/spec-2-1-server-demo-boundary.md",
+        "sha256_before": "002a58d4db6835ca57c2672ddce0a1c8fc3c4ce23e640e823725174c36cf68f4",
+        "sha256_after": "002a58d4db6835ca57c2672ddce0a1c8fc3c4ce23e640e823725174c36cf68f4"
+      },
+      {
+        "path": "_bmad-output/implementation-artifacts/spec-2-2-isolate-demo-deployment-and-limit-resources.md",
+        "sha256_before": "b0a824e0ac1d15584d6047726f6d6c512927e6ad44a081eeaabc30a4f3fa95ba",
+        "sha256_after": "b0a824e0ac1d15584d6047726f6d6c512927e6ad44a081eeaabc30a4f3fa95ba"
+      },
+      {
+        "path": "_bmad-output/implementation-artifacts/sprint-status.yaml",
+        "sha256_before": "d14b1ff5f8c24c624df4872f33546db129a20cf916edcec181661fe00daa8de1",
+        "sha256_after": "d14b1ff5f8c24c624df4872f33546db129a20cf916edcec181661fe00daa8de1"
+      },
+      {
+        "path": "docker-compose.demo.proxy-verify.yml",
+        "sha256_before": "db8eed5296212444d435cd378cae07b97d3e8d24f1a58bdb40b16ed4813cb05d",
+        "sha256_after": "db8eed5296212444d435cd378cae07b97d3e8d24f1a58bdb40b16ed4813cb05d"
+      },
+      {
+        "path": "docker-compose.demo.verify.yml",
+        "sha256_before": "2f21847f6798764d6929991855f848f83cd4bfd6345ea4f8638ed2b255de22f1",
+        "sha256_after": "2f21847f6798764d6929991855f848f83cd4bfd6345ea4f8638ed2b255de22f1"
+      },
+      {
+        "path": "docker-compose.demo.yml",
+        "sha256_before": "f259c2e5fd7809bc872492c5eb753a5ab54389969c3106a6ff0e926f070455f2",
+        "sha256_after": "f259c2e5fd7809bc872492c5eb753a5ab54389969c3106a6ff0e926f070455f2"
+      },
+      {
+        "path": "docker-compose.yml",
+        "sha256_before": "70e6867a5e5e686c835c0830d96229440aa6be5f58a132a978002f40e82bfd4b",
+        "sha256_after": "70e6867a5e5e686c835c0830d96229440aa6be5f58a132a978002f40e82bfd4b"
+      },
+      {
+        "path": "docs/Demo部署隔离验收-2026-09-10.md",
+        "sha256_before": "99d0daa70fb8a70148b273751b2a7992f2beb5a89bccff33121769223fa4b533",
+        "sha256_after": "99d0daa70fb8a70148b273751b2a7992f2beb5a89bccff33121769223fa4b533"
+      },
+      {
+        "path": "docs/README.md",
+        "sha256_before": "4f080b3a22f364c31a415a3ca3cbef3cc56ed90263efc9cd8a9bce89f87f7e0f",
+        "sha256_after": "4f080b3a22f364c31a415a3ca3cbef3cc56ed90263efc9cd8a9bce89f87f7e0f"
+      },
+      {
+        "path": "docs/Story-2.2-剩余验收实施方案-2026-09-11.md",
+        "sha256_before": "239501870d5d26cb4fb836b5aad99f95de7d0e5815e2c38eaacac0b5cc4fefbd",
+        "sha256_after": "239501870d5d26cb4fb836b5aad99f95de7d0e5815e2c38eaacac0b5cc4fefbd"
+      },
+      {
+        "path": "docs/adr/0026-demo-ingress-isolation.md",
+        "sha256_before": "0a8b33107319ec9b832f7578a035478fbced1ec6cfe7008213d2d9ac84b04bc7",
+        "sha256_after": "0a8b33107319ec9b832f7578a035478fbced1ec6cfe7008213d2d9ac84b04bc7"
+      },
+      {
+        "path": "docs/首次使用与故障排查.md",
+        "sha256_before": "c635fb6f1e4e015c4601b71a6aaffedf97112cbcdf2d7f53dad89b772869060c",
+        "sha256_after": "c635fb6f1e4e015c4601b71a6aaffedf97112cbcdf2d7f53dad89b772869060c"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-cleanup-2026-09-12-a2.json",
+        "sha256_before": "3776b40ef26b14d20d8c6bf80bfb28ede059764e02c602961bec08cde20d8d21",
+        "sha256_after": "3776b40ef26b14d20d8c6bf80bfb28ede059764e02c602961bec08cde20d8d21"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-clock-2026-09-12T03-44-50-581Z.json",
+        "sha256_before": "f5513284bca9806b410df289eff9fe14aecce2cb5de5576931a82da1c019863c",
+        "sha256_after": "f5513284bca9806b410df289eff9fe14aecce2cb5de5576931a82da1c019863c"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-clock-environment-2026-09-12-a2.json",
+        "sha256_before": "bdf2529ab06e45466b416f58229025f4def1a160f18fbc77797d910802ba6aa1",
+        "sha256_after": "bdf2529ab06e45466b416f58229025f4def1a160f18fbc77797d910802ba6aa1"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-clock-maintenance-2026-09-12T04-36-26-291Z.json",
+        "sha256_before": "2ff072b07c85559631be36fdb40d8ffe94a4888f750a8e9319f8fec46f262b36",
+        "sha256_after": "2ff072b07c85559631be36fdb40d8ffe94a4888f750a8e9319f8fec46f262b36"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-environment-2026-09-11T08-37-01Z.json",
+        "sha256_before": "d78972e0f1272655f9cfd8f466930d527befac5301984e11728415c0bff3ae99",
+        "sha256_after": "d78972e0f1272655f9cfd8f466930d527befac5301984e11728415c0bff3ae99"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-network-2026-09-12-a2-final.json",
+        "sha256_before": "10a67ce81458721c89424b8717e931dcff2d44cea1c4b838dd28e9a107bab323",
+        "sha256_after": "10a67ce81458721c89424b8717e931dcff2d44cea1c4b838dd28e9a107bab323"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-network-2026-09-12-a2-final2.json",
+        "sha256_before": "8f97f80a4c3a403e66b0329e0eb7f8c2d8c6a4bd084a1be16c79e449ea97c9ea",
+        "sha256_after": "8f97f80a4c3a403e66b0329e0eb7f8c2d8c6a4bd084a1be16c79e449ea97c9ea"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-network-2026-09-12-a2-rerun.json",
+        "sha256_before": "da30ef2a6f76b2a693cc096d202848a7bfd5c10a75d926e796ddea6e500d7754",
+        "sha256_after": "da30ef2a6f76b2a693cc096d202848a7bfd5c10a75d926e796ddea6e500d7754"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-network-2026-09-12-a2.json",
+        "sha256_before": "7f63e343c871a16edf0b36a2040708372119d73cfd01d65117d4265e4c204da8",
+        "sha256_after": "7f63e343c871a16edf0b36a2040708372119d73cfd01d65117d4265e4c204da8"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-network-2026-09-12T03-38-29-471Z.json",
+        "sha256_before": "4db8a31ab30be38a413a32e38078106f8d466ed6acb365650f4a2f3c9b64c45f",
+        "sha256_after": "4db8a31ab30be38a413a32e38078106f8d466ed6acb365650f4a2f3c9b64c45f"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-preservation-2026-09-12-a2.json",
+        "sha256_before": "286ed069ebfdae26f7bf222f87c554c4f579a2131a7e9bfbcd6ffc46443a1399",
+        "sha256_after": "286ed069ebfdae26f7bf222f87c554c4f579a2131a7e9bfbcd6ffc46443a1399"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-proxy-timeouts-2026-09-12-a2-debug.json",
+        "sha256_before": "b896d0e8ba31f3f50c8ee8953e5c26190f45a80aa42615351f62fb52e6f87bab",
+        "sha256_after": "b896d0e8ba31f3f50c8ee8953e5c26190f45a80aa42615351f62fb52e6f87bab"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-proxy-timeouts-2026-09-12-a2.json",
+        "sha256_before": "0dcaf2eeaaf63deb3974b6a7d6043e13caca07422f65ca2f62150f25e659469f",
+        "sha256_after": "0dcaf2eeaaf63deb3974b6a7d6043e13caca07422f65ca2f62150f25e659469f"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-proxy-timeouts-2026-09-12T03-25-47-619Z.json",
+        "sha256_before": "569805cd8aa7341bc0c43244267802433af14ae18eb3671f07a12808ef60e1bd",
+        "sha256_after": "569805cd8aa7341bc0c43244267802433af14ae18eb3671f07a12808ef60e1bd"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-runtime-2026-09-10.json",
+        "sha256_before": "8febd1d0c876bfe2b1db1230e36a341b60cb4e4023adcaf3636a4ab751dc8e95",
+        "sha256_after": "8febd1d0c876bfe2b1db1230e36a341b60cb4e4023adcaf3636a4ab751dc8e95"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-runtime-2026-09-11.json",
+        "sha256_before": "4c95c9ee95ce03f2c69d2cc1f97c2e72338b83b3847ae3fd51fc8d91425daf21",
+        "sha256_after": "4c95c9ee95ce03f2c69d2cc1f97c2e72338b83b3847ae3fd51fc8d91425daf21"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-runtime-2026-09-11T07-56-56-279Z-ccefbb73.json",
+        "sha256_before": "270c7cacbcd01e3586b4ad2b08cdf9c76f4a10ee3c00a3e220be3c946441a7b2",
+        "sha256_after": "270c7cacbcd01e3586b4ad2b08cdf9c76f4a10ee3c00a3e220be3c946441a7b2"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-runtime-2026-09-12T02-41-22-818Z-ea454295.json",
+        "sha256_before": "b685fdab2491a6f2c5dd0dde67242c492f4cb240dd6765589cfc845ebb411409",
+        "sha256_after": "b685fdab2491a6f2c5dd0dde67242c492f4cb240dd6765589cfc845ebb411409"
+      },
+      {
+        "path": "nginx/demo-proxy.conf",
+        "sha256_before": "abae7a74feb2ed1b048b7579348707cc68d9c6a7126baab4356a7d44c7244fb2",
+        "sha256_after": "abae7a74feb2ed1b048b7579348707cc68d9c6a7126baab4356a7d44c7244fb2"
+      },
+      {
+        "path": "nginx/demo.conf",
+        "sha256_before": "df240aef6f22929ab6435d4f4a2e3c603baa17a124fe0d9b7f01d10eaa27c093",
+        "sha256_after": "df240aef6f22929ab6435d4f4a2e3c603baa17a124fe0d9b7f01d10eaa27c093"
+      },
+      {
+        "path": "package-lock.json",
+        "sha256_before": "d16a6af6d2342a702ac0d49b20f7201b9db1ed9f98ebdf4eaa6c3faa5e7d3598",
+        "sha256_after": "d16a6af6d2342a702ac0d49b20f7201b9db1ed9f98ebdf4eaa6c3faa5e7d3598"
+      },
+      {
+        "path": "package.json",
+        "sha256_before": "93e20900fa70d3674f04c022f733eb78528b21ed67b0ce8a7c0f69ec245cd42e",
+        "sha256_after": "93e20900fa70d3674f04c022f733eb78528b21ed67b0ce8a7c0f69ec245cd42e"
+      },
+      {
+        "path": "scripts/demo-http-probes.mjs",
+        "sha256_before": "420ddcd722ae3f4fca844671f97cecabb398637d557f47b1c3174d2a059be238",
+        "sha256_after": "420ddcd722ae3f4fca844671f97cecabb398637d557f47b1c3174d2a059be238"
+      },
+      {
+        "path": "scripts/demo-verification-utils.mjs",
+        "sha256_before": "7f470b62da3ce58fe36354797db426c5e6ba6b9e95e2829ad6ac263861da4665",
+        "sha256_after": "7f470b62da3ce58fe36354797db426c5e6ba6b9e95e2829ad6ac263861da4665"
+      },
+      {
+        "path": "scripts/fixtures/demo-proxy-upstream.mjs",
+        "sha256_before": "88298403d5b72a60760c36309639e777fce3859a9c5e076ded9e33ea3a32c169",
+        "sha256_after": "88298403d5b72a60760c36309639e777fce3859a9c5e076ded9e33ea3a32c169"
+      },
+      {
+        "path": "scripts/verify-demo-network.mjs",
+        "sha256_before": "e527300e9a0c26676906a737ab0bd53cacb7e4cee6f6280936f4463eb7eec365",
+        "sha256_after": "e527300e9a0c26676906a737ab0bd53cacb7e4cee6f6280936f4463eb7eec365"
+      },
+      {
+        "path": "scripts/verify-demo-proxy-timeouts.mjs",
+        "sha256_before": "71c54bff2a8a4116356553646f8d0423b84cad078818fba52076f58c00e49d5f",
+        "sha256_after": "71c54bff2a8a4116356553646f8d0423b84cad078818fba52076f58c00e49d5f"
+      },
+      {
+        "path": "scripts/verify-demo-runtime.mjs",
+        "sha256_before": "e302fbb02b0a383ad8fa268b284b9eb307982d0543bea4fc52562344be2ac2b5",
+        "sha256_after": "e302fbb02b0a383ad8fa268b284b9eb307982d0543bea4fc52562344be2ac2b5"
+      },
+      {
+        "path": "scripts/verify-demo-runtime.ps1",
+        "sha256_before": "d8d0b56bab5c432ca4ed824ec5780b8360a09d8bd722f2904044289433e57695",
+        "sha256_after": "d8d0b56bab5c432ca4ed824ec5780b8360a09d8bd722f2904044289433e57695"
+      },
+      {
+        "path": "src/app/(app)/settings/page.tsx",
+        "sha256_before": "bc7e0dba9a0d9a20d3c7fb3f64157ac0e4d3001e6355e64e53b6b982f2ded46c",
+        "sha256_after": "bc7e0dba9a0d9a20d3c7fb3f64157ac0e4d3001e6355e64e53b6b982f2ded46c"
+      },
+      {
+        "path": "src/lib/llm-config.ts",
+        "sha256_before": "c9a363404fe78da50278237704b60514b8c230cb8153cedc46713f0e3ef3899c",
+        "sha256_after": "c9a363404fe78da50278237704b60514b8c230cb8153cedc46713f0e3ef3899c"
+      },
+      {
+        "path": "src/middleware.ts",
+        "sha256_before": "1b51fa7f95a90e8bcc94609cd2d2b820fea838503538a3932c2ef3ee64bc2d22",
+        "sha256_after": "1b51fa7f95a90e8bcc94609cd2d2b820fea838503538a3932c2ef3ee64bc2d22"
+      },
+      {
+        "path": "tests/api/demo-boundary.test.ts",
+        "sha256_before": "b407ff9ec6d62487f93ea31e871900351af2a72600377a6294dcc5f20c3ecaf3",
+        "sha256_after": "b407ff9ec6d62487f93ea31e871900351af2a72600377a6294dcc5f20c3ecaf3"
+      },
+      {
+        "path": "tests/config/demo-network.test.ts",
+        "sha256_before": "1947f17a5b0de61df6d6715e39c8bedd49b14c6c9452de02de6245e162f26757",
+        "sha256_after": "1947f17a5b0de61df6d6715e39c8bedd49b14c6c9452de02de6245e162f26757"
+      },
+      {
+        "path": "tests/config/demo-proxy-timeouts.test.ts",
+        "sha256_before": "0e4cb091ac0d6b7ce04cb8f29e27e35ab1aea5bcb972dc765e20f242a1014238",
+        "sha256_after": "0e4cb091ac0d6b7ce04cb8f29e27e35ab1aea5bcb972dc765e20f242a1014238"
+      },
+      {
+        "path": "tests/docs/first-use-guide.test.ts",
+        "sha256_before": "3ea645b8cc0227b0fd80944a26975194e03b4141b2f5a1da37b61a8faa3a3649",
+        "sha256_after": "3ea645b8cc0227b0fd80944a26975194e03b4141b2f5a1da37b61a8faa3a3649"
+      }
+    ],
+    "normalization": "挂载按 Destination 排序，网络名称排序；仅比较元数据与源文件哈希，不读取正式数据内容",
+    "passed": true
+  },
+  "finished_at": "2026-09-12T04:54:26.899Z"
+}

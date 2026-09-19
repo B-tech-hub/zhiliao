@@ -1,0 +1,166 @@
+{
+  "story": "2.2",
+  "recorded_at": "2026-09-12T09:42:14.120Z",
+  "status": "passed",
+  "project": "zhiliao-demo-proxy-verify-786e0cb67dcf",
+  "run_id": "786e0cb67dcf47d51e6ceb3431416d05",
+  "limits": {
+    "readTimeoutSeconds": 300,
+    "sendTimeoutSeconds": 300,
+    "budgetSeconds": 450
+  },
+  "scenarios": [
+    {
+      "name": "silent",
+      "request_path": "/silent?probe=786e0cb67dcf47d51e6ceb3431416d05-silent",
+      "passed": true,
+      "elapsedSeconds": 298.662,
+      "idle_seconds": 298.662,
+      "log_match": true,
+      "budget_exhausted": false,
+      "log_lines": [
+        "ingress-1  | 2026/09/12 09:47:27 [error] 21#21: *3 upstream timed out (110: Operation timed out) while reading response header from upstream, client: 172.22.0.1, server: _, request: \"GET /silent?probe=786e0cb67dcf47d51e6ceb3431416d05-silent HTTP/1.1\", upstream: \"http://172.22.0.2:3000/silent?probe=786e0cb67dcf47d51e6ceb3431416d05-silent\", host: \"127.0.0.1:3343\"",
+        "ingress-1  | 172.22.0.1 - - [12/Sep/2026:09:47:27 +0000] \"GET /silent?probe=786e0cb67dcf47d51e6ceb3431416d05-silent HTTP/1.1\" 504 167 \"-\" \"-\""
+      ],
+      "observation": {
+        "statusCode": 504,
+        "endedNormally": true,
+        "done": false,
+        "receivedChunks": 1,
+        "heartbeatEvents": 0,
+        "firstBodyMs": 298661,
+        "lastBodyMs": 298661,
+        "maxBodyGapMs": 298661,
+        "uploadBytes": 0,
+        "lastUploadProgressMs": 0,
+        "budgetExhausted": false,
+        "errorCode": null,
+        "elapsedMs": 298662
+      }
+    },
+    {
+      "name": "stream",
+      "request_path": "/stream?probe=786e0cb67dcf47d51e6ceb3431416d05-stream",
+      "passed": true,
+      "elapsedSeconds": 298.664,
+      "idle_seconds": 298.645,
+      "log_match": true,
+      "budget_exhausted": false,
+      "log_lines": [
+        "ingress-1  | 2026/09/12 09:47:27 [error] 21#21: *4 upstream timed out (110: Operation timed out) while reading upstream, client: 172.22.0.1, server: _, request: \"GET /stream?probe=786e0cb67dcf47d51e6ceb3431416d05-stream HTTP/1.1\", upstream: \"http://172.22.0.2:3000/stream?probe=786e0cb67dcf47d51e6ceb3431416d05-stream\", host: \"127.0.0.1:3343\"",
+        "ingress-1  | 172.22.0.1 - - [12/Sep/2026:09:47:27 +0000] \"GET /stream?probe=786e0cb67dcf47d51e6ceb3431416d05-stream HTTP/1.1\" 200 31 \"-\" \"-\""
+      ],
+      "observation": {
+        "statusCode": 200,
+        "endedNormally": false,
+        "done": false,
+        "receivedChunks": 1,
+        "heartbeatEvents": 0,
+        "firstBodyMs": 19,
+        "lastBodyMs": 19,
+        "maxBodyGapMs": 19,
+        "uploadBytes": 0,
+        "lastUploadProgressMs": 0,
+        "budgetExhausted": false,
+        "errorCode": "RESPONSE_ABORTED",
+        "elapsedMs": 298664
+      }
+    },
+    {
+      "name": "heartbeat",
+      "request_path": "/heartbeat?probe=786e0cb67dcf47d51e6ceb3431416d05-heartbeat",
+      "passed": true,
+      "elapsedSeconds": 417.985,
+      "log_match": false,
+      "log_lines": [],
+      "budget_exhausted": false,
+      "observation": {
+        "statusCode": 200,
+        "endedNormally": true,
+        "done": true,
+        "receivedChunks": 7,
+        "heartbeatEvents": 7,
+        "firstBodyMs": 59723,
+        "lastBodyMs": 417985,
+        "maxBodyGapMs": 59793,
+        "uploadBytes": 0,
+        "lastUploadProgressMs": 0,
+        "budgetExhausted": false,
+        "errorCode": null,
+        "elapsedMs": 417985
+      }
+    },
+    {
+      "name": "upload",
+      "request_path": "/upload?probe=786e0cb67dcf47d51e6ceb3431416d05-upload",
+      "passed": true,
+      "elapsedSeconds": 298.643,
+      "idle_seconds": 298.541,
+      "log_match": true,
+      "budget_exhausted": false,
+      "log_lines": [
+        "ingress-1  | 2026/09/12 09:47:27 [error] 21#21: *6 upstream timed out (110: Operation timed out) while sending request to upstream, client: 172.22.0.1, server: _, request: \"POST /upload?probe=786e0cb67dcf47d51e6ceb3431416d05-upload HTTP/1.1\", upstream: \"http://172.22.0.2:3000/upload?probe=786e0cb67dcf47d51e6ceb3431416d05-upload\", host: \"127.0.0.1:3343\"",
+        "ingress-1  | 172.22.0.1 - - [12/Sep/2026:09:47:27 +0000] \"POST /upload?probe=786e0cb67dcf47d51e6ceb3431416d05-upload HTTP/1.1\" 504 167 \"-\" \"-\""
+      ],
+      "observation": {
+        "statusCode": 504,
+        "endedNormally": true,
+        "done": false,
+        "receivedChunks": 1,
+        "heartbeatEvents": 0,
+        "firstBodyMs": 298643,
+        "lastBodyMs": 298643,
+        "maxBodyGapMs": 298643,
+        "uploadBytes": 10092544,
+        "lastUploadProgressMs": 102,
+        "budgetExhausted": false,
+        "errorCode": null,
+        "elapsedMs": 298643
+      }
+    }
+  ],
+  "cleanup": {
+    "status": "removed"
+  },
+  "input_sha256": {
+    "docker-compose.demo.proxy-verify.yml": "db8eed5296212444d435cd378cae07b97d3e8d24f1a58bdb40b16ed4813cb05d",
+    "nginx/demo-proxy.conf": "abae7a74feb2ed1b048b7579348707cc68d9c6a7126baab4356a7d44c7244fb2",
+    "scripts/fixtures/demo-proxy-upstream.mjs": "88298403d5b72a60760c36309639e777fce3859a9c5e076ded9e33ea3a32c169",
+    "nginx/demo.conf": "df240aef6f22929ab6435d4f4a2e3c603baa17a124fe0d9b7f01d10eaa27c093",
+    "scripts/verify-demo-proxy-timeouts.mjs": "71c54bff2a8a4116356553646f8d0423b84cad078818fba52076f58c00e49d5f",
+    "scripts/demo-verification-utils.mjs": "7f470b62da3ce58fe36354797db426c5e6ba6b9e95e2829ad6ac263861da4665"
+  },
+  "limitations": [
+    "只验收本机固定 Nginx 与无业务上游的代理时限；不代替应用 SSE、目标主机、业务卷配额或镜像发布验收。"
+  ],
+  "engine": "28.4.0",
+  "compose": "2.39.4-desktop.1",
+  "images": {
+    "ingress": {
+      "reference": "nginx:1.30.4-alpine@sha256:dc5069ad14f19660b141b21236140b91656bf89bbc3e2417c70ae650cd66104c",
+      "id": "sha256:dc5069ad14f19660b141b21236140b91656bf89bbc3e2417c70ae650cd66104c"
+    },
+    "proxy-upstream": {
+      "reference": "zhiliao-demo-verify:story-2-2",
+      "id": "sha256:46f9241b6d2e539ce3a94324c356cf4336f8cf17e0cf59e5b5d920bf9b53769e"
+    }
+  },
+  "resources": [
+    {
+      "type": "container",
+      "id": "a9ec813c5f53"
+    },
+    {
+      "type": "container",
+      "id": "767bbb62e79e"
+    },
+    {
+      "type": "network",
+      "id": "8136ff109300"
+    }
+  ],
+  "ingress_binding": "127.0.0.1:3343",
+  "nginx_syntax": "passed",
+  "nginx_runtime_sha256": "c5bb8391f338dbf8e21e6942af8b3d942b7a20acf3fb93b201eca11b2f95f07a",
+  "finished_at": "2026-09-12T09:49:39.070Z"
+}

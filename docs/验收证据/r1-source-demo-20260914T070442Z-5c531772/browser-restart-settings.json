@@ -1,0 +1,19 @@
+{
+  "id": "restart-settings",
+  "result": {
+    "checks": {
+      "fields": {
+        "text": "mock",
+        "vision": "",
+        "image": "",
+        "reasoning": "",
+        "embedding": ""
+      },
+      "hiddenMockEndpoints": true,
+      "hiddenCanary": true,
+      "additionalModelsDisabled": true
+    },
+    "browserErrors": [],
+    "browserBlocked": []
+  }
+}

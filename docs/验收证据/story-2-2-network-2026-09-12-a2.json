@@ -1,0 +1,65 @@
+{
+  "story": "2.2",
+  "recorded_at": "2026-09-12T02:42:02.449Z",
+  "status": "failed",
+  "project": "zhiliao-demo-verify-a2-20260912",
+  "run_id": "b469a60a19bf5b70fb8d3b3f49bd9d5a",
+  "services": [
+    "app",
+    "mockllm"
+  ],
+  "targets": [
+    {
+      "name": "metadata-169.254.169.254",
+      "host": "169.254.169.254",
+      "port": 80,
+      "kind": "metadata"
+    },
+    {
+      "name": "metadata-169.254.170.2",
+      "host": "169.254.170.2",
+      "port": 80,
+      "kind": "metadata"
+    },
+    {
+      "name": "private-10",
+      "host": "10.254.254.254",
+      "port": 80,
+      "kind": "rfc1918"
+    },
+    {
+      "name": "private-172",
+      "host": "172.31.254.254",
+      "port": 80,
+      "kind": "rfc1918"
+    },
+    {
+      "name": "private-192",
+      "host": "192.168.254.254",
+      "port": 80,
+      "kind": "rfc1918"
+    }
+  ],
+  "checks": [
+    {
+      "source": "app",
+      "target": "host-control",
+      "expected": "reachable",
+      "result": "ETIMEDOUT",
+      "passed": false
+    }
+  ],
+  "limitations": [
+    "本工具只记录同一 Docker Engine 上的对照路径，不能替代最终部署主机验收。",
+    "宿主机正向对照不可用时不会把监听所有网卡作为替代方案。"
+  ],
+  "cleanup": {
+    "status": "not_applicable"
+  },
+  "host_control": {
+    "bind": "127.0.0.1",
+    "port": 60045,
+    "token_sha256": "7a729e469471494288e85c93191ccb03ea37f70f70c96048e79ca28ee4808e6e"
+  },
+  "error": "Docker exec -T 失败：125"
+}

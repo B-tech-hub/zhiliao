@@ -26,36 +26,67 @@
 
 首次登录、首条笔记、AI 整理、主题与搜索的连续步骤，以及按症状排错，请先看[首次使用与故障排查教程](docs/首次使用与故障排查.md)。
 
-一条命令在本地体验完整的「随手记 → AI 自动归档 → 主题建议」流程。内置演示数据与本地 mock LLM，不需要申请任何 API Key，也不会发出任何外部请求：
+免费自托管试用从已发布固定版本开始，软件采用 MIT，设备和自选模型的费用按个人使用情况承担。遇到安装、记录、搜索、来源问答或数据出口问题，可按[免费反馈说明](docs/产品规划/开源发布范围与执行清单-2026-09-13.md#free-feedback)记录版本、环境与复现步骤；完整数据恢复见[备份与恢复](docs/备份与恢复.md)。
+
+**版本状态：当前工作区为 0.6.1 候选，尚未发布。** 本页普通安装和源码体验命令继续固定已发布的 v0.6.0；当前分支的 Compose 则以 0.6.1 为待发布目标，不能据此认为新镜像已经可用。变化、独立阻断和待验收项见 [v0.6.1 草稿](docs/releases/v0.6.1.md)。
+
+使用内置演示数据与本地 mock LLM，可在全新独立目录和专用终端中体验「随手记 → AI 自动归档 → 主题建议」，无需申请 API Key。旧版不具备当前候选的模型隔离防护；不要复制 `.env*` 或已有 Demo 数据库。下面的 Bash 命令会清理宿主模型变量，并显式隔离 Markdown 目录；Windows 请用[对应的 PowerShell 命令](docs/首次使用与故障排查.md#v060-source-demo-powershell)。目录已存在时换一个新目录名重新开始，不要跳过 clone 失败继续执行。
 
 ```bash
-git clone --branch v0.6.0 --depth 1 https://github.com/B-tech-hub/zhiliao.git
-cd zhiliao && npm install
-npm run demo
+(
+  set -e
+  git clone --branch v0.6.0 --depth 1 https://github.com/B-tech-hub/zhiliao.git zhiliao-demo-v060
+  cd zhiliao-demo-v060
+  npm ci
+  unset DEMO_MODE APP_PASSWORD SESSION_SECRET DATABASE_PATH UPLOAD_DIR
+  for demo_prefix in LLM EMBEDDING VISION IMAGE REASONING; do
+    unset "${demo_prefix}_BASE_URL" "${demo_prefix}_API_KEY" "${demo_prefix}_MODEL"
+  done
+  NOTES_EXPORT_DIR=./data-demo/notes PORT=3000 npm run demo
+)
 ```
 
-打开 http://localhost:3000 ，密码 `demo`。推荐动线：
+v0.6.0 源码启动器允许宿主环境覆盖演示默认配置，而且未设置 `NOTES_EXPORT_DIR`，Markdown 默认写入 `./data/notes`；新建和修改笔记都会安排导出。`DEMO_MODE`、`LLM_*`、`EMBEDDING_*`、`VISION_*`、`IMAGE_*`、`REASONING_*` 与已有 Demo 数据库中的模型配置都可能改变旧版行为，清空环境变量也不能覆盖数据库已保存的模型。上述示例只适用于全新目录与专用环境，不承诺旧版不会发出外部请求；下文的强制覆盖和附加模型禁用仅适用于当前候选。
+
+未覆盖默认配置时，打开 http://localhost:3000 ，密码 `demo`。推荐动线：
 
 1. 新建一条笔记，写「今晚羽毛球多球训练，杀球终于有点下压了」——保存后几秒，AI 自动起标题、打标签并归入「羽毛球」主题；
 2. 打开「未分类」——AI 已根据攒下的笔记建议了「跑步」「下厨」两个新主题，一键采纳即可建组迁移；
 3. 进「羽毛球」主题页，看长笔记的 AI 一句话摘要。
 
 > 演示中的 AI 是本地 mock（按关键词模拟判断），只为展示产品流程；真实效果取决于你接入的 LLM（见下文「LLM 供应商切换」）。
-> 演示数据在 `./data-demo/`，删除该目录即可重置；正式数据 `./data/` 不受影响。
+> 按上述隔离步骤首次启动时，数据库、上传和 Markdown 均位于这个独立 checkout 的 `./data-demo/`。停止该 Demo 后可重置这个隔离目录。若以前按旧命令运行过，`./data/notes` 可能已有导出；仅删除 `data-demo` 不代表完整重置，先核对目录归属，不删除正式目录。
 
-装了 Docker、不想装 Node？下载 [docker-compose.demo.yml](docker-compose.demo.yml) 后：
+当前 **0.6.1 候选源码**已修复 Demo 接线：`npm run demo` 自动设置 `DEMO_RUNTIME=local`，固定连接 `http://127.0.0.1:8787/v1`；容器未设置标记时，以及标记非法时，固定连接 `http://mockllm:8787/v1`。两种 Demo 都忽略数据库和环境中的外部模型地址，禁用附加模型。上方 clone 命令继续获取历史 v0.6.0；2026-09-14 已完成 Windows 本机受控环境中的源码启动、浏览器闭环、配置污染和 403 验收，见 [R1 结果与验收边界](docs/产品规划/开源发布范围与执行清单-2026-09-13.md#r1-source-demo)及[实测记录](docs/R1源码Demo接线验收-2026-09-14.md)。本次使用临时副本和附加运行保护，不代表无缓存安装、Docker 或发布验收通过。
+
+当前源码启动器固定 `APP_PASSWORD=demo`、演示专用会话密钥及 `./data-demo/` 路径，覆盖宿主同名配置；`PORT` 等未固定变量仍可透传。Docker Demo 的密码继续通过专用 `demo.env` 中的 `DEMO_PASSWORD` 设置。
+
+Docker Demo 使用固定摘要的 Nginx 入口发布宿主机端口并限制实际请求体；app 与 mock LLM 只加入 isolated 内网。当前 [docker-compose.demo.yml](docker-compose.demo.yml) 已固定为 **0.6.1 候选镜像**，需配套 [Nginx 配置](nginx/demo.conf)。以下是镜像实际发布并完成对应验收后的启动步骤，本轮未验证该镜像可拉取：
 
 ```bash
-docker compose -f docker-compose.demo.yml up -d
+printf 'DEMO_PASSWORD=demo\nDEMO_SESSION_SECRET=%s\n' "$(openssl rand -hex 32)" > demo.env
+npm run demo:compose -- up -d
 ```
 
-访问 http://localhost:3210 （密码 `demo`）；结束体验：`docker compose -f docker-compose.demo.yml down -v`。
+访问 http://localhost:3210 （默认仅绑定本机，密码默认 `demo`，可在 `demo.env` 中修改 `DEMO_PASSWORD`）；结束体验：`npm run demo:compose -- down -v`。
+
+`npm run demo:compose` 会先清理宿主 `DEMO_*`/`COMPOSE_*`，再执行内部等价命令 `docker compose --env-file demo.env -p zhiliao-demo -f docker-compose.demo.yml`，避免正式 `.env` 或宿主变量污染 Demo。默认 project 为 `zhiliao-demo`，内部网络、入口网络和三个 `demo_*` 命名卷随 project 隔离，不挂载 `./data` 或正式卷。Nginx 仅固定转发到 app，并限制 `200 MiB` 实际请求体；入口默认只绑定 `127.0.0.1`，不会直接暴露到局域网。app 与 mock LLM 位于不分配宿主机网关的 isolated 内网。三个服务均设置 CPU、内存、进程数、只读文件系统和日志轮转上限。
+
+当前候选的入口请求限流仅豁免 `/_next/static/` 下的构建资源，避免并行加载脚本、样式和字体耗尽额度。页面、API 及其他路径仍按入口来源地址限制为 `10r/s`、突发 `40`；所有路径继续受每来源地址 `32` 个连接的限制。`/_next/image` 等动态路径不在豁免范围。局部对照与浏览器结果见[静态资源限流修复验收](docs/R1安装验收-2026-09-15.md#demo-static-rate-limit-repair)。
+
+已运行这套入口且镜像已在本机的实例，更新 `nginx/demo.conf` 后应单独重建入口，让新进程初始化限流区。例如在原部署目录执行 `npm run demo:compose -- up -d --no-deps --force-recreate --no-build --pull never ingress`；内部仍是 `docker compose --env-file demo.env -p zhiliao-demo -f docker-compose.demo.yml`，project 与环境文件沿用实际实例参数。此操作会短暂中断入口，不重建 app/mock 或数据卷。
+
+**版本边界：已发布 v0.6.0 不含本轮 Demo 服务端防护；0.6.1 配置更新不代表补丁镜像已发布。** Nginx 入口已经承担接收正文前的实际请求体限制，当前工作区源码同时保留高风险操作和长度声明检查。公网使用前仍须发布包含当前源码补丁的固定应用镜像，并由宿主机或 Docker 存储层限制 Demo 卷容量；运行复核进度见 [Story 2.2 验收记录](docs/Demo部署隔离验收-2026-09-10.md)。
+
+维护者可用 `scripts/verify-demo-runtime.ps1` 复验本地候选，宿主机需 Node.js 22+。`-Port` 指定回环入口，`-IncludeSse -IncludeNetwork` 在同一次运行中完成 HTTP/SSE 和 20 项网络对照；工具关联独立网络证据，默认清理本次资源，检查、证据或清理失败均返回非零。单独网络检查和代理时限验收仍分别使用 `node scripts/verify-demo-network.mjs --help` 与 `node scripts/verify-demo-proxy-timeouts.mjs --help`。
+
+当前维护者选择 Windows Docker Desktop、仅本机体验。9 月 12 日 B2 的 HTTP/SSE、20 项网络对照与清理均通过；此前四项代理验收继续按原范围复用。业务卷硬配额、实际正式服务边界、公网 HTTPS 和补丁镜像发布仍未完成，不能将本机通过等同于公开部署完成。结果见 [Story 2.2 验收记录](docs/Demo部署隔离验收-2026-09-10.md#b2-local)；工具不自动构建、拉取或发布，拓扑取舍见 [ADR-0026](docs/adr/0026-demo-ingress-isolation.md)。
 
 ## 界面预览
 
 ### Demo 服务端边界
 
-体验模式只保留新建普通笔记、AI 自动整理和主题建议主流程，并固定使用容器内 mock LLM。设置外部模型、创建或吊销 API Token、备份、导入导出、向量回填、文件上传和模型测试等高风险操作由服务端直接拒绝并返回 HTTP `403`；前端隐藏入口只是辅助提示，不能替代服务端校验。
+以下边界已在当前 0.6.1 候选源码实现，尚未作为新版本发布，已发布 v0.6.0 不包含这些补丁：体验模式只保留新建普通笔记、AI 自动整理和主题建议主流程，并按源码/容器运行方式选择固定 mock LLM。设置外部模型、创建或吊销 API Token、备份、导入导出、向量回填、文件上传和模型测试等高风险操作由服务端直接拒绝并返回 HTTP `403`；前端隐藏入口只是辅助提示，不能替代服务端校验。
 
 | 首页 · 浅色 | 主题页 · 深色（AI 标题/摘要/标签） |
 |---|---|
@@ -96,7 +127,7 @@ Next.js 15（App Router，全栈单体）· TypeScript · Tailwind CSS 4 · Driz
 
 ## 文档
 
-**25 篇架构决策记录（[ADR](docs/adr/)）**——每个取舍为什么这么定、当时否掉了什么、留下了什么代价，都写在里面。想学 Next.js 全栈的话，这里可能比源码本身更有用：从 [ADR-0001（LLM 配置为何存数据库）](docs/adr/0001-llm-config-in-db.md) 顺着读到 [ADR-0018（混合检索与向量存储）](docs/adr/0018-hybrid-search.md)、[ADR-0019（Token 与 MCP）](docs/adr/0019-external-access.md)，就是这个应用的完整演进史。
+**26 篇架构决策记录（[ADR](docs/adr/)）**——每个取舍为什么这么定、当时否掉了什么、留下了什么代价，都写在里面。想学 Next.js 全栈的话，这里可能比源码本身更有用：从 [ADR-0001（LLM 配置为何存数据库）](docs/adr/0001-llm-config-in-db.md) 顺着读到 [ADR-0018（混合检索与向量存储）](docs/adr/0018-hybrid-search.md)、[ADR-0019（Token 与 MCP）](docs/adr/0019-external-access.md)，就是这个应用的完整演进史。
 
 其余专项文档集中在 [docs/](docs/README.md)：[开发规范](docs/开发规范.md)、[UI 规范](docs/UI规范.md)、Tailscale 部署手册和[备份与恢复](docs/备份与恢复.md)。领域术语见 [CONTEXT.md](CONTEXT.md)，Agent 入口见 [AGENTS.md](AGENTS.md)。
 
@@ -114,38 +145,48 @@ npm run dev
 
 ## 部署（Docker）
 
-**主路径：Docker 预构建镜像。** 固定使用 `ghcr.io/b-tech-hub/zhiliao:0.6.0`（amd64 / arm64），无需本地构建。源码安装是备用路径，请先 checkout `v0.6.0` tag：
+**主路径：Docker 预构建镜像。** 本文使用 `ghcr.io/b-tech-hub/zhiliao:0.6.0`（amd64 / arm64），无需本地构建。以下下载命令只用于全新安装，请先进入一个新建的空目录；已有实例按下方升级说明操作。Windows PowerShell 请按[部署手册第 2–4 章](docs/部署手册-tailscale.md#第-2-章获取固定版本的部署文件)操作。
 
 ```bash
-# 1. 下载 compose 文件与环境变量模板（或直接 git clone 整个仓库）
-curl -L -o docker-compose.yml https://raw.githubusercontent.com/B-tech-hub/zhiliao/v0.6.0/docker-compose.yml
-curl -L -o .env https://raw.githubusercontent.com/B-tech-hub/zhiliao/v0.6.0/.env.example
-# Windows Docker Desktop 还需下载命名卷覆盖文件：
-curl -L -o docker-compose.win.yml https://raw.githubusercontent.com/B-tech-hub/zhiliao/v0.6.0/docker-compose.win.yml
+# Linux / macOS：下载固定 tag 的部署文件
+curl -fL -o docker-compose.yml https://raw.githubusercontent.com/B-tech-hub/zhiliao/v0.6.0/docker-compose.yml
+curl -fL -o .env.example https://raw.githubusercontent.com/B-tech-hub/zhiliao/v0.6.0/.env.example
+cp -n .env.example .env
+```
 
-# 2. 编辑 .env：设置 APP_PASSWORD / SESSION_SECRET（LLM 可稍后在设置页配置）
+**启动前必须锁定镜像。** `v0.6.0` 历史 tag 中的 Compose 仍写着 `latest`；下载固定 tag 并不自动锁定镜像。编辑下载的 `docker-compose.yml`，仅把 `services.app.image` 改为下列值，保留其余配置：
 
-# 3. 启动
+```yaml
+image: ghcr.io/b-tech-hub/zhiliao:0.6.0
+```
+
+编辑 `.env`，设置 `APP_PASSWORD` 和 `SESSION_SECRET`，清空示例 `LLM_*` 占位值；模型可稍后在设置页配置。核对镜像输出必须为 `ghcr.io/b-tech-hub/zhiliao:0.6.0`，再拉取并启动；任一步失败都先排错：
+
+```bash
+docker compose config --images
+docker compose pull app
 docker compose up -d
 ```
 
-> **想从源码构建**：把 `docker-compose.yml` 里的 `image:` 行注释掉、取消 `build: .` 的注释，再 `docker compose up -d --build`。
+> **源码备用路径**：先用 `git clone --branch v0.6.0 --depth 1 https://github.com/B-tech-hub/zhiliao.git zhiliao-src` 获取完整源码；进入该目录，准备 `.env` 后，把 Compose 的 `image:` 行注释掉、取消 `build: .` 的注释，再执行 `docker compose up -d --build`。仅下载上面两份文件不足以构建。
 >
 > **Windows Docker Desktop 本地测试**：绑定挂载不支持 SQLite WAL 所需的共享内存（报 `SQLITE_IOERR_SHMOPEN`），请叠加命名卷 override：
-> `docker compose -f docker-compose.yml -f docker-compose.win.yml up -d`
+> `docker compose -f docker-compose.yml -f docker-compose.win.yml up -d`。镜像核对和拉取也须使用同样的两个 `-f`；完整下载步骤见部署手册。
 > Linux 服务器不受影响。
 
-`APP_PASSWORD` 和 `SESSION_SECRET` 是必填变量；应用监听 3000 端口，数据默认持久化在 `./data/db`、`./data/uploads` 和 `./data/notes`。手机安装 PWA 必须通过 HTTPS 访问；自托管可使用 Tailscale 或其他 HTTPS 反向代理，详见 [部署手册-tailscale.md](docs/部署手册-tailscale.md)。
+应用监听 3000 端口。默认 Compose 的 `"3000:3000"` 会发布到宿主机所有接口；只经本机或 Tailscale Serve 使用时，按部署手册改为 `"127.0.0.1:3000:3000"`。Tailscale 不会自动关闭原有端口或其他公网入口。手机安装 PWA 必须通过 HTTPS 访问，详见 [部署手册-tailscale.md](docs/部署手册-tailscale.md)。
 
 ### 全新环境安装冒烟
 
 维护者可在 Docker 可用的机器上运行隔离冒烟（使用临时密码、named volume 和临时导出目录，不接触正式 `data/`、`.env` 或正式 Docker 卷）：
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts/smoke-fresh-install.ps1
+powershell -ExecutionPolicy Bypass -File scripts/smoke-fresh-install.ps1 -Image ghcr.io/b-tech-hub/zhiliao:0.6.0
 ```
 
-脚本固定使用 `ghcr.io/b-tech-hub/zhiliao:0.6.0`，镜像不存在时先尝试拉取；会验证健康检查、登录、首条笔记、SQLite/上传目录、Markdown 导出和重启持久化，并生成不含密码/API Key 的记录。失败时脚本返回非零并输出容器状态与最近日志；使用 `-KeepResources` 可保留隔离资源和日志用于诊断，完成后执行脚本输出的 `docker compose ... down -v --remove-orphans` 清理。可用 `-Port 3301` 选择未占用的宿主端口。
+脚本默认读取所属仓库 `package.json` 的版本，当前为尚未发布的 `0.6.1`；上面的命令显式验证历史 `0.6.0`。`-Image` 可指定固定完整 tag 或 digest，`-PrintConfig` 只输出包版本、目标镜像和端口，不创建资源或调用 Docker。候选镜像未生成前，先用预览核对，不能把历史冒烟结果转记为 0.6.1 通过。
+
+实际冒烟在镜像不存在时尝试拉取，验证健康检查、登录、首条笔记、SQLite/上传目录、Markdown 导出和重启持久化，并生成不含密码/API Key 的记录。失败时返回非零并输出容器状态与最近日志；`-KeepResources` 可保留隔离资源和日志用于诊断，完成后按脚本输出清理。可用 `-Port 3301` 选择未占用的宿主端口。
 
 Linux/默认绑定挂载时数据落在宿主机 `./data/`；Windows Docker Desktop 叠加 `docker-compose.win.yml` 后，数据库和上传文件位于 `kb_db`、`kb_uploads` 命名卷，`./data/notes` 仍保存 Markdown 导出：
 
@@ -156,11 +197,15 @@ Linux/默认绑定挂载时数据落在宿主机 `./data/`；Windows Docker Desk
 | `./data/uploads/` | 上传的图片 |
 | `./data/notes/` | 增量导出的 Markdown（按 `主题/标题-id.md`，只出不进；可直接用 Obsidian 打开） |
 
-迁移在应用启动时自动执行。升级版本：`docker compose pull && docker compose up -d`（源码构建则 `docker compose up -d --build`），重启不丢数据与未完成的 AI 任务。
+### 升级与恢复
+
+升级前先保存[数据库与完整图片的配对快照](docs/备份与恢复.md)，以及原镜像 tag/digest、Compose、`.env`、project 和实际挂载记录。选择目标已发布版本，阅读其 Release Notes，在原部署目录对比并更新所需配置，明确把 `image:` 改到目标固定版本，再核对 `docker compose config --images`、执行 `docker compose pull app` 和 `docker compose up -d`；Windows 三条命令都要叠加 `docker-compose.win.yml`。固定 `0.6.0` 后仅执行 `pull` 不会升级到下一个版本。
+
+沿用原 project、数据挂载和 `.env`；若原命令带 `-p` 或 `--env-file`，后续也继续带上。启动会迁移数据库并恢复后台任务；数据已经迁移后，不能只把镜像改回旧版本作为回退。失败时先停下并保护现有数据，按[隔离恢复与回退步骤](docs/备份与恢复.md#isolated-restore)处理。运行后可用 `docker image inspect ghcr.io/b-tech-hub/zhiliao:0.6.0 --format '{{.Id}} {{json .RepoDigests}}'` 记录实际镜像身份；升级时将命令中的版本换成目标版本。
 
 ### 手机安装为 App（PWA）
 
-浏览器要求 PWA 必须运行在 HTTPS 下。单用户自用推荐 **Tailscale 组网**：免费获得 `*.ts.net` 域名与受信任证书，手机随处可访问且服务零公网暴露。完整步骤见 **[docs/部署手册-tailscale.md](docs/部署手册-tailscale.md)**。
+浏览器要求 PWA 必须运行在 HTTPS 下。单用户自用可用 **Tailscale 组网**，通过 `*.ts.net` 域名与受信任证书访问；将应用端口限制在本机，并核对未启用其他公开入口。完整步骤见 **[docs/部署手册-tailscale.md](docs/部署手册-tailscale.md)**。
 
 ### 手机一键记录
 
@@ -189,6 +234,7 @@ Linux/默认绑定挂载时数据落在宿主机 `./data/`；Windows Docker Desk
 | `AI_CONFIDENCE_THRESHOLD` | | 分类置信度阈值，默认 0.6，低于则归未分类 |
 | `PORT` | | 监听端口，默认 3000 |
 | `DEMO_MODE` | | 设为 `1` 时空库启动会写入演示数据（**仅供一键体验，正式部署请勿设置**） |
+| `DEMO_RUNTIME` | | 当前候选 Demo 的固定目标选择：`local` 为本机 mock，缺省或其他值为容器 mock；`npm run demo` 自动设置，正式模式忽略 |
 | `NEXT_DIST_DIR` | | 构建输出目录，默认 `.next`；仅在 Windows 下 `.next` 被残留进程句柄锁死、`next build` 卡住时临时改用其他目录 |
 
 未配置 `LLM_*` 时应用照常可用，笔记会停留在"待整理"状态，配置后自动补处理。
@@ -230,6 +276,8 @@ Linux/默认绑定挂载时数据落在宿主机 `./data/`；Windows Docker Desk
 > **不受此约束**：缺陷修复、文档、分发与运维照常推进——已经存在的东西该好用就得好用。
 >
 > 解冻后，下方「解冻后再评估」的条目重新排期；在那之前，新功能提案先记录、不实现。
+
+**当前交付重点：开源发布与免费使用反馈。** 优先完成可复现安装、核心“记、找、用”、可靠的数据出口与恢复，以及版本和文档一致。公网 Demo 后移，收费招募暂缓；本地演示和文章分发按对应已发布版本推进。MIT、单用户自托管、100 条冻结和原发布门禁保持，具体安排见[当前执行清单](docs/产品规划/开源发布范围与执行清单-2026-09-13.md)。
 
 **缺陷修复**（不受冻结约束）
 

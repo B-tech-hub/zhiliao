@@ -1,0 +1,14 @@
+{
+  "runId": "dependency-patches-20260918T065520Z-aj_74aqy",
+  "runDirectory": "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\dependency-patches-20260918T065520Z-aj_74aqy",
+  "startedUtc": "2026-09-18T06:55:20.639202+00:00",
+  "head": "f213761b795cc020be2122e27301fe4a7c5cf7a0",
+  "indexSha256": "73dfe17c3c9dbf96154c42c45f09379ec12dd0ac15ff49d6067e3909791f1515",
+  "baselineFiles": 981,
+  "nativeModuleHashes": {
+    "node_modules/better-sqlite3/build/Release/better_sqlite3.node": "c4b95a94a963258a9ef41b12fd3bb86f0b08a2ac5c5b499fe94de57a5443682d",
+    "node_modules/@node-rs/jieba-win32-x64-msvc/jieba.win32-x64-msvc.node": "c35e25ec9022295bdaf31e44f784925eb14e787b5d503e6f35ee7b03662a8cdd"
+  },
+  "packageSha256": "a2e5e801f8711c43a0b1f236cfd1067643a89d9cb89c123b4e55a66e6a1cc802",
+  "lockSha256": "72fc3d00abb257d53aca7faed33951cd7e3642d3e77217fc991b6f3707db0166"
+}

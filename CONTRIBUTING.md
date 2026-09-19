@@ -12,7 +12,7 @@ cp .env.example .env.local   # 填 APP_PASSWORD / SESSION_SECRET，LLM 三项可
 npm run dev
 ```
 
-不想申请 LLM API Key？运行 `npm run demo` 会启动「内置 mock LLM + 演示数据」的完整联调环境（数据写在 `./data-demo/`，与正式数据完全隔离），AI 归档、主题建议、失败重试等流水线机制都能在本地跑通。
+已发布 v0.6.0 的 `npm run demo` 使用内置 mock LLM 与演示数据，数据写在 `./data-demo/`，与正式数据隔离。当前 0.6.1 候选的源码 Demo 存在本机 mock 地址与容器地址接线冲突，保留为[独立候选阻断](docs/产品规划/开源发布范围与执行清单-2026-09-13.md#r3-version)，不能沿用旧版说明宣称当前源码流程已通过。
 
 开始改动前请阅读 [项目开发规范](docs/开发规范.md)；涉及页面、组件、交互或样式时同时阅读 [UI 规范](docs/UI规范.md)。产品边界和新功能冻结仍以 README Roadmap、`CONTEXT.md` 与相关 ADR 为准。
 
@@ -33,6 +33,14 @@ npm test
 npm run build
 ```
 
+修改版本校验或安装冒烟预览时，可先执行局部回归：
+
+```bash
+node node_modules/vitest/vitest.mjs run tests/config/release-version.test.ts tests/config/smoke-fresh-install.test.ts --maxWorkers=1 --no-file-parallelism
+```
+
+安装预览回归使用 Windows 内置 `powershell.exe`，其他平台使用 `pwsh`（PowerShell 7，须加入 PATH）。本机未安装时该组明确跳过；CI 缺少运行时会失败，不能把跳过记为通过。测试在临时副本中执行原脚本，拦截 Docker 并检查文件树不变，覆盖默认/旧版/RC/digest 和非法镜像参数，不运行真实容器。发布版本测试同时定向检查 TypeScript 调用处的参数类型，不执行 Next 构建或生成增量缓存。
+
 ## PR 约定
 
 - 改动较大请先开 Issue 讨论，避免方向不合白做一场。
@@ -51,10 +59,23 @@ npm run build
 
 ## 发布流程（维护者）
 
-1. 更新 `package.json` 的 `version`。
-2. 把 `CHANGELOG.md` 的「未发布」段落落为新版本号并补上日期。
-3. 本地执行 `npm run lint`、`npm test`、`npm run build`，全部通过后提交并先推送 `main`。
+1. 以 `package.json` 为应用版本来源，同步 `package-lock.json` 顶层和 `packages[""].version`、主 Compose 与 Demo app/mockllm 的固定镜像。`src/lib/version.ts` 静态导入包版本供 MCP 握手使用，不使用 `npm_package_version` 或运行目录中的包文件。Windows Compose 继承主文件。
+2. 候选阶段将 `CHANGELOG.md` 首个版本段写为 `## [未发布] - X.Y.Z 候选`，新增 `docs/releases/vX.Y.Z.md` 草稿；进入 RC 前完成审查、定稿并补正式版本标题/日期，不覆盖旧发布记录。RC 与正式版本共用同一基础版本说明；已发布安装和恢复样例保留其历史版本含义。
+3. 执行 `npm run check:design`、`npm run lint`、`npm test`、`npm run build`，全部通过后按已确认范围提交并推送 `main`；运行构建、全量测试及发布仍遵循项目确认规则。
 4. 推送预发布标签彩排：`git tag v0.x.y-rc1 && git push origin v0.x.y-rc1`。等待 CI、amd64/arm64 镜像构建、manifest 合并校验与预发布 Release 全部成功。
 5. RC 全绿后，在同一提交上推送正式标签：`git tag v0.x.y && git push origin v0.x.y`。不要在 RC 与正式标签之间夹带未经彩排的提交。
 6. Release 工作流会自动构建多架构镜像并推送至 ghcr.io，同时创建 GitHub Release。发布后确认 `x.y.z`、`x.y` 与 `latest`（正式版本）指向同一多架构 manifest。
 7. 首次发布后需到 GitHub Packages 将包设为 public 并关联仓库（一次性操作）。
+
+版本维护后先执行只读校验：
+
+```bash
+npm run check:version
+npm run check:version -- --tag v0.6.1-rc1
+```
+
+校验覆盖 package/lockfile 根版本、主/Demo/Windows Compose 镜像、Release Notes 标题、CHANGELOG 首个版本段及可选 tag。支持 `vX.Y.Z` 和 `-rc1`、`-rc.1` 形式的 rc/beta/alpha tag；预发布后缀不写入应用基础版本。脚本只核对本地文件，不执行 Git、Docker 或网络操作；通过不代表镜像可获取、安装/恢复已通过或发布获批。
+
+CI 在原四条门禁前增加版本核对。Release 的 `validate` job 使用 Node.js 22 和 `npm ci --ignore-scripts` 安装现有校验依赖，核对 `GITHUB_REF_NAME` 后才允许构建；不替代原门禁、升级/恢复彩排、RC 冒烟及双架构 manifest 核验。当前目标 0.6.1 仍未发布，状态见 [候选说明](docs/releases/v0.6.1.md)。
+
+安装冒烟默认读取脚本所属仓库的包版本。`-PrintConfig` 仅预览；需验证实际 RC 或复用旧版时，用 `-Image ghcr.io/b-tech-hub/zhiliao:0.6.1-rc1` 或明确的固定版本/digest。拒绝 `latest`、`0.6` 等浮动引用；真正运行容器仍按项目验证规则另行安排。

@@ -1,0 +1,19 @@
+{
+  "step": "review-lint",
+  "cwd": "D:/ClaudeProjects/ai_acknowladge",
+  "command": [
+    "D:/node.js/node.exe",
+    "node_modules/eslint/bin/eslint.js",
+    "tests/components/markdown-editor-security.test.tsx",
+    "--max-warnings=0",
+    "--format=json",
+    "--output-file=C:/Users/BAIBAI/AppData/Local/Temp/zhiliao-tiptap-wald1s82/review-lint.report.json"
+  ],
+  "startedUtc": "2026-09-19T03:02:03.490541+00:00",
+  "finishedUtc": "2026-09-19T03:02:05.951570+00:00",
+  "elapsedSeconds": 2.469,
+  "exitCode": 0,
+  "stdout": "review-lint.stdout.log",
+  "stderr": "review-lint.stderr.log",
+  "lifecycleScriptsDisabled": true
+}

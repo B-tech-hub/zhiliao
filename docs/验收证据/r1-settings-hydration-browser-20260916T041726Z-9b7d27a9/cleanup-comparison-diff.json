@@ -1,0 +1,12 @@
+{
+  "differences": [
+    {
+      "path": "/containers/0/mounts",
+      "type": "order-only",
+      "length": 2
+    }
+  ],
+  "addedImages": [
+    "sha256:c54958650c37439cf5d734070be78ab56d6ca87f9dc5c85cd3d7b8dbcdba3548"
+  ]
+}

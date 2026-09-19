@@ -1,0 +1,17 @@
+{
+  "constructedUtc": "2026-09-18T07:29:56.644562+00:00",
+  "baselineCommit": "f213761b795cc020be2122e27301fe4a7c5cf7a0",
+  "trackedDiffBytes": 292957,
+  "untrackedFilesIncluded": 397,
+  "fullDiffBytes": 5291668,
+  "fullDiffSha256": "a1ada111df4e04d0a0e6ecc0f1f87195db83c71b65356b831d6c88ae2e06528f",
+  "fullDiffLocation": "临时目录 review-full-workspace.diff；含既有工作区差异，不作为本轮改动发布。",
+  "reviewScope": "基于本轮实施前 981 文件快照识别归属，仅审查获批的依赖差异、5 份同步文档、规格与本轮新增证据。",
+  "method": "用户明确要求单 Agent，因此三个审查视角由同一 Agent 顺序执行；未调用子 Agent，未声称独立复审。",
+  "reviewEvidence": [
+    "dependency-changes.patch",
+    "workspace-before.json",
+    "lock-scope-review.json",
+    "review.md"
+  ]
+}

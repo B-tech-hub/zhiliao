@@ -9,7 +9,7 @@
 
 ## 决策
 
-编辑器开启 `tiptap-markdown` 的 `html: true`，带属性的图片以内嵌 HTML（`<img src width style alt>`）形式序列化进 Markdown；未调整过属性的图片仍保持 `![alt](url)` 纯 Markdown 形式。两种形式可在同一篇笔记中混存，编辑器均能正确渲染。
+编辑器开启 `tiptap-markdown` 的 `html: true`，设置了宽度或对齐的图片以内嵌 HTML（`<img src width style alt>`）形式序列化进 Markdown；没有宽度/对齐的图片仍保持 `![alt](url)` 纯 Markdown 形式，说明与标题沿用标准图片语法。两种形式可在同一篇笔记中混存，编辑器均能正确渲染。
 
 ## 备选方案与否决理由
 
@@ -25,3 +25,9 @@
 
 - 历史笔记（纯 Markdown 图片）无需迁移，照常渲染。
 - 编辑含图笔记需保证"保存→重开→再保存"内容不漂移（验收项）。
+
+## 实现修复（2026-09-19）
+
+TipTap 专项回归发现此前只配置了图片的 HTML 属性，没有覆盖 Markdown 图片序列化器，导致保存后宽度/对齐丢失；块级图片缺少尾部分隔还会破坏相邻 GFM 表格。用户批准后，在 `RichImage.addStorage` 补上既有决策的实现：带宽度/对齐时通过实际 schema 的 DOM 序列化输出 HTML，普通图片复用标准 Markdown 序列化，最后统一关闭图片块。
+
+这不改变存储格式决策、不新增图片元数据，也不自动恢复此前已经丢失的属性。实际组件的属性转义、普通图片、相邻图片/表格和两次往返验证通过，详见 [TipTap 修复结果](../TipTap残余风险调查-2026-09-19.md#tiptap-patch-result)。

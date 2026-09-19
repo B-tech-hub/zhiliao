@@ -1,0 +1,6 @@
+{
+  "id": "search-page",
+  "result": {
+    "snapshot": "- main:\n  - paragraph: 知了\n  - heading \"搜索\" [level=1]\n  - textbox \"搜索标题、正文、标签\"\n  - button \"全部主题\"\n  - button \"羽毛球\"\n  - button \"每周回顾\"\n  - button \"跑步\"\n  - button \"自媒体\"\n  - button \"未分类\""
+  }
+}

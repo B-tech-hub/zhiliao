@@ -1,0 +1,44 @@
+import hashlib
+import json
+import sys
+from r1lib import ROOT, RUN, REPO, now, preservation, save, sha
+
+allowed = {
+    "_bmad-output/implementation-artifacts/spec-r1-settings-hydration-418.md",
+    "_bmad-output/implementation-artifacts/deferred-work.md",
+    "CHANGELOG.md", "docs/README.md", "docs/UI规范.md", "docs/releases/v0.6.1.md",
+    "docs/R1安装验收-2026-09-15.md", "docs/R1设置页刷新React418调查-2026-09-16.md",
+    "docs/产品规划/知了产品视觉PRD-v1.0.md",
+    "docs/产品规划/开源发布范围与执行清单-2026-09-13.md",
+}
+before = json.loads((ROOT / "private/preservation-before.json").read_text(encoding="utf-8"))
+after = preservation()
+changed = sorted(name for name, value in before["workspace"].items() if after["workspace"].get(name) != value)
+added = sorted(set(after["workspace"]) - set(before["workspace"]))
+unexpected = [name for name in changed if name not in allowed] + [
+    name for name in added if name not in allowed and not name.startswith(RUN["evidence"] + "/")
+]
+manifest = json.loads((ROOT / "source-manifest.json").read_text(encoding="utf-8"))
+source_drift = [name for name, value in manifest.items() if sha(REPO / name) != value or sha(ROOT / "source" / name) != value]
+text = (REPO / "_bmad-output/implementation-artifacts/spec-r1-settings-hydration-418.md").read_text(encoding="utf-8")
+frozen = text[text.index("<frozen-after-approval"):text.index("</frozen-after-approval>") + len("</frozen-after-approval>")]
+frozen_sha = hashlib.sha256(frozen.encode("utf-8")).hexdigest()
+expected_frozen = json.loads((ROOT / "private/frozen.json").read_text(encoding="utf-8"))["sha256"]
+result = {
+    "runId": RUN["runId"], "phase": sys.argv[1], "checkedAtUtc": now(),
+    "headUnchanged": before["head"] == after["head"],
+    "indexUnchanged": before["indexSha256"] == after["indexSha256"],
+    "protectedEnvAndDataUnchanged": before["protected"] == after["protected"],
+    "dataMetadataUnchanged": before["dataMetadata"] == after["dataMetadata"],
+    "protectedWorkspaceFiles": len(before["workspace"]), "protectedEnvAndDataFiles": len(before["protected"]),
+    "candidateSourceFiles": len(manifest), "sourceDrift": source_drift,
+    "frozenSpecUnchanged": frozen_sha == expected_frozen,
+    "changed": changed, "added": added, "unexpected": unexpected,
+}
+result["status"] = "passed" if all(result[key] for key in (
+    "headUnchanged", "indexUnchanged", "protectedEnvAndDataUnchanged", "dataMetadataUnchanged", "frozenSpecUnchanged"
+)) and not unexpected and not source_drift else "failed"
+save(ROOT / "evidence" / ("preservation-" + sys.argv[1] + ".json"), result)
+print(json.dumps({key: value for key, value in result.items() if key != "added"}, ensure_ascii=False))
+assert result["status"] == "passed", "保护核对未通过"
+

@@ -1,0 +1,1272 @@
+{
+  "story": "2.2",
+  "recorded_at": "2026-09-12T09:22:02.992Z",
+  "status": "restored",
+  "authorization": "用户已确认一次受控 WSL/Engine 停止与恢复，保存终端工作后延续已批准的 A2 维护。",
+  "scope": "正常停止 Docker Desktop，关闭一次 WSL，再恢复原 Docker Desktop 与 Ubuntu；本脚本不写时钟参数或运行代理。",
+  "source_file": "zhiliao-a2-wsl-recovery-v2-20260912.mjs",
+  "source_sha256": "6b933ebb174db63bf995dd9689cb62535c3487d81c9a7dde56d39a2cc1e9a557",
+  "maintenance_source": "import fs from 'node:fs';\nimport path from 'node:path';\nimport crypto from 'node:crypto';\nimport net from 'node:net';\nimport { spawn } from 'node:child_process';\nimport { fileURLToPath } from 'node:url';\nimport { setTimeout as delay } from 'node:timers/promises';\n\nconst root = 'D:/ClaudeProjects/ai_acknowladge';\nconst sourcePath = fileURLToPath(import.meta.url);\nconst source = fs.readFileSync(sourcePath, 'utf8');\nconst livePath = sourcePath.replace(/\\.mjs$/, '.live.json');\nconst sha = value => crypto.createHash('sha256').update(value).digest('hex');\nconst relative = value => path.relative(root, value).replaceAll('\\\\', '/');\nconst decode = value => value.filter(byte => byte === 0).length > value.length / 4 ? value.toString('utf16le') : value.toString('utf8');\nconst priorPath = path.join(root, 'docs/验收证据/story-2-2-chronyd-maintenance-2026-09-12T08-47-30-618Z.json');\nconst prior = JSON.parse(fs.readFileSync(priorPath, 'utf8'));\nconst report = {\n  story: '2.2', recorded_at: new Date().toISOString(), status: 'failed',\n  authorization: '用户已确认一次受控 WSL/Engine 停止与恢复，保存终端工作后延续已批准的 A2 维护。',\n  scope: '正常停止 Docker Desktop，关闭一次 WSL，再恢复原 Docker Desktop 与 Ubuntu；本脚本不写时钟参数或运行代理。',\n  source_file: path.basename(sourcePath), source_sha256: sha(source), maintenance_source: source,\n  prior_evidence: relative(priorPath), prior_evidence_sha256: sha(fs.readFileSync(priorPath)),\n  preparation_fix: '前次正常停止返回 0，但关闭后的 desktop status 返回 1 被误判；已恢复原运行环境。本次修正停止判据，仍只执行尚未执行的一次 WSL shutdown。',\n  prior_recovery_attempt: 'docs/验收证据/story-2-2-wsl-recovery-2026-09-12T09-05-03-097Z.json',\n  steps: [], restoration: { docker: 'not_started', ubuntu: 'not_started' },\n  proxy: { status: 'not_run', reason: '后续须核对根控制通道和计时门槛' },\n};\nconst evidencePath = path.join(root, 'docs/验收证据/story-2-2-wsl-recovery-' + report.recorded_at.replace(/[:.]/g, '-') + '.json');\nif (fs.existsSync(evidencePath) || fs.existsSync(livePath)) throw new Error('运行记录已存在');\nconst progress = (stage, details = {}) => {\n  const event = { at: new Date().toISOString(), stage, ...details };\n  report.steps.push(event);\n  fs.writeFileSync(livePath, JSON.stringify(report, null, 2) + '\\n');\n  console.log(JSON.stringify(event));\n};\nasync function command(file, args, timeoutMs = 15000) {\n  const started = performance.now();\n  const child = spawn(file, args, { cwd: root, windowsHide: true, stdio: ['pipe', 'pipe', 'pipe'] });\n  const stdout = [], stderr = [];\n  let failure;\n  let length = 0;\n  const timer = setTimeout(() => { failure = '命令超过宿主机预算'; child.kill(); }, timeoutMs);\n  for (const [stream, chunks] of [[child.stdout, stdout], [child.stderr, stderr]]) stream.on('data', chunk => {\n    chunks.push(chunk); length += chunk.length;\n    if (length > 2 * 1024 * 1024) { failure = '命令输出超出预算'; child.kill(); }\n  });\n  child.stdin.on('error', error => { failure ??= error.message; });\n  child.stdin.end();\n  const result = await new Promise(resolve => {\n    child.on('error', error => { failure = error.message; resolve({ code: null, signal: null }); });\n    child.on('close', (code, signal) => resolve({ code, signal }));\n  });\n  clearTimeout(timer);\n  const value = { file, args, ...result, elapsed_ms: performance.now() - started,\n    stdout: decode(Buffer.concat(stdout)).trim(), stderr: decode(Buffer.concat(stderr)).trim() };\n  if (failure || value.code !== 0) {\n    const error = new Error(failure ?? file + ' 命令失败：' + value.code);\n    error.result = value;\n    throw error;\n  }\n  return value;\n}\nconst docker = async args => (await command('docker', args)).stdout;\nconst distributions = async () => (await command('wsl.exe', ['--list', '--running', '--quiet'])).stdout.split(/\\r?\\n/).map(x => x.trim()).filter(Boolean).sort();\nconst bootId = async () => (await command('wsl.exe', ['-d', 'Ubuntu-24.04', '-u', 'root', '--', 'cat', '/proc/sys/kernel/random/boot_id'])).stdout;\nasync function containers() {\n  const ids = (await docker(['ps', '-a', '--no-trunc', '--format', '{{.ID}}'])).split(/\\r?\\n/).filter(Boolean);\n  if (!ids.length) return [];\n  const format = '{\"id\":{{json .Id}},\"name\":{{json .Name}},\"image\":{{json .Image}},\"status\":{{json .State.Status}},\"exit_code\":{{json .State.ExitCode}},\"started_at\":{{json .State.StartedAt}},\"finished_at\":{{json .State.FinishedAt}},\"restart_policy\":{{json .HostConfig.RestartPolicy}},\"mounts\":{{json .Mounts}},\"networks\":{{json .NetworkSettings.Networks}}}';\n  const rows = (await docker(['container', 'inspect', '--format', format, ...ids])).split(/\\r?\\n/).filter(Boolean).map(JSON.parse);\n  for (const row of rows) {\n    row.mounts.sort((a,b) => a.Destination.localeCompare(b.Destination));\n    row.networks = Object.keys(row.networks ?? {}).sort();\n  }\n  return rows.sort((a,b) => a.id.localeCompare(b.id));\n}\nfunction files() {\n  const names = new Set([...prior.preservation.files.map(x => x.path), ...prior.preservation.excluded_documents]);\n  for (const name of fs.readdirSync(path.join(root, 'docs/验收证据')).filter(name => /^story-2-2-.*\\.json$/.test(name))) names.add('docs/验收证据/' + name);\n  return [...names].sort().map(file => ({ path: file, sha256: sha(fs.readFileSync(path.join(root,file))) }));\n}\nlet stopAttempted = false;\nlet startAttempted = false;\nlet ubuntuAttempted = false;\nasync function startDocker() {\n  startAttempted = true;\n  progress('restoring_docker_desktop');\n  report.restoration.docker_command = await command('docker', ['desktop', 'start', '--timeout', '120'], 125000);\n  const deadline = performance.now() + 30000;\n  while (true) {\n    try { report.engine_after = await docker(['version', '--format', '{{.Server.Version}}']); break; }\n    catch (error) { if (performance.now() >= deadline) throw error; await delay(1000); }\n  }\n  report.restoration.docker = 'restored';\n  progress('docker_desktop_restored', { engine: report.engine_after });\n}\nasync function startUbuntu() {\n  ubuntuAttempted = true;\n  report.restoration.ubuntu_command = await command('wsl.exe', ['-d','Ubuntu-24.04','-u','root','--','true'], 30000);\n  report.restoration.ubuntu = 'restored';\n  progress('ubuntu_restored');\n}\ntry {\n  report.baseline_commit = (await command('git', ['rev-parse','HEAD'])).stdout;\n  if (report.baseline_commit !== prior.baseline_commit) throw new Error('Git 基线已变化');\n  report.before = { distributions: await distributions(), containers: await containers(), files: files(), boot_id: await bootId() };\n  if (JSON.stringify(report.before.distributions) !== JSON.stringify(['Ubuntu-24.04','docker-desktop'].sort())) throw new Error('运行发行版范围已变化');\n  if (report.before.containers.length !== 7) throw new Error('既有容器数量变化');\n  for (const row of report.before.containers) {\n    const previous = prior.preservation.current_container_metadata.find(item => item.id === row.id);\n    if (!previous || row.status !== 'exited' || !['no','unless-stopped'].includes(row.restart_policy.Name) ||\n        JSON.stringify(row.restart_policy) !== JSON.stringify(previous.restart_policy)) throw new Error('既有容器状态或重启策略变化：' + row.name);\n  }\n  report.engine_before = await docker(['version','--format','{{.Server.Version}}']);\n  report.compose_before = await docker(['compose','version','--short']);\n  report.wsl_version = (await command('wsl.exe', ['--version'])).stdout;\n  report.desktop_before = (await command('docker', ['desktop','status'])).stdout;\n  if (!/running/i.test(report.desktop_before)) throw new Error('Docker Desktop 当前不是 running');\n  const previousProxy = JSON.parse(fs.readFileSync(path.join(root,'docs/验收证据/story-2-2-proxy-timeouts-2026-09-12T03-25-47-619Z.json'),'utf8'));\n  report.images = {};\n  for (const [name, image] of Object.entries(previousProxy.images)) {\n    const id = await docker(['image','inspect','--format','{{.Id}}',image.reference]);\n    if (id !== image.id) throw new Error('候选镜像来源变化：' + name);\n    report.images[name] = { reference:image.reference, id };\n  }\n  await new Promise((resolve,reject) => { const server=net.createServer(); server.once('error',reject); server.listen(3343,'127.0.0.1',()=>server.close(error=>error?reject(error):resolve())); });\n  progress('preflight_passed', { containers:report.before.containers.length, files:report.before.files.length, distributions:report.before.distributions });\n  stopAttempted = true;\n  progress('stopping_docker_desktop');\n  report.stop = await command('docker',['desktop','stop','--timeout','60'],65000);\n  try { report.desktop_status_after_stop = await command('docker',['desktop','status']); }\n  catch (error) { report.desktop_status_after_stop = error.result ?? {error:error.message}; }\n  report.backend_processes_after_stop = (await command('powershell.exe',['-NoProfile','-NonInteractive','-Command',\"Get-CimInstance Win32_Process -Filter \\\"Name='com.docker.backend.exe'\\\" -ErrorAction Stop | Select-Object -ExpandProperty ProcessId\"])).stdout;\n  try { report.engine_after_stop = await command('docker',['version','--format','{{.Server.Version}}']); }\n  catch (error) { report.engine_after_stop = error.result ?? {code:null,error:error.message}; }\n  if (report.backend_processes_after_stop || report.engine_after_stop.code === 0) throw new Error('后端进程或 Engine 仍在运行，停止关闭 WSL');\n  report.desktop_stopped = '正常停止命令返回 0，后端进程不存在，Engine 不再响应；不以 Desktop 关闭后的 status 错误判定停止失败';\n  progress('stopping_wsl_once');\n  report.shutdown = await command('wsl.exe',['--shutdown'],30000);\n  report.distributions_stopped = await distributions();\n  report.distributions_verbose_after_stop = (await command('wsl.exe',['--list','--verbose'])).stdout;\n  const stoppedRows = report.distributions_verbose_after_stop.split(/\\r?\\n/).map(line => line.match(/^\\s*\\*?\\s*(.+?)\\s+(Running|Stopped)\\s+([12])\\s*$/i)).filter(Boolean);\n  if (stoppedRows.length !== report.before.distributions.length || stoppedRows.some(row => row[2].toLowerCase() !== 'stopped') || report.before.distributions.some(name => !stoppedRows.some(row => row[1] === name))) throw new Error('WSL 关闭后的发行版状态未全部确认为 Stopped');\n  progress('wsl_stopped');\n  await startDocker();\n  await startUbuntu();\n  report.after = { distributions: await distributions(), boot_id: await bootId(), containers: await containers() };\n  if (JSON.stringify(report.after.distributions) !== JSON.stringify(report.before.distributions)) throw new Error('发行版未恢复到原运行范围');\n  if (report.after.boot_id === report.before.boot_id) throw new Error('WSL 启动标识没有变化');\n  if (report.engine_after !== report.engine_before) throw new Error('Engine 版本发生变化');\n  report.status = 'restored';\n} catch (error) {\n  report.error = error.message;\n  if (error.result) report.failed_command = error.result;\n  progress('recovery_failed', { error:report.error });\n} finally {\n  if (stopAttempted && !startAttempted) {\n    try { await startDocker(); }\n    catch (error) { report.restoration.docker='failed'; report.restoration.docker_error=error.message; report.restoration.docker_failed_command=error.result; }\n  }\n  if (stopAttempted && !ubuntuAttempted) {\n    try { await startUbuntu(); }\n    catch (error) { report.restoration.ubuntu='failed'; report.restoration.ubuntu_error=error.message; }\n  }\n  if (report.before) {\n    try {\n      const after = await containers();\n      report.preservation = {\n        containers:report.before.containers.map(before=>{const current=after.find(row=>row.id===before.id);const changed=Object.keys(before).filter(key=>JSON.stringify(before[key])!==JSON.stringify(current?.[key]));return {id:before.id,name:before.name,unchanged:!changed.length,changed_fields:changed};}),\n        new_container_ids:after.filter(row=>!report.before.containers.some(before=>before.id===row.id)).map(row=>row.id),\n        files:report.before.files.map(before=>({path:before.path,sha256_before:before.sha256,sha256_after:sha(fs.readFileSync(path.join(root,before.path)))})),\n      };\n      report.preservation.passed=!report.preservation.new_container_ids.length&&report.preservation.containers.every(row=>row.unchanged)&&report.preservation.files.every(row=>row.sha256_before===row.sha256_after);\n      if (!report.preservation.passed) report.status='failed';\n    } catch (error) { report.preservation={passed:false,error:error.message}; report.status='failed'; }\n  }\n  report.finished_at=new Date().toISOString();\n  fs.writeFileSync(evidencePath,JSON.stringify(report,null,2)+'\\n',{flag:'wx'});\n  progress('finished',{status:report.status,evidence:relative(evidencePath),preserved:report.preservation?.passed});\n}\nprocess.exitCode=report.status==='restored'?0:1;\n",
+  "prior_evidence": "docs/验收证据/story-2-2-chronyd-maintenance-2026-09-12T08-47-30-618Z.json",
+  "prior_evidence_sha256": "97a7bc38ea3df71e15394060007cb5103223c882556e1734ad06e5485adf8fed",
+  "preparation_fix": "前次正常停止返回 0，但关闭后的 desktop status 返回 1 被误判；已恢复原运行环境。本次修正停止判据，仍只执行尚未执行的一次 WSL shutdown。",
+  "prior_recovery_attempt": "docs/验收证据/story-2-2-wsl-recovery-2026-09-12T09-05-03-097Z.json",
+  "steps": [
+    {
+      "at": "2026-09-12T09:22:04.101Z",
+      "stage": "preflight_passed",
+      "containers": 7,
+      "files": 64,
+      "distributions": [
+        "Ubuntu-24.04",
+        "docker-desktop"
+      ]
+    },
+    {
+      "at": "2026-09-12T09:22:04.103Z",
+      "stage": "stopping_docker_desktop"
+    },
+    {
+      "at": "2026-09-12T09:23:09.226Z",
+      "stage": "stopping_wsl_once"
+    },
+    {
+      "at": "2026-09-12T09:23:10.204Z",
+      "stage": "wsl_stopped"
+    },
+    {
+      "at": "2026-09-12T09:23:10.205Z",
+      "stage": "restoring_docker_desktop"
+    },
+    {
+      "at": "2026-09-12T09:23:29.410Z",
+      "stage": "docker_desktop_restored",
+      "engine": "28.4.0"
+    },
+    {
+      "at": "2026-09-12T09:23:29.533Z",
+      "stage": "ubuntu_restored"
+    }
+  ],
+  "restoration": {
+    "docker": "restored",
+    "ubuntu": "restored",
+    "docker_command": {
+      "file": "docker",
+      "args": [
+        "desktop",
+        "start",
+        "--timeout",
+        "120"
+      ],
+      "code": 0,
+      "signal": null,
+      "elapsed_ms": 19109.431599999996,
+      "stdout": "✓ Starting Docker Desktop",
+      "stderr": ""
+    },
+    "ubuntu_command": {
+      "file": "wsl.exe",
+      "args": [
+        "-d",
+        "Ubuntu-24.04",
+        "-u",
+        "root",
+        "--",
+        "true"
+      ],
+      "code": 0,
+      "signal": null,
+      "elapsed_ms": 121.63340000000608,
+      "stdout": "",
+      "stderr": "wsl: 检测到 localhost 代理配置，但未镜像到 WSL。NAT 模式下的 WSL 不支持 localhost 代理。"
+    }
+  },
+  "proxy": {
+    "status": "not_run",
+    "reason": "后续须核对根控制通道和计时门槛"
+  },
+  "baseline_commit": "f213761b795cc020be2122e27301fe4a7c5cf7a0",
+  "before": {
+    "distributions": [
+      "Ubuntu-24.04",
+      "docker-desktop"
+    ],
+    "containers": [
+      {
+        "id": "254c7caca374780a6c1a3bea1c2c6ba59d6ab092de155c34f8efd3cd411532c8",
+        "name": "/zhiliao",
+        "image": "sha256:72c998be254eaa69bb8ebd086f3e5628f735f2dfc4948432209bcdb5ac4d94e1",
+        "status": "exited",
+        "exit_code": 0,
+        "started_at": "2026-08-19T03:13:57.315741802Z",
+        "finished_at": "2026-08-19T06:29:56.836399597Z",
+        "restart_policy": {
+          "MaximumRetryCount": 0,
+          "Name": "unless-stopped"
+        },
+        "mounts": [
+          {
+            "Destination": "/data/db",
+            "Mode": "rw",
+            "Propagation": "rprivate",
+            "RW": true,
+            "Source": "D:\\ClaudeProjects\\ai_acknowladge\\data\\db",
+            "Type": "bind"
+          },
+          {
+            "Destination": "/data/uploads",
+            "Mode": "rw",
+            "Propagation": "rprivate",
+            "RW": true,
+            "Source": "D:\\ClaudeProjects\\ai_acknowladge\\data\\uploads",
+            "Type": "bind"
+          }
+        ],
+        "networks": [
+          "ai_acknowladge_default"
+        ]
+      },
+      {
+        "id": "50a70f44a32e78adf331f7084743f042001eb5b650ee7af849441ed6a14a85c0",
+        "name": "/bilinote-nginx",
+        "image": "sha256:516475cc129da42866742567714ddc681e5eed7b9ee0b9e9c015e464b4221a00",
+        "status": "exited",
+        "exit_code": 0,
+        "started_at": "2025-10-03T17:30:36.014136961Z",
+        "finished_at": "2025-10-04T08:55:38.797509698Z",
+        "restart_policy": {
+          "MaximumRetryCount": 0,
+          "Name": "no"
+        },
+        "mounts": [
+          {
+            "Destination": "/etc/nginx/conf.d/default.conf",
+            "Mode": "rw",
+            "Propagation": "rprivate",
+            "RW": true,
+            "Source": "D:\\software\\note_software\\BiliNote\\nginx\\default.conf",
+            "Type": "bind"
+          }
+        ],
+        "networks": [
+          "bilinote_default"
+        ]
+      },
+      {
+        "id": "5d05095aa56b26fee8ff02b3372764d8300cc7b1851773eca5ee0a95ed3f675f",
+        "name": "/zhiliao-smoke-20260910-081121-app-1",
+        "image": "sha256:9d74721d9de527b4f37f5fae9f49de37ba5d55b649dbed2293134c19f250c014",
+        "status": "exited",
+        "exit_code": 255,
+        "started_at": "2026-09-10T00:12:19.432734992Z",
+        "finished_at": "2026-09-10T23:41:18.523944657Z",
+        "restart_policy": {
+          "MaximumRetryCount": 0,
+          "Name": "no"
+        },
+        "mounts": [
+          {
+            "Destination": "/data/db",
+            "Driver": "local",
+            "Mode": "rw",
+            "Name": "zhiliao-smoke-20260910-081121_smoke_db",
+            "Propagation": "",
+            "RW": true,
+            "Source": "/var/lib/docker/volumes/zhiliao-smoke-20260910-081121_smoke_db/_data",
+            "Type": "volume"
+          },
+          {
+            "Destination": "/data/notes",
+            "Mode": "rw",
+            "Propagation": "rprivate",
+            "RW": true,
+            "Source": "/run/desktop/mnt/host/c/Users/BAIBAI/AppData/Local/Temp/zhiliao-smoke-20260910-081121/notes",
+            "Type": "bind"
+          },
+          {
+            "Destination": "/data/uploads",
+            "Driver": "local",
+            "Mode": "rw",
+            "Name": "zhiliao-smoke-20260910-081121_smoke_uploads",
+            "Propagation": "",
+            "RW": true,
+            "Source": "/var/lib/docker/volumes/zhiliao-smoke-20260910-081121_smoke_uploads/_data",
+            "Type": "volume"
+          }
+        ],
+        "networks": [
+          "zhiliao-smoke-20260910-081121_default"
+        ]
+      },
+      {
+        "id": "ab1926223971ae43ca775c7078f16057bde76b5e2f53aa6856382830542c3e4a",
+        "name": "/bilinote-frontend",
+        "image": "sha256:84a489d914ecbfb47da5c1f930d22006cfb3da341600694b9c56ed182e84f505",
+        "status": "exited",
+        "exit_code": 0,
+        "started_at": "2025-10-03T17:30:35.764345107Z",
+        "finished_at": "2025-10-04T08:55:38.797056602Z",
+        "restart_policy": {
+          "MaximumRetryCount": 0,
+          "Name": "no"
+        },
+        "mounts": [],
+        "networks": [
+          "bilinote_default"
+        ]
+      },
+      {
+        "id": "cd07490a30d9cd068c4552f0f528dacecd9349eb2a60c1dbf9f8c18333fe83ea",
+        "name": "/zhiliao-smoke-20260910-082135-app-1",
+        "image": "sha256:9d74721d9de527b4f37f5fae9f49de37ba5d55b649dbed2293134c19f250c014",
+        "status": "exited",
+        "exit_code": 255,
+        "started_at": "2026-09-10T00:21:35.646365498Z",
+        "finished_at": "2026-09-10T23:41:18.523947071Z",
+        "restart_policy": {
+          "MaximumRetryCount": 0,
+          "Name": "no"
+        },
+        "mounts": [
+          {
+            "Destination": "/data/db",
+            "Driver": "local",
+            "Mode": "rw",
+            "Name": "zhiliao-smoke-20260910-082135_smoke_db",
+            "Propagation": "",
+            "RW": true,
+            "Source": "/var/lib/docker/volumes/zhiliao-smoke-20260910-082135_smoke_db/_data",
+            "Type": "volume"
+          },
+          {
+            "Destination": "/data/notes",
+            "Mode": "rw",
+            "Propagation": "rprivate",
+            "RW": true,
+            "Source": "/run/desktop/mnt/host/c/Users/BAIBAI/AppData/Local/Temp/zhiliao-smoke-20260910-082135/notes",
+            "Type": "bind"
+          },
+          {
+            "Destination": "/data/uploads",
+            "Driver": "local",
+            "Mode": "rw",
+            "Name": "zhiliao-smoke-20260910-082135_smoke_uploads",
+            "Propagation": "",
+            "RW": true,
+            "Source": "/var/lib/docker/volumes/zhiliao-smoke-20260910-082135_smoke_uploads/_data",
+            "Type": "volume"
+          }
+        ],
+        "networks": [
+          "zhiliao-smoke-20260910-082135_default"
+        ]
+      },
+      {
+        "id": "ea240066dd4a847db38ef758917c36a04be31191329ab6c995bdc94cd83fc721",
+        "name": "/zhiliao-rc",
+        "image": "sha256:72c998be254eaa69bb8ebd086f3e5628f735f2dfc4948432209bcdb5ac4d94e1",
+        "status": "exited",
+        "exit_code": 255,
+        "started_at": "2026-08-18T19:04:14.162690109Z",
+        "finished_at": "2026-08-19T11:19:29.173125646Z",
+        "restart_policy": {
+          "MaximumRetryCount": 0,
+          "Name": "no"
+        },
+        "mounts": [
+          {
+            "Destination": "/data/db",
+            "Driver": "local",
+            "Mode": "z",
+            "Name": "zhiliao_rc_db",
+            "Propagation": "",
+            "RW": true,
+            "Source": "/var/lib/docker/volumes/zhiliao_rc_db/_data",
+            "Type": "volume"
+          },
+          {
+            "Destination": "/data/uploads",
+            "Driver": "local",
+            "Mode": "z",
+            "Name": "zhiliao_rc_uploads",
+            "Propagation": "",
+            "RW": true,
+            "Source": "/var/lib/docker/volumes/zhiliao_rc_uploads/_data",
+            "Type": "volume"
+          }
+        ],
+        "networks": [
+          "bridge"
+        ]
+      },
+      {
+        "id": "f61337186432f4b8be3bba6578ebb2a3f768cd39baf5349a0fc19c53f224ef81",
+        "name": "/bilinote-backend",
+        "image": "sha256:9babe915cdb4a7f3c4cf37926549e313cbc04df872d6384244683e6f6ec10bf6",
+        "status": "exited",
+        "exit_code": 1,
+        "started_at": "2025-10-04T02:44:49.521652637Z",
+        "finished_at": "2025-10-04T02:44:55.627208871Z",
+        "restart_policy": {
+          "MaximumRetryCount": 0,
+          "Name": "no"
+        },
+        "mounts": [
+          {
+            "Destination": "/app",
+            "Mode": "rw",
+            "Propagation": "rprivate",
+            "RW": true,
+            "Source": "D:\\software\\note_software\\BiliNote\\backend",
+            "Type": "bind"
+          }
+        ],
+        "networks": [
+          "bilinote_default"
+        ]
+      }
+    ],
+    "files": [
+      {
+        "path": ".dockerignore",
+        "sha256": "859c037c021f8004b5785e9134e38425d4cf4c54c8416a625707e13c6a1637e4"
+      },
+      {
+        "path": ".gitignore",
+        "sha256": "1782f3e74113b3febf8659bb4c3dc607c9e3873cd38829ab7326da580e075e03"
+      },
+      {
+        "path": "Dockerfile",
+        "sha256": "19b26ee235928d6d360edc9b5c803427302eb90d9a8dc8d231482ba6380e6668"
+      },
+      {
+        "path": "README.en.md",
+        "sha256": "42ff35f11caf0cd8e4b530e4ab49d4ee6093f0949f73fe86e9a1a36ab8ac0268"
+      },
+      {
+        "path": "README.md",
+        "sha256": "9768809ac37164660acbd7c4bda28db0c5004055a500d9f81e2138890205aa72"
+      },
+      {
+        "path": "_bmad-output/implementation-artifacts/spec-2-1-server-demo-boundary.md",
+        "sha256": "002a58d4db6835ca57c2672ddce0a1c8fc3c4ce23e640e823725174c36cf68f4"
+      },
+      {
+        "path": "_bmad-output/implementation-artifacts/spec-2-2-isolate-demo-deployment-and-limit-resources.md",
+        "sha256": "d560eaf424e51f8b2870ae5d60aefa2a6369d823fd181b2e12c84c9e88a85147"
+      },
+      {
+        "path": "_bmad-output/implementation-artifacts/sprint-status.yaml",
+        "sha256": "3261f04c82d2af828bbc242b03821385fe809214624fcaaea193897f111f338d"
+      },
+      {
+        "path": "docker-compose.demo.proxy-verify.yml",
+        "sha256": "db8eed5296212444d435cd378cae07b97d3e8d24f1a58bdb40b16ed4813cb05d"
+      },
+      {
+        "path": "docker-compose.demo.verify.yml",
+        "sha256": "2f21847f6798764d6929991855f848f83cd4bfd6345ea4f8638ed2b255de22f1"
+      },
+      {
+        "path": "docker-compose.demo.yml",
+        "sha256": "f259c2e5fd7809bc872492c5eb753a5ab54389969c3106a6ff0e926f070455f2"
+      },
+      {
+        "path": "docker-compose.yml",
+        "sha256": "70e6867a5e5e686c835c0830d96229440aa6be5f58a132a978002f40e82bfd4b"
+      },
+      {
+        "path": "docs/Demo部署隔离验收-2026-09-10.md",
+        "sha256": "e278abc208f09c3d1426923c6a108e61bcdbecd5cccfcbb8ec76fcd565ed829c"
+      },
+      {
+        "path": "docs/README.md",
+        "sha256": "b339dbd888f65f353cc6830f23b7f45c37ae3cfa8ce02d889b9f836153b3b88b"
+      },
+      {
+        "path": "docs/Story-2.2-剩余验收实施方案-2026-09-11.md",
+        "sha256": "65a126f9a744d8fefc94f931a26e6b4c821417bec2c40560619ed544a52dca01"
+      },
+      {
+        "path": "docs/adr/0026-demo-ingress-isolation.md",
+        "sha256": "ece9126fb2420c09956da5bae678dd456f988b8b4524c5904f2406b69ec8fd4e"
+      },
+      {
+        "path": "docs/首次使用与故障排查.md",
+        "sha256": "b7e0d78dd305a1a8730912f75fe79f97b3de8b9863b36274efe437c07773600e"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-chrony-attribution-2026-09-12T07-45-32-076Z.json",
+        "sha256": "50afaa74c85cd5db5841a8e9d1d3a3332ac74b497fd9856c97dffe791f3d15be"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-chronyd-maintenance-2026-09-12T08-47-30-618Z.json",
+        "sha256": "97a7bc38ea3df71e15394060007cb5103223c882556e1734ad06e5485adf8fed"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-chronyd-preflight-2026-09-12T08-12-50-069Z.json",
+        "sha256": "67bc8e5f397a17a1afddc069455698198608fc408a0c1736d75acfef4f535705"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-chronyd-preflight-2026-09-12T08-18-12-242Z.json",
+        "sha256": "15e18a826a17f89a310208ce77e42d82216aa8d5e1755a10bbe7c500fb82d8f4"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-cleanup-2026-09-12-a2.json",
+        "sha256": "3776b40ef26b14d20d8c6bf80bfb28ede059764e02c602961bec08cde20d8d21"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-clock-2026-09-12T03-44-50-581Z.json",
+        "sha256": "f5513284bca9806b410df289eff9fe14aecce2cb5de5576931a82da1c019863c"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-clock-diagnostics-2026-09-12T04-59-16-594Z.json",
+        "sha256": "7da80f4332426bdd3919b35b72a2d593ba71b1dd0f2815aaa8feabc261fc825f"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-clock-environment-2026-09-12-a2.json",
+        "sha256": "bdf2529ab06e45466b416f58229025f4def1a160f18fbc77797d910802ba6aa1"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-clock-maintenance-2026-09-12T04-36-26-291Z.json",
+        "sha256": "2ff072b07c85559631be36fdb40d8ffe94a4888f750a8e9319f8fec46f262b36"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-clock-maintenance-2026-09-12T04-53-42-385Z.json",
+        "sha256": "df7c326afe5acce2a2315a16955dbfa52f57de869b45324831203d8e32cd74b5"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-environment-2026-09-11T08-37-01Z.json",
+        "sha256": "d78972e0f1272655f9cfd8f466930d527befac5301984e11728415c0bff3ae99"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-network-2026-09-12-a2-final.json",
+        "sha256": "10a67ce81458721c89424b8717e931dcff2d44cea1c4b838dd28e9a107bab323"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-network-2026-09-12-a2-final2.json",
+        "sha256": "8f97f80a4c3a403e66b0329e0eb7f8c2d8c6a4bd084a1be16c79e449ea97c9ea"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-network-2026-09-12-a2-rerun.json",
+        "sha256": "da30ef2a6f76b2a693cc096d202848a7bfd5c10a75d926e796ddea6e500d7754"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-network-2026-09-12-a2.json",
+        "sha256": "7f63e343c871a16edf0b36a2040708372119d73cfd01d65117d4265e4c204da8"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-network-2026-09-12T03-38-29-471Z.json",
+        "sha256": "4db8a31ab30be38a413a32e38078106f8d466ed6acb365650f4a2f3c9b64c45f"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-preservation-2026-09-12-a2.json",
+        "sha256": "286ed069ebfdae26f7bf222f87c554c4f579a2131a7e9bfbcd6ffc46443a1399"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-proxy-timeouts-2026-09-12-a2-debug.json",
+        "sha256": "b896d0e8ba31f3f50c8ee8953e5c26190f45a80aa42615351f62fb52e6f87bab"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-proxy-timeouts-2026-09-12-a2.json",
+        "sha256": "0dcaf2eeaaf63deb3974b6a7d6043e13caca07422f65ca2f62150f25e659469f"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-proxy-timeouts-2026-09-12T03-25-47-619Z.json",
+        "sha256": "569805cd8aa7341bc0c43244267802433af14ae18eb3671f07a12808ef60e1bd"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-runtime-2026-09-10.json",
+        "sha256": "8febd1d0c876bfe2b1db1230e36a341b60cb4e4023adcaf3636a4ab751dc8e95"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-runtime-2026-09-11.json",
+        "sha256": "4c95c9ee95ce03f2c69d2cc1f97c2e72338b83b3847ae3fd51fc8d91425daf21"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-runtime-2026-09-11T07-56-56-279Z-ccefbb73.json",
+        "sha256": "270c7cacbcd01e3586b4ad2b08cdf9c76f4a10ee3c00a3e220be3c946441a7b2"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-runtime-2026-09-12T02-41-22-818Z-ea454295.json",
+        "sha256": "b685fdab2491a6f2c5dd0dde67242c492f4cb240dd6765589cfc845ebb411409"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-tick-maintenance-2026-09-12T05-48-48-326Z.json",
+        "sha256": "39d1394e690c4ba7cc626aadba5ea88c707a54b991740db22e4a2210a19f8a54"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-tick-trace-2026-09-12T06-33-12-041Z.json",
+        "sha256": "0afa0cdaf8d4b182f6e627a9d7cf044f5079eaf27a883c310ce5d922623d4d1c"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-tick-trace-2026-09-12T06-45-28-312Z.json",
+        "sha256": "195f8e68f64ed59b65751a4d0ddabeaee164ef14ad6039fa6201bb1907f32968"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-tick-trace-2026-09-12T06-55-37-663Z.json",
+        "sha256": "3c7bb803c43e4cec421bc60f63398d652cbb7a830a6c3c08fe17b7cf1d71c4a1"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-wsl-recovery-2026-09-12T09-05-03-097Z.json",
+        "sha256": "3860f352c51080121591a6d3a5871d6284f4a8446404c485c97b42d10ec77a6b"
+      },
+      {
+        "path": "nginx/demo-proxy.conf",
+        "sha256": "abae7a74feb2ed1b048b7579348707cc68d9c6a7126baab4356a7d44c7244fb2"
+      },
+      {
+        "path": "nginx/demo.conf",
+        "sha256": "df240aef6f22929ab6435d4f4a2e3c603baa17a124fe0d9b7f01d10eaa27c093"
+      },
+      {
+        "path": "package-lock.json",
+        "sha256": "d16a6af6d2342a702ac0d49b20f7201b9db1ed9f98ebdf4eaa6c3faa5e7d3598"
+      },
+      {
+        "path": "package.json",
+        "sha256": "93e20900fa70d3674f04c022f733eb78528b21ed67b0ce8a7c0f69ec245cd42e"
+      },
+      {
+        "path": "scripts/demo-http-probes.mjs",
+        "sha256": "420ddcd722ae3f4fca844671f97cecabb398637d557f47b1c3174d2a059be238"
+      },
+      {
+        "path": "scripts/demo-verification-utils.mjs",
+        "sha256": "7f470b62da3ce58fe36354797db426c5e6ba6b9e95e2829ad6ac263861da4665"
+      },
+      {
+        "path": "scripts/fixtures/demo-proxy-upstream.mjs",
+        "sha256": "88298403d5b72a60760c36309639e777fce3859a9c5e076ded9e33ea3a32c169"
+      },
+      {
+        "path": "scripts/verify-demo-network.mjs",
+        "sha256": "e527300e9a0c26676906a737ab0bd53cacb7e4cee6f6280936f4463eb7eec365"
+      },
+      {
+        "path": "scripts/verify-demo-proxy-timeouts.mjs",
+        "sha256": "71c54bff2a8a4116356553646f8d0423b84cad078818fba52076f58c00e49d5f"
+      },
+      {
+        "path": "scripts/verify-demo-runtime.mjs",
+        "sha256": "e302fbb02b0a383ad8fa268b284b9eb307982d0543bea4fc52562344be2ac2b5"
+      },
+      {
+        "path": "scripts/verify-demo-runtime.ps1",
+        "sha256": "d8d0b56bab5c432ca4ed824ec5780b8360a09d8bd722f2904044289433e57695"
+      },
+      {
+        "path": "src/app/(app)/settings/page.tsx",
+        "sha256": "bc7e0dba9a0d9a20d3c7fb3f64157ac0e4d3001e6355e64e53b6b982f2ded46c"
+      },
+      {
+        "path": "src/lib/llm-config.ts",
+        "sha256": "c9a363404fe78da50278237704b60514b8c230cb8153cedc46713f0e3ef3899c"
+      },
+      {
+        "path": "src/middleware.ts",
+        "sha256": "1b51fa7f95a90e8bcc94609cd2d2b820fea838503538a3932c2ef3ee64bc2d22"
+      },
+      {
+        "path": "tests/api/demo-boundary.test.ts",
+        "sha256": "b407ff9ec6d62487f93ea31e871900351af2a72600377a6294dcc5f20c3ecaf3"
+      },
+      {
+        "path": "tests/config/demo-network.test.ts",
+        "sha256": "1947f17a5b0de61df6d6715e39c8bedd49b14c6c9452de02de6245e162f26757"
+      },
+      {
+        "path": "tests/config/demo-proxy-timeouts.test.ts",
+        "sha256": "0e4cb091ac0d6b7ce04cb8f29e27e35ab1aea5bcb972dc765e20f242a1014238"
+      },
+      {
+        "path": "tests/docs/first-use-guide.test.ts",
+        "sha256": "3ea645b8cc0227b0fd80944a26975194e03b4141b2f5a1da37b61a8faa3a3649"
+      }
+    ],
+    "boot_id": "85f93b8d-a44c-4483-8994-7977a9fb32aa"
+  },
+  "engine_before": "28.4.0",
+  "compose_before": "2.39.4-desktop.1",
+  "wsl_version": "WSL 版本: 2.5.10.0\r\n内核版本: 6.6.87.2-1\r\nWSLg 版本: 1.0.66\r\nMSRDC 版本: 1.2.6074\r\nDirect3D 版本: 1.611.1-81528511\r\nDXCore 版本: 10.0.26100.1-240331-1435.ge-release\r\nWindows: 10.0.26200.9445",
+  "desktop_before": "Name                Value\nSessionID           c12242f5-c64c-494d-96eb-dd284ba07b3f\nStatus              running",
+  "images": {
+    "ingress": {
+      "reference": "nginx:1.30.4-alpine@sha256:dc5069ad14f19660b141b21236140b91656bf89bbc3e2417c70ae650cd66104c",
+      "id": "sha256:dc5069ad14f19660b141b21236140b91656bf89bbc3e2417c70ae650cd66104c"
+    },
+    "proxy-upstream": {
+      "reference": "zhiliao-demo-verify:story-2-2",
+      "id": "sha256:46f9241b6d2e539ce3a94324c356cf4336f8cf17e0cf59e5b5d920bf9b53769e"
+    }
+  },
+  "stop": {
+    "file": "docker",
+    "args": [
+      "desktop",
+      "stop",
+      "--timeout",
+      "60"
+    ],
+    "code": 0,
+    "signal": null,
+    "elapsed_ms": 48618.9696,
+    "stdout": "✓ Stopping Docker Desktop",
+    "stderr": ""
+  },
+  "desktop_status_after_stop": {
+    "file": "docker",
+    "args": [
+      "desktop",
+      "status"
+    ],
+    "code": null,
+    "signal": "SIGTERM",
+    "elapsed_ms": 15345.454299999998,
+    "stdout": "",
+    "stderr": "Could not retrieve status. Is Docker Desktop running?\nYou can start Docker Desktop by running 'docker desktop start'."
+  },
+  "backend_processes_after_stop": "",
+  "engine_after_stop": {
+    "file": "docker",
+    "args": [
+      "version",
+      "--format",
+      "{{.Server.Version}}"
+    ],
+    "code": 1,
+    "signal": null,
+    "elapsed_ms": 166.91709999999148,
+    "stdout": "",
+    "stderr": "error during connect: Get \"http://%2F%2F.%2Fpipe%2FdockerDesktopLinuxEngine/v1.51/version\": open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+  },
+  "desktop_stopped": "正常停止命令返回 0，后端进程不存在，Engine 不再响应；不以 Desktop 关闭后的 status 错误判定停止失败",
+  "shutdown": {
+    "file": "wsl.exe",
+    "args": [
+      "--shutdown"
+    ],
+    "code": 0,
+    "signal": null,
+    "elapsed_ms": 850.8294000000024,
+    "stdout": "",
+    "stderr": ""
+  },
+  "distributions_stopped": [],
+  "distributions_verbose_after_stop": "NAME              STATE           VERSION\r\n* Ubuntu-24.04      Stopped         2\r\n  docker-desktop    Stopped         2",
+  "engine_after": "28.4.0",
+  "after": {
+    "distributions": [
+      "Ubuntu-24.04",
+      "docker-desktop"
+    ],
+    "boot_id": "6ac3fe53-9499-4a8d-979d-ea444e813d9f",
+    "containers": [
+      {
+        "id": "254c7caca374780a6c1a3bea1c2c6ba59d6ab092de155c34f8efd3cd411532c8",
+        "name": "/zhiliao",
+        "image": "sha256:72c998be254eaa69bb8ebd086f3e5628f735f2dfc4948432209bcdb5ac4d94e1",
+        "status": "exited",
+        "exit_code": 0,
+        "started_at": "2026-08-19T03:13:57.315741802Z",
+        "finished_at": "2026-08-19T06:29:56.836399597Z",
+        "restart_policy": {
+          "MaximumRetryCount": 0,
+          "Name": "unless-stopped"
+        },
+        "mounts": [
+          {
+            "Destination": "/data/db",
+            "Mode": "rw",
+            "Propagation": "rprivate",
+            "RW": true,
+            "Source": "D:\\ClaudeProjects\\ai_acknowladge\\data\\db",
+            "Type": "bind"
+          },
+          {
+            "Destination": "/data/uploads",
+            "Mode": "rw",
+            "Propagation": "rprivate",
+            "RW": true,
+            "Source": "D:\\ClaudeProjects\\ai_acknowladge\\data\\uploads",
+            "Type": "bind"
+          }
+        ],
+        "networks": [
+          "ai_acknowladge_default"
+        ]
+      },
+      {
+        "id": "50a70f44a32e78adf331f7084743f042001eb5b650ee7af849441ed6a14a85c0",
+        "name": "/bilinote-nginx",
+        "image": "sha256:516475cc129da42866742567714ddc681e5eed7b9ee0b9e9c015e464b4221a00",
+        "status": "exited",
+        "exit_code": 0,
+        "started_at": "2025-10-03T17:30:36.014136961Z",
+        "finished_at": "2025-10-04T08:55:38.797509698Z",
+        "restart_policy": {
+          "MaximumRetryCount": 0,
+          "Name": "no"
+        },
+        "mounts": [
+          {
+            "Destination": "/etc/nginx/conf.d/default.conf",
+            "Mode": "rw",
+            "Propagation": "rprivate",
+            "RW": true,
+            "Source": "D:\\software\\note_software\\BiliNote\\nginx\\default.conf",
+            "Type": "bind"
+          }
+        ],
+        "networks": [
+          "bilinote_default"
+        ]
+      },
+      {
+        "id": "5d05095aa56b26fee8ff02b3372764d8300cc7b1851773eca5ee0a95ed3f675f",
+        "name": "/zhiliao-smoke-20260910-081121-app-1",
+        "image": "sha256:9d74721d9de527b4f37f5fae9f49de37ba5d55b649dbed2293134c19f250c014",
+        "status": "exited",
+        "exit_code": 255,
+        "started_at": "2026-09-10T00:12:19.432734992Z",
+        "finished_at": "2026-09-10T23:41:18.523944657Z",
+        "restart_policy": {
+          "MaximumRetryCount": 0,
+          "Name": "no"
+        },
+        "mounts": [
+          {
+            "Destination": "/data/db",
+            "Driver": "local",
+            "Mode": "rw",
+            "Name": "zhiliao-smoke-20260910-081121_smoke_db",
+            "Propagation": "",
+            "RW": true,
+            "Source": "/var/lib/docker/volumes/zhiliao-smoke-20260910-081121_smoke_db/_data",
+            "Type": "volume"
+          },
+          {
+            "Destination": "/data/notes",
+            "Mode": "rw",
+            "Propagation": "rprivate",
+            "RW": true,
+            "Source": "/run/desktop/mnt/host/c/Users/BAIBAI/AppData/Local/Temp/zhiliao-smoke-20260910-081121/notes",
+            "Type": "bind"
+          },
+          {
+            "Destination": "/data/uploads",
+            "Driver": "local",
+            "Mode": "rw",
+            "Name": "zhiliao-smoke-20260910-081121_smoke_uploads",
+            "Propagation": "",
+            "RW": true,
+            "Source": "/var/lib/docker/volumes/zhiliao-smoke-20260910-081121_smoke_uploads/_data",
+            "Type": "volume"
+          }
+        ],
+        "networks": [
+          "zhiliao-smoke-20260910-081121_default"
+        ]
+      },
+      {
+        "id": "ab1926223971ae43ca775c7078f16057bde76b5e2f53aa6856382830542c3e4a",
+        "name": "/bilinote-frontend",
+        "image": "sha256:84a489d914ecbfb47da5c1f930d22006cfb3da341600694b9c56ed182e84f505",
+        "status": "exited",
+        "exit_code": 0,
+        "started_at": "2025-10-03T17:30:35.764345107Z",
+        "finished_at": "2025-10-04T08:55:38.797056602Z",
+        "restart_policy": {
+          "MaximumRetryCount": 0,
+          "Name": "no"
+        },
+        "mounts": [],
+        "networks": [
+          "bilinote_default"
+        ]
+      },
+      {
+        "id": "cd07490a30d9cd068c4552f0f528dacecd9349eb2a60c1dbf9f8c18333fe83ea",
+        "name": "/zhiliao-smoke-20260910-082135-app-1",
+        "image": "sha256:9d74721d9de527b4f37f5fae9f49de37ba5d55b649dbed2293134c19f250c014",
+        "status": "exited",
+        "exit_code": 255,
+        "started_at": "2026-09-10T00:21:35.646365498Z",
+        "finished_at": "2026-09-10T23:41:18.523947071Z",
+        "restart_policy": {
+          "MaximumRetryCount": 0,
+          "Name": "no"
+        },
+        "mounts": [
+          {
+            "Destination": "/data/db",
+            "Driver": "local",
+            "Mode": "rw",
+            "Name": "zhiliao-smoke-20260910-082135_smoke_db",
+            "Propagation": "",
+            "RW": true,
+            "Source": "/var/lib/docker/volumes/zhiliao-smoke-20260910-082135_smoke_db/_data",
+            "Type": "volume"
+          },
+          {
+            "Destination": "/data/notes",
+            "Mode": "rw",
+            "Propagation": "rprivate",
+            "RW": true,
+            "Source": "/run/desktop/mnt/host/c/Users/BAIBAI/AppData/Local/Temp/zhiliao-smoke-20260910-082135/notes",
+            "Type": "bind"
+          },
+          {
+            "Destination": "/data/uploads",
+            "Driver": "local",
+            "Mode": "rw",
+            "Name": "zhiliao-smoke-20260910-082135_smoke_uploads",
+            "Propagation": "",
+            "RW": true,
+            "Source": "/var/lib/docker/volumes/zhiliao-smoke-20260910-082135_smoke_uploads/_data",
+            "Type": "volume"
+          }
+        ],
+        "networks": [
+          "zhiliao-smoke-20260910-082135_default"
+        ]
+      },
+      {
+        "id": "ea240066dd4a847db38ef758917c36a04be31191329ab6c995bdc94cd83fc721",
+        "name": "/zhiliao-rc",
+        "image": "sha256:72c998be254eaa69bb8ebd086f3e5628f735f2dfc4948432209bcdb5ac4d94e1",
+        "status": "exited",
+        "exit_code": 255,
+        "started_at": "2026-08-18T19:04:14.162690109Z",
+        "finished_at": "2026-08-19T11:19:29.173125646Z",
+        "restart_policy": {
+          "MaximumRetryCount": 0,
+          "Name": "no"
+        },
+        "mounts": [
+          {
+            "Destination": "/data/db",
+            "Driver": "local",
+            "Mode": "z",
+            "Name": "zhiliao_rc_db",
+            "Propagation": "",
+            "RW": true,
+            "Source": "/var/lib/docker/volumes/zhiliao_rc_db/_data",
+            "Type": "volume"
+          },
+          {
+            "Destination": "/data/uploads",
+            "Driver": "local",
+            "Mode": "z",
+            "Name": "zhiliao_rc_uploads",
+            "Propagation": "",
+            "RW": true,
+            "Source": "/var/lib/docker/volumes/zhiliao_rc_uploads/_data",
+            "Type": "volume"
+          }
+        ],
+        "networks": [
+          "bridge"
+        ]
+      },
+      {
+        "id": "f61337186432f4b8be3bba6578ebb2a3f768cd39baf5349a0fc19c53f224ef81",
+        "name": "/bilinote-backend",
+        "image": "sha256:9babe915cdb4a7f3c4cf37926549e313cbc04df872d6384244683e6f6ec10bf6",
+        "status": "exited",
+        "exit_code": 1,
+        "started_at": "2025-10-04T02:44:49.521652637Z",
+        "finished_at": "2025-10-04T02:44:55.627208871Z",
+        "restart_policy": {
+          "MaximumRetryCount": 0,
+          "Name": "no"
+        },
+        "mounts": [
+          {
+            "Destination": "/app",
+            "Mode": "rw",
+            "Propagation": "rprivate",
+            "RW": true,
+            "Source": "D:\\software\\note_software\\BiliNote\\backend",
+            "Type": "bind"
+          }
+        ],
+        "networks": [
+          "bilinote_default"
+        ]
+      }
+    ]
+  },
+  "preservation": {
+    "containers": [
+      {
+        "id": "254c7caca374780a6c1a3bea1c2c6ba59d6ab092de155c34f8efd3cd411532c8",
+        "name": "/zhiliao",
+        "unchanged": true,
+        "changed_fields": []
+      },
+      {
+        "id": "50a70f44a32e78adf331f7084743f042001eb5b650ee7af849441ed6a14a85c0",
+        "name": "/bilinote-nginx",
+        "unchanged": true,
+        "changed_fields": []
+      },
+      {
+        "id": "5d05095aa56b26fee8ff02b3372764d8300cc7b1851773eca5ee0a95ed3f675f",
+        "name": "/zhiliao-smoke-20260910-081121-app-1",
+        "unchanged": true,
+        "changed_fields": []
+      },
+      {
+        "id": "ab1926223971ae43ca775c7078f16057bde76b5e2f53aa6856382830542c3e4a",
+        "name": "/bilinote-frontend",
+        "unchanged": true,
+        "changed_fields": []
+      },
+      {
+        "id": "cd07490a30d9cd068c4552f0f528dacecd9349eb2a60c1dbf9f8c18333fe83ea",
+        "name": "/zhiliao-smoke-20260910-082135-app-1",
+        "unchanged": true,
+        "changed_fields": []
+      },
+      {
+        "id": "ea240066dd4a847db38ef758917c36a04be31191329ab6c995bdc94cd83fc721",
+        "name": "/zhiliao-rc",
+        "unchanged": true,
+        "changed_fields": []
+      },
+      {
+        "id": "f61337186432f4b8be3bba6578ebb2a3f768cd39baf5349a0fc19c53f224ef81",
+        "name": "/bilinote-backend",
+        "unchanged": true,
+        "changed_fields": []
+      }
+    ],
+    "new_container_ids": [],
+    "files": [
+      {
+        "path": ".dockerignore",
+        "sha256_before": "859c037c021f8004b5785e9134e38425d4cf4c54c8416a625707e13c6a1637e4",
+        "sha256_after": "859c037c021f8004b5785e9134e38425d4cf4c54c8416a625707e13c6a1637e4"
+      },
+      {
+        "path": ".gitignore",
+        "sha256_before": "1782f3e74113b3febf8659bb4c3dc607c9e3873cd38829ab7326da580e075e03",
+        "sha256_after": "1782f3e74113b3febf8659bb4c3dc607c9e3873cd38829ab7326da580e075e03"
+      },
+      {
+        "path": "Dockerfile",
+        "sha256_before": "19b26ee235928d6d360edc9b5c803427302eb90d9a8dc8d231482ba6380e6668",
+        "sha256_after": "19b26ee235928d6d360edc9b5c803427302eb90d9a8dc8d231482ba6380e6668"
+      },
+      {
+        "path": "README.en.md",
+        "sha256_before": "42ff35f11caf0cd8e4b530e4ab49d4ee6093f0949f73fe86e9a1a36ab8ac0268",
+        "sha256_after": "42ff35f11caf0cd8e4b530e4ab49d4ee6093f0949f73fe86e9a1a36ab8ac0268"
+      },
+      {
+        "path": "README.md",
+        "sha256_before": "9768809ac37164660acbd7c4bda28db0c5004055a500d9f81e2138890205aa72",
+        "sha256_after": "9768809ac37164660acbd7c4bda28db0c5004055a500d9f81e2138890205aa72"
+      },
+      {
+        "path": "_bmad-output/implementation-artifacts/spec-2-1-server-demo-boundary.md",
+        "sha256_before": "002a58d4db6835ca57c2672ddce0a1c8fc3c4ce23e640e823725174c36cf68f4",
+        "sha256_after": "002a58d4db6835ca57c2672ddce0a1c8fc3c4ce23e640e823725174c36cf68f4"
+      },
+      {
+        "path": "_bmad-output/implementation-artifacts/spec-2-2-isolate-demo-deployment-and-limit-resources.md",
+        "sha256_before": "d560eaf424e51f8b2870ae5d60aefa2a6369d823fd181b2e12c84c9e88a85147",
+        "sha256_after": "d560eaf424e51f8b2870ae5d60aefa2a6369d823fd181b2e12c84c9e88a85147"
+      },
+      {
+        "path": "_bmad-output/implementation-artifacts/sprint-status.yaml",
+        "sha256_before": "3261f04c82d2af828bbc242b03821385fe809214624fcaaea193897f111f338d",
+        "sha256_after": "3261f04c82d2af828bbc242b03821385fe809214624fcaaea193897f111f338d"
+      },
+      {
+        "path": "docker-compose.demo.proxy-verify.yml",
+        "sha256_before": "db8eed5296212444d435cd378cae07b97d3e8d24f1a58bdb40b16ed4813cb05d",
+        "sha256_after": "db8eed5296212444d435cd378cae07b97d3e8d24f1a58bdb40b16ed4813cb05d"
+      },
+      {
+        "path": "docker-compose.demo.verify.yml",
+        "sha256_before": "2f21847f6798764d6929991855f848f83cd4bfd6345ea4f8638ed2b255de22f1",
+        "sha256_after": "2f21847f6798764d6929991855f848f83cd4bfd6345ea4f8638ed2b255de22f1"
+      },
+      {
+        "path": "docker-compose.demo.yml",
+        "sha256_before": "f259c2e5fd7809bc872492c5eb753a5ab54389969c3106a6ff0e926f070455f2",
+        "sha256_after": "f259c2e5fd7809bc872492c5eb753a5ab54389969c3106a6ff0e926f070455f2"
+      },
+      {
+        "path": "docker-compose.yml",
+        "sha256_before": "70e6867a5e5e686c835c0830d96229440aa6be5f58a132a978002f40e82bfd4b",
+        "sha256_after": "70e6867a5e5e686c835c0830d96229440aa6be5f58a132a978002f40e82bfd4b"
+      },
+      {
+        "path": "docs/Demo部署隔离验收-2026-09-10.md",
+        "sha256_before": "e278abc208f09c3d1426923c6a108e61bcdbecd5cccfcbb8ec76fcd565ed829c",
+        "sha256_after": "e278abc208f09c3d1426923c6a108e61bcdbecd5cccfcbb8ec76fcd565ed829c"
+      },
+      {
+        "path": "docs/README.md",
+        "sha256_before": "b339dbd888f65f353cc6830f23b7f45c37ae3cfa8ce02d889b9f836153b3b88b",
+        "sha256_after": "b339dbd888f65f353cc6830f23b7f45c37ae3cfa8ce02d889b9f836153b3b88b"
+      },
+      {
+        "path": "docs/Story-2.2-剩余验收实施方案-2026-09-11.md",
+        "sha256_before": "65a126f9a744d8fefc94f931a26e6b4c821417bec2c40560619ed544a52dca01",
+        "sha256_after": "65a126f9a744d8fefc94f931a26e6b4c821417bec2c40560619ed544a52dca01"
+      },
+      {
+        "path": "docs/adr/0026-demo-ingress-isolation.md",
+        "sha256_before": "ece9126fb2420c09956da5bae678dd456f988b8b4524c5904f2406b69ec8fd4e",
+        "sha256_after": "ece9126fb2420c09956da5bae678dd456f988b8b4524c5904f2406b69ec8fd4e"
+      },
+      {
+        "path": "docs/首次使用与故障排查.md",
+        "sha256_before": "b7e0d78dd305a1a8730912f75fe79f97b3de8b9863b36274efe437c07773600e",
+        "sha256_after": "b7e0d78dd305a1a8730912f75fe79f97b3de8b9863b36274efe437c07773600e"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-chrony-attribution-2026-09-12T07-45-32-076Z.json",
+        "sha256_before": "50afaa74c85cd5db5841a8e9d1d3a3332ac74b497fd9856c97dffe791f3d15be",
+        "sha256_after": "50afaa74c85cd5db5841a8e9d1d3a3332ac74b497fd9856c97dffe791f3d15be"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-chronyd-maintenance-2026-09-12T08-47-30-618Z.json",
+        "sha256_before": "97a7bc38ea3df71e15394060007cb5103223c882556e1734ad06e5485adf8fed",
+        "sha256_after": "97a7bc38ea3df71e15394060007cb5103223c882556e1734ad06e5485adf8fed"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-chronyd-preflight-2026-09-12T08-12-50-069Z.json",
+        "sha256_before": "67bc8e5f397a17a1afddc069455698198608fc408a0c1736d75acfef4f535705",
+        "sha256_after": "67bc8e5f397a17a1afddc069455698198608fc408a0c1736d75acfef4f535705"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-chronyd-preflight-2026-09-12T08-18-12-242Z.json",
+        "sha256_before": "15e18a826a17f89a310208ce77e42d82216aa8d5e1755a10bbe7c500fb82d8f4",
+        "sha256_after": "15e18a826a17f89a310208ce77e42d82216aa8d5e1755a10bbe7c500fb82d8f4"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-cleanup-2026-09-12-a2.json",
+        "sha256_before": "3776b40ef26b14d20d8c6bf80bfb28ede059764e02c602961bec08cde20d8d21",
+        "sha256_after": "3776b40ef26b14d20d8c6bf80bfb28ede059764e02c602961bec08cde20d8d21"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-clock-2026-09-12T03-44-50-581Z.json",
+        "sha256_before": "f5513284bca9806b410df289eff9fe14aecce2cb5de5576931a82da1c019863c",
+        "sha256_after": "f5513284bca9806b410df289eff9fe14aecce2cb5de5576931a82da1c019863c"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-clock-diagnostics-2026-09-12T04-59-16-594Z.json",
+        "sha256_before": "7da80f4332426bdd3919b35b72a2d593ba71b1dd0f2815aaa8feabc261fc825f",
+        "sha256_after": "7da80f4332426bdd3919b35b72a2d593ba71b1dd0f2815aaa8feabc261fc825f"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-clock-environment-2026-09-12-a2.json",
+        "sha256_before": "bdf2529ab06e45466b416f58229025f4def1a160f18fbc77797d910802ba6aa1",
+        "sha256_after": "bdf2529ab06e45466b416f58229025f4def1a160f18fbc77797d910802ba6aa1"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-clock-maintenance-2026-09-12T04-36-26-291Z.json",
+        "sha256_before": "2ff072b07c85559631be36fdb40d8ffe94a4888f750a8e9319f8fec46f262b36",
+        "sha256_after": "2ff072b07c85559631be36fdb40d8ffe94a4888f750a8e9319f8fec46f262b36"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-clock-maintenance-2026-09-12T04-53-42-385Z.json",
+        "sha256_before": "df7c326afe5acce2a2315a16955dbfa52f57de869b45324831203d8e32cd74b5",
+        "sha256_after": "df7c326afe5acce2a2315a16955dbfa52f57de869b45324831203d8e32cd74b5"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-environment-2026-09-11T08-37-01Z.json",
+        "sha256_before": "d78972e0f1272655f9cfd8f466930d527befac5301984e11728415c0bff3ae99",
+        "sha256_after": "d78972e0f1272655f9cfd8f466930d527befac5301984e11728415c0bff3ae99"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-network-2026-09-12-a2-final.json",
+        "sha256_before": "10a67ce81458721c89424b8717e931dcff2d44cea1c4b838dd28e9a107bab323",
+        "sha256_after": "10a67ce81458721c89424b8717e931dcff2d44cea1c4b838dd28e9a107bab323"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-network-2026-09-12-a2-final2.json",
+        "sha256_before": "8f97f80a4c3a403e66b0329e0eb7f8c2d8c6a4bd084a1be16c79e449ea97c9ea",
+        "sha256_after": "8f97f80a4c3a403e66b0329e0eb7f8c2d8c6a4bd084a1be16c79e449ea97c9ea"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-network-2026-09-12-a2-rerun.json",
+        "sha256_before": "da30ef2a6f76b2a693cc096d202848a7bfd5c10a75d926e796ddea6e500d7754",
+        "sha256_after": "da30ef2a6f76b2a693cc096d202848a7bfd5c10a75d926e796ddea6e500d7754"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-network-2026-09-12-a2.json",
+        "sha256_before": "7f63e343c871a16edf0b36a2040708372119d73cfd01d65117d4265e4c204da8",
+        "sha256_after": "7f63e343c871a16edf0b36a2040708372119d73cfd01d65117d4265e4c204da8"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-network-2026-09-12T03-38-29-471Z.json",
+        "sha256_before": "4db8a31ab30be38a413a32e38078106f8d466ed6acb365650f4a2f3c9b64c45f",
+        "sha256_after": "4db8a31ab30be38a413a32e38078106f8d466ed6acb365650f4a2f3c9b64c45f"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-preservation-2026-09-12-a2.json",
+        "sha256_before": "286ed069ebfdae26f7bf222f87c554c4f579a2131a7e9bfbcd6ffc46443a1399",
+        "sha256_after": "286ed069ebfdae26f7bf222f87c554c4f579a2131a7e9bfbcd6ffc46443a1399"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-proxy-timeouts-2026-09-12-a2-debug.json",
+        "sha256_before": "b896d0e8ba31f3f50c8ee8953e5c26190f45a80aa42615351f62fb52e6f87bab",
+        "sha256_after": "b896d0e8ba31f3f50c8ee8953e5c26190f45a80aa42615351f62fb52e6f87bab"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-proxy-timeouts-2026-09-12-a2.json",
+        "sha256_before": "0dcaf2eeaaf63deb3974b6a7d6043e13caca07422f65ca2f62150f25e659469f",
+        "sha256_after": "0dcaf2eeaaf63deb3974b6a7d6043e13caca07422f65ca2f62150f25e659469f"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-proxy-timeouts-2026-09-12T03-25-47-619Z.json",
+        "sha256_before": "569805cd8aa7341bc0c43244267802433af14ae18eb3671f07a12808ef60e1bd",
+        "sha256_after": "569805cd8aa7341bc0c43244267802433af14ae18eb3671f07a12808ef60e1bd"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-runtime-2026-09-10.json",
+        "sha256_before": "8febd1d0c876bfe2b1db1230e36a341b60cb4e4023adcaf3636a4ab751dc8e95",
+        "sha256_after": "8febd1d0c876bfe2b1db1230e36a341b60cb4e4023adcaf3636a4ab751dc8e95"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-runtime-2026-09-11.json",
+        "sha256_before": "4c95c9ee95ce03f2c69d2cc1f97c2e72338b83b3847ae3fd51fc8d91425daf21",
+        "sha256_after": "4c95c9ee95ce03f2c69d2cc1f97c2e72338b83b3847ae3fd51fc8d91425daf21"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-runtime-2026-09-11T07-56-56-279Z-ccefbb73.json",
+        "sha256_before": "270c7cacbcd01e3586b4ad2b08cdf9c76f4a10ee3c00a3e220be3c946441a7b2",
+        "sha256_after": "270c7cacbcd01e3586b4ad2b08cdf9c76f4a10ee3c00a3e220be3c946441a7b2"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-runtime-2026-09-12T02-41-22-818Z-ea454295.json",
+        "sha256_before": "b685fdab2491a6f2c5dd0dde67242c492f4cb240dd6765589cfc845ebb411409",
+        "sha256_after": "b685fdab2491a6f2c5dd0dde67242c492f4cb240dd6765589cfc845ebb411409"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-tick-maintenance-2026-09-12T05-48-48-326Z.json",
+        "sha256_before": "39d1394e690c4ba7cc626aadba5ea88c707a54b991740db22e4a2210a19f8a54",
+        "sha256_after": "39d1394e690c4ba7cc626aadba5ea88c707a54b991740db22e4a2210a19f8a54"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-tick-trace-2026-09-12T06-33-12-041Z.json",
+        "sha256_before": "0afa0cdaf8d4b182f6e627a9d7cf044f5079eaf27a883c310ce5d922623d4d1c",
+        "sha256_after": "0afa0cdaf8d4b182f6e627a9d7cf044f5079eaf27a883c310ce5d922623d4d1c"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-tick-trace-2026-09-12T06-45-28-312Z.json",
+        "sha256_before": "195f8e68f64ed59b65751a4d0ddabeaee164ef14ad6039fa6201bb1907f32968",
+        "sha256_after": "195f8e68f64ed59b65751a4d0ddabeaee164ef14ad6039fa6201bb1907f32968"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-tick-trace-2026-09-12T06-55-37-663Z.json",
+        "sha256_before": "3c7bb803c43e4cec421bc60f63398d652cbb7a830a6c3c08fe17b7cf1d71c4a1",
+        "sha256_after": "3c7bb803c43e4cec421bc60f63398d652cbb7a830a6c3c08fe17b7cf1d71c4a1"
+      },
+      {
+        "path": "docs/验收证据/story-2-2-wsl-recovery-2026-09-12T09-05-03-097Z.json",
+        "sha256_before": "3860f352c51080121591a6d3a5871d6284f4a8446404c485c97b42d10ec77a6b",
+        "sha256_after": "3860f352c51080121591a6d3a5871d6284f4a8446404c485c97b42d10ec77a6b"
+      },
+      {
+        "path": "nginx/demo-proxy.conf",
+        "sha256_before": "abae7a74feb2ed1b048b7579348707cc68d9c6a7126baab4356a7d44c7244fb2",
+        "sha256_after": "abae7a74feb2ed1b048b7579348707cc68d9c6a7126baab4356a7d44c7244fb2"
+      },
+      {
+        "path": "nginx/demo.conf",
+        "sha256_before": "df240aef6f22929ab6435d4f4a2e3c603baa17a124fe0d9b7f01d10eaa27c093",
+        "sha256_after": "df240aef6f22929ab6435d4f4a2e3c603baa17a124fe0d9b7f01d10eaa27c093"
+      },
+      {
+        "path": "package-lock.json",
+        "sha256_before": "d16a6af6d2342a702ac0d49b20f7201b9db1ed9f98ebdf4eaa6c3faa5e7d3598",
+        "sha256_after": "d16a6af6d2342a702ac0d49b20f7201b9db1ed9f98ebdf4eaa6c3faa5e7d3598"
+      },
+      {
+        "path": "package.json",
+        "sha256_before": "93e20900fa70d3674f04c022f733eb78528b21ed67b0ce8a7c0f69ec245cd42e",
+        "sha256_after": "93e20900fa70d3674f04c022f733eb78528b21ed67b0ce8a7c0f69ec245cd42e"
+      },
+      {
+        "path": "scripts/demo-http-probes.mjs",
+        "sha256_before": "420ddcd722ae3f4fca844671f97cecabb398637d557f47b1c3174d2a059be238",
+        "sha256_after": "420ddcd722ae3f4fca844671f97cecabb398637d557f47b1c3174d2a059be238"
+      },
+      {
+        "path": "scripts/demo-verification-utils.mjs",
+        "sha256_before": "7f470b62da3ce58fe36354797db426c5e6ba6b9e95e2829ad6ac263861da4665",
+        "sha256_after": "7f470b62da3ce58fe36354797db426c5e6ba6b9e95e2829ad6ac263861da4665"
+      },
+      {
+        "path": "scripts/fixtures/demo-proxy-upstream.mjs",
+        "sha256_before": "88298403d5b72a60760c36309639e777fce3859a9c5e076ded9e33ea3a32c169",
+        "sha256_after": "88298403d5b72a60760c36309639e777fce3859a9c5e076ded9e33ea3a32c169"
+      },
+      {
+        "path": "scripts/verify-demo-network.mjs",
+        "sha256_before": "e527300e9a0c26676906a737ab0bd53cacb7e4cee6f6280936f4463eb7eec365",
+        "sha256_after": "e527300e9a0c26676906a737ab0bd53cacb7e4cee6f6280936f4463eb7eec365"
+      },
+      {
+        "path": "scripts/verify-demo-proxy-timeouts.mjs",
+        "sha256_before": "71c54bff2a8a4116356553646f8d0423b84cad078818fba52076f58c00e49d5f",
+        "sha256_after": "71c54bff2a8a4116356553646f8d0423b84cad078818fba52076f58c00e49d5f"
+      },
+      {
+        "path": "scripts/verify-demo-runtime.mjs",
+        "sha256_before": "e302fbb02b0a383ad8fa268b284b9eb307982d0543bea4fc52562344be2ac2b5",
+        "sha256_after": "e302fbb02b0a383ad8fa268b284b9eb307982d0543bea4fc52562344be2ac2b5"
+      },
+      {
+        "path": "scripts/verify-demo-runtime.ps1",
+        "sha256_before": "d8d0b56bab5c432ca4ed824ec5780b8360a09d8bd722f2904044289433e57695",
+        "sha256_after": "d8d0b56bab5c432ca4ed824ec5780b8360a09d8bd722f2904044289433e57695"
+      },
+      {
+        "path": "src/app/(app)/settings/page.tsx",
+        "sha256_before": "bc7e0dba9a0d9a20d3c7fb3f64157ac0e4d3001e6355e64e53b6b982f2ded46c",
+        "sha256_after": "bc7e0dba9a0d9a20d3c7fb3f64157ac0e4d3001e6355e64e53b6b982f2ded46c"
+      },
+      {
+        "path": "src/lib/llm-config.ts",
+        "sha256_before": "c9a363404fe78da50278237704b60514b8c230cb8153cedc46713f0e3ef3899c",
+        "sha256_after": "c9a363404fe78da50278237704b60514b8c230cb8153cedc46713f0e3ef3899c"
+      },
+      {
+        "path": "src/middleware.ts",
+        "sha256_before": "1b51fa7f95a90e8bcc94609cd2d2b820fea838503538a3932c2ef3ee64bc2d22",
+        "sha256_after": "1b51fa7f95a90e8bcc94609cd2d2b820fea838503538a3932c2ef3ee64bc2d22"
+      },
+      {
+        "path": "tests/api/demo-boundary.test.ts",
+        "sha256_before": "b407ff9ec6d62487f93ea31e871900351af2a72600377a6294dcc5f20c3ecaf3",
+        "sha256_after": "b407ff9ec6d62487f93ea31e871900351af2a72600377a6294dcc5f20c3ecaf3"
+      },
+      {
+        "path": "tests/config/demo-network.test.ts",
+        "sha256_before": "1947f17a5b0de61df6d6715e39c8bedd49b14c6c9452de02de6245e162f26757",
+        "sha256_after": "1947f17a5b0de61df6d6715e39c8bedd49b14c6c9452de02de6245e162f26757"
+      },
+      {
+        "path": "tests/config/demo-proxy-timeouts.test.ts",
+        "sha256_before": "0e4cb091ac0d6b7ce04cb8f29e27e35ab1aea5bcb972dc765e20f242a1014238",
+        "sha256_after": "0e4cb091ac0d6b7ce04cb8f29e27e35ab1aea5bcb972dc765e20f242a1014238"
+      },
+      {
+        "path": "tests/docs/first-use-guide.test.ts",
+        "sha256_before": "3ea645b8cc0227b0fd80944a26975194e03b4141b2f5a1da37b61a8faa3a3649",
+        "sha256_after": "3ea645b8cc0227b0fd80944a26975194e03b4141b2f5a1da37b61a8faa3a3649"
+      }
+    ],
+    "passed": true
+  },
+  "finished_at": "2026-09-12T09:23:30.218Z"
+}

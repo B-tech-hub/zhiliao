@@ -1,0 +1,88 @@
+{
+  "applicationVersion": "0.6.1",
+  "tests": {
+    "helper-before": {
+      "numTotalTests": 12,
+      "numPassedTests": 4,
+      "numFailedTests": 8,
+      "numPendingTests": 0
+    },
+    "helper-after": {
+      "numTotalTests": 12,
+      "numPassedTests": 12,
+      "numFailedTests": 0,
+      "numPendingTests": 0
+    },
+    "editor-before": {
+      "numTotalTests": 18,
+      "numPassedTests": 2,
+      "numFailedTests": 16,
+      "numPendingTests": 0
+    },
+    "editor-before-corrected": {
+      "numTotalTests": 20,
+      "numPassedTests": 16,
+      "numFailedTests": 4,
+      "numPendingTests": 0
+    },
+    "targeted-after": {
+      "numTotalTests": 47,
+      "numPassedTests": 47,
+      "numFailedTests": 0,
+      "numPendingTests": 0
+    },
+    "targeted-final": {
+      "numTotalTests": 49,
+      "numPassedTests": 49,
+      "numFailedTests": 0,
+      "numPendingTests": 0
+    }
+  },
+  "dependencyCheck": "dependency-check.json",
+  "audits": {
+    "audit-all": {
+      "counts": {
+        "info": 0,
+        "low": 0,
+        "moderate": 32,
+        "high": 0,
+        "critical": 0,
+        "total": 32
+      },
+      "advisories": [
+        "https://github.com/advisories/GHSA-cp6q-959q-f8rh"
+      ]
+    },
+    "audit-production": {
+      "counts": {
+        "info": 0,
+        "low": 0,
+        "moderate": 32,
+        "high": 0,
+        "critical": 0,
+        "total": 32
+      },
+      "advisories": [
+        "https://github.com/advisories/GHSA-cp6q-959q-f8rh"
+      ]
+    }
+  },
+  "scope": {
+    "singleAgent": true,
+    "build": false,
+    "fullTests": false,
+    "browser": false,
+    "docker": false,
+    "realModels": false,
+    "release": false
+  },
+  "approvedExtension": "RichImage serialization and local regressions approved during implementation",
+  "verificationNotes": [
+    "Initial editor test accidentally selected the ProseMirror separator image; corrected to img[src] before baseline classification",
+    "Existing failures were width/alignment loss and adjacent table corruption in both Mermaid modes",
+    "Initial targeted type command ran before its temporary config existed; retry corrected config and added explicit repository typeRoots",
+    "Type check found a missing HTMLImageElement generic in a test; fixed without runtime behavior change, final component lint passed",
+    "Existing Vite native config loader warning retained"
+  ],
+  "reviewPatch": "Added width-only image roundtrip cases for both Mermaid modes; final targeted tests 49/49"
+}

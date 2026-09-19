@@ -1,0 +1,225 @@
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile:
+#1 transferring dockerfile: 2.15kB 0.0s done
+#1 DONE 0.1s
+
+#2 [internal] load metadata for docker.io/library/node:22-bookworm-slim
+#2 DONE 35.3s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 772B done
+#3 DONE 0.1s
+
+#4 [internal] load build context
+#4 DONE 0.0s
+
+#5 [builder 1/6] FROM docker.io/library/node:22-bookworm-slim@sha256:83f487e0a63425e5b4d146fb5e5be574bcbe1b7b843d3ebafdd95eaf7767a7e5
+#5 resolve docker.io/library/node:22-bookworm-slim@sha256:83f487e0a63425e5b4d146fb5e5be574bcbe1b7b843d3ebafdd95eaf7767a7e5 0.0s done
+#5 DONE 0.1s
+
+#4 [internal] load build context
+#4 transferring context: 2.27MB 0.1s done
+#4 DONE 0.2s
+
+#6 [builder 2/6] WORKDIR /app
+#6 CACHED
+
+#7 [builder 3/6] COPY package.json package-lock.json ./
+#7 DONE 0.1s
+
+#8 [builder 4/6] RUN npm ci
+#8 1704.5 
+#8 1704.5 added 762 packages, and audited 763 packages in 28m
+#8 1704.5 
+#8 1704.5 307 packages are looking for funding
+#8 1704.5   run `npm fund` for details
+#8 1704.6 
+#8 1704.6 37 vulnerabilities (34 moderate, 2 high, 1 critical)
+#8 1704.6 
+#8 1704.6 To address issues that do not require attention, run:
+#8 1704.6   npm audit fix
+#8 1704.6 
+#8 1704.6 To address all issues (including breaking changes), run:
+#8 1704.6   npm audit fix --force
+#8 1704.6 
+#8 1704.6 Run `npm audit` for details.
+#8 1704.6 npm notice
+#8 1704.6 npm notice New major version of npm available! 10.9.8 -> 12.0.2
+#8 1704.6 npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.0.2
+#8 1704.6 npm notice To update run: npm install -g npm@12.0.2
+#8 1704.6 npm notice
+#8 DONE 1704.8s
+
+#9 [builder 5/6] COPY . .
+#9 DONE 1.0s
+
+#10 [builder 6/6] RUN npm run build
+#10 0.462 
+#10 0.462 > zhiliao@0.6.1 build
+#10 0.462 > next build
+#10 0.462 
+#10 1.239 Attention: Next.js now collects completely anonymous telemetry regarding usage.
+#10 1.239 This information is used to shape Next.js' roadmap and prioritize features.
+#10 1.239 You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+#10 1.239 https://nextjs.org/telemetry
+#10 1.239 
+#10 1.312    ▲ Next.js 15.5.23
+#10 1.312    - Experiments (use with caution):
+#10 1.312      · staleTimes
+#10 1.312 
+#10 1.369    Creating an optimized production build ...
+#10 10.58  ⚠ Compiled with warnings in 10.2s
+#10 10.58 
+#10 10.58 ./node_modules/libheif-js/libheif-wasm/libheif-bundle.js
+#10 10.58 Critical dependency: require function is used in a way in which dependencies cannot be statically extracted
+#10 10.58 
+#10 10.58 Import trace for requested module:
+#10 10.58 ./node_modules/libheif-js/libheif-wasm/libheif-bundle.js
+#10 10.58 ./node_modules/libheif-js/wasm-bundle.js
+#10 10.58 ./node_modules/heic-decode/index.js
+#10 10.58 ./node_modules/heic-convert/index.js
+#10 10.58 ./src/app/api/uploads/route.ts
+#10 10.58 
+#10 10.58 ./src/lib/version.ts
+#10 10.58 Should not import the named export 'version' (imported as 'version') from default-exporting module (only default export is available soon)
+#10 10.58 
+#10 10.58 Import trace for requested module:
+#10 10.58 ./src/lib/version.ts
+#10 10.58 ./src/app/api/mcp/route.ts
+#10 10.58 
+#10 12.59  ⚠ Compiled with warnings in 1202ms
+#10 12.59 
+#10 12.59 ./node_modules/jose/dist/webapi/lib/deflate.js
+#10 12.59 A Node.js API is used (CompressionStream at line: 10) which is not supported in the Edge Runtime.
+#10 12.59 Learn more: https://nextjs.org/docs/api-reference/edge-runtime
+#10 12.59 
+#10 12.59 Import trace for requested module:
+#10 12.59 ./node_modules/jose/dist/webapi/lib/deflate.js
+#10 12.59 ./node_modules/jose/dist/webapi/lib/jwe_decrypt.js
+#10 12.59 ./node_modules/jose/dist/webapi/jwt/decrypt.js
+#10 12.59 ./node_modules/jose/dist/webapi/index.js
+#10 12.59 ./src/lib/auth.ts
+#10 12.59 
+#10 12.59 ./node_modules/jose/dist/webapi/lib/deflate.js
+#10 12.59 A Node.js API is used (DecompressionStream at line: 26) which is not supported in the Edge Runtime.
+#10 12.59 Learn more: https://nextjs.org/docs/api-reference/edge-runtime
+#10 12.59 
+#10 12.59 Import trace for requested module:
+#10 12.59 ./node_modules/jose/dist/webapi/lib/deflate.js
+#10 12.59 ./node_modules/jose/dist/webapi/lib/jwe_decrypt.js
+#10 12.59 ./node_modules/jose/dist/webapi/jwt/decrypt.js
+#10 12.59 ./node_modules/jose/dist/webapi/index.js
+#10 12.59 ./src/lib/auth.ts
+#10 12.59 
+#10 22.67  ✓ Compiled successfully in 20.7s
+#10 22.67    Linting and checking validity of types ...
+#10 29.52    Collecting page data ...
+#10 32.03    Generating static pages (0/28) ...
+#10 32.49    Generating static pages (7/28) 
+#10 32.53    Generating static pages (14/28) 
+#10 32.67    Generating static pages (21/28) 
+#10 32.69  ✓ Generating static pages (28/28)
+#10 33.84    Finalizing page optimization ...
+#10 33.84    Collecting build traces ...
+#10 45.22 
+#10 45.23 Route (app)                                     Size  First Load JS
+#10 45.23 ┌ ƒ /                                        1.31 kB         108 kB
+#10 45.23 ├ ○ /_not-found                                 1 kB         105 kB
+#10 45.23 ├ ƒ /api/auth/login                            252 B         104 kB
+#10 45.23 ├ ƒ /api/auth/logout                           252 B         104 kB
+#10 45.23 ├ ƒ /api/backup                                252 B         104 kB
+#10 45.23 ├ ƒ /api/chat                                  252 B         104 kB
+#10 45.23 ├ ƒ /api/chat/confirm                          252 B         104 kB
+#10 45.23 ├ ƒ /api/chat/conversations                    252 B         104 kB
+#10 45.23 ├ ƒ /api/chat/conversations/[id]               252 B         104 kB
+#10 45.23 ├ ƒ /api/chat/conversations/[id]/sources       252 B         104 kB
+#10 45.23 ├ ƒ /api/chat/undo                             252 B         104 kB
+#10 45.23 ├ ƒ /api/embedding/backfill                    252 B         104 kB
+#10 45.23 ├ ƒ /api/export                                252 B         104 kB
+#10 45.23 ├ ƒ /api/external/capture                      252 B         104 kB
+#10 45.23 ├ ƒ /api/external/knowledge                    252 B         104 kB
+#10 45.23 ├ ƒ /api/handwriting                           252 B         104 kB
+#10 45.23 ├ ƒ /api/healthz                               252 B         104 kB
+#10 45.23 ├ ƒ /api/images/[filename]                     252 B         104 kB
+#10 45.23 ├ ƒ /api/import                                252 B         104 kB
+#10 45.23 ├ ƒ /api/llm/test                              252 B         104 kB
+#10 45.23 ├ ƒ /api/mcp                                   252 B         104 kB
+#10 45.23 ├ ƒ /api/notes                                 252 B         104 kB
+#10 45.23 ├ ƒ /api/notes/[id]                            252 B         104 kB
+#10 45.23 ├ ƒ /api/notes/[id]/append                     252 B         104 kB
+#10 45.23 ├ ƒ /api/notes/[id]/related                    252 B         104 kB
+#10 45.23 ├ ƒ /api/notes/[id]/reprocess                  252 B         104 kB
+#10 45.23 ├ ƒ /api/notes/[id]/transcribe                 252 B         104 kB
+#10 45.23 ├ ƒ /api/notes/[id]/transcription-candidate    252 B         104 kB
+#10 45.23 ├ ƒ /api/notes/batch-delete                    252 B         104 kB
+#10 45.23 ├ ƒ /api/notes/batch-move                      252 B         104 kB
+#10 45.23 ├ ƒ /api/review                                252 B         104 kB
+#10 45.23 ├ ƒ /api/search                                252 B         104 kB
+#10 45.23 ├ ƒ /api/settings/corrections                  252 B         104 kB
+#10 45.23 ├ ƒ /api/settings/features                     252 B         104 kB
+#10 45.23 ├ ƒ /api/settings/llm                          252 B         104 kB
+#10 45.23 ├ ƒ /api/settings/tokens                       252 B         104 kB
+#10 45.23 ├ ƒ /api/suggestions                           252 B         104 kB
+#10 45.23 ├ ƒ /api/suggestions/[id]/accept               252 B         104 kB
+#10 45.23 ├ ƒ /api/suggestions/[id]/dismiss              252 B         104 kB
+#10 45.23 ├ ƒ /api/suggestions/generate                  252 B         104 kB
+#10 45.23 ├ ƒ /api/tags                                  252 B         104 kB
+#10 45.23 ├ ƒ /api/topics                                252 B         104 kB
+#10 45.23 ├ ƒ /api/topics/[id]                           252 B         104 kB
+#10 45.23 ├ ƒ /api/trash/purge                           252 B         104 kB
+#10 45.23 ├ ƒ /api/trash/restore                         252 B         104 kB
+#10 45.23 ├ ƒ /api/uploads                               252 B         104 kB
+#10 45.23 ├ ○ /icon.svg                                    0 B            0 B
+#10 45.23 ├ ƒ /inbox                                   3.58 kB         111 kB
+#10 45.23 ├ ƒ /login                                   1.19 kB         105 kB
+#10 45.23 ├ ○ /manifest.webmanifest                      252 B         104 kB
+#10 45.23 ├ ƒ /notes/[id]                              6.31 kB         113 kB
+#10 45.23 ├ ƒ /notes/new                               2.25 kB         106 kB
+#10 45.23 ├ ƒ /search                                   2.8 kB         110 kB
+#10 45.23 ├ ƒ /settings                                13.3 kB         120 kB
+#10 45.23 ├ ƒ /topics/[id]                             3.11 kB         110 kB
+#10 45.23 └ ƒ /trash                                   3.22 kB         110 kB
+#10 45.23 + First Load JS shared by all                 104 kB
+#10 45.23   ├ chunks/1255-912c63e691e3026b.js          46.1 kB
+#10 45.23   ├ chunks/4bd1b696-100b9d70ed4e49c1.js      54.2 kB
+#10 45.23   └ other shared chunks (total)              3.26 kB
+#10 45.23 
+#10 45.23 
+#10 45.23 ƒ Middleware                                   40 kB
+#10 45.23 
+#10 45.23 ○  (Static)   prerendered as static content
+#10 45.23 ƒ  (Dynamic)  server-rendered on demand
+#10 45.23 
+#10 DONE 45.6s
+
+#11 [runner 3/7] COPY --from=builder /app/.next/standalone ./
+#11 DONE 0.6s
+
+#12 [runner 4/7] COPY --from=builder /app/.next/static ./.next/static
+#12 DONE 0.2s
+
+#13 [runner 5/7] COPY --from=builder /app/public ./public
+#13 DONE 0.1s
+
+#14 [runner 6/7] COPY --from=builder /app/scripts/mock-llm.mjs ./scripts/
+#14 DONE 0.1s
+
+#15 [runner 7/7] RUN mkdir -p /data/db /data/uploads /data/notes && chown -R node:node /data /app
+#15 DONE 17.4s
+
+#16 exporting to image
+#16 exporting layers
+#16 exporting layers 4.1s done
+#16 exporting manifest sha256:f72cf603c51122e4f7fc633b9715efe935b88d94f4535cd1c5f2e8f3d54f7870 0.0s done
+#16 exporting config sha256:0152ba5d3b0e5bd7c2a14c241387e5cdeda1095d5c342d57a4bbd75a69fc7bd2 0.0s done
+#16 exporting attestation manifest sha256:1e3eb0f79d7a1a2f2718ec00c1473f633f902f3ad1a2f1ed9e75a797b3b86840 0.1s done
+#16 exporting manifest list sha256:8a8f2cd3ec1a26fc68bf04a2661f2306f09bba4b06ba9b1593d74b3f3953deb1
+#16 exporting manifest list sha256:8a8f2cd3ec1a26fc68bf04a2661f2306f09bba4b06ba9b1593d74b3f3953deb1 0.0s done
+#16 naming to docker.io/library/zhiliao-r1:0.6.1-20260915-093206-7a7ba6b4 0.0s done
+#16 unpacking to docker.io/library/zhiliao-r1:0.6.1-20260915-093206-7a7ba6b4
+#16 unpacking to docker.io/library/zhiliao-r1:0.6.1-20260915-093206-7a7ba6b4 1.7s done
+#16 DONE 6.0s
+
+View build details: docker-desktop://dashboard/build/desktop-linux/desktop-linux/rxgecrw5xyfklcumb247m2cz1

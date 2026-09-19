@@ -1,0 +1,11 @@
+# 本轮已脱敏日志随验收记录保存。
+!/build.log
+!/cleanup-compose.log
+!/npm-ci-debug.log
+!/restart-down.log
+!/restart-up.log
+!/runtime-before-restart.log
+!/runtime.log
+!/startup-config-down.log
+!/startup-config-up.log
+!/startup.log

@@ -1,0 +1,2665 @@
+{
+  "runId": "20260915-093206-7a7ba6b4",
+  "startedUtc": "2026-09-15T02:18:45.503Z",
+  "network": [
+    {
+      "time": "2026-09-15T02:19:37.067Z",
+      "path": "/",
+      "method": "GET",
+      "status": 307,
+      "action": "login-page"
+    },
+    {
+      "time": "2026-09-15T02:19:37.103Z",
+      "path": "/login",
+      "method": "GET",
+      "status": 200,
+      "action": "login-page"
+    },
+    {
+      "time": "2026-09-15T02:19:37.127Z",
+      "path": "/_next/static/css/3f43a07db598b6ec.css",
+      "method": "GET",
+      "status": 200,
+      "action": "login-page"
+    },
+    {
+      "time": "2026-09-15T02:19:37.134Z",
+      "path": "/_next/static/chunks/webpack-40deb59ae2a23f6a.js",
+      "method": "GET",
+      "status": 200,
+      "action": "login-page"
+    },
+    {
+      "time": "2026-09-15T02:19:37.138Z",
+      "path": "/_next/static/chunks/main-app-f3336e172256d2ab.js",
+      "method": "GET",
+      "status": 200,
+      "action": "login-page"
+    },
+    {
+      "time": "2026-09-15T02:19:37.139Z",
+      "path": "/manifest.webmanifest",
+      "method": "GET",
+      "status": 200,
+      "action": "login-page"
+    },
+    {
+      "time": "2026-09-15T02:19:37.149Z",
+      "path": "/_next/static/chunks/app/layout-904d69f7d5cdde36.js",
+      "method": "GET",
+      "status": 200,
+      "action": "login-page"
+    },
+    {
+      "time": "2026-09-15T02:19:37.149Z",
+      "path": "/_next/static/chunks/1255-912c63e691e3026b.js",
+      "method": "GET",
+      "status": 200,
+      "action": "login-page"
+    },
+    {
+      "time": "2026-09-15T02:19:37.149Z",
+      "path": "/_next/static/chunks/4bd1b696-100b9d70ed4e49c1.js",
+      "method": "GET",
+      "status": 200,
+      "action": "login-page"
+    },
+    {
+      "time": "2026-09-15T02:19:37.195Z",
+      "path": "/_next/static/media/instrument-serif-latin-400-normal.e872e3f2.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "login-page"
+    },
+    {
+      "time": "2026-09-15T02:19:37.195Z",
+      "path": "/_next/static/chunks/app/login/page-dc157243fbc1fc0f.js",
+      "method": "GET",
+      "status": 200,
+      "action": "login-page"
+    },
+    {
+      "time": "2026-09-15T02:19:37.203Z",
+      "path": "/_next/static/media/inter-latin-wght-normal.6c596dfc.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "login-page"
+    },
+    {
+      "time": "2026-09-15T02:19:37.206Z",
+      "path": "/_next/static/media/noto-sans-sc-119-wght-normal.affd1213.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "login-page"
+    },
+    {
+      "time": "2026-09-15T02:19:37.213Z",
+      "path": "/_next/static/media/noto-sans-sc-117-wght-normal.2e4b1f04.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "login-page"
+    },
+    {
+      "time": "2026-09-15T02:19:37.214Z",
+      "path": "/_next/static/media/noto-sans-sc-118-wght-normal.fa5a5b16.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "login-page"
+    },
+    {
+      "time": "2026-09-15T02:19:37.218Z",
+      "path": "/_next/static/media/noto-sans-sc-115-wght-normal.d494d07f.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "login-page"
+    },
+    {
+      "time": "2026-09-15T02:19:37.221Z",
+      "path": "/_next/static/media/noto-sans-sc-114-wght-normal.4c8b25a1.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "login-page"
+    },
+    {
+      "time": "2026-09-15T02:19:37.224Z",
+      "path": "/_next/static/media/noto-sans-sc-113-wght-normal.58d174d1.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "login-page"
+    },
+    {
+      "time": "2026-09-15T02:19:37.229Z",
+      "path": "/_next/static/media/noto-sans-sc-116-wght-normal.7c86bddd.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "login-page"
+    },
+    {
+      "time": "2026-09-15T02:19:37.232Z",
+      "path": "/_next/static/media/noto-sans-sc-111-wght-normal.3f3c8c90.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "login-page"
+    },
+    {
+      "time": "2026-09-15T02:19:37.235Z",
+      "path": "/_next/static/media/noto-serif-sc-118-wght-normal.f07da885.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "login-page"
+    },
+    {
+      "time": "2026-09-15T02:19:37.246Z",
+      "path": "/icons/icon-192.png",
+      "method": "GET",
+      "status": 200,
+      "action": "login-page"
+    },
+    {
+      "time": "2026-09-15T02:20:27.700Z",
+      "path": "/api/auth/login",
+      "method": "POST",
+      "status": 401,
+      "action": "login"
+    },
+    {
+      "time": "2026-09-15T02:20:27.739Z",
+      "path": "/api/auth/login",
+      "method": "POST",
+      "status": 200,
+      "action": "login"
+    },
+    {
+      "time": "2026-09-15T02:20:27.758Z",
+      "path": "/",
+      "method": "GET",
+      "status": 200,
+      "action": "login"
+    },
+    {
+      "time": "2026-09-15T02:20:27.773Z",
+      "path": "/",
+      "method": "GET",
+      "status": 200,
+      "action": "login"
+    },
+    {
+      "time": "2026-09-15T02:20:27.774Z",
+      "path": "/_next/static/chunks/2619-04bc32f026a0d946.js",
+      "method": "GET",
+      "status": 200,
+      "action": "login"
+    },
+    {
+      "time": "2026-09-15T02:20:27.776Z",
+      "path": "/_next/static/chunks/app/(app)/page-546d9e331d248176.js",
+      "method": "GET",
+      "status": 200,
+      "action": "login"
+    },
+    {
+      "time": "2026-09-15T02:20:27.780Z",
+      "path": "/_next/static/chunks/app/(app)/layout-1052a57c6a33ae25.js",
+      "method": "GET",
+      "status": 200,
+      "action": "login"
+    },
+    {
+      "time": "2026-09-15T02:20:27.781Z",
+      "path": "/_next/static/chunks/5395-343aef0ba32cbeab.js",
+      "method": "GET",
+      "status": 200,
+      "action": "login"
+    },
+    {
+      "time": "2026-09-15T02:20:27.783Z",
+      "path": "/_next/static/chunks/d3ac728e-c168d39ae19d599f.js",
+      "method": "GET",
+      "status": 200,
+      "action": "login"
+    },
+    {
+      "time": "2026-09-15T02:20:27.866Z",
+      "path": "/manifest.webmanifest",
+      "method": "GET",
+      "status": 200,
+      "action": "login"
+    },
+    {
+      "time": "2026-09-15T02:20:27.870Z",
+      "path": "/search",
+      "method": "GET",
+      "status": 200,
+      "action": "login"
+    },
+    {
+      "time": "2026-09-15T02:20:27.870Z",
+      "path": "/_next/static/media/noto-sans-sc-104-wght-normal.2958f540.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "login"
+    },
+    {
+      "time": "2026-09-15T02:20:27.873Z",
+      "path": "/_next/static/media/jetbrains-mono-latin-wght-normal.a865edea.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "login"
+    },
+    {
+      "time": "2026-09-15T02:20:27.876Z",
+      "path": "/",
+      "method": "GET",
+      "status": 200,
+      "action": "login"
+    },
+    {
+      "time": "2026-09-15T02:20:27.877Z",
+      "path": "/_next/static/media/noto-sans-sc-110-wght-normal.cbb24916.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "login"
+    },
+    {
+      "time": "2026-09-15T02:20:27.888Z",
+      "path": "/inbox",
+      "method": "GET",
+      "status": 200,
+      "action": "login"
+    },
+    {
+      "time": "2026-09-15T02:20:27.897Z",
+      "path": "/settings",
+      "method": "GET",
+      "status": 200,
+      "action": "login"
+    },
+    {
+      "time": "2026-09-15T02:20:27.902Z",
+      "path": "/icons/icon-192.png",
+      "method": "GET",
+      "status": 200,
+      "action": "login"
+    },
+    {
+      "time": "2026-09-15T02:20:27.906Z",
+      "path": "/_next/static/chunks/app/(app)/search/page-195baf5521c05d5d.js",
+      "method": "GET",
+      "status": 200,
+      "action": "login"
+    },
+    {
+      "time": "2026-09-15T02:20:27.918Z",
+      "path": "/_next/static/chunks/app/(app)/inbox/page-681898bb0a303d89.js",
+      "method": "GET",
+      "status": 200,
+      "action": "login"
+    },
+    {
+      "time": "2026-09-15T02:20:27.922Z",
+      "path": "/_next/static/chunks/app/(app)/settings/page-5997b3acd7a84aea.js",
+      "method": "GET",
+      "status": 200,
+      "action": "login"
+    },
+    {
+      "time": "2026-09-15T02:20:57.145Z",
+      "path": "/_next/static/media/noto-sans-sc-87-wght-normal.44ffc6ca.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "first-note"
+    },
+    {
+      "time": "2026-09-15T02:20:57.269Z",
+      "path": "/api/notes",
+      "method": "POST",
+      "status": 201,
+      "action": "first-note"
+    },
+    {
+      "time": "2026-09-15T02:20:57.311Z",
+      "path": "/",
+      "method": "GET",
+      "status": 200,
+      "action": "first-note"
+    },
+    {
+      "time": "2026-09-15T02:20:57.633Z",
+      "path": "/manifest.webmanifest",
+      "method": "GET",
+      "status": 200,
+      "action": "first-note"
+    },
+    {
+      "time": "2026-09-15T02:20:57.638Z",
+      "path": "/icons/icon-192.png",
+      "method": "GET",
+      "status": 200,
+      "action": "first-note"
+    },
+    {
+      "time": "2026-09-15T02:20:58.160Z",
+      "path": "/search",
+      "method": "GET",
+      "status": 200,
+      "action": "first-note"
+    },
+    {
+      "time": "2026-09-15T02:20:58.177Z",
+      "path": "/_next/static/media/noto-serif-sc-117-wght-normal.8f2a718c.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "first-note"
+    },
+    {
+      "time": "2026-09-15T02:20:58.476Z",
+      "path": "/manifest.webmanifest",
+      "method": "GET",
+      "status": 200,
+      "action": "first-note"
+    },
+    {
+      "time": "2026-09-15T02:20:58.480Z",
+      "path": "/icons/icon-192.png",
+      "method": "GET",
+      "status": 200,
+      "action": "first-note"
+    },
+    {
+      "time": "2026-09-15T02:20:58.493Z",
+      "path": "/api/search",
+      "method": "GET",
+      "status": 200,
+      "action": "first-note"
+    },
+    {
+      "time": "2026-09-15T02:20:58.514Z",
+      "path": "/notes/ox6f52w66q7g9ldv1jt1am52",
+      "method": "GET",
+      "status": 200,
+      "action": "first-note"
+    },
+    {
+      "time": "2026-09-15T02:20:58.533Z",
+      "path": "/notes/ox6f52w66q7g9ldv1jt1am52",
+      "method": "GET",
+      "status": 200,
+      "action": "first-note"
+    },
+    {
+      "time": "2026-09-15T02:20:58.535Z",
+      "path": "/manifest.webmanifest",
+      "method": "GET",
+      "status": 200,
+      "action": "first-note"
+    },
+    {
+      "time": "2026-09-15T02:20:58.544Z",
+      "path": "/icons/icon-192.png",
+      "method": "GET",
+      "status": 200,
+      "action": "first-note"
+    },
+    {
+      "time": "2026-09-15T02:20:58.544Z",
+      "path": "/_next/static/chunks/app/(app)/notes/%5Bid%5D/page-cb3d79c714509e73.js",
+      "method": "GET",
+      "status": 200,
+      "action": "first-note"
+    },
+    {
+      "time": "2026-09-15T02:20:58.550Z",
+      "path": "/manifest.webmanifest",
+      "method": "GET",
+      "status": 200,
+      "action": "first-note"
+    },
+    {
+      "time": "2026-09-15T02:20:58.556Z",
+      "path": "/icons/icon-192.png",
+      "method": "GET",
+      "status": 200,
+      "action": "first-note"
+    },
+    {
+      "time": "2026-09-15T02:20:58.556Z",
+      "path": "/_next/static/chunks/3997.05b0bdd016730182.js",
+      "method": "GET",
+      "status": 200,
+      "action": "first-note"
+    },
+    {
+      "time": "2026-09-15T02:20:58.559Z",
+      "path": "/_next/static/chunks/70e0d97a.b2cba84adfc5cf7b.js",
+      "method": "GET",
+      "status": 200,
+      "action": "first-note"
+    },
+    {
+      "time": "2026-09-15T02:20:58.559Z",
+      "path": "/_next/static/chunks/54a60aa6.f9355e114c79265d.js",
+      "method": "GET",
+      "status": 200,
+      "action": "first-note"
+    },
+    {
+      "time": "2026-09-15T02:20:58.568Z",
+      "path": "/_next/static/chunks/7814.a5dd8e4ffb31b784.js",
+      "method": "GET",
+      "status": 200,
+      "action": "first-note"
+    },
+    {
+      "time": "2026-09-15T02:20:58.865Z",
+      "path": "/_next/static/media/noto-sans-sc-107-wght-normal.a20e35d3.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "first-note"
+    },
+    {
+      "time": "2026-09-15T02:20:58.868Z",
+      "path": "/_next/static/media/noto-serif-sc-116-wght-normal.b1b2bd04.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "first-note"
+    },
+    {
+      "time": "2026-09-15T02:20:58.871Z",
+      "path": "/_next/static/media/noto-sans-sc-112-wght-normal.4d8fa99b.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "first-note"
+    },
+    {
+      "time": "2026-09-15T02:22:59.190Z",
+      "path": "/settings",
+      "method": "GET",
+      "status": 200,
+      "action": "export-without-model"
+    },
+    {
+      "time": "2026-09-15T02:22:59.259Z",
+      "path": "/_next/static/media/noto-sans-sc-108-wght-normal.8c7c4dad.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "export-without-model"
+    },
+    {
+      "time": "2026-09-15T02:22:59.260Z",
+      "path": "/manifest.webmanifest",
+      "method": "GET",
+      "status": 200,
+      "action": "export-without-model"
+    },
+    {
+      "time": "2026-09-15T02:22:59.267Z",
+      "path": "/_next/static/media/noto-sans-sc-105-wght-normal.5202d792.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "export-without-model"
+    },
+    {
+      "time": "2026-09-15T02:22:59.267Z",
+      "path": "/_next/static/media/noto-sans-sc-109-wght-normal.54798e55.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "export-without-model"
+    },
+    {
+      "time": "2026-09-15T02:22:59.268Z",
+      "path": "/icons/icon-192.png",
+      "method": "GET",
+      "status": 200,
+      "action": "export-without-model"
+    },
+    {
+      "time": "2026-09-15T02:22:59.274Z",
+      "path": "/_next/static/media/noto-sans-sc-101-wght-normal.973dcd0f.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "export-without-model"
+    },
+    {
+      "time": "2026-09-15T02:22:59.552Z",
+      "path": "/trash",
+      "method": "GET",
+      "status": 200,
+      "action": "export-without-model"
+    },
+    {
+      "time": "2026-09-15T02:22:59.558Z",
+      "path": "/api/export",
+      "method": "GET",
+      "status": 200,
+      "action": "export-without-model"
+    },
+    {
+      "time": "2026-09-15T02:22:59.570Z",
+      "path": "/_next/static/chunks/app/(app)/trash/page-1291732c417b1460.js",
+      "method": "GET",
+      "status": 200,
+      "action": "export-without-model"
+    },
+    {
+      "time": "2026-09-15T02:24:39.041Z",
+      "path": "/api/topics",
+      "method": "POST",
+      "status": 201,
+      "action": "mock-settings"
+    },
+    {
+      "time": "2026-09-15T02:24:39.052Z",
+      "path": "/settings",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-settings"
+    },
+    {
+      "time": "2026-09-15T02:24:39.071Z",
+      "path": "/topics/sxpoiqymygtcsflg916yiktv",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-settings"
+    },
+    {
+      "time": "2026-09-15T02:24:39.073Z",
+      "path": "/manifest.webmanifest",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-settings"
+    },
+    {
+      "time": "2026-09-15T02:24:39.079Z",
+      "path": "/icons/icon-192.png",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-settings"
+    },
+    {
+      "time": "2026-09-15T02:24:39.079Z",
+      "path": "/_next/static/chunks/app/(app)/topics/%5Bid%5D/page-a443cf22ffddee12.js",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-settings"
+    },
+    {
+      "time": "2026-09-15T02:24:39.132Z",
+      "path": "/api/settings/llm",
+      "method": "PATCH",
+      "status": 200,
+      "action": "mock-settings"
+    },
+    {
+      "time": "2026-09-15T02:24:39.148Z",
+      "path": "/settings",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-settings"
+    },
+    {
+      "time": "2026-09-15T02:24:39.167Z",
+      "path": "/settings",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-settings"
+    },
+    {
+      "time": "2026-09-15T02:24:39.194Z",
+      "path": "/manifest.webmanifest",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-settings"
+    },
+    {
+      "time": "2026-09-15T02:24:39.195Z",
+      "path": "/_next/static/css/3f43a07db598b6ec.css",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-settings"
+    },
+    {
+      "time": "2026-09-15T02:24:39.196Z",
+      "path": "/_next/static/chunks/webpack-40deb59ae2a23f6a.js",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-settings"
+    },
+    {
+      "time": "2026-09-15T02:24:39.199Z",
+      "path": "/_next/static/chunks/main-app-f3336e172256d2ab.js",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-settings"
+    },
+    {
+      "time": "2026-09-15T02:24:39.202Z",
+      "path": "/_next/static/chunks/app/layout-904d69f7d5cdde36.js",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-settings"
+    },
+    {
+      "time": "2026-09-15T02:24:39.207Z",
+      "path": "/_next/static/chunks/1255-912c63e691e3026b.js",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-settings"
+    },
+    {
+      "time": "2026-09-15T02:24:39.208Z",
+      "path": "/_next/static/chunks/4bd1b696-100b9d70ed4e49c1.js",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-settings"
+    },
+    {
+      "time": "2026-09-15T02:24:39.293Z",
+      "path": "/_next/static/media/jetbrains-mono-latin-wght-normal.a865edea.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-settings"
+    },
+    {
+      "time": "2026-09-15T02:24:39.293Z",
+      "path": "/_next/static/media/noto-sans-sc-118-wght-normal.fa5a5b16.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-settings"
+    },
+    {
+      "time": "2026-09-15T02:24:39.294Z",
+      "path": "/_next/static/media/inter-latin-wght-normal.6c596dfc.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-settings"
+    },
+    {
+      "time": "2026-09-15T02:24:39.294Z",
+      "path": "/_next/static/media/noto-sans-sc-117-wght-normal.2e4b1f04.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-settings"
+    },
+    {
+      "time": "2026-09-15T02:24:39.294Z",
+      "path": "/_next/static/media/noto-sans-sc-114-wght-normal.4c8b25a1.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-settings"
+    },
+    {
+      "time": "2026-09-15T02:24:39.294Z",
+      "path": "/_next/static/media/noto-sans-sc-110-wght-normal.cbb24916.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-settings"
+    },
+    {
+      "time": "2026-09-15T02:24:39.294Z",
+      "path": "/_next/static/media/noto-sans-sc-116-wght-normal.7c86bddd.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-settings"
+    },
+    {
+      "time": "2026-09-15T02:24:39.294Z",
+      "path": "/_next/static/media/noto-sans-sc-104-wght-normal.2958f540.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-settings"
+    },
+    {
+      "time": "2026-09-15T02:24:39.294Z",
+      "path": "/_next/static/media/noto-sans-sc-119-wght-normal.affd1213.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-settings"
+    },
+    {
+      "time": "2026-09-15T02:24:39.295Z",
+      "path": "/_next/static/chunks/d3ac728e-c168d39ae19d599f.js",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-settings"
+    },
+    {
+      "time": "2026-09-15T02:24:39.295Z",
+      "path": "/_next/static/chunks/2619-04bc32f026a0d946.js",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-settings"
+    },
+    {
+      "time": "2026-09-15T02:24:39.295Z",
+      "path": "/_next/static/chunks/5395-343aef0ba32cbeab.js",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-settings"
+    },
+    {
+      "time": "2026-09-15T02:24:39.295Z",
+      "path": "/_next/static/chunks/app/(app)/settings/page-5997b3acd7a84aea.js",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-settings"
+    },
+    {
+      "time": "2026-09-15T02:24:39.297Z",
+      "path": "/_next/static/chunks/app/(app)/layout-1052a57c6a33ae25.js",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-settings"
+    },
+    {
+      "time": "2026-09-15T02:24:39.352Z",
+      "path": "/_next/static/media/instrument-serif-latin-400-normal.e872e3f2.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-settings"
+    },
+    {
+      "time": "2026-09-15T02:24:39.352Z",
+      "path": "/_next/static/media/noto-sans-sc-111-wght-normal.3f3c8c90.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-settings"
+    },
+    {
+      "time": "2026-09-15T02:24:39.352Z",
+      "path": "/_next/static/media/noto-sans-sc-115-wght-normal.d494d07f.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-settings"
+    },
+    {
+      "time": "2026-09-15T02:24:39.352Z",
+      "path": "/_next/static/media/noto-sans-sc-113-wght-normal.58d174d1.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-settings"
+    },
+    {
+      "time": "2026-09-15T02:24:39.352Z",
+      "path": "/_next/static/media/noto-sans-sc-108-wght-normal.8c7c4dad.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-settings"
+    },
+    {
+      "time": "2026-09-15T02:24:39.352Z",
+      "path": "/_next/static/media/noto-sans-sc-112-wght-normal.4d8fa99b.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-settings"
+    },
+    {
+      "time": "2026-09-15T02:24:39.352Z",
+      "path": "/_next/static/media/noto-sans-sc-105-wght-normal.5202d792.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-settings"
+    },
+    {
+      "time": "2026-09-15T02:24:39.352Z",
+      "path": "/_next/static/media/noto-sans-sc-101-wght-normal.973dcd0f.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-settings"
+    },
+    {
+      "time": "2026-09-15T02:24:39.352Z",
+      "path": "/_next/static/media/noto-sans-sc-109-wght-normal.54798e55.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-settings"
+    },
+    {
+      "time": "2026-09-15T02:24:39.396Z",
+      "path": "/_next/static/media/noto-serif-sc-117-wght-normal.8f2a718c.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-settings"
+    },
+    {
+      "time": "2026-09-15T02:24:39.432Z",
+      "path": "/",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-settings"
+    },
+    {
+      "time": "2026-09-15T02:24:39.432Z",
+      "path": "/topics/sxpoiqymygtcsflg916yiktv",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-settings"
+    },
+    {
+      "time": "2026-09-15T02:24:39.440Z",
+      "path": "/search",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-settings"
+    },
+    {
+      "time": "2026-09-15T02:24:39.444Z",
+      "path": "/inbox",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-settings"
+    },
+    {
+      "time": "2026-09-15T02:24:39.445Z",
+      "path": "/icons/icon-192.png",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-settings"
+    },
+    {
+      "time": "2026-09-15T02:24:39.451Z",
+      "path": "/_next/static/chunks/app/(app)/page-546d9e331d248176.js",
+      "method": "GET",
+      "status": 503,
+      "action": "mock-settings"
+    },
+    {
+      "time": "2026-09-15T02:24:39.451Z",
+      "path": "/_next/static/chunks/app/(app)/topics/%5Bid%5D/page-a443cf22ffddee12.js",
+      "method": "GET",
+      "status": 503,
+      "action": "mock-settings"
+    },
+    {
+      "time": "2026-09-15T02:24:39.455Z",
+      "path": "/_next/static/chunks/app/(app)/search/page-195baf5521c05d5d.js",
+      "method": "GET",
+      "status": 503,
+      "action": "mock-settings"
+    },
+    {
+      "time": "2026-09-15T02:24:39.457Z",
+      "path": "/_next/static/chunks/app/(app)/inbox/page-681898bb0a303d89.js",
+      "method": "GET",
+      "status": 503,
+      "action": "mock-settings"
+    },
+    {
+      "time": "2026-09-15T02:29:37.131Z",
+      "path": "/",
+      "method": "GET",
+      "status": 200,
+      "action": "recover-page"
+    },
+    {
+      "time": "2026-09-15T02:29:37.153Z",
+      "path": "/_next/static/css/3f43a07db598b6ec.css",
+      "method": "GET",
+      "status": 200,
+      "action": "recover-page"
+    },
+    {
+      "time": "2026-09-15T02:29:37.156Z",
+      "path": "/manifest.webmanifest",
+      "method": "GET",
+      "status": 200,
+      "action": "recover-page"
+    },
+    {
+      "time": "2026-09-15T02:29:37.159Z",
+      "path": "/_next/static/chunks/webpack-40deb59ae2a23f6a.js",
+      "method": "GET",
+      "status": 200,
+      "action": "recover-page"
+    },
+    {
+      "time": "2026-09-15T02:29:37.163Z",
+      "path": "/_next/static/chunks/main-app-f3336e172256d2ab.js",
+      "method": "GET",
+      "status": 200,
+      "action": "recover-page"
+    },
+    {
+      "time": "2026-09-15T02:29:37.163Z",
+      "path": "/_next/static/chunks/app/layout-904d69f7d5cdde36.js",
+      "method": "GET",
+      "status": 200,
+      "action": "recover-page"
+    },
+    {
+      "time": "2026-09-15T02:29:37.165Z",
+      "path": "/_next/static/chunks/1255-912c63e691e3026b.js",
+      "method": "GET",
+      "status": 200,
+      "action": "recover-page"
+    },
+    {
+      "time": "2026-09-15T02:29:37.172Z",
+      "path": "/_next/static/chunks/4bd1b696-100b9d70ed4e49c1.js",
+      "method": "GET",
+      "status": 200,
+      "action": "recover-page"
+    },
+    {
+      "time": "2026-09-15T02:29:37.185Z",
+      "path": "/_next/static/chunks/2619-04bc32f026a0d946.js",
+      "method": "GET",
+      "status": 200,
+      "action": "recover-page"
+    },
+    {
+      "time": "2026-09-15T02:29:37.185Z",
+      "path": "/_next/static/chunks/d3ac728e-c168d39ae19d599f.js",
+      "method": "GET",
+      "status": 200,
+      "action": "recover-page"
+    },
+    {
+      "time": "2026-09-15T02:29:37.185Z",
+      "path": "/_next/static/chunks/5395-343aef0ba32cbeab.js",
+      "method": "GET",
+      "status": 200,
+      "action": "recover-page"
+    },
+    {
+      "time": "2026-09-15T02:29:37.185Z",
+      "path": "/_next/static/chunks/app/(app)/page-546d9e331d248176.js",
+      "method": "GET",
+      "status": 200,
+      "action": "recover-page"
+    },
+    {
+      "time": "2026-09-15T02:29:37.186Z",
+      "path": "/_next/static/chunks/app/(app)/layout-1052a57c6a33ae25.js",
+      "method": "GET",
+      "status": 200,
+      "action": "recover-page"
+    },
+    {
+      "time": "2026-09-15T02:29:37.202Z",
+      "path": "/_next/static/media/jetbrains-mono-latin-wght-normal.a865edea.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "recover-page"
+    },
+    {
+      "time": "2026-09-15T02:29:37.202Z",
+      "path": "/_next/static/media/instrument-serif-latin-400-normal.e872e3f2.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "recover-page"
+    },
+    {
+      "time": "2026-09-15T02:29:37.204Z",
+      "path": "/_next/static/media/inter-latin-wght-normal.6c596dfc.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "recover-page"
+    },
+    {
+      "time": "2026-09-15T02:29:37.210Z",
+      "path": "/_next/static/media/noto-sans-sc-117-wght-normal.2e4b1f04.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "recover-page"
+    },
+    {
+      "time": "2026-09-15T02:29:37.214Z",
+      "path": "/_next/static/media/noto-sans-sc-118-wght-normal.fa5a5b16.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "recover-page"
+    },
+    {
+      "time": "2026-09-15T02:29:37.214Z",
+      "path": "/_next/static/media/noto-sans-sc-116-wght-normal.7c86bddd.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "recover-page"
+    },
+    {
+      "time": "2026-09-15T02:29:37.219Z",
+      "path": "/_next/static/media/noto-sans-sc-114-wght-normal.4c8b25a1.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "recover-page"
+    },
+    {
+      "time": "2026-09-15T02:29:37.222Z",
+      "path": "/_next/static/media/noto-sans-sc-110-wght-normal.cbb24916.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "recover-page"
+    },
+    {
+      "time": "2026-09-15T02:29:37.224Z",
+      "path": "/_next/static/media/noto-sans-sc-104-wght-normal.2958f540.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "recover-page"
+    },
+    {
+      "time": "2026-09-15T02:29:37.228Z",
+      "path": "/_next/static/media/noto-sans-sc-115-wght-normal.d494d07f.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "recover-page"
+    },
+    {
+      "time": "2026-09-15T02:29:37.230Z",
+      "path": "/inbox",
+      "method": "GET",
+      "status": 200,
+      "action": "recover-page"
+    },
+    {
+      "time": "2026-09-15T02:29:37.230Z",
+      "path": "/_next/static/media/noto-sans-sc-119-wght-normal.affd1213.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "recover-page"
+    },
+    {
+      "time": "2026-09-15T02:29:37.234Z",
+      "path": "/search",
+      "method": "GET",
+      "status": 200,
+      "action": "recover-page"
+    },
+    {
+      "time": "2026-09-15T02:29:37.238Z",
+      "path": "/topics/sxpoiqymygtcsflg916yiktv",
+      "method": "GET",
+      "status": 200,
+      "action": "recover-page"
+    },
+    {
+      "time": "2026-09-15T02:29:37.244Z",
+      "path": "/settings",
+      "method": "GET",
+      "status": 200,
+      "action": "recover-page"
+    },
+    {
+      "time": "2026-09-15T02:29:37.249Z",
+      "path": "/_next/static/media/noto-serif-sc-118-wght-normal.f07da885.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "recover-page"
+    },
+    {
+      "time": "2026-09-15T02:29:37.252Z",
+      "path": "/_next/static/chunks/app/(app)/inbox/page-681898bb0a303d89.js",
+      "method": "GET",
+      "status": 200,
+      "action": "recover-page"
+    },
+    {
+      "time": "2026-09-15T02:29:37.255Z",
+      "path": "/_next/static/chunks/app/(app)/search/page-195baf5521c05d5d.js",
+      "method": "GET",
+      "status": 200,
+      "action": "recover-page"
+    },
+    {
+      "time": "2026-09-15T02:29:37.255Z",
+      "path": "/_next/static/chunks/app/(app)/topics/%5Bid%5D/page-a443cf22ffddee12.js",
+      "method": "GET",
+      "status": 200,
+      "action": "recover-page"
+    },
+    {
+      "time": "2026-09-15T02:29:37.259Z",
+      "path": "/_next/static/chunks/app/(app)/settings/page-5997b3acd7a84aea.js",
+      "method": "GET",
+      "status": 200,
+      "action": "recover-page"
+    },
+    {
+      "time": "2026-09-15T02:29:37.266Z",
+      "path": "/icons/icon-192.png",
+      "method": "GET",
+      "status": 200,
+      "action": "recover-page"
+    },
+    {
+      "time": "2026-09-15T02:30:28.523Z",
+      "path": "/_next/static/media/noto-sans-sc-87-wght-normal.44ffc6ca.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-note"
+    },
+    {
+      "time": "2026-09-15T02:30:28.532Z",
+      "path": "/_next/static/media/noto-sans-sc-113-wght-normal.58d174d1.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-note"
+    },
+    {
+      "time": "2026-09-15T02:30:28.551Z",
+      "path": "/api/notes",
+      "method": "POST",
+      "status": 201,
+      "action": "mock-note"
+    },
+    {
+      "time": "2026-09-15T02:30:28.574Z",
+      "path": "/",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-note"
+    },
+    {
+      "time": "2026-09-15T02:30:28.935Z",
+      "path": "/manifest.webmanifest",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-note"
+    },
+    {
+      "time": "2026-09-15T02:30:28.940Z",
+      "path": "/icons/icon-192.png",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-note"
+    },
+    {
+      "time": "2026-09-15T02:30:29.451Z",
+      "path": "/notes/mkh5swgf5bcho7oqg19vfbfz",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-note"
+    },
+    {
+      "time": "2026-09-15T02:30:29.470Z",
+      "path": "/manifest.webmanifest",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-note"
+    },
+    {
+      "time": "2026-09-15T02:30:29.471Z",
+      "path": "/_next/static/css/3f43a07db598b6ec.css",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-note"
+    },
+    {
+      "time": "2026-09-15T02:30:29.475Z",
+      "path": "/_next/static/chunks/webpack-40deb59ae2a23f6a.js",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-note"
+    },
+    {
+      "time": "2026-09-15T02:30:29.475Z",
+      "path": "/_next/static/chunks/main-app-f3336e172256d2ab.js",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-note"
+    },
+    {
+      "time": "2026-09-15T02:30:29.483Z",
+      "path": "/_next/static/chunks/app/layout-904d69f7d5cdde36.js",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-note"
+    },
+    {
+      "time": "2026-09-15T02:30:29.484Z",
+      "path": "/_next/static/chunks/4bd1b696-100b9d70ed4e49c1.js",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-note"
+    },
+    {
+      "time": "2026-09-15T02:30:29.489Z",
+      "path": "/_next/static/chunks/1255-912c63e691e3026b.js",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-note"
+    },
+    {
+      "time": "2026-09-15T02:30:29.500Z",
+      "path": "/_next/static/chunks/2619-04bc32f026a0d946.js",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-note"
+    },
+    {
+      "time": "2026-09-15T02:30:29.500Z",
+      "path": "/_next/static/chunks/app/(app)/notes/%5Bid%5D/page-cb3d79c714509e73.js",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-note"
+    },
+    {
+      "time": "2026-09-15T02:30:29.515Z",
+      "path": "/_next/static/media/jetbrains-mono-latin-wght-normal.a865edea.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-note"
+    },
+    {
+      "time": "2026-09-15T02:30:29.515Z",
+      "path": "/_next/static/chunks/app/(app)/layout-1052a57c6a33ae25.js",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-note"
+    },
+    {
+      "time": "2026-09-15T02:30:29.515Z",
+      "path": "/_next/static/chunks/5395-343aef0ba32cbeab.js",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-note"
+    },
+    {
+      "time": "2026-09-15T02:30:29.515Z",
+      "path": "/_next/static/media/noto-sans-sc-117-wght-normal.2e4b1f04.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-note"
+    },
+    {
+      "time": "2026-09-15T02:30:29.516Z",
+      "path": "/_next/static/chunks/d3ac728e-c168d39ae19d599f.js",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-note"
+    },
+    {
+      "time": "2026-09-15T02:30:29.520Z",
+      "path": "/_next/static/media/noto-sans-sc-114-wght-normal.4c8b25a1.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-note"
+    },
+    {
+      "time": "2026-09-15T02:30:29.522Z",
+      "path": "/_next/static/media/noto-sans-sc-116-wght-normal.7c86bddd.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-note"
+    },
+    {
+      "time": "2026-09-15T02:30:29.527Z",
+      "path": "/_next/static/media/noto-sans-sc-110-wght-normal.cbb24916.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-note"
+    },
+    {
+      "time": "2026-09-15T02:30:29.533Z",
+      "path": "/_next/static/media/inter-latin-wght-normal.6c596dfc.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-note"
+    },
+    {
+      "time": "2026-09-15T02:30:29.534Z",
+      "path": "/_next/static/media/noto-sans-sc-118-wght-normal.fa5a5b16.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-note"
+    },
+    {
+      "time": "2026-09-15T02:30:29.538Z",
+      "path": "/_next/static/media/noto-sans-sc-104-wght-normal.2958f540.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-note"
+    },
+    {
+      "time": "2026-09-15T02:30:29.547Z",
+      "path": "/_next/static/media/noto-sans-sc-119-wght-normal.affd1213.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-note"
+    },
+    {
+      "time": "2026-09-15T02:30:29.547Z",
+      "path": "/_next/static/media/noto-sans-sc-113-wght-normal.58d174d1.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-note"
+    },
+    {
+      "time": "2026-09-15T02:30:29.547Z",
+      "path": "/_next/static/media/instrument-serif-latin-400-normal.e872e3f2.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-note"
+    },
+    {
+      "time": "2026-09-15T02:30:29.569Z",
+      "path": "/_next/static/media/noto-serif-sc-119-wght-normal.c83ce886.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-note"
+    },
+    {
+      "time": "2026-09-15T02:30:29.571Z",
+      "path": "/",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-note"
+    },
+    {
+      "time": "2026-09-15T02:30:29.571Z",
+      "path": "/_next/static/media/noto-serif-sc-118-wght-normal.f07da885.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-note"
+    },
+    {
+      "time": "2026-09-15T02:30:29.578Z",
+      "path": "/_next/static/media/noto-serif-sc-117-wght-normal.8f2a718c.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-note"
+    },
+    {
+      "time": "2026-09-15T02:30:29.580Z",
+      "path": "/_next/static/media/noto-serif-sc-116-wght-normal.b1b2bd04.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-note"
+    },
+    {
+      "time": "2026-09-15T02:30:29.580Z",
+      "path": "/search",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-note"
+    },
+    {
+      "time": "2026-09-15T02:30:29.582Z",
+      "path": "/_next/static/media/noto-serif-sc-114-wght-normal.e654c9d5.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-note"
+    },
+    {
+      "time": "2026-09-15T02:30:29.586Z",
+      "path": "/inbox",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-note"
+    },
+    {
+      "time": "2026-09-15T02:30:29.589Z",
+      "path": "/icons/icon-192.png",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-note"
+    },
+    {
+      "time": "2026-09-15T02:30:29.594Z",
+      "path": "/settings",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-note"
+    },
+    {
+      "time": "2026-09-15T02:30:29.605Z",
+      "path": "/topics/sxpoiqymygtcsflg916yiktv",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-note"
+    },
+    {
+      "time": "2026-09-15T02:30:29.610Z",
+      "path": "/_next/static/chunks/70e0d97a.b2cba84adfc5cf7b.js",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-note"
+    },
+    {
+      "time": "2026-09-15T02:30:29.612Z",
+      "path": "/_next/static/chunks/app/(app)/page-546d9e331d248176.js",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-note"
+    },
+    {
+      "time": "2026-09-15T02:30:29.612Z",
+      "path": "/_next/static/chunks/3997.05b0bdd016730182.js",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-note"
+    },
+    {
+      "time": "2026-09-15T02:30:29.614Z",
+      "path": "/_next/static/chunks/app/(app)/settings/page-5997b3acd7a84aea.js",
+      "method": "GET",
+      "status": 503,
+      "action": "mock-note"
+    },
+    {
+      "time": "2026-09-15T02:30:29.615Z",
+      "path": "/_next/static/chunks/app/(app)/topics/%5Bid%5D/page-a443cf22ffddee12.js",
+      "method": "GET",
+      "status": 503,
+      "action": "mock-note"
+    },
+    {
+      "time": "2026-09-15T02:30:29.652Z",
+      "path": "/_next/static/chunks/54a60aa6.f9355e114c79265d.js",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-note"
+    },
+    {
+      "time": "2026-09-15T02:30:29.656Z",
+      "path": "/_next/static/chunks/app/(app)/inbox/page-681898bb0a303d89.js",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-note"
+    },
+    {
+      "time": "2026-09-15T02:30:29.656Z",
+      "path": "/_next/static/chunks/app/(app)/search/page-195baf5521c05d5d.js",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-note"
+    },
+    {
+      "time": "2026-09-15T02:30:29.663Z",
+      "path": "/_next/static/chunks/7814.a5dd8e4ffb31b784.js",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-note"
+    },
+    {
+      "time": "2026-09-15T02:30:30.188Z",
+      "path": "/api/notes/mkh5swgf5bcho7oqg19vfbfz",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-note"
+    },
+    {
+      "time": "2026-09-15T02:30:30.491Z",
+      "path": "/api/notes/mkh5swgf5bcho7oqg19vfbfz/related",
+      "method": "POST",
+      "status": 200,
+      "action": "mock-note"
+    },
+    {
+      "time": "2026-09-15T02:30:30.502Z",
+      "path": "/notes/ox6f52w66q7g9ldv1jt1am52",
+      "method": "GET",
+      "status": 200,
+      "action": "mock-note"
+    },
+    {
+      "time": "2026-09-15T02:34:55.469Z",
+      "path": "/",
+      "method": "GET",
+      "status": 307,
+      "action": "restart-login"
+    },
+    {
+      "time": "2026-09-15T02:34:55.504Z",
+      "path": "/login",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-login"
+    },
+    {
+      "time": "2026-09-15T02:34:55.525Z",
+      "path": "/_next/static/css/3f43a07db598b6ec.css",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-login"
+    },
+    {
+      "time": "2026-09-15T02:34:55.526Z",
+      "path": "/_next/static/chunks/webpack-40deb59ae2a23f6a.js",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-login"
+    },
+    {
+      "time": "2026-09-15T02:34:55.529Z",
+      "path": "/_next/static/chunks/main-app-f3336e172256d2ab.js",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-login"
+    },
+    {
+      "time": "2026-09-15T02:34:55.531Z",
+      "path": "/manifest.webmanifest",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-login"
+    },
+    {
+      "time": "2026-09-15T02:34:55.535Z",
+      "path": "/_next/static/chunks/app/layout-904d69f7d5cdde36.js",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-login"
+    },
+    {
+      "time": "2026-09-15T02:34:55.541Z",
+      "path": "/_next/static/chunks/1255-912c63e691e3026b.js",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-login"
+    },
+    {
+      "time": "2026-09-15T02:34:55.541Z",
+      "path": "/_next/static/chunks/4bd1b696-100b9d70ed4e49c1.js",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-login"
+    },
+    {
+      "time": "2026-09-15T02:34:55.554Z",
+      "path": "/_next/static/chunks/app/login/page-dc157243fbc1fc0f.js",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-login"
+    },
+    {
+      "time": "2026-09-15T02:34:55.568Z",
+      "path": "/_next/static/media/inter-latin-wght-normal.6c596dfc.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-login"
+    },
+    {
+      "time": "2026-09-15T02:34:55.569Z",
+      "path": "/_next/static/media/instrument-serif-latin-400-normal.e872e3f2.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-login"
+    },
+    {
+      "time": "2026-09-15T02:34:55.572Z",
+      "path": "/_next/static/media/noto-sans-sc-118-wght-normal.fa5a5b16.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-login"
+    },
+    {
+      "time": "2026-09-15T02:34:55.576Z",
+      "path": "/_next/static/media/noto-sans-sc-119-wght-normal.affd1213.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-login"
+    },
+    {
+      "time": "2026-09-15T02:34:55.579Z",
+      "path": "/_next/static/media/noto-sans-sc-117-wght-normal.2e4b1f04.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-login"
+    },
+    {
+      "time": "2026-09-15T02:34:55.581Z",
+      "path": "/_next/static/media/noto-sans-sc-115-wght-normal.d494d07f.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-login"
+    },
+    {
+      "time": "2026-09-15T02:34:55.584Z",
+      "path": "/_next/static/media/noto-sans-sc-114-wght-normal.4c8b25a1.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-login"
+    },
+    {
+      "time": "2026-09-15T02:34:55.587Z",
+      "path": "/_next/static/media/noto-sans-sc-111-wght-normal.3f3c8c90.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-login"
+    },
+    {
+      "time": "2026-09-15T02:34:55.589Z",
+      "path": "/_next/static/media/noto-sans-sc-116-wght-normal.7c86bddd.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-login"
+    },
+    {
+      "time": "2026-09-15T02:34:55.591Z",
+      "path": "/_next/static/media/noto-sans-sc-113-wght-normal.58d174d1.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-login"
+    },
+    {
+      "time": "2026-09-15T02:34:55.595Z",
+      "path": "/_next/static/media/noto-serif-sc-118-wght-normal.f07da885.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-login"
+    },
+    {
+      "time": "2026-09-15T02:34:55.603Z",
+      "path": "/icons/icon-192.png",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-login"
+    },
+    {
+      "time": "2026-09-15T02:34:56.150Z",
+      "path": "/api/auth/login",
+      "method": "POST",
+      "status": 200,
+      "action": "restart-login"
+    },
+    {
+      "time": "2026-09-15T02:34:56.170Z",
+      "path": "/",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-login"
+    },
+    {
+      "time": "2026-09-15T02:34:56.182Z",
+      "path": "/_next/static/chunks/2619-04bc32f026a0d946.js",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-login"
+    },
+    {
+      "time": "2026-09-15T02:34:56.192Z",
+      "path": "/",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-login"
+    },
+    {
+      "time": "2026-09-15T02:34:56.195Z",
+      "path": "/_next/static/chunks/app/(app)/page-546d9e331d248176.js",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-login"
+    },
+    {
+      "time": "2026-09-15T02:34:56.199Z",
+      "path": "/_next/static/chunks/app/(app)/layout-1052a57c6a33ae25.js",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-login"
+    },
+    {
+      "time": "2026-09-15T02:34:56.200Z",
+      "path": "/_next/static/chunks/d3ac728e-c168d39ae19d599f.js",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-login"
+    },
+    {
+      "time": "2026-09-15T02:34:56.202Z",
+      "path": "/_next/static/chunks/5395-343aef0ba32cbeab.js",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-login"
+    },
+    {
+      "time": "2026-09-15T02:34:56.270Z",
+      "path": "/manifest.webmanifest",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-login"
+    },
+    {
+      "time": "2026-09-15T02:34:56.277Z",
+      "path": "/_next/static/media/jetbrains-mono-latin-wght-normal.a865edea.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-login"
+    },
+    {
+      "time": "2026-09-15T02:34:56.280Z",
+      "path": "/search",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-login"
+    },
+    {
+      "time": "2026-09-15T02:34:56.285Z",
+      "path": "/",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-login"
+    },
+    {
+      "time": "2026-09-15T02:34:56.292Z",
+      "path": "/_next/static/media/noto-sans-sc-110-wght-normal.cbb24916.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-login"
+    },
+    {
+      "time": "2026-09-15T02:34:56.294Z",
+      "path": "/_next/static/media/noto-sans-sc-104-wght-normal.2958f540.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-login"
+    },
+    {
+      "time": "2026-09-15T02:34:56.298Z",
+      "path": "/inbox",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-login"
+    },
+    {
+      "time": "2026-09-15T02:34:56.309Z",
+      "path": "/settings",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-login"
+    },
+    {
+      "time": "2026-09-15T02:34:56.325Z",
+      "path": "/topics/sxpoiqymygtcsflg916yiktv",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-login"
+    },
+    {
+      "time": "2026-09-15T02:34:56.331Z",
+      "path": "/icons/icon-192.png",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-login"
+    },
+    {
+      "time": "2026-09-15T02:34:56.392Z",
+      "path": "/_next/static/chunks/app/(app)/search/page-195baf5521c05d5d.js",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-login"
+    },
+    {
+      "time": "2026-09-15T02:34:56.393Z",
+      "path": "/_next/static/chunks/app/(app)/inbox/page-681898bb0a303d89.js",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-login"
+    },
+    {
+      "time": "2026-09-15T02:34:56.393Z",
+      "path": "/_next/static/chunks/app/(app)/topics/%5Bid%5D/page-a443cf22ffddee12.js",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-login"
+    },
+    {
+      "time": "2026-09-15T02:34:56.399Z",
+      "path": "/_next/static/chunks/app/(app)/settings/page-5997b3acd7a84aea.js",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-login"
+    },
+    {
+      "time": "2026-09-15T02:35:41.363Z",
+      "path": "/manifest.webmanifest",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-notes"
+    },
+    {
+      "time": "2026-09-15T02:35:41.365Z",
+      "path": "/_next/static/media/noto-serif-sc-117-wght-normal.8f2a718c.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-notes"
+    },
+    {
+      "time": "2026-09-15T02:35:41.368Z",
+      "path": "/icons/icon-192.png",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-notes"
+    },
+    {
+      "time": "2026-09-15T02:35:41.759Z",
+      "path": "/api/search",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-notes"
+    },
+    {
+      "time": "2026-09-15T02:35:41.795Z",
+      "path": "/notes/ox6f52w66q7g9ldv1jt1am52",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-notes"
+    },
+    {
+      "time": "2026-09-15T02:35:41.796Z",
+      "path": "/notes/mkh5swgf5bcho7oqg19vfbfz",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-notes"
+    },
+    {
+      "time": "2026-09-15T02:35:41.818Z",
+      "path": "/manifest.webmanifest",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-notes"
+    },
+    {
+      "time": "2026-09-15T02:35:41.822Z",
+      "path": "/notes/mkh5swgf5bcho7oqg19vfbfz",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-notes"
+    },
+    {
+      "time": "2026-09-15T02:35:41.825Z",
+      "path": "/icons/icon-192.png",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-notes"
+    },
+    {
+      "time": "2026-09-15T02:35:41.831Z",
+      "path": "/_next/static/chunks/app/(app)/notes/%5Bid%5D/page-cb3d79c714509e73.js",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-notes"
+    },
+    {
+      "time": "2026-09-15T02:35:41.837Z",
+      "path": "/manifest.webmanifest",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-notes"
+    },
+    {
+      "time": "2026-09-15T02:35:41.843Z",
+      "path": "/icons/icon-192.png",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-notes"
+    },
+    {
+      "time": "2026-09-15T02:35:41.845Z",
+      "path": "/_next/static/chunks/3997.05b0bdd016730182.js",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-notes"
+    },
+    {
+      "time": "2026-09-15T02:35:41.846Z",
+      "path": "/_next/static/chunks/54a60aa6.f9355e114c79265d.js",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-notes"
+    },
+    {
+      "time": "2026-09-15T02:35:41.851Z",
+      "path": "/_next/static/chunks/70e0d97a.b2cba84adfc5cf7b.js",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-notes"
+    },
+    {
+      "time": "2026-09-15T02:35:41.853Z",
+      "path": "/_next/static/chunks/7814.a5dd8e4ffb31b784.js",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-notes"
+    },
+    {
+      "time": "2026-09-15T02:35:42.152Z",
+      "path": "/_next/static/media/noto-serif-sc-114-wght-normal.e654c9d5.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-notes"
+    },
+    {
+      "time": "2026-09-15T02:35:42.156Z",
+      "path": "/_next/static/media/noto-serif-sc-119-wght-normal.c83ce886.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-notes"
+    },
+    {
+      "time": "2026-09-15T02:35:42.158Z",
+      "path": "/_next/static/media/noto-serif-sc-116-wght-normal.b1b2bd04.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-notes"
+    },
+    {
+      "time": "2026-09-15T02:35:42.671Z",
+      "path": "/manifest.webmanifest",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-notes"
+    },
+    {
+      "time": "2026-09-15T02:35:42.676Z",
+      "path": "/icons/icon-192.png",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-notes"
+    },
+    {
+      "time": "2026-09-15T02:35:42.987Z",
+      "path": "/api/search",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-notes"
+    },
+    {
+      "time": "2026-09-15T02:35:43.010Z",
+      "path": "/manifest.webmanifest",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-notes"
+    },
+    {
+      "time": "2026-09-15T02:35:43.016Z",
+      "path": "/notes/ox6f52w66q7g9ldv1jt1am52",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-notes"
+    },
+    {
+      "time": "2026-09-15T02:35:43.018Z",
+      "path": "/icons/icon-192.png",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-notes"
+    },
+    {
+      "time": "2026-09-15T02:35:43.034Z",
+      "path": "/manifest.webmanifest",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-notes"
+    },
+    {
+      "time": "2026-09-15T02:35:43.039Z",
+      "path": "/icons/icon-192.png",
+      "method": "GET",
+      "status": 200,
+      "action": "restart-notes"
+    },
+    {
+      "time": "2026-09-15T02:38:32.330Z",
+      "path": "/settings",
+      "method": "GET",
+      "status": 200,
+      "action": "export-after-restart"
+    },
+    {
+      "time": "2026-09-15T02:38:32.397Z",
+      "path": "/_next/static/media/noto-sans-sc-112-wght-normal.4d8fa99b.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "export-after-restart"
+    },
+    {
+      "time": "2026-09-15T02:38:32.397Z",
+      "path": "/_next/static/media/noto-sans-sc-101-wght-normal.973dcd0f.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "export-after-restart"
+    },
+    {
+      "time": "2026-09-15T02:38:32.404Z",
+      "path": "/_next/static/media/noto-sans-sc-105-wght-normal.5202d792.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "export-after-restart"
+    },
+    {
+      "time": "2026-09-15T02:38:32.404Z",
+      "path": "/_next/static/media/noto-sans-sc-108-wght-normal.8c7c4dad.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "export-after-restart"
+    },
+    {
+      "time": "2026-09-15T02:38:32.404Z",
+      "path": "/_next/static/media/noto-sans-sc-109-wght-normal.54798e55.woff2",
+      "method": "GET",
+      "status": 200,
+      "action": "export-after-restart"
+    },
+    {
+      "time": "2026-09-15T02:38:32.648Z",
+      "path": "/manifest.webmanifest",
+      "method": "GET",
+      "status": 200,
+      "action": "export-after-restart"
+    },
+    {
+      "time": "2026-09-15T02:38:32.653Z",
+      "path": "/icons/icon-192.png",
+      "method": "GET",
+      "status": 200,
+      "action": "export-after-restart"
+    },
+    {
+      "time": "2026-09-15T02:38:32.702Z",
+      "path": "/trash",
+      "method": "GET",
+      "status": 200,
+      "action": "export-after-restart"
+    },
+    {
+      "time": "2026-09-15T02:38:32.703Z",
+      "path": "/api/export",
+      "method": "GET",
+      "status": 200,
+      "action": "export-after-restart"
+    },
+    {
+      "time": "2026-09-15T02:38:32.712Z",
+      "path": "/_next/static/chunks/app/(app)/trash/page-1291732c417b1460.js",
+      "method": "GET",
+      "status": 200,
+      "action": "export-after-restart"
+    }
+  ],
+  "console": [
+    {
+      "type": "warning",
+      "text": "Service Worker registration blocked by Playwright",
+      "action": "login-page"
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "action": "login"
+    },
+    {
+      "type": "warning",
+      "text": "Service Worker registration blocked by Playwright",
+      "action": "mock-settings"
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: the server responded with a status of 503 (Service Temporarily Unavailable)",
+      "action": "mock-settings"
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: the server responded with a status of 503 (Service Temporarily Unavailable)",
+      "action": "mock-settings"
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: the server responded with a status of 503 (Service Temporarily Unavailable)",
+      "action": "mock-settings"
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: the server responded with a status of 503 (Service Temporarily Unavailable)",
+      "action": "mock-settings"
+    },
+    {
+      "type": "warning",
+      "text": "Service Worker registration blocked by Playwright",
+      "action": "recover-page"
+    },
+    {
+      "type": "warning",
+      "text": "Service Worker registration blocked by Playwright",
+      "action": "mock-note"
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: the server responded with a status of 503 (Service Temporarily Unavailable)",
+      "action": "mock-note"
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: the server responded with a status of 503 (Service Temporarily Unavailable)",
+      "action": "mock-note"
+    },
+    {
+      "type": "warning",
+      "text": "Service Worker registration blocked by Playwright",
+      "action": "restart-login"
+    }
+  ],
+  "errors": [
+    {
+      "kind": "requestfailed",
+      "path": "/",
+      "error": "net::ERR_ABORTED",
+      "action": "login"
+    },
+    {
+      "kind": "requestfailed",
+      "path": "/",
+      "error": "net::ERR_ABORTED",
+      "action": "login"
+    },
+    {
+      "kind": "requestfailed",
+      "path": "/search",
+      "error": "net::ERR_ABORTED",
+      "action": "login"
+    },
+    {
+      "kind": "requestfailed",
+      "path": "/",
+      "error": "net::ERR_ABORTED",
+      "action": "login"
+    },
+    {
+      "kind": "requestfailed",
+      "path": "/inbox",
+      "error": "net::ERR_ABORTED",
+      "action": "login"
+    },
+    {
+      "kind": "requestfailed",
+      "path": "/settings",
+      "error": "net::ERR_ABORTED",
+      "action": "login"
+    },
+    {
+      "kind": "requestfailed",
+      "path": "/",
+      "error": "net::ERR_ABORTED",
+      "action": "first-note"
+    },
+    {
+      "kind": "requestfailed",
+      "path": "/search",
+      "error": "net::ERR_ABORTED",
+      "action": "first-note"
+    },
+    {
+      "kind": "requestfailed",
+      "path": "/notes/ox6f52w66q7g9ldv1jt1am52",
+      "error": "net::ERR_ABORTED",
+      "action": "first-note"
+    },
+    {
+      "kind": "requestfailed",
+      "path": "/settings",
+      "error": "net::ERR_ABORTED",
+      "action": "export-without-model"
+    },
+    {
+      "kind": "requestfailed",
+      "path": "/api/export",
+      "error": "net::ERR_ABORTED",
+      "action": "export-without-model"
+    },
+    {
+      "kind": "requestfailed",
+      "path": "/trash",
+      "error": "net::ERR_ABORTED",
+      "action": "export-without-model"
+    },
+    {
+      "kind": "requestfailed",
+      "path": "/settings",
+      "error": "net::ERR_ABORTED",
+      "action": "mock-settings"
+    },
+    {
+      "kind": "requestfailed",
+      "path": "/topics/sxpoiqymygtcsflg916yiktv",
+      "error": "net::ERR_ABORTED",
+      "action": "mock-settings"
+    },
+    {
+      "kind": "pageerror",
+      "error": "Error: Minified React error #418; visit https://react.dev/errors/418?args[]=text&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.",
+      "action": "mock-settings"
+    },
+    {
+      "kind": "requestfailed",
+      "path": "/inbox",
+      "error": "net::ERR_ABORTED",
+      "action": "mock-settings"
+    },
+    {
+      "kind": "requestfailed",
+      "path": "/search",
+      "error": "net::ERR_ABORTED",
+      "action": "mock-settings"
+    },
+    {
+      "kind": "requestfailed",
+      "path": "/topics/sxpoiqymygtcsflg916yiktv",
+      "error": "net::ERR_ABORTED",
+      "action": "mock-settings"
+    },
+    {
+      "kind": "requestfailed",
+      "path": "/_next/static/chunks/app/(app)/page-546d9e331d248176.js",
+      "error": "net::ERR_ABORTED",
+      "action": "mock-settings"
+    },
+    {
+      "kind": "requestfailed",
+      "path": "/_next/static/chunks/app/(app)/topics/%5Bid%5D/page-a443cf22ffddee12.js",
+      "error": "net::ERR_ABORTED",
+      "action": "mock-settings"
+    },
+    {
+      "kind": "requestfailed",
+      "path": "/_next/static/chunks/app/(app)/search/page-195baf5521c05d5d.js",
+      "error": "net::ERR_ABORTED",
+      "action": "mock-settings"
+    },
+    {
+      "kind": "requestfailed",
+      "path": "/_next/static/chunks/app/(app)/inbox/page-681898bb0a303d89.js",
+      "error": "net::ERR_ABORTED",
+      "action": "mock-settings"
+    },
+    {
+      "kind": "pageerror",
+      "error": "ChunkLoadError: Loading chunk 9415 failed.\n(error: http://127.0.0.1:3312/_next/static/chunks/app/(app)/page-546d9e331d248176.js)",
+      "action": "mock-note"
+    },
+    {
+      "kind": "requestfailed",
+      "path": "/inbox",
+      "error": "net::ERR_ABORTED",
+      "action": "recover-page"
+    },
+    {
+      "kind": "requestfailed",
+      "path": "/search",
+      "error": "net::ERR_ABORTED",
+      "action": "recover-page"
+    },
+    {
+      "kind": "requestfailed",
+      "path": "/settings",
+      "error": "net::ERR_ABORTED",
+      "action": "recover-page"
+    },
+    {
+      "kind": "requestfailed",
+      "path": "/topics/sxpoiqymygtcsflg916yiktv",
+      "error": "net::ERR_ABORTED",
+      "action": "recover-page"
+    },
+    {
+      "kind": "requestfailed",
+      "path": "/",
+      "error": "net::ERR_ABORTED",
+      "action": "mock-note"
+    },
+    {
+      "kind": "requestfailed",
+      "path": "/",
+      "error": "net::ERR_ABORTED",
+      "action": "mock-note"
+    },
+    {
+      "kind": "requestfailed",
+      "path": "/search",
+      "error": "net::ERR_ABORTED",
+      "action": "mock-note"
+    },
+    {
+      "kind": "requestfailed",
+      "path": "/inbox",
+      "error": "net::ERR_ABORTED",
+      "action": "mock-note"
+    },
+    {
+      "kind": "requestfailed",
+      "path": "/settings",
+      "error": "net::ERR_ABORTED",
+      "action": "mock-note"
+    },
+    {
+      "kind": "requestfailed",
+      "path": "/topics/sxpoiqymygtcsflg916yiktv",
+      "error": "net::ERR_ABORTED",
+      "action": "mock-note"
+    },
+    {
+      "kind": "requestfailed",
+      "path": "/_next/static/chunks/app/(app)/settings/page-5997b3acd7a84aea.js",
+      "error": "net::ERR_ABORTED",
+      "action": "mock-note"
+    },
+    {
+      "kind": "requestfailed",
+      "path": "/_next/static/chunks/app/(app)/topics/%5Bid%5D/page-a443cf22ffddee12.js",
+      "error": "net::ERR_ABORTED",
+      "action": "mock-note"
+    },
+    {
+      "kind": "requestfailed",
+      "path": "/notes/ox6f52w66q7g9ldv1jt1am52",
+      "error": "net::ERR_ABORTED",
+      "action": "mock-note"
+    },
+    {
+      "kind": "requestfailed",
+      "path": "/",
+      "error": "net::ERR_ABORTED",
+      "action": "restart-login"
+    },
+    {
+      "kind": "requestfailed",
+      "path": "/",
+      "error": "net::ERR_ABORTED",
+      "action": "restart-login"
+    },
+    {
+      "kind": "requestfailed",
+      "path": "/search",
+      "error": "net::ERR_ABORTED",
+      "action": "restart-login"
+    },
+    {
+      "kind": "requestfailed",
+      "path": "/",
+      "error": "net::ERR_ABORTED",
+      "action": "restart-login"
+    },
+    {
+      "kind": "requestfailed",
+      "path": "/inbox",
+      "error": "net::ERR_ABORTED",
+      "action": "restart-login"
+    },
+    {
+      "kind": "requestfailed",
+      "path": "/settings",
+      "error": "net::ERR_ABORTED",
+      "action": "restart-login"
+    },
+    {
+      "kind": "requestfailed",
+      "path": "/topics/sxpoiqymygtcsflg916yiktv",
+      "error": "net::ERR_ABORTED",
+      "action": "restart-login"
+    },
+    {
+      "kind": "requestfailed",
+      "path": "/notes/ox6f52w66q7g9ldv1jt1am52",
+      "error": "net::ERR_ABORTED",
+      "action": "restart-notes"
+    },
+    {
+      "kind": "requestfailed",
+      "path": "/notes/mkh5swgf5bcho7oqg19vfbfz",
+      "error": "net::ERR_ABORTED",
+      "action": "restart-notes"
+    },
+    {
+      "kind": "requestfailed",
+      "path": "/notes/ox6f52w66q7g9ldv1jt1am52",
+      "error": "net::ERR_ABORTED",
+      "action": "restart-notes"
+    },
+    {
+      "kind": "requestfailed",
+      "path": "/settings",
+      "error": "net::ERR_ABORTED",
+      "action": "export-after-restart"
+    },
+    {
+      "kind": "requestfailed",
+      "path": "/api/export",
+      "error": "net::ERR_ABORTED",
+      "action": "export-after-restart"
+    },
+    {
+      "kind": "requestfailed",
+      "path": "/trash",
+      "error": "net::ERR_ABORTED",
+      "action": "export-after-restart"
+    }
+  ],
+  "blocked": [],
+  "steps": {
+    "login-page": {
+      "url": "http://127.0.0.1:3312/login",
+      "title": "知了",
+      "timeUtc": "2026-09-15T02:19:37.267Z"
+    },
+    "login": {
+      "startedUtc": "2026-09-15T02:20:27.656Z",
+      "finishedUtc": "2026-09-15T02:20:27.854Z",
+      "wrongStatus": 401,
+      "correctStatus": 200,
+      "url": "http://127.0.0.1:3312/",
+      "cookies": [
+        {
+          "name": "kb_session",
+          "httpOnly": true,
+          "secure": true,
+          "sameSite": "Lax",
+          "domain": "127.0.0.1",
+          "path": "/"
+        }
+      ],
+      "cookieInjected": false
+    },
+    "first-note": {
+      "id": "ox6f52w66q7g9ldv1jt1am52",
+      "input": "R1 安装验收：无模型也能保存和找回",
+      "startedUtc": "2026-09-15T02:20:57.112Z",
+      "savedUtc": "2026-09-15T02:20:57.321Z",
+      "status": 201,
+      "saveResponseMs": 177,
+      "secondsFromLogin": 29.665
+    },
+    "search-without-model": {
+      "query": "安装验收",
+      "status": 200,
+      "noteId": "ox6f52w66q7g9ldv1jt1am52",
+      "url": "http://127.0.0.1:3312/notes/ox6f52w66q7g9ldv1jt1am52",
+      "bodyMatches": true,
+      "timeUtc": "2026-09-15T02:20:58.910Z"
+    },
+    "export-without-model": {
+      "timeUtc": "2026-09-15T02:22:59.812Z",
+      "suggestedFilename": "zhiliao-export-20260915.zip",
+      "savedAs": "export-without-model.zip",
+      "bytes": 375,
+      "downloadFailure": null
+    },
+    "topic-created": {
+      "status": 201,
+      "topic": {
+        "id": "sxpoiqymygtcsflg916yiktv"
+      },
+      "timeUtc": "2026-09-15T02:24:39.092Z"
+    },
+    "mock-settings": {
+      "timeUtc": "2026-09-15T02:24:39.423Z",
+      "status": 200,
+      "baseUrl": "http://mockllm:8787/v1",
+      "model": "mock",
+      "keySynthetic": true,
+      "readBackAfterReload": true
+    },
+    "mock-note-failure": {
+      "error": "TimeoutError: locator.click: Timeout 60000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: '快速记录', exact: true })\u001b[22m\n"
+    },
+    "recover-page": {
+      "timeUtc": "2026-09-15T02:29:37.817Z",
+      "url": "http://127.0.0.1:3312/",
+      "pageReloaded": true,
+      "priorPageErrorCount": 2
+    },
+    "mock-note": {
+      "id": "mkh5swgf5bcho7oqg19vfbfz",
+      "input": "R1 安装验收：今晚羽毛球训练，杀球有下压",
+      "startedUtc": "2026-09-15T02:30:28.495Z",
+      "savedUtc": "2026-09-15T02:30:28.604Z",
+      "status": 201,
+      "saveResponseMs": 83,
+      "afterPageRecovery": true
+    },
+    "mock-completed": {
+      "timeUtc": "2026-09-15T02:30:30.227Z",
+      "id": "mkh5swgf5bcho7oqg19vfbfz",
+      "aiStatus": "done",
+      "title": "R1 安装验收：今晚·AI",
+      "tags": [
+        "训练",
+        "羽毛球"
+      ],
+      "topicId": "sxpoiqymygtcsflg916yiktv",
+      "bodyMatches": true,
+      "observedSecondsFromSave": 1.623,
+      "url": "http://127.0.0.1:3312/notes/mkh5swgf5bcho7oqg19vfbfz"
+    },
+    "before-restart": {
+      "timeUtc": "2026-09-15T02:31:58.223Z",
+      "url": "about:blank",
+      "noteIds": [
+        "ox6f52w66q7g9ldv1jt1am52",
+        "mkh5swgf5bcho7oqg19vfbfz"
+      ]
+    },
+    "restart-login": {
+      "timeUtc": "2026-09-15T02:34:56.259Z",
+      "status": 200,
+      "url": "http://127.0.0.1:3312/",
+      "cookiesClearedBeforeLogin": true,
+      "cookieInjected": false,
+      "cookies": [
+        {
+          "name": "kb_session",
+          "httpOnly": true,
+          "secure": true,
+          "sameSite": "Lax"
+        }
+      ]
+    },
+    "restart-notes": {
+      "timeUtc": "2026-09-15T02:35:43.031Z",
+      "query": "安装验收",
+      "reopened": [
+        {
+          "id": "mkh5swgf5bcho7oqg19vfbfz",
+          "url": "http://127.0.0.1:3312/notes/mkh5swgf5bcho7oqg19vfbfz",
+          "bodyMatches": true,
+          "title": "R1 安装验收：今晚·AI",
+          "tags": "训练, 羽毛球",
+          "searchStatus": 200
+        },
+        {
+          "id": "ox6f52w66q7g9ldv1jt1am52",
+          "url": "http://127.0.0.1:3312/notes/ox6f52w66q7g9ldv1jt1am52",
+          "bodyMatches": true,
+          "title": "R1 安装验收：无模·AI",
+          "tags": "记录, 测试",
+          "searchStatus": 200
+        }
+      ]
+    },
+    "export-after-restart": {
+      "timeUtc": "2026-09-15T02:38:32.834Z",
+      "suggestedFilename": "zhiliao-export-20260915.zip",
+      "savedAs": "export-after-restart.zip",
+      "bytes": 861,
+      "downloadFailure": null
+    },
+    "browser-final": {
+      "timeUtc": "2026-09-15T02:39:16.169Z",
+      "browserVersion": "153.0.8010.36",
+      "blockedExternalRequests": 0,
+      "pageErrors": [
+        {
+          "kind": "pageerror",
+          "error": "Error: Minified React error #418; visit https://react.dev/errors/418?args[]=text&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.",
+          "action": "mock-settings"
+        },
+        {
+          "kind": "pageerror",
+          "error": "ChunkLoadError: Loading chunk 9415 failed.\n(error: http://127.0.0.1:3312/_next/static/chunks/app/(app)/page-546d9e331d248176.js)",
+          "action": "mock-note"
+        }
+      ],
+      "httpErrors": [
+        {
+          "time": "2026-09-15T02:20:27.700Z",
+          "path": "/api/auth/login",
+          "method": "POST",
+          "status": 401,
+          "action": "login"
+        },
+        {
+          "time": "2026-09-15T02:24:39.451Z",
+          "path": "/_next/static/chunks/app/(app)/page-546d9e331d248176.js",
+          "method": "GET",
+          "status": 503,
+          "action": "mock-settings"
+        },
+        {
+          "time": "2026-09-15T02:24:39.451Z",
+          "path": "/_next/static/chunks/app/(app)/topics/%5Bid%5D/page-a443cf22ffddee12.js",
+          "method": "GET",
+          "status": 503,
+          "action": "mock-settings"
+        },
+        {
+          "time": "2026-09-15T02:24:39.455Z",
+          "path": "/_next/static/chunks/app/(app)/search/page-195baf5521c05d5d.js",
+          "method": "GET",
+          "status": 503,
+          "action": "mock-settings"
+        },
+        {
+          "time": "2026-09-15T02:24:39.457Z",
+          "path": "/_next/static/chunks/app/(app)/inbox/page-681898bb0a303d89.js",
+          "method": "GET",
+          "status": 503,
+          "action": "mock-settings"
+        },
+        {
+          "time": "2026-09-15T02:30:29.614Z",
+          "path": "/_next/static/chunks/app/(app)/settings/page-5997b3acd7a84aea.js",
+          "method": "GET",
+          "status": 503,
+          "action": "mock-note"
+        },
+        {
+          "time": "2026-09-15T02:30:29.615Z",
+          "path": "/_next/static/chunks/app/(app)/topics/%5Bid%5D/page-a443cf22ffddee12.js",
+          "method": "GET",
+          "status": 503,
+          "action": "mock-note"
+        }
+      ],
+      "steps": [
+        "login-page",
+        "login",
+        "first-note",
+        "search-without-model",
+        "export-without-model",
+        "topic-created",
+        "mock-settings",
+        "mock-note-failure",
+        "recover-page",
+        "mock-note",
+        "mock-completed",
+        "before-restart",
+        "restart-login",
+        "restart-notes",
+        "export-after-restart"
+      ]
+    }
+  },
+  "currentAction": "close",
+  "driverPid": 60084,
+  "browserVersion": "153.0.8010.36",
+  "finishedUtc": "2026-09-15T02:41:24.669Z"
+}

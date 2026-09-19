@@ -1,0 +1,687 @@
+[
+  {
+    "name": "next",
+    "locked": "15.5.23",
+    "installed": "15.5.23",
+    "dev": false,
+    "optional": false,
+    "integrity": "sha512-Gvd2WKgvxIXCGotxcI1im/Uf3rS3J3oZGw0g/uskg6AVBZhyE3aAbujkYWzS3xLmEPEtTLfkaVQUKK0KMTSIkA==",
+    "parents": [
+      {
+        "path": "(root)",
+        "kind": "dependencies",
+        "range": "^15.3.0"
+      }
+    ]
+  },
+  {
+    "name": "react",
+    "locked": "19.2.8",
+    "installed": "19.2.8",
+    "dev": false,
+    "optional": false,
+    "integrity": "sha512-PWaYA1L/q9u2u7xYQi+Y3L3Yfnie7XyLeaJICV1MGD6LprsBxcAqGjYyr0eY3p+QdsA+x/Irkt4Qif8D63+Sbw==",
+    "parents": [
+      {
+        "path": "(root)",
+        "kind": "dependencies",
+        "range": "^19.1.0"
+      },
+      {
+        "path": "node_modules/@testing-library/react",
+        "kind": "peerDependencies",
+        "range": "^18.0.0 || ^19.0.0"
+      },
+      {
+        "path": "node_modules/@tiptap/react",
+        "kind": "peerDependencies",
+        "range": "^17.0.0 || ^18.0.0 || ^19.0.0"
+      },
+      {
+        "path": "node_modules/next",
+        "kind": "peerDependencies",
+        "range": "^18.2.0 || 19.0.0-rc-de68d2f4-20241204 || ^19.0.0"
+      },
+      {
+        "path": "node_modules/next-themes",
+        "kind": "peerDependencies",
+        "range": "^16.8 || ^17 || ^18 || ^19 || ^19.0.0-rc"
+      },
+      {
+        "path": "node_modules/react-dom",
+        "kind": "peerDependencies",
+        "range": "^19.2.8"
+      },
+      {
+        "path": "node_modules/react-markdown",
+        "kind": "peerDependencies",
+        "range": ">=18"
+      },
+      {
+        "path": "node_modules/styled-jsx",
+        "kind": "peerDependencies",
+        "range": ">= 16.8.0 || 17.x.x || ^18.0.0-0 || ^19.0.0-0"
+      },
+      {
+        "path": "node_modules/use-sync-external-store",
+        "kind": "peerDependencies",
+        "range": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0"
+      }
+    ]
+  },
+  {
+    "name": "react-dom",
+    "locked": "19.2.8",
+    "installed": "19.2.8",
+    "dev": false,
+    "optional": false,
+    "integrity": "sha512-rVprimfGBG3DR+Tq0IQG2DT5PxKth1WIGDmj5yPmlzr4YBe7uyE+Du4oVqTDXZSHGGGXRtTJEGSSePyQCMBglQ==",
+    "parents": [
+      {
+        "path": "(root)",
+        "kind": "dependencies",
+        "range": "^19.1.0"
+      },
+      {
+        "path": "node_modules/@testing-library/react",
+        "kind": "peerDependencies",
+        "range": "^18.0.0 || ^19.0.0"
+      },
+      {
+        "path": "node_modules/@tiptap/react",
+        "kind": "peerDependencies",
+        "range": "^17.0.0 || ^18.0.0 || ^19.0.0"
+      },
+      {
+        "path": "node_modules/next",
+        "kind": "peerDependencies",
+        "range": "^18.2.0 || 19.0.0-rc-de68d2f4-20241204 || ^19.0.0"
+      },
+      {
+        "path": "node_modules/next-themes",
+        "kind": "peerDependencies",
+        "range": "^16.8 || ^17 || ^18 || ^19 || ^19.0.0-rc"
+      }
+    ]
+  },
+  {
+    "name": "sharp",
+    "locked": "0.35.3",
+    "installed": "0.35.3",
+    "dev": false,
+    "optional": false,
+    "integrity": "sha512-ej0zVHuZGHCiABXcNxeYhpRnPNPAcvbG8RMdBAhDAxLKkCRVSpK3Iyu7qbqw3JMzoj0REeM6f3tJLtVwl0023Q==",
+    "parents": [
+      {
+        "path": "(root)",
+        "kind": "dependencies",
+        "range": "^0.35.0"
+      },
+      {
+        "path": "node_modules/next",
+        "kind": "optionalDependencies",
+        "range": "^0.34.3"
+      }
+    ]
+  },
+  {
+    "name": "@img/sharp-linux-x64",
+    "locked": "0.35.3",
+    "installed": null,
+    "dev": false,
+    "optional": true,
+    "integrity": "sha512-8pqvxubL2PGdhlPy6GLqzDYMUjyRmKAwKHYKixpdJYBUK7PJ0C029XdsnpFIdgRZG68fZiGdHVWcKPvtiPB4cA==",
+    "parents": [
+      {
+        "path": "node_modules/sharp",
+        "kind": "optionalDependencies",
+        "range": "0.35.3"
+      }
+    ]
+  },
+  {
+    "name": "@img/sharp-libvips-linux-x64",
+    "locked": "1.3.2",
+    "installed": null,
+    "dev": false,
+    "optional": true,
+    "integrity": "sha512-ITPEtgffGJ0S6G9dRyw/366tJQqFRcHWPHhC+Stpg3Z8AEMrDrTr2lhdz4f/Y/HMbRh//7Z5mBzEpVdi62Oc3w==",
+    "parents": [
+      {
+        "path": "node_modules/@img/sharp-linux-x64",
+        "kind": "optionalDependencies",
+        "range": "1.3.2"
+      },
+      {
+        "path": "node_modules/sharp",
+        "kind": "optionalDependencies",
+        "range": "1.3.2"
+      }
+    ]
+  },
+  {
+    "name": "@tiptap/core",
+    "locked": "2.27.2",
+    "installed": "2.27.2",
+    "dev": false,
+    "optional": false,
+    "integrity": "sha512-ABL1N6eoxzDzC1bYvkMbvyexHacszsKdVPYqhl5GwHLOvpZcv9VE9QaKwDILTyz5voCA0lGcAAXZp+qnXOk5lQ==",
+    "parents": [
+      {
+        "path": "node_modules/@tiptap/extension-blockquote",
+        "kind": "peerDependencies",
+        "range": "^2.7.0"
+      },
+      {
+        "path": "node_modules/@tiptap/extension-bold",
+        "kind": "peerDependencies",
+        "range": "^2.7.0"
+      },
+      {
+        "path": "node_modules/@tiptap/extension-bubble-menu",
+        "kind": "peerDependencies",
+        "range": "^2.7.0"
+      },
+      {
+        "path": "node_modules/@tiptap/extension-bullet-list",
+        "kind": "peerDependencies",
+        "range": "^2.7.0"
+      },
+      {
+        "path": "node_modules/@tiptap/extension-code",
+        "kind": "peerDependencies",
+        "range": "^2.7.0"
+      },
+      {
+        "path": "node_modules/@tiptap/extension-code-block",
+        "kind": "peerDependencies",
+        "range": "^2.7.0"
+      },
+      {
+        "path": "node_modules/@tiptap/extension-document",
+        "kind": "peerDependencies",
+        "range": "^2.7.0"
+      },
+      {
+        "path": "node_modules/@tiptap/extension-dropcursor",
+        "kind": "peerDependencies",
+        "range": "^2.7.0"
+      },
+      {
+        "path": "node_modules/@tiptap/extension-floating-menu",
+        "kind": "peerDependencies",
+        "range": "^2.7.0"
+      },
+      {
+        "path": "node_modules/@tiptap/extension-gapcursor",
+        "kind": "peerDependencies",
+        "range": "^2.7.0"
+      },
+      {
+        "path": "node_modules/@tiptap/extension-hard-break",
+        "kind": "peerDependencies",
+        "range": "^2.7.0"
+      },
+      {
+        "path": "node_modules/@tiptap/extension-heading",
+        "kind": "peerDependencies",
+        "range": "^2.7.0"
+      },
+      {
+        "path": "node_modules/@tiptap/extension-history",
+        "kind": "peerDependencies",
+        "range": "^2.7.0"
+      },
+      {
+        "path": "node_modules/@tiptap/extension-horizontal-rule",
+        "kind": "peerDependencies",
+        "range": "^2.7.0"
+      },
+      {
+        "path": "node_modules/@tiptap/extension-image",
+        "kind": "peerDependencies",
+        "range": "^2.7.0"
+      },
+      {
+        "path": "node_modules/@tiptap/extension-italic",
+        "kind": "peerDependencies",
+        "range": "^2.7.0"
+      },
+      {
+        "path": "node_modules/@tiptap/extension-link",
+        "kind": "peerDependencies",
+        "range": "^2.7.0"
+      },
+      {
+        "path": "node_modules/@tiptap/extension-list-item",
+        "kind": "peerDependencies",
+        "range": "^2.7.0"
+      },
+      {
+        "path": "node_modules/@tiptap/extension-ordered-list",
+        "kind": "peerDependencies",
+        "range": "^2.7.0"
+      },
+      {
+        "path": "node_modules/@tiptap/extension-paragraph",
+        "kind": "peerDependencies",
+        "range": "^2.7.0"
+      },
+      {
+        "path": "node_modules/@tiptap/extension-placeholder",
+        "kind": "peerDependencies",
+        "range": "^2.7.0"
+      },
+      {
+        "path": "node_modules/@tiptap/extension-strike",
+        "kind": "peerDependencies",
+        "range": "^2.7.0"
+      },
+      {
+        "path": "node_modules/@tiptap/extension-table",
+        "kind": "peerDependencies",
+        "range": "^2.7.0"
+      },
+      {
+        "path": "node_modules/@tiptap/extension-table-cell",
+        "kind": "peerDependencies",
+        "range": "^2.7.0"
+      },
+      {
+        "path": "node_modules/@tiptap/extension-table-header",
+        "kind": "peerDependencies",
+        "range": "^2.7.0"
+      },
+      {
+        "path": "node_modules/@tiptap/extension-table-row",
+        "kind": "peerDependencies",
+        "range": "^2.7.0"
+      },
+      {
+        "path": "node_modules/@tiptap/extension-text",
+        "kind": "peerDependencies",
+        "range": "^2.7.0"
+      },
+      {
+        "path": "node_modules/@tiptap/extension-text-style",
+        "kind": "peerDependencies",
+        "range": "^2.7.0"
+      },
+      {
+        "path": "node_modules/@tiptap/react",
+        "kind": "peerDependencies",
+        "range": "^2.7.0"
+      },
+      {
+        "path": "node_modules/@tiptap/starter-kit",
+        "kind": "dependencies",
+        "range": "^2.27.2"
+      },
+      {
+        "path": "node_modules/tiptap-markdown",
+        "kind": "peerDependencies",
+        "range": "^2.0.3"
+      }
+    ]
+  },
+  {
+    "name": "@tiptap/react",
+    "locked": "2.27.2",
+    "installed": "2.27.2",
+    "dev": false,
+    "optional": false,
+    "integrity": "sha512-0EAs8Cpkfbvben1PZ34JN2Nd79Dhioynm2jML27DBbf1VWPk+FFWFGTMLUT0bu+Np5iVxio8fqV9t0mc4D6thA==",
+    "parents": [
+      {
+        "path": "(root)",
+        "kind": "dependencies",
+        "range": "^2.14.0"
+      }
+    ]
+  },
+  {
+    "name": "@tiptap/starter-kit",
+    "locked": "2.27.2",
+    "installed": "2.27.2",
+    "dev": false,
+    "optional": false,
+    "integrity": "sha512-bb0gJvPoDuyRUQ/iuN52j1//EtWWttw+RXAv1uJxfR0uKf8X7uAqzaOOgwjknoCIDC97+1YHwpGdnRjpDkOBxw==",
+    "parents": [
+      {
+        "path": "(root)",
+        "kind": "dependencies",
+        "range": "^2.14.0"
+      }
+    ]
+  },
+  {
+    "name": "tiptap-markdown",
+    "locked": "0.8.10",
+    "installed": "0.8.10",
+    "dev": false,
+    "optional": false,
+    "integrity": "sha512-iDVkR2BjAqkTDtFX0h94yVvE2AihCXlF0Q7RIXSJPRSR5I0PA1TMuAg6FHFpmqTn4tPxJ0by0CK7PUMlnFLGEQ==",
+    "parents": [
+      {
+        "path": "(root)",
+        "kind": "dependencies",
+        "range": "^0.8.10"
+      }
+    ]
+  },
+  {
+    "name": "prosemirror-model",
+    "locked": "1.25.11",
+    "installed": "1.25.11",
+    "dev": false,
+    "optional": false,
+    "integrity": "sha512-QWg9RhnpLlogAmp3p96uEFrE5txQpFynd4vhBAELkwgOCWQs/X0yCzB3/hrHqiPwf91RG5KyWq6553zs9JqIOQ==",
+    "parents": [
+      {
+        "path": "node_modules/@tiptap/pm",
+        "kind": "dependencies",
+        "range": "^1.23.0"
+      },
+      {
+        "path": "node_modules/prosemirror-commands",
+        "kind": "dependencies",
+        "range": "^1.0.0"
+      },
+      {
+        "path": "node_modules/prosemirror-gapcursor",
+        "kind": "dependencies",
+        "range": "^1.0.0"
+      },
+      {
+        "path": "node_modules/prosemirror-markdown",
+        "kind": "dependencies",
+        "range": "^1.25.0"
+      },
+      {
+        "path": "node_modules/prosemirror-schema-basic",
+        "kind": "dependencies",
+        "range": "^1.25.0"
+      },
+      {
+        "path": "node_modules/prosemirror-schema-list",
+        "kind": "dependencies",
+        "range": "^1.0.0"
+      },
+      {
+        "path": "node_modules/prosemirror-state",
+        "kind": "dependencies",
+        "range": "^1.0.0"
+      },
+      {
+        "path": "node_modules/prosemirror-tables",
+        "kind": "dependencies",
+        "range": "^1.25.4"
+      },
+      {
+        "path": "node_modules/prosemirror-trailing-node",
+        "kind": "peerDependencies",
+        "range": "^1.22.1"
+      },
+      {
+        "path": "node_modules/prosemirror-transform",
+        "kind": "dependencies",
+        "range": "^1.21.0"
+      },
+      {
+        "path": "node_modules/prosemirror-view",
+        "kind": "dependencies",
+        "range": "^1.25.8"
+      }
+    ]
+  },
+  {
+    "name": "js-yaml",
+    "locked": "4.3.1",
+    "installed": "4.3.1",
+    "dev": true,
+    "optional": false,
+    "integrity": "sha512-CY6crGq313MX8GkwvB7tzgp99vjQxY1++5y10/BKN/GUfHqWaOGQMNZkBvqSzsZKWk/ijwHlWzzkLulsGHhjWQ==",
+    "parents": [
+      {
+        "path": "node_modules/@eslint/eslintrc",
+        "kind": "dependencies",
+        "range": "^4.3.0"
+      }
+    ]
+  },
+  {
+    "name": "eslint",
+    "locked": "9.39.5",
+    "installed": "9.39.5",
+    "dev": true,
+    "optional": false,
+    "integrity": "sha512-DgZS62aPLXKlnxILS/AYCoRvHaZeXceIzlXPkkGGzJWSow1aEk0lbTlxUSlyjC8jcaKxAdOnTDz+o1JFSBsyjw==",
+    "parents": [
+      {
+        "path": "(root)",
+        "kind": "devDependencies",
+        "range": "^9.34.0"
+      },
+      {
+        "path": "node_modules/@eslint-community/eslint-utils",
+        "kind": "peerDependencies",
+        "range": "^6.0.0 || ^7.0.0 || >=8.0.0"
+      },
+      {
+        "path": "node_modules/@typescript-eslint/eslint-plugin",
+        "kind": "peerDependencies",
+        "range": "^8.57.0 || ^9.0.0 || ^10.0.0"
+      },
+      {
+        "path": "node_modules/@typescript-eslint/parser",
+        "kind": "peerDependencies",
+        "range": "^8.57.0 || ^9.0.0 || ^10.0.0"
+      },
+      {
+        "path": "node_modules/@typescript-eslint/type-utils",
+        "kind": "peerDependencies",
+        "range": "^8.57.0 || ^9.0.0 || ^10.0.0"
+      },
+      {
+        "path": "node_modules/@typescript-eslint/utils",
+        "kind": "peerDependencies",
+        "range": "^8.57.0 || ^9.0.0 || ^10.0.0"
+      },
+      {
+        "path": "node_modules/eslint-config-next",
+        "kind": "peerDependencies",
+        "range": "^7.23.0 || ^8.0.0 || ^9.0.0"
+      },
+      {
+        "path": "node_modules/eslint-import-resolver-typescript",
+        "kind": "peerDependencies",
+        "range": "*"
+      },
+      {
+        "path": "node_modules/eslint-plugin-import",
+        "kind": "peerDependencies",
+        "range": "^2 || ^3 || ^4 || ^5 || ^6 || ^7.2.0 || ^8 || ^9"
+      },
+      {
+        "path": "node_modules/eslint-plugin-jsx-a11y",
+        "kind": "peerDependencies",
+        "range": "^3 || ^4 || ^5 || ^6 || ^7 || ^8 || ^9"
+      },
+      {
+        "path": "node_modules/eslint-plugin-react",
+        "kind": "peerDependencies",
+        "range": "^3 || ^4 || ^5 || ^6 || ^7 || ^8 || ^9.7"
+      },
+      {
+        "path": "node_modules/eslint-plugin-react-hooks",
+        "kind": "peerDependencies",
+        "range": "^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0-0 || ^9.0.0"
+      }
+    ]
+  },
+  {
+    "name": "@eslint/eslintrc",
+    "locked": "3.3.6",
+    "installed": "3.3.6",
+    "dev": true,
+    "optional": false,
+    "integrity": "sha512-l2Ul9PrHsPCKcEY/ac7VgFj9D80C7S68sOKc618SyHDPK36s1XcFebXY0iTzUVn4Yq+YbwvSnDmCz9yxjX+QrA==",
+    "parents": [
+      {
+        "path": "(root)",
+        "kind": "devDependencies",
+        "range": "^3.3.0"
+      },
+      {
+        "path": "node_modules/eslint",
+        "kind": "dependencies",
+        "range": "^3.3.6"
+      }
+    ]
+  },
+  {
+    "name": "eslint-config-next",
+    "locked": "15.5.23",
+    "installed": "15.5.23",
+    "dev": true,
+    "optional": false,
+    "integrity": "sha512-z4WcTXNqFHwMG4V8WHb2xrlEPJvwarZa+H/6CR28vxr53icRnQzGXviO11p748BwrMZGl52itdPRzZfzYo0SKw==",
+    "parents": [
+      {
+        "path": "(root)",
+        "kind": "devDependencies",
+        "range": "^15.5.0"
+      }
+    ]
+  },
+  {
+    "name": "vitest",
+    "locked": "4.1.10",
+    "installed": "4.1.10",
+    "dev": true,
+    "optional": false,
+    "integrity": "sha512-R9jUTe5S4Qb0HCd4TNqpC7oGcrMssMRGXLW80ubjWsW9VH5GF8y1Y0SFLY9AbqSk6nt0PnOx4H4WNJYZ13GUPw==",
+    "parents": [
+      {
+        "path": "(root)",
+        "kind": "devDependencies",
+        "range": "^4.1.10"
+      }
+    ]
+  },
+  {
+    "name": "@vitest/mocker",
+    "locked": "4.1.10",
+    "installed": "4.1.10",
+    "dev": true,
+    "optional": false,
+    "integrity": "sha512-v0xaezt+DKEmKfaxg133ldzADrwLGd7Ze1MfQQTYfvs8OqZIwbxyxaYURivwV7sWy5fqn3rH5uOrSp07bp44Ow==",
+    "parents": [
+      {
+        "path": "node_modules/vitest",
+        "kind": "dependencies",
+        "range": "4.1.10"
+      }
+    ]
+  },
+  {
+    "name": "jose",
+    "locked": "6.2.8",
+    "installed": "6.2.8",
+    "dev": false,
+    "optional": false,
+    "integrity": "sha512-Bsdjwm3Qsd/P0jR+BHDe3LytDfY7WBq2HmCCLIwuVRHMuEC9ae7/R474GIUdF1NgCyZjzVo/A9DOiOBtXq8ZoQ==",
+    "parents": [
+      {
+        "path": "(root)",
+        "kind": "dependencies",
+        "range": "^6.0.0"
+      }
+    ]
+  },
+  {
+    "name": "heic-convert",
+    "locked": "2.1.0",
+    "installed": "2.1.0",
+    "dev": false,
+    "optional": false,
+    "integrity": "sha512-1qDuRvEHifTVAj3pFIgkqGgJIr0M3X7cxEPjEp0oG4mo8GFjq99DpCo8Eg3kg17Cy0MTjxpFdoBHOatj7ZVKtg==",
+    "parents": [
+      {
+        "path": "(root)",
+        "kind": "dependencies",
+        "range": "^2.1.0"
+      }
+    ]
+  },
+  {
+    "name": "heic-decode",
+    "locked": "2.1.0",
+    "installed": "2.1.0",
+    "dev": false,
+    "optional": false,
+    "integrity": "sha512-0fB3O3WMk38+PScbHLVp66jcNhsZ/ErtQ6u2lMYu/YxXgbBtl+oKOhGQHa4RpvE68k8IzbWkABzHnyAIjR758A==",
+    "parents": [
+      {
+        "path": "node_modules/heic-convert",
+        "kind": "dependencies",
+        "range": "^2.0.0"
+      }
+    ]
+  },
+  {
+    "name": "libheif-js",
+    "locked": "1.19.8",
+    "installed": "1.19.8",
+    "dev": false,
+    "optional": false,
+    "integrity": "sha512-vQJWusIxO7wavpON1dusciL8Go9jsIQ+EUrckauFYAiSTjcmLAsuJh3SszLpvkwPci3JcL41ek2n+LUZGFpPIQ==",
+    "parents": [
+      {
+        "path": "node_modules/heic-decode",
+        "kind": "dependencies",
+        "range": "^1.19.8"
+      }
+    ]
+  },
+  {
+    "name": "postcss",
+    "locked": "8.5.26",
+    "installed": "8.5.26",
+    "dev": false,
+    "optional": false,
+    "integrity": "sha512-u82N74LFzG8ca+dD8puPnplTXoGH4fTPpVGuIbt36G3qvNlkvfD0lEAZSxaly3KX8TS/L1A1gsCEmvKmBcVbkQ==",
+    "parents": [
+      {
+        "path": "node_modules/@tailwindcss/postcss",
+        "kind": "dependencies",
+        "range": "^8.5.16"
+      },
+      {
+        "path": "node_modules/next",
+        "kind": "dependencies",
+        "range": "8.4.31"
+      },
+      {
+        "path": "node_modules/vite",
+        "kind": "dependencies",
+        "range": "^8.5.25"
+      }
+    ]
+  },
+  {
+    "name": "mermaid",
+    "locked": "11.16.1",
+    "installed": "11.16.1",
+    "dev": false,
+    "optional": false,
+    "integrity": "sha512-TQsq6u22fAn3rek5VOubrhKPo1g5hwC3FXUN9hiyupTckcYiGuuKGkNQrKYwGJkXUxZdojwRG46gsSCFZMDp4g==",
+    "parents": [
+      {
+        "path": "(root)",
+        "kind": "dependencies",
+        "range": "^11.16.1"
+      }
+    ]
+  }
+]

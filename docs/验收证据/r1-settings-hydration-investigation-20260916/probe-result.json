@@ -1,0 +1,66 @@
+{
+  "node": "v22.19.0",
+  "react": "19.2.8",
+  "reactDom": "19.2.8",
+  "scope": "In-memory source function extraction; no Next server, browser, filesystem writes, database or network; backup timestamp is a synthetic sample based on the log time, not the original file mtime.",
+  "results": [
+    {
+      "name": "no-backup-different-zones",
+      "backup": null,
+      "serverTz": "UTC",
+      "clientTz": "Asia/Shanghai",
+      "serverNow": "2026-09-15T02:24:39.423Z",
+      "clientNow": "2026-09-15T02:24:39.423Z",
+      "serverText": null,
+      "clientText": null,
+      "recoverableErrorCount": 0,
+      "errors": []
+    },
+    {
+      "name": "backup-same-zone",
+      "backup": 1789438975452,
+      "serverTz": "UTC",
+      "clientTz": "UTC",
+      "serverNow": "2026-09-15T02:24:39.423Z",
+      "clientNow": "2026-09-15T02:24:39.423Z",
+      "serverText": "02:22",
+      "clientText": "02:22",
+      "recoverableErrorCount": 0,
+      "errors": []
+    },
+    {
+      "name": "backup-different-zones",
+      "backup": 1789438975452,
+      "serverTz": "UTC",
+      "clientTz": "Asia/Shanghai",
+      "serverNow": "2026-09-15T02:24:39.423Z",
+      "clientNow": "2026-09-15T02:24:39.423Z",
+      "serverText": "02:22",
+      "clientText": "10:22",
+      "recoverableErrorCount": 1,
+      "errors": [
+        {
+          "message": "Hydration failed because the server rendered text didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:\n\n- A server/client branch `if (typeof window !== 'undefined')`.\n- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.\n- Date formatting in a user's locale which doesn't match the server.\n- External changing data without sending a snapshot of it along with the HTML.\n- Invalid HTML tag nesting.\n\nIt can also happen if the client has a browser extension installed which messes with the HTML before React loaded.\n\nhttps://react.dev/link/hydration-mismatch\n\n  <DataSection lastBackupAt={1789438975452} trashCount={0}>\n    <section>\n      <h2>\n      <div className=\"rounded-ca...\">\n        <div className=\"flex flex-...\">\n          <button>\n          <span className=\"font-mono ...\">\n+           10:22\n-           02:22\n        ...\n",
+          "componentStack": "\n    at span (<anonymous>)\n    at div (<anonymous>)\n    at div (<anonymous>)\n    at section (<anonymous>)\n    at DataSection (eval at <anonymous> ([stdin]:25:1), <anonymous>:7:24)"
+        }
+      ]
+    },
+    {
+      "name": "backup-cross-midnight",
+      "backup": 1789430340000,
+      "serverTz": "UTC",
+      "clientTz": "UTC",
+      "serverNow": "2026-09-14T23:59:59Z",
+      "clientNow": "2026-09-15T00:00:01Z",
+      "serverText": "23:59",
+      "clientText": "9月14日",
+      "recoverableErrorCount": 1,
+      "errors": [
+        {
+          "message": "Hydration failed because the server rendered text didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:\n\n- A server/client branch `if (typeof window !== 'undefined')`.\n- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.\n- Date formatting in a user's locale which doesn't match the server.\n- External changing data without sending a snapshot of it along with the HTML.\n- Invalid HTML tag nesting.\n\nIt can also happen if the client has a browser extension installed which messes with the HTML before React loaded.\n\nhttps://react.dev/link/hydration-mismatch\n\n  <DataSection lastBackupAt={1789430340000} trashCount={0}>\n    <section>\n      <h2>\n      <div className=\"rounded-ca...\">\n        <div className=\"flex flex-...\">\n          <button>\n          <span className=\"font-mono ...\">\n+           9月14日\n-           23:59\n        ...\n",
+          "componentStack": "\n    at span (<anonymous>)\n    at div (<anonymous>)\n    at div (<anonymous>)\n    at section (<anonymous>)\n    at DataSection (eval at <anonymous> ([stdin]:25:1), <anonymous>:7:24)"
+        }
+      ]
+    }
+  ]
+}

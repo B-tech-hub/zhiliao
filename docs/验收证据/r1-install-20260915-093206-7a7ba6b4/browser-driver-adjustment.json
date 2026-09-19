@@ -1,0 +1,10 @@
+{
+  "runId": "20260915-093206-7a7ba6b4",
+  "timeUtc": "2026-09-15T02:44:41.524637+00:00",
+  "initialDriver": "隐藏启动的浏览器驱动未收到标准输入，未打开应用或创建笔记",
+  "action": "确认驱动命令行与父进程后关闭该进程树，改用显式标准输入/输出管道启动独立浏览器",
+  "initialDriverPid": 26460,
+  "actualDriverPid": 60084,
+  "actualBrowserClosed": true,
+  "productCodeChanged": false
+}

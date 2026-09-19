@@ -1,0 +1,20 @@
+{
+  "runId": "20260916T041726Z-9b7d27a9",
+  "checkedAtUtc": "2026-09-16T05:01:03.172400+00:00",
+  "status": "failed",
+  "relatedLinks": 61,
+  "utf8LfFiles": 48,
+  "verifiedArtifacts": 46,
+  "gitDiffCheck": "passed",
+  "unitCases": 13,
+  "browserCases": 14,
+  "screenshots": 10,
+  "buildCount": 1,
+  "errors": [
+    {
+      "file": "docs/验收证据/r1-settings-hydration-browser-20260916T041726Z-9b7d27a9/README.md",
+      "link": "preservation-final.json",
+      "error": "missing-file"
+    }
+  ]
+}

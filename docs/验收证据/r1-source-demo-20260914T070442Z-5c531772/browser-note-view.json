@@ -1,0 +1,18 @@
+{
+  "id": "note-view",
+  "result": {
+    "note": {
+      "status": 201,
+      "id": "eifme1synnzp9q0y8o314hkw",
+      "title": "R1验收冷启动：今晚·AI",
+      "tags": [
+        "羽毛球",
+        "训练"
+      ],
+      "topicId": "b2m5ni7f25w10ix7vgpq87bi",
+      "aiStatus": "done",
+      "bodyPreserved": true
+    },
+    "snapshot": "- complementary \"主导航\":\n  - link \"知了 · 回到首页\":\n    - /url: /\n  - navigation:\n    - link \"主题\":\n      - /url: /\n    - link \"搜索\":\n      - /url: /search\n    - link \"未分类 8\":\n      - /url: /inbox\n    - link \"设置\":\n      - /url: /settings\n  - paragraph: 全部主题\n  - link \"羽毛球 5\":\n    - /url: /topics/b2m5ni7f25w10ix7vgpq87bi\n  - link \"每周回顾 1\":\n    - /url: /topics/q5cfo0dno40r5wecnl70ovak\n  - link \"自媒体 3\":\n    - /url: /topics/sy50vc1d6oway90i41bnacce\n  - button \"新建主题\"\n  - button \"收起\" [expanded]\n- main:\n  - button \"返回\"\n  - combobox:\n    - option \"未分类\"\n    - option \"羽毛球\" [selected]\n    - option \"每周回顾\"\n    - option \"自媒体\"\n  - button \"专注\"\n  - button \"以此为来源提问\"\n  - button \"删除\"\n  - textbox \"标题（留空由 AI 生成）\": R1验收冷启动：今晚·AI\n  - button \"B\"\n  - button \"I\"\n  - button \"H2\"\n  - button \"无序列表\"\n  - button \"1.\"\n  - button \"</>\"\n  - button \"链接\"\n  - button \"插入图片\"\n  - button \"插入数学公式\"\n  - button \"插入表格\"\n  - paragraph: R1验收冷启动：今晚羽毛球多球训练，杀球终于有点下压了。\n  - complementary:\n    - paragraph: 目录\n    - paragraph: 暂无标题\n    - paragraph: 相关笔记\n    - link \"新球拍拉了 26 磅·AI 新球拍拉了 26 磅，杀球下压明显有力，但控球变难了，得适应两周。\":\n      - /url: /notes/htmpc7pr2m5h6sg8h8fu27j1\n      - paragraph: 新球拍拉了 26 磅·AI\n      - paragraph: 新球拍拉了 26 磅，杀球下压明显有力，但控球变难了，得适应两周。\n    - link \"这个月羽毛球训练小结·AI 这个月羽毛球训练小结：反手高远球终于能稳定打到后场，引拍时机比以前早了半拍，转体也更完整；网前搓球手感有进步，但对方压反手时仍…\":\n      - /url: /notes/fg0hpdtc0qu05ck23ijc23il\n      - paragraph: 这个月羽毛球训练小结·AI\n      - paragraph: 这个月羽毛球训练小结：反手高远球终于能稳定打到后场，引拍时机比以前早了半拍，转体也更完整；网前搓球手感有进步，但对方压反手时仍…\n    - link \"今晚羽毛球多球训练，·AI 今晚羽毛球多球训练，反手过渡球比上周稳定，就是步伐还是慢半拍。\":\n      - /url: /notes/jc3niz4rzkzxl0rs8b4dm4ob\n      - paragraph: 今晚羽毛球多球训练，·AI\n      - paragraph: 今晚羽毛球多球训练，反手过渡球比上周稳定，就是步伐还是慢半拍。\n    - link \"双打站位复盘：接杀球·AI 双打站位复盘：接杀球后第三拍抢网太急，教练说先稳住中场再压前场。\":\n      - /url: /notes/j86xi1u1l187xm5hzdbcklo9\n      - paragraph: 双打站位复盘：接杀球·AI\n      - paragraph: 双打站位复盘：接杀球后第三拍抢网太急，教练说先稳住中场再压前场。\n    - link \"晨跑 5 公里，配速·AI 晨跑 5 公里，配速 6 分 10 秒，最后一公里有点顶不住。\":\n      - /url: /notes/wsyc3qpp2tlu1szq83j6e9kp\n      - paragraph: 晨跑 5 公里，配速·AI\n      - paragraph: 晨跑 5 公里，配速 6 分 10 秒，最后一公里有点顶不住。\n    - link \"跑前热身偷懒了，小腿·AI 跑前热身偷懒了，小腿酸得不行，下次老老实实做动态拉伸。\":\n      - /url: /notes/fn0gtqpvvbtb8b3ohnv9xowh\n      - paragraph: 跑前热身偷懒了，小腿·AI\n      - paragraph: 跑前热身偷懒了，小腿酸得不行，下次老老实实做动态拉伸。\n    - link \"周末逛菜市场买了排骨·AI 周末逛菜市场买了排骨，试做糖醋排骨，炒糖色差点糊锅。\":\n      - /url: /notes/sx0tkkaj24akub5ebb18j984\n      - paragraph: 周末逛菜市场买了排骨·AI\n      - paragraph: 周末逛菜市场买了排骨，试做糖醋排骨，炒糖色差点糊锅。\n  - textbox \"标签，用逗号分隔（留空由 AI 生成）\": 羽毛球, 训练\n- button \"快速记录\"\n- button \"AI 助手\"\n- alert"
+  }
+}

@@ -1,0 +1,134 @@
+{
+  "story": "2.2",
+  "recorded_at": "2026-09-12T11:50:40.434125+00:00",
+  "scope": "B2 本机验收结束后的既有资源及文件保留核对",
+  "baseline": "docs/验收证据/story-2-2-b2-environment-2026-09-12T11-47-41Z.json",
+  "runtime": "docs/验收证据/story-2-2-runtime-b2-2026-09-12T11-48-30Z.json",
+  "network": "docs/验收证据/story-2-2-runtime-b2-2026-09-12T11-48-30Z-network.json",
+  "containers_unchanged": true,
+  "volumes_unchanged": true,
+  "networks_unchanged": true,
+  "counts": {
+    "containers": 7,
+    "volumes": 8,
+    "networks": 7,
+    "preserved_files": 73
+  },
+  "changed_files": [],
+  "runtime_status": "passed",
+  "runtime_cleanup": {
+    "status": "removed"
+  },
+  "network_status": "passed",
+  "network_cleanup": {
+    "status": "removed",
+    "resource_count": 6
+  },
+  "network_evidence_hash_matches": true,
+  "containers": [
+    {
+      "id": "cd07490a30d9cd068c4552f0f528dacecd9349eb2a60c1dbf9f8c18333fe83ea",
+      "state": "exited",
+      "metadata_sha256": "a297dc5b53acb84529ea1e465e25093f42263ed834d033d31e178292ac4f2f8d"
+    },
+    {
+      "id": "5d05095aa56b26fee8ff02b3372764d8300cc7b1851773eca5ee0a95ed3f675f",
+      "state": "exited",
+      "metadata_sha256": "a4fad8fcae7de2d2a580ec75606b304925c81e8abd12e83275e8198d99afb344"
+    },
+    {
+      "id": "254c7caca374780a6c1a3bea1c2c6ba59d6ab092de155c34f8efd3cd411532c8",
+      "state": "exited",
+      "metadata_sha256": "91aca3c619e87c0ce712f363241a589030d90a795c2f7f85dcfc50f7ad2ed985"
+    },
+    {
+      "id": "ea240066dd4a847db38ef758917c36a04be31191329ab6c995bdc94cd83fc721",
+      "state": "exited",
+      "metadata_sha256": "e8631505818338f4ce89c1bb047ec3a89301c18fb353b99ab310cef012c312dc"
+    },
+    {
+      "id": "50a70f44a32e78adf331f7084743f042001eb5b650ee7af849441ed6a14a85c0",
+      "state": "exited",
+      "metadata_sha256": "c3d6ee61b29c1d95d8b89079087bb01b3605ecc55d1c2400d27b2eaeaabc2b67"
+    },
+    {
+      "id": "ab1926223971ae43ca775c7078f16057bde76b5e2f53aa6856382830542c3e4a",
+      "state": "exited",
+      "metadata_sha256": "5d57b9a3ce0dc6a466685e6443c0bc5167b2e7bfad6df0dd582aee8714b0f421"
+    },
+    {
+      "id": "f61337186432f4b8be3bba6578ebb2a3f768cd39baf5349a0fc19c53f224ef81",
+      "state": "exited",
+      "metadata_sha256": "c565dd511e25cf8313a9120b9eb849719f5249bf688e4e66b388c667352074b8"
+    }
+  ],
+  "volumes": [
+    {
+      "name_sha256": "bc181e1b1e8030bfb3896296969ba1ad3c02a752472de1e2972178c51879b2e6",
+      "metadata_sha256": "9d1084a37462d31406e812fd1e70df479a80ee4083f659b8c9010a3dc6070341"
+    },
+    {
+      "name_sha256": "67dcddc99efa4b4aa4a7e73d47d917314c70f9c0a4a5451f51bc39d5720a5f3e",
+      "metadata_sha256": "12923f5a2ef671694e3ea944b10ee3310a0e0fe30d40cb0f7bc43ddb224193a6"
+    },
+    {
+      "name_sha256": "b693f31b1bc12cab06df8596316c6530facc66a209c718a310d892657d04c809",
+      "metadata_sha256": "6192df49f26b392583649db55cbbbcd9c0aaea0915a6078520862056d553514e"
+    },
+    {
+      "name_sha256": "8c657931a815075fa557aceb17fc4e00852b91aa95eb14d05152c7e5a215f65c",
+      "metadata_sha256": "cec574495ccaaba428aad22a0654cf159c7043c7da44483309cc4a717ba43798"
+    },
+    {
+      "name_sha256": "ca8a07bbfdff91b842efb8510f78939bf6ca7aa2dc24130144efb0b8e23b05d0",
+      "metadata_sha256": "93a600590c76421c5e8cbb9f6c1b1c782a6dddc016924fc17d7db70c08a06572"
+    },
+    {
+      "name_sha256": "fe21511d16e2d870ff14bec45c99ddde020fb6f36cadd695df84b52ba1a6beef",
+      "metadata_sha256": "00ed5bd723d5e01cdf3f2db7ec2b8f0db7e9007f62a2f8c3d5dc42701e063a7a"
+    },
+    {
+      "name_sha256": "82b1f84a90131937a298880159314db01745c75f2f724e0ae209ba2fe399ba39",
+      "metadata_sha256": "2d9ad2b415086e9cccdf8f3270778ac29152f0ac37b030e6783b6c7563857db4"
+    },
+    {
+      "name_sha256": "bd78dfb2bd134afb3507d0990a233bad6b70fb37c9657083c914231380caadf0",
+      "metadata_sha256": "ced318219e9375e9af914924940e3822404f4520a50c334d211f7775658a60e0"
+    }
+  ],
+  "networks": [
+    {
+      "id": "a172288b901b2a1b791280adbd2c3f169ddab9c45022fdc7541724b99a8f203e",
+      "metadata_sha256": "b5ba154acda606afdecf7d5b0e3f039524a064c0b5a8b7e93e1078e15ef2e135"
+    },
+    {
+      "id": "31a1be3a36c95e48f3374158921a02d969732cd576992974529fb5f8b552bd2e",
+      "metadata_sha256": "83887efbf5108614ae1294209ef35c2f0de9c027c876ad6c660e1d8f37b4eb34"
+    },
+    {
+      "id": "199774bd4a2cbb685cdb7bbce25caeae74f37b90322c6c73daafed04d62d3e49",
+      "metadata_sha256": "af6fc171a954b40aba0801c377b229430ca55db223e6da2cc487312a7a73f06b"
+    },
+    {
+      "id": "37acf5aefebd284f7c13114478c1fb4f5071ea61814fb12921a88a426de3678a",
+      "metadata_sha256": "29982db2eb06a75c96a7300f4e88274b08538eef2341f213a621c8f2b7149f9c"
+    },
+    {
+      "id": "f0ac4100a25e3b2ec5411f6257bb8ab1988435cb6406a0af366ee22eae60119f",
+      "metadata_sha256": "823d543c89e740edd5ab009897cf6e2a35025b0c8a3eae6f0017b257dddd20da"
+    },
+    {
+      "id": "e79ff43e38552b9a5d6c17a2bf7fd737c8cfbbec49fa7f75e573c2431597771f",
+      "metadata_sha256": "ffd4f169772a1c5b62188ef58bb7efdc8d7110ee78ba3ee7fc40f42de1c0481b"
+    },
+    {
+      "id": "6c3413f4d4700cb75b3e6305741f40dd56a2de135e802390c9cc1cb99685d0e0",
+      "metadata_sha256": "74521cd30e8961ea899452cd833e910224ce5427237879b7d25d35fb584637e3"
+    }
+  ],
+  "limitations": [
+    "容器元数据、卷/网络元数据和文件哈希核对；未读取或校验正式业务数据内容",
+    "本机所选检查成功不关闭硬配额、实际正式服务、公网 HTTPS 或发布门槛"
+  ],
+  "status": "passed"
+}

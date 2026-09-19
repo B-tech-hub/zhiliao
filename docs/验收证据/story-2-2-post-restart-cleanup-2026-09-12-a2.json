@@ -1,0 +1,405 @@
+{
+  "story": "2.2",
+  "recorded_at": "2026-09-12T09:53:52.437Z",
+  "status": "passed",
+  "scope": "核对运行源码已存证后精确删除本轮 10 个临时辅助文件；不删除仓库记录或其他临时目录",
+  "input": "docs/验收证据/story-2-2-post-restart-a2-2026-09-12T09-42-13-440Z.json",
+  "input_sha256": "ea3a4bd84a4f8a97e9c2e0fd5ebbb6da0cc927d4bf04a4dfff99c191c39758cb",
+  "proxy_evidence": "docs/验收证据/story-2-2-proxy-timeouts-2026-09-12T09-42-14-119Z.json",
+  "proxy_sha256": "92d2e3ddadcce20e92fbec472266daf598e66fc6782b544575fca0d00fbb5973",
+  "boot_id": "6ac3fe53-9499-4a8d-979d-ea444e813d9f",
+  "helper_process_count": 0,
+  "proxy_resources_remaining": [],
+  "port_3343_released": true,
+  "existing_containers": [
+    {
+      "id": "cd07490a30d9cd068c4552f0f528dacecd9349eb2a60c1dbf9f8c18333fe83ea",
+      "state": "exited"
+    },
+    {
+      "id": "5d05095aa56b26fee8ff02b3372764d8300cc7b1851773eca5ee0a95ed3f675f",
+      "state": "exited"
+    },
+    {
+      "id": "254c7caca374780a6c1a3bea1c2c6ba59d6ab092de155c34f8efd3cd411532c8",
+      "state": "exited"
+    },
+    {
+      "id": "ea240066dd4a847db38ef758917c36a04be31191329ab6c995bdc94cd83fc721",
+      "state": "exited"
+    },
+    {
+      "id": "50a70f44a32e78adf331f7084743f042001eb5b650ee7af849441ed6a14a85c0",
+      "state": "exited"
+    },
+    {
+      "id": "ab1926223971ae43ca775c7078f16057bde76b5e2f53aa6856382830542c3e4a",
+      "state": "exited"
+    },
+    {
+      "id": "f61337186432f4b8be3bba6578ebb2a3f768cd39baf5349a0fc19c53f224ef81",
+      "state": "exited"
+    }
+  ],
+  "preserved_files_before_doc_sync": [
+    {
+      "path": ".dockerignore",
+      "unchanged": true
+    },
+    {
+      "path": ".gitignore",
+      "unchanged": true
+    },
+    {
+      "path": "Dockerfile",
+      "unchanged": true
+    },
+    {
+      "path": "README.en.md",
+      "unchanged": true
+    },
+    {
+      "path": "README.md",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/spec-2-1-server-demo-boundary.md",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/spec-2-2-isolate-demo-deployment-and-limit-resources.md",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/sprint-status.yaml",
+      "unchanged": true
+    },
+    {
+      "path": "docker-compose.demo.proxy-verify.yml",
+      "unchanged": true
+    },
+    {
+      "path": "docker-compose.demo.verify.yml",
+      "unchanged": true
+    },
+    {
+      "path": "docker-compose.demo.yml",
+      "unchanged": true
+    },
+    {
+      "path": "docker-compose.yml",
+      "unchanged": true
+    },
+    {
+      "path": "docs/Demo部署隔离验收-2026-09-10.md",
+      "unchanged": true
+    },
+    {
+      "path": "docs/README.md",
+      "unchanged": true
+    },
+    {
+      "path": "docs/Story-2.2-剩余验收实施方案-2026-09-11.md",
+      "unchanged": true
+    },
+    {
+      "path": "docs/adr/0026-demo-ingress-isolation.md",
+      "unchanged": true
+    },
+    {
+      "path": "docs/首次使用与故障排查.md",
+      "unchanged": true
+    },
+    {
+      "path": "docs/验收证据/story-2-2-chrony-attribution-2026-09-12T07-45-32-076Z.json",
+      "unchanged": true
+    },
+    {
+      "path": "docs/验收证据/story-2-2-chronyd-maintenance-2026-09-12T08-47-30-618Z.json",
+      "unchanged": true
+    },
+    {
+      "path": "docs/验收证据/story-2-2-chronyd-preflight-2026-09-12T08-12-50-069Z.json",
+      "unchanged": true
+    },
+    {
+      "path": "docs/验收证据/story-2-2-chronyd-preflight-2026-09-12T08-18-12-242Z.json",
+      "unchanged": true
+    },
+    {
+      "path": "docs/验收证据/story-2-2-cleanup-2026-09-12-a2.json",
+      "unchanged": true
+    },
+    {
+      "path": "docs/验收证据/story-2-2-clock-2026-09-12T03-44-50-581Z.json",
+      "unchanged": true
+    },
+    {
+      "path": "docs/验收证据/story-2-2-clock-diagnostics-2026-09-12T04-59-16-594Z.json",
+      "unchanged": true
+    },
+    {
+      "path": "docs/验收证据/story-2-2-clock-environment-2026-09-12-a2.json",
+      "unchanged": true
+    },
+    {
+      "path": "docs/验收证据/story-2-2-clock-maintenance-2026-09-12T04-36-26-291Z.json",
+      "unchanged": true
+    },
+    {
+      "path": "docs/验收证据/story-2-2-clock-maintenance-2026-09-12T04-53-42-385Z.json",
+      "unchanged": true
+    },
+    {
+      "path": "docs/验收证据/story-2-2-environment-2026-09-11T08-37-01Z.json",
+      "unchanged": true
+    },
+    {
+      "path": "docs/验收证据/story-2-2-network-2026-09-12-a2-final.json",
+      "unchanged": true
+    },
+    {
+      "path": "docs/验收证据/story-2-2-network-2026-09-12-a2-final2.json",
+      "unchanged": true
+    },
+    {
+      "path": "docs/验收证据/story-2-2-network-2026-09-12-a2-rerun.json",
+      "unchanged": true
+    },
+    {
+      "path": "docs/验收证据/story-2-2-network-2026-09-12-a2.json",
+      "unchanged": true
+    },
+    {
+      "path": "docs/验收证据/story-2-2-network-2026-09-12T03-38-29-471Z.json",
+      "unchanged": true
+    },
+    {
+      "path": "docs/验收证据/story-2-2-normal-clock-2026-09-12T09-35-59-307Z.json",
+      "unchanged": true
+    },
+    {
+      "path": "docs/验收证据/story-2-2-preservation-2026-09-12-a2.json",
+      "unchanged": true
+    },
+    {
+      "path": "docs/验收证据/story-2-2-proxy-timeouts-2026-09-12-a2-debug.json",
+      "unchanged": true
+    },
+    {
+      "path": "docs/验收证据/story-2-2-proxy-timeouts-2026-09-12-a2.json",
+      "unchanged": true
+    },
+    {
+      "path": "docs/验收证据/story-2-2-proxy-timeouts-2026-09-12T03-25-47-619Z.json",
+      "unchanged": true
+    },
+    {
+      "path": "docs/验收证据/story-2-2-root-channel-2026-09-12T09-31-24-902Z.json",
+      "unchanged": true
+    },
+    {
+      "path": "docs/验收证据/story-2-2-root-channel-audit-2026-09-12T09-33-17-334Z.json",
+      "unchanged": true
+    },
+    {
+      "path": "docs/验收证据/story-2-2-runtime-2026-09-10.json",
+      "unchanged": true
+    },
+    {
+      "path": "docs/验收证据/story-2-2-runtime-2026-09-11.json",
+      "unchanged": true
+    },
+    {
+      "path": "docs/验收证据/story-2-2-runtime-2026-09-11T07-56-56-279Z-ccefbb73.json",
+      "unchanged": true
+    },
+    {
+      "path": "docs/验收证据/story-2-2-runtime-2026-09-12T02-41-22-818Z-ea454295.json",
+      "unchanged": true
+    },
+    {
+      "path": "docs/验收证据/story-2-2-tick-maintenance-2026-09-12T05-48-48-326Z.json",
+      "unchanged": true
+    },
+    {
+      "path": "docs/验收证据/story-2-2-tick-trace-2026-09-12T06-33-12-041Z.json",
+      "unchanged": true
+    },
+    {
+      "path": "docs/验收证据/story-2-2-tick-trace-2026-09-12T06-45-28-312Z.json",
+      "unchanged": true
+    },
+    {
+      "path": "docs/验收证据/story-2-2-tick-trace-2026-09-12T06-55-37-663Z.json",
+      "unchanged": true
+    },
+    {
+      "path": "docs/验收证据/story-2-2-wsl-recovery-2026-09-12T09-05-03-097Z.json",
+      "unchanged": true
+    },
+    {
+      "path": "docs/验收证据/story-2-2-wsl-recovery-2026-09-12T09-22-02-992Z.json",
+      "unchanged": true
+    },
+    {
+      "path": "nginx/demo-proxy.conf",
+      "unchanged": true
+    },
+    {
+      "path": "nginx/demo.conf",
+      "unchanged": true
+    },
+    {
+      "path": "package-lock.json",
+      "unchanged": true
+    },
+    {
+      "path": "package.json",
+      "unchanged": true
+    },
+    {
+      "path": "scripts/demo-http-probes.mjs",
+      "unchanged": true
+    },
+    {
+      "path": "scripts/demo-verification-utils.mjs",
+      "unchanged": true
+    },
+    {
+      "path": "scripts/fixtures/demo-proxy-upstream.mjs",
+      "unchanged": true
+    },
+    {
+      "path": "scripts/verify-demo-network.mjs",
+      "unchanged": true
+    },
+    {
+      "path": "scripts/verify-demo-proxy-timeouts.mjs",
+      "unchanged": true
+    },
+    {
+      "path": "scripts/verify-demo-runtime.mjs",
+      "unchanged": true
+    },
+    {
+      "path": "scripts/verify-demo-runtime.ps1",
+      "unchanged": true
+    },
+    {
+      "path": "src/app/(app)/settings/page.tsx",
+      "unchanged": true
+    },
+    {
+      "path": "src/lib/llm-config.ts",
+      "unchanged": true
+    },
+    {
+      "path": "src/middleware.ts",
+      "unchanged": true
+    },
+    {
+      "path": "tests/api/demo-boundary.test.ts",
+      "unchanged": true
+    },
+    {
+      "path": "tests/config/demo-network.test.ts",
+      "unchanged": true
+    },
+    {
+      "path": "tests/config/demo-proxy-timeouts.test.ts",
+      "unchanged": true
+    },
+    {
+      "path": "tests/docs/first-use-guide.test.ts",
+      "unchanged": true
+    }
+  ],
+  "files": [
+    {
+      "path": "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-a2-wsl-recovery-20260912.mjs",
+      "sha256": "9e7309997b3d00f20b71f7b08693ed018be280e5b58c78b5992f0c816fae22b2",
+      "archived_in": [
+        "docs/验收证据/story-2-2-wsl-recovery-2026-09-12T09-05-03-097Z.json"
+      ],
+      "removed": true
+    },
+    {
+      "path": "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-a2-wsl-recovery-20260912.live.json",
+      "sha256": "e2be76c65f9b978322f0a7793416dfd8cebedc2ecbecbd617b3d418d70a03469",
+      "archived_in": [
+        "docs/验收证据/story-2-2-wsl-recovery-2026-09-12T09-05-03-097Z.json"
+      ],
+      "removed": true
+    },
+    {
+      "path": "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-a2-wsl-recovery-v2-20260912.mjs",
+      "sha256": "6b933ebb174db63bf995dd9689cb62535c3487d81c9a7dde56d39a2cc1e9a557",
+      "archived_in": [
+        "docs/验收证据/story-2-2-wsl-recovery-2026-09-12T09-22-02-992Z.json"
+      ],
+      "removed": true
+    },
+    {
+      "path": "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-a2-wsl-recovery-v2-20260912.live.json",
+      "sha256": "4da6ddcd3c46ff05bb1973f9e1c5103bc59fa88a0cc5666b9520e972fe444d5a",
+      "archived_in": [
+        "docs/验收证据/story-2-2-wsl-recovery-2026-09-12T09-22-02-992Z.json"
+      ],
+      "removed": true
+    },
+    {
+      "path": "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-a2-root-channel-20260912.mjs",
+      "sha256": "d3347a755e08f03a2c6d7a6dbe8dca4817023cd8c6abb3cd1c3a68a5e184e196",
+      "archived_in": [
+        "docs/验收证据/story-2-2-root-channel-2026-09-12T09-31-24-902Z.json"
+      ],
+      "removed": true
+    },
+    {
+      "path": "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-a2-root-channel-20260912.live.json",
+      "sha256": "e3faa018e25acd0917353935e5add1e263d7d8bfcd112be2362d058ed9c72cf3",
+      "archived_in": [
+        "docs/验收证据/story-2-2-root-channel-2026-09-12T09-31-24-902Z.json"
+      ],
+      "removed": true
+    },
+    {
+      "path": "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-a2-clock-probe-20260912.mjs",
+      "sha256": "94989705f7904bb4310e5472204efc44e5895ab6bef5e383497d62ef760933f8",
+      "archived_in": [
+        "docs/验收证据/story-2-2-normal-clock-2026-09-12T09-35-59-307Z.json",
+        "docs/验收证据/story-2-2-post-restart-a2-2026-09-12T09-42-13-440Z.json"
+      ],
+      "removed": true
+    },
+    {
+      "path": "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-a2-normal-clock-20260912.mjs",
+      "sha256": "8511f725dfb8a96e7f9bff7eadecb0d6c16020109bada9b48366dd9f573e4a41",
+      "archived_in": [
+        "docs/验收证据/story-2-2-normal-clock-2026-09-12T09-35-59-307Z.json"
+      ],
+      "removed": true
+    },
+    {
+      "path": "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-a2-proxy-after-restart-20260912.mjs",
+      "sha256": "eb5b9528ff67dd747f4ad2d5353d6d7c54066f66e29bc497de24f7dce88ca9e3",
+      "archived_in": [
+        "docs/验收证据/story-2-2-post-restart-a2-2026-09-12T09-42-13-440Z.json"
+      ],
+      "removed": true
+    },
+    {
+      "path": "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-a2-proxy-after-restart-20260912.live.json",
+      "sha256": "88b4f451699f0aedc92d82d384d33470037a1db7952d6e56b004a4e56edb9f29",
+      "archived_in": [
+        "docs/验收证据/story-2-2-post-restart-a2-2026-09-12T09-42-13-440Z.json"
+      ],
+      "removed": true
+    }
+  ],
+  "root_shell": "两次重连已在独立预检记录证明，本轮未关闭根 shell；辅助文件清理不等同于恢复已结束的 Ubuntu 终端会话",
+  "clock_writes": [],
+  "signals_sent": [],
+  "finished_at": "2026-09-12T09:53:52.442Z"
+}

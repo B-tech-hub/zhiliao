@@ -20,6 +20,9 @@ jobs:
       - name: 安装依赖
         run: npm ci
 
+      - name: 版本一致性
+        run: npm run check:version
+
       - name: 设计系统门禁
         run: npm run check:design
 
@@ -27,6 +30,8 @@ jobs:
         run: npm run lint
 
       - name: 单元测试（Vitest）
+        env:
+          REQUIRE_DOCKER_COMPOSE: "1"
         run: npm test
 
       - name: 构建（含 TypeScript 严格类型检查）

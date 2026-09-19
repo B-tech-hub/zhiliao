@@ -1,0 +1,19 @@
+{
+  "runId": "20260914T070442Z-5c531772",
+  "sourceFiles": 186,
+  "candidateVersion": "0.6.1",
+  "nodeVersion": "v22.19.0",
+  "dependencyMethod": "physical-copy-existing-node_modules",
+  "sourceSha256Verified": true,
+  "originalEnvOrDataCopied": false,
+  "fixtures": {
+    "r1-import.zip": {
+      "bytes": 226,
+      "sha256": "3bdf16b3e18cbbdbdb3daeffd93185033db9b3b0b29562f2429381a5525649de"
+    },
+    "r1-upload.png": {
+      "bytes": 68,
+      "sha256": "232cb5b5a7a7c369e0487b90402ee13a2f0de9582370d48913b79f8b783701c8"
+    }
+  }
+}

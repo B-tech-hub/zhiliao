@@ -1,0 +1,18 @@
+{
+  "timeUtc": "2026-09-15T02:09:23.724503+00:00",
+  "origin": "http://127.0.0.1:3312",
+  "proxyBypassLoopback": true,
+  "configuredProxyKinds": [
+    "ftp",
+    "http",
+    "https"
+  ],
+  "directHealth": {
+    "error": "[WinError 10061] 由于目标计算机积极拒绝，无法连接。"
+  },
+  "containers": [
+    "zhiliao-r1-061-20260915-093206-7a7ba6b4-ingress-1 Up About a minute (healthy) 8080/tcp",
+    "zhiliao-r1-061-20260915-093206-7a7ba6b4-app-1 Up About a minute (healthy) ",
+    "zhiliao-r1-061-20260915-093206-7a7ba6b4-mockllm-1 Up About a minute (healthy) "
+  ]
+}

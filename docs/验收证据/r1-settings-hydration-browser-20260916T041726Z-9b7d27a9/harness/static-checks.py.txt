@@ -1,0 +1,89 @@
+import hashlib
+import json
+import re
+import unicodedata
+from urllib.parse import unquote
+from r1lib import ROOT, RUN, REPO, command, now, save, sha
+
+docs = [
+    "CHANGELOG.md", "docs/README.md", "docs/UI规范.md", "docs/releases/v0.6.1.md",
+    "docs/产品规划/知了产品视觉PRD-v1.0.md", "docs/产品规划/开源发布范围与执行清单-2026-09-13.md",
+    "docs/R1安装验收-2026-09-15.md", "docs/R1设置页刷新React418调查-2026-09-16.md",
+    "_bmad-output/implementation-artifacts/spec-r1-settings-hydration-418.md",
+    "_bmad-output/implementation-artifacts/deferred-work.md",
+]
+target = REPO / RUN["evidence"]
+all_links = {
+    "docs/R1设置页刷新React418调查-2026-09-16.md",
+    "_bmad-output/implementation-artifacts/spec-r1-settings-hydration-418.md",
+    RUN["evidence"] + "/README.md", RUN["evidence"] + "/review.md",
+}
+link_docs = docs + [RUN["evidence"] + "/README.md", RUN["evidence"] + "/review.md"]
+errors = []
+checked_links = 0
+link_pattern = re.compile(r"\[[^\]\n]+\]\((?:<([^>]+)>|([^\s)]+))\)")
+def slug(title):
+    title = title.strip().lower()
+    title = "".join(ch for ch in title if unicodedata.category(ch)[0] in "LMN" or ch.isspace() or ch in "_-")
+    return re.sub(r"\s", "-", title)
+for name in link_docs:
+    file = REPO / name
+    text = file.read_text(encoding="utf-8")
+    for match in link_pattern.finditer(text):
+        href = match.group(1) or match.group(2)
+        if name not in all_links and not re.search(r"settings-hydration|R1设置页刷新React418", href):
+            continue
+        if re.match(r"^[a-zA-Z][a-zA-Z0-9+.-]*:", href):
+            continue
+        checked_links += 1
+        relative, _, fragment = href.partition("#")
+        linked = (file.parent / unquote(relative)).resolve() if relative else file
+        if not linked.is_file():
+            errors.append({"file": name, "link": href, "error": "missing-file"})
+            continue
+        if fragment:
+            body = linked.read_text(encoding="utf-8")
+            fragment = unquote(fragment)
+            line_match = re.fullmatch(r"L(\d+)", fragment)
+            if line_match:
+                valid = 1 <= int(line_match.group(1)) <= len(body.splitlines())
+            else:
+                valid = ('id="' + fragment + '"') in body or fragment in [slug(title) for title in re.findall(r"(?m)^#{1,6}\s+(.+)$", body)]
+            if not valid:
+                errors.append({"file": name, "link": href, "error": "missing-anchor"})
+
+files = [REPO / name for name in docs] + [
+    REPO / "src/app/(app)/settings/settings-panel.tsx", REPO / "tests/components/settings-panel-hydration.test.tsx",
+] + [file for file in target.rglob("*") if file.is_file() and file.suffix in {".md", ".json", ".txt", ".log", ".yml"}]
+for file in files:
+    data = file.read_bytes()
+    data.decode("utf-8", errors="strict")
+    if data.startswith(b"\xef\xbb\xbf") or b"\r" in data:
+        errors.append({"file": file.relative_to(REPO).as_posix(), "error": "encoding-or-line-ending"})
+command(["git", "--no-optional-locks", "diff", "--check", "--", *docs,
+         "src/app/(app)/settings/settings-panel.tsx", "tests/components/settings-panel-hydration.test.tsx"])
+manifest = json.loads((target / "artifact-manifest.json").read_text(encoding="utf-8"))
+for name, value in manifest.items():
+    if sha(target / name) != value["sha256"] or (target / name).stat().st_size != value["bytes"]:
+        errors.append({"file": name, "error": "artifact-integrity"})
+build = json.loads((target / "build.json").read_text(encoding="utf-8"))
+browser = json.loads((target / "browser-report.json").read_text(encoding="utf-8"))
+runtime = json.loads((target / "runtime.json").read_text(encoding="utf-8"))
+unit = json.loads((REPO / "docs/验收证据/r1-settings-hydration-repair-20260916/vitest-after.json").read_text(encoding="utf-8"))
+assert build["status"] == "passed" and build["exitCode"] == 0
+assert browser["status"] == "passed" and browser["summary"]["settingsCases"] == 14
+assert browser["summary"]["screenshots"] == 10 and not browser["pageErrors"]
+assert build["imageId"] == browser["imageId"] == RUN["imageId"]
+assert runtime["status"] == "cleaned" and runtime["cleanup"]["status"] == "passed"
+assert unit["success"] and unit["numTotalTests"] == unit["numPassedTests"] == 13
+assert unit["numPendingTests"] == 0 and unit["numFailedTests"] == 0
+spec = (REPO / "_bmad-output/implementation-artifacts/spec-r1-settings-hydration-418.md").read_text(encoding="utf-8")
+assert "status: 'done'" in spec and "## Suggested Review Order" in spec
+result = {"runId": RUN["runId"], "checkedAtUtc": now(), "status": "passed" if not errors else "failed",
+    "relatedLinks": checked_links, "utf8LfFiles": len(files), "verifiedArtifacts": len(manifest),
+    "gitDiffCheck": "passed", "unitCases": 13, "browserCases": 14, "screenshots": 10,
+    "buildCount": 1, "errors": errors}
+save(ROOT / "evidence/static-checks.json", result)
+print(json.dumps(result, ensure_ascii=False))
+assert not errors
+
