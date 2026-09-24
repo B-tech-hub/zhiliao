@@ -58,3 +58,10 @@ brainstorm/
 # 验收时随手截的图。仓库内正式截图都在 docs/screenshots/ 与 public/ 下，
 # 只挡仓库根目录这一层，不误伤它们。
 /*.png
+
+# R1 核心闭环隔离实例（端口 3011 附近，不进仓库）
+/data-r1-core/
+/.next-r1-core/
+
+# 公开笔记与导图的本地隔离实验，不计入真实使用笔记
+/data-public-eval/
