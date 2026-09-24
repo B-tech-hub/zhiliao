@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>知了圆桌 · 第四场 · 2026-09-22</title>
+<style>
+  :root { --ink:#1f1d1a; --paper:#f7f3ea; --line:#d9d2c3; --accent:#b8412a; --muted:#6f6a60; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--paper); color:var(--ink); font-family:"Noto Serif SC","Songti SC","SimSun",Georgia,serif; line-height:1.7; }
+  header { padding:56px 24px 24px; text-align:center; }
+  header h1 { margin:0; font-size:28px; letter-spacing:.12em; font-weight:600; }
+  header p { margin:8px 0 0; color:var(--muted); font-size:14px; letter-spacing:.2em; }
+  .table { display:flex; justify-content:center; margin:8px 0 32px; }
+  main { max-width:920px; margin:0 auto; padding:0 24px 64px; }
+  .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:18px; }
+  .card { background:#fffdf8; border:1px solid var(--line); border-radius:6px; padding:18px 20px; position:relative; }
+  .card .who { display:flex; align-items:baseline; gap:10px; margin-bottom:8px; }
+  .card .icon { font-size:22px; }
+  .card .name { font-size:18px; font-weight:600; }
+  .card .role { color:var(--muted); font-size:13px; }
+  .card blockquote { margin:6px 0 0; padding-left:12px; border-left:3px solid var(--accent); font-size:14.5px; }
+  .card blockquote + blockquote { margin-top:10px; }
+  section { margin-top:40px; }
+  section h2 { font-size:16px; letter-spacing:.2em; color:var(--muted); font-weight:500; border-bottom:1px solid var(--line); padding-bottom:6px; }
+  ul { padding-left:20px; }
+  li { margin:6px 0; }
+  .tag { display:inline-block; font-size:12px; padding:1px 8px; border:1px solid var(--line); border-radius:999px; color:var(--muted); margin-left:6px; vertical-align:middle; }
+  footer { text-align:center; color:var(--muted); font-size:12px; letter-spacing:.15em; padding:24px; }
+  @keyframes turn { to { transform:rotate(360deg); } }
+  @keyframes doze { 0%,100% { opacity:0; transform:translateY(0);} 50% { opacity:1; transform:translateY(-6px);} }
+  .seats { animation:turn 60s linear infinite; transform-origin:110px 110px; }
+  .zzz text { animation:doze 3s ease-in-out infinite; }
+  .zzz text:nth-child(2) { animation-delay:.6s; }
+  .zzz text:nth-child(3) { animation-delay:1.2s; }
+</style>
+</head>
+<body>
+<header>
+  <h1>知了圆桌 · 第四场</h1>
+  <p>二〇二六年九月二十二日 · 以为是 UX，结果是发布清单和一张记账表</p>
+</header>
+
+<div class="table" aria-hidden="true">
+  <svg width="220" height="220" viewBox="0 0 220 220">
+    <circle cx="110" cy="110" r="64" fill="#e9e1d0" stroke="#d9d2c3"/>
+    <g class="seats" fill="#fffdf8" stroke="#b8412a" stroke-width="1.5">
+      <circle cx="110" cy="26" r="13"/>
+      <circle cx="190" cy="84" r="13"/>
+      <circle cx="160" cy="178" r="13"/>
+      <circle cx="60" cy="178" r="13"/>
+      <circle cx="30" cy="84" r="13"/>
+    </g>
+    <g font-size="14" text-anchor="middle" fill="#1f1d1a">
+      <text x="110" y="31">📊</text><text x="190" y="89">📋</text><text x="160" y="183">🎨</text><text x="60" y="183">🏗️</text><text x="30" y="89">💻</text>
+    </g>
+    <g class="zzz" font-size="11" fill="#6f6a60" font-family="Georgia,serif">
+      <text x="140" y="112">z</text><text x="148" y="104">z</text><text x="156" y="96">z</text>
+    </g>
+    <text x="110" y="116" font-size="10" text-anchor="middle" fill="#6f6a60">一台睡着的电脑</text>
+  </svg>
+</div>
+
+<main>
+  <div class="cards">
+    <div class="card">
+      <div class="who"><span class="icon">💻</span><span class="name">Amelia</span><span class="role">高级工程师</span></div>
+      <blockquote>Kernel-Power 42 在 00:56:55，Power-Troubleshooter 1 在 07:38:43。这不是缺陷，是笔记本合盖。</blockquote>
+      <blockquote>清单里写死的前置就是前置。这局记你输，但我不高兴。</blockquote>
+      <blockquote>副作用用对地方就是功能。</blockquote>
+    </div>
+    <div class="card">
+      <div class="who"><span class="icon">📋</span><span class="name">John</span><span class="role">产品经理</span></div>
+      <blockquote>0.6.1 对用户的价值是什么？安全补丁。剩下十九组是搭车的。</blockquote>
+      <blockquote>差一条没意义，写明才有意义。别让第 100 条是记账本。</blockquote>
+      <blockquote>两笔钱。分开答，Mary 要对账。</blockquote>
+    </div>
+    <div class="card">
+      <div class="who"><span class="icon">🎨</span><span class="name">Sally</span><span class="role">交互设计师</span></div>
+      <blockquote>「三十秒」是工程师对表格的估计，不是人对表格的估计。</blockquote>
+      <blockquote>别用 Markdown 文件，在知了里建一个「基线期」主题，让产品自己当仪器。</blockquote>
+      <blockquote>考研是有日期的。今天 22 号，你记了几行？</blockquote>
+    </div>
+    <div class="card">
+      <div class="who"><span class="icon">🏗️</span><span class="name">Winston</span><span class="role">架构师</span></div>
+      <blockquote>今天的议题全是无聊的：三个 WIP 提交上面怎么叠，一台睡着的电脑。</blockquote>
+      <blockquote>记录的成本本身就是负担，放哪儿都一样，那就放最不容易忘的地方。</blockquote>
+      <blockquote>知了必须每天能打开。它挂了，你就少一行。这比任何 SM 都真。</blockquote>
+    </div>
+    <div class="card">
+      <div class="who"><span class="icon">📊</span><span class="name">Mary</span><span class="role">商业分析师</span></div>
+      <blockquote>四轮里，真实模型的来源问答成功次数是零。「找」有证据了，「用」一条都没有。</blockquote>
+      <blockquote>这批候选离「能发」差的不是审查，是 build。</blockquote>
+      <blockquote>三天没打开和三天没学，得分得开。</blockquote>
+    </div>
+  </div>
+
+  <section>
+    <h2>定案</h2>
+    <ul>
+      <li>安全补丁等完整候选，不切 hotfix；R1、R2 仍是发布前置。<span class="tag">John 问，baibai 答</span></li>
+      <li>基线期记录是知了里的一条笔记，一天一行，六个字段，没打开也记。<span class="tag">Sally 赢，Winston 站得快</span></li>
+      <li>三条隔离规则：不进来源集，不计入 100 条，验证读导出副本。<span class="tag">Mary 与 John</span></li>
+      <li>R1 重跑预算 3 / 2 / 1；公开导图 20 张各一次。<span class="tag">两笔分开批</span></li>
+      <li>候选范围按建议：A1 至 A12 纳入，B1 补审查，方案 A。<span class="tag">Amelia 的方案 A</span></li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>回响</h2>
+    <ul>
+      <li>Sally 对 Winston：「这周你倒是站得快。」这是第三次。</li>
+      <li>Amelia 的置锁副作用，第一场是警告，第四场成了功能。</li>
+      <li>John 的本子上两格空了一整场，散场前填满。</li>
+      <li>散场时 baibai 一行都还没记。今晚那一行。</li>
+    </ul>
+  </section>
+</main>
+<footer>下次见面：R1 结果回来定候选提交，或月底第一次基线小结</footer>
+</body>
+</html>
