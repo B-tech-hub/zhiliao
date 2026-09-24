@@ -62,6 +62,7 @@ T0114 之后的审查修正（白名单引用不改写、伪造脚注不挡固�
 - **compare.py 自测**：合成数据 16 个用例，6 个应通过、10 个应失败，全部符合预期，含 manifest 多一个文件和改一个字节两个反例。
 - **容器脚本**：`fixture.cjs`、`inspect.cjs` 通过 `node --check`。容器内上传转换、导出和恢复仍待实测。
 - **审查**：单 Agent 审查结论与 7 项补丁见[审查记录](../../../_bmad-output/implementation-artifacts/review-0-6-1-baseline-r2-preparation.md)。补丁之后重跑了操作单干跑和 `inspect.cjs` 语法检查；准备脚本和 `compare.py` 没有改动，沿用补丁前的结果。
+- **捕获编码**：实测 5.1 默认按 GB2312 解码捕获的原生输出，“雨后青竹”会被存成乱码；定义块已设 `[Console]::OutputEncoding` 为 UTF-8，试跑脚本断言此项。
 
 ## 5. 待提交分组
 

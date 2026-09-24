@@ -102,6 +102,7 @@ if ($build.Count -ne 1 -or ($build[0] -join ' ') -notmatch '--platform linux/amd
 $modes = @($script:pyCalls | ForEach-Object { $_[2] }) -join ','
 if ($modes -ne 'manifest,snapshot,zip,restore,restore,snapshot,unchanged') { $problems.Add("compare.py 调用顺序不符：$modes") }
 if ($verbs['up'] -ne 7) { $problems.Add("up 次数应为 7，实际 $($verbs['up'])") }
+if ([Console]::OutputEncoding.WebName -ne 'utf-8') { $problems.Add('定义块未把捕获输出设为 UTF-8，中文状态 JSON 会乱码') }
 foreach ($key in $negative.Keys) { if ($negative[$key] -ne 'ok') { $problems.Add("反例「$key」未按预期停止：$($negative[$key])") } }
 if ($negative.Count -ne 4) { $problems.Add("反例只执行了 $($negative.Count) 项") }
 if ($problems.Count -gt 0) { $problems | ForEach-Object { "问题：$_" }; exit 1 }
