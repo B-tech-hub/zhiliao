@@ -381,6 +381,21 @@ describe("splitCitations 引用溯源", () => {
   it("空文本返回空数组", () => {
     expect(splitCitations("", new Set())).toEqual([]);
   });
+
+  it("模型写成 noteId 前缀时仍取出真实 id", () => {
+    const segs = splitCitations("安排在周二[^noteId:n1]。", new Set(["n1"]));
+    expect(segs).toEqual([
+      { text: "安排在周二" },
+      { text: "[^noteId:n1]", noteId: "n1" },
+      { text: "。" },
+    ]);
+  });
+
+  it("带前缀但 id 不在白名单时保持原样", () => {
+    expect(splitCitations("据说如此[^noteId:n404]。", new Set(["n1"]))).toEqual([
+      { text: "据说如此[^noteId:n404]。" },
+    ]);
+  });
 });
 
 /* 助手回答改走 Markdown 渲染后，`[^id]` 正好撞上 GFM 的脚注语法——
@@ -408,6 +423,12 @@ describe("citationsToMarkdown 引用转链接", () => {
 
   it("没有引用的正文原样通过", () => {
     expect(citationsToMarkdown("## 标题\n\n- 列表", new Set())).toBe("## 标题\n\n- 列表");
+  });
+
+  it("noteId 前缀的真实引用变成同一条站内链接", () => {
+    expect(citationsToMarkdown("A[^noteId:n1]B[^n2]", new Set(["n1", "n2"]))).toBe(
+      "A[[1]](/notes/n1)B[[2]](/notes/n2)",
+    );
   });
 });
 

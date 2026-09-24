@@ -154,5 +154,7 @@ export async function POST(req: NextRequest) {
         },
       },
     ],
+    sourceRefusal: grounded,
+    sourceNoteIds: grounded ? new Set(allowedNoteIds ?? []) : undefined,
   });
 }

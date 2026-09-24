@@ -203,5 +203,7 @@ export async function POST(req: NextRequest) {
     prelude: grounded
       ? [{ grounding: { noteIds: allowedNoteIds ?? [], mode: sourcesMode ?? "empty" } }]
       : undefined,
+    sourceRefusal: grounded,
+    sourceNoteIds: grounded ? new Set(allowedNoteIds ?? []) : undefined,
   });
 }

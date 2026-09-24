@@ -4,6 +4,7 @@
 import { and, desc, eq, isNull } from "drizzle-orm";
 import { getDb } from "@/db";
 import { notes, topics } from "@/db/schema";
+import { SOURCE_REFUSAL_SENTENCE } from "@/lib/ai/source-refusal";
 import { buildSourcesContext } from "@/lib/ai/sources";
 import { extractImageFilenames } from "@/lib/image-refs";
 import { isFeatureEnabled } from "@/lib/feature-flags";
@@ -43,7 +44,7 @@ export const SOURCES_SYSTEM_PROMPT = `你是「知了」个人知识库的 AI �
 
 严格接地（最高优先级，不可协商）：
 - 你的回答只能依据下面给出的来源集内容，以及用 search_notes / read_note 从来源集内取到的内容
-- 来源集里没有的信息，一律回答「来源笔记中没有相关内容」，并简要说明缺什么。禁止用你自己的知识补充、推测或发挥
+- 来源集里没有的信息，一律回答「${SOURCE_REFUSAL_SENTENCE}」，并简要说明缺什么。禁止用你自己的知识补充、推测或发挥
 - 即使用户明确要求你用自身知识回答，也不要在本次会话中破例。请告诉他：本次是来源问答，可以新建一个普通对话来问
 - 允许对来源内容做归纳、比较、改写和总结，但结论必须能在来源里找到依据
 
