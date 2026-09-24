@@ -1,0 +1,20 @@
+{
+  "command": [
+    "node",
+    "node_modules/eslint/bin/eslint.js",
+    "src/lib/client-note.ts",
+    "src/app/(app)/inbox/page.tsx",
+    "src/app/(app)/topics/[id]/page.tsx",
+    "src/app/(app)/notes/[id]/page.tsx",
+    "tests/lib/client-note.test.ts",
+    "tests/components/client-note-pages.test.tsx",
+    "src/lib/ai/source-refusal.ts",
+    "src/lib/ai/chat-context.ts",
+    "src/lib/ai/chat-stream.ts",
+    "src/app/api/chat/route.ts",
+    "src/app/api/chat/confirm/route.ts",
+    "src/components/chat/chat-state.ts"
+  ],
+  "exit_code": 0,
+  "elapsed_s": 57.143
+}

@@ -40,3 +40,11 @@
 - 应用镜像 `ghcr.io/b-tech-hub/zhiliao:0.6.1` 仍无 digest，且尚未发布；Nginx 已使用固定摘要。公开部署前必须正式构建、推送并钉死双架构 manifest，不能用本地候选 tag 代替。
 - `demo_net` 只设置 `com.docker.network.bridge.gateway_mode_ipv4: isolated`，未声明 IPv6 隔离。目标主机验收仍须覆盖 IPv6 出站、实际正式服务边界、业务卷硬配额和公网 HTTPS。
 - Compose 启动阶段的会话密钥长度/强度校验仍未落地；弱密钥会拖到登录签发才失败。宿主 `DEMO_*` 覆盖问题本轮单列为 Decision，不在此关闭。
+## Deferred from: code review (2026-09-22)
+
+- `GET /api/notes` 与 `GET /api/notes/[id]` 仍 `select()` 整行并展开返回。`embedding` Buffer 会经 JSON 变成 `{ type: "Buffer", data: [...] }` 到达调用方。这是本次三页改动之外的既有出口，不在本轮修补。
+- `ClientNote = Omit<Note, "embedding">` 仍可接受完整 `Note`。当前三页已调用 `toClientNote`，但属性类型本身不能阻止以后直接传整行。类型层收紧方式不唯一，本轮不改。
+
+## Deferred from: code review of spec-r1-core-loop.md (2026-09-23)
+
+- 来源注入仍把笔记标成 noteId: <id>（src/lib/ai/sources.ts:156）。模型会把这个前缀抄进 [^noteId:id]。本次只在客户端白名单解析里兼容，没有改注入文案。这是本轮改动之前就有的提示形状。
