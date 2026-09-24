@@ -1,0 +1,76 @@
+{
+  "status": "failed",
+  "started_at": "2026-09-19T16:44:40.799Z",
+  "baseline_commit": "0179c8dfc5aa021865a7b2020df7bfa161f03ec4",
+  "llm": {
+    "source": "host-settings",
+    "model": "gemini-3.7-flash",
+    "host": "ai.hybgzs.com",
+    "key_len": 62
+  },
+  "budget": {
+    "organize_success": 2,
+    "source_chat": 0,
+    "failure": 0
+  },
+  "checks": {
+    "healthz": {
+      "ok": true
+    },
+    "login": {
+      "ok": true
+    },
+    "topic_create": {
+      "ok": true,
+      "id": "txealbexut240t4o6icwwp8k",
+      "name": "运动"
+    },
+    "record": {
+      "ok": true,
+      "ids": {
+        "A": "x3kgbiwzk34o4y7nwzwz43co",
+        "B": "tmpafirp49r80wwaeudqhd29",
+        "C": "hkcb0yhfdj7lin2f8847cuqm"
+      }
+    },
+    "organize": {
+      "ok": false,
+      "notes": {
+        "A": {
+          "id": "x3kgbiwzk34o4y7nwzwz43co",
+          "aiStatus": "done",
+          "title": "羽毛球高远球练习安排",
+          "topicId": "txealbexut240t4o6icwwp8k",
+          "contentUnchanged": true,
+          "elapsedMs": 54663,
+          "timedOut": false
+        },
+        "B": {
+          "id": "tmpafirp49r80wwaeudqhd29",
+          "aiStatus": "done",
+          "title": "Markdown表格对齐语法",
+          "topicId": "inbox",
+          "contentUnchanged": true,
+          "elapsedMs": 56054,
+          "timedOut": false
+        },
+        "C": {
+          "id": "hkcb0yhfdj7lin2f8847cuqm",
+          "aiStatus": "processing",
+          "title": "",
+          "topicId": "inbox",
+          "contentUnchanged": true,
+          "elapsedMs": 240837,
+          "timedOut": true
+        }
+      }
+    }
+  },
+  "no_model": {
+    "reused": "docs/R1安装验收-2026-09-15.md",
+    "rerun": false
+  },
+  "port": 3011,
+  "error": "整理未在时限内全部成功，或正文被覆盖",
+  "finished_at": "2026-09-19T16:50:44.467Z"
+}

@@ -1,0 +1,113 @@
+{
+  "status": "passed",
+  "started_at": "2026-09-23T01:14:34.785Z",
+  "baseline_commit": "0179c8dfc5aa021865a7b2020df7bfa161f03ec4",
+  "llm": {
+    "source": "host-settings",
+    "model": "42",
+    "host": "xn--wnup5g6so4wn.de5.net",
+    "key_len": 51
+  },
+  "budget": {
+    "organize_success": 0,
+    "source_chat": 2,
+    "failure": 0,
+    "caps": {
+      "organize_success": 1,
+      "source_chat": 2,
+      "failure": 0
+    }
+  },
+  "deadline_ms": 1545000,
+  "checks": {
+    "healthz": {
+      "ok": true
+    },
+    "login": {
+      "ok": true
+    },
+    "topic_create": {
+      "ok": true,
+      "id": "vbr3roi0cpr91tf57b8k05iy",
+      "name": "运动"
+    },
+    "record": {
+      "ok": true,
+      "ids": {
+        "A": "pobhk7fd8wf73dur3a61qq71"
+      }
+    },
+    "organize_recovery": {
+      "skipped": true
+    },
+    "organize": {
+      "ok": false,
+      "notes": {
+        "A": {
+          "id": "pobhk7fd8wf73dur3a61qq71",
+          "aiStatus": "failed",
+          "title": "每周二早上在体育馆覆盖练习羽毛球远球",
+          "topicId": "inbox",
+          "contentUnchanged": true,
+          "elapsedMs": 21189,
+          "timedOut": false
+        }
+      },
+      "required": false
+    },
+    "topics": {
+      "skipped": true
+    },
+    "search": {
+      "skipped": true
+    },
+    "cite": {
+      "ok": true,
+      "grounding": {
+        "noteIds": [
+          "pobhk7fd8wf73dur3a61qq71"
+        ],
+        "mode": "full"
+      },
+      "hasRef": true,
+      "hasFact": true,
+      "refused": false,
+      "conversationId": "gonhvxlf2q8s9vjg6j3g6k2a",
+      "text": "羽毛球练习安排在**每周二早上**，地点在体育馆，练习内容是羽毛球远球[^pobhk7fd8wf73dur3a61qq71]。",
+      "error": null
+    },
+    "refuse": {
+      "ok": true,
+      "grounding": {
+        "noteIds": [
+          "pobhk7fd8wf73dur3a61qq71"
+        ],
+        "mode": "full"
+      },
+      "conversationId": "gonhvxlf2q8s9vjg6j3g6k2a",
+      "text": "来源笔记中没有相关内容。\n\n当前来源集里只有一条笔记（每周二早上在体育馆练习羽毛球远球），没有关于茶树种植环境的任何信息。如果你想问这个，可以新建一个普通对话，或者先把相关笔记记进来再问 w",
+      "error": null
+    }
+  },
+  "no_model": {
+    "reused": "docs/R1安装验收-2026-09-15.md",
+    "rerun": false
+  },
+  "port": 3011,
+  "mode": "refusal-recheck",
+  "power": {
+    "available": true,
+    "ac_sec": 0,
+    "dc_sec": 600
+  },
+  "keep_awake": true,
+  "clock": {
+    "wall_ms": 159319,
+    "mono_ms": 159318,
+    "sleep_gap_ms": 1,
+    "sleep_detected": false,
+    "deadline_ms": 1545000
+  },
+  "finished_at": "2026-09-23T01:17:22.105Z",
+  "data_dirs_changed": []
+}

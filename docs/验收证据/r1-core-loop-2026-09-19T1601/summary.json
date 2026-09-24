@@ -1,0 +1,27 @@
+{
+  "status": "failed",
+  "started_at": "2026-09-19T16:01:19.088Z",
+  "baseline_commit": "0179c8dfc5aa021865a7b2020df7bfa161f03ec4",
+  "llm": {
+    "source": "host-settings",
+    "model": "gemini-3.7-flash",
+    "key_len": 62
+  },
+  "budget": {
+    "organize_success": 0,
+    "source_chat": 0,
+    "failure": 0
+  },
+  "checks": {},
+  "no_model": {
+    "reused": "docs/R1安装验收-2026-09-15.md",
+    "rerun": false
+  },
+  "server_exit": {
+    "code": 1,
+    "signal": null,
+    "tail": "   ▲ Next.js 15.5.24 (Turbopack)\n   - Local:        http://localhost:3011\n   - Network:      http://100.123.51.125:3011\n   - Environments: .env.local, .env\n   - Experiments (use with caution):\n     · staleTimes\n\n ✓ Starting...\n[Error: ENOENT: no such file or directory, mkdir '.\\./data-r1-core\\.next\\cache'] {\n  errno: -4058,\n  code: 'ENOENT',\n  syscall: 'mkdir',\n  path: 'D:\\\\ClaudeProjects\\\\ai_acknowladge\\\\D:\\\\ClaudeProjects\\\\ai_acknowladge\\\\data-r1-core\\\\.next\\\\cache'\n}\nnode:internal/fs/promises:860\r\n  return await PromisePrototypeThen(\r\n         ^\r\n\r\nError: ENOENT: no such file or directory, mkdir '.\\./data-r1-core\\.next'\r\n    at async Object.mkdir (node:internal/fs/promises:860:10)\r\n    at async .\\node_modules\\next\\dist\\trace\\report\\to-json.js:126:17\r\n    at async Object.flushAll (.\\node_modules\\next\\dist\\trace\\report\\to-json.js:46:17)\r\n    at async Promise.all (index 0)\r\n    at async MultiReporter.flushAll (.\\node_modules\\next\\dist\\trace\\report\\index.js:24:9)\r\n    at async handleSessionStop (.\\node_modules\\next\\dist\\cli\\next-dev.js:102:5)\r\n    at async ChildProcess.<anonymous> (.\\node_modules\\next\\dist\\cli\\next-dev.js:296:17) {\r\n  errno: -4058,\r\n  code: 'ENOENT',\r\n  syscall: 'mkdir',\r\n  path: 'D:\\\\ClaudeProjects\\\\ai_acknowladge\\\\D:\\\\ClaudeProjects\\\\ai_acknowladge\\\\data-r1-core\\\\.next'\r\n}\r\n\r\nNode.js v22.19.0\r\n"
+  },
+  "error": "隔离实例启动 超时",
+  "finished_at": "2026-09-19T16:02:49.800Z"
+}

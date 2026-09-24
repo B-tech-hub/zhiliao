@@ -1,0 +1,189 @@
+{
+  "status": "failed",
+  "started_at": "2026-09-22T15:40:27.934Z",
+  "baseline_commit": "0179c8dfc5aa021865a7b2020df7bfa161f03ec4",
+  "llm": {
+    "source": "host-settings",
+    "model": "gemini-3.7-flash",
+    "host": "ai.hybgzs.com",
+    "key_len": 62
+  },
+  "budget": {
+    "organize_success": 3,
+    "source_chat": 2,
+    "failure": 1,
+    "caps": {
+      "organize_success": 3,
+      "source_chat": 2,
+      "failure": 1
+    }
+  },
+  "deadline_ms": 1545000,
+  "checks": {
+    "healthz": {
+      "ok": true
+    },
+    "login": {
+      "ok": true
+    },
+    "topic_create": {
+      "ok": true,
+      "id": "dfw5hoj0la4q7pmxwoyp0n02",
+      "name": "运动"
+    },
+    "record": {
+      "ok": true,
+      "ids": {
+        "A": "go73pbotokciby6nr008j57r",
+        "B": "nyqfmgdxr93x1x7wq2ocz33u",
+        "C": "h6sgfdcps6hgiasu31h76tko"
+      }
+    },
+    "organize_recovery": {
+      "key": "B",
+      "note": {
+        "id": "nyqfmgdxr93x1x7wq2ocz33u",
+        "aiStatus": "done",
+        "title": "Markdown表格对齐语法",
+        "topicId": "inbox",
+        "contentUnchanged": true,
+        "elapsedMs": 500386,
+        "timedOut": false,
+        "recovered": true,
+        "priorError": "网络错误: The operation was aborted due to timeout"
+      }
+    },
+    "organize": {
+      "ok": true,
+      "notes": {
+        "A": {
+          "id": "go73pbotokciby6nr008j57r",
+          "aiStatus": "done",
+          "title": "周二羽毛球远球练习",
+          "topicId": "dfw5hoj0la4q7pmxwoyp0n02",
+          "contentUnchanged": true,
+          "elapsedMs": 53014,
+          "timedOut": false
+        },
+        "B": {
+          "id": "nyqfmgdxr93x1x7wq2ocz33u",
+          "aiStatus": "done",
+          "title": "Markdown表格对齐语法",
+          "topicId": "inbox",
+          "contentUnchanged": true,
+          "elapsedMs": 500386,
+          "timedOut": false,
+          "recovered": true,
+          "priorError": "网络错误: The operation was aborted due to timeout"
+        },
+        "C": {
+          "id": "h6sgfdcps6hgiasu31h76tko",
+          "aiStatus": "done",
+          "title": "光合作用与叶绿素光能吸收",
+          "topicId": "inbox",
+          "contentUnchanged": true,
+          "elapsedMs": 166032,
+          "timedOut": false
+        }
+      }
+    },
+    "topics": {
+      "ok": true,
+      "inboxCount": 2,
+      "classified": [
+        "A"
+      ],
+      "leftInbox": [
+        "B",
+        "C"
+      ]
+    },
+    "search": {
+      "ok": true,
+      "hits": {
+        "A": {
+          "q": "羽毛球",
+          "ids": [
+            "go73pbotokciby6nr008j57r"
+          ],
+          "hit": true
+        },
+        "B": {
+          "q": "Markdown 表格",
+          "ids": [
+            "nyqfmgdxr93x1x7wq2ocz33u"
+          ],
+          "hit": true
+        },
+        "C": {
+          "q": "叶绿素",
+          "ids": [
+            "h6sgfdcps6hgiasu31h76tko"
+          ],
+          "hit": true
+        }
+      }
+    },
+    "cite": {
+      "ok": true,
+      "grounding": {
+        "noteIds": [
+          "go73pbotokciby6nr008j57r"
+        ],
+        "mode": "full"
+      },
+      "hasRef": true,
+      "hasFact": true,
+      "refused": false,
+      "conversationId": "ztdxxscn6rjng9lmt00hm5io",
+      "text": "羽毛球练习安排在**每周二**早上[^go73pbotokciby6nr008j57r]。",
+      "error": null
+    },
+    "refuse": {
+      "ok": false,
+      "grounding": {
+        "noteIds": [
+          "go73pbotokciby6nr008j57r"
+        ],
+        "mode": "full"
+      },
+      "conversationId": "ztdxxscn6rjng9lmt00hm5io",
+      "text": "来源笔记中没有关于「茶树种植环境」的相关内容。\n\n当前处于「来源问答」模式，回答仅能依据知识库中的笔记。如需了解茶树的种植环境等通用知识，建议新建一个普通对话进行提问。",
+      "error": null
+    },
+    "failure": {
+      "ok": true,
+      "aiStatus": "failed",
+      "contentUnchanged": true,
+      "elapsedMs": 3847,
+      "timedOut": false,
+      "searchHit": true,
+      "zip": {
+        "bytes": 1339,
+        "filename": "zhiliao-export-20260922.zip",
+        "status": 200
+      }
+    }
+  },
+  "no_model": {
+    "reused": "docs/R1安装验收-2026-09-15.md",
+    "rerun": false
+  },
+  "port": 3011,
+  "power": {
+    "available": true,
+    "ac_sec": 0,
+    "dc_sec": 600
+  },
+  "keep_awake": true,
+  "clock": {
+    "wall_ms": 660986,
+    "mono_ms": 660986,
+    "sleep_gap_ms": 1,
+    "sleep_detected": false,
+    "deadline_ms": 1545000
+  },
+  "error": "来源拒答未出现固定句",
+  "finished_at": "2026-09-22T15:51:29.847Z",
+  "data_dirs_changed": []
+}

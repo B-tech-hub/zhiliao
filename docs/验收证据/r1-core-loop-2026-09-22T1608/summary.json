@@ -1,0 +1,114 @@
+{
+  "status": "failed",
+  "started_at": "2026-09-22T16:08:16.928Z",
+  "baseline_commit": "0179c8dfc5aa021865a7b2020df7bfa161f03ec4",
+  "llm": {
+    "source": "host-settings",
+    "model": "gemini-3.7-flash",
+    "host": "ai.hybgzs.com",
+    "key_len": 62
+  },
+  "budget": {
+    "organize_success": 0,
+    "source_chat": 2,
+    "failure": 0,
+    "caps": {
+      "organize_success": 1,
+      "source_chat": 2,
+      "failure": 0
+    }
+  },
+  "deadline_ms": 1545000,
+  "checks": {
+    "healthz": {
+      "ok": true
+    },
+    "login": {
+      "ok": true
+    },
+    "topic_create": {
+      "ok": true,
+      "id": "b1zzpjhsfjnodvo7utup40ac",
+      "name": "运动"
+    },
+    "record": {
+      "ok": true,
+      "ids": {
+        "A": "x64mrjs92u70qs36h758um4r"
+      }
+    },
+    "organize_recovery": {
+      "skipped": true
+    },
+    "organize": {
+      "ok": false,
+      "notes": {
+        "A": {
+          "id": "x64mrjs92u70qs36h758um4r",
+          "aiStatus": "processing",
+          "title": "",
+          "topicId": "inbox",
+          "contentUnchanged": true,
+          "elapsedMs": 181237,
+          "timedOut": true
+        }
+      },
+      "required": false
+    },
+    "topics": {
+      "skipped": true
+    },
+    "search": {
+      "skipped": true
+    },
+    "cite": {
+      "ok": true,
+      "grounding": {
+        "noteIds": [
+          "x64mrjs92u70qs36h758um4r"
+        ],
+        "mode": "full"
+      },
+      "hasRef": true,
+      "hasFact": true,
+      "refused": false,
+      "conversationId": "cfusn8uuznrcwgu16ejgk3ip",
+      "text": "羽毛球练习安排在**每周二早上**[^x64mrjs92u70qs36h758um4r]。",
+      "error": null
+    },
+    "refuse": {
+      "ok": false,
+      "grounding": {
+        "noteIds": [
+          "x64mrjs92u70qs36h758um4r"
+        ],
+        "mode": "full"
+      },
+      "conversationId": null,
+      "text": "",
+      "error": "LLM 请求失败 HTTP 400: {\"error\":{\"code\":400,\"message\":\"来自上游渠道的报错: Function call is missing a thought_signature in functionCall parts. This is required for tools to work correctly, and missing thought_signature may lead to degraded model performance. Additional data, function call `default_api:search_notes` , position 4. P"
+    }
+  },
+  "no_model": {
+    "reused": "docs/R1安装验收-2026-09-15.md",
+    "rerun": false
+  },
+  "port": 3011,
+  "mode": "refusal-recheck",
+  "power": {
+    "available": true,
+    "ac_sec": 0,
+    "dc_sec": 600
+  },
+  "keep_awake": true,
+  "clock": {
+    "wall_ms": 369888,
+    "mono_ms": 369887,
+    "sleep_gap_ms": 1,
+    "sleep_detected": false,
+    "deadline_ms": 1545000
+  },
+  "error": "来源拒答未出现固定句",
+  "finished_at": "2026-09-22T16:14:27.850Z",
+  "data_dirs_changed": []
+}

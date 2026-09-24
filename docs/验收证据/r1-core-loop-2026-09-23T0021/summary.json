@@ -1,0 +1,102 @@
+{
+  "status": "failed",
+  "started_at": "2026-09-23T00:21:06.412Z",
+  "baseline_commit": "0179c8dfc5aa021865a7b2020df7bfa161f03ec4",
+  "llm": {
+    "source": "host-settings",
+    "model": "42",
+    "host": "xn--wnup5g6so4wn.de5.net",
+    "key_len": 51
+  },
+  "budget": {
+    "organize_success": 0,
+    "source_chat": 1,
+    "failure": 0,
+    "caps": {
+      "organize_success": 1,
+      "source_chat": 2,
+      "failure": 0
+    }
+  },
+  "deadline_ms": 1545000,
+  "checks": {
+    "healthz": {
+      "ok": true
+    },
+    "login": {
+      "ok": true
+    },
+    "topic_create": {
+      "ok": true,
+      "id": "lundu0digkdpcgbckx86iej9",
+      "name": "运动"
+    },
+    "record": {
+      "ok": true,
+      "ids": {
+        "A": "ejdcv7u7zfgmgkuo4ohha146"
+      }
+    },
+    "organize_recovery": {
+      "skipped": true
+    },
+    "organize": {
+      "ok": false,
+      "notes": {
+        "A": {
+          "id": "ejdcv7u7zfgmgkuo4ohha146",
+          "aiStatus": "failed",
+          "title": "每周二早上在体育馆覆盖练习羽毛球远球",
+          "topicId": "inbox",
+          "contentUnchanged": true,
+          "elapsedMs": 96869,
+          "timedOut": false
+        }
+      },
+      "required": false
+    },
+    "topics": {
+      "skipped": true
+    },
+    "search": {
+      "skipped": true
+    },
+    "cite": {
+      "ok": false,
+      "grounding": {
+        "noteIds": [
+          "ejdcv7u7zfgmgkuo4ohha146"
+        ],
+        "mode": "full"
+      },
+      "hasRef": false,
+      "hasFact": true,
+      "refused": false,
+      "conversationId": "gc2evi1rhxtjdupu6is17a9u",
+      "text": "根据来源笔记，羽毛球练习安排在**每周二早上**，地点是体育馆，练习内容是远球覆盖练习[^noteId:ejdcv7u7zfgmgkuo4ohha146]。",
+      "error": null
+    }
+  },
+  "no_model": {
+    "reused": "docs/R1安装验收-2026-09-15.md",
+    "rerun": false
+  },
+  "port": 3011,
+  "mode": "refusal-recheck",
+  "power": {
+    "available": true,
+    "ac_sec": 0,
+    "dc_sec": 600
+  },
+  "keep_awake": true,
+  "clock": {
+    "wall_ms": 206047,
+    "mono_ms": 206046,
+    "sleep_gap_ms": 1,
+    "sleep_detected": false,
+    "deadline_ms": 1545000
+  },
+  "error": "来源引用未通过：需要可打开引用、命中事实且 grounding 含笔记 A",
+  "finished_at": "2026-09-23T00:24:33.618Z",
+  "data_dirs_changed": []
+}

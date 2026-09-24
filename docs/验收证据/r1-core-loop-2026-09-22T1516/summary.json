@@ -1,0 +1,96 @@
+{
+  "status": "failed",
+  "started_at": "2026-09-22T15:16:01.756Z",
+  "baseline_commit": "0179c8dfc5aa021865a7b2020df7bfa161f03ec4",
+  "llm": {
+    "source": "host-settings",
+    "model": "gemini-3.7-flash",
+    "host": "ai.hybgzs.com",
+    "key_len": 62
+  },
+  "budget": {
+    "organize_success": 2,
+    "source_chat": 0,
+    "failure": 0,
+    "caps": {
+      "organize_success": 3,
+      "source_chat": 2,
+      "failure": 1
+    }
+  },
+  "deadline_ms": 1065000,
+  "checks": {
+    "healthz": {
+      "ok": true
+    },
+    "login": {
+      "ok": true
+    },
+    "topic_create": {
+      "ok": true,
+      "id": "pcqb2n5nme7mq3rs34k9xj1e",
+      "name": "运动"
+    },
+    "record": {
+      "ok": true,
+      "ids": {
+        "A": "ixn8o81tsa77pwxzb4jrrs0v",
+        "B": "oy9434s3b1op3j3n7ws1e1i5",
+        "C": "nzsdc8k36o5y9rgjh9o54qfw"
+      }
+    },
+    "organize": {
+      "ok": false,
+      "notes": {
+        "A": {
+          "id": "ixn8o81tsa77pwxzb4jrrs0v",
+          "aiStatus": "done",
+          "title": "周二羽毛球远球练习安排",
+          "topicId": "pcqb2n5nme7mq3rs34k9xj1e",
+          "contentUnchanged": true,
+          "elapsedMs": 54395,
+          "timedOut": false
+        },
+        "B": {
+          "id": "oy9434s3b1op3j3n7ws1e1i5",
+          "aiStatus": "done",
+          "title": "Markdown表格对齐语法",
+          "topicId": "inbox",
+          "contentUnchanged": true,
+          "elapsedMs": 183333,
+          "timedOut": false
+        },
+        "C": {
+          "id": "nzsdc8k36o5y9rgjh9o54qfw",
+          "aiStatus": "failed",
+          "title": "光合作用需要叶绿素吸收光能",
+          "topicId": "inbox",
+          "contentUnchanged": true,
+          "elapsedMs": 431888,
+          "timedOut": false
+        }
+      }
+    }
+  },
+  "no_model": {
+    "reused": "docs/R1安装验收-2026-09-15.md",
+    "rerun": false
+  },
+  "port": 3011,
+  "power": {
+    "available": true,
+    "ac_sec": 0,
+    "dc_sec": 600
+  },
+  "keep_awake": true,
+  "clock": {
+    "wall_ms": 449285,
+    "mono_ms": 449284,
+    "sleep_gap_ms": 2,
+    "sleep_detected": false,
+    "deadline_ms": 1065000
+  },
+  "error": "整理未在时限内全部成功，或正文被覆盖",
+  "finished_at": "2026-09-22T15:23:31.944Z",
+  "data_dirs_changed": []
+}
