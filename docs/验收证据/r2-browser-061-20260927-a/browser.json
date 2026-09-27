@@ -1,0 +1,70 @@
+{
+  "started": "2026-09-27T12:08:12.505Z",
+  "status": "failed",
+  "attempts": 1,
+  "inputRun": "061-20260927-d",
+  "base": "http://127.0.0.1:3313",
+  "imageChecks": [
+    {
+      "url": "/api/images/ubh14wminnczl8qi9or9jx8r.png",
+      "status": 200,
+      "mime": "image/png",
+      "width": 96,
+      "height": 64,
+      "bytes": 389,
+      "sha256": "336badf78b5da96ffde16ff3459d0460d9a55d040884bedb8e7fb2c2088c6b07",
+      "expectedSha256": "336badf78b5da96ffde16ff3459d0460d9a55d040884bedb8e7fb2c2088c6b07"
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "browser/01-home.png",
+      "finiteAnimationsFinished": true
+    },
+    {
+      "file": "browser/02-short.png",
+      "finiteAnimationsFinished": true
+    },
+    {
+      "file": "browser/03-long-png.png",
+      "finiteAnimationsFinished": true
+    },
+    {
+      "file": "browser/failure.png",
+      "finiteAnimationsFinished": true
+    }
+  ],
+  "cases": [
+    {
+      "name": "真实登录",
+      "started": "2026-09-27T12:08:12.797Z",
+      "status": "passed",
+      "finished": "2026-09-27T12:08:13.980Z"
+    },
+    {
+      "name": "短笔记恢复",
+      "started": "2026-09-27T12:08:13.980Z",
+      "status": "passed",
+      "finished": "2026-09-27T12:08:14.881Z"
+    },
+    {
+      "name": "长文表格与 PNG",
+      "started": "2026-09-27T12:08:14.881Z",
+      "status": "failed",
+      "finished": "2026-09-27T12:08:15.885Z"
+    }
+  ],
+  "pageErrors": [],
+  "consoleErrors": [
+    "Failed to load resource: net::ERR_FAILED"
+  ],
+  "failedResponses": [],
+  "blockedRequests": [
+    "/api/notes/dghv1g2h76if0xwgtanjog74/related"
+  ],
+  "modelRequests": [],
+  "browserVersion": "141.0.7390.37",
+  "playwrightVersion": "1.64.0-alpha-1789764292000",
+  "error": "Error: 禁止额外写请求\n    at failNow (C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-r2-browser-061-20260927-a\\browser-check.cjs:32:35)\n    at C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-r2-browser-061-20260927-a\\browser-check.cjs:92:57\n    at RouteHandler._handleInternal (C:\\Users\\BAIBAI\\AppData\\Local\\npm-cache\\_npx\\9833c18b2d85bc59\\node_modules\\playwright-core\\lib\\coreBundle.js:60991:11)\n    at RouteHandler._handleImpl (C:\\Users\\BAIBAI\\AppData\\Local\\npm-cache\\_npx\\9833c18b2d85bc59\\node_modules\\playwright-core\\lib\\coreBundle.js:60958:29)\n    at C:\\Users\\BAIBAI\\AppData\\Local\\npm-cache\\_npx\\9833c18b2d85bc59\\node_modules\\playwright-core\\lib\\coreBundle.js:60952:59\n    at AsyncLocalStorage.run (node:internal/async_local_storage/async_hooks:91:14)\n    at _Zone.run (C:\\Users\\BAIBAI\\AppData\\Local\\npm-cache\\_npx\\9833c18b2d85bc59\\node_modules\\playwright-core\\lib\\coreBundle.js:10511:40)\n    at RouteHandler.handle (C:\\Users\\BAIBAI\\AppData\\Local\\npm-cache\\_npx\\9833c18b2d85bc59\\node_modules\\playwright-core\\lib\\coreBundle.js:60952:38)\n    at _BrowserContext._onRoute (C:\\Users\\BAIBAI\\AppData\\Local\\npm-cache\\_npx\\9833c18b2d85bc59\\node_modules\\playwright-core\\lib\\coreBundle.js:63201:46)\n    at Proxy.<anonymous> (C:\\Users\\BAIBAI\\AppData\\Local\\npm-cache\\_npx\\9833c18b2d85bc59\\node_modules\\playwright-core\\lib\\coreBundle.js:63061:63)",
+  "finished": "2026-09-27T12:08:16.011Z"
+}
