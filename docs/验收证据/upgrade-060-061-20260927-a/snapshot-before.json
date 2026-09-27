@@ -1,0 +1,22 @@
+[
+  {
+    "path": "app.db",
+    "bytes": 241664,
+    "sha256": "a54a2437f49b39841adbfec1976a92666abe2557b7f71efd34340df03f3e436f"
+  },
+  {
+    "path": "uploads/5a32a155-67f8-4c81-88fc-e92a55f6e7fe.heic",
+    "bytes": 1379,
+    "sha256": "fdf0daeaa1c7fb66bd466cb382e7cc9627454676b0974c9e1f27e51dfb6beae9"
+  },
+  {
+    "path": "uploads/5a32a155-67f8-4c81-88fc-e92a55f6e7fe.jpg",
+    "bytes": 1997,
+    "sha256": "1d10cf5b64fe8133f45457c166c9392b344e8790fbd296ef017d8797c2647509"
+  },
+  {
+    "path": "uploads/ru6bbnkpmezy6pgwo33cja25.png",
+    "bytes": 389,
+    "sha256": "336badf78b5da96ffde16ff3459d0460d9a55d040884bedb8e7fb2c2088c6b07"
+  }
+]

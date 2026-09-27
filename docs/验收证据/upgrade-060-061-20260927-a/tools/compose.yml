@@ -1,0 +1,65 @@
+# 升级彩排专用：复制自 R2 compose，数据步骤无网络、不发布端口；镜像由各阶段 env 文件的 R2_IMAGE 决定。
+services:
+  app:
+    image: ${R2_IMAGE:?必须先固定候选镜像}
+    pull_policy: never
+    network_mode: none
+    restart: "no"
+    environment:
+      APP_PASSWORD: ${R2_PASSWORD:?独立密码}
+      SESSION_SECRET: ${R2_SECRET:?独立会话密钥}
+      DATABASE_PATH: /data/db/app.db
+      UPLOAD_DIR: /data/uploads
+      NOTES_EXPORT_DIR: /data/notes
+      R2_ROLE: ${R2_ROLE:?old/rollback}
+      R2_RUN: ${R2_RUN:?独立运行标记}
+      TZ: Asia/Shanghai
+      DEMO_MODE: "0"
+    volumes:
+      - db:/data/db
+      - uploads:/data/uploads
+      - notes:/data/notes
+      - type: bind
+        source: ${R2_PACKAGE:?准备包目录}
+        target: /r2
+        read_only: true
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ${R2_ARTIFACTS:?本角色证据目录}
+        target: /evidence
+        bind:
+          create_host_path: false
+  prepare:
+    profiles: [rollback]
+    image: ${R2_IMAGE:?必须先固定候选镜像}
+    pull_policy: never
+    network_mode: none
+    user: "0:0"
+    entrypoint: [sh, -euc]
+    command:
+      - |
+        test -s /snapshot/app.db
+        test -d /snapshot/uploads
+        test -z "$$(ls -A /data/db)"
+        test -z "$$(ls -A /data/uploads)"
+        test -z "$$(ls -A /data/notes)"
+        cp /snapshot/app.db /data/db/app.db
+        cp -a /snapshot/uploads/. /data/uploads/
+        chown -R node:node /data/db /data/uploads /data/notes
+    healthcheck:
+      disable: true
+    volumes:
+      - db:/data/db
+      - uploads:/data/uploads
+      - notes:/data/notes
+      - type: bind
+        source: ${R2_SNAPSHOT:?已固化升级前快照}
+        target: /snapshot
+        read_only: true
+        bind:
+          create_host_path: false
+volumes:
+  db:
+  uploads:
+  notes:

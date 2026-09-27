@@ -1,0 +1,126 @@
+{
+  "appVersion": "0.6.1",
+  "migrations": [
+    "0001_init",
+    "0002_fts",
+    "0003_settings",
+    "0004_conversations",
+    "0005_soft_delete",
+    "0006_assistant_tools",
+    "0007_conversation_sources",
+    "0008_image_originals",
+    "0009_message_reasoning",
+    "0010_handwriting_transcription",
+    "0011_embeddings",
+    "0012_api_tokens",
+    "0013_correction_examples",
+    "0014_note_chunks"
+  ],
+  "integrity": [
+    {
+      "integrity_check": "ok"
+    }
+  ],
+  "exportedNotes": [
+    {
+      "id": "cy0ex8va1edhqtkudmg7gdlq",
+      "title": "升级 short",
+      "content": "R2 短文检索口令：雨后青竹。",
+      "topic": "升级彩排:图片",
+      "tags": [
+        "short",
+        "验收"
+      ],
+      "summary": null,
+      "created": 1790517066475,
+      "updated": 1790517066633
+    },
+    {
+      "id": "e2pclc1o41vfajbnqwrmx2a7",
+      "title": "",
+      "content": "升级后写入：霜叶红于二月花。\n\n![PNG](image-sha256:336badf78b5da96ffde16ff3459d0460d9a55d040884bedb8e7fb2c2088c6b07)",
+      "topic": "未分类",
+      "tags": [],
+      "summary": null,
+      "created": 1790517073263,
+      "updated": 1790517073263
+    },
+    {
+      "id": "jfitz12atdsm99rmri6qohx4",
+      "title": "升级 long",
+      "content": "# 长文\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n保留原始正文、公式 $a^2+b^2=c^2$ 与中文标点。\n\n|项目|数值|\n|---|---|\n|验收|42|\n\n![PNG](image-sha256:336badf78b5da96ffde16ff3459d0460d9a55d040884bedb8e7fb2c2088c6b07)",
+      "topic": "未分类",
+      "tags": [
+        "long",
+        "验收"
+      ],
+      "summary": "升级彩排合成摘要：保留长文、表格与公式。",
+      "created": 1790517066587,
+      "updated": 1790517066598
+    },
+    {
+      "id": "z19vq92ql5yawogb7ds30y1k",
+      "title": "升级 image",
+      "content": "HEIC 配对口令：琥珀圆环。\n\n<img src=\"image-sha256:1d10cf5b64fe8133f45457c166c9392b344e8790fbd296ef017d8797c2647509\" width=\"240\" style=\"display: block; margin-left: auto; margin-right: auto;\" alt=\"几何图\">",
+      "topic": "未分类",
+      "tags": [
+        "image",
+        "验收"
+      ],
+      "summary": null,
+      "created": 1790517066606,
+      "updated": 1790517066615
+    }
+  ],
+  "pairedImages": [
+    {
+      "display": "1d10cf5b64fe8133f45457c166c9392b344e8790fbd296ef017d8797c2647509",
+      "original": "fdf0daeaa1c7fb66bd466cb382e7cc9627454676b0974c9e1f27e51dfb6beae9"
+    },
+    {
+      "display": "336badf78b5da96ffde16ff3459d0460d9a55d040884bedb8e7fb2c2088c6b07",
+      "original": null
+    },
+    {
+      "display": "336badf78b5da96ffde16ff3459d0460d9a55d040884bedb8e7fb2c2088c6b07",
+      "original": null
+    }
+  ],
+  "tables": {
+    "notes": "7d6a5b6d75e1ee0b97a8d3c678ff1c5f558a28d709dc98855a6637653d482995",
+    "topics": "1b8f79036481b34a645efdeb9fd19eaa5339b914d93148a5956fa2ef9cdef303",
+    "tags": "16fc073b318c6b7662065706388397c0bda84a9736aa3a0cce40607c93051025",
+    "note_tags": "bba2c48bfff82806a259f07072d14cc70177bea3da6383f3c49b543732665c31",
+    "images": "5e72a5d29e96b858da0e2afc1b7a3f226128a7cd1fa349b59d00a7ce94c264d2",
+    "conversations": "aa0950987eda93fbef5229f14ae67b9ef03012dd3ab0b75ba1c0c00b392ad74b",
+    "conversation_sources": "dd25908d13c3b1cde5b9530fa73b4e90017d084fcef0f0978b5790191fdc6d61",
+    "messages": "169c7aebc516038e6b2ec164c649dcae75a96ab9625c01887149e93bb4de408a",
+    "api_tokens": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "correction_examples": "31f04500971d626e93275befd2aaeff69a916e5107588b95502030bbbf91db62"
+  },
+  "files": {
+    "5a32a155-67f8-4c81-88fc-e92a55f6e7fe.heic": {
+      "bytes": 1379,
+      "sha256": "fdf0daeaa1c7fb66bd466cb382e7cc9627454676b0974c9e1f27e51dfb6beae9"
+    },
+    "5a32a155-67f8-4c81-88fc-e92a55f6e7fe.jpg": {
+      "bytes": 1997,
+      "sha256": "1d10cf5b64fe8133f45457c166c9392b344e8790fbd296ef017d8797c2647509"
+    },
+    "kvw0gvo12xt0h76mc5oepf9j.png": {
+      "bytes": 389,
+      "sha256": "336badf78b5da96ffde16ff3459d0460d9a55d040884bedb8e7fb2c2088c6b07"
+    },
+    "ru6bbnkpmezy6pgwo33cja25.png": {
+      "bytes": 389,
+      "sha256": "336badf78b5da96ffde16ff3459d0460d9a55d040884bedb8e7fb2c2088c6b07"
+    }
+  },
+  "counts": {
+    "active": 4,
+    "trash": 1,
+    "images": 3
+  },
+  "modelConfigured": false,
+  "weeklyReviewEnabled": false
+}

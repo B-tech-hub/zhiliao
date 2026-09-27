@@ -1,0 +1,182 @@
+[
+    {
+        "Id": "sha256:9d74721d9de527b4f37f5fae9f49de37ba5d55b649dbed2293134c19f250c014",
+        "RepoTags": [
+            "ghcr.io/b-tech-hub/zhiliao:0.6.0"
+        ],
+        "RepoDigests": [
+            "ghcr.io/b-tech-hub/zhiliao@sha256:9d74721d9de527b4f37f5fae9f49de37ba5d55b649dbed2293134c19f250c014"
+        ],
+        "Parent": "",
+        "Comment": "buildkit.dockerfile.v0",
+        "Created": "2026-08-30T05:21:04.035167903Z",
+        "DockerVersion": "",
+        "Author": "",
+        "Architecture": "amd64",
+        "Os": "linux",
+        "Size": 175107340,
+        "GraphDriver": {
+            "Data": null,
+            "Name": "overlayfs"
+        },
+        "RootFS": {
+            "Type": "layers",
+            "Layers": [
+                "sha256:1d69a5fd31932841d7825ef4780c06f008eea65aaa9f3110fe09d5832ed5c7d8",
+                "sha256:34a6e01aec8a29f1c6b30df6b31b6f9f29acc2ae09836b79ef277eb8c031904b",
+                "sha256:4a5c8e86ffd87d3cd001f89d12232d8c05732179df4e4304a64bb9d106d2f5ac",
+                "sha256:baa7a8b2ed766b8037ad8abaad028064bcb8f110bd82472d8bb90cce62e07233",
+                "sha256:72d01f9cb3224c5bad0234a61ae0213799c495812719428a63c1a32020e9fd67",
+                "sha256:08a1d52d8f2bcb4f5c97d9a71e5571ce0dd2ddd775f96fc47f38389905cb67b6",
+                "sha256:3f7c373fa0620ee7f0e833f0c693094458e3662289a35b48571b69ec09289921",
+                "sha256:3c5ae6d4f61fe8df87fe85e319680caa19adb724ffa12ed15b1ca963887a48f3",
+                "sha256:ffb289cbc9ec3a75d5c4320750904ab6be9fa1b3acaaf414b216b3d133ca1fbd",
+                "sha256:d186245104563407cdc0aa37ea898330d9a417999ff1dcf158111b7bdca35d32",
+                "sha256:6655c0728e35532b3ba01e25184b63be4e39425f25aeda32da75b9568d33cb72"
+            ]
+        },
+        "Metadata": {
+            "LastTagTime": "2026-09-09T14:23:56.110464463Z"
+        },
+        "Descriptor": {
+            "mediaType": "application/vnd.oci.image.index.v1+json",
+            "digest": "sha256:9d74721d9de527b4f37f5fae9f49de37ba5d55b649dbed2293134c19f250c014",
+            "size": 1609
+        },
+        "Config": {
+            "ArgsEscaped": true,
+            "Cmd": [
+                "node",
+                "server.js"
+            ],
+            "Entrypoint": [
+                "docker-entrypoint.sh"
+            ],
+            "Env": [
+                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+                "NODE_VERSION=22.23.2",
+                "YARN_VERSION=1.22.22",
+                "NODE_ENV=production",
+                "DATABASE_PATH=/data/db/app.db",
+                "UPLOAD_DIR=/data/uploads",
+                "NOTES_EXPORT_DIR=/data/notes",
+                "PORT=3000",
+                "HOSTNAME=0.0.0.0"
+            ],
+            "ExposedPorts": {
+                "3000/tcp": {}
+            },
+            "Healthcheck": {
+                "Interval": 60000000000,
+                "Retries": 3,
+                "StartPeriod": 20000000000,
+                "Test": [
+                    "CMD-SHELL",
+                    "node -e \"fetch('http://127.0.0.1:'+(process.env.PORT||3000)+'/api/healthz').then(r=\u003eprocess.exit(r.ok?0:1)).catch(()=\u003eprocess.exit(1))\""
+                ],
+                "Timeout": 5000000000
+            },
+            "Labels": {
+                "org.opencontainers.image.created": "2026-08-30T05:19:34.887Z",
+                "org.opencontainers.image.description": "知了：随手记笔记，AI 自动归类到主题的个人知识库",
+                "org.opencontainers.image.licenses": "MIT",
+                "org.opencontainers.image.revision": "d22ce2b2ad19d460a67d73b2ca83abda224a883a",
+                "org.opencontainers.image.source": "https://github.com/B-tech-hub/zhiliao",
+                "org.opencontainers.image.title": "zhiliao",
+                "org.opencontainers.image.url": "https://github.com/B-tech-hub/zhiliao",
+                "org.opencontainers.image.version": "v0.6.0"
+            },
+            "OnBuild": null,
+            "User": "node",
+            "Volumes": null,
+            "WorkingDir": "/app"
+        }
+    },
+    {
+        "Id": "sha256:f262652592dd2bd32d00aae44f60d4c98caa2c89ca0942254f77918f57aacb4a",
+        "RepoTags": [
+            "zhiliao-r2:0.6.1-0a2819f37699"
+        ],
+        "RepoDigests": [
+            "zhiliao-r2@sha256:f262652592dd2bd32d00aae44f60d4c98caa2c89ca0942254f77918f57aacb4a"
+        ],
+        "Parent": "",
+        "Comment": "buildkit.dockerfile.v0",
+        "Created": "2026-09-27T11:49:23.596840706Z",
+        "DockerVersion": "",
+        "Author": "",
+        "Architecture": "amd64",
+        "Os": "linux",
+        "Size": 176361200,
+        "GraphDriver": {
+            "Data": null,
+            "Name": "overlayfs"
+        },
+        "RootFS": {
+            "Type": "layers",
+            "Layers": [
+                "sha256:34467cc93912af891dfee8a3902adf9b4f355a9bca4eaa46f658d1181a21de0d",
+                "sha256:de795e33b0a97c1f296a52caad0b1f6230838ce1e2f6cf5b6a48914b31bc9b2f",
+                "sha256:821663448d9d87a75869c392ae8fcf7c225652826c759a200eaf2eed826b3d06",
+                "sha256:e4ab6a15070bbca77a0ba5afcafd3dd9d5b92ce55a9e9f1b5d467bfaf72560a8",
+                "sha256:d266843a38db9ec6f439526c04846f3652c06ffa0efb7a3264927b39d5255164",
+                "sha256:8061d169cdd80e6e540a7c0c8511b1872497279e79e7c4167ed81a3cee4e7f0c",
+                "sha256:32b533a154e46aa326c40b8de5bbcf7ee721b815898aa3ce18e4528f0f6a0784",
+                "sha256:c17e85ed8914088d157244865287ed4cd003c78a9750719eb1272a383cfb5438",
+                "sha256:2e2f481726f0f0cdc22922b953574c02a8860c9c66901d639d0d598ad06909b0",
+                "sha256:0a21c1dab218858a1cb8a433826793fa245f9cb7ac5bf9e5bdcbe797332b8a38",
+                "sha256:f2c1a2a3fd777d0147232f1ddc331a6b7654f480f64f412ea9766da633e9bf51"
+            ]
+        },
+        "Metadata": {
+            "LastTagTime": "2026-09-27T11:49:27.528566092Z"
+        },
+        "Descriptor": {
+            "mediaType": "application/vnd.oci.image.index.v1+json",
+            "digest": "sha256:f262652592dd2bd32d00aae44f60d4c98caa2c89ca0942254f77918f57aacb4a",
+            "size": 856
+        },
+        "Config": {
+            "ArgsEscaped": true,
+            "Cmd": [
+                "node",
+                "server.js"
+            ],
+            "Entrypoint": [
+                "docker-entrypoint.sh"
+            ],
+            "Env": [
+                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+                "NODE_VERSION=22.23.3",
+                "YARN_VERSION=1.22.22",
+                "NODE_ENV=production",
+                "DATABASE_PATH=/data/db/app.db",
+                "UPLOAD_DIR=/data/uploads",
+                "NOTES_EXPORT_DIR=/data/notes",
+                "PORT=3000",
+                "HOSTNAME=0.0.0.0"
+            ],
+            "ExposedPorts": {
+                "3000/tcp": {}
+            },
+            "Healthcheck": {
+                "Interval": 60000000000,
+                "Retries": 3,
+                "StartPeriod": 20000000000,
+                "Test": [
+                    "CMD-SHELL",
+                    "node -e \"fetch('http://127.0.0.1:'+(process.env.PORT||3000)+'/api/healthz').then(r=\u003eprocess.exit(r.ok?0:1)).catch(()=\u003eprocess.exit(1))\""
+                ],
+                "Timeout": 5000000000
+            },
+            "Labels": {
+                "io.zhiliao.source-manifest": "0a2819f376993fafa61b27f57a9a978ff7ef1c7635d88e8485bee7c0655c7baf",
+                "org.opencontainers.image.revision": "51f0a54b9878b0f1c1df548f976a2ec7bb17f19b"
+            },
+            "OnBuild": null,
+            "User": "node",
+            "Volumes": null,
+            "WorkingDir": "/app"
+        }
+    }
+]
