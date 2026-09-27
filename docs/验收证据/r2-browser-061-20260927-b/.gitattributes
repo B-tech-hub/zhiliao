@@ -1,0 +1,3 @@
+# 原始证据保留字节，不清理日志空格或换行。
+*.log.txt -text -whitespace
+*.png binary

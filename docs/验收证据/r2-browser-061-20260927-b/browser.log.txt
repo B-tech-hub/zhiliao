@@ -1,0 +1,1 @@
+{"status":"passed","cases":[{"name":"真实登录","status":"passed"},{"name":"短笔记恢复","status":"passed"},{"name":"长文表格与 PNG","status":"passed"},{"name":"HEIC 展示图与字节","status":"passed"},{"name":"搜索并打开结果","status":"passed"},{"name":"历史会话与来源","status":"passed"}]}

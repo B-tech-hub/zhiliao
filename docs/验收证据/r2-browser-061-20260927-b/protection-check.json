@@ -1,0 +1,8 @@
+{
+  "status": "passed",
+  "production_and_other_containers_unchanged": true,
+  "restore_stopped_same_id_image_mounts": true,
+  "volumes_unchanged": true,
+  "old_files_verified": 534,
+  "old_evidence_and_work_unchanged": true
+}
