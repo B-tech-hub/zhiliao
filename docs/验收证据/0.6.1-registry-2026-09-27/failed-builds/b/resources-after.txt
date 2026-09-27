@@ -1,0 +1,9 @@
+/zhiliao 254c7caca374780a6c1a3bea1c2c6ba59d6ab092de155c34f8efd3cd411532c8 running 2026-09-23T00:01:52.245179547Z 0 [{"Destination":"/data/db","Mode":"rw","Propagation":"rprivate","RW":true,"Source":"D:\\ClaudeProjects\\ai_acknowladge\\data\\db","Type":"bind"},{"Destination":"/data/uploads","Mode":"rw","Propagation":"rprivate","RW":true,"Source":"D:\\ClaudeProjects\\ai_acknowladge\\data\\uploads","Type":"bind"}]
+ai_acknowladge_kb_db
+ai_acknowladge_kb_uploads
+zhiliao_rc_db
+zhiliao_rc_uploads
+zhiliao-smoke-20260910-081121_smoke_db
+zhiliao-smoke-20260910-081121_smoke_uploads
+zhiliao-smoke-20260910-082135_smoke_db
+zhiliao-smoke-20260910-082135_smoke_uploads

@@ -1,0 +1,61 @@
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 2.15kB done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/node:22-bookworm-slim
+#2 DONE 6.8s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 862B done
+#3 DONE 0.0s
+
+#4 [builder 1/6] FROM docker.io/library/node:22-bookworm-slim@sha256:43ac6c60b8f89723f746e8a92ce91abd5017e627ce1ddfe4238355d3a30b772c
+#4 resolve docker.io/library/node:22-bookworm-slim@sha256:43ac6c60b8f89723f746e8a92ce91abd5017e627ce1ddfe4238355d3a30b772c 0.0s done
+#4 DONE 0.0s
+
+#5 [builder 2/6] WORKDIR /app
+#5 CACHED
+
+#6 [internal] load build context
+#6 transferring context: 17.53kB 0.0s done
+#6 DONE 0.0s
+
+#7 [builder 3/6] COPY package.json package-lock.json ./
+#7 CACHED
+
+#8 [builder 4/6] RUN npm ci
+#8 67.01 npm notice
+#8 67.01 npm notice New major version of npm available! 10.9.9 -> 12.1.0
+#8 67.01 npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.1.0
+#8 67.01 npm notice To update run: npm install -g npm@12.1.0
+#8 67.01 npm notice
+#8 67.01 npm error Exit handler never called!
+#8 67.01 npm error This is an error with npm itself. Please report this error at:
+#8 67.01 npm error   <https://github.com/npm/cli/issues>
+#8 67.01 npm error A complete log of this run can be found in: /root/.npm/_logs/2026-09-27T09_56_49_855Z-debug-0.log
+#8 ERROR: process "/bin/sh -c npm ci" did not complete successfully: exit code: 1
+------
+ > [builder 4/6] RUN npm ci:
+67.01 npm notice
+67.01 npm notice New major version of npm available! 10.9.9 -> 12.1.0
+67.01 npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.1.0
+67.01 npm notice To update run: npm install -g npm@12.1.0
+67.01 npm notice
+67.01 npm error Exit handler never called!
+67.01 npm error This is an error with npm itself. Please report this error at:
+67.01 npm error   <https://github.com/npm/cli/issues>
+67.01 npm error A complete log of this run can be found in: /root/.npm/_logs/2026-09-27T09_56_49_855Z-debug-0.log
+------
+Dockerfile:7
+--------------------
+   5 |     
+   6 |     COPY package.json package-lock.json ./
+   7 | >>> RUN npm ci
+   8 |     
+   9 |     COPY . .
+--------------------
+ERROR: failed to build: failed to solve: process "/bin/sh -c npm ci" did not complete successfully: exit code: 1
+
+View build details: docker-desktop://dashboard/build/desktop-linux/desktop-linux/mhhubgtisr7mml40auqcy4h4k

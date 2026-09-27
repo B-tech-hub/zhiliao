@@ -8,6 +8,12 @@ $steps = @($blocks | Where-Object { $_ -notmatch 'prepare-workspace\.ps1' })
 if ($prepare.Count -ne 1 -or $steps.Count -lt 5) { throw '操作单代码块结构与预期不符' }
 $runId = [regex]::Match($text, '\$r2Run = ''([^'']+)''').Groups[1].Value
 if (-not $runId -or $prepare[0] -notmatch ('-RunId ' + [regex]::Escape($runId))) { throw '准备脚本的 RunId 与 $r2Run 不一致' }
+$candidateArg = [regex]::Match($prepare[0], '-CandidateDirectory\s+"([^"]+)"')
+if ($prepare[0] -match '-CandidateDirectory\b' -and -not $candidateArg.Success) { throw '候选目录参数必须使用双引号，不能静默回落旧身份' }
+$candidateDir = if ($candidateArg.Success) {
+    (Resolve-Path -LiteralPath (Join-Path (Join-Path $PSScriptRoot '../../..') $candidateArg.Groups[1].Value)).Path
+} else { $PSScriptRoot }
+$expectedIdentity = Get-Content -Raw -Encoding UTF8 (Join-Path $candidateDir 'candidate-identity.json') | ConvertFrom-Json
 
 $realTemp = $env:TEMP
 $fakeTemp = Join-Path $realTemp ('zhiliao-r2-sheet-dry-run-' + [guid]::NewGuid().ToString('N'))
@@ -35,7 +41,7 @@ try {
     foreach ($dir in 'source', 'import', 'restore', 'snapshot', 'source-backups/uploads-2026-09-23') {
         [IO.Directory]::CreateDirectory((Join-Path $work $dir)) | Out-Null
     }
-    Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'candidate-identity.json') -Destination $work
+    Copy-Item -LiteralPath (Join-Path $candidateDir 'candidate-identity.json') -Destination $work
     Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'r2') -Destination (Join-Path $work 'package') -Recurse
     # 桩文件只让复制与存在性检查走通，内容不参与比对
     foreach ($file in 'source/export.zip', 'source-backups/app-2026-09-23.db', 'source-backups/uploads-2026-09-23/stub.png') {
@@ -71,7 +77,12 @@ try {
 } finally {
     $env:TEMP = $realTemp
     try { Stop-Transcript | Out-Null } catch { }
-    if (Test-Path -LiteralPath $fakeTemp) { Remove-Item -LiteralPath $fakeTemp -Recurse -Force }
+    if (Test-Path -LiteralPath $fakeTemp) {
+        $cleanupPath = (Resolve-Path -LiteralPath $fakeTemp).Path
+        $tempRoot = [IO.Path]::GetFullPath($realTemp).TrimEnd('\') + '\'
+        if (-not $cleanupPath.StartsWith($tempRoot, [StringComparison]::OrdinalIgnoreCase) -or [IO.Path]::GetFileName($cleanupPath) -notlike 'zhiliao-r2-sheet-dry-run-*') { throw '干跑清理路径越界' }
+        Remove-Item -LiteralPath $cleanupPath -Recurse -Force
+    }
 }
 
 $problems = [Collections.Generic.List[string]]::new()
@@ -99,6 +110,10 @@ foreach ($call in $compose) {
 }
 $build = @($positive | Where-Object { $_[0] -eq 'build' })
 if ($build.Count -ne 1 -or ($build[0] -join ' ') -notmatch '--platform linux/amd64' -or @($build[0] | Where-Object { $_ -eq '--label' }).Count -ne 2) { $problems.Add('构建命令缺平台或来源标签') }
+if ($build.Count -eq 1) {
+    $tagAt = [array]::IndexOf($build[0], '-t')
+    if ($tagAt -lt 0 -or $build[0][$tagAt + 1] -ne $expectedIdentity.local_image_tag -or $build[0] -notcontains "io.zhiliao.source-manifest=$($expectedIdentity.manifest_sha256)" -or $build[0] -notcontains "org.opencontainers.image.revision=$($expectedIdentity.source_head)") { $problems.Add('构建未使用操作单选择的候选身份') }
+}
 $modes = @($script:pyCalls | ForEach-Object { $_[2] }) -join ','
 if ($modes -ne 'manifest,snapshot,zip,restore,restore,snapshot,unchanged') { $problems.Add("compare.py 调用顺序不符：$modes") }
 if ($verbs['up'] -ne 7) { $problems.Add("up 次数应为 7，实际 $($verbs['up'])") }

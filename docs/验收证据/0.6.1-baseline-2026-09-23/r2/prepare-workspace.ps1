@@ -1,6 +1,7 @@
 ﻿param(
     [string]$RunId = '061-20260923-a',
-    [string]$Workspace
+    [string]$Workspace,
+    [string]$CandidateDirectory = (Join-Path $PSScriptRoot '..')
 )
 $ErrorActionPreference = 'Stop'
 if ($RunId -notmatch '^061-\d{8}-[a-z0-9]+$') { throw '运行标记格式不正确' }
@@ -8,8 +9,11 @@ if (-not $Workspace) { $Workspace = Join-Path $env:TEMP "zhiliao-r2-$RunId" }
 $workspacePath = [IO.Path]::GetFullPath($Workspace)
 if (Test-Path -LiteralPath $workspacePath) { throw '目标已存在，请使用新目录和新运行标记' }
 $repository = (Resolve-Path -LiteralPath (Join-Path $PSScriptRoot '../../../..')).Path
-$manifestPath = Join-Path $PSScriptRoot '../candidate-inputs.json'
-$identity = Get-Content -Raw -Encoding UTF8 (Join-Path $PSScriptRoot '../candidate-identity.json') | ConvertFrom-Json
+# 显式选择新候选时仍复用本目录的验收工具，旧清单保留原路径。
+$candidatePath = (Resolve-Path -LiteralPath $CandidateDirectory).Path
+$manifestPath = Join-Path $candidatePath 'candidate-inputs.json'
+$identityPath = Join-Path $candidatePath 'candidate-identity.json'
+$identity = Get-Content -Raw -Encoding UTF8 $identityPath | ConvertFrom-Json
 if ((Get-FileHash -LiteralPath $manifestPath -Algorithm SHA256).Hash.ToLowerInvariant() -ne $identity.manifest_sha256) { throw '候选清单哈希不匹配' }
 $manifest = Get-Content -Raw -Encoding UTF8 $manifestPath | ConvertFrom-Json
 # 先核对全部输入，再复制到新目标；不读取环境文件、数据库或用户图片。
@@ -29,7 +33,7 @@ foreach ($entry in $manifest.files) {
 }
 Copy-Item -LiteralPath $PSScriptRoot -Destination (Join-Path $workspacePath 'package') -Recurse
 Copy-Item -LiteralPath $manifestPath -Destination (Join-Path $workspacePath 'candidate-inputs.json')
-Copy-Item -LiteralPath (Join-Path $PSScriptRoot '../candidate-identity.json') -Destination (Join-Path $workspacePath 'candidate-identity.json')
+Copy-Item -LiteralPath $identityPath -Destination (Join-Path $workspacePath 'candidate-identity.json')
 [IO.Directory]::CreateDirectory((Join-Path $workspacePath 'snapshot')) | Out-Null
 $rng = [Security.Cryptography.RandomNumberGenerator]::Create()
 function New-R2Secret {
