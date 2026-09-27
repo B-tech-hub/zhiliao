@@ -1,0 +1,9 @@
+{
+  "status": "prepared-not-built",
+  "manifest_sha256": "225d7f540276242ed323269bdfc331c679b5e301843949a2f9928954a27168b3",
+  "local_image_tag": "zhiliao-r2:0.6.1-225d7f540276",
+  "source_head": "dd59aee09034d740960894899aa89eb15c80f9fb",
+  "file_count": 272,
+  "platform": "linux/amd64",
+  "previous_manifest_sha256": "73198e52de5f3b01a8cf7e9c06ef6769a2880d96b206ee2be519c0e0456b316c"
+}

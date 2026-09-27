@@ -1,0 +1,50 @@
+{
+  "run_id": "061-20260927-c",
+  "status": "failed",
+  "reason": "恢复后 HEIC 的 JPEG 展示图被文件名校验拒绝，HTTP 400",
+  "candidate_manifest_sha256": "225d7f540276242ed323269bdfc331c679b5e301843949a2f9928954a27168b3",
+  "execution_commit": "6577710f2b42dc342316122cc951918e27b1cefa",
+  "image_id": "sha256:90683fa43f261bcde5cbecd9ecfd7938784b8da989df67f3bd7c7dc8a063d2d9",
+  "local_image_tag": "zhiliao-r2:0.6.1-225d7f540276",
+  "platform": "linux/amd64",
+  "build": {
+    "status": "passed",
+    "attempts": 1,
+    "start": "2026-09-27T19:20:58+08:00",
+    "end": "2026-09-27T19:23:26+08:00",
+    "npm_ci_seconds": 79.7,
+    "npm_added_packages": 762,
+    "audit_moderate": 32,
+    "cache": "基础镜像和 WORKDIR 有缓存；npm ci 与 Next 构建实际执行；不代表全新无缓存安装"
+  },
+  "checks": {
+    "source_seed_and_heic_conversion": "passed",
+    "incremental_markdown": "passed",
+    "zip_export": "passed",
+    "zip_import_first": "passed",
+    "zip_import_deduplicate": "passed",
+    "zip_roundtrip_fields_and_image_hashes": "passed",
+    "snapshot_integrity_and_images": "passed",
+    "restore_before_start_comparison": "passed-after-failure-read-only",
+    "restore_http_readback": "failed",
+    "restore_after_start_comparison": "not-run",
+    "restart_persistence": "not-run",
+    "browser": "not-run",
+    "source_snapshot_unchanged": "passed-after-failure-read-only",
+    "production_resources_unchanged": "passed"
+  },
+  "failed_filename": "e03aab43-df51-41a6-a409-ba143c5984e7.jpg",
+  "actual_http_status": 400,
+  "real_model_calls": 0,
+  "retained_containers": 3,
+  "retained_volumes": 9,
+  "containers_running": false,
+  "cleanup": "仅停止本轮 app，保留卷、源包、原临时目录；未 down -v、未 prune、未重试",
+  "archive_files": 46,
+  "credentials_scan": "归档前逐文件扫描三套临时密码和密钥，无匹配；不含 env",
+  "limits": [
+    "单机、小规模、同版本恢复",
+    "不代表完整 R2 通过",
+    "不代表 0.6.0 升级回退、异地恢复、arm64、RC 或发布门禁通过"
+  ]
+}

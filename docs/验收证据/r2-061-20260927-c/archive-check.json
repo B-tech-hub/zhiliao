@@ -1,0 +1,12 @@
+{
+  "status": "passed",
+  "raw_archive_files": 46,
+  "archive_matches_originals": true,
+  "candidate_files_unchanged": 272,
+  "production_resources_unchanged": true,
+  "source_snapshot_unchanged": true,
+  "stopped_containers": 3,
+  "retained_volumes": 9,
+  "new_links_checked": 23,
+  "note": "失败后仅对既有文件和停止状态做核对，无业务步骤重试"
+}

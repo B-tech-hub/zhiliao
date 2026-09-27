@@ -1,11 +1,11 @@
 # R2 出口与恢复操作单
 
-状态（2026-09-27）：用户确认后，run c 的官方源候选构建成功，Markdown 与 ZIP 两次导入比对通过；**R2 在恢复后 HEIC 展示图 HTTP 400 处失败**，重启持久化和浏览器未执行。已停止三个实例、保留九卷与源包，不自动重试。见[本次结果](验收证据/r2-061-20260927-c/README.md)，a/b 失败及身份沿革见[迁移记录](验收证据/0.6.1-registry-2026-09-27/README.md)。本页 c 命令为该轮执行记录，不能重复运行；修复后须另定候选和新 run。本页命令已在本机 Windows PowerShell 5.1 用桩 docker 逐条干跑，只证明参数透传与步骤衔接，不代表 Docker 实测。本操作单用于审批后一轮 Windows Docker Desktop、linux/amd64、本机合成数据验收；不替代旧版升级、独立 Linux、双架构或发布验收。[总体计划](0.6.1收口与R2验收计划-2026-09-23.md)继续约束范围。
+状态（2026-09-27）：旧候选在 run a、b 的 `npm ci` 两次失败，R2 数据实测未开始。已批准仅迁移下载源并更新候选；**新候选尚未构建，构建和 R2 实测仍待确认**。失败原文与新身份见[迁移记录](验收证据/0.6.1-registry-2026-09-27/README.md)。本页命令已在本机 Windows PowerShell 5.1 用桩 docker 逐条干跑，只证明参数透传与步骤衔接，不代表 Docker 实测。本操作单用于审批后一轮 Windows Docker Desktop、linux/amd64、本机合成数据验收；不替代旧版升级、独立 Linux、双架构或发布验收。[总体计划](0.6.1收口与R2验收计划-2026-09-23.md)继续约束范围。
 
 ## 1. 固定输入与资源
 
 - 候选输入：[272 文件清单](验收证据/0.6.1-registry-2026-09-27/candidate-inputs.json)，SHA-256 为 `225d7f540276242ed323269bdfc331c679b5e301843949a2f9928954a27168b3`。旧清单 `73198e52…` 留在原目录，仅用于旧运行溯源。
-- 本地候选 tag：`zhiliao-r2:0.6.1-225d7f540276`，已构建；实际 image ID 为 `sha256:90683fa43f261bcde5cbecd9ecfd7938784b8da989df67f3bd7c7dc8a063d2d9`。Git 来源为 `dd59aee09034d740960894899aa89eb15c80f9fb` 加本轮锁文件下载地址差异；其余输入保持旧清单字节（包含原有换行和被忽略生成文件的差异），不能只凭 Git SHA 复现。
+- 本地候选 tag：`zhiliao-r2:0.6.1-225d7f540276`，目前未构建。Git 来源为 `dd59aee09034d740960894899aa89eb15c80f9fb` 加本轮锁文件下载地址差异；其余输入保持旧清单字节（包含原有换行和被忽略生成文件的差异），不能只凭 Git SHA 复现。
 - 准备脚本：[prepare-workspace.ps1](验收证据/0.6.1-baseline-2026-09-23/r2/prepare-workspace.ps1)，只在新目录复制已校验文件、准备三份独立环境文件，不调用 Docker。
 - 本操作单示例 run 为 `061-20260927-c`，实际执行按当天日期换新；project 分别为 `zhiliao-r2-<run>-source`、`-import`、`-restore`，各有 `db/uploads/notes` 三卷，共九卷。重试使用新 run，失败卷保留。
 - [Compose](验收证据/0.6.1-baseline-2026-09-23/r2/compose.yml) 初始全部 `network_mode: none`、无宿主端口、无正式路径；仅恢复 prepare 以 root 复制并交回 node，源包只读。API 从容器回环访问。
