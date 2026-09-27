@@ -5,10 +5,10 @@ import { eq } from "drizzle-orm";
 import { getDb } from "@/db";
 import { images } from "@/db/schema";
 
-// 从磁盘卷读取图片；文件名为服务端生成的 cuid，不存在路径穿越空间，但仍做规范化校验
+// 兼容普通图片 id 和 HEIC 展示图的 UUID；完整校验名称与展示格式后再读磁盘。
 export async function GET(_req: NextRequest, ctx: { params: Promise<{ filename: string }> }) {
   const { filename } = await ctx.params;
-  if (!/^[a-z0-9]+\.(png|jpg|gif|webp)$/.test(filename)) {
+  if (!/^(?:[a-z0-9]+|[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12})\.(png|jpg|gif|webp)$/.test(filename)) {
     return NextResponse.json({ error: "非法文件名" }, { status: 400 });
   }
   const record = getDb().select().from(images).where(eq(images.filename, filename)).get();
