@@ -1,0 +1,32 @@
+{
+  "started": "2026-09-27T11:51:22.569Z",
+  "status": "failed",
+  "cases": [
+    {
+      "name": "真实登录",
+      "started": "2026-09-27T11:51:23.451Z",
+      "status": "passed",
+      "finished": "2026-09-27T11:51:24.776Z"
+    },
+    {
+      "name": "短笔记恢复",
+      "started": "2026-09-27T11:51:24.776Z",
+      "status": "passed",
+      "finished": "2026-09-27T11:51:25.672Z"
+    },
+    {
+      "name": "长文表格与 PNG",
+      "started": "2026-09-27T11:51:25.673Z",
+      "status": "failed",
+      "finished": "2026-09-27T11:51:26.683Z"
+    }
+  ],
+  "pageErrors": [],
+  "consoleErrors": [],
+  "failedResponses": [],
+  "blockedRequests": [],
+  "modelRequests": [],
+  "browserVersion": "141.0.7390.37",
+  "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n401 !== 200\n\n    at checkImage (C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-r2-061-20260927-d\\browser-check.cjs:48:10)\n    at async C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-r2-061-20260927-d\\browser-check.cjs:87:7\n    at async checkpoint (C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-r2-061-20260927-d\\browser-check.cjs:29:9)\n    at async C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-r2-061-20260927-d\\browser-check.cjs:84:5",
+  "finished": "2026-09-27T11:51:26.752Z"
+}

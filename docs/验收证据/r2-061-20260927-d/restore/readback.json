@@ -1,0 +1,58 @@
+{
+  "conv": {
+    "conversation": {
+      "id": "r2-conv",
+      "scopeType": "sources",
+      "scopeId": "",
+      "title": "R2 合成历史",
+      "createdAt": 1790509800747,
+      "updatedAt": 1790509800747
+    },
+    "messages": [
+      {
+        "id": "r2-message",
+        "conversationId": "r2-conv",
+        "role": "assistant",
+        "content": "这是固定合成历史，不是真实模型输出。[^d8lnacgxilnpdauzn4cri4to]",
+        "toolPayload": null,
+        "reasoning": null,
+        "createdAt": 1790509800747
+      }
+    ],
+    "sources": [
+      {
+        "type": "note",
+        "id": "d8lnacgxilnpdauzn4cri4to",
+        "label": "R2 标题:改名",
+        "deleted": false
+      }
+    ],
+    "sourceNoteIds": [
+      "d8lnacgxilnpdauzn4cri4to"
+    ]
+  },
+  "search": {
+    "results": [
+      {
+        "id": "d8lnacgxilnpdauzn4cri4to",
+        "title": "R2 标题:改名",
+        "excerpt": "R2 短文检索口令：雨后青竹。",
+        "topicId": "pbnipjlpjpmxdkj4kz8b0wgn",
+        "topicName": "R2 导出:图片",
+        "tags": [
+          "验收",
+          "short"
+        ],
+        "updatedAt": 1790509802116
+      }
+    ],
+    "terms": [
+      "雨后青竹",
+      "青竹",
+      "雨",
+      "后"
+    ],
+    "staleEmbeddingCount": 0,
+    "vectorEnabled": false
+  }
+}

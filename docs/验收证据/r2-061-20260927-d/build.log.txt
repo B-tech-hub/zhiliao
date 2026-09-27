@@ -1,0 +1,204 @@
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 2.15kB 0.0s done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/node:22-bookworm-slim
+#2 DONE 7.5s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 862B done
+#3 DONE 0.0s
+
+#4 [builder 1/6] FROM docker.io/library/node:22-bookworm-slim@sha256:43ac6c60b8f89723f746e8a92ce91abd5017e627ce1ddfe4238355d3a30b772c
+#4 resolve docker.io/library/node:22-bookworm-slim@sha256:43ac6c60b8f89723f746e8a92ce91abd5017e627ce1ddfe4238355d3a30b772c 0.0s done
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 27.43kB 0.0s done
+#5 DONE 0.0s
+
+#6 [builder 2/6] WORKDIR /app
+#6 CACHED
+
+#7 [builder 3/6] COPY package.json package-lock.json ./
+#7 CACHED
+
+#8 [builder 4/6] RUN npm ci
+#8 CACHED
+
+#9 [builder 5/6] COPY . .
+#9 DONE 0.2s
+
+#10 [builder 6/6] RUN npm run build
+#10 0.597 
+#10 0.597 > zhiliao@0.6.1 build
+#10 0.597 > next build
+#10 0.597 
+#10 1.455 Attention: Next.js now collects completely anonymous telemetry regarding usage.
+#10 1.455 This information is used to shape Next.js' roadmap and prioritize features.
+#10 1.455 You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+#10 1.455 https://nextjs.org/telemetry
+#10 1.455 
+#10 1.518    ▲ Next.js 15.5.24
+#10 1.518    - Experiments (use with caution):
+#10 1.518      · staleTimes
+#10 1.518 
+#10 1.571    Creating an optimized production build ...
+#10 17.69  ⚠ Compiled with warnings in 9.4s
+#10 17.69 
+#10 17.69 ./node_modules/libheif-js/libheif-wasm/libheif-bundle.js
+#10 17.69 Critical dependency: require function is used in a way in which dependencies cannot be statically extracted
+#10 17.69 
+#10 17.69 Import trace for requested module:
+#10 17.69 ./node_modules/libheif-js/libheif-wasm/libheif-bundle.js
+#10 17.69 ./node_modules/libheif-js/wasm-bundle.js
+#10 17.69 ./node_modules/heic-decode/index.js
+#10 17.69 ./node_modules/heic-convert/index.js
+#10 17.69 ./src/app/api/uploads/route.ts
+#10 17.69 
+#10 17.69 ./src/lib/version.ts
+#10 17.69 Should not import the named export 'version' (imported as 'version') from default-exporting module (only default export is available soon)
+#10 17.69 
+#10 17.69 Import trace for requested module:
+#10 17.69 ./src/lib/version.ts
+#10 17.69 ./src/app/api/mcp/route.ts
+#10 17.69 
+#10 19.09  ⚠ Compiled with warnings in 819ms
+#10 19.09 
+#10 19.09 ./node_modules/jose/dist/webapi/lib/deflate.js
+#10 19.09 A Node.js API is used (CompressionStream at line: 10) which is not supported in the Edge Runtime.
+#10 19.09 Learn more: https://nextjs.org/docs/api-reference/edge-runtime
+#10 19.09 
+#10 19.09 Import trace for requested module:
+#10 19.09 ./node_modules/jose/dist/webapi/lib/deflate.js
+#10 19.09 ./node_modules/jose/dist/webapi/lib/jwe_decrypt.js
+#10 19.09 ./node_modules/jose/dist/webapi/jwt/decrypt.js
+#10 19.09 ./node_modules/jose/dist/webapi/index.js
+#10 19.09 ./src/lib/auth.ts
+#10 19.09 
+#10 19.09 ./node_modules/jose/dist/webapi/lib/deflate.js
+#10 19.09 A Node.js API is used (DecompressionStream at line: 26) which is not supported in the Edge Runtime.
+#10 19.09 Learn more: https://nextjs.org/docs/api-reference/edge-runtime
+#10 19.09 
+#10 19.09 Import trace for requested module:
+#10 19.09 ./node_modules/jose/dist/webapi/lib/deflate.js
+#10 19.09 ./node_modules/jose/dist/webapi/lib/jwe_decrypt.js
+#10 19.09 ./node_modules/jose/dist/webapi/jwt/decrypt.js
+#10 19.09 ./node_modules/jose/dist/webapi/index.js
+#10 19.09 ./src/lib/auth.ts
+#10 19.09 
+#10 27.17  ✓ Compiled successfully in 17.8s
+#10 27.18    Linting and checking validity of types ...
+#10 25.09    Collecting page data ...
+#10 27.38    Generating static pages (0/28) ...
+#10 27.80    Generating static pages (7/28) 
+#10 27.80    Generating static pages (14/28) 
+#10 27.90    Generating static pages (21/28) 
+#10 27.94  ✓ Generating static pages (28/28)
+#10 35.46    Finalizing page optimization ...
+#10 35.46    Collecting build traces ...
+#10 40.37 
+#10 40.38 Route (app)                                     Size  First Load JS
+#10 40.38 ┌ ƒ /                                        1.31 kB         108 kB
+#10 40.38 ├ ○ /_not-found                                 1 kB         105 kB
+#10 40.38 ├ ƒ /api/auth/login                            252 B         104 kB
+#10 40.38 ├ ƒ /api/auth/logout                           252 B         104 kB
+#10 40.38 ├ ƒ /api/backup                                252 B         104 kB
+#10 40.38 ├ ƒ /api/chat                                  252 B         104 kB
+#10 40.38 ├ ƒ /api/chat/confirm                          252 B         104 kB
+#10 40.38 ├ ƒ /api/chat/conversations                    252 B         104 kB
+#10 40.38 ├ ƒ /api/chat/conversations/[id]               252 B         104 kB
+#10 40.38 ├ ƒ /api/chat/conversations/[id]/sources       252 B         104 kB
+#10 40.38 ├ ƒ /api/chat/undo                             252 B         104 kB
+#10 40.38 ├ ƒ /api/embedding/backfill                    252 B         104 kB
+#10 40.38 ├ ƒ /api/export                                252 B         104 kB
+#10 40.38 ├ ƒ /api/external/capture                      252 B         104 kB
+#10 40.38 ├ ƒ /api/external/knowledge                    252 B         104 kB
+#10 40.38 ├ ƒ /api/handwriting                           252 B         104 kB
+#10 40.38 ├ ƒ /api/healthz                               252 B         104 kB
+#10 40.38 ├ ƒ /api/images/[filename]                     252 B         104 kB
+#10 40.38 ├ ƒ /api/import                                252 B         104 kB
+#10 40.38 ├ ƒ /api/llm/test                              252 B         104 kB
+#10 40.38 ├ ƒ /api/mcp                                   252 B         104 kB
+#10 40.38 ├ ƒ /api/notes                                 252 B         104 kB
+#10 40.38 ├ ƒ /api/notes/[id]                            252 B         104 kB
+#10 40.38 ├ ƒ /api/notes/[id]/append                     252 B         104 kB
+#10 40.38 ├ ƒ /api/notes/[id]/related                    252 B         104 kB
+#10 40.38 ├ ƒ /api/notes/[id]/reprocess                  252 B         104 kB
+#10 40.38 ├ ƒ /api/notes/[id]/transcribe                 252 B         104 kB
+#10 40.38 ├ ƒ /api/notes/[id]/transcription-candidate    252 B         104 kB
+#10 40.38 ├ ƒ /api/notes/batch-delete                    252 B         104 kB
+#10 40.38 ├ ƒ /api/notes/batch-move                      252 B         104 kB
+#10 40.38 ├ ƒ /api/review                                252 B         104 kB
+#10 40.38 ├ ƒ /api/search                                252 B         104 kB
+#10 40.38 ├ ƒ /api/settings/corrections                  252 B         104 kB
+#10 40.38 ├ ƒ /api/settings/features                     252 B         104 kB
+#10 40.38 ├ ƒ /api/settings/llm                          252 B         104 kB
+#10 40.38 ├ ƒ /api/settings/tokens                       252 B         104 kB
+#10 40.38 ├ ƒ /api/suggestions                           252 B         104 kB
+#10 40.38 ├ ƒ /api/suggestions/[id]/accept               252 B         104 kB
+#10 40.38 ├ ƒ /api/suggestions/[id]/dismiss              252 B         104 kB
+#10 40.38 ├ ƒ /api/suggestions/generate                  252 B         104 kB
+#10 40.38 ├ ƒ /api/tags                                  252 B         104 kB
+#10 40.38 ├ ƒ /api/topics                                252 B         104 kB
+#10 40.38 ├ ƒ /api/topics/[id]                           252 B         104 kB
+#10 40.38 ├ ƒ /api/trash/purge                           252 B         104 kB
+#10 40.38 ├ ƒ /api/trash/restore                         252 B         104 kB
+#10 40.38 ├ ƒ /api/uploads                               252 B         104 kB
+#10 40.38 ├ ○ /icon.svg                                    0 B            0 B
+#10 40.38 ├ ƒ /inbox                                   3.58 kB         111 kB
+#10 40.38 ├ ƒ /login                                   1.19 kB         105 kB
+#10 40.38 ├ ○ /manifest.webmanifest                      252 B         104 kB
+#10 40.38 ├ ƒ /notes/[id]                              6.31 kB         113 kB
+#10 40.38 ├ ƒ /notes/new                               2.25 kB         106 kB
+#10 40.38 ├ ƒ /search                                   2.8 kB         110 kB
+#10 40.38 ├ ƒ /settings                                13.3 kB         120 kB
+#10 40.38 ├ ƒ /topics/[id]                             3.11 kB         110 kB
+#10 40.38 └ ƒ /trash                                   3.22 kB         110 kB
+#10 40.38 + First Load JS shared by all                 104 kB
+#10 40.38   ├ chunks/1255-73aef1a86847a1f3.js          46.1 kB
+#10 40.38   ├ chunks/4bd1b696-100b9d70ed4e49c1.js      54.2 kB
+#10 40.38   └ other shared chunks (total)              3.26 kB
+#10 40.38 
+#10 40.38 
+#10 40.38 ƒ Middleware                                   40 kB
+#10 40.38 
+#10 40.38 ○  (Static)   prerendered as static content
+#10 40.38 ƒ  (Dynamic)  server-rendered on demand
+#10 40.38 
+#10 DONE 40.7s
+
+#6 [builder 2/6] WORKDIR /app
+#6 CACHED
+
+#11 [runner 3/7] COPY --from=builder /app/.next/standalone ./
+#11 DONE 0.3s
+
+#12 [runner 4/7] COPY --from=builder /app/.next/static ./.next/static
+#12 DONE 0.1s
+
+#13 [runner 5/7] COPY --from=builder /app/public ./public
+#13 DONE 0.1s
+
+#14 [runner 6/7] COPY --from=builder /app/scripts/mock-llm.mjs ./scripts/
+#14 DONE 0.1s
+
+#15 [runner 7/7] RUN mkdir -p /data/db /data/uploads /data/notes && chown -R node:node /data /app
+#15 DONE 16.7s
+
+#16 exporting to image
+#16 exporting layers
+#16 exporting layers 3.8s done
+#16 exporting manifest sha256:6ac3f1ffda5e8d2d7147da14eb01c947a5406b8921b86fee10a05255fa4bc95c 0.0s done
+#16 exporting config sha256:a031f66efda3d15168577f5e8ee18d66a4b522fe4036e5df06a3edb123fb0315 0.0s done
+#16 exporting attestation manifest sha256:979561107a51db2ec3e2c44de4c46c23ca59ad0e01160eb831a288dd0231aae8 0.0s done
+#16 exporting manifest list sha256:f262652592dd2bd32d00aae44f60d4c98caa2c89ca0942254f77918f57aacb4a 0.0s done
+#16 naming to docker.io/library/zhiliao-r2:0.6.1-0a2819f37699
+#16 naming to docker.io/library/zhiliao-r2:0.6.1-0a2819f37699 done
+#16 unpacking to docker.io/library/zhiliao-r2:0.6.1-0a2819f37699
+#16 unpacking to docker.io/library/zhiliao-r2:0.6.1-0a2819f37699 1.5s done
+#16 DONE 5.4s
+
+View build details: docker-desktop://dashboard/build/desktop-linux/desktop-linux/ohgwy08u1bs60qnmf1wnlk6uv

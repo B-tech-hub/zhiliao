@@ -1,6 +1,6 @@
 # R2 出口与恢复操作单
 
-状态（2026-09-27）：用户确认后，run d 一次构建、HEIC 图片 HTTP 读取、ZIP 往返、完整恢复比对及重启持久化通过；**浏览器脚本的补充 PNG API 请求返回 401，后续浏览器矩阵未执行，R2 总体验收未通过。** 三个实例已停止、九卷保留，详见[运行记录](验收证据/r2-061-20260927-d/README.md)。下方 d 命令是已执行记录，不得重复运行；下一步仅按[浏览器补验计划](../_bmad-output/implementation-artifacts/spec-r2-browser-followup.md)确认，不重新构建或自动重跑数据矩阵。
+状态（2026-09-27）：HEIC 展示图 UUID 读取兼容已修复，真实接口局部回归通过；[新候选准备记录](验收证据/0.6.1-heic-read-2026-09-27/README.md)已固定清单与预定标签。**新候选尚未构建，run d 尚未执行，R2 仍未通过。** 用户本次只批准修复与局部验证，以下构建及实测命令须另获确认。
 
 历史：run c 的官方源候选构建、Markdown 与 ZIP 两次导入比对通过，但恢复后 HEIC 展示图 HTTP 400，重启持久化和浏览器未执行。三个停止容器、九卷与源包继续保留；[run c 原始证据](验收证据/r2-061-20260927-c/README.md)及 [a/b 失败和旧身份](验收证据/0.6.1-registry-2026-09-27/README.md)不改。下方命令已切换到新候选与新 run，旧命令可由来源提交 `51f0a54b9878b0f1c1df548f976a2ec7bb17f19b` 追溯，不得重复执行 c。
 
@@ -9,7 +9,7 @@
 ## 1. 固定输入与资源
 
 - 候选输入：[276 文件清单](验收证据/0.6.1-heic-read-2026-09-27/candidate-inputs.json)，SHA-256 为 `0a2819f376993fafa61b27f57a9a978ff7ef1c7635d88e8485bee7c0655c7baf`；旧清单 `73198e52…` 和 `225d7f54…` 保留用于历史溯源。
-- 本地候选 tag：`zhiliao-r2:0.6.1-0a2819f37699`，已构建，实际 image ID 为 `sha256:f262652592dd2bd32d00aae44f60d4c98caa2c89ca0942254f77918f57aacb4a`。来源为 `51f0a54b9878b0f1c1df548f976a2ec7bb17f19b` 加读取接口修复与四个测试输入；其余 271 个输入保持旧工作区字节，包括既有 CRLF 和被忽略的 `next-env.d.ts`。必须按清单复制，不能只凭 Git SHA 复现。
+- 本地候选 tag：`zhiliao-r2:0.6.1-0a2819f37699`，仅预定名称，未构建、无 image ID。来源为 `51f0a54b9878b0f1c1df548f976a2ec7bb17f19b` 加读取接口修复与四个测试输入；其余 271 个输入保持旧工作区字节，包括既有 CRLF 和被忽略的 `next-env.d.ts`。必须按清单复制，不能只凭 Git SHA 复现。
 - 准备脚本：[prepare-workspace.ps1](验收证据/0.6.1-baseline-2026-09-23/r2/prepare-workspace.ps1)，只在新目录复制已校验文件、准备三份独立环境文件，不调用 Docker。
 - 本操作单示例 run 为 `061-20260927-d`，实际执行按当天日期换新；project 分别为 `zhiliao-r2-<run>-source`、`-import`、`-restore`，各有 `db/uploads/notes` 三卷，共九卷。重试使用新 run，失败卷保留。
 - [Compose](验收证据/0.6.1-baseline-2026-09-23/r2/compose.yml) 初始全部 `network_mode: none`、无宿主端口、无正式路径；仅恢复 prepare 以 root 复制并交回 node，源包只读。API 从容器回环访问。
@@ -19,7 +19,7 @@
 
 ## 2. 准备目录与统一命令
 
-以下为 run d 已执行命令，仅供回溯，不代表新的执行授权。目录已存在，不得覆盖或再次执行；后续浏览器补验另按计划确认。`-RunId` 取当天的新值，下方 `$r2Run` 必须与它一致。
+以下构建及 Docker 命令均须在重验证获准后执行。准备脚本可以先运行；目录已存在时不得覆盖。`-RunId` 取当天的新值，下方 `$r2Run` 必须与它一致。
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File docs/验收证据/0.6.1-baseline-2026-09-23/r2/prepare-workspace.ps1 -RunId 061-20260927-d -CandidateDirectory "docs/验收证据/0.6.1-heic-read-2026-09-27"

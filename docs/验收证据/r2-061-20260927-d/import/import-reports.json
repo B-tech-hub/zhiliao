@@ -1,0 +1,33 @@
+{
+  "first": {
+    "imported": 3,
+    "overwritten": 0,
+    "skipped": [],
+    "failed": [],
+    "images": 2,
+    "topicsCreated": [
+      "R2 导出:图片"
+    ]
+  },
+  "second": {
+    "imported": 0,
+    "overwritten": 0,
+    "skipped": [
+      {
+        "path": "R2 导出_图片/R2 标题_改名-d8lnacgxilnpdauzn4cri4to.md",
+        "reason": "已存在"
+      },
+      {
+        "path": "未分类/R2 long-dghv1g2h76if0xwgtanjog74.md",
+        "reason": "已存在"
+      },
+      {
+        "path": "未分类/R2 image-snrkv63vk4d6cjt6eitfzxxz.md",
+        "reason": "已存在"
+      }
+    ],
+    "failed": [],
+    "images": 0,
+    "topicsCreated": []
+  }
+}
