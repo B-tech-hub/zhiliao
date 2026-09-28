@@ -54,6 +54,7 @@
 | [0.6.1 依赖告警分诊与补丁](依赖告警分诊-2026-09-18.md) | 9 月 18 日兼容补丁及 65 项局部回归；9 月 19 日另完成 TipTap 官方回补，扫描仍为 32 moderate、无 high/critical，新候选运行验收另行处理 |
 | [TipTap 回补与图片往返修复](TipTap残余风险调查-2026-09-19.md#tiptap-browser-result) | core 2.27.3、49 项局部回归及 run b 两态已执行矩阵通过；GFM 初始输入与全部请求日志缺口保留，专项尚未关闭 |
 | [TipTap 浏览器 run b 与收尾核对](验收证据/tiptap-browser-061-20260928-b/closeout-review.md) | 14 项已有检查、正文/截图/输入/资源核对及两项覆盖缺口；不重跑或扩大为 RC 结论 |
+| [TipTap run c 准备](验收证据/tiptap-browser-061-20260928-c/README.md) | GFM 初始表格与全部请求元数据工具、静态检查及待执行步骤；未启动容器/浏览器，缺口尚未关闭 |
 | [R3 剩余发布门禁](产品规划/开源发布范围与执行清单-2026-09-13.md#r3-remaining-gates) | 候选定稿、TipTap 缺口、四条门禁、无缓存与独立 Linux/双架构、RC、异地恢复及正式发布核对 |
 | [Demo 部署隔离验收](Demo部署隔离验收-2026-09-10.md#b2-local) | Story 2.2 的 B2 本机 HTTP/SSE、20 项网络对照及资源保留核对；保留 A2 历史证据与硬配额、公网、发布门槛 |
 | [Story 2.2 剩余验收实施方案](Story-2.2-剩余验收实施方案-2026-09-11.md#b1-b2-windows-local) | Windows Docker Desktop、仅本机体验；B2 统一网络入口及一次本机验收已完成，B1 硬配额、实际正式网络、公网和发布仍保留 |
