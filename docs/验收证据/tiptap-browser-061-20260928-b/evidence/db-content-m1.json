@@ -1,0 +1,8 @@
+{
+  "center": "宽度居中口令：m1。\n\n<img src=\"/api/images/h5mxh5r07llqvsvj4bebjcy2.png\" alt=\"甲\" width=\"50%\" style=\"display: block; margin-left: auto; margin-right: auto;\">\n\n尾段。",
+  "width": "仅宽度口令：m1。\n\n<img src=\"/api/images/owaqtvubzpooq74f1qeiebdz.png\" alt=\"乙\" width=\"75%\">\n\n尾段。",
+  "right": "仅右对齐口令：m1。\n\n<img src=\"/api/images/t79annru4jmlyaw45ww71lwm.png\" alt=\"丙\" style=\"display: block; margin-left: auto;\">\n\n尾段。",
+  "plain": "普通图片口令：m1。\n\n![丁](/api/images/pgb4gcqy5kl06s9zx9wozvx1.png)\n\n尾段。补",
+  "table": "相邻表格口令：m1。\n\n<img src=\"/api/images/f591h6fz338bjigx3bbl9s35.png\" alt=\"戊\" width=\"50%\">\n\n| 表头 | 数值 |\n| --- | --- |\n| 内容改 | 42 |\n\n尾段。",
+  "danger": "危险属性口令：m1。\n\n<img src=\"/api/images/gqm3wj6pjav9s16v2sbv4l6w.png\" width=\"50%\" onerror=\"window.__xss=1\" onload=\"window.__xss=2\" data-pm-slice='{\"__proto__\":{\"onerror\":\"window.__xss=3\"}}' style=\"display: block; margin-left: auto; margin-right: auto; background:url(javascript:window.__xss=4)\" alt=\"己\">\n\n<img src=\"/api/images/missing-xss.png\" onerror=\"window.__xss=5\">\n\n[链接](javascript:window.__xss=6)\n\n尾段。"
+}

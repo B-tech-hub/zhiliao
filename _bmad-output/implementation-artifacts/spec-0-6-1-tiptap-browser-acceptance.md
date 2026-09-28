@@ -5,6 +5,7 @@ created: '2026-09-28'
 status: 'in-progress'
 baseline_commit: '40ac9d7b4ccb8e824e9dccabb19849c8c249cbb2'
 review_loop_iteration: 0
+last_updated: '2026-09-28'
 context:
   - '{project-root}/docs/TipTap残余风险调查-2026-09-19.md'
   - '{project-root}/docs/验收证据/r2-browser-061-20260927-b/README.md'
@@ -52,10 +53,10 @@ context:
 ## Tasks & Acceptance
 
 **Execution:**
-- [ ] `docs/验收证据/tiptap-browser-061-<run>/tools/` -- 复制并改造 compose、fixture（init 关闭每周回顾并设置 mermaid 开关，seed 写入相邻表格与危险属性两条笔记）、browser-check 和总控脚本 -- 让步骤可复现
+- [x] `docs/验收证据/tiptap-browser-061-<run>/tools/` -- 复制并改造 compose、fixture（init 关闭每周回顾并设置 mermaid 开关，seed 写入相邻表格与危险属性两条笔记）、browser-check 和总控脚本 -- 让步骤可复现
 - [ ] 同一目录 -- 核对镜像 ID、端口空闲和资源前置快照 → mermaid=0 轮 → 停止实例、切换开关 → mermaid=1 轮 → 停止实例并做资源后置快照 -- 执行矩阵
-- [ ] 同一目录 -- 归档 report、截图、每项对应的 DB 正文摘录和日志，做凭据扫描，写 README -- 留证
-- [ ] `docs/TipTap残余风险调查-2026-09-19.md`、`docs/releases/v0.6.1.md`、`docs/产品规划/开源发布范围与执行清单-2026-09-13.md`、`docs/README.md`、`CHANGELOG.md` -- 如实同步结果后本地提交 -- 满足文档同步规则
+- [x] 同一目录 -- 归档 report、截图、每项对应的 DB 正文摘录和日志，做凭据扫描，写 README -- 留证
+- [x] `docs/TipTap残余风险调查-2026-09-19.md`、`docs/releases/v0.6.1.md`、`docs/产品规划/开源发布范围与执行清单-2026-09-13.md`、`docs/README.md`、`CHANGELOG.md` -- 如实同步结果后本地提交 -- 满足文档同步规则
 
 **Acceptance Criteria:**
 - Given 矩阵执行完毕，when 核对 report，then 两轮共 10 项都有 DOM 断言、DB 正文断言和截图；pageErrors、modelRequests、blockedRequests 均为空；只有全部通过才能记为「TipTap 补丁真实浏览器验收本机通过」。
@@ -73,4 +74,19 @@ context:
 
 ## 执行记录
 
-- run `t061-20260928-a`：m0 轮的前 5 项全部通过；「危险属性」一项因脚本把缺失图片的状态码预期为 404（实际为 400）而失败并停止，m1 轮未执行。这是工具缺陷，不是产品缺陷，详见[运行记录](../../docs/验收证据/tiptap-browser-061-20260928-a/README.md)。run b 须经用户确认后才能执行。
+- run `t061-20260928-a`：m0 轮的前 5 项全部通过；「危险属性」一项因脚本把缺失图片的状态码预期为 404（实际为 400）而失败并停止，m1 轮未执行。这是工具缺陷，不是产品缺陷，详见[运行记录](../../docs/验收证据/tiptap-browser-061-20260928-a/README.md)。当时 run b 须经用户确认后才能执行；后续已存在的 run b 结果与本次收尾核对见下文。
+
+## 2026-09-28 文档收尾与矩阵核对
+
+本次用户明确要求接续已有 run b 证据、同步文档和状态并列出 R3 门禁。沿用现有工作区，单 Agent 只读核对证据后更新文档；未启动浏览器、容器、构建、全量门禁或模型请求。保留原 `baseline_commit` 和冻结块，不把文档收尾解释为新的运行授权。本规格为独立工作包，未绑定 Epic/Story，不修改 `sprint-status.yaml` 的完成数量或 Story 2.2 的 `review` 状态。
+
+- [run b](../../docs/验收证据/tiptap-browser-061-20260928-b/README.md)：两轮各 1 次、各 7 项（登录 + 6 项业务检查）全部 passed，共 14 项；12 张截图齐全，10 条保存后的正文与各轮导出一致，危险输入的原正文保留。原验收标准的“10 项”按两态下的五类场景计数，其中“仅宽度 / 仅右对齐”实际拆成两项，不能把 14 项写成 14 类独立功能。
+- 候选 276 个文件哈希匹配；image ID、两态设置、资源快照、运行时工具包和凭据扫描的核对见[收尾核对](../../docs/验收证据/tiptap-browser-061-20260928-b/closeout-review.md)。图片居中、右对齐和表格截图已人工抽查。
+- run a 的失败及原始 JSON 保留。run b 的唯一可执行逻辑变化是缺失图片状态预期从 404 改为 400，另有两处说明性注释变化；未修改产品源码。
+
+**状态保持 `in-progress`。** 已执行矩阵通过，但下列原规格要求尚无完整证据，执行矩阵任务不勾选完成：
+
+1. 冻结矩阵要求以“带属性图片紧邻 GFM 表格”为输入，实际 seed 是 `<img …><table>…</table>`。现有证据证明 HTML 表格编辑后导出为 GFM 并重开成功，未覆盖 GFM 初始输入。
+2. 冻结约束要求“所有浏览器请求都要记录”。现有 JSON 保存了写请求、相关笔记请求和异常分类，正常 GET/HEAD 与登录没有逐请求日志。守卫数组为空不等于完整请求归档，不能事后补造。
+
+以上为验证覆盖缺口，未证明产品出现新的缺陷。后续最小补验需先确定 GFM 输入及正常请求记录方式，再按原 Ask First 约束确认运行；不修改旧工具或旧报告来消除缺口。R3 剩余清单见[发布门禁](../../docs/产品规划/开源发布范围与执行清单-2026-09-13.md#r3-remaining-gates)。
