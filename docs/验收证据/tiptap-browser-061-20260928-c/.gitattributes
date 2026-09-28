@@ -1,0 +1,9 @@
+# 原始运行证据按字节存档，避免 Git 自动换行改变运行时工具和日志哈希。
+* -text
+*.md text eol=lf
+.gitattributes text eol=lf
+closeout-check.json text eol=lf
+# 以下原始证据保留运行时行尾或日志行尾空格，不按源码格式重写。
+tools/run.ps1 whitespace=cr-at-eol
+transcript.txt whitespace=cr-at-eol,-blank-at-eol
+app.log.txt -whitespace

@@ -1,0 +1,10 @@
+{"time":"2026-09-28T20:01:22.6072041+08:00","block":"preflight","event":"start"}
+{"time":"2026-09-28T20:01:28.3019995+08:00","block":"preflight","event":"passed"}
+{"time":"2026-09-28T20:01:28.3025111+08:00","block":"start","event":"start"}
+{"time":"2026-09-28T20:01:32.0790030+08:00","block":"start","event":"passed"}
+{"time":"2026-09-28T20:01:32.0802512+08:00","block":"round-m0","event":"start"}
+{"time":"2026-09-28T20:02:01.3988762+08:00","block":"round-m0","event":"passed"}
+{"time":"2026-09-28T20:02:01.4001264+08:00","block":"round-m1","event":"start"}
+{"time":"2026-09-28T20:02:28.6081517+08:00","block":"round-m1","event":"passed"}
+{"time":"2026-09-28T20:02:28.6094997+08:00","block":"stop","event":"start"}
+{"time":"2026-09-28T20:02:29.5119552+08:00","block":"stop","event":"passed"}

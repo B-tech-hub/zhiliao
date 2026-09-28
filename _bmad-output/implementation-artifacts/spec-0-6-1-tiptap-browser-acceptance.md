@@ -2,7 +2,7 @@
 title: '0.6.1 TipTap 补丁真实浏览器验收'
 type: 'chore'
 created: '2026-09-28'
-status: 'in-progress'
+status: 'done'
 baseline_commit: '40ac9d7b4ccb8e824e9dccabb19849c8c249cbb2'
 review_loop_iteration: 0
 last_updated: '2026-09-28'
@@ -54,7 +54,7 @@ context:
 
 **Execution:**
 - [x] `docs/验收证据/tiptap-browser-061-<run>/tools/` -- 复制并改造 compose、fixture（init 关闭每周回顾并设置 mermaid 开关，seed 写入相邻表格与危险属性两条笔记）、browser-check 和总控脚本 -- 让步骤可复现
-- [ ] 同一目录 -- 核对镜像 ID、端口空闲和资源前置快照 → mermaid=0 轮 → 停止实例、切换开关 → mermaid=1 轮 → 停止实例并做资源后置快照 -- 执行矩阵
+- [x] 同一目录 -- 核对镜像 ID、端口空闲和资源前置快照 → mermaid=0 轮 → 停止实例、切换开关 → mermaid=1 轮 → 停止实例并做资源后置快照 -- 执行矩阵
 - [x] 同一目录 -- 归档 report、截图、每项对应的 DB 正文摘录和日志，做凭据扫描，写 README -- 留证
 - [x] `docs/TipTap残余风险调查-2026-09-19.md`、`docs/releases/v0.6.1.md`、`docs/产品规划/开源发布范围与执行清单-2026-09-13.md`、`docs/README.md`、`CHANGELOG.md` -- 如实同步结果后本地提交 -- 满足文档同步规则
 
@@ -107,3 +107,14 @@ context:
 - [x] 运行矩阵未执行，未生成 passed 报告，两个运行缺口保留，状态继续 `in-progress`。
 
 后续获准后，按准备说明在新 project 上仅执行一次两态矩阵；不重建镜像，失败即停、保留现场。工具语法通过不能代替 GFM 编辑往返或真实请求事件完整性验收。
+
+## run c 执行与缺口关闭（2026-09-28）
+
+用户授权后按 [run c 工具与说明](../../docs/验收证据/tiptap-browser-061-20260928-c/README.md)在全新隔离实例上执行一次两态矩阵（单 Agent，零真实模型，不构建、不拉取）。**run b 遗留的两个覆盖缺口已关闭，本规格状态改为 `done`。**
+
+- 两轮各 7 项（登录 + 6 项业务）全部 `passed`，共 14 项；12 张截图齐全；页面错误、异常响应、额外写请求、模型请求与弹窗数组均为空；总控退出码 0，`stages` 全部 `passed`，无重试。
+- 缺口 1（GFM 初始输入）：两态编辑前的详情正文即为 GFM 表格 seed，格式记录为 `GFM`；编辑单元格保存重开后仍为 GFM 表格，图片保持 `width="50%"` 且与表格不粘行。
+- 缺口 2（全部请求记录）：每轮独立 `requests-mN.jsonl`，逐请求记录开始、守卫决定、响应状态与完成/失败；未结束 ID 与记录错误均为 0，成功登录与普通读取均有记录；唯一非 200 是刻意引用的缺失图片 400，`requestfailed` 均为关闭浏览器时的真实取消。
+- 核对与边界见[收尾核对](../../docs/验收证据/tiptap-browser-061-20260928-c/closeout-review.md)与 [closeout-check.json](../../docs/验收证据/tiptap-browser-061-20260928-c/closeout-check.json)：归档逐字节比对一致、凭据扫描 0 命中、正式容器前后一致。
+
+**此前「2026-09-28 文档收尾与矩阵核对」一节中「状态保持 `in-progress`」的结论，已由本节的 run c 结果取代；该节记录其当时证据，不再代表当前状态。** 本规格的 `done` 只表示该浏览器专项的覆盖要求已满足，不表示 R3 剩余门禁（候选定稿、完整四条门禁、无缓存/双架构、RC、正式发布）已通过，也不改变 Story 2.2 的 `review` 状态。冻结块、原 `baseline_commit` 与历史执行记录保留。

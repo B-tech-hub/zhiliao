@@ -1,0 +1,139 @@
+{
+  "started": "2026-09-28T12:01:36.569Z",
+  "status": "passed",
+  "attempts": 1,
+  "round": "m0",
+  "base": "http://127.0.0.1:3321",
+  "cases": [
+    {
+      "name": "真实登录",
+      "started": "2026-09-28T12:01:37.573Z",
+      "status": "passed",
+      "finished": "2026-09-28T12:01:38.699Z"
+    },
+    {
+      "name": "宽度 50% + 居中保存重开",
+      "started": "2026-09-28T12:01:38.699Z",
+      "status": "passed",
+      "finished": "2026-09-28T12:01:42.724Z"
+    },
+    {
+      "name": "仅宽度 75%",
+      "started": "2026-09-28T12:01:42.725Z",
+      "status": "passed",
+      "finished": "2026-09-28T12:01:46.609Z"
+    },
+    {
+      "name": "仅右对齐",
+      "started": "2026-09-28T12:01:46.610Z",
+      "status": "passed",
+      "finished": "2026-09-28T12:01:50.594Z"
+    },
+    {
+      "name": "普通图片保持 Markdown",
+      "started": "2026-09-28T12:01:50.594Z",
+      "status": "passed",
+      "finished": "2026-09-28T12:01:54.441Z"
+    },
+    {
+      "name": "图片紧邻 GFM 初始表格编辑往返",
+      "started": "2026-09-28T12:01:54.441Z",
+      "status": "passed",
+      "finished": "2026-09-28T12:01:58.318Z"
+    },
+    {
+      "name": "危险属性不生效",
+      "started": "2026-09-28T12:01:58.319Z",
+      "status": "passed",
+      "finished": "2026-09-28T12:02:00.821Z"
+    }
+  ],
+  "screenshots": [
+    "browser/m0-01-center.png",
+    "browser/m0-02-width.png",
+    "browser/m0-03-right.png",
+    "browser/m0-04-plain.png",
+    "browser/m0-05-table.png",
+    "browser/m0-06-danger.png"
+  ],
+  "dbChecks": [
+    {
+      "key": "center",
+      "label": "50%+居中",
+      "content": "宽度居中口令：m0。\n\n<img src=\"/api/images/ydyhrdqzl2pwafkzowfnb6vx.png\" alt=\"甲\" width=\"50%\" style=\"display: block; margin-left: auto; margin-right: auto;\">\n\n尾段。"
+    },
+    {
+      "key": "width",
+      "label": "仅 75%",
+      "content": "仅宽度口令：m0。\n\n<img src=\"/api/images/snp5ag7u4wmb8j3uw0l7sail.png\" alt=\"乙\" width=\"75%\">\n\n尾段。"
+    },
+    {
+      "key": "right",
+      "label": "仅右对齐",
+      "content": "仅右对齐口令：m0。\n\n<img src=\"/api/images/j6oy1bou24876jbysawxn2wm.png\" alt=\"丙\" style=\"display: block; margin-left: auto;\">\n\n尾段。"
+    },
+    {
+      "key": "plain",
+      "label": "普通图片",
+      "content": "普通图片口令：m0。\n\n![丁](/api/images/foeiuqbnmwjphsk009v4706f.png)\n\n尾段。补"
+    },
+    {
+      "key": "table",
+      "label": "相邻表格",
+      "content": "相邻表格口令：m0。\n\n<img src=\"/api/images/lpz5hl2x8xbuvjld36neejoh.png\" alt=\"戊\" width=\"50%\">\n\n| 表头 | 数值 |\n| --- | --- |\n| 内容改 | 42 |\n\n尾段。"
+    }
+  ],
+  "pageErrors": [],
+  "consoleErrors": [],
+  "failedResponses": [],
+  "expectedMissing": [
+    "400 /api/images/missing-xss.png",
+    "console: Failed to load resource: the server responded with a status of 400 (Bad Request)"
+  ],
+  "blockedRequests": [],
+  "allowedWrites": [
+    "PATCH /api/notes/afjm5jodhi33ai3n1wx177al",
+    "PATCH /api/notes/alx4h0uwa2c81d2w6qys7a4z",
+    "PATCH /api/notes/chvdpyhu3l5qu6xql0sezlem",
+    "PATCH /api/notes/re8z501vl89l7qqg6faxfy6b",
+    "PATCH /api/notes/m5ksdqu6pjjgdy00yurj7gc9"
+  ],
+  "readOnlyRequests": [
+    "/api/notes/afjm5jodhi33ai3n1wx177al/related",
+    "/api/notes/alx4h0uwa2c81d2w6qys7a4z/related",
+    "/api/notes/chvdpyhu3l5qu6xql0sezlem/related",
+    "/api/notes/re8z501vl89l7qqg6faxfy6b/related",
+    "/api/notes/m5ksdqu6pjjgdy00yurj7gc9/related",
+    "/api/notes/uekkep25mc6r45qt2p8uaeb6/related"
+  ],
+  "modelRequests": [],
+  "dialogs": [],
+  "browserVersion": "141.0.7390.37",
+  "playwrightVersion": "1.64.0-alpha-1789764292000",
+  "tableInitial": {
+    "format": "GFM",
+    "content": "相邻表格口令：m0。\n\n<img src=\"/api/images/lpz5hl2x8xbuvjld36neejoh.png\" width=\"50%\" alt=\"戊\">\n\n| 表头 | 数值 |\n| --- | --- |\n| 内容 | 42 |\n\n尾段。"
+  },
+  "dangerResult": {
+    "xss": null,
+    "onAttrs": [],
+    "jsLinks": 0,
+    "styles": [
+      "display: block; margin-left: auto; margin-right: auto;",
+      ""
+    ]
+  },
+  "requestMetadata": {
+    "file": "requests-m0.jsonl",
+    "requests": 567,
+    "events": 2264,
+    "finished": 516,
+    "failed": 51,
+    "incompleteIds": [],
+    "errors": [],
+    "loginRecorded": true,
+    "readsRecorded": true,
+    "sha256": "f61e439b2806f1f7e33f3ae246bee5054c03854ad14bf36c87be808a769fd94a"
+  },
+  "finished": "2026-09-28T12:02:01.010Z"
+}

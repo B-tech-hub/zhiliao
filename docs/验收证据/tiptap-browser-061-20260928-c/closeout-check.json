@@ -1,0 +1,102 @@
+{
+  "kind": "run-closeout-check",
+  "status": "executed-passed-local-only",
+  "date": "2026-09-28",
+  "run_id": "t061-20260928-c",
+  "baseline_commit": "fbf2497ab01e949a8bab890b1516505cea42b688",
+  "head_at_run": "26bd61c8237381472c9a7058da846314ece54b1a",
+  "image": "zhiliao-r2:0.6.1-0a2819f37699",
+  "image_id": "sha256:f262652592dd2bd32d00aae44f60d4c98caa2c89ca0942254f77918f57aacb4a",
+  "candidate_input_hashes_matched": 276,
+  "resource_snapshot_identical": true,
+  "production_container_untouched": true,
+  "credential_scan_hits": 0,
+  "archived_file_hash_mismatches": [],
+  "archive_matches_runtime_package": true,
+  "rounds": [
+    {
+      "round": "m0",
+      "status": "passed",
+      "attempts": 1,
+      "checks": 7,
+      "db_checks": 5,
+      "screenshots": 6,
+      "table_initial_format": "GFM",
+      "page_errors": 0,
+      "console_errors": 0,
+      "failed_responses": 0,
+      "blocked_requests": 0,
+      "model_requests": 0,
+      "dialogs": 0,
+      "expected_missing": 2,
+      "requests": 567,
+      "events": 2264,
+      "finished": 516,
+      "failed": 51,
+      "incomplete_ids": 0,
+      "log_errors": 0,
+      "login_recorded": true,
+      "reads_recorded": true,
+      "log_sha256": "f61e439b2806f1f7e33f3ae246bee5054c03854ad14bf36c87be808a769fd94a",
+      "non200_responses": [
+        "400 "
+      ],
+      "requestfailed_status_200": 47,
+      "requestfailed_status_null": 4,
+      "guard_decisions": [
+        "allowed-read=555",
+        "allowed-login=1",
+        "allowed-related=6",
+        "allowed-patch=5"
+      ]
+    },
+    {
+      "round": "m1",
+      "status": "passed",
+      "attempts": 1,
+      "checks": 7,
+      "db_checks": 5,
+      "screenshots": 6,
+      "table_initial_format": "GFM",
+      "page_errors": 0,
+      "console_errors": 0,
+      "failed_responses": 0,
+      "blocked_requests": 0,
+      "model_requests": 0,
+      "dialogs": 0,
+      "expected_missing": 2,
+      "requests": 568,
+      "events": 2268,
+      "finished": 511,
+      "failed": 57,
+      "incomplete_ids": 0,
+      "log_errors": 0,
+      "login_recorded": true,
+      "reads_recorded": true,
+      "log_sha256": "3a06f5bded7eeedf27519ca8270cb18924c43399c59a0d1737c2266c0ad36a67",
+      "non200_responses": [
+        "400 "
+      ],
+      "requestfailed_status_200": 53,
+      "requestfailed_status_null": 4,
+      "guard_decisions": [
+        "allowed-read=556",
+        "allowed-login=1",
+        "allowed-related=6",
+        "allowed-patch=5"
+      ]
+    }
+  ],
+  "gaps_closed": [
+    "GFM 初始表格输入",
+    "全部浏览器请求元数据"
+  ],
+  "gaps_remaining": [],
+  "runtime": {
+    "docker_commands": "compose 启停、日志、inspect 与卷列举",
+    "browser_launches": 2,
+    "model_calls": 0,
+    "builds": 0
+  },
+  "review": "单 Agent 串行自审；归档逐字节核对，凭据未泄漏，正式实例前后一致"
+}
