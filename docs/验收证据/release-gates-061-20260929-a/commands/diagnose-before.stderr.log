@@ -1,0 +1,50 @@
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - `__dirname` (vitest.config.mts:17:32). Use `import.meta.dirname` instead
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+stderr | tests/components/markdown-editor-security.test.tsx > 真实编辑器安全边界：Mermaid=false > 外部正文同步通过实际 setContent 路径过滤属性
+flushSync was called from inside a lifecycle method. React cannot flush when React is already rendering. Consider moving this call to a scheduler task or micro task.
+
+stderr | tests/components/markdown-editor-security.test.tsx > 真实编辑器安全边界：Mermaid=true > 外部正文同步通过实际 setContent 路径过滤属性
+flushSync was called from inside a lifecycle method. React cannot flush when React is already rendering. Consider moving this call to a scheduler task or micro task.
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/components/settings-page-demo.test.tsx > 设置页 Demo 接入点 > DEMO_MODE=1 时传给 SettingsPanel 的 llm.baseUrl 为空
+AssertionError: expected undefined to be '' // Object.is equality
+
+- Expected:
+""
+
++ Received:
+undefined
+
+ ❯ tests/components/settings-page-demo.test.tsx:48:30
+     46|     vi.stubEnv("DEMO_RUNTIME", undefined);
+     47|     SettingsPage();
+     48|     expect(captured.baseUrl).toBe("");
+       |                              ^
+     49|   });
+     50| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/config/demo-http-probes.test.ts > Demo HTTP 和 SSE 探针（仅本机临时 HTTP 夹具） > 用不同长度区分默认 8m、导入 200m 和上传 25m
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/config/demo-http-probes.test.ts:65:67
+     63|       import_midsize: 401, upload_midsize: 401, sent_body_bytes: 1,
+     64|     });
+     65|     expect(Object.values(received).every((value) => value === 1)).toBe…
+       |                                                                   ^
+     66|   });
+     67|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+

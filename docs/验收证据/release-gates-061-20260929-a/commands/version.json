@@ -1,0 +1,25 @@
+{
+  "stage": "version",
+  "command": [
+    "D:\\node.js\\node.EXE",
+    "D:\\node.js\\node_modules\\npm\\bin\\npm-cli.js",
+    "run",
+    "check:version"
+  ],
+  "cwd": "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-release-gates-061-20260929-a\\candidate",
+  "started_at": "2026-09-29T01:34:13.544778+00:00",
+  "finished_at": "2026-09-29T01:34:16.359549+00:00",
+  "duration_seconds": 2.813,
+  "exit_code": 0,
+  "manifest_sha256": "e0ae237431ca64182e1b694d4d2e36221a16dcc9d380323660c78735951a1415",
+  "node": "v22.19.0",
+  "environment": {
+    "CI": "1",
+    "NEXT_TELEMETRY_DISABLED": "1",
+    "REQUIRE_DOCKER_COMPOSE": "1",
+    "CIRCLE_NODE_TOTAL": "2",
+    "DATABASE_PATH": "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-release-gates-061-20260929-a\\data\\db\\app.db",
+    "UPLOAD_DIR": "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-release-gates-061-20260929-a\\data\\uploads",
+    "NOTES_EXPORT_DIR": "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-release-gates-061-20260929-a\\data\\notes"
+  }
+}

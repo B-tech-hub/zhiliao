@@ -1,0 +1,74 @@
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - `__dirname` (vitest.config.mts:17:32). Use `import.meta.dirname` instead
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+stderr | tests/components/markdown-editor-security.test.tsx > 真实编辑器安全边界：Mermaid=false > 外部正文同步通过实际 setContent 路径过滤属性
+flushSync was called from inside a lifecycle method. React cannot flush when React is already rendering. Consider moving this call to a scheduler task or micro task.
+
+stderr | tests/components/markdown-editor-security.test.tsx > 真实编辑器安全边界：Mermaid=true > 外部正文同步通过实际 setContent 路径过滤属性
+flushSync was called from inside a lifecycle method. React cannot flush when React is already rendering. Consider moving this call to a scheduler task or micro task.
+
+stderr | tests/components/nav.test.tsx > SideNav 折叠状态契约 > 响应命令事件切换 data-collapsed
+Received `true` for a non-boolean attribute `prefetch`.
+
+If you want to write it to the DOM, pass a string instead: prefetch="true" or prefetch={value.toString()}.
+
+stderr | tests/lib/hybrid-search.test.ts > 混合检索的最小可信证明 > Embedding 供应商不可用时降级为 BM25 而非报错
+[search] Embedding 请求失败，本次降级为纯 BM25: Embedding 网络错误: connect ECONNREFUSED
+
+stderr | tests/api/related-notes.test.ts > 相关笔记接口 > LLM 未配置或失败时保留相关笔记并返回空冲突
+[related-notes] 冲突判断失败，保留相关笔记结果: 供应商不可用
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/components/markdown-editor-security.test.tsx > 真实编辑器安全边界：Mermaid=true > 初次加载不保留危险属性，正常内容完整
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ tests/components/markdown-editor-security.test.tsx:79:3
+     77|
+     78| describe.each([false, true])("真实编辑器安全边界：Mermaid=%s", (mermaidEnabled) …
+     79|   it("初次加载不保留危险属性，正常内容完整", async () => {
+       |   ^
+     80|     const { editor } = await mountEditor(html, mermaidEnabled);
+     81|     assertSafeAndUseful(editor);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  tests/components/settings-page-demo.test.tsx > 设置页 Demo 接入点 > DEMO_MODE=1 时传给 SettingsPanel 的 llm.baseUrl 为空
+AssertionError: expected undefined to be '' // Object.is equality
+
+- Expected:
+""
+
++ Received:
+undefined
+
+ ❯ tests/components/settings-page-demo.test.tsx:48:30
+     46|     vi.stubEnv("DEMO_RUNTIME", undefined);
+     47|     SettingsPage();
+     48|     expect(captured.baseUrl).toBe("");
+       |                              ^
+     49|   });
+     50| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  tests/config/demo-http-probes.test.ts > Demo HTTP 和 SSE 探针（仅本机临时 HTTP 夹具） > 用不同长度区分默认 8m、导入 200m 和上传 25m
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/config/demo-http-probes.test.ts:65:67
+     63|       import_midsize: 401, upload_midsize: 401, sent_body_bytes: 1,
+     64|     });
+     65|     expect(Object.values(received).every((value) => value === 1)).toBe…
+       |                                                                   ^
+     66|   });
+     67|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+

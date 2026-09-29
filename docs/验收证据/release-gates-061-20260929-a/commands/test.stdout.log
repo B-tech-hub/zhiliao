@@ -1,0 +1,159 @@
+
+> zhiliao@0.6.1 test
+> vitest run --maxWorkers=1 --no-file-parallelism --reporter=default --reporter=json --outputFile.json=D:\ClaudeProjects\ai_acknowladge\docs\验收证据\release-gates-061-20260929-a\test-results.json
+
+
+ RUN  v4.1.11 C:/Users/BAIBAI/AppData/Local/Temp/zhiliao-release-gates-061-20260929-a/candidate
+
+ ❯ tests/components/markdown-editor-security.test.tsx (26 tests | 1 failed) 72477ms
+     ✓ 初次加载不保留危险属性，正常内容完整 151ms
+     ✓ 外部正文同步通过实际 setContent 路径过滤属性 67ms
+     ✓ text 粘贴通过真实事件和 schema 56ms
+     ✓ html 粘贴通过真实事件和 schema 36ms
+     ✓ context 粘贴通过真实事件和 schema 30ms
+     ✓ text 拖放通过真实事件和 schema 40ms
+     ✓ html 拖放通过真实事件和 schema 39ms
+     ✓ 图片属性、公式、表格、链接及围栏保存重开后保真 77ms
+     ✓ 图片直接相邻表格时保存重开不破坏表格 72ms
+     ✓ 普通图片保持 Markdown，并与相邻图片和表格分隔 60ms
+     ✓ '仅对齐' 的图片保留属性，说明与标题正确转义 80ms
+     ✓ '仅宽度' 的图片保留属性，说明与标题正确转义 49ms
+     ✓ 无表头表格退回 HTML 后仍可往返 37ms
+     × 初次加载不保留危险属性，正常内容完整 71117ms
+     ✓ 外部正文同步通过实际 setContent 路径过滤属性 35ms
+     ✓ text 粘贴通过真实事件和 schema 44ms
+     ✓ html 粘贴通过真实事件和 schema 29ms
+     ✓ context 粘贴通过真实事件和 schema 25ms
+     ✓ text 拖放通过真实事件和 schema 38ms
+     ✓ html 拖放通过真实事件和 schema 35ms
+     ✓ 图片属性、公式、表格、链接及围栏保存重开后保真 78ms
+     ✓ 图片直接相邻表格时保存重开不破坏表格 88ms
+     ✓ 普通图片保持 Markdown，并与相邻图片和表格分隔 70ms
+     ✓ '仅对齐' 的图片保留属性，说明与标题正确转义 42ms
+     ✓ '仅宽度' 的图片保留属性，说明与标题正确转义 43ms
+     ✓ 无表头表格退回 HTML 后仍可往返 36ms
+ ❯ tests/config/demo-http-probes.test.ts (12 tests | 1 failed) 547ms
+     × 用不同长度区分默认 8m、导入 200m 和上传 25m 38ms
+     ✓ 拒绝 health 的错误状态 4ms
+     ✓ 拒绝 oversize 的错误状态 3ms
+     ✓ 登录后验证正文分批到达、done 结束、主动中断和中断后的健康检查 109ms
+     ✓ 健康请求没有响应时在总时限内失败 66ms
+     ✓ 只有 SSE 响应头而没有正文时触发首块超时 51ms
+     ✓ 已收到正文后停滞的流触发空闲超时 83ms
+     ✓ 持续发送事件但不结束的流仍受总时限限制 109ms
+     ✓ 一次性缓冲全部事件不能被认作流式通过 4ms
+     ✓ 缺少应用协议的 done 事件时失败 74ms
+     ✓ 应用返回错误事件时不回显其中的敏感文本 2ms
+     ✓ HTML 响应不能被当成 SSE 通过 2ms
+ ❯ tests/components/settings-page-demo.test.tsx (1 test | 1 failed) 6ms
+     × DEMO_MODE=1 时传给 SettingsPanel 的 llm.baseUrl 为空 5ms
+ ✓ tests/config/smoke-fresh-install.test.ts (11 tests) 4284ms
+     ✓ 默认包版本：输出正确镜像，且不依赖运行目录或环境版本  456ms
+     ✓ 历史固定版本：输出正确镜像，且不依赖运行目录或环境版本  353ms
+     ✓ RC：输出正确镜像，且不依赖运行目录或环境版本  364ms
+     ✓ 点分 RC：输出正确镜像，且不依赖运行目录或环境版本  356ms
+     ✓ digest：输出正确镜像，且不依赖运行目录或环境版本  352ms
+     ✓ 拒绝 latest，失败前后均无部署副作用  404ms
+     ✓ 拒绝 浮动次版本，失败前后均无部署副作用  395ms
+     ✓ 拒绝 错误仓库，失败前后均无部署副作用  391ms
+     ✓ 拒绝 错误摘要，失败前后均无部署副作用  407ms
+     ✓ 拒绝 错误 RC，失败前后均无部署副作用  400ms
+     ✓ 拒绝 末尾换行，失败前后均无部署副作用  404ms
+ ✓ tests/config/demo-runtime.test.ts (35 tests) 2758ms
+     ✓ Windows PowerShell 能解析中文入口并保留 Node 的失败退出码  310ms
+     ✓ PowerShell 将网络选项作为独立参数传递给 Node  327ms
+ ✓ tests/components/command-palette.test.tsx (7 tests) 1812ms
+     ✓ 输入搜索词后展示 API 笔记并可回车打开  325ms
+     ✓ 改词后旧请求被中断，不覆盖新结果  1295ms
+ ✓ tests/config/release-version.test.ts (39 tests) 9766ms
+     ✓ TypeScript 调用可传入 tag，导出参数类型与运行契约一致  8883ms
+     ✓ 从仓库外启动 CLI 也使用脚本所属仓库，并返回正确退出码  384ms
+ ✓ tests/config/demo-network.test.ts (13 tests) 1403ms
+     ✓ 缺少正向对照时不把目标不可达算作通过 {"privateUnavailable":true}  1244ms
+ ✓ tests/components/quick-capture.test.tsx (15 tests) 1148ms
+     ✓ 保存成功后刷新列表、不跳转，并收起浮层清掉草稿  742ms
+ ✓ tests/config/demo-compose-cli.test.ts (5 tests) 1123ms
+ ✓ tests/components/settings-panel-hydration.test.tsx (13 tests) 941ms
+ ✓ tests/lib/import.test.ts (31 tests) 835ms
+ ✓ tests/api/demo-boundary.test.ts (44 tests) 6603ms
+     ✓ 所有高风险入口在 Demo 中直接拒绝  6442ms
+ ✓ tests/components/api-token-section.test.tsx (10 tests) 426ms
+ ✓ tests/lib/llm.test.ts (23 tests) 445ms
+     ✓ stripJsonFence 剥掉可能的代码块围栏  401ms
+ ✓ tests/config/demo-proxy-timeouts.test.ts (14 tests) 389ms
+ ✓ tests/lib/vision-images.test.ts (4 tests) 380ms
+ ✓ tests/api/import.test.ts (5 tests) 295ms
+ ✓ tests/components/nav.test.tsx (5 tests) 144ms
+stdout | tests/lib/search.test.ts > search > rebuildFtsIfNeeded 以未删除笔记数为基准，重建后不含回收站笔记
+[fts] 重建索引：notes=1 fts=0
+
+ ✓ tests/lib/search.test.ts (14 tests) 180ms
+ ✓ tests/lib/ai-tools.test.ts (31 tests) 150ms
+ ✓ tests/lib/undo.test.ts (19 tests) 139ms
+ ✓ tests/api/images.test.ts (32 tests) 150ms
+ ✓ tests/lib/chat-routes.test.ts (20 tests) 142ms
+ ✓ tests/lib/sources.test.ts (15 tests) 116ms
+ ✓ tests/lib/hybrid-search.test.ts (15 tests) 133ms
+ ✓ tests/api/mcp.test.ts (4 tests) 114ms
+ ✓ tests/lib/trash.test.ts (19 tests) 122ms
+ ✓ tests/api/embedding-backfill.test.ts (6 tests) 115ms
+ ✓ tests/lib/process-note.test.ts (10 tests) 114ms
+ ✓ tests/lib/markdown-export.test.ts (1 test) 116ms
+stdout | tests/lib/weekly-review.test.ts > 生成回顾 > 非空周产出锁定的普通笔记并同步索引
+[weekly-review] 已生成 8.3–8.9 的回顾（2 条笔记）
+
+stdout | tests/lib/weekly-review.test.ts > 跨周执行的任务 > 生成的仍是入队那一周的回顾，而非执行时刻的上一周
+[weekly-review] 已生成 7.27–8.2 的回顾（1 条笔记）
+
+ ✓ tests/lib/weekly-review.test.ts (16 tests) 113ms
+ ✓ tests/config/demo-launcher.test.ts (8 tests) 118ms
+ ✓ tests/api/external-capture.test.ts (4 tests) 98ms
+ ✓ tests/api/related-notes.test.ts (4 tests) 126ms
+ ✓ tests/lib/mermaid.test.ts (8 tests) 100ms
+stdout | tests/lib/backup.test.ts > backup > doBackup 同时备份数据库与图片目录，并各按 7 份轮转
+[backup] 已备份到 C:\Users\BAIBAI\AppData\Local\Temp\zhiliao-backup-dlKsMo\db\backups\app-2026-09-29.db
+
+stdout | tests/lib/backup.test.ts > backup > uploads 目录不存在时仅备份数据库，不报错
+[backup] 已备份到 C:\Users\BAIBAI\AppData\Local\Temp\zhiliao-backup-WFndHw\db\backups\app-2026-09-29.db
+
+stdout | tests/lib/backup.test.ts > backup > 并发调用 doBackup 合并为一次执行
+[backup] 已备份到 C:\Users\BAIBAI\AppData\Local\Temp\zhiliao-backup-WbUGCS\db\backups\app-2026-09-29.db
+
+ ✓ tests/lib/backup.test.ts (5 tests) 77ms
+ ✓ tests/lib/read-note.test.ts (15 tests) 51ms
+ ✓ tests/lib/chat-stream.test.ts (15 tests) 50ms
+ ✓ tests/lib/embedding.test.ts (11 tests) 46ms
+ ✓ tests/lib/fetch-url.test.ts (35 tests) 45ms
+ ✓ tests/lib/llm-config.test.ts (18 tests) 39ms
+ ✓ tests/lib/export.test.ts (16 tests) 41ms
+ ✓ tests/lib/feature-flags.test.ts (22 tests) 28ms
+ ✓ tests/docs/first-use-guide.test.ts (8 tests) 43ms
+ ✓ tests/lib/notes.test.ts (5 tests) 24ms
+ ✓ tests/lib/note-chunks.test.ts (4 tests) 21ms
+ ✓ tests/api/handwriting.test.ts (4 tests) 23ms
+ ✓ tests/components/client-note-pages.test.tsx (3 tests) 24ms
+ ✓ tests/lib/api-token.test.ts (2 tests) 19ms
+ ✓ tests/lib/image-gen.test.ts (8 tests) 22ms
+ ✓ tests/lib/correction-learning.test.ts (2 tests) 17ms
+ ✓ tests/lib/chat-state.test.ts (45 tests) 11ms
+ ✓ tests/lib/chat-loop.test.ts (33 tests) 11ms
+ ✓ tests/lib/auth.test.ts (4 tests) 10ms
+ ✓ tests/lib/tiptap-security.test.ts (12 tests) 9ms
+ ✓ tests/config/demo-compose.test.ts (20 tests) 9ms
+ ✓ tests/config/demo-compose-wrapper.test.ts (2 tests) 7ms
+ ✓ tests/lib/note-chunking.test.ts (10 tests) 6ms
+ ✓ tests/config/r1-core-loop-script.test.ts (6 tests) 5ms
+ ✓ tests/lib/math.test.ts (3 tests) 3ms
+ ✓ tests/lib/source-refusal.test.ts (8 tests) 4ms
+ ✓ tests/config/demo-verification-utils.test.ts (2 tests) 4ms
+ ✓ tests/lib/client-note.test.ts (1 test) 3ms
+ ↓ tests/lib/notes-corpus-acceptance.test.ts (23 tests | 23 skipped)
+ ↓ tests/lib/t0-acceptance.test.ts (1 test | 1 skipped)
+ ↓ tests/lib/t1-chunking-acceptance.test.ts (2 tests | 2 skipped)
+
+ Test Files  3 failed | 61 passed | 3 skipped (67)
+      Tests  3 failed | 855 passed | 26 skipped (884)
+   Start at  09:34:37
+   Duration  206.63s (transform 2.77s, setup 322ms, import 45.17s, tests 108.58s, environment 37.44s)
+
+JSON report written to D:/ClaudeProjects/ai_acknowladge/docs/验收证据/release-gates-061-20260929-a/test-results.json

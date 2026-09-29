@@ -1,0 +1,89 @@
+
+> zhiliao@0.6.1 build
+> next build
+
+⚠ No build cache found. Please configure build caching for faster rebuilds. Read more: https://nextjs.org/docs/messages/no-cache
+   ▲ Next.js 15.5.24
+   - Experiments (use with caution):
+     · staleTimes
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 45s
+   Linting and checking validity of types ...
+   Collecting page data ...
+   Generating static pages (0/28) ...
+   Generating static pages (7/28) 
+   Generating static pages (14/28) 
+   Generating static pages (21/28) 
+ ✓ Generating static pages (28/28)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                                     Size  First Load JS
+┌ ƒ /                                        1.31 kB         108 kB
+├ ○ /_not-found                                 1 kB         105 kB
+├ ƒ /api/auth/login                            252 B         104 kB
+├ ƒ /api/auth/logout                           252 B         104 kB
+├ ƒ /api/backup                                252 B         104 kB
+├ ƒ /api/chat                                  252 B         104 kB
+├ ƒ /api/chat/confirm                          252 B         104 kB
+├ ƒ /api/chat/conversations                    252 B         104 kB
+├ ƒ /api/chat/conversations/[id]               252 B         104 kB
+├ ƒ /api/chat/conversations/[id]/sources       252 B         104 kB
+├ ƒ /api/chat/undo                             252 B         104 kB
+├ ƒ /api/embedding/backfill                    252 B         104 kB
+├ ƒ /api/export                                252 B         104 kB
+├ ƒ /api/external/capture                      252 B         104 kB
+├ ƒ /api/external/knowledge                    252 B         104 kB
+├ ƒ /api/handwriting                           252 B         104 kB
+├ ƒ /api/healthz                               252 B         104 kB
+├ ƒ /api/images/[filename]                     252 B         104 kB
+├ ƒ /api/import                                252 B         104 kB
+├ ƒ /api/llm/test                              252 B         104 kB
+├ ƒ /api/mcp                                   252 B         104 kB
+├ ƒ /api/notes                                 252 B         104 kB
+├ ƒ /api/notes/[id]                            252 B         104 kB
+├ ƒ /api/notes/[id]/append                     252 B         104 kB
+├ ƒ /api/notes/[id]/related                    252 B         104 kB
+├ ƒ /api/notes/[id]/reprocess                  252 B         104 kB
+├ ƒ /api/notes/[id]/transcribe                 252 B         104 kB
+├ ƒ /api/notes/[id]/transcription-candidate    252 B         104 kB
+├ ƒ /api/notes/batch-delete                    252 B         104 kB
+├ ƒ /api/notes/batch-move                      252 B         104 kB
+├ ƒ /api/review                                252 B         104 kB
+├ ƒ /api/search                                252 B         104 kB
+├ ƒ /api/settings/corrections                  252 B         104 kB
+├ ƒ /api/settings/features                     252 B         104 kB
+├ ƒ /api/settings/llm                          252 B         104 kB
+├ ƒ /api/settings/tokens                       252 B         104 kB
+├ ƒ /api/suggestions                           252 B         104 kB
+├ ƒ /api/suggestions/[id]/accept               252 B         104 kB
+├ ƒ /api/suggestions/[id]/dismiss              252 B         104 kB
+├ ƒ /api/suggestions/generate                  252 B         104 kB
+├ ƒ /api/tags                                  252 B         104 kB
+├ ƒ /api/topics                                252 B         104 kB
+├ ƒ /api/topics/[id]                           252 B         104 kB
+├ ƒ /api/trash/purge                           252 B         104 kB
+├ ƒ /api/trash/restore                         252 B         104 kB
+├ ƒ /api/uploads                               252 B         104 kB
+├ ○ /icon.svg                                    0 B            0 B
+├ ƒ /inbox                                   3.58 kB         111 kB
+├ ƒ /login                                   1.19 kB         105 kB
+├ ○ /manifest.webmanifest                      252 B         104 kB
+├ ƒ /notes/[id]                              6.31 kB         113 kB
+├ ƒ /notes/new                               2.25 kB         106 kB
+├ ƒ /search                                   2.8 kB         110 kB
+├ ƒ /settings                                13.3 kB         120 kB
+├ ƒ /topics/[id]                             3.11 kB         110 kB
+└ ƒ /trash                                   3.22 kB         110 kB
++ First Load JS shared by all                 104 kB
+  ├ chunks/1255-73aef1a86847a1f3.js          46.1 kB
+  ├ chunks/4bd1b696-100b9d70ed4e49c1.js      54.2 kB
+  └ other shared chunks (total)              3.29 kB
+
+
+ƒ Middleware                                   40 kB
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+

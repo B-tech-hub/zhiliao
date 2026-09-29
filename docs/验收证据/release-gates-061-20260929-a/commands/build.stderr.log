@@ -1,0 +1,43 @@
+ ⚠ Compiled with warnings in 13.8s
+
+./node_modules/libheif-js/libheif-wasm/libheif-bundle.js
+Critical dependency: require function is used in a way in which dependencies cannot be statically extracted
+
+Import trace for requested module:
+./node_modules/libheif-js/libheif-wasm/libheif-bundle.js
+./node_modules/libheif-js/wasm-bundle.js
+./node_modules/heic-decode/index.js
+./node_modules/heic-convert/index.js
+./src/app/api/uploads/route.ts
+
+./src/lib/version.ts
+Should not import the named export 'version' (imported as 'version') from default-exporting module (only default export is available soon)
+
+Import trace for requested module:
+./src/lib/version.ts
+./src/app/api/mcp/route.ts
+
+ ⚠ Compiled with warnings in 1229ms
+
+./node_modules/jose/dist/webapi/lib/deflate.js
+A Node.js API is used (CompressionStream at line: 10) which is not supported in the Edge Runtime.
+Learn more: https://nextjs.org/docs/api-reference/edge-runtime
+
+Import trace for requested module:
+./node_modules/jose/dist/webapi/lib/deflate.js
+./node_modules/jose/dist/webapi/lib/jwe_decrypt.js
+./node_modules/jose/dist/webapi/jwt/decrypt.js
+./node_modules/jose/dist/webapi/index.js
+./src/lib/auth.ts
+
+./node_modules/jose/dist/webapi/lib/deflate.js
+A Node.js API is used (DecompressionStream at line: 26) which is not supported in the Edge Runtime.
+Learn more: https://nextjs.org/docs/api-reference/edge-runtime
+
+Import trace for requested module:
+./node_modules/jose/dist/webapi/lib/deflate.js
+./node_modules/jose/dist/webapi/lib/jwe_decrypt.js
+./node_modules/jose/dist/webapi/jwt/decrypt.js
+./node_modules/jose/dist/webapi/index.js
+./src/lib/auth.ts
+

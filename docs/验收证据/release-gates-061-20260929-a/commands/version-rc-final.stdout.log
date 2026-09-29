@@ -1,0 +1,5 @@
+
+> zhiliao@0.6.1 check:version
+> node scripts/check-release-version.mjs --tag v0.6.1-rc1
+
+版本一致：0.6.1（v0.6.1-rc1）；发布材料：docs/releases/v0.6.1.md

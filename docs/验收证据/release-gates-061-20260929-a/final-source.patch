@@ -1,0 +1,125 @@
+diff --git a/eslint.config.mjs b/eslint.config.mjs
+index aff0e9c..ce49f5c 100644
+--- a/eslint.config.mjs
++++ b/eslint.config.mjs
+@@ -19,6 +19,8 @@ const eslintConfig = [
+       ".next-verify/**",
+       "out/**",
+       "build/**",
++      // 一次性 CJS 验收脚本按原始字节归档；产品和其他文档脚本仍接受检查
++      "docs/验收证据/**/*.cjs",
+       "next-env.d.ts",
+       // Service Worker 运行在独立环境（self/caches 全局），不按应用代码规则检查
+       "public/sw.js",
+diff --git a/tests/components/settings-page-demo.test.tsx b/tests/components/settings-page-demo.test.tsx
+index 86bc3d8..b47d640 100644
+--- a/tests/components/settings-page-demo.test.tsx
++++ b/tests/components/settings-page-demo.test.tsx
+@@ -1,14 +1,7 @@
+ import { afterEach, describe, expect, it, vi } from "vitest";
+ 
+-const { captured } = vi.hoisted(() => ({
+-  captured: { baseUrl: undefined as string | undefined },
+-}));
+-
+ vi.mock("@/app/(app)/settings/settings-panel", () => ({
+-  SettingsPanel: (props: { llm: { baseUrl: string } }) => {
+-    captured.baseUrl = props.llm.baseUrl;
+-    return null;
+-  },
++  SettingsPanel: () => null,
+ }));
+ 
+ vi.mock("@/db", () => ({
+@@ -36,7 +29,6 @@ vi.mock("@/lib/feature-flags", () => ({
+ import SettingsPage from "@/app/(app)/settings/page";
+ 
+ afterEach(() => {
+-  captured.baseUrl = undefined;
+   vi.unstubAllEnvs();
+ });
+ 
+@@ -44,7 +36,8 @@ describe("设置页 Demo 接入点", () => {
+   it("DEMO_MODE=1 时传给 SettingsPanel 的 llm.baseUrl 为空", () => {
+     vi.stubEnv("DEMO_MODE", "1");
+     vi.stubEnv("DEMO_RUNTIME", undefined);
+-    SettingsPage();
+-    expect(captured.baseUrl).toBe("");
++    // 服务端页面返回 React 元素，不会直接执行子组件；检查实际传给客户端的参数。
++    const page = SettingsPage();
++    expect(page.props.llm.baseUrl).toBe("");
+   });
+ });
+diff --git a/tests/config/demo-http-probes.test.ts b/tests/config/demo-http-probes.test.ts
+index 3d0c868..e551c75 100644
+--- a/tests/config/demo-http-probes.test.ts
++++ b/tests/config/demo-http-probes.test.ts
+@@ -42,13 +42,14 @@ afterEach(async () => {
+ 
+ describe("Demo HTTP 和 SSE 探针（仅本机临时 HTTP 夹具）", () => {
+   it("用不同长度区分默认 8m、导入 200m 和上传 25m", async () => {
+-    const received: Record<string, number> = {};
++    const received: { path: string; declaredBytes: number; receivedBytes: number }[] = [];
+     const base = await listen((req, res) => {
+       if (req.method === "GET" && req.url === "/api/healthz") { res.writeHead(200).end("ok"); return; }
+       const length = Number(req.headers["content-length"]);
+       const path = req.url ?? "";
+       req.once("data", (chunk) => {
+-        received[path] = (received[path] ?? 0) + chunk.length;
++        // 导入和上传各有两次探针；按请求留证，避免把同一路径的字节数相加。
++        received.push({ path, declaredBytes: length, receivedBytes: chunk.length });
+         const overDefault = length > 8 * 1024 * 1024;
+         const overUpload = length > 25 * 1024 * 1024;
+         const overImport = length > 200 * 1024 * 1024;
+@@ -62,7 +63,13 @@ describe("Demo HTTP 和 SSE 探针（仅本机临时 HTTP 夹具）", () => {
+       health: 200, oversize: 413, default_oversize: 413, upload_oversize: 413,
+       import_midsize: 401, upload_midsize: 401, sent_body_bytes: 1,
+     });
+-    expect(Object.values(received).every((value) => value === 1)).toBe(true);
++    expect(received).toEqual([
++      { path: "/api/notes", declaredBytes: 8 * 1024 * 1024 + 1, receivedBytes: 1 },
++      { path: "/api/import", declaredBytes: 8 * 1024 * 1024 + 1, receivedBytes: 1 },
++      { path: "/api/import", declaredBytes: 200 * 1024 * 1024 + 1, receivedBytes: 1 },
++      { path: "/api/uploads", declaredBytes: 8 * 1024 * 1024 + 1, receivedBytes: 1 },
++      { path: "/api/uploads", declaredBytes: 25 * 1024 * 1024 + 1, receivedBytes: 1 },
++    ]);
+   });
+ 
+   it.each([["health", 503], ["oversize", 200]] as const)("拒绝 %s 的错误状态", async (kind, status) => {
+diff --git a/tests/config/demo-verification-utils.test.ts b/tests/config/demo-verification-utils.test.ts
+index d13ef77..292e079 100644
+--- a/tests/config/demo-verification-utils.test.ts
++++ b/tests/config/demo-verification-utils.test.ts
+@@ -1,20 +1,28 @@
+ import { EventEmitter } from "node:events";
+ import { afterEach, describe, expect, it, vi } from "vitest";
++
++// ESM 下模块命名空间不可配置，无法用 vi.spyOn 打桩内置模块的具名导出；改用 vi.mock 工厂替换 spawn
++const spawnMock = vi.hoisted(() => vi.fn());
++vi.mock("node:child_process", async (importOriginal) => {
++  const actual = await importOriginal<typeof import("node:child_process")>();
++  return { ...actual, spawn: spawnMock };
++});
++
+ import { attachVerificationSignals, killProcessTree } from "../../scripts/demo-verification-utils.mjs";
+ 
+ afterEach(() => {
+   vi.restoreAllMocks();
++  spawnMock.mockReset();
+ });
+ 
+ describe("Demo 验收进程辅助", () => {
+-  it("Windows 用 taskkill 终止进程树", async () => {
+-    const childProcess = await import("node:child_process");
+-    const spawn = vi.spyOn(childProcess, "spawn").mockReturnValue(new EventEmitter() as never);
++  it("Windows 用 taskkill 终止进程树", () => {
++    spawnMock.mockReturnValue(new EventEmitter() as never);
+     const previous = process.platform;
+     Object.defineProperty(process, "platform", { configurable: true, value: "win32" });
+     try {
+       killProcessTree({ pid: 4242 });
+-      expect(spawn).toHaveBeenCalledWith("taskkill", ["/pid", "4242", "/T", "/F"], { windowsHide: true, stdio: "ignore" });
++      expect(spawnMock).toHaveBeenCalledWith("taskkill", ["/pid", "4242", "/T", "/F"], { windowsHide: true, stdio: "ignore" });
+     } finally {
+       Object.defineProperty(process, "platform", { configurable: true, value: previous });
+     }

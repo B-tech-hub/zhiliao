@@ -1,0 +1,9 @@
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - `__dirname` (vitest.config.mts:17:32). Use `import.meta.dirname` instead
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+stderr | tests/components/markdown-editor-security.test.tsx > 真实编辑器安全边界：Mermaid=false > 外部正文同步通过实际 setContent 路径过滤属性
+flushSync was called from inside a lifecycle method. React cannot flush when React is already rendering. Consider moving this call to a scheduler task or micro task.
+
+stderr | tests/components/markdown-editor-security.test.tsx > 真实编辑器安全边界：Mermaid=true > 外部正文同步通过实际 setContent 路径过滤属性
+flushSync was called from inside a lifecycle method. React cannot flush when React is already rendering. Consider moving this call to a scheduler task or micro task.
+

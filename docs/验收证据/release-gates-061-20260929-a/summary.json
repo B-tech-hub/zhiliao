@@ -1,0 +1,52 @@
+{
+  "status": "passed",
+  "scope": "门禁 3：Windows x64 隔离源码验证，不是发布",
+  "source_head": "6e79059ff825bb2f0ae5c76d6cb818e6da497d04",
+  "working_tree_included": true,
+  "source_manifest_sha256": "0c3dd6fecf14eb53218e85e061ad51737b612e886e5114243320cf49495c1d10",
+  "gate_inputs_sha256": "47fdf39c94fbfabfc3bcf6ab5311a3979ec831ab9b89a6be50bf70cb290e4b90",
+  "source_patch_sha256": "fd6f0fefb0f1bd8e0107e96be0c881e16781716b216221b0bcb18d0c55941e1c",
+  "source_changes_from_old_candidate": [
+    "eslint.config.mjs",
+    "tests/components/settings-page-demo.test.tsx",
+    "tests/config/demo-http-probes.test.ts",
+    "tests/config/demo-verification-utils.test.ts"
+  ],
+  "gates": [
+    {
+      "stage": "design-final",
+      "exit_code": 0,
+      "duration_seconds": 0.422,
+      "manifest_sha256": "0c3dd6fecf14eb53218e85e061ad51737b612e886e5114243320cf49495c1d10"
+    },
+    {
+      "stage": "lint-final",
+      "exit_code": 0,
+      "duration_seconds": 5.312,
+      "manifest_sha256": "0c3dd6fecf14eb53218e85e061ad51737b612e886e5114243320cf49495c1d10"
+    },
+    {
+      "stage": "test-final",
+      "exit_code": 0,
+      "duration_seconds": 77.75,
+      "manifest_sha256": "0c3dd6fecf14eb53218e85e061ad51737b612e886e5114243320cf49495c1d10"
+    },
+    {
+      "stage": "build",
+      "exit_code": 0,
+      "duration_seconds": 105.969,
+      "manifest_sha256": "0c3dd6fecf14eb53218e85e061ad51737b612e886e5114243320cf49495c1d10"
+    }
+  ],
+  "tests": {
+    "passed": 858,
+    "failed": 0,
+    "skipped": 26,
+    "total": 884
+  },
+  "remaining_gates": [
+    4,
+    5,
+    6
+  ]
+}

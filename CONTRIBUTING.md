@@ -12,7 +12,7 @@ cp .env.example .env.local   # 填 APP_PASSWORD / SESSION_SECRET，LLM 三项可
 npm run dev
 ```
 
-已发布 v0.6.0 的 `npm run demo` 使用内置 mock LLM 与演示数据，数据写在 `./data-demo/`，与正式数据隔离。当前 0.6.1 候选的源码 Demo 存在本机 mock 地址与容器地址接线冲突，保留为[独立候选阻断](docs/产品规划/开源发布范围与执行清单-2026-09-13.md#r3-version)，不能沿用旧版说明宣称当前源码流程已通过。
+当前 0.6.1 候选的 `npm run demo` 已固定本机 mock 接线、演示凭据及 `./data-demo/` 路径，源码受控验收见 [R1 记录](docs/R1源码Demo接线验收-2026-09-14.md)。已发布 v0.6.0 不含这些保护，体验旧版必须遵循 README 的独立目录与环境清理步骤；源码验收不代表镜像已发布。
 
 开始改动前请阅读 [项目开发规范](docs/开发规范.md)；涉及页面、组件、交互或样式时同时阅读 [UI 规范](docs/UI规范.md)。产品边界和新功能冻结仍以 README Roadmap、`CONTEXT.md` 与相关 ADR 为准。
 
@@ -32,6 +32,10 @@ npm run lint
 npm test
 npm run build
 ```
+
+完整门禁应在不含正式 `.env*`、数据和旧构建目录的隔离副本执行。`next-env.d.ts` 是工具链生成文件，不作为可复现源码输入；让 Next.js 重新生成并保存结果，避免携带旧隔离目录的类型引用。ESLint 仅排除 `docs/验收证据/` 中按原始字节保存的一次性 `.cjs` 归档，其他脚本继续检查。门禁测试设置 `REQUIRE_DOCKER_COMPOSE=1`，避免把缺少 Compose 的跳过误记为通过；可用 `npm test -- --maxWorkers=1 --no-file-parallelism` 限制并发。
+
+0.6.1 当前源码的四条门禁已于 2026-09-29 通过，输入身份、首轮失败、26 项专项跳过及剩余分发验收见[门禁记录](docs/验收证据/release-gates-061-20260929-a/README.md)。复制本机依赖不构成无缓存安装证据。
 
 修改版本校验或安装冒烟预览时，可先执行局部回归：
 
