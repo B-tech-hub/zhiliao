@@ -1,0 +1,419 @@
+{
+  "schema_version": 1,
+  "created": "2026-09-29",
+  "status": "prepared-not-executed",
+  "scope": "单 Agent，仅差异审阅和执行单准备；未暂存、提交、推送、远端查询、重跑检查或发布。",
+  "head": "321f770b523773e3f93a56dcf4fd2b1f78213ca5",
+  "git_tree": "66ab7b0d7a217f0e8ab9a2dcacbaf969f428389c",
+  "branch": "candidate/0.6.1-baseline",
+  "spec_baseline_commit": "549f45200081f9c50b3d658e4c8d1a7c695bde04",
+  "manifest_path": "docs/验收证据/r3-gate4-v2-preparation-20260929-a/inputs.json",
+  "self_hash_policy": "本清单不包含自身哈希；执行前在仓库外记录原始字节哈希，暂存集合包含 manifest_path。",
+  "current_changed_file_count": 54,
+  "proposed_commit_path_count": 55,
+  "files": [
+    {
+      "path": ".github/workflows/release.yml",
+      "bytes": 11193,
+      "sha256": "e9bd788ebc06d6ecf82c6f29ae1ed8b93d18cc616d2d1b8d2103db58d2be1076"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "bytes": 10215,
+      "sha256": "ce6f568043e40b472b5d01b5ce7f807bbc2bb3c59c2fb68ea9b0373f10cff6d2"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/spec-r3-gate4-distribution.md",
+      "bytes": 8230,
+      "sha256": "3f9d948d8f4475e9c52c491572973758dae30e9334bb02ee76df9370e4efadc3"
+    },
+    {
+      "path": "docs/0.6.1候选定稿-2026-09-28.md",
+      "bytes": 8602,
+      "sha256": "8da56c51087123addf94f0a7ee68dbfa20355536c5906a8451588a5d4653e20d"
+    },
+    {
+      "path": "docs/R3门禁4修复后候选推送与PR-CI执行单-2026-09-29.md",
+      "bytes": 17305,
+      "sha256": "416c61b37e4633a0da0e0a4142821f7f7a9fe0974456851a98557d2ac8bbc43d"
+    },
+    {
+      "path": "docs/R3门禁4候选推送与PR-CI执行单-2026-09-29.md",
+      "bytes": 14057,
+      "sha256": "bc32df2e9f038ebe9cb123bb0b42c8ccd71e82dd9104db5577de6cd64c2d2591"
+    },
+    {
+      "path": "docs/R3门禁4环境调查与验收计划-2026-09-29.md",
+      "bytes": 19236,
+      "sha256": "d287778fd9c07a2d96edb70c1f91b82a51d0108fa06178bfb32bdff3a0395e00"
+    },
+    {
+      "path": "docs/README.md",
+      "bytes": 18073,
+      "sha256": "1962e232b8719f512bf72298ac271c0ff63bb3b1baed0a8503467fb66f42c936"
+    },
+    {
+      "path": "docs/releases/v0.6.1.md",
+      "bytes": 17717,
+      "sha256": "bf4a1cf0e932ad93c57bafb54f4d2ca20dcd0de534853170d367adbd856b6450"
+    },
+    {
+      "path": "docs/产品规划/开源发布范围与执行清单-2026-09-13.md",
+      "bytes": 48076,
+      "sha256": "79afe3683bea5d22bca7ffc2fe89319ebfc53f9650a2194354c7765944d2e4c2"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-runner-context-20260929-a/README.md",
+      "bytes": 5976,
+      "sha256": "8c2d694f11db9b170b40ca23c5c4bd21f8ecd0e5bfb73140af5c6b42444b5359"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-runner-context-20260929-a/actionlint-after.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-runner-context-20260929-a/actionlint-before.txt",
+      "bytes": 1909,
+      "sha256": "1c82e04272f3d8b2d55ff1ab71a4178a00cd622d13d5037d0d00d35b2e0132bb"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-runner-context-20260929-a/bash-init.json",
+      "bytes": 1558,
+      "sha256": "77763b2fb7e3bfba2863365d646d00ab2ecd3512fee72e4610cac7d6dd4452ca"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-runner-context-20260929-a/checks.json",
+      "bytes": 1920,
+      "sha256": "8e61037068f4694b459368fe053e987a35dc8c3d5e7a0d13a17e14963453c4c1"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-runner-context-20260929-a/diff-check.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-runner-context-20260929-a/eslint.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-runner-context-20260929-a/initializers.json",
+      "bytes": 347,
+      "sha256": "f308bb56d793c01f815a062ec9051c039b524630aa5a0b6d5298054bf76ee6ca"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-runner-context-20260929-a/inputs.json",
+      "bytes": 3869,
+      "sha256": "37523b61d81b085f68fcac085666ad5d5463580d93b30e844717140d59c8599b"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-runner-context-20260929-a/preservation.json",
+      "bytes": 5084,
+      "sha256": "7b09a14c096b95d4f89674822ccf89823c433bf63627771d38d2e7518d8b5a2f"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-runner-context-20260929-a/tests-after.json",
+      "bytes": 19003,
+      "sha256": "3e5c7dbf432ca111f8d87d87b814e199e6d560cf2500a6e33c75058183ec3679"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-runner-context-20260929-a/tests-before.json",
+      "bytes": 12250,
+      "sha256": "8cb6777bb034258646d9b86c4f5f28b26e817d3439b137e0fed6b3f1fb467a57"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-runner-context-20260929-a/tests-initial.json",
+      "bytes": 19022,
+      "sha256": "7c19c3f24ad692af0469b612b4168ca74cf414d0605f6d74310c5b84dd130e7d"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-runner-context-20260929-a/tool.json",
+      "bytes": 423,
+      "sha256": "3e72595f46307e7db340599144ac26dd6b3034ffc1bc0d796f8e7b75b9707847"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-runner-context-20260929-a/verify-initializers.py",
+      "bytes": 3389,
+      "sha256": "fe27af938599beee925e9335512aa2652f4e3df0dacd65924ef980f3289023b3"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-runner-context-20260929-a/workflow-delta.txt",
+      "bytes": 108,
+      "sha256": "a17ccd13a788e780ec103edfa3d36976ac9a14d8a1a000aaa714fc8ac718c356"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v-061-36567105695/README.md",
+      "bytes": 5816,
+      "sha256": "88f45c7061e8d6173a75c74d77aab87d2b1f021daf542dedb369a0b1e8e74563"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v-061-36567105695/archive-review.json",
+      "bytes": 1560,
+      "sha256": "6fa3e3c1407470a9532d6e04cd0735eee78efb0bcfbf6e9c9a0a40e0cb3bd3fb"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v-061-36567105695/artifacts.json",
+      "bytes": 42,
+      "sha256": "f7417e1fb877d3f5934f143cc38ad9e2905476e8f5ac6776507d09441efcd6f6"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v-061-36567105695/candidate.json",
+      "bytes": 4179,
+      "sha256": "8d3ab01cb07cc3cfd2506c76f1e962240a77803ee3980e35f28a05c2dcfa3cc9"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v-061-36567105695/checkout-commit.json",
+      "bytes": 2814,
+      "sha256": "621779ed0ed43dfc8130a2bf22a66a548ce5986ad70736a2bda9eec1471f6168"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v-061-36567105695/ci-log.txt",
+      "bytes": 73443,
+      "sha256": "05f2eca77755178bdd9de3f45c0bd6da6a145f07c5f9ba588ef295d5eb5c06d1"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v-061-36567105695/closeout-checks.json",
+      "bytes": 2622,
+      "sha256": "0ef8890b88ffde1ffac0ab766374996eedeb2c330ce2eeaef7e39562b2a676ef"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v-061-36567105695/files.sha256.json",
+      "bytes": 3522,
+      "sha256": "c54a14675f0ba9a0d6a029c9125263cf4b337574eab291c787a86531c8b44daa"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v-061-36567105695/git-tree.txt",
+      "bytes": 192091,
+      "sha256": "3c61229b62d348581b57f48eb605cbbfe2811f3aeee4475c9e3dbd2afe1c42dd"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v-061-36567105695/jobs-initial.json",
+      "bytes": 3788,
+      "sha256": "af19ebf9af647a99beb873835c05bc7fd9374d28bd550d64295632646f899b4b"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v-061-36567105695/jobs.json",
+      "bytes": 4203,
+      "sha256": "524f0b73a9f30e7eef3bdd42dd9b4bc5fa22804ed9bace9ef5c08c5e7bd19813"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v-061-36567105695/log-excerpts.json",
+      "bytes": 4711,
+      "sha256": "617e5cc5314e72e94f9e8cace46d9896926b811507bba545b9dc2ec596eecac0"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v-061-36567105695/log-integrity.json",
+      "bytes": 448,
+      "sha256": "ddb41d38c8cf4405ff6906e975413bde9beed9db6d228b3be5c091b794ea639c"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v-061-36567105695/push.json",
+      "bytes": 718,
+      "sha256": "119585c45a2f44c4c75d6b22da6da5a8e668698aac118c5cc8011ea215f0b3b3"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v-061-36567105695/release-jobs.json",
+      "bytes": 37,
+      "sha256": "96d97734621cbc60b36338e1e6436535313870ca18fd2dd60f5e10c573463b28"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v-061-36567105695/release-run.json",
+      "bytes": 14312,
+      "sha256": "37b6547105eb761475f1955ccb5f956ddef815dd259fe89eeb77588bed997945"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v-061-36567105695/release-workflow-error.json",
+      "bytes": 1735,
+      "sha256": "e2fafd686beaf9c4c226fc7f857154144250a70f8e72f01bcefc91e99b801c8c"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v-061-36567105695/remote-after.json",
+      "bytes": 922,
+      "sha256": "c8b68b76fa5a75ad1b4829c9da78ba423dcdf2eaa313ce83853a3e8c39ac8d94"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v-061-36567105695/remote-before.json",
+      "bytes": 927,
+      "sha256": "0010af8d7b8782098b128653efca40b538f13523cf9aaa4e3503bd2c8aa9315a"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v-061-36567105695/remote-final.json",
+      "bytes": 1233,
+      "sha256": "137d664523b5355568513979301644a09cc15a55552a9226c3168e86451ae07b"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v-061-36567105695/run-initial.json",
+      "bytes": 14306,
+      "sha256": "287f849909217a63913f6cbf68e403dee3cacd1521e70121c595fd58125a75dc"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v-061-36567105695/run.json",
+      "bytes": 14309,
+      "sha256": "6ad59e98c2d98a5ab075b666b473b5c06f29b6f911abb4c04646a2fe3472998f"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v-061-36567105695/runs-discovery.json",
+      "bytes": 299,
+      "sha256": "a99730806fc60b8f6df65183570296726e9aa061465d2a515ea3296792d13e0f"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v-061-36567105695/summary.json",
+      "bytes": 5164,
+      "sha256": "334f7bf8b0f1eed1e02ae7ac6ba517b4b67b0348a6178f6752919de4dfc36df9"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v2-preparation-20260929-a/README.md",
+      "bytes": 5069,
+      "sha256": "135bc0b17780b5e82f6b3e17c9ad48d5a4add39cccd5b57c243ec24c4fea6348"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v2-preparation-20260929-a/preserve-evidence.patch",
+      "bytes": 465,
+      "sha256": "344e93eaa3d46cbf3d1b8ca126122e693e865198eeea0bc22328a8c548f72e36"
+    },
+    {
+      "path": "tests/config/release-gate4.test.ts",
+      "bytes": 13633,
+      "sha256": "e79f4de1423137776e53e23362388ee3cf572df9eb6e705036f31864e0ddb6ae"
+    }
+  ],
+  "proposed_files": [
+    {
+      "path": ".gitattributes",
+      "status": "proposed-not-applied",
+      "before_sha256": "739e654651348c94b0eb9f75d90adcc49e282525888fd36f00e119b18c90a589",
+      "after_sha256": "ef627801675bf3a290d7634b312ba92ebdeebd34e67add9332e076663f2b3bd9",
+      "after_bytes": 511,
+      "patch_path": "docs/验收证据/r3-gate4-v2-preparation-20260929-a/preserve-evidence.patch"
+    }
+  ],
+  "stable_executable_inputs": {
+    ".github/workflows/release.yml": "e9bd788ebc06d6ecf82c6f29ae1ed8b93d18cc616d2d1b8d2103db58d2be1076",
+    "tests/config/release-gate4.test.ts": "e79f4de1423137776e53e23362388ee3cf572df9eb6e705036f31864e0ddb6ae",
+    "scripts/verify-release-gate4.mjs": "8ef109822f7eb1d0a30a5fa617135c19bd4f816038691580f7103507d2cb54e3",
+    "tests/config/release-version.test.ts": "1fab2461b270dc10667a1ab61aea263a6bc828be16c4c4d0c6196bf23b96f09a",
+    ".github/workflows/ci.yml": "7428f5cac57922f89d33332118190d3936d332001d53e2533f9184de723c7f17",
+    "package.json": "c7264a2aa0b60f44d7991982049b8fe946228f9a2b99aea07122741765367629",
+    "package-lock.json": "ec7fc3bd5aae1c8cec50723eb69678bfc360c998b154d4d9c6d723a0cfe1564a",
+    ".gitattributes": "739e654651348c94b0eb9f75d90adcc49e282525888fd36f00e119b18c90a589"
+  },
+  "reused_evidence": {
+    "repair_inputs_path": "docs/验收证据/r3-gate4-runner-context-20260929-a/inputs.json",
+    "repair_inputs_match_at_start": {
+      ".github/workflows/release.yml": true,
+      "CONTRIBUTING.md": true,
+      "_bmad-output/implementation-artifacts/spec-r3-gate4-distribution.md": true,
+      "docs/0.6.1候选定稿-2026-09-28.md": true,
+      "docs/R3门禁4候选推送与PR-CI执行单-2026-09-29.md": true,
+      "docs/R3门禁4环境调查与验收计划-2026-09-29.md": true,
+      "docs/README.md": true,
+      "docs/releases/v0.6.1.md": true,
+      "docs/产品规划/开源发布范围与执行清单-2026-09-13.md": true,
+      "tests/config/release-gate4.test.ts": true
+    },
+    "repair_evidence_hashes_match": {
+      "actionlint-after.txt": true,
+      "actionlint-before.txt": true,
+      "bash-init.json": true,
+      "checks.json": true,
+      "diff-check.txt": true,
+      "eslint.txt": true,
+      "initializers.json": true,
+      "README.md": true,
+      "tests-after.json": true,
+      "tests-before.json": true,
+      "tests-initial.json": true,
+      "tool.json": true,
+      "verify-initializers.py": true,
+      "workflow-delta.txt": true
+    },
+    "old_v_manifest_path": "docs/验收证据/r3-gate4-v-061-36567105695/files.sha256.json",
+    "old_v_evidence_hashes_match": {
+      "archive-review.json": true,
+      "artifacts.json": true,
+      "candidate.json": true,
+      "checkout-commit.json": true,
+      "ci-log.txt": true,
+      "closeout-checks.json": true,
+      "git-tree.txt": true,
+      "jobs-initial.json": true,
+      "jobs.json": true,
+      "log-excerpts.json": true,
+      "log-integrity.json": true,
+      "push.json": true,
+      "README.md": true,
+      "release-jobs.json": true,
+      "release-run.json": true,
+      "release-workflow-error.json": true,
+      "remote-after.json": true,
+      "remote-before.json": true,
+      "remote-final.json": true,
+      "run-initial.json": true,
+      "run.json": true,
+      "runs-discovery.json": true,
+      "summary.json": true
+    },
+    "historical_final_local_test_result": {
+      "numPassedTests": 64,
+      "numFailedTests": 0,
+      "numPendingTests": 0,
+      "success": true
+    },
+    "checks_rerun": false,
+    "limits": "历史 64/0/0、actionlint、Bash 和 ESLint 结果按原输入与环境复用；文档本轮新增变化单列，不视为新候选 CI 通过。"
+  },
+  "git_text_filter_findings": [
+    {
+      "path": "docs/验收证据/r3-gate4-runner-context-20260929-a/bash-init.json",
+      "bytes": 1558,
+      "crlf": 64,
+      "worktree_blob": "fc0ff07d9e8680f643e5735b6ee94b789826b72a",
+      "filtered_blob": "390b57fda13aa29e607429238f21b5581fa8b26a",
+      "sha256": "77763b2fb7e3bfba2863365d646d00ab2ecd3512fee72e4610cac7d6dd4452ca"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-runner-context-20260929-a/checks.json",
+      "bytes": 1920,
+      "crlf": 73,
+      "worktree_blob": "118d3abc9bf2b92873cf21771fd2351d5b2f91ab",
+      "filtered_blob": "76cc2de40cf759903fcc4849cede36333af069b1",
+      "sha256": "8e61037068f4694b459368fe053e987a35dc8c3d5e7a0d13a17e14963453c4c1"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-runner-context-20260929-a/tool.json",
+      "bytes": 423,
+      "crlf": 8,
+      "worktree_blob": "abb8d885b7310366c6e8e9c9cd9fc2215ee1695e",
+      "filtered_blob": "2520df55a7bf5beeca10abbfa292c4d2f886e0f6",
+      "sha256": "3e72595f46307e7db340599144ac26dd6b3034ffc1bc0d796f8e7b75b9707847"
+    }
+  ],
+  "preservation": {
+    "head_unchanged": true,
+    "index_sha256": "a1d3330e5f18e804c0358261a193afed5554afd36ec2486d082c61b1a1eabf47",
+    "index_unchanged": true,
+    "spec_baseline_unchanged": true,
+    "frozen_block_sha256": "e5b55957c1cb5577da612a30348600df27b94db28aeb0327bad081ac80eac3d6",
+    "frozen_block_equals_head": true,
+    "existing_evidence_file_count": 1011,
+    "existing_evidence_all_unchanged": true,
+    "existing_changed_paths_this_turn": [
+      "_bmad-output/implementation-artifacts/spec-r3-gate4-distribution.md",
+      "docs/R3门禁4候选推送与PR-CI执行单-2026-09-29.md",
+      "docs/R3门禁4环境调查与验收计划-2026-09-29.md",
+      "docs/README.md"
+    ],
+    "workflow_test_verifier_unchanged": true,
+    "actual_gitattributes_unchanged": true,
+    "attribute_patch_applied": false
+  },
+  "remote_evidence": {
+    "queried_this_turn": false,
+    "source": "docs/验收证据/r3-gate4-v-061-36567105695/remote-final.json",
+    "captured_at": "2026-09-29T12:23:02.265719+00:00",
+    "candidate": "321f770b523773e3f93a56dcf4fd2b1f78213ca5",
+    "main": "6ee67532deed37fda6cc98962e8df76c98659890",
+    "recheck_before_execution": true
+  }
+}

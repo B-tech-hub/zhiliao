@@ -1,0 +1,1 @@
+Workflow semantic delta: four env removals, two leading initialization steps, and two fixed artifact paths.

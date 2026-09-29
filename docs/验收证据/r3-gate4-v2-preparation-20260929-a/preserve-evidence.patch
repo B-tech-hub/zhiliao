@@ -1,0 +1,13 @@
+diff --git a/.gitattributes b/.gitattributes
+--- a/.gitattributes
++++ b/.gitattributes
+@@ -5,4 +5,9 @@
+ *.png binary
+ *.jpg binary
+ *.ico binary
+ *.woff2 binary
++
++# 保留三份已归档原始证据的字节及哈希，不推广到其他文件。
++docs/验收证据/r3-gate4-runner-context-20260929-a/bash-init.json -text
++docs/验收证据/r3-gate4-runner-context-20260929-a/checks.json -text
++docs/验收证据/r3-gate4-runner-context-20260929-a/tool.json -text

@@ -1,0 +1,101 @@
+{
+  "sha": "321f770b523773e3f93a56dcf4fd2b1f78213ca5",
+  "tree": "66ab7b0d7a217f0e8ab9a2dcacbaf969f428389c",
+  "parent": "549f45200081f9c50b3d658e4c8d1a7c695bde04",
+  "branch": "candidate/0.6.1-baseline",
+  "captured_at": "2026-09-29T12:16:40.987964+00:00",
+  "clean_worktree": true,
+  "inputs": [
+    {
+      "path": ".github/workflows/release.yml",
+      "sha256": "577e1306549306dba1ff12b18d3d9c1d337241e436adf054e54671fcd8e308b3",
+      "git_sha256": "577e1306549306dba1ff12b18d3d9c1d337241e436adf054e54671fcd8e308b3",
+      "matches_git": true,
+      "bytes": 10862
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "sha256": "315c73aefc0b0b0c9f91ed40e53f784a1bb71d3cdac87e41beb5341ca650a874",
+      "git_sha256": "315c73aefc0b0b0c9f91ed40e53f784a1bb71d3cdac87e41beb5341ca650a874",
+      "matches_git": true,
+      "bytes": 9182
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/review-r3-gate4-preparation.md",
+      "sha256": "cac9237741f43c69b8c24fde4d624a384b2ee7901fc0cff646819d01a0bb3f46",
+      "git_sha256": "cac9237741f43c69b8c24fde4d624a384b2ee7901fc0cff646819d01a0bb3f46",
+      "matches_git": true,
+      "bytes": 3223
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/spec-r3-gate4-distribution.md",
+      "sha256": "86bd365963a57f1957c2fd56c439aad3f0dc7de14f76618052db10da71981215",
+      "git_sha256": "86bd365963a57f1957c2fd56c439aad3f0dc7de14f76618052db10da71981215",
+      "matches_git": true,
+      "bytes": 4295
+    },
+    {
+      "path": "docs/R3门禁4候选推送与PR-CI执行单-2026-09-29.md",
+      "sha256": "245c3fb1e9e9f74110558ff102d0d48c26305a6700c3eb56b5310f4204056757",
+      "git_sha256": "245c3fb1e9e9f74110558ff102d0d48c26305a6700c3eb56b5310f4204056757",
+      "matches_git": true,
+      "bytes": 13121
+    },
+    {
+      "path": "docs/R3门禁4环境调查与验收计划-2026-09-29.md",
+      "sha256": "7a6d25b1d16244026cb3a3824a0c8a21a503947de56d85049547ad57cc10aa89",
+      "git_sha256": "7a6d25b1d16244026cb3a3824a0c8a21a503947de56d85049547ad57cc10aa89",
+      "matches_git": true,
+      "bytes": 16478
+    },
+    {
+      "path": "docs/README.md",
+      "sha256": "ec5f1c8e95919fab9776e1ee138f5d2bd99efcaf1d5fb0263394fab9df22a2a3",
+      "git_sha256": "ec5f1c8e95919fab9776e1ee138f5d2bd99efcaf1d5fb0263394fab9df22a2a3",
+      "matches_git": true,
+      "bytes": 17189
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-preparation-20260929-a/README.md",
+      "sha256": "df9c11adc5078554a8d8dcfa3a6807e8036d16d1eb1390643b01bc6cd4da2262",
+      "git_sha256": "df9c11adc5078554a8d8dcfa3a6807e8036d16d1eb1390643b01bc6cd4da2262",
+      "matches_git": true,
+      "bytes": 3579
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-preparation-20260929-a/checks.json",
+      "sha256": "2bd1f556516b44839693392f4e2cc937c330a02b4ce061c485d3a5dd11414089",
+      "git_sha256": "2bd1f556516b44839693392f4e2cc937c330a02b4ce061c485d3a5dd11414089",
+      "matches_git": true,
+      "bytes": 5092
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-preparation-20260929-a/inputs.json",
+      "sha256": "1b49adf8810f69c309b62c711ff51cb600ba7dea272d51e36894693dd2e50010",
+      "git_sha256": "1b49adf8810f69c309b62c711ff51cb600ba7dea272d51e36894693dd2e50010",
+      "matches_git": true,
+      "bytes": 2555
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-preparation-20260929-a/test-results.json",
+      "sha256": "512698155d039b8d202367180a5fec75a43bd14461dd985c6a01a6b11d6c3d78",
+      "git_sha256": "512698155d039b8d202367180a5fec75a43bd14461dd985c6a01a6b11d6c3d78",
+      "matches_git": true,
+      "bytes": 18152
+    },
+    {
+      "path": "scripts/verify-release-gate4.mjs",
+      "sha256": "8ef109822f7eb1d0a30a5fa617135c19bd4f816038691580f7103507d2cb54e3",
+      "git_sha256": "8ef109822f7eb1d0a30a5fa617135c19bd4f816038691580f7103507d2cb54e3",
+      "matches_git": true,
+      "bytes": 27967
+    },
+    {
+      "path": "tests/config/release-gate4.test.ts",
+      "sha256": "6500c658f5317008108a49a037da546b3a5088f6f266313b4d076e41b33b9cbe",
+      "git_sha256": "6500c658f5317008108a49a037da546b3a5088f6f266313b4d076e41b33b9cbe",
+      "matches_git": true,
+      "bytes": 12143
+    }
+  ]
+}

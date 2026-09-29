@@ -1,0 +1,41 @@
+{
+  "status": "failed",
+  "run_id": 36567100870,
+  "source_url": "https://github.com/B-tech-hub/zhiliao/actions/runs/36567100870",
+  "captured_at": "2026-09-29T12:26:28.406138+00:00",
+  "source_html_sha256": "e28f987c922423db1e089d954563f228f2d2454876a55a657649a3c56ddcaf4f",
+  "raw_html_archived": false,
+  "extraction_note": "Only visible annotation text is archived; dynamic HTML contains session/socket metadata. REST run and jobs responses are preserved separately.",
+  "file": ".github/workflows/release.yml",
+  "errors": [
+    {
+      "line": 81,
+      "column": 17,
+      "message": "Unrecognized named-value: 'runner'. Located at position 1 within expression: runner.temp"
+    },
+    {
+      "line": 206,
+      "column": 17,
+      "message": "Unrecognized named-value: 'runner'. Located at position 1 within expression: runner.temp"
+    },
+    {
+      "line": 207,
+      "column": 20,
+      "message": "Unrecognized named-value: 'runner'. Located at position 1 within expression: runner.temp"
+    },
+    {
+      "line": 208,
+      "column": 22,
+      "message": "Unrecognized named-value: 'runner'. Located at position 1 within expression: runner.temp"
+    }
+  ],
+  "jobs_started": 0,
+  "affected_scopes": [
+    "jobs.build.env.EVIDENCE",
+    "jobs.install.env.EVIDENCE",
+    "jobs.install.env.DOCKER_HOST",
+    "jobs.install.env.DOCKER_CONFIG"
+  ],
+  "diagnosis": "runner context is unavailable in job-level env; YAML syntax and ordinary configuration tests did not validate Actions context availability.",
+  "proposed_fix": "Initialize these paths in early job steps using RUNNER_TEMP and write to GITHUB_ENV; preserve separate daemon and anonymous Docker config; add regression coverage. Not implemented or pushed in V."
+}

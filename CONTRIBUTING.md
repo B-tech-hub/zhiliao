@@ -86,6 +86,8 @@ CI 在原四条门禁前增加版本核对。Release 的 `validate` job 使用 N
 
 构建 job 上限 60 分钟（构建步骤 45 分钟），安装 job 上限 15 分钟。资源按本轮标签核对归属后清理；专用 daemon 只在本轮成功建立所有权标记后停止，不清理 runner 的默认 Docker 存储。失败、超时或清理失败不能放行 GitHub Release。`gate4-validate`、`gate4-build-*`、`gate4-manifest`、`gate4-install-*` artifact 保留 30 天，构建阶段的 npm/build 日志与耗时另见该次 Actions 日志及 Docker build record。维护者在过期前归档到新的门禁 4 证据目录，不把 artifacts 的存在等同于全部检查通过。
 
-上述工作流补强目前只有本地准备和局部验证证据，远端构建、GHCR 取用与安装尚未执行。详见 [R3 门禁 4 计划](docs/R3门禁4环境调查与验收计划-2026-09-29.md)。原完整门禁、升级/恢复彩排、RC 和正式发布要求保留；当前目标 0.6.1 仍未发布，状态见 [候选说明](docs/releases/v0.6.1.md)。
+2026-09-29 候选 `321f770` 已推送，PR CI 的版本检查和四条门禁通过（878 项通过、28 项原条件跳过）；当次 Release 因四处 job 级 `env` 使用不支持的 `runner.temp` 而解析失败，零 job 启动，见 [V 运行证据](docs/验收证据/r3-gate4-v-061-36567105695/README.md)。随后已在本地修正：build/install 首个 Bash 步骤通过 `$RUNNER_TEMP` 写入 `$GITHUB_ENV`，后续步骤再消费路径；初始化不创建目录，保留专用 daemon 和匿名配置的不存在检查。上传步骤直接使用合法的 step 级 `runner.temp` 固定目录，避免初始化失败后空变量将上传路径变成根目录。
+
+修改此类路径时，先运行 `release-gate4.test.ts`、`release-version.test.ts` 的串行局部回归，并用理解 Actions 上下文的校验器复核；普通 YAML 解析不能替代。该次使用校验过下载哈希的 `actionlint 1.7.7 -shellcheck= -pyflakes= -no-color .github/workflows/release.yml`，另对初始化片段做 Bash 语法及临时环境验证，见[修复证据](docs/验收证据/r3-gate4-runner-context-20260929-a/README.md)。这是本地验证，尚未提交或推送；新的候选 CI 与 [R 阶段](docs/R3门禁4环境调查与验收计划-2026-09-29.md)另行确认。真实镜像构建、GHCR 取用、双架构安装、RC 和正式发布仍未完成，当前目标 0.6.1 仍未发布。
 
 安装冒烟默认读取脚本所属仓库的包版本。`-PrintConfig` 仅预览；需验证实际 RC 或复用旧版时，用 `-Image ghcr.io/b-tech-hub/zhiliao:0.6.1-rc1` 或明确的固定版本/digest。拒绝 `latest`、`0.6` 等浮动引用；真正运行容器仍按项目验证规则另行安排。

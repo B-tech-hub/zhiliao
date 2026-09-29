@@ -1,0 +1,40 @@
+{
+  "sha": "4179e0a40ec6d05eedfc0a09dc1517750620b027",
+  "node_id": "C_kwDOT3PzZ9oAKDQxNzllMGE0MGVjNmQwNWVlZGZjMGEwOWRjMTUxNzc1MDYyMGIwMjc",
+  "url": "https://api.github.com/repos/B-tech-hub/zhiliao/git/commits/4179e0a40ec6d05eedfc0a09dc1517750620b027",
+  "html_url": "https://github.com/B-tech-hub/zhiliao/commit/4179e0a40ec6d05eedfc0a09dc1517750620b027",
+  "author": {
+    "name": "BAIBAI",
+    "email": "BAIBAI2024826@outlook.com",
+    "date": "2026-09-29T12:17:11Z"
+  },
+  "committer": {
+    "name": "GitHub",
+    "email": "noreply@github.com",
+    "date": "2026-09-29T12:17:11Z"
+  },
+  "tree": {
+    "sha": "66ab7b0d7a217f0e8ab9a2dcacbaf969f428389c",
+    "url": "https://api.github.com/repos/B-tech-hub/zhiliao/git/trees/66ab7b0d7a217f0e8ab9a2dcacbaf969f428389c"
+  },
+  "message": "Merge 321f770b523773e3f93a56dcf4fd2b1f78213ca5 into 6ee67532deed37fda6cc98962e8df76c98659890",
+  "parents": [
+    {
+      "sha": "6ee67532deed37fda6cc98962e8df76c98659890",
+      "url": "https://api.github.com/repos/B-tech-hub/zhiliao/git/commits/6ee67532deed37fda6cc98962e8df76c98659890",
+      "html_url": "https://github.com/B-tech-hub/zhiliao/commit/6ee67532deed37fda6cc98962e8df76c98659890"
+    },
+    {
+      "sha": "321f770b523773e3f93a56dcf4fd2b1f78213ca5",
+      "url": "https://api.github.com/repos/B-tech-hub/zhiliao/git/commits/321f770b523773e3f93a56dcf4fd2b1f78213ca5",
+      "html_url": "https://github.com/B-tech-hub/zhiliao/commit/321f770b523773e3f93a56dcf4fd2b1f78213ca5"
+    }
+  ],
+  "verification": {
+    "verified": true,
+    "reason": "valid",
+    "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJqu6xHCRC1aQ7uu5UhlAAA6JUQAJA0aRsfEd+XPvIppg35ptf6\n8H9YWLIwBUawR+J0tgXFKeoIvMilf02m5nPlcr2Xc6OtycgC0WEv+fQ6ZpXuTI2l\nWniydKZPse48hTpd+gQePaLoQbImwcr1136oSxmb/2WB4e0362lxXMqVDMoVqmR8\nv5qi2NOU8LyU3oPes0r+3zBIQk1cBOfkM/uohJWiqfGdjx/4g3IndbVgfPxTKBUW\nV2v7xyKpuynD4Ir0edHnGy/SeX6r6uT0fvpC9zP3xy8OUmKQClyiuvo/1zJClymy\nExKLjQwZvRAZeBdtUNI9DcHBzybD4u4iffNsdhUWYnf1biI67KLk6MC/VbXHJ1/d\nfXSjN16otvEBf8ZnxoI6b22X71DRWJ4VGw5Lso5wyzSmoqcDL7j9L+usYEuy0ZMy\nbpnnXcZ6FNjMAh0lj+qdAhMfUPZS+gcT4xRhG8cgiuNGtKuLydEhftOGFtwOAhGX\nyZrjfIbHDoD8kOE1FBV+kEhcsfPYRe9Hss0PR6oRQJOPEQ12YXcO0msc1OdX0Udm\nXfHltP6QVSv9lyXC+X/LtWAv+rEaLDp0sPL+0odhAmH0Qf7hammNVFRcgzkO0UUB\nIohWb7dfNgD1utT9pGsD7B7rrnl+s/FEHMW5BubUScKCYeEXZIaA/aHUijDrp8pt\nZIahlYD9S3MVeMf9yq52\n=H8hk\n-----END PGP SIGNATURE-----\n",
+    "payload": "tree 66ab7b0d7a217f0e8ab9a2dcacbaf969f428389c\nparent 6ee67532deed37fda6cc98962e8df76c98659890\nparent 321f770b523773e3f93a56dcf4fd2b1f78213ca5\nauthor BAIBAI <BAIBAI2024826@outlook.com> 1790684231 +0000\ncommitter GitHub <noreply@github.com> 1790684231 +0000\n\nMerge 321f770b523773e3f93a56dcf4fd2b1f78213ca5 into 6ee67532deed37fda6cc98962e8df76c98659890\n",
+    "verified_at": "2026-09-29T12:17:12Z"
+  }
+}

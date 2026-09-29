@@ -78,10 +78,14 @@ jobs:
       packages: write
     env:
       PLATFORM: ${{ matrix.platform }}
-      EVIDENCE: ${{ runner.temp }}/gate4-build
       BUILDX_METADATA_PROVENANCE: max
       DOCKER_BUILD_RECORD_RETENTION_DAYS: 30
     steps:
+      - name: 初始化构建证据路径
+        shell: bash
+        run: |
+          set -euo pipefail
+          printf '%s\n' "EVIDENCE=$RUNNER_TEMP/gate4-build" >> "$GITHUB_ENV"
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.sha }}
@@ -135,7 +139,7 @@ jobs:
         if: always()
         with:
           name: gate4-build-${{ matrix.arch }}
-          path: ${{ env.EVIDENCE }}/
+          path: ${{ runner.temp }}/gate4-build/
           if-no-files-found: error
           retention-days: 30
 
@@ -203,11 +207,16 @@ jobs:
             runner: ubuntu-24.04-arm
     env:
       PLATFORM: ${{ matrix.platform }}
-      EVIDENCE: ${{ runner.temp }}/gate4-install
-      DOCKER_HOST: unix://${{ runner.temp }}/gate4-docker/docker.sock
-      DOCKER_CONFIG: ${{ runner.temp }}/gate4-anonymous
       DOCKER_CONTEXT: ""
     steps:
+      - name: 初始化安装证据与匿名 Docker 路径
+        shell: bash
+        run: |
+          set -euo pipefail
+          printf '%s\n' \
+            "EVIDENCE=$RUNNER_TEMP/gate4-install" \
+            "DOCKER_HOST=unix://$RUNNER_TEMP/gate4-docker/docker.sock" \
+            "DOCKER_CONFIG=$RUNNER_TEMP/gate4-anonymous" >> "$GITHUB_ENV"
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.sha }}
@@ -276,7 +285,7 @@ jobs:
         if: always()
         with:
           name: gate4-install-${{ matrix.arch }}
-          path: ${{ env.EVIDENCE }}/
+          path: ${{ runner.temp }}/gate4-install/
           retention-days: 30
           if-no-files-found: error
 

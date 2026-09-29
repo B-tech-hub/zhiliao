@@ -150,7 +150,30 @@ describe("清理与失败结果", () => {
 
 describe("发布工作流保护", () => {
   const workflow = YAML.parse(fs.readFileSync(path.join(root, ".github/workflows/release.yml"), "utf8"));
-  type Step = { uses?: string; run?: string; if?: string; with?: Record<string, unknown> };
+  type Step = { uses?: string; run?: string; shell?: string; if?: string; with?: Record<string, unknown> };
+
+  it("工作流与 job 级 env 不引用 runner 上下文", () => {
+    const environments = [workflow.env, ...Object.values(workflow.jobs).map((job) => (job as { env?: unknown }).env)];
+    for (const env of environments) {
+      // 守卫本次缺陷所在层级；完整表达式语义另用 actionlint 校验。
+      for (const expression of JSON.stringify(env ?? {}).matchAll(/\$\{\{([\s\S]*?)\}\}/g)) {
+        expect(expression[1]).not.toMatch(/\brunner\s*(?:\.|\[)/);
+      }
+    }
+  });
+
+  it.each(["build", "install"])("%s 在任何使用者之前初始化证据路径", (name) => {
+    const job = workflow.jobs[name];
+    const init: Step = job.steps[0];
+    expect(job.env.EVIDENCE).toBeUndefined();
+    expect(init.shell).toBe("bash");
+    expect(init.if).toBeUndefined();
+    expect(init.run).toContain(`"EVIDENCE=$RUNNER_TEMP/gate4-${name}"`);
+    expect(init.run).toContain('>> "$GITHUB_ENV"');
+    const upload = job.steps.find((step: Step) => step.uses?.startsWith("actions/upload-artifact"));
+    // 初始化失败时也固定上传目录，避免空 EVIDENCE 将路径变成根目录。
+    expect(upload.with.path).toBe(`\${{ runner.temp }}/gate4-${name}/`);
+  });
 
   it("tag 仍是唯一入口，GitHub Release 等待两种原生架构的安装和清理", () => {
     expect(Object.keys(workflow.on)).toEqual(["push"]);
@@ -193,10 +216,15 @@ describe("发布工作流保护", () => {
     const job = workflow.jobs.install;
     expect(job.permissions).toEqual({ contents: "read" });
     expect(job.steps.some((step: Step) => step.uses?.includes("login-action"))).toBe(false);
-    expect(job.env.DOCKER_HOST).toContain("gate4-docker/docker.sock");
-    expect(job.env.DOCKER_CONFIG).toContain("gate4-anonymous");
+    expect(job.env.DOCKER_HOST).toBeUndefined();
+    expect(job.env.DOCKER_CONFIG).toBeUndefined();
+    expect(job.env.DOCKER_CONTEXT).toBe("");
+    const init: Step = job.steps[0];
+    expect(init.run).toContain('"DOCKER_HOST=unix://$RUNNER_TEMP/gate4-docker/docker.sock"');
+    expect(init.run).toContain('"DOCKER_CONFIG=$RUNNER_TEMP/gate4-anonymous"');
     const start = job.steps.find((step: Step) => step.run?.includes("nohup dockerd"));
     expect(start.run).toContain('test ! -e "$daemon"');
+    expect(start.run).toContain('test ! -e "$DOCKER_CONFIG"');
     expect(start.run).toContain('--data-root="$daemon/data"');
     expect(start.run).toContain('--config-file="$daemon/config.json"');
     expect(start.run.indexOf('test ! -e "$daemon"')).toBeLessThan(start.run.indexOf('echo "owned=true"'));

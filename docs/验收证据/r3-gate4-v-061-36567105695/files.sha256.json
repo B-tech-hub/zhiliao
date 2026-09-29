@@ -1,0 +1,122 @@
+{
+  "excludes": [
+    "files.sha256.json"
+  ],
+  "files": [
+    {
+      "path": "archive-review.json",
+      "bytes": 1560,
+      "sha256": "6fa3e3c1407470a9532d6e04cd0735eee78efb0bcfbf6e9c9a0a40e0cb3bd3fb"
+    },
+    {
+      "path": "artifacts.json",
+      "bytes": 42,
+      "sha256": "f7417e1fb877d3f5934f143cc38ad9e2905476e8f5ac6776507d09441efcd6f6"
+    },
+    {
+      "path": "candidate.json",
+      "bytes": 4179,
+      "sha256": "8d3ab01cb07cc3cfd2506c76f1e962240a77803ee3980e35f28a05c2dcfa3cc9"
+    },
+    {
+      "path": "checkout-commit.json",
+      "bytes": 2814,
+      "sha256": "621779ed0ed43dfc8130a2bf22a66a548ce5986ad70736a2bda9eec1471f6168"
+    },
+    {
+      "path": "ci-log.txt",
+      "bytes": 73443,
+      "sha256": "05f2eca77755178bdd9de3f45c0bd6da6a145f07c5f9ba588ef295d5eb5c06d1"
+    },
+    {
+      "path": "closeout-checks.json",
+      "bytes": 2622,
+      "sha256": "0ef8890b88ffde1ffac0ab766374996eedeb2c330ce2eeaef7e39562b2a676ef"
+    },
+    {
+      "path": "git-tree.txt",
+      "bytes": 192091,
+      "sha256": "3c61229b62d348581b57f48eb605cbbfe2811f3aeee4475c9e3dbd2afe1c42dd"
+    },
+    {
+      "path": "jobs-initial.json",
+      "bytes": 3788,
+      "sha256": "af19ebf9af647a99beb873835c05bc7fd9374d28bd550d64295632646f899b4b"
+    },
+    {
+      "path": "jobs.json",
+      "bytes": 4203,
+      "sha256": "524f0b73a9f30e7eef3bdd42dd9b4bc5fa22804ed9bace9ef5c08c5e7bd19813"
+    },
+    {
+      "path": "log-excerpts.json",
+      "bytes": 4711,
+      "sha256": "617e5cc5314e72e94f9e8cace46d9896926b811507bba545b9dc2ec596eecac0"
+    },
+    {
+      "path": "log-integrity.json",
+      "bytes": 448,
+      "sha256": "ddb41d38c8cf4405ff6906e975413bde9beed9db6d228b3be5c091b794ea639c"
+    },
+    {
+      "path": "push.json",
+      "bytes": 718,
+      "sha256": "119585c45a2f44c4c75d6b22da6da5a8e668698aac118c5cc8011ea215f0b3b3"
+    },
+    {
+      "path": "README.md",
+      "bytes": 5816,
+      "sha256": "88f45c7061e8d6173a75c74d77aab87d2b1f021daf542dedb369a0b1e8e74563"
+    },
+    {
+      "path": "release-jobs.json",
+      "bytes": 37,
+      "sha256": "96d97734621cbc60b36338e1e6436535313870ca18fd2dd60f5e10c573463b28"
+    },
+    {
+      "path": "release-run.json",
+      "bytes": 14312,
+      "sha256": "37b6547105eb761475f1955ccb5f956ddef815dd259fe89eeb77588bed997945"
+    },
+    {
+      "path": "release-workflow-error.json",
+      "bytes": 1735,
+      "sha256": "e2fafd686beaf9c4c226fc7f857154144250a70f8e72f01bcefc91e99b801c8c"
+    },
+    {
+      "path": "remote-after.json",
+      "bytes": 922,
+      "sha256": "c8b68b76fa5a75ad1b4829c9da78ba423dcdf2eaa313ce83853a3e8c39ac8d94"
+    },
+    {
+      "path": "remote-before.json",
+      "bytes": 927,
+      "sha256": "0010af8d7b8782098b128653efca40b538f13523cf9aaa4e3503bd2c8aa9315a"
+    },
+    {
+      "path": "remote-final.json",
+      "bytes": 1233,
+      "sha256": "137d664523b5355568513979301644a09cc15a55552a9226c3168e86451ae07b"
+    },
+    {
+      "path": "run-initial.json",
+      "bytes": 14306,
+      "sha256": "287f849909217a63913f6cbf68e403dee3cacd1521e70121c595fd58125a75dc"
+    },
+    {
+      "path": "run.json",
+      "bytes": 14309,
+      "sha256": "6ad59e98c2d98a5ab075b666b473b5c06f29b6f911abb4c04646a2fe3472998f"
+    },
+    {
+      "path": "runs-discovery.json",
+      "bytes": 299,
+      "sha256": "a99730806fc60b8f6df65183570296726e9aa061465d2a515ea3296792d13e0f"
+    },
+    {
+      "path": "summary.json",
+      "bytes": 5164,
+      "sha256": "334f7bf8b0f1eed1e02ae7ac6ba517b4b67b0348a6178f6752919de4dfc36df9"
+    }
+  ]
+}

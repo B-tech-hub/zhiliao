@@ -1,0 +1,64 @@
+{
+  "head": "321f770b523773e3f93a56dcf4fd2b1f78213ca5",
+  "git_tree": "66ab7b0d7a217f0e8ab9a2dcacbaf969f428389c",
+  "scope": "Uncommitted local repair; before hashes include the existing V documentation updates",
+  "changed_files": {
+    ".github/workflows/release.yml": {
+      "before": "577e1306549306dba1ff12b18d3d9c1d337241e436adf054e54671fcd8e308b3",
+      "after": "e9bd788ebc06d6ecf82c6f29ae1ed8b93d18cc616d2d1b8d2103db58d2be1076"
+    },
+    "CONTRIBUTING.md": {
+      "before": "1ad87ab4ed619d0771d4b40d8cb4d326a9f0b5f3b7b34bc2f94943b6ff4dafd9",
+      "after": "ce6f568043e40b472b5d01b5ce7f807bbc2bb3c59c2fb68ea9b0373f10cff6d2"
+    },
+    "_bmad-output/implementation-artifacts/spec-r3-gate4-distribution.md": {
+      "before": "76812b809e38c8ee3ec3067907d43100f805e91c34d0ed78a2c74d4c12165c1e",
+      "after": "fc2ef6557d6394c90ad742f49e2f914f1534ebaa74ebe2238ff4e200f43ba5f9"
+    },
+    "docs/0.6.1候选定稿-2026-09-28.md": {
+      "before": "31e1f66b3893ea09c22fc506dd5633c08641a67192da37dc60c3a7e252404016",
+      "after": "8da56c51087123addf94f0a7ee68dbfa20355536c5906a8451588a5d4653e20d"
+    },
+    "docs/R3门禁4候选推送与PR-CI执行单-2026-09-29.md": {
+      "before": "f8bbc1512d0633b6584d29634c9e0a1d17c57749198f14b8e018644dd91c35d2",
+      "after": "173cd9d1dc8f0250f39f314919e68e9cef6b6a0936f86231a5dd11b36d6d0a94"
+    },
+    "docs/R3门禁4环境调查与验收计划-2026-09-29.md": {
+      "before": "356e646ac860dab84a20171dd681851fbc9fa780d5f03308081218fdcb3d3bf2",
+      "after": "b326b8ef4973b05f2eb2278eb912ee8cbf0e7ea8100f04d2722a76b7bd3d1e4a"
+    },
+    "docs/README.md": {
+      "before": "3d146c4c274c7c484f760eb8e395da419c8b4dcf94e2062dd8af99cd46cef07f",
+      "after": "ae3f3aea1a0a903c9cdeb4d30c23214db4454b60ff4f4f4b2585626997cc0db1"
+    },
+    "docs/releases/v0.6.1.md": {
+      "before": "0344cef9eed5a94b29e32f184c14dc70c9a4d5c44e9819fdd7c2e60532617f0f",
+      "after": "bf4a1cf0e932ad93c57bafb54f4d2ca20dcd0de534853170d367adbd856b6450"
+    },
+    "docs/产品规划/开源发布范围与执行清单-2026-09-13.md": {
+      "before": "81587c7e5d9517ed4d85b781f297ab50530ea3c8c13f6fc8033911640bb77216",
+      "after": "79afe3683bea5d22bca7ffc2fe89319ebfc53f9650a2194354c7765944d2e4c2"
+    },
+    "tests/config/release-gate4.test.ts": {
+      "before": "6500c658f5317008108a49a037da546b3a5088f6f266313b4d076e41b33b9cbe",
+      "after": "e79f4de1423137776e53e23362388ee3cf572df9eb6e705036f31864e0ddb6ae"
+    }
+  },
+  "unchanged_verifier_sha256": "8ef109822f7eb1d0a30a5fa617135c19bd4f816038691580f7103507d2cb54e3",
+  "evidence_files": {
+    "actionlint-after.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "actionlint-before.txt": "1c82e04272f3d8b2d55ff1ab71a4178a00cd622d13d5037d0d00d35b2e0132bb",
+    "bash-init.json": "77763b2fb7e3bfba2863365d646d00ab2ecd3512fee72e4610cac7d6dd4452ca",
+    "checks.json": "8e61037068f4694b459368fe053e987a35dc8c3d5e7a0d13a17e14963453c4c1",
+    "diff-check.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "eslint.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "initializers.json": "f308bb56d793c01f815a062ec9051c039b524630aa5a0b6d5298054bf76ee6ca",
+    "README.md": "8c2d694f11db9b170b40ca23c5c4bd21f8ecd0e5bfb73140af5c6b42444b5359",
+    "tests-after.json": "3e5c7dbf432ca111f8d87d87b814e199e6d560cf2500a6e33c75058183ec3679",
+    "tests-before.json": "8cb6777bb034258646d9b86c4f5f28b26e817d3439b137e0fed6b3f1fb467a57",
+    "tests-initial.json": "7c19c3f24ad692af0469b612b4168ca74cf414d0605f6d74310c5b84dd130e7d",
+    "tool.json": "3e72595f46307e7db340599144ac26dd6b3034ffc1bc0d796f8e7b75b9707847",
+    "verify-initializers.py": "fe27af938599beee925e9335512aa2652f4e3df0dacd65924ef980f3289023b3",
+    "workflow-delta.txt": "a17ccd13a788e780ec103edfa3d36976ac9a14d8a1a000aaa714fc8ac718c356"
+  }
+}
