@@ -1,0 +1,68 @@
+{
+  "status": "local-validation-passed",
+  "checks": [
+    {
+      "log": "regression-red.log.txt",
+      "exit_code": 1,
+      "result": "32 tests: 4 failed, 28 passed; before fix",
+      "sha256": "7d2b9071ebe69556e9d144f07400432e64a026bea0292a1df7a320cb99554ba0",
+      "bytes": 7328
+    },
+    {
+      "log": "regression-green.log.txt",
+      "exit_code": 0,
+      "result": "32 passed; after fix",
+      "sha256": "17af0695613da06f772569551aa92f1df41d3b28905e7feaa4fdeceb10ded44a",
+      "bytes": 1774
+    },
+    {
+      "log": "regression-final.log.txt",
+      "exit_code": 0,
+      "result": "32 passed; self-contained test fixtures",
+      "sha256": "3b26023391a4c5d61c81fe2e6ece2a99facaabe45e78fc07e6970395360afd8e",
+      "bytes": 1774
+    },
+    {
+      "log": "lint.log.txt",
+      "exit_code": 0,
+      "result": "targeted ESLint: route and test",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "log": "types.log.txt",
+      "exit_code": 0,
+      "result": "local TypeScript: real test import graph",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "log": "sheet.log.txt",
+      "exit_code": 0,
+      "result": "14 blocks, 57 stub docker, 7 stub compare, 4 negative cases",
+      "sha256": "a22f328708e2f8c7effdf09adad0795c7474e293a0748b549f32506f5e60da3c",
+      "bytes": 1060
+    },
+    {
+      "log": "version.log.txt",
+      "exit_code": 0,
+      "result": "0.6.1",
+      "sha256": "300132aca208cf78a81dfe0ddb2b80a76a1d4758bfa5a6dcb185e1bdd719e9df",
+      "bytes": 84
+    },
+    {
+      "log": "sheet-final.log.txt",
+      "exit_code": 0,
+      "result": "final identity: 14 blocks, 57 stub docker, 7 stub compare, 4 negative cases",
+      "sha256": "087bce1380486fec2c5d5dc04324ff0fda29f9227f5bb65ea68cc690d6dfea90",
+      "bytes": 1060
+    }
+  ],
+  "build_executed": false,
+  "r2_executed": false,
+  "docker_invoked": false,
+  "production_operated": false,
+  "pushed": false,
+  "published": false,
+  "manifest_sha256": "0a2819f376993fafa61b27f57a9a978ff7ef1c7635d88e8485bee7c0655c7baf"
+}

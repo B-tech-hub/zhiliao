@@ -1,0 +1,223 @@
+{
+  "status": "passed",
+  "scope": "P: local preparation only",
+  "node": "v22.19.0",
+  "platform": "win32",
+  "arch": "x64",
+  "results": [
+    {
+      "name": "javascript-syntax",
+      "command": "D:\\node.js\\node.exe",
+      "args": [
+        "--check",
+        "scripts/verify-release-gate4.mjs"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "duration_ms": 60,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "target-eslint",
+      "command": "D:\\node.js\\node.exe",
+      "args": [
+        "node_modules/eslint/bin/eslint.js",
+        "scripts/verify-release-gate4.mjs",
+        "tests/config/release-gate4.test.ts"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "duration_ms": 2484,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "release-version",
+      "command": "D:\\node.js\\node.exe",
+      "args": [
+        "scripts/check-release-version.mjs",
+        "--tag",
+        "v0.6.1-rc1"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "duration_ms": 121,
+      "stdout": "版本一致：0.6.1（v0.6.1-rc1）；发布材料：docs/releases/v0.6.1.md\n",
+      "stderr": ""
+    },
+    {
+      "name": "target-typescript",
+      "status": "passed",
+      "diagnostics": []
+    },
+    {
+      "name": "bash-syntax:validate:准备空 npm 缓存",
+      "command": "C:/Program Files/Git/bin/bash.exe",
+      "args": [
+        "-n"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "duration_ms": 68,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "bash-syntax:validate:安装校验依赖",
+      "command": "C:/Program Files/Git/bin/bash.exe",
+      "args": [
+        "-n"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "duration_ms": 48,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "bash-syntax:validate:核对 tag、版本与发布材料",
+      "command": "C:/Program Files/Git/bin/bash.exe",
+      "args": [
+        "-n"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "duration_ms": 46,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "bash-syntax:build:核对原生架构、源码与缓存初态",
+      "command": "C:/Program Files/Git/bin/bash.exe",
+      "args": [
+        "-n"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "duration_ms": 47,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "bash-syntax:build:保存并核对实际构建身份",
+      "command": "C:/Program Files/Git/bin/bash.exe",
+      "args": [
+        "-n"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "duration_ms": 46,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "bash-syntax:merge:合并并校验架构、子 digest 与 revision",
+      "command": "C:/Program Files/Git/bin/bash.exe",
+      "args": [
+        "-n"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "duration_ms": 49,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "bash-syntax:install:启动专用空 Docker 存储",
+      "command": "C:/Program Files/Git/bin/bash.exe",
+      "args": [
+        "-n"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "duration_ms": 49,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "bash-syntax:install:按固定 digest 验收原生模块、登录、数据和 MCP",
+      "command": "C:/Program Files/Git/bin/bash.exe",
+      "args": [
+        "-n"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "duration_ms": 48,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "bash-syntax:install:停止本轮专用 daemon",
+      "command": "C:/Program Files/Git/bin/bash.exe",
+      "args": [
+        "-n"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "duration_ms": 50,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "embedded-python-syntax",
+      "command": "py",
+      "args": [
+        "-3",
+        "-c",
+        "import ast,sys; ast.parse(sys.stdin.read())"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "duration_ms": 101,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "bash-syntax:release:选择 Release Notes",
+      "command": "C:/Program Files/Git/bin/bash.exe",
+      "args": [
+        "-n"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "duration_ms": 56,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "git-diff-check",
+      "command": "git",
+      "args": [
+        "diff",
+        "--check"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "duration_ms": 82,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "documents",
+      "status": "passed",
+      "errors": []
+    },
+    {
+      "name": "targeted-vitest",
+      "status": "passed",
+      "passed": 61,
+      "failed": 0,
+      "skipped": 0,
+      "report": "test-results.json"
+    }
+  ],
+  "not_run": [
+    "Docker builds",
+    "container runtime",
+    "full test suite",
+    "browser",
+    "GitHub Actions",
+    "push/tag/Release"
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "status": "passed",
+  "production_resources_equal": true,
+  "old_run_c_equal_after_mount_sort": true,
+  "old_run_c_containers": 3,
+  "raw_old_run_comparison_equal": false,
+  "raw_difference": "Docker inspect 的 Mounts 数组顺序改变，按 Destination 排序后完整字段相同；未修改旧实例。",
+  "auxiliary_query_error": "首次收集旧容器 ID 时 PowerShell 单值字符串相加，构成无效 ID；只读 inspect 报 No such object，未操作任何容器。随后按数组正确只读核对，原空文件 old-run-c-before.txt 保留。"
+}

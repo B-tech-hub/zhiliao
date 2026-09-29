@@ -1,0 +1,102 @@
+[
+  {
+    "line": 10,
+    "text": "Lint、测试与构建\tSet up job\t2026-09-29T12:17:18.6229277Z ##[group]Operating System"
+  },
+  {
+    "line": 11,
+    "text": "Lint、测试与构建\tSet up job\t2026-09-29T12:17:18.6230414Z Ubuntu"
+  },
+  {
+    "line": 16,
+    "text": "Lint、测试与构建\tSet up job\t2026-09-29T12:17:18.6235215Z Image: ubuntu-24.04"
+  },
+  {
+    "line": 18,
+    "text": "Lint、测试与构建\tSet up job\t2026-09-29T12:17:18.6238530Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260920.314/images/ubuntu/Ubuntu2404-Readme.md"
+  },
+  {
+    "line": 19,
+    "text": "Lint、测试与构建\tSet up job\t2026-09-29T12:17:18.6241761Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260920.314"
+  },
+  {
+    "line": 121,
+    "text": "Lint、测试与构建\tRun actions/checkout@v4\t2026-09-29T12:17:20.6262875Z [command]/usr/bin/git log -1 --format=%H"
+  },
+  {
+    "line": 131,
+    "text": "Lint、测试与构建\tRun actions/setup-node@v4\t2026-09-29T12:17:20.8332238Z Found in cache @ /opt/hostedtoolcache/node/22.23.2/x64"
+  },
+  {
+    "line": 132,
+    "text": "Lint、测试与构建\tRun actions/setup-node@v4\t2026-09-29T12:17:20.8337790Z (node:2202) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead."
+  },
+  {
+    "line": 135,
+    "text": "Lint、测试与构建\tRun actions/setup-node@v4\t2026-09-29T12:17:21.2699420Z node: v22.23.2"
+  },
+  {
+    "line": 136,
+    "text": "Lint、测试与构建\tRun actions/setup-node@v4\t2026-09-29T12:17:21.2701137Z npm: 10.9.8"
+  },
+  {
+    "line": 139,
+    "text": "Lint、测试与构建\tRun actions/setup-node@v4\t2026-09-29T12:17:21.2724415Z [command]/opt/hostedtoolcache/node/22.23.2/x64/bin/npm config get cache"
+  },
+  {
+    "line": 141,
+    "text": "Lint、测试与构建\tRun actions/setup-node@v4\t2026-09-29T12:17:21.4650583Z npm cache is not found"
+  },
+  {
+    "line": 197,
+    "text": "Lint、测试与构建\t单元测试（Vitest）\t2026-09-29T12:17:49.7881424Z   REQUIRE_DOCKER_COMPOSE: 1"
+  },
+  {
+    "line": 338,
+    "text": "Lint、测试与构建\t单元测试（Vitest）\t2026-09-29T12:18:24.0037579Z ^[[2m Test Files ^[[22m ^[[1m^[[32m65 passed^[[39m^[[22m^[[2m | ^[[22m^[[33m3 skipped^[[39m^[[90m (68)^[[39m"
+  },
+  {
+    "line": 339,
+    "text": "Lint、测试与构建\t单元测试（Vitest）\t2026-09-29T12:18:24.0040588Z ^[[2m      Tests ^[[22m ^[[1m^[[32m878 passed^[[39m^[[22m^[[2m | ^[[22m^[[33m28 skipped^[[39m^[[90m (906)^[[39m"
+  },
+  {
+    "line": 341,
+    "text": "Lint、测试与构建\t单元测试（Vitest）\t2026-09-29T12:18:24.0043368Z ^[[2m   Duration ^[[22m 33.70s^[[2m (transform 3.46s, setup 736ms, import 34.01s, tests 43.30s, environment 8.36s)^[[22m"
+  },
+  {
+    "line": 405,
+    "text": "Lint、测试与构建\t构建（含 TypeScript 严格类型检查）\t2026-09-29T12:18:57.4620296Z  ✓ Compiled successfully in 29.6s"
+  },
+  {
+    "line": 408,
+    "text": "Lint、测试与构建\t构建（含 TypeScript 严格类型检查）\t2026-09-29T12:19:12.9909847Z    Generating static pages (0/28) ..."
+  },
+  {
+    "line": 409,
+    "text": "Lint、测试与构建\t构建（含 TypeScript 严格类型检查）\t2026-09-29T12:19:13.5267687Z    Generating static pages (7/28) "
+  },
+  {
+    "line": 410,
+    "text": "Lint、测试与构建\t构建（含 TypeScript 严格类型检查）\t2026-09-29T12:19:13.5640275Z    Generating static pages (14/28) "
+  },
+  {
+    "line": 411,
+    "text": "Lint、测试与构建\t构建（含 TypeScript 严格类型检查）\t2026-09-29T12:19:13.8900285Z    Generating static pages (21/28) "
+  },
+  {
+    "line": 412,
+    "text": "Lint、测试与构建\t构建（含 TypeScript 严格类型检查）\t2026-09-29T12:19:13.8902381Z  ✓ Generating static pages (28/28)"
+  },
+  {
+    "line": 485,
+    "text": "Lint、测试与构建\tPost Run actions/setup-node@v4\t2026-09-29T12:19:32.8180467Z (node:3616) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead."
+  },
+  {
+    "line": 488,
+    "text": "Lint、测试与构建\tPost Run actions/setup-node@v4\t2026-09-29T12:19:33.5153540Z (node:3616) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities."
+  },
+  {
+    "line": 491,
+    "text": "Lint、测试与构建\tPost Run actions/setup-node@v4\t2026-09-29T12:19:34.9244580Z Cache saved with the key: node-cache-Linux-x64-npm-a80d524b827bf84fc72ed3d4dc708a032dcf4069998ffc465b83a90e03c197e2"
+  }
+]

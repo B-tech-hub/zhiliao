@@ -1,0 +1,16 @@
+{
+  "previous_manifest_sha256": "225d7f540276242ed323269bdfc331c679b5e301843949a2f9928954a27168b3",
+  "manifest_sha256": "0a2819f376993fafa61b27f57a9a978ff7ef1c7635d88e8485bee7c0655c7baf",
+  "changed": [
+    "src/app/api/images/[filename]/route.ts"
+  ],
+  "added": [
+    "tests/api/images.test.ts",
+    "tests/fixtures/images/README.md",
+    "tests/fixtures/images/pattern.png",
+    "tests/fixtures/images/pattern.heic"
+  ],
+  "removed": [],
+  "unchanged": 271,
+  "package_lock_unchanged": true
+}

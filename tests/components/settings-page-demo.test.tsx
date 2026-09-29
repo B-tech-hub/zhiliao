@@ -1,14 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-const { captured } = vi.hoisted(() => ({
-  captured: { baseUrl: undefined as string | undefined },
-}));
-
 vi.mock("@/app/(app)/settings/settings-panel", () => ({
-  SettingsPanel: (props: { llm: { baseUrl: string } }) => {
-    captured.baseUrl = props.llm.baseUrl;
-    return null;
-  },
+  SettingsPanel: () => null,
 }));
 
 vi.mock("@/db", () => ({
@@ -36,7 +29,6 @@ vi.mock("@/lib/feature-flags", () => ({
 import SettingsPage from "@/app/(app)/settings/page";
 
 afterEach(() => {
-  captured.baseUrl = undefined;
   vi.unstubAllEnvs();
 });
 
@@ -44,7 +36,8 @@ describe("设置页 Demo 接入点", () => {
   it("DEMO_MODE=1 时传给 SettingsPanel 的 llm.baseUrl 为空", () => {
     vi.stubEnv("DEMO_MODE", "1");
     vi.stubEnv("DEMO_RUNTIME", undefined);
-    SettingsPage();
-    expect(captured.baseUrl).toBe("");
+    // 服务端页面返回 React 元素，不会直接执行子组件；检查实际传给客户端的参数。
+    const page = SettingsPage();
+    expect(page.props.llm.baseUrl).toBe("");
   });
 });

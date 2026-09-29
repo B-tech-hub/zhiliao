@@ -1,0 +1,11 @@
+{
+  "revision": "75eeb32b1943c7e54c32e20b416bc7fb8a61f178",
+  "source_manifest_sha256": "0c3dd6fecf14eb53218e85e061ad51737b612e886e5114243320cf49495c1d10",
+  "checked_files": 275,
+  "mismatches": [
+    "tests/config/demo-compose-wrapper.test.ts"
+  ],
+  "generated_files_excluded": [
+    "next-env.d.ts"
+  ]
+}

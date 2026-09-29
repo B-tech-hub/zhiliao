@@ -1,0 +1,23 @@
+{
+  "recorded_at": "2026-09-29T14:18:32.582908+00:00",
+  "old_evidence_count": 1064,
+  "all_old_evidence_unchanged": true,
+  "head": "b2bae00d4a0e91ef43a0cb41f70f75ebc38ec592",
+  "staging_empty": true,
+  "baseline_and_frozen_block_unchanged": true,
+  "status": "in-progress",
+  "modified_result_documents": [
+    "CONTRIBUTING.md",
+    "_bmad-output/implementation-artifacts/spec-r3-gate4-distribution.md",
+    "docs/0.6.1候选定稿-2026-09-28.md",
+    "docs/R3门禁4修复后候选推送与PR-CI执行单-2026-09-29.md",
+    "docs/R3门禁4环境调查与验收计划-2026-09-29.md",
+    "docs/R3门禁4预览预算修复后候选推送与PR-CI执行单-2026-09-29.md",
+    "docs/README.md",
+    "docs/releases/v0.6.1.md",
+    "docs/产品规划/开源发布范围与执行清单-2026-09-13.md"
+  ],
+  "local_revalidation": false,
+  "extra_commit_or_push": false,
+  "note": "只读取证时曾有错误路径/引用拼写及终端GBK输出错误；后续已用正确引用重查并按UTF-8读取，未据不完整查询执行推送，也未重复CI。"
+}

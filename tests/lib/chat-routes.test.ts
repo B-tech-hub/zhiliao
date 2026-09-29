@@ -48,12 +48,17 @@ const rows = () =>
     .all();
 
 // 造一个「模型请求删除、等待确认」的现场
-function seedPendingDelete(noteId: string) {
+function seedPendingDelete(noteId: string, scopeType = "global", sourceNoteId?: string) {
   const db = getDb();
   const now = Date.now();
   db.insert(conversations)
-    .values({ id: CONV, scopeType: "global", scopeId: "", title: "删除", createdAt: now, updatedAt: now })
+    .values({ id: CONV, scopeType, scopeId: "", title: "删除", createdAt: now, updatedAt: now })
     .run();
+  if (sourceNoteId) {
+    db.insert(conversationSources)
+      .values({ conversationId: CONV, sourceType: "note", sourceId: sourceNoteId, createdAt: now })
+      .run();
+  }
   db.insert(messages)
     .values({ id: "m1", conversationId: CONV, role: "user", content: "删掉那条笔记", createdAt: now })
     .run();
@@ -209,6 +214,24 @@ describe("POST /api/chat/confirm", () => {
       approve: true,
     });
     expect(res.status).toBe(404);
+  });
+
+  it("来源会话的最终回答会收成固定拒答句", async () => {
+    vi.stubGlobal("fetch", vi.fn(async () => sseResponse("来源里没有茶树种植的记录。")));
+    const noteId = await seedNote("每周二早上在体育馆练习羽毛球远球");
+    seedPendingDelete(noteId, "sources", noteId);
+
+    const res = await post(confirmPost, "http://x/api/chat/confirm", {
+      conversationId: CONV,
+      messageId: "m3",
+      approve: false,
+    });
+    const body = await res.text();
+    const assistant = rows().filter((row) => row.role === "assistant").at(-1);
+
+    expect(assistant?.content.startsWith("来源笔记中没有相关内容")).toBe(true);
+    expect(body).toContain("来源笔记中没有相关内容");
+    expect(assistant?.content).toContain("茶树种植的记录");
   });
 });
 

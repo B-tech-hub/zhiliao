@@ -1,0 +1,31 @@
+{
+  "recorded_at": "2026-09-29T13:46:47.307837+00:00",
+  "checks": [
+    {
+      "name": "tests",
+      "command": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "tests/config/smoke-fresh-install.test.ts",
+        "--maxWorkers=1",
+        "--no-file-parallelism",
+        "--reporter=json",
+        "--outputFile=C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-preview-timeout-0bodgkd7\\tests-after.json"
+      ],
+      "exit_code": 0,
+      "duration_seconds": 4.969
+    },
+    {
+      "name": "eslint",
+      "command": [
+        "node",
+        "node_modules/eslint/bin/eslint.js",
+        "tests/config/smoke-fresh-install.test.ts"
+      ],
+      "exit_code": 0,
+      "duration_seconds": 2.469
+    }
+  ],
+  "scope": "仅 11 项安装预览回归及目标 ESLint；临时 observer 只记录预览子进程元数据，不改变返回结果。"
+}

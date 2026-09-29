@@ -1,0 +1,11 @@
+{
+    "run_id":  "061-20260927-registry993a79ad",
+    "docker_invoked":  false,
+    "network_invoked":  false,
+    "manifest":  "passed",
+    "three_env_image_identity":  "passed",
+    "existing_directory_rejected":  "passed",
+    "old_identity_rejected_before_copy":  "passed",
+    "bad_manifest_rejected_before_copy":  "passed",
+    "temporary_workspace_removed":  true
+}

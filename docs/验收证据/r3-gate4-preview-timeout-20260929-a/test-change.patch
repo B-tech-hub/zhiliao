@@ -1,0 +1,29 @@
+diff --git a/tests/config/smoke-fresh-install.test.ts b/tests/config/smoke-fresh-install.test.ts
+index 0804dba..c43beb7 100644
+--- a/tests/config/smoke-fresh-install.test.ts
++++ b/tests/config/smoke-fresh-install.test.ts
+@@ -13,6 +13,8 @@ const powershell = (process.env.PATH ?? "").split(path.delimiter)
+ const fixtureVersion = "1.2.3";
+ const imagePrefix = "ghcr.io/b-tech-hub/zhiliao";
+ const port = 3317;
++// 外层预算需覆盖 PowerShell 的 10 秒进程上限及启动、快照和断言开销。
++const previewTestTimeoutMs = 15_000;
+ 
+ function snapshotTree(root: string) {
+   const entries: Record<string, string> = {};
+@@ -112,7 +114,7 @@ describe.skipIf(!powershell && !process.env.CI)("安装冒烟预览：参数与
+     expect(result.status, result.stderr).toBe(0);
+     expect(result.stderr).toBe("");
+     expect(JSON.parse(result.stdout)).toEqual({ packageVersion: fixtureVersion, image: image ?? `${imagePrefix}:${fixtureVersion}`, port });
+-  });
++  }, previewTestTimeoutMs);
+ 
+   it.each([
+     ["latest", `${imagePrefix}:latest`],
+@@ -126,5 +128,5 @@ describe.skipIf(!powershell && !process.env.CI)("安装冒烟预览：参数与
+     expect(result.status).toBe(1);
+     expect(result.stdout).toBe("");
+     expect(result.stderr).toContain("Image");
+-  });
++  }, previewTestTimeoutMs);
+ });

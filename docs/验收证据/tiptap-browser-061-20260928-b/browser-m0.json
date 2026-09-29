@@ -1,0 +1,123 @@
+{
+  "started": "2026-09-28T05:58:49.245Z",
+  "status": "passed",
+  "attempts": 1,
+  "round": "m0",
+  "base": "http://127.0.0.1:3321",
+  "cases": [
+    {
+      "name": "真实登录",
+      "started": "2026-09-28T05:58:49.679Z",
+      "status": "passed",
+      "finished": "2026-09-28T05:58:50.533Z"
+    },
+    {
+      "name": "宽度 50% + 居中保存重开",
+      "started": "2026-09-28T05:58:50.533Z",
+      "status": "passed",
+      "finished": "2026-09-28T05:58:54.482Z"
+    },
+    {
+      "name": "仅宽度 75%",
+      "started": "2026-09-28T05:58:54.482Z",
+      "status": "passed",
+      "finished": "2026-09-28T05:58:58.358Z"
+    },
+    {
+      "name": "仅右对齐",
+      "started": "2026-09-28T05:58:58.359Z",
+      "status": "passed",
+      "finished": "2026-09-28T05:59:02.217Z"
+    },
+    {
+      "name": "普通图片保持 Markdown",
+      "started": "2026-09-28T05:59:02.218Z",
+      "status": "passed",
+      "finished": "2026-09-28T05:59:06.094Z"
+    },
+    {
+      "name": "图片紧邻表格编辑往返",
+      "started": "2026-09-28T05:59:06.094Z",
+      "status": "passed",
+      "finished": "2026-09-28T05:59:09.975Z"
+    },
+    {
+      "name": "危险属性不生效",
+      "started": "2026-09-28T05:59:09.975Z",
+      "status": "passed",
+      "finished": "2026-09-28T05:59:12.403Z"
+    }
+  ],
+  "screenshots": [
+    "browser/m0-01-center.png",
+    "browser/m0-02-width.png",
+    "browser/m0-03-right.png",
+    "browser/m0-04-plain.png",
+    "browser/m0-05-table.png",
+    "browser/m0-06-danger.png"
+  ],
+  "dbChecks": [
+    {
+      "key": "center",
+      "label": "50%+居中",
+      "content": "宽度居中口令：m0。\n\n<img src=\"/api/images/iwujztoqru9scpuglb9vlmk1.png\" alt=\"甲\" width=\"50%\" style=\"display: block; margin-left: auto; margin-right: auto;\">\n\n尾段。"
+    },
+    {
+      "key": "width",
+      "label": "仅 75%",
+      "content": "仅宽度口令：m0。\n\n<img src=\"/api/images/z2jtbffdu6yphsif1b2rt727.png\" alt=\"乙\" width=\"75%\">\n\n尾段。"
+    },
+    {
+      "key": "right",
+      "label": "仅右对齐",
+      "content": "仅右对齐口令：m0。\n\n<img src=\"/api/images/u5wgad60qpt8oaqusewa3hm8.png\" alt=\"丙\" style=\"display: block; margin-left: auto;\">\n\n尾段。"
+    },
+    {
+      "key": "plain",
+      "label": "普通图片",
+      "content": "普通图片口令：m0。\n\n![丁](/api/images/zuwvy71cwonadwu876193jcx.png)\n\n尾段。补"
+    },
+    {
+      "key": "table",
+      "label": "相邻表格",
+      "content": "相邻表格口令：m0。\n\n<img src=\"/api/images/nfofvs9qlrqf0cio41c5pqpk.png\" alt=\"戊\" width=\"50%\">\n\n| 表头 | 数值 |\n| --- | --- |\n| 内容改 | 42 |\n\n尾段。"
+    }
+  ],
+  "pageErrors": [],
+  "consoleErrors": [],
+  "failedResponses": [],
+  "expectedMissing": [
+    "400 /api/images/missing-xss.png",
+    "console: Failed to load resource: the server responded with a status of 400 (Bad Request)"
+  ],
+  "blockedRequests": [],
+  "allowedWrites": [
+    "PATCH /api/notes/nzhzvtm9galetrw9x1v3cxsc",
+    "PATCH /api/notes/wfd7fozr2vmfeys75njtqpez",
+    "PATCH /api/notes/h7q1il52so4kvzffkzilqi8t",
+    "PATCH /api/notes/jx2czdawirui1eqlso6xnowb",
+    "PATCH /api/notes/oj7hru2sahusk299feiv9xfm"
+  ],
+  "readOnlyRequests": [
+    "/api/notes/nzhzvtm9galetrw9x1v3cxsc/related",
+    "/api/notes/wfd7fozr2vmfeys75njtqpez/related",
+    "/api/notes/h7q1il52so4kvzffkzilqi8t/related",
+    "/api/notes/jx2czdawirui1eqlso6xnowb/related",
+    "/api/notes/oj7hru2sahusk299feiv9xfm/related",
+    "/api/notes/d5m0qt1hxxoawmzh3qpec0zu/related"
+  ],
+  "modelRequests": [],
+  "dialogs": [],
+  "browserVersion": "141.0.7390.37",
+  "playwrightVersion": "1.64.0-alpha-1789764292000",
+  "dangerResult": {
+    "xss": null,
+    "onAttrs": [],
+    "jsLinks": 0,
+    "styles": [
+      "display: block; margin-left: auto; margin-right: auto;",
+      ""
+    ]
+  },
+  "finished": "2026-09-28T05:59:12.403Z"
+}

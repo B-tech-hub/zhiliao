@@ -1,0 +1,68 @@
+{
+  "algorithm": "SHA-256",
+  "excluded": [
+    "files.sha256.json"
+  ],
+  "files": {
+    "actionlint.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "application.json": {
+      "bytes": 2119,
+      "sha256": "c9b45cb3a7dbeb50698562af1a79fbceef2180c14f353fd7614c96e59cf96b71"
+    },
+    "candidate-inputs.json": {
+      "bytes": 12188,
+      "sha256": "de06c026f0c6fa5de1ca1917898e6c1ac89dcef88969f2e102e70b28138db08c"
+    },
+    "checks.json": {
+      "bytes": 1958,
+      "sha256": "40b53e74afe190b2c72701b6e482fe4d6c628a5fb9d183de71dd7f4c9afd2f97"
+    },
+    "closeout.json": {
+      "bytes": 559,
+      "sha256": "08523df300ad9a28f38f92381a5ac2ea70e9c1282f8bd58b8c9c7cab01c6148a"
+    },
+    "diff-check.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "eslint.log": {
+      "bytes": 285,
+      "sha256": "082752e3b93b770605e093cab6f425d921aae525886512b860d990cda03d793b"
+    },
+    "preservation-before.json": {
+      "bytes": 162106,
+      "sha256": "ba8084023e0ebdbc26492ad9fbe2c3fdef3064423c5a91b7ddde0b28871c35c3"
+    },
+    "README.md": {
+      "bytes": 4650,
+      "sha256": "66c41b8a68d48347da3dd45ee9237229edfd17fbe0c8dfc4b1475e88ebd44edd"
+    },
+    "run-checks.py": {
+      "bytes": 3289,
+      "sha256": "b3a752eb889537d72691c7d9d05e36bd40d3a9ec2779c713c3ef561da4bc7958"
+    },
+    "tests.json": {
+      "bytes": 20068,
+      "sha256": "e2b7f2f67487fbf79652d906f48845a4e9bac74a084d2773fc8262c45178b9f4"
+    },
+    "tests.log": {
+      "bytes": 971,
+      "sha256": "45a10a21f62667534a23070752d5711395f8fa7f375901a469500e74e0794ff3"
+    },
+    "verification-inputs.json": {
+      "bytes": 2902,
+      "sha256": "c3427de5d55e997370e7bf3cfbfd58449baa8ab53508776816947e0466590d5a"
+    },
+    "version-rc.log": {
+      "bytes": 168,
+      "sha256": "6a52fb2eb18e8328436d849f9540d599dd09cb9f1b9274958ce5849778481e3a"
+    },
+    "version.log": {
+      "bytes": 135,
+      "sha256": "77cea3eb6c8f1900a219377c65ab2900557305d699f1cb8946eae84ce8026002"
+    }
+  }
+}

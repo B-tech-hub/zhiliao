@@ -6,3 +6,11 @@
 *.jpg binary
 *.ico binary
 *.woff2 binary
+
+# 保留三份已归档原始证据的字节及哈希，不推广到其他文件。
+docs/验收证据/r3-gate4-runner-context-20260929-a/bash-init.json -text
+docs/验收证据/r3-gate4-runner-context-20260929-a/checks.json -text
+docs/验收证据/r3-gate4-runner-context-20260929-a/tool.json -text
+
+# 保留 V3 原始查询记录的字节，不扩大到其他证据。
+docs/验收证据/r3-gate4-v3-061-36580449536/run.json -text

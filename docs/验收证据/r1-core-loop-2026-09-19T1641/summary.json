@@ -1,0 +1,23 @@
+{
+  "status": "failed",
+  "started_at": "2026-09-19T16:41:40.208Z",
+  "baseline_commit": "0179c8dfc5aa021865a7b2020df7bfa161f03ec4",
+  "llm": {
+    "source": "env",
+    "model": "",
+    "host": "",
+    "key_len": 0
+  },
+  "budget": {
+    "organize_success": 0,
+    "source_chat": 0,
+    "failure": 0
+  },
+  "checks": {},
+  "no_model": {
+    "reused": "docs/R1安装验收-2026-09-15.md",
+    "rerun": false
+  },
+  "port": null,
+  "error": "环境未配置 LLM_BASE_URL / LLM_API_KEY / LLM_MODEL"
+}

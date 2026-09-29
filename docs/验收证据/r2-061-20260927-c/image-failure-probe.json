@@ -1,0 +1,27 @@
+{
+    "source_equals_restore_before_start":  true,
+    "formal_resources_unchanged":  true,
+    "filename_guard":  "^[a-z0-9]+\\.(png|jpg|gif|webp)$",
+    "files":  [
+                  {
+                      "filename":  "e03aab43-df51-41a6-a409-ba143c5984e7.heic",
+                      "exists_in_snapshot":  true,
+                      "hash_matches":  true,
+                      "passes_current_filename_guard":  false
+                  },
+                  {
+                      "filename":  "e03aab43-df51-41a6-a409-ba143c5984e7.jpg",
+                      "exists_in_snapshot":  true,
+                      "hash_matches":  true,
+                      "passes_current_filename_guard":  false
+                  },
+                  {
+                      "filename":  "j8nrrw7ae4sr6jfonsbplr5x.png",
+                      "exists_in_snapshot":  true,
+                      "hash_matches":  true,
+                      "passes_current_filename_guard":  true
+                  }
+              ],
+    "network_request_replayed":  false,
+    "scope":  "只读比对实际失败文件名和源码校验条件；未重启实例、未重放网络请求。"
+}

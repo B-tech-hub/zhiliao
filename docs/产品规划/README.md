@@ -30,7 +30,8 @@
 | 范围决策审阅 | [已批准的范围调整提案](../../_bmad-output/planning-artifacts/sprint-change-proposal-2026-09-12-open-source-first.md) | 开源优先、依赖变化、商业暂缓和 Story 2.2 原验收保留 |
 | 产品负责人 | [知了产品视觉 PRD](知了产品视觉PRD-v1.0.md) | 确认定位、用户流程、App 形态、视觉方向、指标和分期 |
 | 自定义 Agent 候选规划 | [知了自定义知识库 Agent 产品简报](../../_bmad-output/planning-artifacts/briefs/brief-知了-2026-09-19/brief.md) | 冻结期草稿；沿用四个已确认核心，保留场景、维护原则与验证问题，不代表开发授权 |
-| 自定义 Agent 需求澄清 | [自定义知识库 Agent PRD 草稿](../../_bmad-output/planning-artifacts/prds/prd-知了-2026-09-19/prd.md) | 承接简报的四个核心；首轮任务、职责与档案规则待确认，不作为开发定稿 |
+| 自定义 Agent 需求定稿 | [自定义知识库 Agent PRD](../../_bmad-output/planning-artifacts/prds/prd-知了-2026-09-19/prd.md) | 冻结期定稿；首轮范围、负责范围与学习档案规则、验证方案与开发启动条件已确认，开发仍待 100 条真实笔记解冻后批准 |
+| 自定义 Agent 基线期 | [基线期记录](../../_bmad-output/planning-artifacts/prds/prd-知了-2026-09-19/基线期记录.md) | 冻结期规则：逐日记录写在知了内固定笔记，本文件放两行定义、隔离规则与月度小结；供开发启动条件与停止条件判断 |
 | 研发负责人 | [知了开发实施方案](知了开发实施方案-v1.0.md) | 了解现有架构、技术边界、实施批次、接口、验证和风险 |
 | 开发人员 | [项目开发规范](../开发规范.md) | 执行需求门禁、编码、数据、安全、验证和文档同步 |
 | UI 开发 | [UI 规范](../UI规范.md) | 执行布局、token、组件、交互、无障碍和截图验收 |

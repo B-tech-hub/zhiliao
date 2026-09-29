@@ -1,0 +1,8 @@
+{
+    "exit_code":  0,
+    "real_docker":  false,
+    "unparsed_candidate_rejected":  true,
+    "summary":  [
+                    "干跑通过：14 个命令块，docker 调用 57 次（compose：config 4、cp 2、exec 15、logs 4、restart 1、run 7、stop 7、up 7），compare.py 调用 7 次；启动/重启后均先等待就绪；反例 4 项（就绪超时、未知角色、证据不覆盖、正式实例变化）均按预期停止；PowerShell 5.1.26100.9444"
+                ]
+}

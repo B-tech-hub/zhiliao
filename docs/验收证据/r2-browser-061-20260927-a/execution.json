@@ -1,0 +1,43 @@
+{
+  "started": "2026-09-27T12:08:05.684620+00:00",
+  "status": "failed",
+  "attempts": 1,
+  "baseline_commit": "b7d50f9a56d68dfcd68c77dc98cf7dd6075c55ac",
+  "restore_id": "b000881c42c1c8b91a9ddaf4bd587bf88edba2cda76885e9a5a263502f119481",
+  "image_id": "sha256:f262652592dd2bd32d00aae44f60d4c98caa2c89ca0942254f77918f57aacb4a",
+  "image_tag": "zhiliao-r2:0.6.1-0a2819f37699",
+  "candidate_manifest_sha256": "0a2819f376993fafa61b27f57a9a978ff7ef1c7635d88e8485bee7c0655c7baf",
+  "build_attempts": 0,
+  "restore_attempts": 0,
+  "stages": [
+    {
+      "name": "preflight",
+      "status": "passed",
+      "at": "2026-09-27T12:08:06.272348+00:00"
+    },
+    {
+      "name": "start",
+      "status": "passed",
+      "at": "2026-09-27T12:08:06.811951+00:00"
+    },
+    {
+      "name": "health",
+      "status": "passed",
+      "at": "2026-09-27T12:08:12.176952+00:00"
+    },
+    {
+      "name": "browser",
+      "status": "failed",
+      "at": "2026-09-27T12:08:16.222062+00:00"
+    },
+    {
+      "name": "stop",
+      "status": "passed",
+      "at": "2026-09-27T12:08:16.533565+00:00"
+    }
+  ],
+  "candidate_input_files_verified": 276,
+  "browser_exit_code": 1,
+  "error": "浏览器矩阵失败，停止且不重试",
+  "finished": "2026-09-27T12:08:16.978892+00:00"
+}

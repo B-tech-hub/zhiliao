@@ -1,0 +1,4 @@
+{
+  "build": "set -euo pipefail\nprintf '%s\\n' \"EVIDENCE=$RUNNER_TEMP/gate4-build\" >> \"$GITHUB_ENV\"\n",
+  "install": "set -euo pipefail\nprintf '%s\\n' \\\n  \"EVIDENCE=$RUNNER_TEMP/gate4-install\" \\\n  \"DOCKER_HOST=unix://$RUNNER_TEMP/gate4-docker/docker.sock\" \\\n  \"DOCKER_CONFIG=$RUNNER_TEMP/gate4-anonymous\" >> \"$GITHUB_ENV\"\n"
+}

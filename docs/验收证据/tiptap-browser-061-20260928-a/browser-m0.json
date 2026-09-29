@@ -1,0 +1,118 @@
+{
+  "started": "2026-09-28T05:18:20.780Z",
+  "status": "failed",
+  "attempts": 1,
+  "round": "m0",
+  "base": "http://127.0.0.1:3321",
+  "cases": [
+    {
+      "name": "真实登录",
+      "started": "2026-09-28T05:18:21.963Z",
+      "status": "passed",
+      "finished": "2026-09-28T05:18:23.122Z"
+    },
+    {
+      "name": "宽度 50% + 居中保存重开",
+      "started": "2026-09-28T05:18:23.122Z",
+      "status": "passed",
+      "finished": "2026-09-28T05:18:27.078Z"
+    },
+    {
+      "name": "仅宽度 75%",
+      "started": "2026-09-28T05:18:27.079Z",
+      "status": "passed",
+      "finished": "2026-09-28T05:18:30.952Z"
+    },
+    {
+      "name": "仅右对齐",
+      "started": "2026-09-28T05:18:30.952Z",
+      "status": "passed",
+      "finished": "2026-09-28T05:18:34.801Z"
+    },
+    {
+      "name": "普通图片保持 Markdown",
+      "started": "2026-09-28T05:18:34.802Z",
+      "status": "passed",
+      "finished": "2026-09-28T05:18:38.643Z"
+    },
+    {
+      "name": "图片紧邻表格编辑往返",
+      "started": "2026-09-28T05:18:38.643Z",
+      "status": "passed",
+      "finished": "2026-09-28T05:18:42.510Z"
+    },
+    {
+      "name": "危险属性不生效",
+      "started": "2026-09-28T05:18:42.510Z",
+      "status": "failed",
+      "finished": "2026-09-28T05:18:42.838Z"
+    }
+  ],
+  "screenshots": [
+    "browser/m0-01-center.png",
+    "browser/m0-02-width.png",
+    "browser/m0-03-right.png",
+    "browser/m0-04-plain.png",
+    "browser/m0-05-table.png",
+    "browser/m0-failure.png"
+  ],
+  "dbChecks": [
+    {
+      "key": "center",
+      "label": "50%+居中",
+      "content": "宽度居中口令：m0。\n\n<img src=\"/api/images/m0ikmnyf8ardtkekbhd7zt8f.png\" alt=\"甲\" width=\"50%\" style=\"display: block; margin-left: auto; margin-right: auto;\">\n\n尾段。"
+    },
+    {
+      "key": "width",
+      "label": "仅 75%",
+      "content": "仅宽度口令：m0。\n\n<img src=\"/api/images/kbf2rpfn7pvg8rlivgheiwlv.png\" alt=\"乙\" width=\"75%\">\n\n尾段。"
+    },
+    {
+      "key": "right",
+      "label": "仅右对齐",
+      "content": "仅右对齐口令：m0。\n\n<img src=\"/api/images/ht8g1mx5i1ogbfss6054y8kx.png\" alt=\"丙\" style=\"display: block; margin-left: auto;\">\n\n尾段。"
+    },
+    {
+      "key": "plain",
+      "label": "普通图片",
+      "content": "普通图片口令：m0。\n\n![丁](/api/images/w9u136z11bigfjz0gwu5p38f.png)\n\n尾段。补"
+    },
+    {
+      "key": "table",
+      "label": "相邻表格",
+      "content": "相邻表格口令：m0。\n\n<img src=\"/api/images/kffs2irbbjksw10ypdqv9ym5.png\" alt=\"戊\" width=\"50%\">\n\n| 表头 | 数值 |\n| --- | --- |\n| 内容改 | 42 |\n\n尾段。"
+    }
+  ],
+  "pageErrors": [],
+  "consoleErrors": [],
+  "failedResponses": [
+    {
+      "url": "http://127.0.0.1:3321/api/images/missing-xss.png",
+      "status": 400
+    }
+  ],
+  "expectedMissing": [
+    "console: Failed to load resource: the server responded with a status of 400 (Bad Request)"
+  ],
+  "blockedRequests": [],
+  "allowedWrites": [
+    "PATCH /api/notes/qsbwtugzbl7rmj8f2s112u9r",
+    "PATCH /api/notes/oqwest8shu5f4h7bipbzp76r",
+    "PATCH /api/notes/ovdli943bt3flxrpv8uq4u72",
+    "PATCH /api/notes/tb2u34ocu1skupkiowp4u1j2",
+    "PATCH /api/notes/nwbloltajwtburj5m2wa5zov"
+  ],
+  "readOnlyRequests": [
+    "/api/notes/qsbwtugzbl7rmj8f2s112u9r/related",
+    "/api/notes/oqwest8shu5f4h7bipbzp76r/related",
+    "/api/notes/ovdli943bt3flxrpv8uq4u72/related",
+    "/api/notes/tb2u34ocu1skupkiowp4u1j2/related",
+    "/api/notes/nwbloltajwtburj5m2wa5zov/related"
+  ],
+  "modelRequests": [],
+  "dialogs": [],
+  "browserVersion": "141.0.7390.37",
+  "playwrightVersion": "1.64.0-alpha-1789764292000",
+  "error": "Error: 页面 HTTP 错误\n    at failNow (C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-t061-20260928-a\\package\\browser-check.cjs:30:61)\n    at _Page.<anonymous> (C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-t061-20260928-a\\package\\browser-check.cjs:109:88)\n    at _Page._callHandler (C:\\Users\\BAIBAI\\AppData\\Local\\npm-cache\\_npx\\9833c18b2d85bc59\\node_modules\\playwright-core\\lib\\coreBundle.js:11110:33)\n    at _Page.emit (C:\\Users\\BAIBAI\\AppData\\Local\\npm-cache\\_npx\\9833c18b2d85bc59\\node_modules\\playwright-core\\lib\\coreBundle.js:11100:16)\n    at _BrowserContext._onResponse (C:\\Users\\BAIBAI\\AppData\\Local\\npm-cache\\_npx\\9833c18b2d85bc59\\node_modules\\playwright-core\\lib\\coreBundle.js:63166:16)\n    at Proxy.<anonymous> (C:\\Users\\BAIBAI\\AppData\\Local\\npm-cache\\_npx\\9833c18b2d85bc59\\node_modules\\playwright-core\\lib\\coreBundle.js:63116:78)\n    at Proxy._callHandler (C:\\Users\\BAIBAI\\AppData\\Local\\npm-cache\\_npx\\9833c18b2d85bc59\\node_modules\\playwright-core\\lib\\coreBundle.js:11110:33)\n    at Proxy.emit (C:\\Users\\BAIBAI\\AppData\\Local\\npm-cache\\_npx\\9833c18b2d85bc59\\node_modules\\playwright-core\\lib\\coreBundle.js:11100:16)\n    at Connection.dispatch (C:\\Users\\BAIBAI\\AppData\\Local\\npm-cache\\_npx\\9833c18b2d85bc59\\node_modules\\playwright-core\\lib\\coreBundle.js:64773:25)\n    at Immediate.<anonymous> (C:\\Users\\BAIBAI\\AppData\\Local\\npm-cache\\_npx\\9833c18b2d85bc59\\node_modules\\playwright-core\\lib\\coreBundle.js:64834:85)",
+  "finished": "2026-09-28T05:18:42.884Z"
+}

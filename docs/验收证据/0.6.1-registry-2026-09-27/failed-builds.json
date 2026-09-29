@@ -1,0 +1,62 @@
+{
+  "runs": [
+    {
+      "run_id": "061-20260927-a",
+      "status": "build-failed",
+      "step": "npm ci",
+      "error": "Exit handler never called!",
+      "files": [
+        {
+          "source": "build.log",
+          "archive": "failed-builds/a/build.log.txt",
+          "bytes": 8396,
+          "sha256": "6c1baee7ee65e1f6f1e82ba933043091ab6e4cbafc8b44f506c4ddbe9fc9d95a"
+        },
+        {
+          "source": "resources-before.txt",
+          "archive": "failed-builds/a/resources-before.txt",
+          "bytes": 661,
+          "sha256": "74f58648d141921e782054c350aa0263252d00dc304f66223c3f29bcf009bef5"
+        },
+        {
+          "source": "resources-after.txt",
+          "archive": "failed-builds/a/resources-after.txt",
+          "bytes": 661,
+          "sha256": "74f58648d141921e782054c350aa0263252d00dc304f66223c3f29bcf009bef5"
+        }
+      ],
+      "resources_before_after_equal": true,
+      "transcript_sha256": "08e87eb0998def1f9d8a8d7ce2adcab74f5d083177e3925ff80a64bb9a79bdd4"
+    },
+    {
+      "run_id": "061-20260927-b",
+      "status": "build-failed",
+      "step": "npm ci",
+      "error": "Exit handler never called!",
+      "files": [
+        {
+          "source": "build.log",
+          "archive": "failed-builds/b/build.log.txt",
+          "bytes": 2444,
+          "sha256": "0584bb4994bafd36aee3d3a45041c9685ff09e1668f30a1cc722bdf7894d82ee"
+        },
+        {
+          "source": "resources-before.txt",
+          "archive": "failed-builds/b/resources-before.txt",
+          "bytes": 661,
+          "sha256": "74f58648d141921e782054c350aa0263252d00dc304f66223c3f29bcf009bef5"
+        },
+        {
+          "source": "resources-after.txt",
+          "archive": "failed-builds/b/resources-after.txt",
+          "bytes": 661,
+          "sha256": "74f58648d141921e782054c350aa0263252d00dc304f66223c3f29bcf009bef5"
+        }
+      ],
+      "resources_before_after_equal": true,
+      "transcript_sha256": "feb60ffc586072500fdb090ba445eafc2d9908fbe1ac55b22064c6a4e4b22101"
+    }
+  ],
+  "network_diagnosis_source": "用户转述 Claude 的网络对照：镜像站 TLS 失败、官方源可达；本轮未复测网络",
+  "limits": "资源快照仅覆盖正式容器元数据及过滤后的卷列表；无 R2 残留由用户转述，不扩大为本轮 Docker 检查"
+}

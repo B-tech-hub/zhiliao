@@ -1,0 +1,64 @@
+{
+  "status": "passed",
+  "scope": "Only initialization snippets; no Docker, build, or GitHub execution",
+  "cases": [
+    {
+      "job": "build",
+      "case": "bash_syntax",
+      "exit_code": 0
+    },
+    {
+      "job": "build",
+      "case": "empty",
+      "exit_code": 0,
+      "values_matched": true,
+      "runner_files_unchanged": true,
+      "existing_environment_preserved": true
+    },
+    {
+      "job": "build",
+      "case": "occupied",
+      "exit_code": 0,
+      "values_matched": true,
+      "runner_files_unchanged": true,
+      "existing_environment_preserved": true
+    },
+    {
+      "job": "build",
+      "case": "missing_runner_temp",
+      "exit_code": 1,
+      "values_matched": true,
+      "runner_files_unchanged": true,
+      "existing_environment_preserved": true
+    },
+    {
+      "job": "install",
+      "case": "bash_syntax",
+      "exit_code": 0
+    },
+    {
+      "job": "install",
+      "case": "empty",
+      "exit_code": 0,
+      "values_matched": true,
+      "runner_files_unchanged": true,
+      "existing_environment_preserved": true
+    },
+    {
+      "job": "install",
+      "case": "occupied",
+      "exit_code": 0,
+      "values_matched": true,
+      "runner_files_unchanged": true,
+      "existing_environment_preserved": true
+    },
+    {
+      "job": "install",
+      "case": "missing_runner_temp",
+      "exit_code": 1,
+      "values_matched": true,
+      "runner_files_unchanged": true,
+      "existing_environment_preserved": true
+    }
+  ]
+}

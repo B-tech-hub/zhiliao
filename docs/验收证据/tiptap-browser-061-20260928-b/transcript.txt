@@ -1,0 +1,51 @@
+﻿**********************
+Windows PowerShell 脚本开始
+开始时间: 20260928135834
+用户名: LAPTOP-RUE2E3NU\BAIBAI
+RunAs 用户: LAPTOP-RUE2E3NU\BAIBAI
+配置名称: 
+计算机: LAPTOP-RUE2E3NU (Microsoft Windows NT 10.0.26200.0)
+主机应用程序: C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -ExecutionPolicy Bypass -File docs/验收证据/tiptap-browser-061-20260928-b/tools/run.ps1 -RunId t061-20260928-b
+进程 ID: 38200
+PSVersion: 5.1.26100.9444
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.9444
+BuildVersion: 10.0.26100.9444
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+TipTap 验收 preflight 开始
+
+TipTap 验收 start 开始
+
+
+**********************
+命令开始时间: 20260928135843
+**********************
+PS>TerminatingError():“Docker 命令失败，保留现场”
+>> TerminatingError():“Docker 命令失败，保留现场”
+
+TipTap 验收 round-m0 开始
+
+
+
+
+
+
+
+TipTap 验收 round-m1 开始
+
+
+
+
+
+
+
+TipTap 验收 stop 开始
+
+**********************
+Windows PowerShell 脚本结束
+结束时间: 20260928135940
+**********************

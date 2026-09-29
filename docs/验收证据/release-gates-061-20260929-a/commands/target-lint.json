@@ -1,0 +1,25 @@
+{
+  "stage": "target-lint",
+  "command": [
+    "D:\\node.js\\node.EXE",
+    "node_modules/eslint/bin/eslint.js",
+    "eslint.config.mjs",
+    "tests/config/demo-verification-utils.test.ts"
+  ],
+  "cwd": "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-release-gates-061-20260929-a\\candidate",
+  "started_at": "2026-09-29T01:30:27.102756+00:00",
+  "finished_at": "2026-09-29T01:31:20.719853+00:00",
+  "duration_seconds": 53.609,
+  "exit_code": 0,
+  "manifest_sha256": "e0ae237431ca64182e1b694d4d2e36221a16dcc9d380323660c78735951a1415",
+  "node": "v22.19.0",
+  "environment": {
+    "CI": "1",
+    "NEXT_TELEMETRY_DISABLED": "1",
+    "REQUIRE_DOCKER_COMPOSE": "1",
+    "CIRCLE_NODE_TOTAL": "2",
+    "DATABASE_PATH": "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-release-gates-061-20260929-a\\data\\db\\app.db",
+    "UPLOAD_DIR": "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-release-gates-061-20260929-a\\data\\uploads",
+    "NOTES_EXPORT_DIR": "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-release-gates-061-20260929-a\\data\\notes"
+  }
+}

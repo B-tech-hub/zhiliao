@@ -1,0 +1,177 @@
+{
+  "status": "pr_ci_passed_with_release_workflow_blocker",
+  "scope": "V: candidate push and PR CI only",
+  "run_id": 36567105695,
+  "run_attempt": 1,
+  "url": "https://github.com/B-tech-hub/zhiliao/actions/runs/36567105695",
+  "candidate_sha": "321f770b523773e3f93a56dcf4fd2b1f78213ca5",
+  "checkout_sha": "4179e0a40ec6d05eedfc0a09dc1517750620b027",
+  "tree": "66ab7b0d7a217f0e8ab9a2dcacbaf969f428389c",
+  "base_sha": "6ee67532deed37fda6cc98962e8df76c98659890",
+  "job_started_at": "2026-09-29T12:17:17Z",
+  "job_completed_at": "2026-09-29T12:19:36Z",
+  "job_duration_seconds": 139,
+  "environment": {
+    "os": "Ubuntu 24.04.5 LTS",
+    "runner_image": "ubuntu-24.04",
+    "runner_image_version": "20260920.314.1",
+    "architecture": "x64",
+    "architecture_evidence": "setup-node toolcache path and cache key; no separate uname probe",
+    "node": "22.23.2",
+    "npm": "10.9.8",
+    "npm_cache": "not found at setup; saved at post-job",
+    "node_toolcache": "hit",
+    "require_docker_compose": "1"
+  },
+  "tests": {
+    "passed": 878,
+    "failed": 0,
+    "skipped": 28,
+    "total": 906,
+    "files_passed": 65,
+    "files_skipped": 3,
+    "files_total": 68,
+    "skip_breakdown": [
+      {
+        "file": "tests/lib/notes-corpus-acceptance.test.ts",
+        "count": 23,
+        "reason": "existing opt-in corpus acceptance"
+      },
+      {
+        "file": "tests/lib/t1-chunking-acceptance.test.ts",
+        "count": 2,
+        "reason": "existing opt-in T1 acceptance"
+      },
+      {
+        "file": "tests/lib/t0-acceptance.test.ts",
+        "count": 1,
+        "reason": "existing opt-in T0 acceptance"
+      },
+      {
+        "file": "tests/config/demo-runtime.test.ts",
+        "count": 2,
+        "reason": "Windows PowerShell tests on Linux",
+        "source_lines": [
+          383,
+          393
+        ]
+      }
+    ]
+  },
+  "steps": [
+    {
+      "name": "Set up job",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 1,
+      "started_at": "2026-09-29T12:17:18Z",
+      "completed_at": "2026-09-29T12:17:19Z"
+    },
+    {
+      "name": "Run actions/checkout@v4",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 2,
+      "started_at": "2026-09-29T12:17:19Z",
+      "completed_at": "2026-09-29T12:17:20Z"
+    },
+    {
+      "name": "Run actions/setup-node@v4",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 3,
+      "started_at": "2026-09-29T12:17:20Z",
+      "completed_at": "2026-09-29T12:17:21Z"
+    },
+    {
+      "name": "安装依赖",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 4,
+      "started_at": "2026-09-29T12:17:21Z",
+      "completed_at": "2026-09-29T12:17:42Z"
+    },
+    {
+      "name": "版本一致性",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 5,
+      "started_at": "2026-09-29T12:17:42Z",
+      "completed_at": "2026-09-29T12:17:43Z"
+    },
+    {
+      "name": "设计系统门禁",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 6,
+      "started_at": "2026-09-29T12:17:43Z",
+      "completed_at": "2026-09-29T12:17:43Z"
+    },
+    {
+      "name": "代码检查（ESLint）",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 7,
+      "started_at": "2026-09-29T12:17:43Z",
+      "completed_at": "2026-09-29T12:17:49Z"
+    },
+    {
+      "name": "单元测试（Vitest）",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 8,
+      "started_at": "2026-09-29T12:17:49Z",
+      "completed_at": "2026-09-29T12:18:24Z"
+    },
+    {
+      "name": "构建（含 TypeScript 严格类型检查）",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 9,
+      "started_at": "2026-09-29T12:18:24Z",
+      "completed_at": "2026-09-29T12:19:32Z"
+    },
+    {
+      "name": "Post Run actions/setup-node@v4",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 17,
+      "started_at": "2026-09-29T12:19:32Z",
+      "completed_at": "2026-09-29T12:19:34Z"
+    },
+    {
+      "name": "Post Run actions/checkout@v4",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 18,
+      "started_at": "2026-09-29T12:19:34Z",
+      "completed_at": "2026-09-29T12:19:35Z"
+    },
+    {
+      "name": "Complete job",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 19,
+      "started_at": "2026-09-29T12:19:35Z",
+      "completed_at": "2026-09-29T12:19:35Z"
+    }
+  ],
+  "artifacts": 0,
+  "reruns": 0,
+  "cancelled": false,
+  "installation_warning": "npm ci reported 33 moderate vulnerabilities; no separate audit or dependency change in V",
+  "not_validated": [
+    "native arm64 build/runtime",
+    "GHCR manifest and anonymous installation",
+    "RC and formal release",
+    "offsite restore"
+  ],
+  "evidence_stays_local": true,
+  "v_acceptance": "passed for approved candidate push, PR CI and identity archive; Release readiness remains blocked",
+  "release_blocker": {
+    "run_id": 36567100870,
+    "conclusion": "failure",
+    "jobs_started": 0,
+    "error_file": "release-workflow-error.json"
+  }
+}

@@ -1,0 +1,91 @@
+{
+  "status": "static-diagnosis",
+  "failure": "page.request.get 在 PNG 字节补充校验处返回 401；浏览器图片已显示并通过 naturalWidth/naturalHeight 断言。",
+  "product_evidence": "src/app/api/auth/login/route.ts 在 production 设置 Secure Cookie；真实登录及浏览器页面成功。",
+  "tool_version": "1.64.0-alpha-1789764292000",
+  "tool_sha256": "728ee6ffd51548f3b200a442749421b039a21621775ec751bff33d10a05b2637",
+  "tool_snippets": [
+    {
+      "first_line": 13592,
+      "lines": [
+        "function filterCookies(cookies, urls) {",
+        "  const parsedURLs = urls.map((s) => new URL(s));",
+        "  return cookies.filter((c) => {",
+        "    if (!parsedURLs.length)",
+        "      return true;",
+        "    for (const parsedURL of parsedURLs) {",
+        "      let domain = c.domain;",
+        "      if (!domain.startsWith(\".\"))",
+        "        domain = \".\" + domain;",
+        "      if (!(\".\" + parsedURL.hostname).endsWith(domain))",
+        "        continue;",
+        "      if (!parsedURL.pathname.startsWith(c.path))",
+        "        continue;",
+        "      if (parsedURL.protocol !== \"https:\" && !isLocalHostname(parsedURL.hostname) && c.secure)",
+        "        continue;",
+        "      return true;",
+        "    }",
+        "    return false;",
+        "  });",
+        "}",
+        "function isLocalHostname(hostname) {",
+        "  return hostname === \"localhost\" || hostname.endsWith(\".localhost\");",
+        "}",
+        "function isForbiddenHeader(name, value2) {"
+      ]
+    },
+    {
+      "first_line": 14373,
+      "lines": [
+        "    Cookie = class {",
+        "      constructor(data) {",
+        "        this._raw = data;",
+        "      }",
+        "      _name() {",
+        "        return this._raw.name;",
+        "      }",
+        "      // https://datatracker.ietf.org/doc/html/rfc6265#section-5.4",
+        "      matches(url3) {",
+        "        if (this._raw.secure && (url3.protocol !== \"https:\" && !isLocalHostname(url3.hostname)))",
+        "          return false;",
+        "        if (!domainMatches(url3.hostname, this._raw.domain))",
+        "          return false;",
+        "        if (!pathMatches(url3.pathname, this._raw.path))",
+        "          return false;",
+        "        return true;",
+        "      }",
+        "      _equals(other) {",
+        "        return this._raw.name === other._raw.name && this._raw.domain === other._raw.domain && this._raw.path === other._raw.path;",
+        "      }"
+      ]
+    },
+    {
+      "first_line": 27184,
+      "lines": [
+        "      async _updateRequestCookieHeader(progress2, url3, headers) {",
+        "        if (getHeader(headers, \"cookie\") !== void 0)",
+        "          return;",
+        "        const contextCookies = await this.cookies(progress2, url3);",
+        "        const cookies = contextCookies.filter((c) => new Cookie(c).matches(url3));",
+        "        if (cookies.length) {",
+        "          const valueArray = cookies.map((c) => `${c.name}=${c.value}`);",
+        "          setHeader(headers, \"cookie\", valueArray.join(\"; \"));",
+        "        }",
+        "      }",
+        "      async _sendRequestWithRetries(progress2, url3, options, postData, maxRetries) {"
+      ]
+    },
+    {
+      "first_line": 27570,
+      "lines": [
+        "      async cookies(progress2, url3) {",
+        "        return await this._context.cookies(progress2, url3.toString());",
+        "      }",
+        "      async storageState(progress2, params2) {"
+      ]
+    }
+  ],
+  "conclusion": "Playwright API 请求过滤 Secure Cookie，仅为 localhost/.localhost 提供 HTTP 例外，不包含 127.0.0.1。浏览器和 APIRequestContext 的行为不同，导致脚本额外请求未带登录态。未抓取该请求的 Cookie 头；依据源码与本次运行现象归因。",
+  "next_proposal": "保持产品和已构建镜像；在后续获准的浏览器补验中，通过页面同源 fetch(credentials: same-origin) 核对图片响应和字节，不记录 Cookie。保留本轮失败脚本。",
+  "replayed": false
+}

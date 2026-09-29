@@ -1,0 +1,507 @@
+Lint、测试与构建	Set up job	﻿2026-09-29T12:17:18.6179932Z Current runner version: '2.337.0'
+Lint、测试与构建	Set up job	2026-09-29T12:17:18.6217908Z ##[group]Runner Image Provisioner
+Lint、测试与构建	Set up job	2026-09-29T12:17:18.6219436Z Hosted Compute Agent
+Lint、测试与构建	Set up job	2026-09-29T12:17:18.6220678Z Version: 20260828.587
+Lint、测试与构建	Set up job	2026-09-29T12:17:18.6221790Z Commit: abac92662cab4cc7352de4f9f9d2e2419aad9c29
+Lint、测试与构建	Set up job	2026-09-29T12:17:18.6223153Z Build Date: 2026-08-28T16:44:25Z
+Lint、测试与构建	Set up job	2026-09-29T12:17:18.6224367Z Worker ID: {c623fa23-a24e-4ed2-bc06-7eda1b3dcc86}
+Lint、测试与构建	Set up job	2026-09-29T12:17:18.6225650Z Azure Region: eastus
+Lint、测试与构建	Set up job	2026-09-29T12:17:18.6227062Z ##[endgroup]
+Lint、测试与构建	Set up job	2026-09-29T12:17:18.6229277Z ##[group]Operating System
+Lint、测试与构建	Set up job	2026-09-29T12:17:18.6230414Z Ubuntu
+Lint、测试与构建	Set up job	2026-09-29T12:17:18.6231356Z 24.04.5
+Lint、测试与构建	Set up job	2026-09-29T12:17:18.6232365Z LTS
+Lint、测试与构建	Set up job	2026-09-29T12:17:18.6233333Z ##[endgroup]
+Lint、测试与构建	Set up job	2026-09-29T12:17:18.6234214Z ##[group]Runner Image
+Lint、测试与构建	Set up job	2026-09-29T12:17:18.6235215Z Image: ubuntu-24.04
+Lint、测试与构建	Set up job	2026-09-29T12:17:18.6236279Z Version: 20260920.314.1
+Lint、测试与构建	Set up job	2026-09-29T12:17:18.6238530Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260920.314/images/ubuntu/Ubuntu2404-Readme.md
+Lint、测试与构建	Set up job	2026-09-29T12:17:18.6241761Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260920.314
+Lint、测试与构建	Set up job	2026-09-29T12:17:18.6243489Z ##[endgroup]
+Lint、测试与构建	Set up job	2026-09-29T12:17:18.6245889Z ##[group]GITHUB_TOKEN Permissions
+Lint、测试与构建	Set up job	2026-09-29T12:17:18.6249439Z Contents: read
+Lint、测试与构建	Set up job	2026-09-29T12:17:18.6250689Z Metadata: read
+Lint、测试与构建	Set up job	2026-09-29T12:17:18.6251694Z Packages: read
+Lint、测试与构建	Set up job	2026-09-29T12:17:18.6252794Z ##[endgroup]
+Lint、测试与构建	Set up job	2026-09-29T12:17:18.6256660Z Secret source: Actions
+Lint、测试与构建	Set up job	2026-09-29T12:17:18.6258494Z Cache mode: write
+Lint、测试与构建	Set up job	2026-09-29T12:17:18.6260432Z Prepare workflow directory
+Lint、测试与构建	Set up job	2026-09-29T12:17:18.6759034Z Prepare all required actions
+Lint、测试与构建	Set up job	2026-09-29T12:17:18.6833950Z Getting action download info
+Lint、测试与构建	Set up job	2026-09-29T12:17:18.9255000Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+Lint、测试与构建	Set up job	2026-09-29T12:17:19.0321279Z Download action repository 'actions/setup-node@v4' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+Lint、测试与构建	Set up job	2026-09-29T12:17:19.2685759Z Complete job name: Lint、测试与构建
+Lint、测试与构建	Run actions/checkout@v4	﻿2026-09-29T12:17:19.3626729Z ##[group]Run actions/checkout@v4
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:19.3627724Z with:
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:19.3628193Z   repository: B-tech-hub/zhiliao
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:19.3631972Z   token: ***
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:19.3632411Z   ssh-strict: true
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:19.3632910Z   ssh-user: git
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:19.3633355Z   persist-credentials: true
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:19.3633842Z   clean: true
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:19.3634284Z   sparse-checkout-cone-mode: true
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:19.3634805Z   fetch-depth: 1
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:19.3635244Z   fetch-tags: false
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:19.3635689Z   show-progress: true
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:19.3636138Z   lfs: false
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:19.3636812Z   submodules: false
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:19.3637278Z   set-safe-directory: true
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:19.3637792Z   allow-unsafe-pr-checkout: false
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:19.3638612Z ##[endgroup]
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:19.4718449Z Syncing repository: B-tech-hub/zhiliao
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:19.4721187Z ##[group]Getting Git version info
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:19.4722387Z Working directory is '/home/runner/work/zhiliao/zhiliao'
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:19.4724250Z [command]/usr/bin/git version
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:19.4796577Z git version 2.55.0
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:19.4818904Z ##[endgroup]
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:19.4835390Z Temporarily overriding HOME='/home/runner/work/_temp/f3fdddcc-ee1f-472f-9e98-c90aa2dec76d' before making global git config changes
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:19.4838350Z Adding repository directory to the temporary git global config as a safe directory
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:19.4841687Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/zhiliao/zhiliao
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:19.4958551Z Deleting the contents of '/home/runner/work/zhiliao/zhiliao'
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:19.4968138Z ##[group]Initializing the repository
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:19.4979338Z [command]/usr/bin/git init /home/runner/work/zhiliao/zhiliao
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:19.5111922Z hint: Using 'master' as the name for the initial branch. This default branch name
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:19.5113271Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:19.5114667Z hint: to use in all of your new repositories, which will suppress this warning,
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:19.5115501Z hint: call:
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:19.5116008Z hint:
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:19.5117001Z hint: 	git config --global init.defaultBranch <name>
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:19.5118160Z hint:
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:19.5119242Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:19.5120885Z hint: 'development'. The just-created branch can be renamed via this command:
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:19.5122417Z hint:
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:19.5123844Z hint: 	git branch -m <name>
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:19.5125287Z hint:
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:19.5127292Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:19.5129942Z Initialized empty Git repository in /home/runner/work/zhiliao/zhiliao/.git/
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:19.5152260Z [command]/usr/bin/git remote add origin https://github.com/B-tech-hub/zhiliao
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:19.5199058Z ##[endgroup]
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:19.5200146Z ##[group]Disabling automatic garbage collection
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:19.5206087Z [command]/usr/bin/git config --local gc.auto 0
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:19.5250416Z ##[endgroup]
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:19.5251747Z ##[group]Setting up auth
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:19.5256817Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:19.5298959Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:19.5722887Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:19.5766677Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:19.6012631Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:19.6053442Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:19.6313021Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:19.6359383Z ##[endgroup]
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:19.6360786Z ##[group]Fetching the repository
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:19.6372681Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +4179e0a40ec6d05eedfc0a09dc1517750620b027:refs/remotes/pull/12/merge
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:20.4418833Z From https://github.com/B-tech-hub/zhiliao
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:20.4421055Z  * [new ref]         4179e0a40ec6d05eedfc0a09dc1517750620b027 -> pull/12/merge
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:20.4427046Z ##[endgroup]
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:20.4429113Z ##[group]Determining the checkout info
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:20.4431259Z ##[endgroup]
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:20.4433489Z [command]/usr/bin/git sparse-checkout disable
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:20.4507672Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:20.4548336Z ##[group]Checking out the ref
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:20.4551459Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/12/merge
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:20.6194116Z Note: switching to 'refs/remotes/pull/12/merge'.
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:20.6196155Z 
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:20.6198273Z You are in 'detached HEAD' state. You can look around, make experimental
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:20.6201219Z changes and commit them, and you can discard any commits you make in this
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:20.6203175Z state without impacting any branches by switching back to a branch.
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:20.6204108Z 
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:20.6204797Z If you want to create a new branch to retain commits you create, you may
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:20.6206623Z do so (now or later) by using -c with the switch command. Example:
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:20.6207744Z 
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:20.6208188Z   git switch -c <new-branch-name>
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:20.6209015Z 
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:20.6210047Z Or undo this operation with:
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:20.6210892Z 
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:20.6211324Z   git switch -
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:20.6211775Z 
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:20.6212465Z Turn off this advice by setting config variable advice.detachedHead to false
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:20.6213517Z 
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:20.6214859Z HEAD is now at 4179e0a Merge 321f770b523773e3f93a56dcf4fd2b1f78213ca5 into 6ee67532deed37fda6cc98962e8df76c98659890
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:20.6218672Z ##[endgroup]
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:20.6262875Z [command]/usr/bin/git log -1 --format=%H
+Lint、测试与构建	Run actions/checkout@v4	2026-09-29T12:17:20.6292245Z 4179e0a40ec6d05eedfc0a09dc1517750620b027
+Lint、测试与构建	Run actions/setup-node@v4	﻿2026-09-29T12:17:20.6783148Z ##[group]Run actions/setup-node@v4
+Lint、测试与构建	Run actions/setup-node@v4	2026-09-29T12:17:20.6784433Z with:
+Lint、测试与构建	Run actions/setup-node@v4	2026-09-29T12:17:20.6785360Z   node-version: 22
+Lint、测试与构建	Run actions/setup-node@v4	2026-09-29T12:17:20.6786287Z   cache: npm
+Lint、测试与构建	Run actions/setup-node@v4	2026-09-29T12:17:20.6787411Z   always-auth: false
+Lint、测试与构建	Run actions/setup-node@v4	2026-09-29T12:17:20.6788389Z   check-latest: false
+Lint、测试与构建	Run actions/setup-node@v4	2026-09-29T12:17:20.6797042Z   token: ***
+Lint、测试与构建	Run actions/setup-node@v4	2026-09-29T12:17:20.6797997Z ##[endgroup]
+Lint、测试与构建	Run actions/setup-node@v4	2026-09-29T12:17:20.8332238Z Found in cache @ /opt/hostedtoolcache/node/22.23.2/x64
+Lint、测试与构建	Run actions/setup-node@v4	2026-09-29T12:17:20.8337790Z (node:2202) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+Lint、测试与构建	Run actions/setup-node@v4	2026-09-29T12:17:20.8342084Z (Use `node --trace-deprecation ...` to show where the warning was created)
+Lint、测试与构建	Run actions/setup-node@v4	2026-09-29T12:17:20.8345972Z ##[group]Environment details
+Lint、测试与构建	Run actions/setup-node@v4	2026-09-29T12:17:21.2699420Z node: v22.23.2
+Lint、测试与构建	Run actions/setup-node@v4	2026-09-29T12:17:21.2701137Z npm: 10.9.8
+Lint、测试与构建	Run actions/setup-node@v4	2026-09-29T12:17:21.2701695Z yarn: 1.22.22
+Lint、测试与构建	Run actions/setup-node@v4	2026-09-29T12:17:21.2703371Z ##[endgroup]
+Lint、测试与构建	Run actions/setup-node@v4	2026-09-29T12:17:21.2724415Z [command]/opt/hostedtoolcache/node/22.23.2/x64/bin/npm config get cache
+Lint、测试与构建	Run actions/setup-node@v4	2026-09-29T12:17:21.3870169Z /home/runner/.npm
+Lint、测试与构建	Run actions/setup-node@v4	2026-09-29T12:17:21.4650583Z npm cache is not found
+Lint、测试与构建	安装依赖	﻿2026-09-29T12:17:21.4818426Z ##[group]Run npm ci
+Lint、测试与构建	安装依赖	2026-09-29T12:17:21.4818829Z ^[[36;1mnpm ci^[[0m
+Lint、测试与构建	安装依赖	2026-09-29T12:17:21.5124412Z shell: /usr/bin/bash -e {0}
+Lint、测试与构建	安装依赖	2026-09-29T12:17:21.5124863Z ##[endgroup]
+Lint、测试与构建	安装依赖	2026-09-29T12:17:42.7423889Z 
+Lint、测试与构建	安装依赖	2026-09-29T12:17:42.7432124Z added 762 packages, and audited 763 packages in 21s
+Lint、测试与构建	安装依赖	2026-09-29T12:17:42.7432706Z 
+Lint、测试与构建	安装依赖	2026-09-29T12:17:42.7432987Z 307 packages are looking for funding
+Lint、测试与构建	安装依赖	2026-09-29T12:17:42.7433445Z   run `npm fund` for details
+Lint、测试与构建	安装依赖	2026-09-29T12:17:42.8284247Z 
+Lint、测试与构建	安装依赖	2026-09-29T12:17:42.8285339Z 33 moderate severity vulnerabilities
+Lint、测试与构建	安装依赖	2026-09-29T12:17:42.8286087Z 
+Lint、测试与构建	安装依赖	2026-09-29T12:17:42.8287185Z To address issues that do not require attention, run:
+Lint、测试与构建	安装依赖	2026-09-29T12:17:42.8287951Z   npm audit fix
+Lint、测试与构建	安装依赖	2026-09-29T12:17:42.8288221Z 
+Lint、测试与构建	安装依赖	2026-09-29T12:17:42.8288647Z To address all issues (including breaking changes), run:
+Lint、测试与构建	安装依赖	2026-09-29T12:17:42.8289121Z   npm audit fix --force
+Lint、测试与构建	安装依赖	2026-09-29T12:17:42.8289323Z 
+Lint、测试与构建	安装依赖	2026-09-29T12:17:42.8289494Z Run `npm audit` for details.
+Lint、测试与构建	版本一致性	﻿2026-09-29T12:17:42.9079154Z ##[group]Run npm run check:version
+Lint、测试与构建	版本一致性	2026-09-29T12:17:42.9079557Z ^[[36;1mnpm run check:version^[[0m
+Lint、测试与构建	版本一致性	2026-09-29T12:17:42.9146735Z shell: /usr/bin/bash -e {0}
+Lint、测试与构建	版本一致性	2026-09-29T12:17:42.9147124Z ##[endgroup]
+Lint、测试与构建	版本一致性	2026-09-29T12:17:43.0249332Z 
+Lint、测试与构建	版本一致性	2026-09-29T12:17:43.0250101Z > zhiliao@0.6.1 check:version
+Lint、测试与构建	版本一致性	2026-09-29T12:17:43.0250937Z > node scripts/check-release-version.mjs
+Lint、测试与构建	版本一致性	2026-09-29T12:17:43.0251432Z 
+Lint、测试与构建	版本一致性	2026-09-29T12:17:43.1205375Z 版本一致：0.6.1；发布材料：docs/releases/v0.6.1.md
+Lint、测试与构建	设计系统门禁	﻿2026-09-29T12:17:43.1394926Z ##[group]Run npm run check:design
+Lint、测试与构建	设计系统门禁	2026-09-29T12:17:43.1395261Z ^[[36;1mnpm run check:design^[[0m
+Lint、测试与构建	设计系统门禁	2026-09-29T12:17:43.1459601Z shell: /usr/bin/bash -e {0}
+Lint、测试与构建	设计系统门禁	2026-09-29T12:17:43.1459900Z ##[endgroup]
+Lint、测试与构建	设计系统门禁	2026-09-29T12:17:43.2496911Z 
+Lint、测试与构建	设计系统门禁	2026-09-29T12:17:43.2497992Z > zhiliao@0.6.1 check:design
+Lint、测试与构建	设计系统门禁	2026-09-29T12:17:43.2498929Z > node scripts/check-design.mjs
+Lint、测试与构建	设计系统门禁	2026-09-29T12:17:43.2499319Z 
+Lint、测试与构建	设计系统门禁	2026-09-29T12:17:43.2947445Z ✓ 裸色类只允许出现在主题不变面
+Lint、测试与构建	设计系统门禁	2026-09-29T12:17:43.3002722Z ✓ 低透明度黑不得用作内容区填充
+Lint、测试与构建	设计系统门禁	2026-09-29T12:17:43.3058380Z ✓ 语义色不得硬编码
+Lint、测试与构建	设计系统门禁	2026-09-29T12:17:43.3127927Z ✓ ink 是文字色，不得用作背景
+Lint、测试与构建	设计系统门禁	2026-09-29T12:17:43.3215944Z ✓ 任意圆角类已清零（冻结的 Mermaid 精确行除外）
+Lint、测试与构建	设计系统门禁	2026-09-29T12:17:43.3280192Z ✓ rounded-full 只用于圆形控件与计数角标
+Lint、测试与构建	设计系统门禁	2026-09-29T12:17:43.3280884Z 设计系统门禁通过（检查了 148 个文件）。
+Lint、测试与构建	代码检查（ESLint）	﻿2026-09-29T12:17:43.3418346Z ##[group]Run npm run lint
+Lint、测试与构建	代码检查（ESLint）	2026-09-29T12:17:43.3418672Z ^[[36;1mnpm run lint^[[0m
+Lint、测试与构建	代码检查（ESLint）	2026-09-29T12:17:43.3483014Z shell: /usr/bin/bash -e {0}
+Lint、测试与构建	代码检查（ESLint）	2026-09-29T12:17:43.3483628Z ##[endgroup]
+Lint、测试与构建	代码检查（ESLint）	2026-09-29T12:17:43.4524439Z 
+Lint、测试与构建	代码检查（ESLint）	2026-09-29T12:17:43.4525178Z > zhiliao@0.6.1 lint
+Lint、测试与构建	代码检查（ESLint）	2026-09-29T12:17:43.4525726Z > eslint .
+Lint、测试与构建	代码检查（ESLint）	2026-09-29T12:17:43.4525883Z 
+Lint、测试与构建	单元测试（Vitest）	﻿2026-09-29T12:17:49.7816994Z ##[group]Run npm test
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:17:49.7817312Z ^[[36;1mnpm test^[[0m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:17:49.7880915Z shell: /usr/bin/bash -e {0}
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:17:49.7881210Z env:
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:17:49.7881424Z   REQUIRE_DOCKER_COMPOSE: 1
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:17:49.7881672Z ##[endgroup]
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:17:49.9395683Z 
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:17:49.9396287Z > zhiliao@0.6.1 test
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:17:49.9397115Z > vitest run
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:17:49.9397387Z 
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:17:50.2540369Z ^[[33m(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:17:50.2567981Z   - `__dirname` (vitest.config.mts:17:32). Use `import.meta.dirname` instead
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:17:50.2569868Z Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:17:50.2899104Z 
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:17:50.2900961Z ^[[1m^[[30m^[[46m RUN ^[[49m^[[39m^[[22m ^[[36mv4.1.11 ^[[39m^[[90m/home/runner/work/zhiliao/zhiliao^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:17:50.2901527Z 
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:17:51.3185517Z  ^[[32m✓^[[39m tests/config/demo-runtime.test.ts ^[[2m(^[[22m^[[2m35 tests^[[22m^[[2m | ^[[22m^[[33m2 skipped^[[39m^[[2m)^[[22m^[[33m 506^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:17:51.6348485Z  ^[[32m✓^[[39m tests/lib/chat-state.test.ts ^[[2m(^[[22m^[[2m45 tests^[[22m^[[2m)^[[22m^[[32m 23^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:17:51.9799320Z  ^[[2m^[[90m↓^[[39m^[[22m tests/lib/notes-corpus-acceptance.test.ts ^[[2m(^[[22m^[[2m23 tests^[[22m^[[2m | ^[[22m^[[33m23 skipped^[[39m^[[2m)^[[22m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:17:52.1178660Z  ^[[32m✓^[[39m tests/lib/import.test.ts ^[[2m(^[[22m^[[2m31 tests^[[22m^[[2m)^[[22m^[[33m 411^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:17:52.2608430Z  ^[[32m✓^[[39m tests/lib/chat-loop.test.ts ^[[2m(^[[22m^[[2m33 tests^[[22m^[[2m)^[[22m^[[32m 29^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:17:53.0542067Z  ^[[32m✓^[[39m tests/lib/chat-routes.test.ts ^[[2m(^[[22m^[[2m20 tests^[[22m^[[2m)^[[22m^[[33m 327^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:17:53.4508988Z  ^[[32m✓^[[39m tests/lib/trash.test.ts ^[[2m(^[[22m^[[2m19 tests^[[22m^[[2m)^[[22m^[[32m 271^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:17:53.6965347Z  ^[[32m✓^[[39m tests/lib/ai-tools.test.ts ^[[2m(^[[22m^[[2m31 tests^[[22m^[[2m)^[[22m^[[33m 441^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:17:53.9921510Z  ^[[32m✓^[[39m tests/config/release-gate4.test.ts ^[[2m(^[[22m^[[2m22 tests^[[22m^[[2m)^[[22m^[[32m 205^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:17:54.6444915Z  ^[[32m✓^[[39m tests/config/demo-proxy-timeouts.test.ts ^[[2m(^[[22m^[[2m14 tests^[[22m^[[2m)^[[22m^[[33m 313^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:17:54.6558245Z  ^[[32m✓^[[39m tests/lib/llm.test.ts ^[[2m(^[[22m^[[2m23 tests^[[22m^[[2m)^[[22m^[[33m 718^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:17:54.6560541Z      ^[[33m^[[2m✓^[[22m^[[39m stripJsonFence 剥掉可能的代码块围栏 ^[[33m 657^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:17:54.7388712Z  ^[[32m✓^[[39m tests/api/demo-boundary.test.ts ^[[2m(^[[22m^[[2m44 tests^[[22m^[[2m)^[[22m^[[33m 625^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:17:54.7390655Z      ^[[33m^[[2m✓^[[22m^[[39m 所有高风险入口在 Demo 中直接拒绝 ^[[33m 414^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:17:55.0698912Z  ^[[32m✓^[[39m tests/lib/fetch-url.test.ts ^[[2m(^[[22m^[[2m35 tests^[[22m^[[2m)^[[22m^[[32m 137^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:17:56.0592326Z ^[[90mstdout^[[2m | tests/lib/weekly-review.test.ts^[[2m > ^[[22m^[[2m生成回顾^[[2m > ^[[22m^[[2m非空周产出锁定的普通笔记并同步索引
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:17:56.0647952Z ^[[22m^[[39m[weekly-review] 已生成 8.3–8.9 的回顾（2 条笔记）
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:17:56.0676809Z 
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:17:56.0828554Z ^[[90mstdout^[[2m | tests/lib/weekly-review.test.ts^[[2m > ^[[22m^[[2m跨周执行的任务^[[2m > ^[[22m^[[2m生成的仍是入队那一周的回顾，而非执行时刻的上一周
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:17:56.0847713Z ^[[22m^[[39m[weekly-review] 已生成 7.27–8.2 的回顾（1 条笔记）
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:17:56.0848196Z 
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:17:56.0908197Z  ^[[32m✓^[[39m tests/lib/weekly-review.test.ts ^[[2m(^[[22m^[[2m16 tests^[[22m^[[2m)^[[22m^[[32m 255^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:17:56.2462629Z  ^[[32m✓^[[39m tests/lib/undo.test.ts ^[[2m(^[[22m^[[2m19 tests^[[22m^[[2m)^[[22m^[[33m 356^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:17:56.3365671Z ^[[90mstderr^[[2m | tests/lib/hybrid-search.test.ts^[[2m > ^[[22m^[[2m混合检索的最小可信证明^[[2m > ^[[22m^[[2mEmbedding 供应商不可用时降级为 BM25 而非报错
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:17:56.3368730Z ^[[22m^[[39m[search] Embedding 请求失败，本次降级为纯 BM25: Embedding 网络错误: connect ECONNREFUSED
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:17:56.3369756Z 
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:17:56.3742313Z  ^[[32m✓^[[39m tests/lib/hybrid-search.test.ts ^[[2m(^[[22m^[[2m15 tests^[[22m^[[2m)^[[22m^[[33m 321^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:17:57.1308861Z  ^[[32m✓^[[39m tests/lib/chat-stream.test.ts ^[[2m(^[[22m^[[2m15 tests^[[22m^[[2m)^[[22m^[[32m 143^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:17:57.7738393Z  ^[[32m✓^[[39m tests/lib/sources.test.ts ^[[2m(^[[22m^[[2m15 tests^[[22m^[[2m)^[[22m^[[33m 333^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:17:58.4897315Z  ^[[32m✓^[[39m tests/lib/embedding.test.ts ^[[2m(^[[22m^[[2m11 tests^[[22m^[[2m)^[[22m^[[32m 125^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:17:58.9498664Z  ^[[32m✓^[[39m tests/components/api-token-section.test.tsx ^[[2m(^[[22m^[[2m10 tests^[[22m^[[2m)^[[22m^[[33m 1221^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:17:59.9629773Z ^[[90mstderr^[[2m | tests/components/markdown-editor-security.test.tsx^[[2m > ^[[22m^[[2m真实编辑器安全边界：Mermaid=false^[[2m > ^[[22m^[[2m外部正文同步通过实际 setContent 路径过滤属性
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:17:59.9649168Z ^[[22m^[[39mflushSync was called from inside a lifecycle method. React cannot flush when React is already rendering. Consider moving this call to a scheduler task or micro task.
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:17:59.9681139Z 
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:00.5149274Z  ^[[32m✓^[[39m tests/config/demo-compose-cli.test.ts ^[[2m(^[[22m^[[2m5 tests^[[22m^[[2m)^[[22m^[[33m 819^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:02.0587050Z ^[[90mstderr^[[2m | tests/components/markdown-editor-security.test.tsx^[[2m > ^[[22m^[[2m真实编辑器安全边界：Mermaid=true^[[2m > ^[[22m^[[2m外部正文同步通过实际 setContent 路径过滤属性
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:02.0589946Z ^[[22m^[[39mflushSync was called from inside a lifecycle method. React cannot flush when React is already rendering. Consider moving this call to a scheduler task or micro task.
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:02.0591150Z 
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:02.1723653Z  ^[[32m✓^[[39m tests/config/demo-network.test.ts ^[[2m(^[[22m^[[2m13 tests^[[22m^[[2m)^[[22m^[[33m 1405^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:02.1770801Z      ^[[33m^[[2m✓^[[22m^[[39m 缺少正向对照时不把目标不可达算作通过 {"privateUnavailable":true} ^[[33m 1214^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:02.5259149Z  ^[[32m✓^[[39m tests/components/settings-panel-hydration.test.tsx ^[[2m(^[[22m^[[2m13 tests^[[22m^[[2m)^[[22m^[[33m 2406^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:02.5308194Z      ^[[33m^[[2m✓^[[22m^[[39m '跨时区'：首帧一致，挂载后显示正确时间 ^[[33m 630^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:03.3509333Z  ^[[32m✓^[[39m tests/components/markdown-editor-security.test.tsx ^[[2m(^[[22m^[[2m26 tests^[[22m^[[2m)^[[22m^[[33m 3842^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:03.3518353Z      ^[[33m^[[2m✓^[[22m^[[39m 初次加载不保留危险属性，正常内容完整 ^[[33m 341^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:03.3519579Z      ^[[33m^[[2m✓^[[22m^[[39m 初次加载不保留危险属性，正常内容完整 ^[[33m 759^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:03.5508639Z  ^[[32m✓^[[39m tests/config/demo-compose.test.ts ^[[2m(^[[22m^[[2m20 tests^[[22m^[[2m)^[[22m^[[32m 39^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:04.5879137Z  ^[[32m✓^[[39m tests/lib/llm-config.test.ts ^[[2m(^[[22m^[[2m18 tests^[[22m^[[2m)^[[22m^[[32m 103^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:04.8318520Z  ^[[32m✓^[[39m tests/docs/first-use-guide.test.ts ^[[2m(^[[22m^[[2m8 tests^[[22m^[[2m)^[[22m^[[32m 27^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:05.3811572Z  ^[[32m✓^[[39m tests/components/quick-capture.test.tsx ^[[2m(^[[22m^[[2m15 tests^[[22m^[[2m)^[[22m^[[33m 1459^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:05.3824174Z      ^[[33m^[[2m✓^[[22m^[[39m 保存成功后刷新列表、不跳转，并收起浮层清掉草稿 ^[[33m 810^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:05.6298668Z  ^[[32m✓^[[39m tests/config/demo-http-probes.test.ts ^[[2m(^[[22m^[[2m12 tests^[[22m^[[2m)^[[22m^[[33m 559^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:06.0270625Z  ^[[32m✓^[[39m tests/config/demo-launcher.test.ts ^[[2m(^[[22m^[[2m8 tests^[[22m^[[2m)^[[22m^[[32m 164^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:06.5418671Z  ^[[32m✓^[[39m tests/lib/export.test.ts ^[[2m(^[[22m^[[2m16 tests^[[22m^[[2m)^[[22m^[[32m 76^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:07.0257913Z  ^[[32m✓^[[39m tests/lib/feature-flags.test.ts ^[[2m(^[[22m^[[2m22 tests^[[22m^[[2m)^[[22m^[[32m 67^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:07.1104654Z  ^[[32m✓^[[39m tests/config/release-version.test.ts ^[[2m(^[[22m^[[2m39 tests^[[22m^[[2m)^[[22m^[[33m 2747^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:07.1198570Z      ^[[33m^[[2m✓^[[22m^[[39m TypeScript 调用可传入 tag，导出参数类型与运行契约一致 ^[[33m 2178^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:07.1258641Z      ^[[33m^[[2m✓^[[22m^[[39m 从仓库外启动 CLI 也使用脚本所属仓库，并返回正确退出码 ^[[33m 364^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:07.8868410Z  ^[[2m^[[90m↓^[[39m^[[22m tests/lib/t1-chunking-acceptance.test.ts ^[[2m(^[[22m^[[2m2 tests^[[22m^[[2m | ^[[22m^[[33m2 skipped^[[39m^[[2m)^[[22m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:08.1419965Z  ^[[32m✓^[[39m tests/lib/read-note.test.ts ^[[2m(^[[22m^[[2m15 tests^[[22m^[[2m)^[[22m^[[32m 120^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:09.4078628Z  ^[[32m✓^[[39m tests/lib/process-note.test.ts ^[[2m(^[[22m^[[2m10 tests^[[22m^[[2m)^[[22m^[[33m 313^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:10.5128559Z  ^[[32m✓^[[39m tests/api/images.test.ts ^[[2m(^[[22m^[[2m32 tests^[[22m^[[2m)^[[22m^[[32m 228^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:11.2777256Z  ^[[32m✓^[[39m tests/lib/image-gen.test.ts ^[[2m(^[[22m^[[2m8 tests^[[22m^[[2m)^[[22m^[[32m 38^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:11.4465779Z  ^[[32m✓^[[39m tests/components/command-palette.test.tsx ^[[2m(^[[22m^[[2m7 tests^[[22m^[[2m)^[[22m^[[33m 2010^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:11.4528578Z      ^[[33m^[[2m✓^[[22m^[[39m 输入搜索词后展示 API 笔记并可回车打开 ^[[33m 374^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:11.4532976Z      ^[[33m^[[2m✓^[[22m^[[39m 改词后旧请求被中断，不覆盖新结果 ^[[33m 1300^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:12.4928841Z ^[[90mstdout^[[2m | tests/lib/backup.test.ts^[[2m > ^[[22m^[[2mbackup^[[2m > ^[[22m^[[2mdoBackup 同时备份数据库与图片目录，并各按 7 份轮转
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:12.4958456Z ^[[22m^[[39m[backup] 已备份到 /tmp/zhiliao-backup-9EbEdH/db/backups/app-2026-09-29.db
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:12.4986885Z 
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:12.5048379Z ^[[90mstdout^[[2m | tests/lib/backup.test.ts^[[2m > ^[[22m^[[2mbackup^[[2m > ^[[22m^[[2muploads 目录不存在时仅备份数据库，不报错
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:12.5074020Z ^[[22m^[[39m[backup] 已备份到 /tmp/zhiliao-backup-qiYrAA/db/backups/app-2026-09-29.db
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:12.5074931Z 
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:12.5148742Z ^[[90mstdout^[[2m | tests/lib/backup.test.ts^[[2m > ^[[22m^[[2mbackup^[[2m > ^[[22m^[[2m并发调用 doBackup 合并为一次执行
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:12.5183214Z ^[[22m^[[39m[backup] 已备份到 /tmp/zhiliao-backup-OsbP9o/db/backups/app-2026-09-29.db
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:12.5217008Z 
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:12.5245170Z  ^[[32m✓^[[39m tests/lib/backup.test.ts ^[[2m(^[[22m^[[2m5 tests^[[22m^[[2m)^[[22m^[[32m 95^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:12.6663128Z ^[[90mstdout^[[2m | tests/lib/search.test.ts^[[2m > ^[[22m^[[2msearch^[[2m > ^[[22m^[[2mrebuildFtsIfNeeded 以未删除笔记数为基准，重建后不含回收站笔记
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:12.6667079Z ^[[22m^[[39m[fts] 重建索引：notes=1 fts=0
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:12.6667827Z 
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:12.6692113Z  ^[[32m✓^[[39m tests/lib/search.test.ts ^[[2m(^[[22m^[[2m14 tests^[[22m^[[2m)^[[22m^[[33m 526^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:13.3878376Z  ^[[32m✓^[[39m tests/lib/note-chunking.test.ts ^[[2m(^[[22m^[[2m10 tests^[[22m^[[2m)^[[22m^[[32m 15^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:14.0350709Z  ^[[32m✓^[[39m tests/api/import.test.ts ^[[2m(^[[22m^[[2m5 tests^[[22m^[[2m)^[[22m^[[33m 379^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:14.0357228Z      ^[[33m^[[2m✓^[[22m^[[39m 原始 zip 字节作为请求体即可导入，返回报告 ^[[33m 320^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:14.3348676Z  ^[[2m^[[90m↓^[[39m^[[22m tests/lib/t0-acceptance.test.ts ^[[2m(^[[22m^[[2m1 test^[[22m^[[2m | ^[[22m^[[33m1 skipped^[[39m^[[2m)^[[22m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:15.2058907Z  ^[[32m✓^[[39m tests/api/embedding-backfill.test.ts ^[[2m(^[[22m^[[2m6 tests^[[22m^[[2m)^[[22m^[[32m 141^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:15.4935699Z  ^[[32m✓^[[39m tests/config/r1-core-loop-script.test.ts ^[[2m(^[[22m^[[2m6 tests^[[22m^[[2m)^[[22m^[[32m 11^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:15.6348200Z  ^[[32m✓^[[39m tests/lib/mermaid.test.ts ^[[2m(^[[22m^[[2m8 tests^[[22m^[[2m)^[[22m^[[32m 250^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:16.4735865Z ^[[90mstderr^[[2m | tests/api/related-notes.test.ts^[[2m > ^[[22m^[[2m相关笔记接口^[[2m > ^[[22m^[[2mLLM 未配置或失败时保留相关笔记并返回空冲突
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:16.4738030Z ^[[22m^[[39m[related-notes] 冲突判断失败，保留相关笔记结果: 供应商不可用
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:16.4743534Z 
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:16.4775459Z  ^[[32m✓^[[39m tests/api/related-notes.test.ts ^[[2m(^[[22m^[[2m4 tests^[[22m^[[2m)^[[22m^[[32m 101^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:17.8763426Z  ^[[32m✓^[[39m tests/components/client-note-pages.test.tsx ^[[2m(^[[22m^[[2m3 tests^[[22m^[[2m)^[[22m^[[32m 47^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:18.0748770Z ^[[90mstderr^[[2m | tests/components/nav.test.tsx^[[2m > ^[[22m^[[2mSideNav 折叠状态契约^[[2m > ^[[22m^[[2m响应命令事件切换 data-collapsed
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:18.0777835Z ^[[22m^[[39mReceived `true` for a non-boolean attribute `prefetch`.
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:18.0806964Z 
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:18.0808128Z If you want to write it to the DOM, pass a string instead: prefetch="true" or prefetch={value.toString()}.
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:18.0816983Z 
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:18.4298372Z  ^[[32m✓^[[39m tests/components/nav.test.tsx ^[[2m(^[[22m^[[2m5 tests^[[22m^[[2m)^[[22m^[[33m 413^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:18.6103121Z  ^[[32m✓^[[39m tests/config/demo-verification-utils.test.ts ^[[2m(^[[22m^[[2m2 tests^[[22m^[[2m)^[[22m^[[32m 6^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:19.3238361Z  ^[[32m✓^[[39m tests/lib/tiptap-security.test.ts ^[[2m(^[[22m^[[2m12 tests^[[22m^[[2m)^[[22m^[[32m 23^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:19.6078324Z  ^[[32m✓^[[39m tests/lib/note-chunks.test.ts ^[[2m(^[[22m^[[2m4 tests^[[22m^[[2m)^[[22m^[[32m 46^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:20.3698651Z  ^[[32m✓^[[39m tests/lib/notes.test.ts ^[[2m(^[[22m^[[2m5 tests^[[22m^[[2m)^[[22m^[[32m 58^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:20.5797170Z  ^[[32m✓^[[39m tests/lib/source-refusal.test.ts ^[[2m(^[[22m^[[2m8 tests^[[22m^[[2m)^[[22m^[[32m 6^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:20.7997984Z  ^[[32m✓^[[39m tests/config/demo-compose-wrapper.test.ts ^[[2m(^[[22m^[[2m2 tests^[[22m^[[2m)^[[22m^[[32m 10^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:20.8158156Z  ^[[32m✓^[[39m tests/api/external-capture.test.ts ^[[2m(^[[22m^[[2m4 tests^[[22m^[[2m)^[[22m^[[32m 157^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:21.8819160Z  ^[[32m✓^[[39m tests/api/handwriting.test.ts ^[[2m(^[[22m^[[2m4 tests^[[22m^[[2m)^[[22m^[[32m 50^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:22.0715956Z  ^[[32m✓^[[39m tests/lib/vision-images.test.ts ^[[2m(^[[22m^[[2m4 tests^[[22m^[[2m)^[[22m^[[33m 995^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:22.0718922Z      ^[[33m^[[2m✓^[[22m^[[39m 生成仅供视觉请求使用的 WebP Data URL ^[[33m 459^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:22.0720405Z      ^[[33m^[[2m✓^[[22m^[[39m 同一文件被正文重复引用时只发送一次 ^[[33m 531^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:22.2654857Z  ^[[32m✓^[[39m tests/api/mcp.test.ts ^[[2m(^[[22m^[[2m4 tests^[[22m^[[2m)^[[22m^[[32m 113^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:22.7372899Z  ^[[32m✓^[[39m tests/components/settings-page-demo.test.tsx ^[[2m(^[[22m^[[2m1 test^[[22m^[[2m)^[[22m^[[32m 7^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:23.0291132Z  ^[[32m✓^[[39m tests/lib/auth.test.ts ^[[2m(^[[22m^[[2m4 tests^[[22m^[[2m)^[[22m^[[32m 20^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:23.1825846Z  ^[[32m✓^[[39m tests/config/smoke-fresh-install.test.ts ^[[2m(^[[22m^[[2m11 tests^[[22m^[[2m)^[[22m^[[33m 16387^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:23.1829096Z      ^[[33m^[[2m✓^[[22m^[[39m 默认包版本：输出正确镜像，且不依赖运行目录或环境版本 ^[[33m 2106^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:23.1830431Z      ^[[33m^[[2m✓^[[22m^[[39m 历史固定版本：输出正确镜像，且不依赖运行目录或环境版本 ^[[33m 1364^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:23.1831585Z      ^[[33m^[[2m✓^[[22m^[[39m RC：输出正确镜像，且不依赖运行目录或环境版本 ^[[33m 1080^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:23.1832739Z      ^[[33m^[[2m✓^[[22m^[[39m 点分 RC：输出正确镜像，且不依赖运行目录或环境版本 ^[[33m 1383^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:23.1833904Z      ^[[33m^[[2m✓^[[22m^[[39m digest：输出正确镜像，且不依赖运行目录或环境版本 ^[[33m 1203^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:23.1835561Z      ^[[33m^[[2m✓^[[22m^[[39m 拒绝 latest，失败前后均无部署副作用 ^[[33m 1585^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:23.1837005Z      ^[[33m^[[2m✓^[[22m^[[39m 拒绝 浮动次版本，失败前后均无部署副作用 ^[[33m 1569^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:23.1883871Z      ^[[33m^[[2m✓^[[22m^[[39m 拒绝 错误仓库，失败前后均无部署副作用 ^[[33m 1658^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:23.1938331Z      ^[[33m^[[2m✓^[[22m^[[39m 拒绝 错误摘要，失败前后均无部署副作用 ^[[33m 1431^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:23.2008377Z      ^[[33m^[[2m✓^[[22m^[[39m 拒绝 错误 RC，失败前后均无部署副作用 ^[[33m 1533^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:23.2038635Z      ^[[33m^[[2m✓^[[22m^[[39m 拒绝 末尾换行，失败前后均无部署副作用 ^[[33m 1472^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:23.3171914Z  ^[[32m✓^[[39m tests/lib/markdown-export.test.ts ^[[2m(^[[22m^[[2m1 test^[[22m^[[2m)^[[22m^[[32m 197^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:23.4098359Z  ^[[32m✓^[[39m tests/lib/math.test.ts ^[[2m(^[[22m^[[2m3 tests^[[22m^[[2m)^[[22m^[[32m 8^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:23.5173023Z  ^[[32m✓^[[39m tests/lib/client-note.test.ts ^[[2m(^[[22m^[[2m1 test^[[22m^[[2m)^[[22m^[[32m 6^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:23.7475765Z  ^[[32m✓^[[39m tests/lib/correction-learning.test.ts ^[[2m(^[[22m^[[2m2 tests^[[22m^[[2m)^[[22m^[[32m 24^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:23.9988287Z  ^[[32m✓^[[39m tests/lib/api-token.test.ts ^[[2m(^[[22m^[[2m2 tests^[[22m^[[2m)^[[22m^[[32m 26^[[2mms^[[22m^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:24.0030179Z 
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:24.0037579Z ^[[2m Test Files ^[[22m ^[[1m^[[32m65 passed^[[39m^[[22m^[[2m | ^[[22m^[[33m3 skipped^[[39m^[[90m (68)^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:24.0040588Z ^[[2m      Tests ^[[22m ^[[1m^[[32m878 passed^[[39m^[[22m^[[2m | ^[[22m^[[33m28 skipped^[[39m^[[90m (906)^[[39m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:24.0041667Z ^[[2m   Start at ^[[22m 12:17:50
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:24.0043368Z ^[[2m   Duration ^[[22m 33.70s^[[2m (transform 3.46s, setup 736ms, import 34.01s, tests 43.30s, environment 8.36s)^[[22m
+Lint、测试与构建	单元测试（Vitest）	2026-09-29T12:18:24.0044644Z 
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	﻿2026-09-29T12:18:24.0538712Z ##[group]Run npm run build
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:24.0539031Z ^[[36;1mnpm run build^[[0m
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:24.0602026Z shell: /usr/bin/bash -e {0}
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:24.0602323Z ##[endgroup]
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:24.1661321Z 
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:24.1661989Z > zhiliao@0.6.1 build
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:24.1662540Z > next build
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:24.1662720Z 
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:24.9396756Z ⚠ No build cache found. Please configure build caching for faster rebuilds. Read more: https://nextjs.org/docs/messages/no-cache
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:24.9472349Z Attention: Next.js now collects completely anonymous telemetry regarding usage.
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:24.9473794Z This information is used to shape Next.js' roadmap and prioritize features.
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:24.9475486Z You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:24.9477037Z https://nextjs.org/telemetry
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:24.9477518Z 
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:25.0447133Z    ▲ Next.js 15.5.24
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:25.0448081Z    - Experiments (use with caution):
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:25.0448937Z      · staleTimes
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:25.0450212Z 
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:25.1215893Z    Creating an optimized production build ...
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:41.2427243Z  ⚠ Compiled with warnings in 15.3s
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:41.2428454Z 
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:41.2428966Z ./node_modules/libheif-js/libheif-wasm/libheif-bundle.js
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:41.2430266Z Critical dependency: require function is used in a way in which dependencies cannot be statically extracted
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:41.2431284Z 
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:41.2431665Z Import trace for requested module:
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:41.2437608Z ./node_modules/libheif-js/libheif-wasm/libheif-bundle.js
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:41.2438343Z ./node_modules/libheif-js/wasm-bundle.js
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:41.2438892Z ./node_modules/heic-decode/index.js
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:41.2439422Z ./node_modules/heic-convert/index.js
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:41.2439946Z ./src/app/api/uploads/route.ts
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:41.2440234Z 
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:41.2440392Z ./src/lib/version.ts
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:41.2441672Z Should not import the named export 'version' (imported as 'version') from default-exporting module (only default export is available soon)
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:41.2443043Z 
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:41.2443349Z Import trace for requested module:
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:41.2443853Z ./src/lib/version.ts
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:41.2444281Z ./src/app/api/mcp/route.ts
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:41.2444559Z 
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:43.5287491Z  ⚠ Compiled with warnings in 1363ms
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:43.5307803Z 
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:43.5327176Z ./node_modules/jose/dist/webapi/lib/deflate.js
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:43.5328045Z A Node.js API is used (CompressionStream at line: 10) which is not supported in the Edge Runtime.
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:43.5328724Z Learn more: https://nextjs.org/docs/api-reference/edge-runtime
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:43.5329015Z 
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:43.5329172Z Import trace for requested module:
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:43.5329538Z ./node_modules/jose/dist/webapi/lib/deflate.js
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:43.5329944Z ./node_modules/jose/dist/webapi/lib/jwe_decrypt.js
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:43.5330378Z ./node_modules/jose/dist/webapi/jwt/decrypt.js
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:43.5330741Z ./node_modules/jose/dist/webapi/index.js
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:43.5331026Z ./src/lib/auth.ts
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:43.5331162Z 
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:43.5331330Z ./node_modules/jose/dist/webapi/lib/deflate.js
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:43.5331932Z A Node.js API is used (DecompressionStream at line: 26) which is not supported in the Edge Runtime.
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:43.5332577Z Learn more: https://nextjs.org/docs/api-reference/edge-runtime
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:43.5332850Z 
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:43.5332999Z Import trace for requested module:
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:43.5333385Z ./node_modules/jose/dist/webapi/lib/deflate.js
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:43.5333773Z ./node_modules/jose/dist/webapi/lib/jwe_decrypt.js
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:43.5334153Z ./node_modules/jose/dist/webapi/jwt/decrypt.js
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:43.5334499Z ./node_modules/jose/dist/webapi/index.js
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:43.5334778Z ./src/lib/auth.ts
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:43.5334917Z 
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:57.4620296Z  ✓ Compiled successfully in 29.6s
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:18:57.4664143Z    Linting and checking validity of types ...
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:09.4630174Z    Collecting page data ...
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:12.9909847Z    Generating static pages (0/28) ...
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:13.5267687Z    Generating static pages (7/28) 
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:13.5640275Z    Generating static pages (14/28) 
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:13.8900285Z    Generating static pages (21/28) 
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:13.8902381Z  ✓ Generating static pages (28/28)
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:15.0990721Z    Finalizing page optimization ...
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:15.1015998Z    Collecting build traces ...
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.5954354Z 
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6040353Z Route (app)                                     Size  First Load JS
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6041663Z ┌ ƒ /                                        1.31 kB         108 kB
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6042687Z ├ ○ /_not-found                                 1 kB         105 kB
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6043680Z ├ ƒ /api/auth/login                            252 B         104 kB
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6044759Z ├ ƒ /api/auth/logout                           252 B         104 kB
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6045782Z ├ ƒ /api/backup                                252 B         104 kB
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6047129Z ├ ƒ /api/chat                                  252 B         104 kB
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6048173Z ├ ƒ /api/chat/confirm                          252 B         104 kB
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6049219Z ├ ƒ /api/chat/conversations                    252 B         104 kB
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6050297Z ├ ƒ /api/chat/conversations/[id]               252 B         104 kB
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6051804Z ├ ƒ /api/chat/conversations/[id]/sources       252 B         104 kB
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6052747Z ├ ƒ /api/chat/undo                             252 B         104 kB
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6053470Z ├ ƒ /api/embedding/backfill                    252 B         104 kB
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6054030Z ├ ƒ /api/export                                252 B         104 kB
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6054977Z ├ ƒ /api/external/capture                      252 B         104 kB
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6055560Z ├ ƒ /api/external/knowledge                    252 B         104 kB
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6056080Z ├ ƒ /api/handwriting                           252 B         104 kB
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6057711Z ├ ƒ /api/healthz                               252 B         104 kB
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6058529Z ├ ƒ /api/images/[filename]                     252 B         104 kB
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6059133Z ├ ƒ /api/import                                252 B         104 kB
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6059629Z ├ ƒ /api/llm/test                              252 B         104 kB
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6060111Z ├ ƒ /api/mcp                                   252 B         104 kB
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6060605Z ├ ƒ /api/notes                                 252 B         104 kB
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6061105Z ├ ƒ /api/notes/[id]                            252 B         104 kB
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6061602Z ├ ƒ /api/notes/[id]/append                     252 B         104 kB
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6062127Z ├ ƒ /api/notes/[id]/related                    252 B         104 kB
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6062640Z ├ ƒ /api/notes/[id]/reprocess                  252 B         104 kB
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6063164Z ├ ƒ /api/notes/[id]/transcribe                 252 B         104 kB
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6063691Z ├ ƒ /api/notes/[id]/transcription-candidate    252 B         104 kB
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6064234Z ├ ƒ /api/notes/batch-delete                    252 B         104 kB
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6064756Z ├ ƒ /api/notes/batch-move                      252 B         104 kB
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6065261Z ├ ƒ /api/review                                252 B         104 kB
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6065745Z ├ ƒ /api/search                                252 B         104 kB
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6066251Z ├ ƒ /api/settings/corrections                  252 B         104 kB
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6067098Z ├ ƒ /api/settings/features                     252 B         104 kB
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6067876Z ├ ƒ /api/settings/llm                          252 B         104 kB
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6068395Z ├ ƒ /api/settings/tokens                       252 B         104 kB
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6069114Z ├ ƒ /api/suggestions                           252 B         104 kB
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6069880Z ├ ƒ /api/suggestions/[id]/accept               252 B         104 kB
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6070703Z ├ ƒ /api/suggestions/[id]/dismiss              252 B         104 kB
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6071555Z ├ ƒ /api/suggestions/generate                  252 B         104 kB
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6072320Z ├ ƒ /api/tags                                  252 B         104 kB
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6073053Z ├ ƒ /api/topics                                252 B         104 kB
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6073788Z ├ ƒ /api/topics/[id]                           252 B         104 kB
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6074565Z ├ ƒ /api/trash/purge                           252 B         104 kB
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6075455Z ├ ƒ /api/trash/restore                         252 B         104 kB
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6076565Z ├ ƒ /api/uploads                               252 B         104 kB
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6077451Z ├ ○ /icon.svg                                    0 B            0 B
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6078526Z ├ ƒ /inbox                                   3.59 kB         111 kB
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6079365Z ├ ƒ /login                                   1.19 kB         105 kB
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6080261Z ├ ○ /manifest.webmanifest                      252 B         104 kB
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6081154Z ├ ƒ /notes/[id]                               6.3 kB         113 kB
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6081996Z ├ ƒ /notes/new                               2.25 kB         106 kB
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6082834Z ├ ƒ /search                                   2.8 kB         110 kB
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6083669Z ├ ƒ /settings                                13.3 kB         120 kB
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6084512Z ├ ƒ /topics/[id]                             3.11 kB         110 kB
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6085349Z └ ƒ /trash                                   3.22 kB         110 kB
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6086085Z + First Load JS shared by all                 104 kB
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6087069Z   ├ chunks/1255-73aef1a86847a1f3.js          46.1 kB
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6087829Z   ├ chunks/4bd1b696-100b9d70ed4e49c1.js      54.2 kB
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6088558Z   └ other shared chunks (total)              3.26 kB
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6088938Z 
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6088949Z 
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6089337Z ƒ Middleware                                   40 kB
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6089699Z 
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6090054Z ○  (Static)   prerendered as static content
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6090721Z ƒ  (Dynamic)  server-rendered on demand
+Lint、测试与构建	构建（含 TypeScript 严格类型检查）	2026-09-29T12:19:32.6091038Z 
+Lint、测试与构建	Post Run actions/setup-node@v4	﻿2026-09-29T12:19:32.6919347Z Post job cleanup.
+Lint、测试与构建	Post Run actions/setup-node@v4	2026-09-29T12:19:32.8180467Z (node:3616) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+Lint、测试与构建	Post Run actions/setup-node@v4	2026-09-29T12:19:32.8181793Z (Use `node --trace-deprecation ...` to show where the warning was created)
+Lint、测试与构建	Post Run actions/setup-node@v4	2026-09-29T12:19:32.8445515Z [command]/usr/bin/tar --posix -cf cache.tzst --exclude cache.tzst -P -C /home/runner/work/zhiliao/zhiliao --files-from manifest.txt --use-compress-program zstdmt
+Lint、测试与构建	Post Run actions/setup-node@v4	2026-09-29T12:19:33.5153540Z (node:3616) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+Lint、测试与构建	Post Run actions/setup-node@v4	2026-09-29T12:19:34.4962226Z Sent 74579695 of 275906287 (27.0%), 71.1 MBs/sec
+Lint、测试与构建	Post Run actions/setup-node@v4	2026-09-29T12:19:34.7957354Z Sent 275906287 of 275906287 (100.0%), 202.4 MBs/sec
+Lint、测试与构建	Post Run actions/setup-node@v4	2026-09-29T12:19:34.9244580Z Cache saved with the key: node-cache-Linux-x64-npm-a80d524b827bf84fc72ed3d4dc708a032dcf4069998ffc465b83a90e03c197e2
+Lint、测试与构建	Post Run actions/checkout@v4	﻿2026-09-29T12:19:34.9432860Z Post job cleanup.
+Lint、测试与构建	Post Run actions/checkout@v4	2026-09-29T12:19:35.0342722Z [command]/usr/bin/git version
+Lint、测试与构建	Post Run actions/checkout@v4	2026-09-29T12:19:35.0391239Z git version 2.55.0
+Lint、测试与构建	Post Run actions/checkout@v4	2026-09-29T12:19:35.0432581Z Temporarily overriding HOME='/home/runner/work/_temp/2a2654d3-b084-4f88-94c0-9659c2cca7c8' before making global git config changes
+Lint、测试与构建	Post Run actions/checkout@v4	2026-09-29T12:19:35.0434132Z Adding repository directory to the temporary git global config as a safe directory
+Lint、测试与构建	Post Run actions/checkout@v4	2026-09-29T12:19:35.0440011Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/zhiliao/zhiliao
+Lint、测试与构建	Post Run actions/checkout@v4	2026-09-29T12:19:35.0484455Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Lint、测试与构建	Post Run actions/checkout@v4	2026-09-29T12:19:35.0525712Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Lint、测试与构建	Post Run actions/checkout@v4	2026-09-29T12:19:35.0808929Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Lint、测试与构建	Post Run actions/checkout@v4	2026-09-29T12:19:35.0841888Z http.https://github.com/.extraheader
+Lint、测试与构建	Post Run actions/checkout@v4	2026-09-29T12:19:35.0856550Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+Lint、测试与构建	Post Run actions/checkout@v4	2026-09-29T12:19:35.0900631Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Lint、测试与构建	Post Run actions/checkout@v4	2026-09-29T12:19:35.1167026Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Lint、测试与构建	Post Run actions/checkout@v4	2026-09-29T12:19:35.1212175Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Lint、测试与构建	Complete job	﻿2026-09-29T12:19:35.1643352Z Cleaning up orphan processes
+Lint、测试与构建	Complete job	2026-09-29T12:19:35.2039284Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-node@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

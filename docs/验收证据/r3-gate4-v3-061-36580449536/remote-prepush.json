@@ -1,0 +1,26 @@
+{
+  "refs": {
+    "refs/heads/candidate/0.6.1-baseline": "82b1e5a1b98d4b687d8604a84c47c8ec416bf818",
+    "refs/heads/main": "6ee67532deed37fda6cc98962e8df76c98659890"
+  },
+  "pr": {
+    "baseRefName": "main",
+    "baseRefOid": "6ee67532deed37fda6cc98962e8df76c98659890",
+    "headRefName": "candidate/0.6.1-baseline",
+    "headRefOid": "82b1e5a1b98d4b687d8604a84c47c8ec416bf818",
+    "headRepository": {
+      "id": "R_kgDOT3PzZw",
+      "name": "zhiliao",
+      "nameWithOwner": "B-tech-hub/zhiliao"
+    },
+    "headRepositoryOwner": {
+      "id": "U_kgDODOX3kw",
+      "name": "BAIBAI",
+      "login": "B-tech-hub"
+    },
+    "isDraft": false,
+    "mergeable": "MERGEABLE",
+    "state": "OPEN"
+  },
+  "recorded_at": "2026-09-29T14:08:38.293819+00:00"
+}

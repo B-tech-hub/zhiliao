@@ -1,0 +1,113 @@
+{
+  "status": "failed",
+  "started_at": "2026-09-19T16:53:31.488Z",
+  "baseline_commit": "0179c8dfc5aa021865a7b2020df7bfa161f03ec4",
+  "llm": {
+    "source": "host-settings",
+    "model": "gemini-3.7-flash",
+    "host": "ai.hybgzs.com",
+    "key_len": 62
+  },
+  "budget": {
+    "organize_success": 3,
+    "source_chat": 0,
+    "failure": 0
+  },
+  "checks": {
+    "healthz": {
+      "ok": true
+    },
+    "login": {
+      "ok": true
+    },
+    "topic_create": {
+      "ok": true,
+      "id": "lyv3rj31a92fgvsbrapgmf0b",
+      "name": "运动"
+    },
+    "record": {
+      "ok": true,
+      "ids": {
+        "A": "fedagqhtq9otucx3vxdjucxa",
+        "B": "lvcumx1ak90iksk5sqm28s3t",
+        "C": "ciu5aykap49bmol8qjec1wts"
+      }
+    },
+    "organize": {
+      "ok": true,
+      "notes": {
+        "A": {
+          "id": "fedagqhtq9otucx3vxdjucxa",
+          "aiStatus": "done",
+          "title": "羽毛球高远球练习计划",
+          "topicId": "lyv3rj31a92fgvsbrapgmf0b",
+          "contentUnchanged": true,
+          "elapsedMs": 54307,
+          "timedOut": false
+        },
+        "B": {
+          "id": "lvcumx1ak90iksk5sqm28s3t",
+          "aiStatus": "done",
+          "title": "Markdown表格对齐语法",
+          "topicId": "inbox",
+          "contentUnchanged": true,
+          "elapsedMs": 108122,
+          "timedOut": false
+        },
+        "C": {
+          "id": "ciu5aykap49bmol8qjec1wts",
+          "aiStatus": "done",
+          "title": "光合作用的光能吸收",
+          "topicId": "inbox",
+          "contentUnchanged": true,
+          "elapsedMs": 164148,
+          "timedOut": false
+        }
+      }
+    },
+    "topics": {
+      "ok": true,
+      "inboxCount": 2,
+      "classified": [
+        "A"
+      ],
+      "leftInbox": [
+        "B",
+        "C"
+      ]
+    },
+    "search": {
+      "ok": true,
+      "hits": {
+        "A": {
+          "q": "羽毛球",
+          "ids": [
+            "fedagqhtq9otucx3vxdjucxa"
+          ],
+          "hit": true
+        },
+        "B": {
+          "q": "Markdown 表格",
+          "ids": [
+            "lvcumx1ak90iksk5sqm28s3t"
+          ],
+          "hit": true
+        },
+        "C": {
+          "q": "叶绿素",
+          "ids": [
+            "ciu5aykap49bmol8qjec1wts"
+          ],
+          "hit": true
+        }
+      }
+    }
+  },
+  "no_model": {
+    "reused": "docs/R1安装验收-2026-09-15.md",
+    "rerun": false
+  },
+  "port": 3011,
+  "error": "This operation was aborted",
+  "finished_at": "2026-09-19T23:38:40.568Z"
+}

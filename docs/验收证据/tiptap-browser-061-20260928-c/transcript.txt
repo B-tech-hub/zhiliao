@@ -1,0 +1,51 @@
+﻿**********************
+Windows PowerShell transcript start
+Start time: 20260928200122
+Username: LAPTOP-RUE2E3NU\BAIBAI
+RunAs User: LAPTOP-RUE2E3NU\BAIBAI
+Configuration Name: 
+Machine: LAPTOP-RUE2E3NU (Microsoft Windows NT 10.0.26200.0)
+Host Application: C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\docs\验收证据\tiptap-browser-061-20260928-c\tools\run.ps1 -RunId t061-20260928-c
+Process ID: 2376
+PSVersion: 5.1.26100.9444
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.9444
+BuildVersion: 10.0.26100.9444
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+TipTap 验收 preflight 开始
+› Ask Codex to do anything
+TipTap 验收 start 开始
+› Ask Codex to do anything
+› Ask Codex to do anything
+**********************
+Command start time: 20260928200129
+**********************
+PS>TerminatingError(): "Docker 命令失败，保留现场"
+>> TerminatingError(): "Docker 命令失败，保留现场"
+› Ask Codex to do anything
+TipTap 验收 round-m0 开始
+› Ask Codex to do anything
+› Ask Codex to do anything
+› Ask Codex to do anything
+› Ask Codex to do anything
+› Ask Codex to do anything
+› Ask Codex to do anything
+› Ask Codex to do anything
+TipTap 验收 round-m1 开始
+› Ask Codex to do anything
+› Ask Codex to do anything
+› Ask Codex to do anything
+› Ask Codex to do anything
+› Ask Codex to do anything
+› Ask Codex to do anything
+› Ask Codex to do anything
+TipTap 验收 stop 开始
+› Ask Codex to do anything
+**********************
+Windows PowerShell transcript end
+End time: 20260928200229
+**********************

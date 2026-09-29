@@ -1,0 +1,18 @@
+{
+  "bytes": 73488,
+  "sha256": "e39b43e81b7c0e9e17f22bc84b7cfd4c574fefa800c4f18b51fb112cd05c5b57",
+  "patterns": [
+    "gh[pousr]_[A-Za-z0-9]{30,}",
+    "github_pat_[A-Za-z0-9_]{30,}",
+    "sk-[A-Za-z0-9_-]{24,}",
+    "-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----"
+  ],
+  "matches": [
+    0,
+    0,
+    0,
+    0
+  ],
+  "additional_redaction": false,
+  "captured_at": "2026-09-29T14:14:44.592636+00:00"
+}

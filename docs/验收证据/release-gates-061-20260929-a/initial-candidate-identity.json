@@ -1,0 +1,10 @@
+{
+  "kind": "isolated-source-validation",
+  "source_head": "6e79059ff825bb2f0ae5c76d6cb818e6da497d04",
+  "manifest_sha256": "e0ae237431ca64182e1b694d4d2e36221a16dcc9d380323660c78735951a1415",
+  "gate_inputs_sha256": "0fe637d64f84c6865104020606cb31602f663105844f62b8e58aa19f690908d0",
+  "file_count": 275,
+  "image_built": false,
+  "platform": "win32/x64",
+  "copy": "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-release-gates-061-20260929-a\\candidate"
+}

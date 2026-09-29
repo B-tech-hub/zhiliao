@@ -1,0 +1,12 @@
+{
+  "status": "passed",
+  "manifest_sha256": "0a2819f376993fafa61b27f57a9a978ff7ef1c7635d88e8485bee7c0655c7baf",
+  "candidate_files": 276,
+  "unchanged_inputs": 271,
+  "historical_files_preserved": 95,
+  "package_lock_unchanged": true,
+  "fixture_bytes_equal": true,
+  "new_links_checked": 36,
+  "docker_invoked": false,
+  "network_invoked": false
+}

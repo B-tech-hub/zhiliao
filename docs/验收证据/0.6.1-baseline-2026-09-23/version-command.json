@@ -1,0 +1,8 @@
+{
+  "command": [
+    "node",
+    "scripts/check-release-version.mjs"
+  ],
+  "exit_code": 0,
+  "elapsed_s": 0.12
+}

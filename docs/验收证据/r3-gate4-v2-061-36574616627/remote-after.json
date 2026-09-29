@@ -1,0 +1,38 @@
+{
+  "captured_at": "2026-09-29T13:22:44.069082+00:00",
+  "refs": {
+    "refs/heads/candidate/0.6.1-baseline": "82b1e5a1b98d4b687d8604a84c47c8ec416bf818",
+    "refs/heads/main": "6ee67532deed37fda6cc98962e8df76c98659890"
+  },
+  "pr": {
+    "baseRefName": "main",
+    "baseRefOid": "6ee67532deed37fda6cc98962e8df76c98659890",
+    "headRefName": "candidate/0.6.1-baseline",
+    "headRefOid": "82b1e5a1b98d4b687d8604a84c47c8ec416bf818",
+    "headRepository": {
+      "id": "R_kgDOT3PzZw",
+      "name": "zhiliao",
+      "nameWithOwner": "B-tech-hub/zhiliao"
+    },
+    "headRepositoryOwner": {
+      "id": "U_kgDODOX3kw",
+      "name": "BAIBAI",
+      "login": "B-tech-hub"
+    },
+    "isDraft": false,
+    "mergeable": "MERGEABLE",
+    "state": "OPEN",
+    "statusCheckRollup": [
+      {
+        "__typename": "CheckRun",
+        "completedAt": "0001-01-01T00:00:00Z",
+        "conclusion": "",
+        "detailsUrl": "https://github.com/B-tech-hub/zhiliao/actions/runs/36574616627/job/109426911317",
+        "name": "Lint、测试与构建",
+        "startedAt": "2026-09-29T13:22:31Z",
+        "status": "QUEUED",
+        "workflowName": "CI"
+      }
+    ]
+  }
+}

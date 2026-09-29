@@ -1,0 +1,11 @@
+{
+    "status":  "passed",
+    "docker_invoked":  false,
+    "real_run_created":  false,
+    "candidate_files":  276,
+    "copied_manifest_passed":  true,
+    "three_env_images_match":  true,
+    "existing_workspace_rejected":  true,
+    "old_identity_rejected_before_copy":  true,
+    "temporary_workspace_removed":  true
+}

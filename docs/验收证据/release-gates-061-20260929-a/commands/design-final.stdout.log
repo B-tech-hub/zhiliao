@@ -1,0 +1,11 @@
+
+> zhiliao@0.6.1 check:design
+> node scripts/check-design.mjs
+
+✓ 裸色类只允许出现在主题不变面
+✓ 低透明度黑不得用作内容区填充
+✓ 语义色不得硬编码
+✓ ink 是文字色，不得用作背景
+✓ 任意圆角类已清零（冻结的 Mermaid 精确行除外）
+✓ rounded-full 只用于圆形控件与计数角标
+设计系统门禁通过（检查了 148 个文件）。

@@ -1,0 +1,16 @@
+{
+  "recorded_at": "2026-09-29T14:37:31.271720+00:00",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "preserved_files": 1104,
+  "preservation_mismatches": [],
+  "verification_input_mismatches": [],
+  "approved_target_mismatches": [],
+  "frozen_block_unchanged": true,
+  "baseline_unchanged": true,
+  "status_in_progress": true,
+  "head": "b2bae00d4a0e91ef43a0cb41f70f75ebc38ec592",
+  "staged_empty": true,
+  "all_authorized_checks_passed": true,
+  "diff_check_exit": 0,
+  "temporary_copy": "retained for inspection; no application runtime resources created"
+}

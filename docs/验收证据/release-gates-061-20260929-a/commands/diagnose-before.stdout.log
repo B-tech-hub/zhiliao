@@ -1,0 +1,27 @@
+
+ RUN  v4.1.11 C:/Users/BAIBAI/AppData/Local/Temp/zhiliao-release-gates-061-20260929-a/candidate
+
+ ✓ tests/components/markdown-editor-security.test.tsx (26 tests) 2625ms
+     ✓ 外部正文同步通过实际 setContent 路径过滤属性  1419ms
+ ❯ tests/config/demo-http-probes.test.ts (12 tests | 1 failed) 548ms
+     × 用不同长度区分默认 8m、导入 200m 和上传 25m 32ms
+     ✓ 拒绝 health 的错误状态 4ms
+     ✓ 拒绝 oversize 的错误状态 3ms
+     ✓ 登录后验证正文分批到达、done 结束、主动中断和中断后的健康检查 108ms
+     ✓ 健康请求没有响应时在总时限内失败 60ms
+     ✓ 只有 SSE 响应头而没有正文时触发首块超时 60ms
+     ✓ 已收到正文后停滞的流触发空闲超时 91ms
+     ✓ 持续发送事件但不结束的流仍受总时限限制 114ms
+     ✓ 一次性缓冲全部事件不能被认作流式通过 4ms
+     ✓ 缺少应用协议的 done 事件时失败 67ms
+     ✓ 应用返回错误事件时不回显其中的敏感文本 2ms
+     ✓ HTML 响应不能被当成 SSE 通过 2ms
+ ❯ tests/components/settings-page-demo.test.tsx (1 test | 1 failed) 6ms
+     × DEMO_MODE=1 时传给 SettingsPanel 的 llm.baseUrl 为空 5ms
+
+ Test Files  2 failed | 1 passed (3)
+      Tests  2 failed | 37 passed (39)
+   Start at  09:40:28
+   Duration  6.34s (transform 156ms, setup 37ms, import 1.23s, tests 3.18s, environment 1.26s)
+
+JSON report written to D:/ClaudeProjects/ai_acknowladge/docs/验收证据/release-gates-061-20260929-a/diagnose-before-results.json

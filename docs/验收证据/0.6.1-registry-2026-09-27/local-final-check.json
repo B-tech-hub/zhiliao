@@ -1,0 +1,13 @@
+{
+  "status": "passed",
+  "changed_resolved": 820,
+  "all_other_lock_fields_equal": true,
+  "candidate_files": 272,
+  "unchanged_candidate_files": 271,
+  "old_identity_preserved": true,
+  "archived_files_verified": 6,
+  "utf8_lf_files": 30,
+  "new_links_checked": 31,
+  "network_invoked": false,
+  "docker_invoked": false
+}

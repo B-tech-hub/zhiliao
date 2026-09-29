@@ -1,0 +1,6 @@
+{"time":"2026-09-28T13:18:06.4138306+08:00","block":"preflight","event":"start"}
+{"time":"2026-09-28T13:18:11.1530879+08:00","block":"preflight","event":"passed"}
+{"time":"2026-09-28T13:18:11.1558939+08:00","block":"start","event":"start"}
+{"time":"2026-09-28T13:18:15.0577968+08:00","block":"start","event":"passed"}
+{"time":"2026-09-28T13:18:15.0587976+08:00","block":"round-m0","event":"start"}
+{"time":"2026-09-28T13:18:43.0838437+08:00","error":"浏览器矩阵 m0 失败","block":"round-m0","event":"failed"}

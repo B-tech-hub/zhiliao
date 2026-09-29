@@ -1,0 +1,57 @@
+{
+  "patch_reproduced_files": 4,
+  "patch_mismatches": [],
+  "commit_mismatches": [],
+  "line_ending_differences": [
+    {
+      "path": "tests/config/demo-compose-wrapper.test.ts",
+      "validated_sha256": "5c5b00d51260ca05552dc48e0b4546f4bd8633e858ba0284db5e84476fadbdf6",
+      "committed_sha256": "59f0114110a01ed9065e5f2c8541b0d78597a6b8c9668d6a3100f3c653df12d0",
+      "validated_bytes": 2188,
+      "committed_bytes": 2141,
+      "crlf_count": 47,
+      "git_attributes": {
+        "text": "auto",
+        "eol": "lf"
+      },
+      "reconstruction": "committed bytes: replace LF with CRLF",
+      "raw_bytes_reproduced": true
+    }
+  ],
+  "markdown_files": [
+    "CHANGELOG.md",
+    "CONTRIBUTING.md",
+    "_bmad-output/implementation-artifacts/review-0-6-1-final-release-gates.md",
+    "_bmad-output/implementation-artifacts/spec-0-6-1-final-release-gates.md",
+    "docs/0.6.1候选定稿-2026-09-28.md",
+    "docs/README.md",
+    "docs/releases/v0.6.1.md",
+    "docs/产品规划/开源发布范围与执行清单-2026-09-13.md",
+    "docs/验收证据/release-gates-061-20260929-a/README.md"
+  ],
+  "local_links_checked": 295,
+  "broken_links": [],
+  "encoding_issues": [],
+  "lint_scope": [
+    {
+      "path": "docs/验收证据/r2-061-20260927-d/browser-check.cjs",
+      "ignored": true
+    },
+    {
+      "path": "scripts/demo-http-probes.mjs",
+      "ignored": false
+    },
+    {
+      "path": "tests/config/demo-http-probes.test.ts",
+      "ignored": false
+    },
+    {
+      "path": "src/app/(app)/settings/page.tsx",
+      "ignored": false
+    }
+  ],
+  "raw_log_count": 30,
+  "unlisted_logs": [],
+  "standalone_server_exists": true,
+  "build_id": "-O6MQo2KRg-k1dvD3prEK"
+}

@@ -1,0 +1,8 @@
+{
+  "path": "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-release-gates-061-20260929-a\\candidate",
+  "tracked_file_count": 1583,
+  "env_files": [],
+  "data_directories": [],
+  "next_env_copied": false,
+  "dependency_source": "本机 node_modules 独立复制；不构成 npm ci 或无缓存安装证据"
+}

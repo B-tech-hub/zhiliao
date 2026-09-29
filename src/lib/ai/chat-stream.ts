@@ -7,6 +7,7 @@ import type { DB } from "@/db";
 import { conversations, messages, notes } from "@/db/schema";
 import { newId } from "@/lib/ids";
 import type { LlmMessage } from "@/lib/llm";
+import { enforceSourceRefusal } from "./source-refusal";
 import {
   LIMIT_NOTICE,
   OVER_LIMIT_RESULT,
@@ -26,6 +27,10 @@ export interface ChatStreamParams {
   deps: ToolLoopDeps;
   // 循环开始前先发出的事件（确认后补发那条已执行的工具结果）
   prelude?: unknown[];
+  // 来源问答：资料不足的最终回答强制带上固定拒答句
+  sourceRefusal?: boolean;
+  // 白名单里的笔记才算已经引用，收口时不改这类回答
+  sourceNoteIds?: ReadonlySet<string>;
 }
 
 export function createChatSseResponse(params: ChatStreamParams): Response {
@@ -63,26 +68,33 @@ export function createChatSseResponse(params: ChatStreamParams): Response {
         for await (const ev of runToolLoop(initial, deps)) {
           switch (ev.kind) {
             case "delta":
-              send({ delta: ev.text });
+              // 来源问答先攒着，最终回答收口后再一次性发出，避免客户端拼出改写前的句子
+              if (!params.sourceRefusal) send({ delta: ev.text });
               break;
 
             case "reasoning":
               send({ reasoning: ev.text });
               break;
 
-            case "assistant":
+            case "assistant": {
               /* 空轮（既无文本又无调用）不落库，避免历史里堆空消息。
                  只有思考过程没有正文的轮次同样跳过——那段思考属于
-                 紧接着的工具调用轮，不该单独留一条空消息 */
-              if (ev.text || ev.calls.length > 0) {
+                 紧接着的工具调用轮，不该单独留一条空消息。
+                 只收口没有工具调用的最终回答；查资料过程中的过渡句不改，
+                 也不发给客户端，避免和收口后的正文拼在一起。 */
+              const finalAnswer = Boolean(params.sourceRefusal) && ev.calls.length === 0;
+              const text = finalAnswer ? enforceSourceRefusal(ev.text, params.sourceNoteIds) : ev.text;
+              if (finalAnswer && text) send({ delta: text });
+              if (text || ev.calls.length > 0) {
                 insert(
                   "assistant",
-                  ev.text,
+                  text,
                   ev.calls.length > 0 ? { kind: "calls", calls: ev.calls } : undefined,
                   ev.reasoning,
                 );
               }
               break;
+            }
 
             case "tool_start":
               send({ tool_start: { id: ev.call.id, name: ev.call.name, args: ev.call.args } });

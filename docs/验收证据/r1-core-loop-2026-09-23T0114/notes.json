@@ -1,0 +1,31 @@
+{
+  "ids": {
+    "A": "pobhk7fd8wf73dur3a61qq71"
+  },
+  "organized": {
+    "A": {
+      "id": "pobhk7fd8wf73dur3a61qq71",
+      "aiStatus": "failed",
+      "title": "每周二早上在体育馆覆盖练习羽毛球远球",
+      "topicId": "inbox",
+      "contentUnchanged": true,
+      "elapsedMs": 21189,
+      "timedOut": false
+    }
+  },
+  "fixtures": {
+    "topic": "运动",
+    "notes": {
+      "A": "每周二早上在体育馆覆盖练习羽毛球远球",
+      "B": "Markdown 表格用 `:---` 左对齐、`:---:` 居中、`---:` 右对齐",
+      "C": "光合作用需要叶绿素吸收光能"
+    },
+    "citeQuestion": "羽毛球练习安排在星期几",
+    "refuseQuestion": "茶树在什么环境种植",
+    "searchTerms": {
+      "A": "羽毛球",
+      "B": "Markdown 表格",
+      "C": "叶绿素"
+    }
+  }
+}

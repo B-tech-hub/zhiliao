@@ -1,0 +1,80 @@
+{
+  "patterns": [
+    "gh[pousr]_[A-Za-z0-9]{30,}",
+    "github_pat_[A-Za-z0-9_]{30,}",
+    "sk-[A-Za-z0-9_-]{24,}",
+    "-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----"
+  ],
+  "files": [
+    {
+      "file": "artifacts.json",
+      "matches": 0
+    },
+    {
+      "file": "candidate.json",
+      "matches": 0
+    },
+    {
+      "file": "checkout-commit.json",
+      "matches": 0
+    },
+    {
+      "file": "ci-log.txt",
+      "matches": 0
+    },
+    {
+      "file": "git-tree.txt",
+      "matches": 0
+    },
+    {
+      "file": "jobs-initial.json",
+      "matches": 0
+    },
+    {
+      "file": "jobs.json",
+      "matches": 0
+    },
+    {
+      "file": "log-excerpts.json",
+      "matches": 0
+    },
+    {
+      "file": "log-integrity.json",
+      "matches": 0
+    },
+    {
+      "file": "push.json",
+      "matches": 0
+    },
+    {
+      "file": "remote-after.json",
+      "matches": 0
+    },
+    {
+      "file": "remote-before.json",
+      "matches": 0
+    },
+    {
+      "file": "remote-final.json",
+      "matches": 0
+    },
+    {
+      "file": "run-initial.json",
+      "matches": 0
+    },
+    {
+      "file": "run.json",
+      "matches": 0
+    },
+    {
+      "file": "runs-discovery.json",
+      "matches": 0
+    },
+    {
+      "file": "summary.json",
+      "matches": 0
+    }
+  ],
+  "manual_review": "Credential-labelled log lines contain Actions masks or test/route names. No user data observed. Pattern scan does not prove absence of all secrets.",
+  "redaction": "No additional redaction; preserve gh CLI log bytes and original Actions masks."
+}

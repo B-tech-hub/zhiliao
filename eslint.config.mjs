@@ -19,6 +19,8 @@ const eslintConfig = [
       ".next-verify/**",
       "out/**",
       "build/**",
+      // 一次性 CJS 验收脚本按原始字节归档；产品和其他文档脚本仍接受检查
+      "docs/验收证据/**/*.cjs",
       "next-env.d.ts",
       // Service Worker 运行在独立环境（self/caches 全局），不按应用代码规则检查
       "public/sw.js",

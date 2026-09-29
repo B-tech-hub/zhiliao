@@ -1,0 +1,77 @@
+{
+  "scope": "local preparation inputs; not a complete image build manifest",
+  "revision": "549f45200081f9c50b3d658e4c8d1a7c695bde04",
+  "working_tree_included": true,
+  "files": [
+    {
+      "path": ".github/workflows/release.yml",
+      "bytes": 10862,
+      "sha256": "577e1306549306dba1ff12b18d3d9c1d337241e436adf054e54671fcd8e308b3"
+    },
+    {
+      "path": "scripts/verify-release-gate4.mjs",
+      "bytes": 27967,
+      "sha256": "8ef109822f7eb1d0a30a5fa617135c19bd4f816038691580f7103507d2cb54e3"
+    },
+    {
+      "path": "tests/config/release-gate4.test.ts",
+      "bytes": 12143,
+      "sha256": "6500c658f5317008108a49a037da546b3a5088f6f266313b4d076e41b33b9cbe"
+    },
+    {
+      "path": "tests/config/release-version.test.ts",
+      "bytes": 8468,
+      "sha256": "1fab2461b270dc10667a1ab61aea263a6bc828be16c4c4d0c6196bf23b96f09a"
+    },
+    {
+      "path": "Dockerfile",
+      "bytes": 2112,
+      "sha256": "19b26ee235928d6d360edc9b5c803427302eb90d9a8dc8d231482ba6380e6668"
+    },
+    {
+      "path": "package.json",
+      "bytes": 2836,
+      "sha256": "c7264a2aa0b60f44d7991982049b8fe946228f9a2b99aea07122741765367629"
+    },
+    {
+      "path": "package-lock.json",
+      "bytes": 450273,
+      "sha256": "ec7fc3bd5aae1c8cec50723eb69678bfc360c998b154d4d9c6d723a0cfe1564a"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "bytes": 728,
+      "sha256": "7428f5cac57922f89d33332118190d3936d332001d53e2533f9184de723c7f17"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "bytes": 9182,
+      "sha256": "315c73aefc0b0b0c9f91ed40e53f784a1bb71d3cdac87e41beb5341ca650a874"
+    },
+    {
+      "path": "docs/README.md",
+      "bytes": 16945,
+      "sha256": "b02dc572bd80cfbbb35f4123d57f41a9a7b3b9ce5c5f3875e9153ca501c64012"
+    },
+    {
+      "path": "docs/R3门禁4环境调查与验收计划-2026-09-29.md",
+      "bytes": 15761,
+      "sha256": "94e9393218bc685df3f14d8985b4ff50ec96464348f387d42f5dcdd313ad8460"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/spec-r3-gate4-distribution.md",
+      "bytes": 3713,
+      "sha256": "c9c94a95cd6872106f10ea694f4d3564582b8241f40c1021b0af67f8e8f5abd3"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/review-r3-gate4-preparation.md",
+      "bytes": 3223,
+      "sha256": "cac9237741f43c69b8c24fde4d624a384b2ee7901fc0cff646819d01a0bb3f46"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-preparation-20260929-a/README.md",
+      "bytes": 3579,
+      "sha256": "df9c11adc5078554a8d8dcfa3a6807e8036d16d1eb1390643b01bc6cd4da2262"
+    }
+  ]
+}

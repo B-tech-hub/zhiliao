@@ -1,0 +1,123 @@
+{
+  "status": "passed",
+  "scope": "archive and documentation only; no test/build rerun",
+  "checked_at": "2026-09-29T12:30:37.037852+00:00",
+  "documents": [
+    "CONTRIBUTING.md",
+    "_bmad-output/implementation-artifacts/spec-r3-gate4-distribution.md",
+    "docs/0.6.1候选定稿-2026-09-28.md",
+    "docs/R3门禁4候选推送与PR-CI执行单-2026-09-29.md",
+    "docs/R3门禁4环境调查与验收计划-2026-09-29.md",
+    "docs/README.md",
+    "docs/releases/v0.6.1.md",
+    "docs/产品规划/开源发布范围与执行清单-2026-09-13.md",
+    "docs/验收证据/r3-gate4-v-061-36567105695/README.md"
+  ],
+  "checks": [
+    "UTF-8/LF documents",
+    "relative file links",
+    "JSON parse",
+    "original CI log SHA-256",
+    "13 candidate inputs and 1672 Git file objects",
+    "executable inputs unchanged",
+    "staged area empty",
+    "git diff --check",
+    "credential pattern scan and manual failure-annotation review",
+    "ci-log.txt is not ignored by Git; original bytes retained"
+  ],
+  "scan": [
+    {
+      "file": "archive-review.json",
+      "matches": 0
+    },
+    {
+      "file": "artifacts.json",
+      "matches": 0
+    },
+    {
+      "file": "candidate.json",
+      "matches": 0
+    },
+    {
+      "file": "checkout-commit.json",
+      "matches": 0
+    },
+    {
+      "file": "ci-log.txt",
+      "matches": 0
+    },
+    {
+      "file": "git-tree.txt",
+      "matches": 0
+    },
+    {
+      "file": "jobs-initial.json",
+      "matches": 0
+    },
+    {
+      "file": "jobs.json",
+      "matches": 0
+    },
+    {
+      "file": "log-excerpts.json",
+      "matches": 0
+    },
+    {
+      "file": "log-integrity.json",
+      "matches": 0
+    },
+    {
+      "file": "push.json",
+      "matches": 0
+    },
+    {
+      "file": "README.md",
+      "matches": 0
+    },
+    {
+      "file": "release-jobs.json",
+      "matches": 0
+    },
+    {
+      "file": "release-run.json",
+      "matches": 0
+    },
+    {
+      "file": "release-workflow-error.json",
+      "matches": 0
+    },
+    {
+      "file": "remote-after.json",
+      "matches": 0
+    },
+    {
+      "file": "remote-before.json",
+      "matches": 0
+    },
+    {
+      "file": "remote-final.json",
+      "matches": 0
+    },
+    {
+      "file": "run-initial.json",
+      "matches": 0
+    },
+    {
+      "file": "run.json",
+      "matches": 0
+    },
+    {
+      "file": "runs-discovery.json",
+      "matches": 0
+    },
+    {
+      "file": "summary.json",
+      "matches": 0
+    }
+  ],
+  "limitations": [
+    "Link anchors not checked",
+    "Log bytes preserved rather than normalized",
+    "Pattern scan is not a complete secret detector"
+  ]
+}

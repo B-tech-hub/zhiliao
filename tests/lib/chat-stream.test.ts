@@ -32,7 +32,7 @@ function seedConversation() {
 // 跑一次流并把 SSE 文本解析成事件对象数组
 async function collectSse(
   rounds: StreamChunk[][],
-  opts: { outcome?: ToolOutcome; startSeq?: number } = {},
+  opts: { outcome?: ToolOutcome; startSeq?: number; sourceRefusal?: boolean; sourceNoteIds?: ReadonlySet<string> } = {},
 ) {
   let i = 0;
   const deps: ToolLoopDeps = {
@@ -51,6 +51,8 @@ async function collectSse(
     signal: new AbortController().signal,
     initial: [{ role: "user", content: "帮我记一条" }],
     deps,
+    sourceRefusal: opts.sourceRefusal,
+    sourceNoteIds: opts.sourceNoteIds,
   });
   const body = await res.text();
   return body
@@ -187,5 +189,50 @@ describe("轮次上限", () => {
     const last = storedMessages().at(-1)!;
     expect(last.role).toBe("assistant");
     expect(last.content).toContain("轮次上限");
+  });
+});
+
+describe("来源拒答收口", () => {
+  it("最终回答里的改写拒答会收成固定句，并按收口后的文本落库", async () => {
+    const events = await collectSse(
+      [[text("来源笔记中没有关于茶树种植环境的相关内容。")]],
+      { sourceRefusal: true },
+    );
+    const deltas = events.filter((e) => e.delta).map((e) => (e.delta as string));
+    expect(deltas.join("")).toContain("来源笔记中没有相关内容");
+    expect(deltas.join("")).not.toContain("没有关于");
+    expect(storedMessages().at(-1)?.content).toContain("来源笔记中没有相关内容");
+  });
+
+  it("带引用的回答不收成拒答", async () => {
+    const answer = "羽毛球练习安排在每周二早上[^note-a]。";
+    const events = await collectSse([[text(answer)]], { sourceRefusal: true });
+    const deltas = events.filter((e) => e.delta).map((e) => e.delta as string);
+    expect(deltas.join("")).toBe(answer);
+    expect(storedMessages().at(-1)?.content).toBe(answer);
+  });
+
+  it("白名单引用的嵌题回答不收成拒答", async () => {
+    const answer = "来源笔记中没有关于茶树的相关内容[^n1]。";
+    const events = await collectSse([[text(answer)]], {
+      sourceRefusal: true,
+      sourceNoteIds: new Set(["n1"]),
+    });
+    const deltas = events.filter((e) => e.delta).map((e) => e.delta as string);
+    expect(deltas.join("")).toBe(answer);
+    expect(storedMessages().at(-1)?.content).toBe(answer);
+  });
+
+  it("工具轮过渡句不发给客户端，最终拒答仍收口", async () => {
+    const events = await collectSse(
+      [[text("先看看来源"), toolCall("c1", "search_notes")], [text("来源里没有茶树种植的记录。")]],
+      { sourceRefusal: true },
+    );
+    const deltas = events.filter((e) => e.delta).map((e) => e.delta as string);
+    expect(deltas.join("")).not.toContain("先看看来源");
+    expect(deltas.join("")).toContain("来源笔记中没有相关内容");
+    const stored = storedMessages().filter((row) => row.role === "assistant").map((row) => row.content);
+    expect(stored).toContain("先看看来源");
+    expect(stored.at(-1)).toContain("来源笔记中没有相关内容");
   });
 });

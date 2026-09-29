@@ -1,0 +1,73 @@
+{
+  "recorded_at": "2026-09-29T12:46:45.956130+00:00",
+  "head": "321f770b523773e3f93a56dcf4fd2b1f78213ca5",
+  "node": "v22.19.0",
+  "scope": "Local checks only; no build, full tests, Docker, push, or release",
+  "tests": {
+    "before": {
+      "numPassedTests": 21,
+      "numFailedTests": 4,
+      "numPendingTests": 0,
+      "success": false
+    },
+    "initial": {
+      "numPassedTests": 64,
+      "numFailedTests": 0,
+      "numPendingTests": 0,
+      "success": true
+    },
+    "after": {
+      "numPassedTests": 64,
+      "numFailedTests": 0,
+      "numPendingTests": 0,
+      "success": true
+    }
+  },
+  "checks": [
+    {
+      "name": "actionlint-after",
+      "command": [
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-runner-context-a5cecfe65f184ff7ba9e19d3b2fef139\\actionlint.exe",
+        "-shellcheck=",
+        "-pyflakes=",
+        "-no-color",
+        ".github/workflows/release.yml"
+      ],
+      "exit_code": 0,
+      "duration_seconds": 0.016,
+      "stdout_stderr_file": "actionlint-after.txt"
+    },
+    {
+      "name": "eslint",
+      "command": [
+        "node",
+        "node_modules/eslint/bin/eslint.js",
+        "tests/config/release-gate4.test.ts"
+      ],
+      "exit_code": 0,
+      "duration_seconds": 2.422,
+      "stdout_stderr_file": "eslint.txt"
+    },
+    {
+      "name": "workflow-delta",
+      "command": [
+        "node",
+        "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-runner-context-a5cecfe65f184ff7ba9e19d3b2fef139\\extract-check.mjs"
+      ],
+      "exit_code": 0,
+      "duration_seconds": 0.14,
+      "stdout_stderr_file": "workflow-delta.txt"
+    },
+    {
+      "name": "diff-check",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_code": 0,
+      "duration_seconds": 0.063,
+      "stdout_stderr_file": "diff-check.txt"
+    }
+  ]
+}

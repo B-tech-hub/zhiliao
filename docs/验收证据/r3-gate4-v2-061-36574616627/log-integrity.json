@@ -1,0 +1,20 @@
+{
+  "file": "ci-log.txt",
+  "bytes": 55609,
+  "lines": 387,
+  "sha256": "dcc06101e168474e8025495aa1ca0c2dd6093cdcab8d82460120fe56902a37f3",
+  "additional_redaction": false,
+  "scan_patterns": [
+    "gh[pousr]_[A-Za-z0-9]{30,}",
+    "github_pat_[A-Za-z0-9_]{30,}",
+    "sk-[A-Za-z0-9_-]{24,}",
+    "-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----"
+  ],
+  "scan_matches": [
+    0,
+    0,
+    0,
+    0
+  ],
+  "captured_at": "2026-09-29T13:25:23.355033+00:00"
+}

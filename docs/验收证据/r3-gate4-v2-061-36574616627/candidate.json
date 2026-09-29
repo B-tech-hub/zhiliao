@@ -1,0 +1,345 @@
+{
+  "recorded_at": "2026-09-29T13:21:24.499124+00:00",
+  "sha": "82b1e5a1b98d4b687d8604a84c47c8ec416bf818",
+  "tree": "324efa98630217a18b019f9dc6d2f1dd4be81a9e",
+  "parents": [
+    "321f770b523773e3f93a56dcf4fd2b1f78213ca5"
+  ],
+  "commit_subject": "fix: 修复 Release 上下文并归档门禁 4 验证",
+  "files": [
+    {
+      "path": ".gitattributes",
+      "blob": "ab981bce4dbb7307d97052395570bdb1085f35cb",
+      "bytes": 511,
+      "sha256": "ef627801675bf3a290d7634b312ba92ebdeebd34e67add9332e076663f2b3bd9"
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "blob": "b060ff934559841fa3154ec12f34079ddb0f1c26",
+      "bytes": 11193,
+      "sha256": "e9bd788ebc06d6ecf82c6f29ae1ed8b93d18cc616d2d1b8d2103db58d2be1076"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "blob": "024bba740dcd4639206e213d6517e0b45989607a",
+      "bytes": 10215,
+      "sha256": "ce6f568043e40b472b5d01b5ce7f807bbc2bb3c59c2fb68ea9b0373f10cff6d2"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/spec-r3-gate4-distribution.md",
+      "blob": "949b04b935418419d20dad045e7967f7b921c0f8",
+      "bytes": 8230,
+      "sha256": "3f9d948d8f4475e9c52c491572973758dae30e9334bb02ee76df9370e4efadc3"
+    },
+    {
+      "path": "docs/0.6.1候选定稿-2026-09-28.md",
+      "blob": "e1230ffb4f40084f763c60c006930d5ab1128d9e",
+      "bytes": 8602,
+      "sha256": "8da56c51087123addf94f0a7ee68dbfa20355536c5906a8451588a5d4653e20d"
+    },
+    {
+      "path": "docs/R3门禁4修复后候选推送与PR-CI执行单-2026-09-29.md",
+      "blob": "f2fa5912b42aa6c7db9918b5a7b5601f5c7b6658",
+      "bytes": 17305,
+      "sha256": "416c61b37e4633a0da0e0a4142821f7f7a9fe0974456851a98557d2ac8bbc43d"
+    },
+    {
+      "path": "docs/R3门禁4候选推送与PR-CI执行单-2026-09-29.md",
+      "blob": "b7c83047964514bea6258d9a97002c60966d533c",
+      "bytes": 14057,
+      "sha256": "bc32df2e9f038ebe9cb123bb0b42c8ccd71e82dd9104db5577de6cd64c2d2591"
+    },
+    {
+      "path": "docs/R3门禁4环境调查与验收计划-2026-09-29.md",
+      "blob": "9160116aafd13d62998ec52a076b716c044ece55",
+      "bytes": 19236,
+      "sha256": "d287778fd9c07a2d96edb70c1f91b82a51d0108fa06178bfb32bdff3a0395e00"
+    },
+    {
+      "path": "docs/README.md",
+      "blob": "4c2494d4f6b0d2fe09ae1fbecffb84fcc09dccf1",
+      "bytes": 18073,
+      "sha256": "1962e232b8719f512bf72298ac271c0ff63bb3b1baed0a8503467fb66f42c936"
+    },
+    {
+      "path": "docs/releases/v0.6.1.md",
+      "blob": "6c90574a6707df3624afbfbadd62fb144401d6db",
+      "bytes": 17717,
+      "sha256": "bf4a1cf0e932ad93c57bafb54f4d2ca20dcd0de534853170d367adbd856b6450"
+    },
+    {
+      "path": "docs/产品规划/开源发布范围与执行清单-2026-09-13.md",
+      "blob": "e30ae6d61267c3f18a3ce8fb4df013131352d7ac",
+      "bytes": 48076,
+      "sha256": "79afe3683bea5d22bca7ffc2fe89319ebfc53f9650a2194354c7765944d2e4c2"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-runner-context-20260929-a/README.md",
+      "blob": "56fb4a360fa980291584c0504081c8f254b2e3f7",
+      "bytes": 5976,
+      "sha256": "8c2d694f11db9b170b40ca23c5c4bd21f8ecd0e5bfb73140af5c6b42444b5359"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-runner-context-20260929-a/actionlint-after.txt",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-runner-context-20260929-a/actionlint-before.txt",
+      "blob": "2031025915886906dd4a1d5c3aa8c3908a2ed626",
+      "bytes": 1909,
+      "sha256": "1c82e04272f3d8b2d55ff1ab71a4178a00cd622d13d5037d0d00d35b2e0132bb"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-runner-context-20260929-a/bash-init.json",
+      "blob": "fc0ff07d9e8680f643e5735b6ee94b789826b72a",
+      "bytes": 1558,
+      "sha256": "77763b2fb7e3bfba2863365d646d00ab2ecd3512fee72e4610cac7d6dd4452ca"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-runner-context-20260929-a/checks.json",
+      "blob": "118d3abc9bf2b92873cf21771fd2351d5b2f91ab",
+      "bytes": 1920,
+      "sha256": "8e61037068f4694b459368fe053e987a35dc8c3d5e7a0d13a17e14963453c4c1"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-runner-context-20260929-a/diff-check.txt",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-runner-context-20260929-a/eslint.txt",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-runner-context-20260929-a/initializers.json",
+      "blob": "9ce48c4821bc5213e68c59b103925698ae4b61e5",
+      "bytes": 347,
+      "sha256": "f308bb56d793c01f815a062ec9051c039b524630aa5a0b6d5298054bf76ee6ca"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-runner-context-20260929-a/inputs.json",
+      "blob": "b801c821c831700da1bf3516c004d49d007b7e82",
+      "bytes": 3869,
+      "sha256": "37523b61d81b085f68fcac085666ad5d5463580d93b30e844717140d59c8599b"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-runner-context-20260929-a/preservation.json",
+      "blob": "b17ac8d036572a562ced708d7ed704194d7675aa",
+      "bytes": 5084,
+      "sha256": "7b09a14c096b95d4f89674822ccf89823c433bf63627771d38d2e7518d8b5a2f"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-runner-context-20260929-a/tests-after.json",
+      "blob": "a37a06886b41f0206b303333e7bfc5baa88b8241",
+      "bytes": 19003,
+      "sha256": "3e5c7dbf432ca111f8d87d87b814e199e6d560cf2500a6e33c75058183ec3679"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-runner-context-20260929-a/tests-before.json",
+      "blob": "e1d2b001665972073ce7b8895508ccb9ead81be7",
+      "bytes": 12250,
+      "sha256": "8cb6777bb034258646d9b86c4f5f28b26e817d3439b137e0fed6b3f1fb467a57"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-runner-context-20260929-a/tests-initial.json",
+      "blob": "6bf204d93f236c4f25f309cace3ab0804e79d4b1",
+      "bytes": 19022,
+      "sha256": "7c19c3f24ad692af0469b612b4168ca74cf414d0605f6d74310c5b84dd130e7d"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-runner-context-20260929-a/tool.json",
+      "blob": "abb8d885b7310366c6e8e9c9cd9fc2215ee1695e",
+      "bytes": 423,
+      "sha256": "3e72595f46307e7db340599144ac26dd6b3034ffc1bc0d796f8e7b75b9707847"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-runner-context-20260929-a/verify-initializers.py",
+      "blob": "414d52d2a08d79b0b988fb572c98a42158c9cdc7",
+      "bytes": 3389,
+      "sha256": "fe27af938599beee925e9335512aa2652f4e3df0dacd65924ef980f3289023b3"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-runner-context-20260929-a/workflow-delta.txt",
+      "blob": "a20954934377d46c22454e19efce774c468fe193",
+      "bytes": 108,
+      "sha256": "a17ccd13a788e780ec103edfa3d36976ac9a14d8a1a000aaa714fc8ac718c356"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v-061-36567105695/README.md",
+      "blob": "4e004ad86ad8be47eac9c91b4e3c8514ce40799f",
+      "bytes": 5816,
+      "sha256": "88f45c7061e8d6173a75c74d77aab87d2b1f021daf542dedb369a0b1e8e74563"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v-061-36567105695/archive-review.json",
+      "blob": "b67c179af871283e546084a7fc98a16e6fe2ff02",
+      "bytes": 1560,
+      "sha256": "6fa3e3c1407470a9532d6e04cd0735eee78efb0bcfbf6e9c9a0a40e0cb3bd3fb"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v-061-36567105695/artifacts.json",
+      "blob": "0674b39d4f87fa0cff7027660aeb481bb61b871f",
+      "bytes": 42,
+      "sha256": "f7417e1fb877d3f5934f143cc38ad9e2905476e8f5ac6776507d09441efcd6f6"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v-061-36567105695/candidate.json",
+      "blob": "3281c791ee5ec91bc0eea75ba89dfb130c2d1184",
+      "bytes": 4179,
+      "sha256": "8d3ab01cb07cc3cfd2506c76f1e962240a77803ee3980e35f28a05c2dcfa3cc9"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v-061-36567105695/checkout-commit.json",
+      "blob": "48c697f12888ca8408cb8639552bc56e124d24f6",
+      "bytes": 2814,
+      "sha256": "621779ed0ed43dfc8130a2bf22a66a548ce5986ad70736a2bda9eec1471f6168"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v-061-36567105695/ci-log.txt",
+      "blob": "318dbc0ff580c9782deb034873ac10adafa59ad4",
+      "bytes": 73443,
+      "sha256": "05f2eca77755178bdd9de3f45c0bd6da6a145f07c5f9ba588ef295d5eb5c06d1"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v-061-36567105695/closeout-checks.json",
+      "blob": "22c7a69b6384bbfbd1eea49ee0b93ff1725c0473",
+      "bytes": 2622,
+      "sha256": "0ef8890b88ffde1ffac0ab766374996eedeb2c330ce2eeaef7e39562b2a676ef"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v-061-36567105695/files.sha256.json",
+      "blob": "43b108778d702afe2baeca60aa756700d67e4af5",
+      "bytes": 3522,
+      "sha256": "c54a14675f0ba9a0d6a029c9125263cf4b337574eab291c787a86531c8b44daa"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v-061-36567105695/git-tree.txt",
+      "blob": "4b9a8f8e60b5612e57daaff91beb43509546639f",
+      "bytes": 192091,
+      "sha256": "3c61229b62d348581b57f48eb605cbbfe2811f3aeee4475c9e3dbd2afe1c42dd"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v-061-36567105695/jobs-initial.json",
+      "blob": "9e4c6d1ba5b4db52923d7154e44bff16bf3bca46",
+      "bytes": 3788,
+      "sha256": "af19ebf9af647a99beb873835c05bc7fd9374d28bd550d64295632646f899b4b"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v-061-36567105695/jobs.json",
+      "blob": "8edbe63ce7b0833319e94b02e0cd695cbffeeca6",
+      "bytes": 4203,
+      "sha256": "524f0b73a9f30e7eef3bdd42dd9b4bc5fa22804ed9bace9ef5c08c5e7bd19813"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v-061-36567105695/log-excerpts.json",
+      "blob": "eefb8d2a10f5a26a72bacc36dfecd2d5cf29430b",
+      "bytes": 4711,
+      "sha256": "617e5cc5314e72e94f9e8cace46d9896926b811507bba545b9dc2ec596eecac0"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v-061-36567105695/log-integrity.json",
+      "blob": "59c421fd16f9cc8b732338ac9a0380429fe19692",
+      "bytes": 448,
+      "sha256": "ddb41d38c8cf4405ff6906e975413bde9beed9db6d228b3be5c091b794ea639c"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v-061-36567105695/push.json",
+      "blob": "0b4c0ff4f06b885854e9b8b9e305a6a169a57787",
+      "bytes": 718,
+      "sha256": "119585c45a2f44c4c75d6b22da6da5a8e668698aac118c5cc8011ea215f0b3b3"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v-061-36567105695/release-jobs.json",
+      "blob": "02674db88e0589c531b57a6d2e79b378ab12a174",
+      "bytes": 37,
+      "sha256": "96d97734621cbc60b36338e1e6436535313870ca18fd2dd60f5e10c573463b28"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v-061-36567105695/release-run.json",
+      "blob": "d68a9673f91a003a486a66e898d742a40df4de86",
+      "bytes": 14312,
+      "sha256": "37b6547105eb761475f1955ccb5f956ddef815dd259fe89eeb77588bed997945"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v-061-36567105695/release-workflow-error.json",
+      "blob": "f63e597387aa4d96ab82b979b46fec141d20c993",
+      "bytes": 1735,
+      "sha256": "e2fafd686beaf9c4c226fc7f857154144250a70f8e72f01bcefc91e99b801c8c"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v-061-36567105695/remote-after.json",
+      "blob": "b043c4c90fb276d1d44901821b072c500d7002a0",
+      "bytes": 922,
+      "sha256": "c8b68b76fa5a75ad1b4829c9da78ba423dcdf2eaa313ce83853a3e8c39ac8d94"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v-061-36567105695/remote-before.json",
+      "blob": "49105c34796619a87096f655df04cde79c3457e7",
+      "bytes": 927,
+      "sha256": "0010af8d7b8782098b128653efca40b538f13523cf9aaa4e3503bd2c8aa9315a"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v-061-36567105695/remote-final.json",
+      "blob": "55d7b101fb5d643abc9ecb77c32ccb1741bb0343",
+      "bytes": 1233,
+      "sha256": "137d664523b5355568513979301644a09cc15a55552a9226c3168e86451ae07b"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v-061-36567105695/run-initial.json",
+      "blob": "f2ae02a2b7f8c48bdb2898bdb655da8f473d2821",
+      "bytes": 14306,
+      "sha256": "287f849909217a63913f6cbf68e403dee3cacd1521e70121c595fd58125a75dc"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v-061-36567105695/run.json",
+      "blob": "8156e79abd78b87ee4ddc337513ff048aba46830",
+      "bytes": 14309,
+      "sha256": "6ad59e98c2d98a5ab075b666b473b5c06f29b6f911abb4c04646a2fe3472998f"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v-061-36567105695/runs-discovery.json",
+      "blob": "aaf7783c8ecb3f8c5443b3bdc728658c036f0078",
+      "bytes": 299,
+      "sha256": "a99730806fc60b8f6df65183570296726e9aa061465d2a515ea3296792d13e0f"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v-061-36567105695/summary.json",
+      "blob": "19fc5f2022d9e29f9713613863b45f4c047873ff",
+      "bytes": 5164,
+      "sha256": "334f7bf8b0f1eed1e02ae7ac6ba517b4b67b0348a6178f6752919de4dfc36df9"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v2-preparation-20260929-a/README.md",
+      "blob": "0c3677acdb48b9e9ba8720e671326e26ebe2cc79",
+      "bytes": 5069,
+      "sha256": "135bc0b17780b5e82f6b3e17c9ad48d5a4add39cccd5b57c243ec24c4fea6348"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v2-preparation-20260929-a/inputs.json",
+      "blob": "5202f205be68d79d8b378ba832f0488befab9d65",
+      "bytes": 16996,
+      "sha256": "8f57fcc5504a7752d652a9aaf445559c7a69c18669a27f74165f23c5c9a189d3"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v2-preparation-20260929-a/preserve-evidence.patch",
+      "blob": "9c0e9697192b8576ee10e10f0c513919946ffa57",
+      "bytes": 465,
+      "sha256": "344e93eaa3d46cbf3d1b8ca126122e693e865198eeea0bc22328a8c548f72e36"
+    },
+    {
+      "path": "tests/config/release-gate4.test.ts",
+      "blob": "a3d0d5b263d1ee39b23d4d5181c485923d5b99ef",
+      "bytes": 13633,
+      "sha256": "e79f4de1423137776e53e23362388ee3cf572df9eb6e705036f31864e0ddb6ae"
+    }
+  ],
+  "file_count": 55,
+  "full_tree_file_count": 1716,
+  "clean_worktree_after_commit": true,
+  "manifest_sha256": "8f57fcc5504a7752d652a9aaf445559c7a69c18669a27f74165f23c5c9a189d3"
+}

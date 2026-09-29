@@ -1,0 +1,443 @@
+{
+  "containers": {
+    "37dc51684ccbb7522bfa8ea869953369edeb8ae1ef9408b5981af5c078a3eed9": {
+      "id": "37dc51684ccbb7522bfa8ea869953369edeb8ae1ef9408b5981af5c078a3eed9",
+      "name": "/zhiliao-r2-061-20260927-c-source-app-1",
+      "image": "sha256:90683fa43f261bcde5cbecd9ecfd7938784b8da989df67f3bd7c7dc8a063d2d9",
+      "user": "node",
+      "running": false,
+      "started": "2026-09-27T11:23:55.047855396Z",
+      "finished": "2026-09-27T11:23:56.803051878Z",
+      "exit_code": 0,
+      "restarts": 0,
+      "network": "none",
+      "ports": {},
+      "mounts": [
+        {
+          "Type": "volume",
+          "Name": "zhiliao-r2-061-20260927-c-source_db",
+          "Source": "/var/lib/docker/volumes/zhiliao-r2-061-20260927-c-source_db/_data",
+          "Destination": "/data/db",
+          "Driver": "local",
+          "Mode": "rw",
+          "RW": true,
+          "Propagation": ""
+        },
+        {
+          "Type": "volume",
+          "Name": "zhiliao-r2-061-20260927-c-source_notes",
+          "Source": "/var/lib/docker/volumes/zhiliao-r2-061-20260927-c-source_notes/_data",
+          "Destination": "/data/notes",
+          "Driver": "local",
+          "Mode": "rw",
+          "RW": true,
+          "Propagation": ""
+        },
+        {
+          "Type": "volume",
+          "Name": "zhiliao-r2-061-20260927-c-source_uploads",
+          "Source": "/var/lib/docker/volumes/zhiliao-r2-061-20260927-c-source_uploads/_data",
+          "Destination": "/data/uploads",
+          "Driver": "local",
+          "Mode": "rw",
+          "RW": true,
+          "Propagation": ""
+        },
+        {
+          "Type": "bind",
+          "Source": "C:/Users/BAIBAI/AppData/Local/Temp/zhiliao-r2-061-20260927-c/source",
+          "Destination": "/evidence",
+          "Mode": "",
+          "RW": true,
+          "Propagation": "rprivate"
+        },
+        {
+          "Type": "bind",
+          "Source": "C:/Users/BAIBAI/AppData/Local/Temp/zhiliao-r2-061-20260927-c/package",
+          "Destination": "/r2",
+          "Mode": "",
+          "RW": false,
+          "Propagation": "rprivate"
+        }
+      ]
+    },
+    "529e956f774dc81f875bd41a2c4e2513bfcb4a635eb88542194bad0b61ff4402": {
+      "id": "529e956f774dc81f875bd41a2c4e2513bfcb4a635eb88542194bad0b61ff4402",
+      "name": "/zhiliao-r2-061-20260927-c-import-app-1",
+      "image": "sha256:90683fa43f261bcde5cbecd9ecfd7938784b8da989df67f3bd7c7dc8a063d2d9",
+      "user": "node",
+      "running": false,
+      "started": "2026-09-27T11:24:01.390207961Z",
+      "finished": "2026-09-27T11:24:02.783774978Z",
+      "exit_code": 0,
+      "restarts": 0,
+      "network": "none",
+      "ports": {},
+      "mounts": [
+        {
+          "Type": "volume",
+          "Name": "zhiliao-r2-061-20260927-c-import_db",
+          "Source": "/var/lib/docker/volumes/zhiliao-r2-061-20260927-c-import_db/_data",
+          "Destination": "/data/db",
+          "Driver": "local",
+          "Mode": "rw",
+          "RW": true,
+          "Propagation": ""
+        },
+        {
+          "Type": "volume",
+          "Name": "zhiliao-r2-061-20260927-c-import_notes",
+          "Source": "/var/lib/docker/volumes/zhiliao-r2-061-20260927-c-import_notes/_data",
+          "Destination": "/data/notes",
+          "Driver": "local",
+          "Mode": "rw",
+          "RW": true,
+          "Propagation": ""
+        },
+        {
+          "Type": "volume",
+          "Name": "zhiliao-r2-061-20260927-c-import_uploads",
+          "Source": "/var/lib/docker/volumes/zhiliao-r2-061-20260927-c-import_uploads/_data",
+          "Destination": "/data/uploads",
+          "Driver": "local",
+          "Mode": "rw",
+          "RW": true,
+          "Propagation": ""
+        },
+        {
+          "Type": "bind",
+          "Source": "C:/Users/BAIBAI/AppData/Local/Temp/zhiliao-r2-061-20260927-c/import",
+          "Destination": "/evidence",
+          "Mode": "",
+          "RW": true,
+          "Propagation": "rprivate"
+        },
+        {
+          "Type": "bind",
+          "Source": "C:/Users/BAIBAI/AppData/Local/Temp/zhiliao-r2-061-20260927-c/package",
+          "Destination": "/r2",
+          "Mode": "",
+          "RW": false,
+          "Propagation": "rprivate"
+        }
+      ]
+    },
+    "b000881c42c1c8b91a9ddaf4bd587bf88edba2cda76885e9a5a263502f119481": {
+      "id": "b000881c42c1c8b91a9ddaf4bd587bf88edba2cda76885e9a5a263502f119481",
+      "name": "/zhiliao-r2-061-20260927-d-restore-app-1",
+      "image": "sha256:f262652592dd2bd32d00aae44f60d4c98caa2c89ca0942254f77918f57aacb4a",
+      "user": "node",
+      "running": false,
+      "started": "2026-09-27T12:21:36.085398068Z",
+      "finished": "2026-09-27T12:21:57.0864333Z",
+      "exit_code": 0,
+      "restarts": 0,
+      "network": "bridge",
+      "ports": {
+        "3000/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "3313"
+          }
+        ]
+      },
+      "mounts": [
+        {
+          "Type": "volume",
+          "Name": "zhiliao-r2-061-20260927-d-restore_db",
+          "Source": "/var/lib/docker/volumes/zhiliao-r2-061-20260927-d-restore_db/_data",
+          "Destination": "/data/db",
+          "Driver": "local",
+          "Mode": "rw",
+          "RW": true,
+          "Propagation": ""
+        },
+        {
+          "Type": "volume",
+          "Name": "zhiliao-r2-061-20260927-d-restore_notes",
+          "Source": "/var/lib/docker/volumes/zhiliao-r2-061-20260927-d-restore_notes/_data",
+          "Destination": "/data/notes",
+          "Driver": "local",
+          "Mode": "rw",
+          "RW": true,
+          "Propagation": ""
+        },
+        {
+          "Type": "volume",
+          "Name": "zhiliao-r2-061-20260927-d-restore_uploads",
+          "Source": "/var/lib/docker/volumes/zhiliao-r2-061-20260927-d-restore_uploads/_data",
+          "Destination": "/data/uploads",
+          "Driver": "local",
+          "Mode": "rw",
+          "RW": true,
+          "Propagation": ""
+        },
+        {
+          "Type": "bind",
+          "Source": "C:/Users/BAIBAI/AppData/Local/Temp/zhiliao-r2-061-20260927-d/restore",
+          "Destination": "/evidence",
+          "Mode": "",
+          "RW": true,
+          "Propagation": "rprivate"
+        },
+        {
+          "Type": "bind",
+          "Source": "C:/Users/BAIBAI/AppData/Local/Temp/zhiliao-r2-061-20260927-d/package",
+          "Destination": "/r2",
+          "Mode": "",
+          "RW": false,
+          "Propagation": "rprivate"
+        }
+      ]
+    },
+    "e1fbfb41831513d1504b5f52decaffd0dbbcb33943a71b226b89748122d0375d": {
+      "id": "e1fbfb41831513d1504b5f52decaffd0dbbcb33943a71b226b89748122d0375d",
+      "name": "/zhiliao-r2-061-20260927-d-import-app-1",
+      "image": "sha256:f262652592dd2bd32d00aae44f60d4c98caa2c89ca0942254f77918f57aacb4a",
+      "user": "node",
+      "running": false,
+      "started": "2026-09-27T11:50:06.454735928Z",
+      "finished": "2026-09-27T11:50:08.050835949Z",
+      "exit_code": 0,
+      "restarts": 0,
+      "network": "none",
+      "ports": {},
+      "mounts": [
+        {
+          "Type": "volume",
+          "Name": "zhiliao-r2-061-20260927-d-import_db",
+          "Source": "/var/lib/docker/volumes/zhiliao-r2-061-20260927-d-import_db/_data",
+          "Destination": "/data/db",
+          "Driver": "local",
+          "Mode": "rw",
+          "RW": true,
+          "Propagation": ""
+        },
+        {
+          "Type": "volume",
+          "Name": "zhiliao-r2-061-20260927-d-import_notes",
+          "Source": "/var/lib/docker/volumes/zhiliao-r2-061-20260927-d-import_notes/_data",
+          "Destination": "/data/notes",
+          "Driver": "local",
+          "Mode": "rw",
+          "RW": true,
+          "Propagation": ""
+        },
+        {
+          "Type": "volume",
+          "Name": "zhiliao-r2-061-20260927-d-import_uploads",
+          "Source": "/var/lib/docker/volumes/zhiliao-r2-061-20260927-d-import_uploads/_data",
+          "Destination": "/data/uploads",
+          "Driver": "local",
+          "Mode": "rw",
+          "RW": true,
+          "Propagation": ""
+        },
+        {
+          "Type": "bind",
+          "Source": "C:/Users/BAIBAI/AppData/Local/Temp/zhiliao-r2-061-20260927-d/import",
+          "Destination": "/evidence",
+          "Mode": "",
+          "RW": true,
+          "Propagation": "rprivate"
+        },
+        {
+          "Type": "bind",
+          "Source": "C:/Users/BAIBAI/AppData/Local/Temp/zhiliao-r2-061-20260927-d/package",
+          "Destination": "/r2",
+          "Mode": "",
+          "RW": false,
+          "Propagation": "rprivate"
+        }
+      ]
+    },
+    "ece2372cf7a92d02aa5319bb2ddb1f8166a2503a0f601de0369b3196ffd59f98": {
+      "id": "ece2372cf7a92d02aa5319bb2ddb1f8166a2503a0f601de0369b3196ffd59f98",
+      "name": "/zhiliao-r2-061-20260927-c-restore-app-1",
+      "image": "sha256:90683fa43f261bcde5cbecd9ecfd7938784b8da989df67f3bd7c7dc8a063d2d9",
+      "user": "node",
+      "running": false,
+      "started": "2026-09-27T11:23:55.937154379Z",
+      "finished": "2026-09-27T11:23:58.513550524Z",
+      "exit_code": 0,
+      "restarts": 0,
+      "network": "none",
+      "ports": {},
+      "mounts": [
+        {
+          "Type": "volume",
+          "Name": "zhiliao-r2-061-20260927-c-restore_db",
+          "Source": "/var/lib/docker/volumes/zhiliao-r2-061-20260927-c-restore_db/_data",
+          "Destination": "/data/db",
+          "Driver": "local",
+          "Mode": "rw",
+          "RW": true,
+          "Propagation": ""
+        },
+        {
+          "Type": "volume",
+          "Name": "zhiliao-r2-061-20260927-c-restore_notes",
+          "Source": "/var/lib/docker/volumes/zhiliao-r2-061-20260927-c-restore_notes/_data",
+          "Destination": "/data/notes",
+          "Driver": "local",
+          "Mode": "rw",
+          "RW": true,
+          "Propagation": ""
+        },
+        {
+          "Type": "volume",
+          "Name": "zhiliao-r2-061-20260927-c-restore_uploads",
+          "Source": "/var/lib/docker/volumes/zhiliao-r2-061-20260927-c-restore_uploads/_data",
+          "Destination": "/data/uploads",
+          "Driver": "local",
+          "Mode": "rw",
+          "RW": true,
+          "Propagation": ""
+        },
+        {
+          "Type": "bind",
+          "Source": "C:/Users/BAIBAI/AppData/Local/Temp/zhiliao-r2-061-20260927-c/restore",
+          "Destination": "/evidence",
+          "Mode": "",
+          "RW": true,
+          "Propagation": "rprivate"
+        },
+        {
+          "Type": "bind",
+          "Source": "C:/Users/BAIBAI/AppData/Local/Temp/zhiliao-r2-061-20260927-c/package",
+          "Destination": "/r2",
+          "Mode": "",
+          "RW": false,
+          "Propagation": "rprivate"
+        }
+      ]
+    },
+    "f48bf7339d8e24b764e9d1791c933bf8a64056c235518854f72527b5dc459c1e": {
+      "id": "f48bf7339d8e24b764e9d1791c933bf8a64056c235518854f72527b5dc459c1e",
+      "name": "/zhiliao-r2-061-20260927-d-source-app-1",
+      "image": "sha256:f262652592dd2bd32d00aae44f60d4c98caa2c89ca0942254f77918f57aacb4a",
+      "user": "node",
+      "running": false,
+      "started": "2026-09-27T11:50:01.150287535Z",
+      "finished": "2026-09-27T11:50:02.663594559Z",
+      "exit_code": 0,
+      "restarts": 0,
+      "network": "none",
+      "ports": {},
+      "mounts": [
+        {
+          "Type": "volume",
+          "Name": "zhiliao-r2-061-20260927-d-source_db",
+          "Source": "/var/lib/docker/volumes/zhiliao-r2-061-20260927-d-source_db/_data",
+          "Destination": "/data/db",
+          "Driver": "local",
+          "Mode": "rw",
+          "RW": true,
+          "Propagation": ""
+        },
+        {
+          "Type": "volume",
+          "Name": "zhiliao-r2-061-20260927-d-source_notes",
+          "Source": "/var/lib/docker/volumes/zhiliao-r2-061-20260927-d-source_notes/_data",
+          "Destination": "/data/notes",
+          "Driver": "local",
+          "Mode": "rw",
+          "RW": true,
+          "Propagation": ""
+        },
+        {
+          "Type": "volume",
+          "Name": "zhiliao-r2-061-20260927-d-source_uploads",
+          "Source": "/var/lib/docker/volumes/zhiliao-r2-061-20260927-d-source_uploads/_data",
+          "Destination": "/data/uploads",
+          "Driver": "local",
+          "Mode": "rw",
+          "RW": true,
+          "Propagation": ""
+        },
+        {
+          "Type": "bind",
+          "Source": "C:/Users/BAIBAI/AppData/Local/Temp/zhiliao-r2-061-20260927-d/source",
+          "Destination": "/evidence",
+          "Mode": "",
+          "RW": true,
+          "Propagation": "rprivate"
+        },
+        {
+          "Type": "bind",
+          "Source": "C:/Users/BAIBAI/AppData/Local/Temp/zhiliao-r2-061-20260927-d/package",
+          "Destination": "/r2",
+          "Mode": "",
+          "RW": false,
+          "Propagation": "rprivate"
+        }
+      ]
+    },
+    "254c7caca374780a6c1a3bea1c2c6ba59d6ab092de155c34f8efd3cd411532c8": {
+      "id": "254c7caca374780a6c1a3bea1c2c6ba59d6ab092de155c34f8efd3cd411532c8",
+      "name": "/zhiliao",
+      "image": "sha256:72c998be254eaa69bb8ebd086f3e5628f735f2dfc4948432209bcdb5ac4d94e1",
+      "user": "node",
+      "running": true,
+      "started": "2026-09-23T00:01:52.245179547Z",
+      "finished": "2026-08-19T06:29:56.836399597Z",
+      "exit_code": 0,
+      "restarts": 0,
+      "network": "ai_acknowladge_default",
+      "ports": {
+        "3000/tcp": [
+          {
+            "HostIp": "",
+            "HostPort": "3000"
+          }
+        ]
+      },
+      "mounts": [
+        {
+          "Type": "bind",
+          "Source": "D:\\ClaudeProjects\\ai_acknowladge\\data\\db",
+          "Destination": "/data/db",
+          "Mode": "rw",
+          "RW": true,
+          "Propagation": "rprivate"
+        },
+        {
+          "Type": "bind",
+          "Source": "D:\\ClaudeProjects\\ai_acknowladge\\data\\uploads",
+          "Destination": "/data/uploads",
+          "Mode": "rw",
+          "RW": true,
+          "Propagation": "rprivate"
+        }
+      ]
+    }
+  },
+  "volumes": [
+    "ai_acknowladge_kb_db",
+    "ai_acknowladge_kb_uploads",
+    "zhiliao-r2-061-20260927-c-import_db",
+    "zhiliao-r2-061-20260927-c-import_notes",
+    "zhiliao-r2-061-20260927-c-import_uploads",
+    "zhiliao-r2-061-20260927-c-restore_db",
+    "zhiliao-r2-061-20260927-c-restore_notes",
+    "zhiliao-r2-061-20260927-c-restore_uploads",
+    "zhiliao-r2-061-20260927-c-source_db",
+    "zhiliao-r2-061-20260927-c-source_notes",
+    "zhiliao-r2-061-20260927-c-source_uploads",
+    "zhiliao-r2-061-20260927-d-import_db",
+    "zhiliao-r2-061-20260927-d-import_notes",
+    "zhiliao-r2-061-20260927-d-import_uploads",
+    "zhiliao-r2-061-20260927-d-restore_db",
+    "zhiliao-r2-061-20260927-d-restore_notes",
+    "zhiliao-r2-061-20260927-d-restore_uploads",
+    "zhiliao-r2-061-20260927-d-source_db",
+    "zhiliao-r2-061-20260927-d-source_notes",
+    "zhiliao-r2-061-20260927-d-source_uploads",
+    "zhiliao-smoke-20260910-081121_smoke_db",
+    "zhiliao-smoke-20260910-081121_smoke_uploads",
+    "zhiliao-smoke-20260910-082135_smoke_db",
+    "zhiliao-smoke-20260910-082135_smoke_uploads",
+    "zhiliao_rc_db",
+    "zhiliao_rc_uploads"
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "head_unchanged": true,
+  "workspace_source_matches_final": true,
+  "workspace_source_mismatches": [],
+  "copy_input_mismatches": [],
+  "protected_tracked_file_count": 1049,
+  "protected_tracked_changes": [],
+  "original_next_env_unchanged": true,
+  "production_identity_started_at_restart_mounts_unchanged": false,
+  "changed_tracked_files_since_start": [
+    "CHANGELOG.md",
+    "CONTRIBUTING.md",
+    "docs/0.6.1候选定稿-2026-09-28.md",
+    "docs/README.md",
+    "docs/releases/v0.6.1.md",
+    "docs/产品规划/开源发布范围与执行清单-2026-09-13.md",
+    "eslint.config.mjs",
+    "tests/components/settings-page-demo.test.tsx",
+    "tests/config/demo-http-probes.test.ts"
+  ],
+  "old_manifest_unchanged": true
+}

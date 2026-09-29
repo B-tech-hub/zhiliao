@@ -1,0 +1,480 @@
+{
+  "source_head": "51f0a54b9878b0f1c1df548f976a2ec7bb17f19b",
+  "files": [
+    {
+      "path": "docs/验收证据/0.6.1-baseline-2026-09-23/b1-command.json",
+      "sha256": "26ce4ccd688e311e4ce8c18ebdd659b4427f24c8d87e35b6fd349847375e6707",
+      "bytes": 583
+    },
+    {
+      "path": "docs/验收证据/0.6.1-baseline-2026-09-23/b1.json",
+      "sha256": "d5d592c20af6a011c0da1c912303106ce6297b722b69324408d500ebc95d1d4f",
+      "bytes": 2067
+    },
+    {
+      "path": "docs/验收证据/0.6.1-baseline-2026-09-23/b1.log",
+      "sha256": "1a7a044a9a1626ad4d58c72bb0a0e0aeb95e3d96f6c6434dd09870f5ecca0510",
+      "bytes": 745
+    },
+    {
+      "path": "docs/验收证据/0.6.1-baseline-2026-09-23/candidate-identity.json",
+      "sha256": "ff13dc32a9723542aac4cda78da152c90de0d4ae75315ae5ad75090f1123b541",
+      "bytes": 299
+    },
+    {
+      "path": "docs/验收证据/0.6.1-baseline-2026-09-23/candidate-inputs.json",
+      "sha256": "73198e52de5f3b01a8cf7e9c06ef6769a2880d96b206ee2be519c0e0456b316c",
+      "bytes": 45537
+    },
+    {
+      "path": "docs/验收证据/0.6.1-baseline-2026-09-23/r1-final-patches-command.json",
+      "sha256": "3335a1325d19d740340426be385de58e7b62ae2476d15f4d71e94a3f8dd6b7a8",
+      "bytes": 710
+    },
+    {
+      "path": "docs/验收证据/0.6.1-baseline-2026-09-23/r1-final-patches.json",
+      "sha256": "5a0b1f50fd4c2c56d7f4188d0cfc973568c274622fc49353dacf3e31b1f9c7de",
+      "bytes": 27406
+    },
+    {
+      "path": "docs/验收证据/0.6.1-baseline-2026-09-23/r1-final-patches.log",
+      "sha256": "23c4cea0efd2e7005f65887401f0149c845c7b5f6292f1ffd116a4327c0ca91d",
+      "bytes": 915
+    },
+    {
+      "path": "docs/验收证据/0.6.1-baseline-2026-09-23/r2/compare.py",
+      "sha256": "ccb387da1de08eb30cde68a00c3a8b6662727ec56bf52943e96fa5a74391f123",
+      "bytes": 2741
+    },
+    {
+      "path": "docs/验收证据/0.6.1-baseline-2026-09-23/r2/compose.yml",
+      "sha256": "18840363bdee340b14428fa166d225baac5cf33605aed5fafcd5b3ed3cd565f7",
+      "bytes": 1758
+    },
+    {
+      "path": "docs/验收证据/0.6.1-baseline-2026-09-23/r2/fixture.cjs",
+      "sha256": "0e737bf6a401accb7c90d372b84f0a75c215c9cfdf764b977761d7691196db3a",
+      "bytes": 10864
+    },
+    {
+      "path": "docs/验收证据/0.6.1-baseline-2026-09-23/r2/fixtures/decode.json",
+      "sha256": "3a942d38afa4c23ecb9ceddbaa4a8a4edc7b8b13902ffafb7c372ba4311e8098",
+      "bytes": 146
+    },
+    {
+      "path": "docs/验收证据/0.6.1-baseline-2026-09-23/r2/fixtures/generate.py",
+      "sha256": "3f3bd616fca23fe4c0987d78f379851572c4e4efb100ebe3e465675465d42642",
+      "bytes": 484
+    },
+    {
+      "path": "docs/验收证据/0.6.1-baseline-2026-09-23/r2/fixtures/pattern-preview.jpg",
+      "sha256": "1d10cf5b64fe8133f45457c166c9392b344e8790fbd296ef017d8797c2647509",
+      "bytes": 1997
+    },
+    {
+      "path": "docs/验收证据/0.6.1-baseline-2026-09-23/r2/fixtures/pattern.heic",
+      "sha256": "fdf0daeaa1c7fb66bd466cb382e7cc9627454676b0974c9e1f27e51dfb6beae9",
+      "bytes": 1379
+    },
+    {
+      "path": "docs/验收证据/0.6.1-baseline-2026-09-23/r2/fixtures/pattern.png",
+      "sha256": "336badf78b5da96ffde16ff3459d0460d9a55d040884bedb8e7fb2c2088c6b07",
+      "bytes": 389
+    },
+    {
+      "path": "docs/验收证据/0.6.1-baseline-2026-09-23/r2/fixtures/README.md",
+      "sha256": "fd266fa281422a74f0a70d87d17c413dcf69d819c16f08370c2b20fa4bc7493e",
+      "bytes": 1163
+    },
+    {
+      "path": "docs/验收证据/0.6.1-baseline-2026-09-23/r2/inspect.cjs",
+      "sha256": "0ebf5f16564e1fdf73e72bd9b9c2d11722818e3b98d44793228aa1c7d8eb744e",
+      "bytes": 3673
+    },
+    {
+      "path": "docs/验收证据/0.6.1-baseline-2026-09-23/r2/prepare-workspace.ps1",
+      "sha256": "cb4276016f142ce62aa5834e172ac66b12bc23a12872fc2d4362f506bb70cefc",
+      "bytes": 4001
+    },
+    {
+      "path": "docs/验收证据/0.6.1-baseline-2026-09-23/r2/ui.yml",
+      "sha256": "9b67cb6b9d295e0d83923875b27e4eb2ee65dffb088317c8432c3af3abcc8f6d",
+      "bytes": 112
+    },
+    {
+      "path": "docs/验收证据/0.6.1-baseline-2026-09-23/README.md",
+      "sha256": "f4cf4f42d14cb27b62c3c8a85029a288bb6c3cf730916d4420856b2c71a70439",
+      "bytes": 10872
+    },
+    {
+      "path": "docs/验收证据/0.6.1-baseline-2026-09-23/sheet-dry-run.ps1",
+      "sha256": "ec34168f1e6caf675342199ddb840df824c6800a803c8e85bd87686c3c0f21fa",
+      "bytes": 9010
+    },
+    {
+      "path": "docs/验收证据/0.6.1-baseline-2026-09-23/targeted-lint-command.json",
+      "sha256": "9a055998c899adf2cafa509467347574e647bf0c1b7040323782aaeb7ae26b9e",
+      "bytes": 591
+    },
+    {
+      "path": "docs/验收证据/0.6.1-baseline-2026-09-23/targeted-lint.log",
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+      "bytes": 1
+    },
+    {
+      "path": "docs/验收证据/0.6.1-baseline-2026-09-23/version-command.json",
+      "sha256": "60a23c52669efe086b19679460d46c6ad6dc8862debcdbffb5f32cac35c3eff6",
+      "bytes": 122
+    },
+    {
+      "path": "docs/验收证据/0.6.1-baseline-2026-09-23/version.log",
+      "sha256": "b58771cc8a94c71a257202f009dabc1a580c2957e9e6e48858d4c1da89db7a4e",
+      "bytes": 63
+    },
+    {
+      "path": "docs/验收证据/0.6.1-registry-2026-09-27/candidate-identity.json",
+      "sha256": "37678ddcd919de0622ec603e0db6dd932080641bf5e5ba799bcc006fe5090274",
+      "bytes": 389
+    },
+    {
+      "path": "docs/验收证据/0.6.1-registry-2026-09-27/candidate-inputs.json",
+      "sha256": "225d7f540276242ed323269bdfc331c679b5e301843949a2f9928954a27168b3",
+      "bytes": 45737
+    },
+    {
+      "path": "docs/验收证据/0.6.1-registry-2026-09-27/check-local.py",
+      "sha256": "440a21c6e7dc48e20110a3d2842fe9c9aef47186b8986c13d1309c888cd78004",
+      "bytes": 4717
+    },
+    {
+      "path": "docs/验收证据/0.6.1-registry-2026-09-27/failed-builds/.gitattributes",
+      "sha256": "3b60b984b9838639682095ed7b8bd745fde7bab14655f495a6712df2626061b4",
+      "bytes": 109
+    },
+    {
+      "path": "docs/验收证据/0.6.1-registry-2026-09-27/failed-builds/a/build.log.txt",
+      "sha256": "6c1baee7ee65e1f6f1e82ba933043091ab6e4cbafc8b44f506c4ddbe9fc9d95a",
+      "bytes": 8396
+    },
+    {
+      "path": "docs/验收证据/0.6.1-registry-2026-09-27/failed-builds/a/resources-after.txt",
+      "sha256": "74f58648d141921e782054c350aa0263252d00dc304f66223c3f29bcf009bef5",
+      "bytes": 661
+    },
+    {
+      "path": "docs/验收证据/0.6.1-registry-2026-09-27/failed-builds/a/resources-before.txt",
+      "sha256": "74f58648d141921e782054c350aa0263252d00dc304f66223c3f29bcf009bef5",
+      "bytes": 661
+    },
+    {
+      "path": "docs/验收证据/0.6.1-registry-2026-09-27/failed-builds/b/build.log.txt",
+      "sha256": "0584bb4994bafd36aee3d3a45041c9685ff09e1668f30a1cc722bdf7894d82ee",
+      "bytes": 2444
+    },
+    {
+      "path": "docs/验收证据/0.6.1-registry-2026-09-27/failed-builds/b/resources-after.txt",
+      "sha256": "74f58648d141921e782054c350aa0263252d00dc304f66223c3f29bcf009bef5",
+      "bytes": 661
+    },
+    {
+      "path": "docs/验收证据/0.6.1-registry-2026-09-27/failed-builds/b/resources-before.txt",
+      "sha256": "74f58648d141921e782054c350aa0263252d00dc304f66223c3f29bcf009bef5",
+      "bytes": 661
+    },
+    {
+      "path": "docs/验收证据/0.6.1-registry-2026-09-27/failed-builds.json",
+      "sha256": "8b070bd8e7a07c8a1125fa965228aced978e2a14da3f8b0e801f7ee9b58b93bb",
+      "bytes": 2307
+    },
+    {
+      "path": "docs/验收证据/0.6.1-registry-2026-09-27/local-check.json",
+      "sha256": "a76f14f3e190ba41f12c185adc0ccb941ff148bb151ff86f98fcdb2eb288a027",
+      "bytes": 324
+    },
+    {
+      "path": "docs/验收证据/0.6.1-registry-2026-09-27/local-final-check.json",
+      "sha256": "e50acdf272007843c8763f86b4b27060f87586362509c699096b1bec703707e4",
+      "bytes": 324
+    },
+    {
+      "path": "docs/验收证据/0.6.1-registry-2026-09-27/lock-comparison.json",
+      "sha256": "3052b5eb1ac59a86c758b60a64627b3f47510724571d7705962124b8f2e51d2b",
+      "bytes": 33323
+    },
+    {
+      "path": "docs/验收证据/0.6.1-registry-2026-09-27/preparation-check.json",
+      "sha256": "36a3310d0747498ebde4cc1b55f4d275d0e538713086acf18d29d85ae422c8ac",
+      "bytes": 374
+    },
+    {
+      "path": "docs/验收证据/0.6.1-registry-2026-09-27/README.md",
+      "sha256": "77664c46353e6a35ee69b829236a522870188c7633f8fedc8eab9c43a3f487dc",
+      "bytes": 6599
+    },
+    {
+      "path": "docs/验收证据/0.6.1-registry-2026-09-27/sheet-check.json",
+      "sha256": "1f182782a4ea6f51594b1fda8f515a7219acab496a4fd4129366ebd7d777a137",
+      "bytes": 446
+    },
+    {
+      "path": "docs/验收证据/0.6.1-registry-2026-09-27/sheet-final-check.json",
+      "sha256": "6212bf01faca337e6f73fb12f0139f0b2ae39b92dde739c30cf2fd1bf958a030",
+      "bytes": 488
+    },
+    {
+      "path": "docs/验收证据/r2-061-20260927-c/.gitattributes",
+      "sha256": "43dfe24e203ad6483d8bda94437a61dc72e93a83e70269b8c72c15cc63a62f79",
+      "bytes": 175
+    },
+    {
+      "path": "docs/验收证据/r2-061-20260927-c/archive-check.json",
+      "sha256": "81dccd83e2a5c28356a779cb95614506bcdc8292ecf36c72389ee086db140bb5",
+      "bytes": 372
+    },
+    {
+      "path": "docs/验收证据/r2-061-20260927-c/archive-manifest.json",
+      "sha256": "c3e57b230b6810bbc76f9208927d62a3e30f0422d5b56033739704d49c3c96ec",
+      "bytes": 9077
+    },
+    {
+      "path": "docs/验收证据/r2-061-20260927-c/build.log.txt",
+      "sha256": "d7f93604ab2b92a4c967df2a91e6ec46edfc32c43d7904961928be614ac1ce32",
+      "bytes": 11300
+    },
+    {
+      "path": "docs/验收证据/r2-061-20260927-c/candidate-identity.json",
+      "sha256": "37678ddcd919de0622ec603e0db6dd932080641bf5e5ba799bcc006fe5090274",
+      "bytes": 389
+    },
+    {
+      "path": "docs/验收证据/r2-061-20260927-c/candidate-inputs.json",
+      "sha256": "225d7f540276242ed323269bdfc331c679b5e301843949a2f9928954a27168b3",
+      "bytes": 45737
+    },
+    {
+      "path": "docs/验收证据/r2-061-20260927-c/failure-import-app.log.txt",
+      "sha256": "cadbde4f3c13f88a2a71ea7f81041b5199e7b58a8c3bb8f498df9cf412d9e79e",
+      "bytes": 930
+    },
+    {
+      "path": "docs/验收证据/r2-061-20260927-c/failure-restore-app.log.txt",
+      "sha256": "ae24b6fa59681d48fa36838012ed7a5bffcb097364ede608c199c3959ac631a0",
+      "bytes": 465
+    },
+    {
+      "path": "docs/验收证据/r2-061-20260927-c/failure-source-app.log.txt",
+      "sha256": "13b07e026de74a22380c2d587f0328eadab57677d67459c32e376e506100c72a",
+      "bytes": 1492
+    },
+    {
+      "path": "docs/验收证据/r2-061-20260927-c/image-failure-probe.json",
+      "sha256": "8719a20415df4b1aca7e30ba2b695cb2907580c72e05010a35e51baa9668019d",
+      "bytes": 1163
+    },
+    {
+      "path": "docs/验收证据/r2-061-20260927-c/image.json",
+      "sha256": "b7ba312cba18e819279d9cb606ee34cb15882d347162c33f1d2064b8f12faac3",
+      "bytes": 3646
+    },
+    {
+      "path": "docs/验收证据/r2-061-20260927-c/import/import-reports.json",
+      "sha256": "99945bac2000861f221fd6273e74cd1e64c8fd9a1472447bffe7b7eafcbedda7",
+      "bytes": 664
+    },
+    {
+      "path": "docs/验收证据/r2-061-20260927-c/import-app.log.txt",
+      "sha256": "cadbde4f3c13f88a2a71ea7f81041b5199e7b58a8c3bb8f498df9cf412d9e79e",
+      "bytes": 930
+    },
+    {
+      "path": "docs/验收证据/r2-061-20260927-c/import-state.json",
+      "sha256": "7b49c408ebc17ff8bf6ff8da68237b38a16f71b54aeba286666ac000b2fc81a6",
+      "bytes": 8300
+    },
+    {
+      "path": "docs/验收证据/r2-061-20260927-c/operation-sheet.md",
+      "sha256": "70317838a6cb14089953a87e70c746d2ca7e043ce5b7930de461550bc4e14933",
+      "bytes": 18400
+    },
+    {
+      "path": "docs/验收证据/r2-061-20260927-c/package/compare.py",
+      "sha256": "ccb387da1de08eb30cde68a00c3a8b6662727ec56bf52943e96fa5a74391f123",
+      "bytes": 2741
+    },
+    {
+      "path": "docs/验收证据/r2-061-20260927-c/package/compose.yml",
+      "sha256": "18840363bdee340b14428fa166d225baac5cf33605aed5fafcd5b3ed3cd565f7",
+      "bytes": 1758
+    },
+    {
+      "path": "docs/验收证据/r2-061-20260927-c/package/fixture.cjs",
+      "sha256": "0e737bf6a401accb7c90d372b84f0a75c215c9cfdf764b977761d7691196db3a",
+      "bytes": 10864
+    },
+    {
+      "path": "docs/验收证据/r2-061-20260927-c/package/fixtures/decode.json",
+      "sha256": "3a942d38afa4c23ecb9ceddbaa4a8a4edc7b8b13902ffafb7c372ba4311e8098",
+      "bytes": 146
+    },
+    {
+      "path": "docs/验收证据/r2-061-20260927-c/package/fixtures/generate.py",
+      "sha256": "3f3bd616fca23fe4c0987d78f379851572c4e4efb100ebe3e465675465d42642",
+      "bytes": 484
+    },
+    {
+      "path": "docs/验收证据/r2-061-20260927-c/package/fixtures/pattern-preview.jpg",
+      "sha256": "1d10cf5b64fe8133f45457c166c9392b344e8790fbd296ef017d8797c2647509",
+      "bytes": 1997
+    },
+    {
+      "path": "docs/验收证据/r2-061-20260927-c/package/fixtures/pattern.heic",
+      "sha256": "fdf0daeaa1c7fb66bd466cb382e7cc9627454676b0974c9e1f27e51dfb6beae9",
+      "bytes": 1379
+    },
+    {
+      "path": "docs/验收证据/r2-061-20260927-c/package/fixtures/pattern.png",
+      "sha256": "336badf78b5da96ffde16ff3459d0460d9a55d040884bedb8e7fb2c2088c6b07",
+      "bytes": 389
+    },
+    {
+      "path": "docs/验收证据/r2-061-20260927-c/package/fixtures/README.md",
+      "sha256": "fd266fa281422a74f0a70d87d17c413dcf69d819c16f08370c2b20fa4bc7493e",
+      "bytes": 1163
+    },
+    {
+      "path": "docs/验收证据/r2-061-20260927-c/package/inspect.cjs",
+      "sha256": "0ebf5f16564e1fdf73e72bd9b9c2d11722818e3b98d44793228aa1c7d8eb744e",
+      "bytes": 3673
+    },
+    {
+      "path": "docs/验收证据/r2-061-20260927-c/package/prepare-workspace.ps1",
+      "sha256": "cb4276016f142ce62aa5834e172ac66b12bc23a12872fc2d4362f506bb70cefc",
+      "bytes": 4001
+    },
+    {
+      "path": "docs/验收证据/r2-061-20260927-c/package/ui.yml",
+      "sha256": "9b67cb6b9d295e0d83923875b27e4eb2ee65dffb088317c8432c3af3abcc8f6d",
+      "bytes": 112
+    },
+    {
+      "path": "docs/验收证据/r2-061-20260927-c/README.md",
+      "sha256": "0a1ef821e8ebf1ba44225e76464c065755be73b359b8f0dcaacc73a96a7ed2f4",
+      "bytes": 4761
+    },
+    {
+      "path": "docs/验收证据/r2-061-20260927-c/resources-after.txt",
+      "sha256": "74f58648d141921e782054c350aa0263252d00dc304f66223c3f29bcf009bef5",
+      "bytes": 661
+    },
+    {
+      "path": "docs/验收证据/r2-061-20260927-c/resources-before.txt",
+      "sha256": "74f58648d141921e782054c350aa0263252d00dc304f66223c3f29bcf009bef5",
+      "bytes": 661
+    },
+    {
+      "path": "docs/验收证据/r2-061-20260927-c/restore-before-start.json",
+      "sha256": "d59c4231f6b5ec9043f93a0198a7e38c97e63564000369ba9e20bf6c73543026",
+      "bytes": 8324
+    },
+    {
+      "path": "docs/验收证据/r2-061-20260927-c/retained-volumes.json",
+      "sha256": "2d338e72f0f65e6cda90d4b725be7fb2c26adf27a1c2c0099b3af7cf6c4f2393",
+      "bytes": 417
+    },
+    {
+      "path": "docs/验收证据/r2-061-20260927-c/run-stage.ps1",
+      "sha256": "32e80b6c9a7d5d9009005560db3abe97571a997f5cb28253efb573a8dcbc0af9",
+      "bytes": 2425
+    },
+    {
+      "path": "docs/验收证据/r2-061-20260927-c/runtime-containers.json",
+      "sha256": "21eb448a1d06334dfebd76b282e84722b381274e6bec3f228af583d001c047f5",
+      "bytes": 8298
+    },
+    {
+      "path": "docs/验收证据/r2-061-20260927-c/snapshot/app.db",
+      "sha256": "adf513697b7eae796c0c87262dcb66534ccdd5baa4e8512d226c644548fc4960",
+      "bytes": 237568
+    },
+    {
+      "path": "docs/验收证据/r2-061-20260927-c/snapshot/uploads/e03aab43-df51-41a6-a409-ba143c5984e7.heic",
+      "sha256": "fdf0daeaa1c7fb66bd466cb382e7cc9627454676b0974c9e1f27e51dfb6beae9",
+      "bytes": 1379
+    },
+    {
+      "path": "docs/验收证据/r2-061-20260927-c/snapshot/uploads/e03aab43-df51-41a6-a409-ba143c5984e7.jpg",
+      "sha256": "1d10cf5b64fe8133f45457c166c9392b344e8790fbd296ef017d8797c2647509",
+      "bytes": 1997
+    },
+    {
+      "path": "docs/验收证据/r2-061-20260927-c/snapshot/uploads/j8nrrw7ae4sr6jfonsbplr5x.png",
+      "sha256": "336badf78b5da96ffde16ff3459d0460d9a55d040884bedb8e7fb2c2088c6b07",
+      "bytes": 389
+    },
+    {
+      "path": "docs/验收证据/r2-061-20260927-c/snapshot-after-failure.json",
+      "sha256": "324389a82b9f2a92a8fef7ea5862a94b7101f831787aa07e165beef9d70e5860",
+      "bytes": 643
+    },
+    {
+      "path": "docs/验收证据/r2-061-20260927-c/snapshot-before.json",
+      "sha256": "324389a82b9f2a92a8fef7ea5862a94b7101f831787aa07e165beef9d70e5860",
+      "bytes": 643
+    },
+    {
+      "path": "docs/验收证据/r2-061-20260927-c/source/backup.json",
+      "sha256": "db1fe0503c98e0bfefc86be2236d9ae3b11b5997bd9d754aac421e09e86a22b6",
+      "bytes": 52
+    },
+    {
+      "path": "docs/验收证据/r2-061-20260927-c/source/export.zip",
+      "sha256": "e3182f04b951b1486192f027674f81aaf96ff820d83c7db32a2fd26857b0990a",
+      "bytes": 5817
+    },
+    {
+      "path": "docs/验收证据/r2-061-20260927-c/source/seed.json",
+      "sha256": "82aa568d39d3a53f9d17245af5163d72b872302bc320364628c2f2bd6799ce49",
+      "bytes": 6056
+    },
+    {
+      "path": "docs/验收证据/r2-061-20260927-c/source-app.log.txt",
+      "sha256": "13b07e026de74a22380c2d587f0328eadab57677d67459c32e376e506100c72a",
+      "bytes": 1492
+    },
+    {
+      "path": "docs/验收证据/r2-061-20260927-c/source-markdown/R2 导出_图片/R2 标题_改名-kieo0y6bo5lmf1n21boiyoxl.md",
+      "sha256": "b65172063422ef1534019e6069149154ff7920f33f2739be6e9b8efb3a15a99a",
+      "bytes": 226
+    },
+    {
+      "path": "docs/验收证据/r2-061-20260927-c/source-markdown/未分类/R2 image-xwwgux8i7qhtte0vzlpz5ahu.md",
+      "sha256": "1fe5a0e69e7e360dadfaf02f4ba64f8fb55096d4cfb80ead7f17d0ab3dc6c671",
+      "bytes": 362
+    },
+    {
+      "path": "docs/验收证据/r2-061-20260927-c/source-markdown/未分类/R2 long-as6mf0uoqctuzj5oih49047s.md",
+      "sha256": "6e9bca9313b771c2a20d3ee14eca224726021ad28e211a471e11baa7439106aa",
+      "bytes": 5288
+    },
+    {
+      "path": "docs/验收证据/r2-061-20260927-c/source-state.json",
+      "sha256": "d59c4231f6b5ec9043f93a0198a7e38c97e63564000369ba9e20bf6c73543026",
+      "bytes": 8324
+    },
+    {
+      "path": "docs/验收证据/r2-061-20260927-c/stages.jsonl",
+      "sha256": "71c88f3cf5922c27063423749eeb3c961a11b7ed7ea73845b78e4e4096ef16d9",
+      "bytes": 1610
+    },
+    {
+      "path": "docs/验收证据/r2-061-20260927-c/summary.json",
+      "sha256": "219cbde5284f0445a2b3fc4af096fdc18cab4e6d78285146952ba54ef2967691",
+      "bytes": 2094
+    },
+    {
+      "path": "docs/验收证据/r2-061-20260927-c/transcript.txt",
+      "sha256": "d05c023ddecfe3a55cb4825b3394227db03723ab76bc8212558a20fa2870fa3c",
+      "bytes": 17524
+    }
+  ]
+}

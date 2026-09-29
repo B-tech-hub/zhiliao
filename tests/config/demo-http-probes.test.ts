@@ -42,13 +42,14 @@ afterEach(async () => {
 
 describe("Demo HTTP 和 SSE 探针（仅本机临时 HTTP 夹具）", () => {
   it("用不同长度区分默认 8m、导入 200m 和上传 25m", async () => {
-    const received: Record<string, number> = {};
+    const received: { path: string; declaredBytes: number; receivedBytes: number }[] = [];
     const base = await listen((req, res) => {
       if (req.method === "GET" && req.url === "/api/healthz") { res.writeHead(200).end("ok"); return; }
       const length = Number(req.headers["content-length"]);
       const path = req.url ?? "";
       req.once("data", (chunk) => {
-        received[path] = (received[path] ?? 0) + chunk.length;
+        // 导入和上传各有两次探针；按请求留证，避免把同一路径的字节数相加。
+        received.push({ path, declaredBytes: length, receivedBytes: chunk.length });
         const overDefault = length > 8 * 1024 * 1024;
         const overUpload = length > 25 * 1024 * 1024;
         const overImport = length > 200 * 1024 * 1024;
@@ -62,7 +63,13 @@ describe("Demo HTTP 和 SSE 探针（仅本机临时 HTTP 夹具）", () => {
       health: 200, oversize: 413, default_oversize: 413, upload_oversize: 413,
       import_midsize: 401, upload_midsize: 401, sent_body_bytes: 1,
     });
-    expect(Object.values(received).every((value) => value === 1)).toBe(true);
+    expect(received).toEqual([
+      { path: "/api/notes", declaredBytes: 8 * 1024 * 1024 + 1, receivedBytes: 1 },
+      { path: "/api/import", declaredBytes: 8 * 1024 * 1024 + 1, receivedBytes: 1 },
+      { path: "/api/import", declaredBytes: 200 * 1024 * 1024 + 1, receivedBytes: 1 },
+      { path: "/api/uploads", declaredBytes: 8 * 1024 * 1024 + 1, receivedBytes: 1 },
+      { path: "/api/uploads", declaredBytes: 25 * 1024 * 1024 + 1, receivedBytes: 1 },
+    ]);
   });
 
   it.each([["health", 503], ["oversize", 200]] as const)("拒绝 %s 的错误状态", async (kind, status) => {

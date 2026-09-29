@@ -1,0 +1,95 @@
+{
+  "status": "ci-failed-no-rerun",
+  "run_id": 36574616627,
+  "test_file": "tests/config/smoke-fresh-install.test.ts",
+  "line": 110,
+  "test_name": "默认包版本：输出正确镜像，且不依赖运行目录或环境版本",
+  "error": "Test timed out in 5000ms.",
+  "reported_duration_ms": 5244,
+  "vitest_timeout_ms": 5000,
+  "subprocess_timeout_ms": 10000,
+  "previous_ci_duration_ms": 2106,
+  "previous_ci_run_id": 36567105695,
+  "unchanged_inputs": [
+    {
+      "path": "tests/config/smoke-fresh-install.test.ts",
+      "sha256": "72eb1bc1b8d211c012cee6e47174044a8b13c26591d0f80cce5f72684463a0ab",
+      "same_as_previous_candidate": true
+    },
+    {
+      "path": "scripts/smoke-fresh-install.ps1",
+      "sha256": "9bb09cfd1da7ee570108bcda51691c4e82134e64f2aac6a3e50934f4ef5ca454",
+      "same_as_previous_candidate": true
+    },
+    {
+      "path": "vitest.config.mts",
+      "sha256": "386c7045e405d0855313ad030d87e72394cea3926ff1c2a80a2285895524c4d3",
+      "same_as_previous_candidate": true
+    }
+  ],
+  "log_evidence": [
+    {
+      "line": 223,
+      "text": "Lint、测试与构建\t单元测试（Vitest）\t2026-09-29T13:23:33.3567175Z  ✓ tests/config/release-gate4.test.ts (25 tests) 207ms"
+    },
+    {
+      "line": 270,
+      "text": "Lint、测试与构建\t单元测试（Vitest）\t2026-09-29T13:23:45.6710527Z  ✓ tests/config/release-version.test.ts (39 tests) 2412ms"
+    },
+    {
+      "line": 331,
+      "text": "Lint、测试与构建\t单元测试（Vitest）\t2026-09-29T13:24:02.0847924Z  ❯ tests/config/smoke-fresh-install.test.ts (11 tests | 1 failed) 16450ms"
+    },
+    {
+      "line": 332,
+      "text": "Lint、测试与构建\t单元测试（Vitest）\t2026-09-29T13:24:02.0849822Z      × 默认包版本：输出正确镜像，且不依赖运行目录或环境版本 5244ms"
+    },
+    {
+      "line": 344,
+      "text": "Lint、测试与构建\t单元测试（Vitest）\t2026-09-29T13:24:02.0958191Z ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯"
+    },
+    {
+      "line": 346,
+      "text": "Lint、测试与构建\t单元测试（Vitest）\t2026-09-29T13:24:02.0960164Z  FAIL  tests/config/smoke-fresh-install.test.ts > 安装冒烟预览：参数与零部署副作用 > 默认包版本：输出正确镜像，且不依赖运行目录或环境版本"
+    },
+    {
+      "line": 347,
+      "text": "Lint、测试与构建\t单元测试（Vitest）\t2026-09-29T13:24:02.0964576Z Error: Test timed out in 5000ms."
+    },
+    {
+      "line": 349,
+      "text": "Lint、测试与构建\t单元测试（Vitest）\t2026-09-29T13:24:02.0967048Z  ❯ tests/config/smoke-fresh-install.test.ts:110:5"
+    },
+    {
+      "line": 360,
+      "text": "Lint、测试与构建\t单元测试（Vitest）\t2026-09-29T13:24:02.1020838Z  Test Files  1 failed | 64 passed | 3 skipped (68)"
+    },
+    {
+      "line": 361,
+      "text": "Lint、测试与构建\t单元测试（Vitest）\t2026-09-29T13:24:02.1025278Z       Tests  1 failed | 880 passed | 28 skipped (909)"
+    },
+    {
+      "line": 366,
+      "text": "Lint、测试与构建\t单元测试（Vitest）\t2026-09-29T13:24:02.1069157Z ##[error]Error: Test timed out in 5000ms."
+    },
+    {
+      "line": 368,
+      "text": "Lint、测试与构建\t单元测试（Vitest）\t ❯ tests/config/smoke-fresh-install.test.ts:110:5"
+    }
+  ],
+  "previous_log_evidence": [
+    {
+      "line": 321,
+      "text": "Lint、测试与构建\t单元测试（Vitest）\t2026-09-29T12:18:23.1829096Z      ^[[33m^[[2m✓^[[22m^[[39m 默认包版本：输出正确镜像，且不依赖运行目录或环境版本 ^[[33m 2106^[[2mms^[[22m^[[39m"
+    }
+  ],
+  "confirmed": "当前外层测试时限 5 秒小于同步 PowerShell 子进程上限 10 秒，本次报告 5244 ms。",
+  "not_proven": "没有独立的 PowerShell 启动/执行分段耗时；不能判定具体资源原因或认定只是偶发误报，也不能认定未完成的断言已通过。",
+  "proposed_next_scope": [
+    "仅调查 tests/config/smoke-fresh-install.test.ts 的子进程与测试超时预算，保留已有失败、参数和零部署副作用断言。",
+    "获准后为该文件调用 PowerShell 的测试设置超过 10000 ms 子进程上限并包含少量开销的局部预算，例如 15000 ms；先记录实际子进程状态与耗时，不改全局 Vitest 超时或增加重试。",
+    "局部验证只针对该文件的 11 个用例；不能用局部成功回填本次失败，新的完整 PR CI 另按新提交范围确认。"
+  ],
+  "implemented": false,
+  "tests_rerun": false
+}

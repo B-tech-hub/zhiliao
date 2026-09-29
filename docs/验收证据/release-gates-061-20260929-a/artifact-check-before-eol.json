@@ -1,0 +1,43 @@
+{
+  "patch_reproduced_files": 4,
+  "patch_mismatches": [],
+  "commit_mismatches": [
+    "tests/config/demo-compose-wrapper.test.ts"
+  ],
+  "markdown_files": [
+    "CHANGELOG.md",
+    "CONTRIBUTING.md",
+    "_bmad-output/implementation-artifacts/review-0-6-1-final-release-gates.md",
+    "_bmad-output/implementation-artifacts/spec-0-6-1-final-release-gates.md",
+    "docs/0.6.1候选定稿-2026-09-28.md",
+    "docs/README.md",
+    "docs/releases/v0.6.1.md",
+    "docs/产品规划/开源发布范围与执行清单-2026-09-13.md",
+    "docs/验收证据/release-gates-061-20260929-a/README.md"
+  ],
+  "local_links_checked": 293,
+  "broken_links": [],
+  "encoding_issues": [],
+  "lint_scope": [
+    {
+      "path": "docs/验收证据/r2-061-20260927-d/browser-check.cjs",
+      "ignored": true
+    },
+    {
+      "path": "scripts/demo-http-probes.mjs",
+      "ignored": false
+    },
+    {
+      "path": "tests/config/demo-http-probes.test.ts",
+      "ignored": false
+    },
+    {
+      "path": "src/app/(app)/settings/page.tsx",
+      "ignored": false
+    }
+  ],
+  "raw_log_count": 30,
+  "unlisted_logs": [],
+  "standalone_server_exists": true,
+  "build_id": "-O6MQo2KRg-k1dvD3prEK"
+}

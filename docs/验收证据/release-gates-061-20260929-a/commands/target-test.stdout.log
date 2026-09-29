@@ -1,0 +1,10 @@
+
+ RUN  v4.1.11 C:/Users/BAIBAI/AppData/Local/Temp/zhiliao-release-gates-061-20260929-a/candidate
+
+ ✓ tests/config/demo-verification-utils.test.ts (2 tests) 4ms
+
+ Test Files  1 passed (1)
+      Tests  2 passed (2)
+   Start at  09:30:18
+   Duration  1.35s (transform 42ms, setup 52ms, import 75ms, tests 4ms, environment 0ms)
+

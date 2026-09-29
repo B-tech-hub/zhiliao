@@ -1,0 +1,36 @@
+# TipTap 浏览器验收专用：单实例、专用卷，只在 127.0.0.1 发布端口；不配置任何模型。
+services:
+  app:
+    image: ${T_IMAGE:?必须先固定候选镜像}
+    pull_policy: never
+    restart: "no"
+    environment:
+      APP_PASSWORD: ${T_PASSWORD:?独立密码}
+      SESSION_SECRET: ${T_SECRET:?独立会话密钥}
+      DATABASE_PATH: /data/db/app.db
+      UPLOAD_DIR: /data/uploads
+      NOTES_EXPORT_DIR: /data/notes
+      T_RUN: ${T_RUN:?独立运行标记}
+      TZ: Asia/Shanghai
+      DEMO_MODE: "0"
+    ports:
+      - "127.0.0.1:${T_PORT:?回环端口}:3000"
+    volumes:
+      - db:/data/db
+      - uploads:/data/uploads
+      - notes:/data/notes
+      - type: bind
+        source: ${T_PACKAGE:?工具目录}
+        target: /t
+        read_only: true
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ${T_ARTIFACTS:?证据目录}
+        target: /evidence
+        bind:
+          create_host_path: false
+volumes:
+  db:
+  uploads:
+  notes:

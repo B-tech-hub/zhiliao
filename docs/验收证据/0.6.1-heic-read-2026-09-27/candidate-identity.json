@@ -1,0 +1,12 @@
+{
+  "status": "prepared-not-built",
+  "manifest_sha256": "0a2819f376993fafa61b27f57a9a978ff7ef1c7635d88e8485bee7c0655c7baf",
+  "local_image_tag": "zhiliao-r2:0.6.1-0a2819f37699",
+  "source_head": "51f0a54b9878b0f1c1df548f976a2ec7bb17f19b",
+  "file_count": 276,
+  "platform": "linux/amd64",
+  "previous_manifest_sha256": "225d7f540276242ed323269bdfc331c679b5e301843949a2f9928954a27168b3",
+  "previous_run_id": "061-20260927-c",
+  "proposed_run_id": "061-20260927-d",
+  "image_id": null
+}

@@ -1,0 +1,27 @@
+{
+  "round": "m1",
+  "ids": {
+    "center": "cfh6mp7s55sdoub0lh3a5c6r",
+    "width": "cs03xjlehk768r9bwvg84rs6",
+    "right": "loetd2memdouuckko6xoi8uv",
+    "plain": "xorhldzleimozy8mza3oawx9",
+    "table": "zs7zal6qbttxy499t63rg92k",
+    "danger": "kv6sw41qgjfvo5h5wlniseia"
+  },
+  "urls": {
+    "center": "/api/images/h5mxh5r07llqvsvj4bebjcy2.png",
+    "width": "/api/images/owaqtvubzpooq74f1qeiebdz.png",
+    "right": "/api/images/t79annru4jmlyaw45ww71lwm.png",
+    "plain": "/api/images/pgb4gcqy5kl06s9zx9wozvx1.png",
+    "table": "/api/images/f591h6fz338bjigx3bbl9s35.png",
+    "danger": "/api/images/gqm3wj6pjav9s16v2sbv4l6w.png"
+  },
+  "content": {
+    "center": "宽度居中口令：m1。\n\n![甲](/api/images/h5mxh5r07llqvsvj4bebjcy2.png)\n\n尾段。",
+    "width": "仅宽度口令：m1。\n\n![乙](/api/images/owaqtvubzpooq74f1qeiebdz.png)\n\n尾段。",
+    "right": "仅右对齐口令：m1。\n\n![丙](/api/images/t79annru4jmlyaw45ww71lwm.png)\n\n尾段。",
+    "plain": "普通图片口令：m1。\n\n![丁](/api/images/pgb4gcqy5kl06s9zx9wozvx1.png)\n\n尾段。",
+    "table": "相邻表格口令：m1。\n\n<img src=\"/api/images/f591h6fz338bjigx3bbl9s35.png\" width=\"50%\" alt=\"戊\"><table><tr><th>表头</th><th>数值</th></tr><tr><td>内容</td><td>42</td></tr></table>\n\n尾段。",
+    "danger": "危险属性口令：m1。\n\n<img src=\"/api/images/gqm3wj6pjav9s16v2sbv4l6w.png\" width=\"50%\" onerror=\"window.__xss=1\" onload=\"window.__xss=2\" data-pm-slice='{\"__proto__\":{\"onerror\":\"window.__xss=3\"}}' style=\"display: block; margin-left: auto; margin-right: auto; background:url(javascript:window.__xss=4)\" alt=\"己\">\n\n<img src=\"/api/images/missing-xss.png\" onerror=\"window.__xss=5\">\n\n[链接](javascript:window.__xss=6)\n\n尾段。"
+  }
+}

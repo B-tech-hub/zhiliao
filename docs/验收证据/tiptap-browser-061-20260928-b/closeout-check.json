@@ -1,0 +1,68 @@
+{
+  "kind": "existing-evidence-closeout",
+  "date": "2026-09-28",
+  "review_head": "538c62f7c6df39be87d2b8032c7dda4dc65b2c1b",
+  "new_browser_runs": 0,
+  "new_builds": 0,
+  "docker_commands": 0,
+  "spec_status": "in-progress",
+  "rounds": [
+    {
+      "round": "m0",
+      "status": "passed",
+      "attempts": 1,
+      "checks": 7,
+      "screenshots": 6,
+      "saved_content_matches": 5,
+      "danger_source_unchanged": true,
+      "guard_arrays_empty": true,
+      "table_input": "HTML",
+      "table_saved_format": "GFM"
+    },
+    {
+      "round": "m1",
+      "status": "passed",
+      "attempts": 1,
+      "checks": 7,
+      "screenshots": 6,
+      "saved_content_matches": 5,
+      "danger_source_unchanged": true,
+      "guard_arrays_empty": true,
+      "table_input": "HTML",
+      "table_saved_format": "GFM"
+    }
+  ],
+  "stages_passed": 5,
+  "resource_snapshots_equal": true,
+  "image_id": "sha256:f262652592dd2bd32d00aae44f60d4c98caa2c89ca0942254f77918f57aacb4a",
+  "platform": "linux/amd64",
+  "candidate_files_match": 276,
+  "manifest_sha256": "0a2819f376993fafa61b27f57a9a978ff7ef1c7635d88e8485bee7c0655c7baf",
+  "runtime_archive_files_match": 34,
+  "credential_values_checked": 2,
+  "credential_hits": [],
+  "screenshot_spot_checks": [
+    "browser/m0-01-center.png",
+    "browser/m1-03-right.png",
+    "browser/m1-05-table.png"
+  ],
+  "frozen_block_unchanged": true,
+  "spec_baseline_unchanged": true,
+  "sprint_unchanged": true,
+  "existing_files_changed": [
+    "CHANGELOG.md",
+    "_bmad-output/implementation-artifacts/spec-0-6-1-tiptap-browser-acceptance.md",
+    "docs/README.md",
+    "docs/TipTap残余风险调查-2026-09-19.md",
+    "docs/releases/v0.6.1.md",
+    "docs/产品规划/开源发布范围与执行清单-2026-09-13.md",
+    "docs/验收证据/tiptap-browser-061-20260928-b/README.md"
+  ],
+  "existing_files_unchanged": 1535,
+  "new_or_changed_doc_links_checked": 66,
+  "utf8_lf_and_fences": "passed",
+  "open_coverage_gaps": [
+    "GFM initial table fixture absent",
+    "complete browser request log absent"
+  ]
+}

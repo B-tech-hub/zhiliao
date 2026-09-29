@@ -1,0 +1,16 @@
+C:\Users\BAIBAI\AppData\Local\Temp\zhiliao-runner-context-a5cecfe65f184ff7ba9e19d3b2fef139\release-before.yml:81:21: context "runner" is not allowed here. available contexts are "github", "inputs", "matrix", "needs", "secrets", "strategy", "vars". see https://docs.github.com/en/actions/learn-github-actions/contexts#context-availability for more details [expression]
+   |
+81 |       EVIDENCE: ${{ runner.temp }}/gate4-build
+   |                     ^~~~~~~~~~~
+C:\Users\BAIBAI\AppData\Local\Temp\zhiliao-runner-context-a5cecfe65f184ff7ba9e19d3b2fef139\release-before.yml:206:21: context "runner" is not allowed here. available contexts are "github", "inputs", "matrix", "needs", "secrets", "strategy", "vars". see https://docs.github.com/en/actions/learn-github-actions/contexts#context-availability for more details [expression]
+    |
+206 |       EVIDENCE: ${{ runner.temp }}/gate4-install
+    |                     ^~~~~~~~~~~
+C:\Users\BAIBAI\AppData\Local\Temp\zhiliao-runner-context-a5cecfe65f184ff7ba9e19d3b2fef139\release-before.yml:207:31: context "runner" is not allowed here. available contexts are "github", "inputs", "matrix", "needs", "secrets", "strategy", "vars". see https://docs.github.com/en/actions/learn-github-actions/contexts#context-availability for more details [expression]
+    |
+207 |       DOCKER_HOST: unix://${{ runner.temp }}/gate4-docker/docker.sock
+    |                               ^~~~~~~~~~~
+C:\Users\BAIBAI\AppData\Local\Temp\zhiliao-runner-context-a5cecfe65f184ff7ba9e19d3b2fef139\release-before.yml:208:26: context "runner" is not allowed here. available contexts are "github", "inputs", "matrix", "needs", "secrets", "strategy", "vars". see https://docs.github.com/en/actions/learn-github-actions/contexts#context-availability for more details [expression]
+    |
+208 |       DOCKER_CONFIG: ${{ runner.temp }}/gate4-anonymous
+    |                          ^~~~~~~~~~~

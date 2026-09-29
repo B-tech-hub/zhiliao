@@ -1,0 +1,8 @@
+{
+  "version": "1.7.7\ninstalled by downloading from release page\nbuilt with go1.23.4 compiler for windows/amd64\n",
+  "source": "https://github.com/rhysd/actionlint/releases/tag/v1.7.7",
+  "archive_sha256": "7f12f1801bca3d480d67aaf7774f4c2a6359a3ca8eebe382c95c10c9704aa731",
+  "checksum_matched": true,
+  "binary_sha256": "6d470a52039a433bccdf57bd65170885a5b23e511155d0de587c2c3ce0eb1c24",
+  "baseline_exit": 1
+}

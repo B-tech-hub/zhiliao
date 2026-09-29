@@ -1,0 +1,18 @@
+{"time":"2026-09-27T19:20:57.5973503+08:00","event":"start","block":2,"stage":"build"}
+{"time":"2026-09-27T19:20:57.9727802+08:00","event":"passed","block":2,"stage":"build"}
+{"time":"2026-09-27T19:20:57.9734326+08:00","event":"start","block":3,"stage":"build"}
+{"time":"2026-09-27T19:20:58.7712937+08:00","event":"passed","block":3,"stage":"build"}
+{"time":"2026-09-27T19:20:58.7718543+08:00","event":"start","block":4,"stage":"build"}
+{"time":"2026-09-27T19:23:26.0448273+08:00","event":"passed","block":4,"stage":"build"}
+{"time":"2026-09-27T19:23:47.1142259+08:00","event":"start","block":5,"stage":"data"}
+{"time":"2026-09-27T19:23:55.9898960+08:00","event":"passed","block":5,"stage":"data"}
+{"time":"2026-09-27T19:23:55.9907732+08:00","event":"start","block":6,"stage":"data"}
+{"time":"2026-09-27T19:23:56.4369801+08:00","event":"passed","block":6,"stage":"data"}
+{"time":"2026-09-27T19:23:56.4377441+08:00","event":"start","block":7,"stage":"data"}
+{"time":"2026-09-27T19:23:56.5599389+08:00","event":"passed","block":7,"stage":"data"}
+{"time":"2026-09-27T19:23:56.5604412+08:00","event":"start","block":8,"stage":"data"}
+{"time":"2026-09-27T19:24:01.0302586+08:00","event":"passed","block":8,"stage":"data"}
+{"time":"2026-09-27T19:24:01.0308263+08:00","event":"start","block":9,"stage":"data"}
+{"time":"2026-09-27T19:24:01.1380711+08:00","event":"passed","block":9,"stage":"data"}
+{"time":"2026-09-27T19:24:01.1390739+08:00","event":"start","block":10,"stage":"data"}
+{"time":"2026-09-27T19:24:04.1579846+08:00","error":"Docker 命令失败，保留现场","event":"failed","block":10,"stage":"data"}

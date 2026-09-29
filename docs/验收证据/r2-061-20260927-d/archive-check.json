@@ -1,0 +1,16 @@
+{
+  "status": "passed",
+  "archived_files_verified": 58,
+  "candidate_input_files_verified": 276,
+  "source_snapshot_unchanged": true,
+  "zip_fields_equal": true,
+  "restore_before_and_after_fields_equal": true,
+  "production_resources_unchanged": true,
+  "old_run_c_normalized_metadata_equal": true,
+  "old_evidence_files_verified": 95,
+  "all_previous_evidence_directories_unchanged": true,
+  "three_containers_stopped_same_image": true,
+  "retained_volumes": 9,
+  "browser_failure_preserved": true,
+  "r2_passed": false
+}

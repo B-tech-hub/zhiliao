@@ -1,0 +1,66 @@
+{
+  "kind": "preparation-static-check",
+  "status": "prepared-not-executed",
+  "date": "2026-09-28",
+  "baseline_commit": "fbf2497ab01e949a8bab890b1516505cea42b688",
+  "checks": {
+    "javascript_syntax_files": 3,
+    "powershell_ast": "passed",
+    "compose_yaml": "passed",
+    "gfm_seed_rounds": [
+      "m0",
+      "m1"
+    ],
+    "gfm_shape": "adjacent HTML image block and 2-row GFM table",
+    "metadata_emit_sites_checked": 4,
+    "metadata_fields_and_listener_order": "passed",
+    "document_links": 13,
+    "utf8_lf": "passed",
+    "powershell_utf8_bom": true,
+    "candidate_input_hashes_matched": 276,
+    "unchanged_baseline_files": 1542,
+    "frozen_spec_unchanged": true,
+    "spec_baseline_unchanged": true,
+    "sprint_unchanged": true,
+    "review": "单 Agent 串行静态审阅；非 HTTP 路径省略以避免 data 地址包含正文"
+  },
+  "execution": {
+    "docker_commands": 0,
+    "browser_launches": 0,
+    "model_calls": 0,
+    "builds": 0,
+    "runtime_evidence_created": false,
+    "runtime_preflight_executed": false
+  },
+  "tools": [
+    {
+      "path": "tools/browser-check.cjs",
+      "sha256": "5bcd6548427b5b5a7620f75925f36409e161747f6553db307c7d390c22135f02"
+    },
+    {
+      "path": "tools/compose.yml",
+      "sha256": "5d7386418b50572f0806af9bbef3463f4bd024cd173d9ee1090e6e44c97ccc66"
+    },
+    {
+      "path": "tools/fixture.cjs",
+      "sha256": "53009483fdf99b8f009f0b4f7ffc1fea1b2e4319f2bbfd5a128182f2887f715a"
+    },
+    {
+      "path": "tools/fixtures/pattern.png",
+      "sha256": "336badf78b5da96ffde16ff3459d0460d9a55d040884bedb8e7fb2c2088c6b07"
+    },
+    {
+      "path": "tools/request-recorder.cjs",
+      "sha256": "3bdd7d1f628278ce7ef9d49c2095d1cabc778f583fb81007dccfd80fb2ce7f7b"
+    },
+    {
+      "path": "tools/run.ps1",
+      "sha256": "d63fae145537aaf49b7d2a415fb7ec0a8a53b836c69bd691acdba5908a3b101e"
+    }
+  ],
+  "pending": [
+    "真实 GFM 编辑、保存与重开",
+    "Playwright 请求事件与结束记录完整性",
+    "资源前后保护、凭据扫描和运行结果审查"
+  ]
+}

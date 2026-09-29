@@ -1,0 +1,35 @@
+{
+  "captured_at": "2026-09-29T14:43:32.539784+00:00",
+  "head": "b2bae00d4a0e91ef43a0cb41f70f75ebc38ec592",
+  "preserved_files": 1120,
+  "preservation_mismatches": [],
+  "verification_inputs": 18,
+  "verification_input_mismatches": [],
+  "approved_target_mismatches": [],
+  "content_filter_mismatches": [
+    {
+      "path": "docs/验收证据/r3-gate4-v3-061-36580449536/run.json",
+      "raw_git_blob": "c69e7e7848552acffb42821eaf9c29f348200763",
+      "filtered_git_blob": "0c012b97f44d5a26a83563386187277433b30471",
+      "raw_sha256": "7da3409bcd3202d03fb56a874f262193f87a700808aa038126d6952e5511bd57",
+      "crlf_count": 1
+    }
+  ],
+  "proposed_attribute_simulation": {
+    "temporary_worktree": "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-f-attrs-check-hom88h27",
+    "raw": "c69e7e7848552acffb42821eaf9c29f348200763",
+    "proposed": "c69e7e7848552acffb42821eaf9c29f348200763",
+    "matches": true
+  },
+  "actual_attributes_changed": false,
+  "simulation_note": "git hash-object 在隔离 cwd/work-tree 读取拟用属性；未暂存、未写对象、未改真实属性或证据",
+  "changed_executable_paths": [
+    ".github/workflows/release.yml",
+    "tests/config/release-gate4.test.ts",
+    "tests/config/release-version.test.ts"
+  ],
+  "frozen_block_unchanged": true,
+  "staged_empty": true,
+  "diff_check_passed": true,
+  "verification_reused": "67/0/0 plus ESLint, actionlint and version; no checks rerun"
+}

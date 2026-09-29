@@ -1,0 +1,2 @@
+# 原始构建日志保留字节，包括 Dockerfile 摘录中的行尾空格。
+*.log.txt -text -whitespace

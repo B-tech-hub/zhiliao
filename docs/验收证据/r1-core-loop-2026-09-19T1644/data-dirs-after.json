@@ -1,0 +1,27 @@
+{
+  "data": {
+    "exists": true,
+    "files": 108,
+    "digest": "80ecad021447173f8acc7c1b133cfd555f5c0e1c74743296081a202751bc7f48"
+  },
+  "data-demo": {
+    "exists": true,
+    "files": 6,
+    "digest": "1b25b1b5e3cbe2976e205d513a9d5ed48c2dee16c086ca14ee73af242ace2ec3"
+  },
+  "data-demo-ui": {
+    "exists": true,
+    "files": 11,
+    "digest": "0d80b2bfa8323d1756aa28547ccd057b0f5cc39f89ddf404e743581bf1d9ad89"
+  },
+  "data-feature-verify": {
+    "exists": true,
+    "files": 11,
+    "digest": "ca42157522e705e7c316927d89a947788cdfedd9107603a12384283c4a514bc8"
+  },
+  "data-import-verify": {
+    "exists": true,
+    "files": 7,
+    "digest": "39aab8e9308ee046d43584ef19e4a69d2c0bc5d74d2ce44fb5144e0c8e8f0374"
+  }
+}

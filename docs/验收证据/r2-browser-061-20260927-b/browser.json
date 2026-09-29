@@ -1,0 +1,104 @@
+{
+  "started": "2026-09-27T12:21:49.250Z",
+  "status": "passed",
+  "attempts": 1,
+  "inputRun": "061-20260927-d",
+  "base": "http://127.0.0.1:3313",
+  "imageChecks": [
+    {
+      "url": "/api/images/ubh14wminnczl8qi9or9jx8r.png",
+      "status": 200,
+      "mime": "image/png",
+      "width": 96,
+      "height": 64,
+      "bytes": 389,
+      "sha256": "336badf78b5da96ffde16ff3459d0460d9a55d040884bedb8e7fb2c2088c6b07",
+      "expectedSha256": "336badf78b5da96ffde16ff3459d0460d9a55d040884bedb8e7fb2c2088c6b07"
+    },
+    {
+      "url": "/api/images/758a22e3-4432-43a6-8817-ae7e323eada8.jpg",
+      "status": 200,
+      "mime": "image/jpeg",
+      "width": 96,
+      "height": 64,
+      "bytes": 1997,
+      "sha256": "1d10cf5b64fe8133f45457c166c9392b344e8790fbd296ef017d8797c2647509",
+      "expectedSha256": "1d10cf5b64fe8133f45457c166c9392b344e8790fbd296ef017d8797c2647509"
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "browser/01-home.png",
+      "finiteAnimationsFinished": true
+    },
+    {
+      "file": "browser/02-short.png",
+      "finiteAnimationsFinished": true
+    },
+    {
+      "file": "browser/03-long-png.png",
+      "finiteAnimationsFinished": true
+    },
+    {
+      "file": "browser/04-heic-jpeg.png",
+      "finiteAnimationsFinished": true
+    },
+    {
+      "file": "browser/05-search.png",
+      "finiteAnimationsFinished": true
+    },
+    {
+      "file": "browser/06-history-source.png",
+      "finiteAnimationsFinished": true
+    }
+  ],
+  "cases": [
+    {
+      "name": "真实登录",
+      "started": "2026-09-27T12:21:49.524Z",
+      "status": "passed",
+      "finished": "2026-09-27T12:21:50.676Z"
+    },
+    {
+      "name": "短笔记恢复",
+      "started": "2026-09-27T12:21:50.676Z",
+      "status": "passed",
+      "finished": "2026-09-27T12:21:51.580Z"
+    },
+    {
+      "name": "长文表格与 PNG",
+      "started": "2026-09-27T12:21:51.581Z",
+      "status": "passed",
+      "finished": "2026-09-27T12:21:52.864Z"
+    },
+    {
+      "name": "HEIC 展示图与字节",
+      "started": "2026-09-27T12:21:52.865Z",
+      "status": "passed",
+      "finished": "2026-09-27T12:21:53.797Z"
+    },
+    {
+      "name": "搜索并打开结果",
+      "started": "2026-09-27T12:21:53.798Z",
+      "status": "passed",
+      "finished": "2026-09-27T12:21:55.620Z"
+    },
+    {
+      "name": "历史会话与来源",
+      "started": "2026-09-27T12:21:55.620Z",
+      "status": "passed",
+      "finished": "2026-09-27T12:21:55.928Z"
+    }
+  ],
+  "pageErrors": [],
+  "consoleErrors": [],
+  "failedResponses": [],
+  "blockedRequests": [],
+  "readOnlyRequests": [
+    "/api/notes/dghv1g2h76if0xwgtanjog74/related"
+  ],
+  "modelRequests": [],
+  "browserVersion": "141.0.7390.37",
+  "playwrightVersion": "1.64.0-alpha-1789764292000",
+  "finished": "2026-09-27T12:21:55.929Z"
+}

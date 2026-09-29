@@ -1,0 +1,253 @@
+# R2 出口与恢复操作单
+
+状态（2026-09-27）：HEIC 展示图 UUID 读取兼容已修复，真实接口局部回归通过；[新候选准备记录](验收证据/0.6.1-heic-read-2026-09-27/README.md)已固定清单与预定标签。**新候选尚未构建，run d 尚未执行，R2 仍未通过。** 用户本次只批准修复与局部验证，以下构建及实测命令须另获确认。
+
+历史：run c 的官方源候选构建、Markdown 与 ZIP 两次导入比对通过，但恢复后 HEIC 展示图 HTTP 400，重启持久化和浏览器未执行。三个停止容器、九卷与源包继续保留；[run c 原始证据](验收证据/r2-061-20260927-c/README.md)及 [a/b 失败和旧身份](验收证据/0.6.1-registry-2026-09-27/README.md)不改。下方命令已切换到新候选与新 run，旧命令可由来源提交 `51f0a54b9878b0f1c1df548f976a2ec7bb17f19b` 追溯，不得重复执行 c。
+
+本页命令用 Windows PowerShell 5.1 桩函数干跑，只证明参数与步骤衔接。本操作单用于审批后一轮 Windows Docker Desktop、linux/amd64、本机合成数据验收；不替代旧版升级、独立 Linux、双架构或发布验收。[总体计划](0.6.1收口与R2验收计划-2026-09-23.md)继续约束范围。
+
+## 1. 固定输入与资源
+
+- 候选输入：[276 文件清单](验收证据/0.6.1-heic-read-2026-09-27/candidate-inputs.json)，SHA-256 为 `0a2819f376993fafa61b27f57a9a978ff7ef1c7635d88e8485bee7c0655c7baf`；旧清单 `73198e52…` 和 `225d7f54…` 保留用于历史溯源。
+- 本地候选 tag：`zhiliao-r2:0.6.1-0a2819f37699`，仅预定名称，未构建、无 image ID。来源为 `51f0a54b9878b0f1c1df548f976a2ec7bb17f19b` 加读取接口修复与四个测试输入；其余 271 个输入保持旧工作区字节，包括既有 CRLF 和被忽略的 `next-env.d.ts`。必须按清单复制，不能只凭 Git SHA 复现。
+- 准备脚本：[prepare-workspace.ps1](验收证据/0.6.1-baseline-2026-09-23/r2/prepare-workspace.ps1)，只在新目录复制已校验文件、准备三份独立环境文件，不调用 Docker。
+- 本操作单示例 run 为 `061-20260927-d`，实际执行按当天日期换新；project 分别为 `zhiliao-r2-<run>-source`、`-import`、`-restore`，各有 `db/uploads/notes` 三卷，共九卷。重试使用新 run，失败卷保留。
+- [Compose](验收证据/0.6.1-baseline-2026-09-23/r2/compose.yml) 初始全部 `network_mode: none`、无宿主端口、无正式路径；仅恢复 prepare 以 root 复制并交回 node，源包只读。API 从容器回环访问。
+- 真实模型预算为 0。三库均使用合成数据，没有模型地址或 Key；不读宿主环境文件，关闭每周回顾。最多一轮来源数据创建、两次 ZIP 导入、一轮完整恢复；失败停留现场，不自动重试。
+
+样本已包含真实 HEIC 与 PNG，来源和哈希见[样本说明](验收证据/0.6.1-baseline-2026-09-23/r2/fixtures/README.md)。四条笔记含短文（先建初稿再改正文）、长文/公式/表格、内嵌图片、回收站；另有合成历史会话与来源集。测试历史不是模型效果证据。
+
+## 2. 准备目录与统一命令
+
+以下构建及 Docker 命令均须在重验证获准后执行。准备脚本可以先运行；目录已存在时不得覆盖。`-RunId` 取当天的新值，下方 `$r2Run` 必须与它一致。
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File docs/验收证据/0.6.1-baseline-2026-09-23/r2/prepare-workspace.ps1 -RunId 061-20260927-d -CandidateDirectory "docs/验收证据/0.6.1-heic-read-2026-09-27"
+```
+
+显式传入新候选目录；省略该参数仍选旧清单，并会因当前锁文件不同而拒绝准备。不要把 a、b、c 的 context、env 或身份文件混入新 run。用脚本实际输出的目录；默认值如下。在专用 Windows PowerShell 5.1 中先定义命令包装，任一步失败即停止。包装都写成不带参数特性的简单函数：带 `[Parameter]` 的高级函数会把 `up -d`、`node -e` 当成 PowerShell 自己的参数。除构建日志一处外，原生命令不要加 `2>$null` 或 `2>&1`，否则进度输出会在 `Stop` 下变成终止错误。改动本页命令后，先用[试跑脚本](验收证据/0.6.1-baseline-2026-09-23/sheet-dry-run.ps1)重新干跑。
+
+```powershell
+$ErrorActionPreference = 'Stop'
+# 容器输出是 UTF-8；5.1 默认按 GBK 解码捕获内容，中文会被写成乱码
+[Console]::OutputEncoding = [Text.Encoding]::UTF8
+$r2Run = '061-20260927-d'
+$r2Work = Join-Path $env:TEMP "zhiliao-r2-$r2Run"
+$r2Package = Join-Path $r2Work 'package'
+$r2Identity = Get-Content -Raw -Encoding UTF8 (Join-Path $r2Work 'candidate-identity.json') | ConvertFrom-Json
+Start-Transcript -LiteralPath (Join-Path $r2Work 'transcript.txt') -IncludeInvocationHeader -Append
+function Dkr {
+    & docker @args
+    if ($LASTEXITCODE -ne 0) { throw 'Docker 命令失败，保留现场' }
+}
+function R2 {
+    $role = $args[0]
+    if ($role -notin @('source', 'import', 'restore')) { throw "未知角色：$role" }
+    $rest = @($args | Select-Object -Skip 1)
+    Dkr compose --env-file (Join-Path $r2Work "$role.env") -p "zhiliao-r2-$r2Run-$role" -f (Join-Path $r2Package 'compose.yml') @rest
+}
+function Wait-R2Health {
+    $role = $args[0]
+    if ($role -notin @('source', 'import', 'restore')) { throw "未知角色：$role" }
+    # 最多 60 次、每次间隔 2 秒；未就绪时 exec 失败属正常，用尽才停
+    for ($attempt = 1; $attempt -le 60; $attempt++) {
+        try {
+            R2 $role exec -T app node -e "fetch('http://127.0.0.1:3000/api/healthz').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
+            return
+        } catch { Start-Sleep -Seconds 2 }
+    }
+    throw "healthz 未就绪：$role，保留现场"
+}
+function Save-R2Text {
+    param([string]$File, [scriptblock]$Action)
+    $target = Join-Path $r2Work $File
+    # 与 compare.py 一样只新建不覆盖，重复执行时保留第一次的证据
+    if (Test-Path -LiteralPath $target) { throw "证据已存在，不覆盖：$File" }
+    $outputLines = & $Action
+    [IO.File]::WriteAllText($target, ($outputLines -join "`n") + "`n", [Text.UTF8Encoding]::new($false))
+}
+function Save-R2Resources {
+    $file = $args[0]
+    Save-R2Text $file {
+        # 正式实例按容器名 zhiliao 核对，只记录不随运行时长变化的身份、状态与挂载
+        $production = @(Dkr ps -aq --no-trunc --filter 'name=^zhiliao$')
+        if ($production.Count -ne 1) { throw '未找到唯一的正式容器 zhiliao，先人工确认' }
+        Dkr inspect --format '{{.Name}} {{.Id}} {{.State.Status}} {{.State.StartedAt}} {{.RestartCount}} {{json .Mounts}}' $production[0]
+        Dkr volume ls --format '{{.Name}}' | Where-Object { $_ -notlike 'zhiliao-r2-*' } | Sort-Object
+    }
+}
+# 专用终端中移除可能覆盖 env 文件的同名变量；不输出任何值。
+Get-ChildItem Env: | Where-Object { $_.Name -match '^(R2_|COMPOSE_)' } | ForEach-Object { Remove-Item -LiteralPath $_.PSPath }
+```
+
+执行前保存正式实例与卷快照，并确认三个 project、九个预期卷尚不存在；任一撞名就换新 run。原 3000 端口知了保持运行，不对其执行 stop、restart 或 down。
+
+```powershell
+Save-R2Resources 'resources-before.txt'
+$r2Taken = @(Dkr ps -a --format '{{.Names}}') + @(Dkr volume ls --format '{{.Name}}') | Where-Object { $_ -like "zhiliao-r2-$r2Run-*" }
+if (@($r2Taken).Count -gt 0) { throw '本轮资源名已被占用，换新 run' }
+```
+
+只打印镜像和服务列表，避免完整 Compose 输出泄露本次密码：
+
+```powershell
+R2 source config --quiet
+R2 source config --images
+R2 import config --quiet
+R2 restore config --quiet
+```
+
+## 3. 构建一次并固定实际镜像
+
+构建前用清单核对 `$r2Work/context`：文件集合和哈希必须与清单完全相同，不能有额外文件。准备阶段不在该目录运行 npm 或其他生成文件命令。构建输入来自这个独立目录，不来自整个脏工作区。
+
+```powershell
+py -3 (Join-Path $r2Package 'compare.py') manifest (Join-Path $r2Work 'candidate-inputs.json') (Join-Path $r2Work 'context')
+if ($LASTEXITCODE -ne 0) { throw '构建目录与候选清单不一致' }
+$r2BuildLog = Join-Path $r2Work 'build.log'
+if (Test-Path -LiteralPath $r2BuildLog) { throw '已有 build.log，不重复构建' }
+# 构建进度在 stderr；仅此一步放宽错误处理，边显示边写入 build.log，中断时也恢复 Stop
+$global:LASTEXITCODE = -1
+try {
+    $ErrorActionPreference = 'Continue'
+    & docker build --progress=plain --platform linux/amd64 --label "org.opencontainers.image.revision=$($r2Identity.source_head)" --label "io.zhiliao.source-manifest=$($r2Identity.manifest_sha256)" -t $r2Identity.local_image_tag (Join-Path $r2Work 'context') 2>&1 | ForEach-Object { $line = if ($_ -is [Management.Automation.ErrorRecord]) { $_.Exception.Message } else { "$_" }; [IO.File]::AppendAllText($r2BuildLog, $line + "`n"); $line }
+    $r2BuildExit = $LASTEXITCODE
+} finally { $ErrorActionPreference = 'Stop' }
+if ($r2BuildExit -ne 0) { throw '构建失败，保留 build.log' }
+Save-R2Text 'image.json' { Dkr image inspect $r2Identity.local_image_tag }
+```
+
+`image.json` 含实际 image ID、架构、创建时间和两条来源标签，`build.log` 记录缓存命中与耗时。后续三个实例的实际 image ID 必须相同；本地 ID 不是 GHCR manifest digest。不重新构建相同输入，不自动推送。构建失败时保留该 run 的 `build.log` 与 transcript，先调查原因；获准重试时另建新 run，不覆盖证据或自动连续重试。
+
+## 4. 合成源与 ZIP
+
+先启动空源库使迁移完成，就绪后立即停止，在同一卷执行 init，再启动。`run --entrypoint node` 不启动 worker：
+
+```powershell
+R2 source up -d app
+Wait-R2Health source
+R2 source stop app
+R2 source run --rm --no-deps --entrypoint node app /r2/fixture.cjs init
+R2 source up -d app
+Wait-R2Health source
+R2 source exec -T app node /r2/fixture.cjs seed
+R2 source stop app
+R2 source run --rm --no-deps --entrypoint node app /r2/fixture.cjs seal
+R2 source up -d app
+Wait-R2Health source
+R2 source exec -T app node /r2/fixture.cjs export-backup
+R2 source stop app
+Save-R2Text 'source-state.json' { R2 source run --rm --no-deps -T --entrypoint node app /r2/inspect.cjs }
+Save-R2Text 'source-app.log' { R2 source logs --no-color --timestamps app }
+```
+
+每次 `up` 后先由 `Wait-R2Health` 等到就绪，不用业务步骤反复试错。seed 走实际上传、记录、修改和回收站接口：短文先建初稿再改正文，确认 Markdown 出现新正文且初稿消失；再验证改名旧路径消失、恢复后 Markdown 重新生成。seal 只在停机的四条合成笔记库补摘要、已结束会话并停用模型任务。导出前再次经真实修改入口刷新 Markdown。
+
+应用每次启动 5 分钟后会自动备份一次并清扫孤儿，备份文件名取 UTC 日期（北京时间 08:00 换日）。每次 `up` 到 `stop` 尽量在 5 分钟内完成，并避开 08:00 前后；同日多次备份写同一对文件，跨日产生两组时下方唯一配对检查会停止。
+
+源实例停稳后取出备份；刚建立的新源库应只有一个 `app-*.db` 与同日期的 `uploads-*`，有多个或配对缺失时停止核对，不能随意选最近时间：
+
+```powershell
+R2 source cp app:/data/db/backups (Join-Path $r2Work 'source-backups')
+$r2Db = @(Get-ChildItem -LiteralPath (Join-Path $r2Work 'source-backups') -Filter 'app-*.db')
+if ($r2Db.Count -ne 1) { throw '必须明确唯一的配对快照' }
+$r2Stamp = $r2Db[0].BaseName.Substring(4)
+$r2Uploads = Join-Path $r2Db[0].DirectoryName "uploads-$r2Stamp"
+if (-not (Test-Path -LiteralPath $r2Uploads -PathType Container)) { throw '缺少图片快照' }
+Copy-Item -LiteralPath $r2Db[0].FullName -Destination (Join-Path $r2Work 'snapshot/app.db')
+Copy-Item -LiteralPath $r2Uploads -Destination (Join-Path $r2Work 'snapshot/uploads') -Recurse
+R2 source cp app:/data/notes (Join-Path $r2Work 'source-markdown')
+```
+
+源包应含数据库、PNG、容器生成的 JPEG、真实 HEIC 原件。将 `snapshot` 中全部文件的相对路径、字节数与 SHA-256 保存为 `snapshot-before.json`；确认图片清单和 `source-state.json` 一致。复制操作不得混入 WAL/SHM。随后所有恢复都只读使用这份源包。
+
+```powershell
+py -3 (Join-Path $r2Package 'compare.py') snapshot (Join-Path $r2Work 'snapshot') (Join-Path $r2Work 'snapshot-before.json')
+if ($LASTEXITCODE -ne 0) { throw '源快照检查失败' }
+```
+
+在另一个空库导入源 ZIP 两次：
+
+```powershell
+Copy-Item -LiteralPath (Join-Path $r2Work 'source/export.zip') -Destination (Join-Path $r2Work 'import/export.zip')
+R2 import up -d app
+Wait-R2Health import
+R2 import stop app
+R2 import run --rm --no-deps --entrypoint node app /r2/fixture.cjs init
+R2 import up -d app
+Wait-R2Health import
+R2 import exec -T app node /r2/fixture.cjs import-twice
+R2 import stop app
+Save-R2Text 'import-state.json' { R2 import run --rm --no-deps -T --entrypoint node app /r2/inspect.cjs }
+Save-R2Text 'import-app.log' { R2 import logs --no-color --timestamps app }
+```
+
+预期首次 3 条有效笔记、2 组图片；第二次新增/覆盖/图片均为 0，跳过 3，失败 0，无 AI 整理任务。比较 `source-state.json` 和 `import-state.json` 的 `exportedNotes`、`pairedImages` 完全相等；已把改名后的图片 URL 规范化为图片字节哈希，不能仅因 URL 不同判正文丢失。回收站、会话和内部状态不按 ZIP 还原要求比较。
+
+```powershell
+py -3 (Join-Path $r2Package 'compare.py') zip (Join-Path $r2Work 'source-state.json') (Join-Path $r2Work 'import-state.json')
+if ($LASTEXITCODE -ne 0) { throw 'ZIP 往返比对失败' }
+```
+
+## 5. 完整快照恢复
+
+prepare 对三份非空目标卷明确拒绝复制，不挂正式卷。第一次失败后不得清空原目标重试，应保留现场并另建 run。
+
+```powershell
+R2 restore run --rm --no-deps prepare
+Save-R2Text 'restore-before-start.json' { R2 restore run --rm --no-deps -T --entrypoint node app /r2/inspect.cjs }
+R2 restore up -d app
+Wait-R2Health restore
+R2 restore exec -T app node /r2/fixture.cjs readback
+Save-R2Text 'restore-after-start.json' { R2 restore exec -T app node /r2/inspect.cjs }
+R2 restore exec -T app node /r2/fixture.cjs persist
+R2 restore restart app
+Wait-R2Health restore
+R2 restore exec -T app node /r2/fixture.cjs check-persist
+R2 restore stop app
+Save-R2Text 'restore-app.log' { R2 restore logs --no-color --timestamps app }
+```
+
+在 persist 改写目标之前比较三份状态报告：`source-state` 与 `restore-before-start`、`restore-after-start` 的 `tables`、`files`、`exportedNotes`、`pairedImages` 应完全相同。完整恢复保留回收站和历史会话；队列/调度启动状态可变化，原始数据库快照保持不动。恢复前完整性检查必须成功；读取模型配置只输出“未配置”，不输出密钥。
+
+```powershell
+foreach ($r2Report in @('restore-before-start.json','restore-after-start.json')) {
+    py -3 (Join-Path $r2Package 'compare.py') restore (Join-Path $r2Work 'source-state.json') (Join-Path $r2Work $r2Report)
+    if ($LASTEXITCODE -ne 0) { throw "恢复比对失败：$r2Report" }
+}
+py -3 (Join-Path $r2Package 'compare.py') snapshot (Join-Path $r2Work 'snapshot') (Join-Path $r2Work 'snapshot-after.json')
+if ($LASTEXITCODE -ne 0) { throw '源快照复核失败' }
+py -3 (Join-Path $r2Package 'compare.py') unchanged (Join-Path $r2Work 'snapshot-before.json') (Join-Path $r2Work 'snapshot-after.json')
+if ($LASTEXITCODE -ne 0) { throw '源包未保持原样' }
+```
+
+重新计算源包清单为 `snapshot-after.json`，要求与 before 完全相等；确认实际目标卷、image ID、非 root 写权限和全部图片。数据库恢复不自动回填全库 Markdown，persist 仅证明新写事件可导出；source-markdown 与 ZIP 单独留证。
+
+## 6. 浏览器、停止与证据
+
+先保存上述状态并核对三个库模型配置均为空。若同次批准包括浏览器检查，使用 [ui.yml](验收证据/0.6.1-baseline-2026-09-23/r2/ui.yml) 将恢复实例临时改为 bridge，仅发布 `127.0.0.1:3313`；运行前确认端口空闲。密码只从本次 `restore.env` 人工读取：请在另一个窗口查看，不要在记录 transcript 的终端里显示；不复制正式凭据或发到公开证据。
+
+```powershell
+if (Get-NetTCPConnection -State Listen -LocalPort 3313 -ErrorAction SilentlyContinue) { throw '3313 已被占用，停止浏览器检查' }
+Dkr compose --env-file (Join-Path $r2Work 'restore.env') -p "zhiliao-r2-$r2Run-restore" -f (Join-Path $r2Package 'compose.yml') -f (Join-Path $r2Package 'ui.yml') up -d app
+Wait-R2Health restore
+```
+
+浏览器验收：登录，打开长短笔记、PNG 与 HEIC 展示图，查看合成历史会话及来源，关键词命中并打开目标；截图不含密码。检查完用同样两份 Compose 停止并保存这次容器的日志，不自动删卷。此步骤允许恢复实例使用 bridge，但库内无外部模型配置，预算仍为 0；无许可时保持离线，将浏览器列为未执行。
+
+```powershell
+Dkr compose --env-file (Join-Path $r2Work 'restore.env') -p "zhiliao-r2-$r2Run-restore" -f (Join-Path $r2Package 'compose.yml') -f (Join-Path $r2Package 'ui.yml') stop app
+Save-R2Text 'restore-ui-app.log' { Dkr compose --env-file (Join-Path $r2Work 'restore.env') -p "zhiliao-r2-$r2Run-restore" -f (Join-Path $r2Package 'compose.yml') -f (Join-Path $r2Package 'ui.yml') logs --no-color --timestamps app }
+```
+
+全部结束或任一阶段失败后，复核正式实例与卷，再停止记录：
+
+```powershell
+Save-R2Resources 'resources-after.txt'
+if ((Get-Content -Raw -LiteralPath (Join-Path $r2Work 'resources-before.txt')) -cne (Get-Content -Raw -LiteralPath (Join-Path $r2Work 'resources-after.txt'))) { throw '正式实例或非本轮卷有变化，停止并人工核对' }
+Stop-Transcript
+```
+
+任一阶段失败：停止本次对应 app，保存该角色日志和上面的资源复核，不执行 `down -v`、prune 或删除源包。原服务从未停止，不存在切换回原卷的操作。放弃本轮资源时另按准确的三个 project、九卷和本次临时目录确认清理范围。其他项目的卷若在演练期间增删，资源复核也会报差异，需人工确认与本轮无关。
+
+最终记录每一步开始/结束时间（transcript）、命令退出码、镜像身份（`image.json` 与 `build.log`）、挂载、截图、ZIP 原包、两次导入报告、四份状态 JSON、各角色应用日志、源包前后哈希、正式实例前后快照、失败与资源保留情况。入库时复制到 `docs/验收证据/r2-<run>/`，不复制任何 `*.env`；transcript 先检查不含密码。只有实际运行完成并逐项比对，才更新 R2 为通过；同盘演练不记作异地备份或 0.6.0 升级回退通过。

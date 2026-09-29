@@ -1,0 +1,52 @@
+{
+  "algorithm": "SHA-256",
+  "excluded": [
+    "files.sha256.json"
+  ],
+  "files": {
+    "before.json": {
+      "sha256": "a9be0255f58972d15002acbe5ed59ec010263d617e6a9cfdef8f23e41654b874",
+      "bytes": 397175
+    },
+    "checks.json": {
+      "sha256": "1694a3ec4c92a01b2d4121a1834bb9c87d9d1a2d8560b1b11dd38d422a94c0da",
+      "bytes": 887
+    },
+    "eslint-output.txt": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "inputs.json": {
+      "sha256": "170d8a5406883fa883235514a07dc4bcdd0f86a39e738129f1fef03bbb29e37e",
+      "bytes": 2599
+    },
+    "observe-preview.cjs": {
+      "sha256": "f6094029ba558308ed7cc63b098004566bdc6400de51b94dc6fcaa6f70d75e9a",
+      "bytes": 1073
+    },
+    "preservation.json": {
+      "sha256": "7dd053aa398474c8a8156030246c9cc2b25fd96070acd69e6747f86819962c8b",
+      "bytes": 7058
+    },
+    "preview-processes.jsonl": {
+      "sha256": "4549ac15e4ae9647b30f0313bcb348aea493e1d8cfa526b5928aefced490332c",
+      "bytes": 1876
+    },
+    "README.md": {
+      "sha256": "c13cba82bc1009e9e3aa579f5c69f5a99909a5c961be87da8fa8d5d7153a2cb2",
+      "bytes": 4787
+    },
+    "test-change.patch": {
+      "sha256": "1cb86b17743ea2bd8211eb1507473241a7be4bdc508f7d5fd012343b98c10e70",
+      "bytes": 1315
+    },
+    "tests-after.json": {
+      "sha256": "bb9233155a080686c68cf26d88d5a577574a646827ede8d21a2f3e480777db01",
+      "bytes": 4595
+    },
+    "tests-output.txt": {
+      "sha256": "e47f0783c46f2ccf7153ac0a5ce231b372fc97e8aa4bdf996ceb1734d43a6a29",
+      "bytes": 415
+    }
+  }
+}
