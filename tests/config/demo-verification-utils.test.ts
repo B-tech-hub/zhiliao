@@ -1,20 +1,28 @@
 import { EventEmitter } from "node:events";
 import { afterEach, describe, expect, it, vi } from "vitest";
+
+// ESM 下模块命名空间不可配置，无法用 vi.spyOn 打桩内置模块的具名导出；改用 vi.mock 工厂替换 spawn
+const spawnMock = vi.hoisted(() => vi.fn());
+vi.mock("node:child_process", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("node:child_process")>();
+  return { ...actual, spawn: spawnMock };
+});
+
 import { attachVerificationSignals, killProcessTree } from "../../scripts/demo-verification-utils.mjs";
 
 afterEach(() => {
   vi.restoreAllMocks();
+  spawnMock.mockReset();
 });
 
 describe("Demo 验收进程辅助", () => {
-  it("Windows 用 taskkill 终止进程树", async () => {
-    const childProcess = await import("node:child_process");
-    const spawn = vi.spyOn(childProcess, "spawn").mockReturnValue(new EventEmitter() as never);
+  it("Windows 用 taskkill 终止进程树", () => {
+    spawnMock.mockReturnValue(new EventEmitter() as never);
     const previous = process.platform;
     Object.defineProperty(process, "platform", { configurable: true, value: "win32" });
     try {
       killProcessTree({ pid: 4242 });
-      expect(spawn).toHaveBeenCalledWith("taskkill", ["/pid", "4242", "/T", "/F"], { windowsHide: true, stdio: "ignore" });
+      expect(spawnMock).toHaveBeenCalledWith("taskkill", ["/pid", "4242", "/T", "/F"], { windowsHide: true, stdio: "ignore" });
     } finally {
       Object.defineProperty(process, "platform", { configurable: true, value: previous });
     }
