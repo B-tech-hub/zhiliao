@@ -1,0 +1,82 @@
+{
+  "root": "D:\\ClaudeProjects\\ai_acknowladge",
+  "work": "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-rc-local-kksm0f15",
+  "fixture_temp": "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-rc-local-kksm0f15\\temporary",
+  "node": "D:\\node.js\\node.EXE",
+  "npm_cli": "D:\\node.js\\node_modules\\npm\\bin\\npm-cli.js",
+  "dependency_reuse": "junction to existing node_modules; no install; not a no-cache claim",
+  "files": [
+    {
+      "path": "package.json",
+      "sha256": "c7264a2aa0b60f44d7991982049b8fe946228f9a2b99aea07122741765367629"
+    },
+    {
+      "path": "package-lock.json",
+      "sha256": "ec7fc3bd5aae1c8cec50723eb69678bfc360c998b154d4d9c6d723a0cfe1564a"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "sha256": "7942a5ca2acf3fb958b986a81d81805931ed4359b9d6e9157b25230c99dc70f8"
+    },
+    {
+      "path": "docker-compose.yml",
+      "sha256": "1a75ec912cbd3c959592583c138c266860c7b6b63758bb4b90ac643ef8531484"
+    },
+    {
+      "path": "docker-compose.demo.yml",
+      "sha256": "8fa6bba90113d0b65c6b1e91bbb54e1962bbc8145ac09b9e0c5c3a828ccd2cb9"
+    },
+    {
+      "path": "docker-compose.win.yml",
+      "sha256": "e74636651d1366f908ab084f0047a361cebcfeb6ca513e2e28e37bd14ad4292d"
+    },
+    {
+      "path": "docs/releases/v0.6.1.md",
+      "sha256": "7d1e7da84d9d5599c86d2eb4de128ecf5e7e4866b7e87a882d4ca749c6e89e39"
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "sha256": "ca617b85b1c4d35c0939a5be96413732b3ad77e760a9dfbf3ef2585d5e987507"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "sha256": "7428f5cac57922f89d33332118190d3936d332001d53e2533f9184de723c7f17"
+    },
+    {
+      "path": "vitest.config.mts",
+      "sha256": "386c7045e405d0855313ad030d87e72394cea3926ff1c2a80a2285895524c4d3"
+    },
+    {
+      "path": "tsconfig.json",
+      "sha256": "867f845484b340480861cd6f7afa90a8930674f48427806d59934d8607cd5a1c"
+    },
+    {
+      "path": "eslint.config.mjs",
+      "sha256": "1e37ccce9d7032ebdd7513b4d69ba602f63d0ba3e2dbc58a09ddba7be5c6b233"
+    },
+    {
+      "path": "tests/setup.ts",
+      "sha256": "29d62c420def381503d81d400c35cb6a7ba67bd208f30c07f8b6c3f4d275c419"
+    },
+    {
+      "path": "tests/config/release-gate4.test.ts",
+      "sha256": "332d0d3056dc1eac98ba07808e113191bd224cf9c62bdc9b961aaf7a4fe6be11"
+    },
+    {
+      "path": "tests/config/release-version.test.ts",
+      "sha256": "cf8c03deddd386bc1a95e5f2f5769bfb43c4fbfd52f59a660f218f1d6df85da9"
+    },
+    {
+      "path": "scripts/check-release-version.mjs",
+      "sha256": "49aaad7c8b9eb54d08affa901c28322d657b71783940f8ab60594fa69110c162"
+    },
+    {
+      "path": "scripts/verify-release-gate4.mjs",
+      "sha256": "8ef109822f7eb1d0a30a5fa617135c19bd4f816038691580f7103507d2cb54e3"
+    },
+    {
+      "path": "scripts/demo-verification-utils.mjs",
+      "sha256": "e084afe31c92c5a9f53cab810394a99773cafdbcde0e3e3512a5fb007883dd3d"
+    }
+  ]
+}

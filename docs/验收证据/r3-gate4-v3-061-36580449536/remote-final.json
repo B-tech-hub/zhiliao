@@ -1,0 +1,10 @@
+{
+  "recorded_at": "2026-09-29T14:16:33.358457+00:00",
+  "refs": {
+    "refs/heads/candidate/0.6.1-baseline": "b2bae00d4a0e91ef43a0cb41f70f75ebc38ec592",
+    "refs/heads/main": "6ee67532deed37fda6cc98962e8df76c98659890"
+  },
+  "pr_head": "b2bae00d4a0e91ef43a0cb41f70f75ebc38ec592",
+  "pr_base": "6ee67532deed37fda6cc98962e8df76c98659890",
+  "state": "open"
+}

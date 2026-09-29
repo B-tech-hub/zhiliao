@@ -1,0 +1,17 @@
+{
+  "refs": {
+    "refs/heads/candidate/0.6.1-baseline": "b2bae00d4a0e91ef43a0cb41f70f75ebc38ec592",
+    "refs/heads/main": "6ee67532deed37fda6cc98962e8df76c98659890"
+  },
+  "pr": {
+    "baseRefName": "main",
+    "baseRefOid": "6ee67532deed37fda6cc98962e8df76c98659890",
+    "headRefName": "candidate/0.6.1-baseline",
+    "headRefOid": "b2bae00d4a0e91ef43a0cb41f70f75ebc38ec592",
+    "isDraft": false,
+    "mergeable": "UNKNOWN",
+    "state": "OPEN",
+    "statusCheckRollup": []
+  },
+  "recorded_at": "2026-09-29T14:08:45.153568+00:00"
+}

@@ -1,0 +1,44 @@
+{
+  "applied_at": "2026-09-29T14:33:47.600395+00:00",
+  "targets": {
+    "status": "draft-not-applied-not-tested",
+    "normalization": "补丁使用 UTF-8/LF；before 哈希按工作树原始字节",
+    "files": [
+      {
+        "path": ".github/workflows/release.yml",
+        "before_sha256": "e9bd788ebc06d6ecf82c6f29ae1ed8b93d18cc616d2d1b8d2103db58d2be1076",
+        "after_utf8_lf_sha256": "ca617b85b1c4d35c0939a5be96413732b3ad77e760a9dfbf3ef2585d5e987507"
+      },
+      {
+        "path": "tests/config/release-gate4.test.ts",
+        "before_sha256": "e79f4de1423137776e53e23362388ee3cf572df9eb6e705036f31864e0ddb6ae",
+        "after_utf8_lf_sha256": "332d0d3056dc1eac98ba07808e113191bd224cf9c62bdc9b961aaf7a4fe6be11"
+      },
+      {
+        "path": "tests/config/release-version.test.ts",
+        "before_sha256": "1fab2461b270dc10667a1ab61aea263a6bc828be16c4c4d0c6196bf23b96f09a",
+        "after_utf8_lf_sha256": "cf8c03deddd386bc1a95e5f2f5769bfb43c4fbfd52f59a660f218f1d6df85da9"
+      },
+      {
+        "path": "CHANGELOG.md",
+        "before_sha256": "205c5be25f75ef81b77cb06fc8c8c3c591237040bf2ad8a738627c51cc0b0211",
+        "after_utf8_lf_sha256": "7942a5ca2acf3fb958b986a81d81805931ed4359b9d6e9157b25230c99dc70f8"
+      },
+      {
+        "path": "docs/releases/v0.6.1.md",
+        "before_sha256": "60bc56f9a417bbe5d1463a8b73aebf609f3ded3ef36f739d287954eab412e6bd",
+        "after_utf8_lf_sha256": "7d1e7da84d9d5599c86d2eb4de128ecf5e7e4866b7e87a882d4ca749c6e89e39"
+      },
+      {
+        "path": "CONTRIBUTING.md",
+        "before_sha256": "a3c1d84b2158e49035e57d60badfff83676dcc852eb7abdbeca4a9ea593fb206",
+        "after_utf8_lf_sha256": "4cddc7fc5a756883cbc5d382b75209f24668f09408b8f8bd9ff0944eca805da2"
+      }
+    ],
+    "patch_sha256": "d64ea633c3f654aa7ed28feab2eb9c398be4ceef006097ff73a12b1825f3c95c"
+  },
+  "preserved_files": 1104,
+  "actionlint": "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-runner-context-a5cecfe65f184ff7ba9e19d3b2fef139\\actionlint.exe",
+  "actionlint_sha256": "6d470a52039a433bccdf57bd65170885a5b23e511155d0de587c2c3ce0eb1c24",
+  "status": "applied-exactly"
+}

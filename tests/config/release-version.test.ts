@@ -150,12 +150,13 @@ describe("当前仓库的发布接线", () => {
 
   it("发布构建等待版本校验，原四条门禁和双架构保留", () => {
     const release = YAML.parse(fs.readFileSync(path.join(repository, ".github/workflows/release.yml"), "utf8"));
-    expect(release.jobs.build.needs).toContain("validate");
-    expect(release.jobs.merge.needs).toContain("build");
+    for (const name of ["build_amd64", "build_arm64"]) expect(release.jobs[name].needs).toContain("validate");
+    expect(release.jobs.build_arm64.needs).toContain("build_amd64");
+    expect(release.jobs.merge.needs).toEqual(["build_amd64", "build_arm64"]);
     expect(release.jobs.release.needs).toContain("merge");
     const validationRuns = release.jobs.validate.steps.map((step: { run?: string }) => step.run).filter(Boolean);
     expect(validationRuns).toContain('npm run check:version -- --tag "$GITHUB_REF_NAME"');
-    expect(release.jobs.build.strategy.matrix.include.map((entry: { platform: string }) => entry.platform)).toEqual(["linux/amd64", "linux/arm64"]);
+    expect([release.jobs.build_amd64.env.PLATFORM, release.jobs.build_arm64.env.PLATFORM]).toEqual(["linux/amd64", "linux/arm64"]);
     const ci = YAML.parse(fs.readFileSync(path.join(repository, ".github/workflows/ci.yml"), "utf8"));
     const commands = ci.jobs.build.steps.map((step: { run?: string }) => step.run).filter(Boolean);
     expect(commands).toEqual(["npm ci", "npm run check:version", "npm run check:design", "npm run lint", "npm test", "npm run build"]);

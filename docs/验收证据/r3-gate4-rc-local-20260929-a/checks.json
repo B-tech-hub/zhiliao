@@ -1,0 +1,77 @@
+[
+  {
+    "name": "tests",
+    "command": [
+      "D:\\node.js\\node.EXE",
+      "node_modules/vitest/vitest.mjs",
+      "run",
+      "tests/config/release-gate4.test.ts",
+      "tests/config/release-version.test.ts",
+      "--maxWorkers=1",
+      "--no-file-parallelism",
+      "--reporter=default",
+      "--reporter=json",
+      "--outputFile=D:\\ClaudeProjects\\ai_acknowladge\\docs\\验收证据\\r3-gate4-rc-local-20260929-a\\tests.json"
+    ],
+    "started_at": "2026-09-29T14:34:28.071883+00:00",
+    "exit_code": 0,
+    "status": "passed",
+    "seconds": 4.264
+  },
+  {
+    "name": "eslint",
+    "command": [
+      "D:\\node.js\\node.EXE",
+      "node_modules/eslint/bin/eslint.js",
+      "tests/config/release-gate4.test.ts",
+      "tests/config/release-version.test.ts"
+    ],
+    "started_at": "2026-09-29T14:34:32.336118+00:00",
+    "exit_code": 0,
+    "status": "passed",
+    "seconds": 4.541
+  },
+  {
+    "name": "actionlint",
+    "command": [
+      "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-runner-context-a5cecfe65f184ff7ba9e19d3b2fef139\\actionlint.exe",
+      "-shellcheck=",
+      "-pyflakes=",
+      "-no-color",
+      ".github/workflows/release.yml"
+    ],
+    "started_at": "2026-09-29T14:34:36.877672+00:00",
+    "exit_code": 0,
+    "status": "passed",
+    "seconds": 0.069
+  },
+  {
+    "name": "version",
+    "command": [
+      "D:\\node.js\\node.EXE",
+      "D:\\node.js\\node_modules\\npm\\bin\\npm-cli.js",
+      "run",
+      "check:version"
+    ],
+    "started_at": "2026-09-29T14:34:36.947225+00:00",
+    "exit_code": 0,
+    "status": "passed",
+    "seconds": 0.515
+  },
+  {
+    "name": "version-rc",
+    "command": [
+      "D:\\node.js\\node.EXE",
+      "D:\\node.js\\node_modules\\npm\\bin\\npm-cli.js",
+      "run",
+      "check:version",
+      "--",
+      "--tag",
+      "v0.6.1-rc1"
+    ],
+    "started_at": "2026-09-29T14:34:37.462873+00:00",
+    "exit_code": 0,
+    "status": "passed",
+    "seconds": 0.374
+  }
+]

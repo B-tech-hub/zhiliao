@@ -1,0 +1,19 @@
+{
+  "run_id": 36580449536,
+  "attempt": 1,
+  "conclusion": "success",
+  "candidate_sha": "b2bae00d4a0e91ef43a0cb41f70f75ebc38ec592",
+  "tree": "d454fb7fd60c30e156a898be38a0d05b06c5da0a",
+  "checkout": "b9d45eed96cd5cd574962e215500dcc67b0f9bc7",
+  "tests": {
+    "passed": 881,
+    "failed": 0,
+    "skipped": 28
+  },
+  "release_runs_found": 0,
+  "push_count": 1,
+  "commit_count": 1,
+  "rerun_count": 0,
+  "local_tests_run": false,
+  "published": false
+}

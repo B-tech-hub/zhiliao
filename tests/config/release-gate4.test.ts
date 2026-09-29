@@ -162,35 +162,53 @@ describe("发布工作流保护", () => {
     }
   });
 
-  it.each(["build", "install"])("%s 在任何使用者之前初始化证据路径", (name) => {
+  it.each([["build_amd64", "build"], ["build_arm64", "build"], ["install_amd64", "install"], ["install_arm64", "install"]])("%s 在任何使用者之前初始化证据路径", (name, phase) => {
     const job = workflow.jobs[name];
     const init: Step = job.steps[0];
     expect(job.env.EVIDENCE).toBeUndefined();
     expect(init.shell).toBe("bash");
     expect(init.if).toBeUndefined();
-    expect(init.run).toContain(`"EVIDENCE=$RUNNER_TEMP/gate4-${name}"`);
+    expect(init.run).toContain(`"EVIDENCE=$RUNNER_TEMP/gate4-${phase}"`);
     expect(init.run).toContain('>> "$GITHUB_ENV"');
     const upload = job.steps.find((step: Step) => step.uses?.startsWith("actions/upload-artifact"));
     // 初始化失败时也固定上传目录，避免空 EVIDENCE 将路径变成根目录。
-    expect(upload.with.path).toBe(`\${{ runner.temp }}/gate4-${name}/`);
+    expect(upload.with.path).toBe(`\${{ runner.temp }}/gate4-${phase}/`);
   });
 
   it("tag 仍是唯一入口，GitHub Release 等待两种原生架构的安装和清理", () => {
     expect(Object.keys(workflow.on)).toEqual(["push"]);
     expect(workflow.on.push.tags).toEqual(["v*.*.*"]);
-    expect(workflow.jobs.release.needs).toEqual(expect.arrayContaining(["merge", "install"]));
-    for (const name of ["build", "install"]) {
+    const dependencies: Record<string, string[]> = {
+      build_amd64: ["validate"], build_arm64: ["validate", "build_amd64"],
+      merge: ["build_amd64", "build_arm64"],
+      install_amd64: ["merge"], install_arm64: ["merge", "install_amd64"],
+      release: ["merge", "install_amd64", "install_arm64"],
+    };
+    for (const [name, needs] of Object.entries(dependencies)) {
       const job = workflow.jobs[name];
-      expect(job.strategy["max-parallel"]).toBe(1);
-      expect(job.strategy.matrix.include.map((item: { platform: string; runner: string }) => [item.platform, item.runner])).toEqual([
-        ["linux/amd64", "ubuntu-24.04"], ["linux/arm64", "ubuntu-24.04-arm"],
-      ]);
+      expect(job.needs).toEqual(needs);
+      // 保留默认成功条件，禁止 always 或容错绕过前置失败。
+      expect(job.if).toBeUndefined();
       expect(job["continue-on-error"]).toBeUndefined();
+      expect(job.strategy).toBeUndefined();
+      for (const step of job.steps) expect(step["continue-on-error"]).toBeUndefined();
     }
-    const stop = workflow.jobs.install.steps.find((step: Step) => step.run?.includes("SIGTERM"));
-    expect(stop.if).toBe("always() && steps.daemon.outputs.owned == 'true'");
-    expect(stop.run).toContain("daemon 归属不匹配");
-    expect(stop.run).toContain('sys.exit(1 if result["status"] == "failed" else 0)');
+    for (const phase of ["build", "install"]) {
+      for (const [arch, runner] of [["amd64", "ubuntu-24.04"], ["arm64", "ubuntu-24.04-arm"]]) {
+        const job = workflow.jobs[`${phase}_${arch}`];
+        expect(job["runs-on"]).toBe(runner);
+        expect(job.env.PLATFORM).toBe(`linux/${arch}`);
+        expect(job["timeout-minutes"]).toBe(phase === "build" ? 60 : 15);
+        const upload = job.steps.find((step: Step) => step.uses?.startsWith("actions/upload-artifact"));
+        expect(upload.with.name).toBe(`gate4-${phase}-${arch}`);
+      }
+    }
+    for (const name of ["install_amd64", "install_arm64"]) {
+      const stop = workflow.jobs[name].steps.find((step: Step) => step.run?.includes("SIGTERM"));
+      expect(stop.if).toBe("always() && steps.daemon.outputs.owned == 'true'");
+      expect(stop.run).toContain("daemon 归属不匹配");
+      expect(stop.run).toContain('sys.exit(1 if result["status"] == "failed" else 0)');
+    }
   });
 
   it("构建不恢复应用缓存且记录 provenance，失败仍上传证据", () => {
@@ -203,17 +221,19 @@ describe("发布工作流保护", () => {
       if (step.uses?.startsWith("actions/setup-node")) expect(step.with?.cache).toBeUndefined();
       if (step.uses?.startsWith("actions/checkout")) expect(step.with?.ref).toBe("${{ github.sha }}");
     }
-    const build = steps.find((step) => step.uses?.startsWith("docker/build-push-action"));
-    expect(build?.with).toMatchObject({ "no-cache": true, pull: true, provenance: "mode=max" });
-    for (const name of ["build", "merge", "install"]) {
+    for (const arch of ["amd64", "arm64"]) {
+      const build = workflow.jobs[`build_${arch}`].steps.find((step: Step) => step.uses?.startsWith("docker/build-push-action"));
+      expect(build?.with).toMatchObject({ "no-cache": true, pull: true, provenance: "mode=max", platforms: `linux/${arch}` });
+    }
+    for (const name of ["build_amd64", "build_arm64", "merge", "install_amd64", "install_arm64"]) {
       const upload = workflow.jobs[name].steps.find((step: Step) => step.uses?.startsWith("actions/upload-artifact"));
       expect(upload.if).toBe("always()");
       expect(upload.with["if-no-files-found"]).toBe("error");
     }
   });
 
-  it("安装 job 不登录 registry，专用 daemon 与空配置不接触宿主已有存储", () => {
-    const job = workflow.jobs.install;
+  it.each(["install_amd64", "install_arm64"])("%s 不登录 registry，专用 daemon 与空配置不接触宿主已有存储", (name) => {
+    const job = workflow.jobs[name];
     expect(job.permissions).toEqual({ contents: "read" });
     expect(job.steps.some((step: Step) => step.uses?.includes("login-action"))).toBe(false);
     expect(job.env.DOCKER_HOST).toBeUndefined();

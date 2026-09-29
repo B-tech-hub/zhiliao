@@ -63,6 +63,8 @@ node node_modules/vitest/vitest.mjs run tests/config/release-version.test.ts tes
 
 ## 发布流程（维护者）
 
+0.6.1 当前接续见[最终候选收口与 RC 执行单](docs/R3门禁4最终候选收口与RC执行单-2026-09-29.md)。发布链通过显式成功依赖保证 amd64 构建先于 arm64 构建、amd64 安装先于 arm64 安装；前置 job 失败时后续阶段跳过。实际 job 内仍尽力清理和上传失败证据，强制取消不保证收尾成功。此配置不替代运行证据，V3 PR CI 成功不表示 RC 已通过。
+
 1. 以 `package.json` 为应用版本来源，同步 `package-lock.json` 顶层和 `packages[""].version`、主 Compose 与 Demo app/mockllm 的固定镜像。`src/lib/version.ts` 静态导入包版本供 MCP 握手使用，不使用 `npm_package_version` 或运行目录中的包文件。Windows Compose 继承主文件。
 2. 候选阶段将 `CHANGELOG.md` 首个版本段写为 `## [未发布] - X.Y.Z 候选`，新增 `docs/releases/vX.Y.Z.md` 草稿；进入 RC 前完成审查、定稿并补正式版本标题/日期，不覆盖旧发布记录。RC 与正式版本共用同一基础版本说明；已发布安装和恢复样例保留其历史版本含义。
 3. 执行 `npm run check:design`、`npm run lint`、`npm test`、`npm run build`，全部通过后按已确认范围提交并推送 `main`；运行构建、全量测试及发布仍遵循项目确认规则。
@@ -80,7 +82,7 @@ npm run check:version -- --tag v0.6.1-rc1
 
 校验覆盖 package/lockfile 根版本、主/Demo/Windows Compose 镜像、Release Notes 标题、CHANGELOG 首个版本段及可选 tag。支持 `vX.Y.Z` 和 `-rc1`、`-rc.1` 形式的 rc/beta/alpha tag；预发布后缀不写入应用基础版本。脚本只核对本地文件，不执行 Git、Docker 或网络操作；通过不代表镜像可获取、安装/恢复已通过或发布获批。
 
-CI 在原四条门禁前增加版本核对。Release 的 `validate` job 使用 Node.js 22 和独立空 npm 缓存执行 `npm ci --ignore-scripts`，核对 `GITHUB_REF_NAME` 后才允许构建。构建使用 `ubuntu-24.04`、`ubuntu-24.04-arm` 原生 runner，两个架构顺序执行；启用 `no-cache`、`pull` 和最大 provenance，不恢复 GHA 构建缓存。记录干净 checkout 的完整提交、文件哈希和生成文件排除项，并从实际构建元数据记录 Node 基础镜像 digest。这里的无缓存指客户端依赖/构建缓存边界，不宣称 registry/CDN 没有缓存。
+CI 在原四条门禁前增加版本核对。Release 的 `validate` job 使用 Node.js 22 和独立空 npm 缓存执行 `npm ci --ignore-scripts`，核对 `GITHUB_REF_NAME` 后才允许构建。构建使用 `ubuntu-24.04`、`ubuntu-24.04-arm` 原生 runner，通过 `build_amd64` → `build_arm64` 成功依赖串行执行；启用 `no-cache`、`pull` 和最大 provenance，不恢复 GHA 构建缓存。记录干净 checkout 的完整提交、文件哈希和生成文件排除项，并从实际构建元数据记录 Node 基础镜像 digest。这里的无缓存指客户端依赖/构建缓存边界，不宣称 registry/CDN 没有缓存。
 
 `scripts/verify-release-gate4.mjs` 负责构建身份、OCI 索引和安装检查。索引必须含两种运行架构，子 digest 与原生构建对应，配置中的 OCI revision 与最终提交相同；attestation 单列。安装任务使用本轮独立空 Docker 存储与空登录配置，匿名按索引 digest 拉取镜像；应用容器无外部网络，通过容器内回环 HTTP 检查健康、登录、真实 PNG 上传、合成笔记、中文搜索、Markdown、容器重建持久化和 MCP 应用版本。SQLite、Jieba 和 Sharp 也在目标平台实际执行。此安装矩阵不验证浏览器交互、外部模型效果、MCP 公网鉴权或异地恢复。
 
@@ -93,5 +95,7 @@ CI 在原四条门禁前增加版本核对。Release 的 `validate` job 使用 N
 后续 [V2](docs/验收证据/r3-gate4-v2-061-36574616627/README.md) 已获准执行：修复、旧证据和准备材料共 55 路径提交为 `82b1e5a1b98d4b687d8604a84c47c8ec416bf818` 并一次推送；三份原始 JSON 通过精确 `-text` 规则保留 Git 字节。新 CI 的 gate4/版本测试通过，但安装预览用例超过 5000 ms，使全量测试为 880/1/28，构建未执行。未自动重跑；后续超时预算修复与 CI 按新范围确认。上段“尚未提交”只描述本地修复当轮状态，不代表 V2 当前状态，R 仍未执行。
 
 安装冒烟默认读取脚本所属仓库的包版本。`-PrintConfig` 仅预览；需验证实际 RC 或复用旧版时，用 `-Image ghcr.io/b-tech-hub/zhiliao:0.6.1-rc1` 或明确的固定版本/digest。拒绝 `latest`、`0.6` 等浮动引用；真正运行容器仍按项目验证规则另行安排。
+
+最新候选结果：V3 已按授权完成：61 路径提交为 `b2bae00d4a0e91ef43a0cb41f70f75ebc38ec592` 并一次推送；自动 PR CI `36580449536` 的版本及四条完整门禁通过，881 项通过、28 项原条件跳过，11 个预览用例全部通过。旧 V2 失败保持，未重跑或发布，R 和门禁 4–6 仍未完成。 见[V3 归档](docs/验收证据/r3-gate4-v3-061-36580449536/README.md)。下段局部修复“尚未提交”仅为该轮历史状态。
 
 安装预览配置测试会启动 PowerShell 子进程，其进程上限为 10 秒；对应 11 个用例单独采用 15 秒外层预算，为进程启动、快照和断言保留开销，不修改全局 Vitest 超时或加入重试。该修复已在本机通过 11 项定向回归，见[局部记录](docs/验收证据/r3-gate4-preview-timeout-20260929-a/README.md)；尚未提交或推送，不将其改记为旧 V2 CI 成功。

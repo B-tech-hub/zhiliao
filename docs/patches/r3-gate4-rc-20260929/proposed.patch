@@ -1,0 +1,462 @@
+diff --git a/.github/workflows/release.yml b/.github/workflows/release.yml
+--- a/.github/workflows/release.yml
++++ b/.github/workflows/release.yml
+@@ -56,28 +56,17 @@
+           retention-days: 30
+           if-no-files-found: error
+ 
+-  build:
++  build_amd64:
+     needs: [validate]
+-    # 双平台使用原生 runner；arm64 不可用时保留失败，不降级为单架构。
+-    name: 无缓存构建 ${{ matrix.platform }}
++    # 原生平台按成功依赖串行；失败时跳过后续阶段，不降级为单架构。
++    name: 无缓存构建 linux/amd64
+     timeout-minutes: 60
+-    strategy:
+-      fail-fast: false
+-      max-parallel: 1
+-      matrix:
+-        include:
+-          - platform: linux/amd64
+-            arch: amd64
+-            runner: ubuntu-24.04
+-          - platform: linux/arm64
+-            arch: arm64
+-            runner: ubuntu-24.04-arm
+-    runs-on: ${{ matrix.runner }}
++    runs-on: ubuntu-24.04
+     permissions:
+       contents: read
+       packages: write
+     env:
+-      PLATFORM: ${{ matrix.platform }}
++      PLATFORM: linux/amd64
+       BUILDX_METADATA_PROVENANCE: max
+       DOCKER_BUILD_RECORD_RETENTION_DAYS: 30
+     steps:
+@@ -122,7 +111,7 @@
+         uses: docker/build-push-action@v6
+         with:
+           context: .
+-          platforms: ${{ matrix.platform }}
++          platforms: linux/amd64
+           labels: ${{ steps.meta.outputs.labels }}
+           outputs: type=image,name=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }},push-by-digest=true,name-canonical=true,push=true
+           no-cache: true
+@@ -138,7 +127,83 @@
+       - uses: actions/upload-artifact@v4
+         if: always()
+         with:
+-          name: gate4-build-${{ matrix.arch }}
++          name: gate4-build-amd64
++          path: ${{ runner.temp }}/gate4-build/
++          if-no-files-found: error
++          retention-days: 30
++
++  build_arm64:
++    needs: [validate, build_amd64]
++    # 原生平台按成功依赖串行；失败时跳过后续阶段，不降级为单架构。
++    name: 无缓存构建 linux/arm64
++    timeout-minutes: 60
++    runs-on: ubuntu-24.04-arm
++    permissions:
++      contents: read
++      packages: write
++    env:
++      PLATFORM: linux/arm64
++      BUILDX_METADATA_PROVENANCE: max
++      DOCKER_BUILD_RECORD_RETENTION_DAYS: 30
++    steps:
++      - name: 初始化构建证据路径
++        shell: bash
++        run: |
++          set -euo pipefail
++          printf '%s\n' "EVIDENCE=$RUNNER_TEMP/gate4-build" >> "$GITHUB_ENV"
++      - uses: actions/checkout@v4
++        with:
++          ref: ${{ github.sha }}
++          persist-credentials: false
++      - uses: actions/setup-node@v4
++        with:
++          node-version: 22
++
++      - uses: docker/setup-buildx-action@v3
++      - name: 核对原生架构、源码与缓存初态
++        run: node scripts/verify-release-gate4.mjs preflight --platform "$PLATFORM" --output "$EVIDENCE"
++
++      - name: 登录 ghcr.io
++        uses: docker/login-action@v3
++        with:
++          registry: ${{ env.REGISTRY }}
++          username: ${{ github.actor }}
++          password: ${{ secrets.GITHUB_TOKEN }}
++
++      - name: 镜像元数据（OCI 标签）
++        id: meta
++        uses: docker/metadata-action@v5
++        with:
++          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
++          labels: |
++            org.opencontainers.image.title=zhiliao
++            org.opencontainers.image.description=知了：随手记笔记，AI 自动归类到主题的个人知识库
++            org.opencontainers.image.licenses=MIT
++            org.opencontainers.image.revision=${{ github.sha }}
++
++      - name: 无缓存构建并按 digest 推送
++        id: build
++        timeout-minutes: 45
++        uses: docker/build-push-action@v6
++        with:
++          context: .
++          platforms: linux/arm64
++          labels: ${{ steps.meta.outputs.labels }}
++          outputs: type=image,name=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }},push-by-digest=true,name-canonical=true,push=true
++          no-cache: true
++          pull: true
++          provenance: mode=max
++
++      - name: 保存并核对实际构建身份
++        env:
++          BUILD_DIGEST: ${{ steps.build.outputs.digest }}
++          BUILD_METADATA: ${{ steps.build.outputs.metadata }}
++        run: node scripts/verify-release-gate4.mjs record-build --platform "$PLATFORM" --digest "$BUILD_DIGEST" --output "$EVIDENCE"
++
++      - uses: actions/upload-artifact@v4
++        if: always()
++        with:
++          name: gate4-build-arm64
+           path: ${{ runner.temp }}/gate4-build/
+           if-no-files-found: error
+           retention-days: 30
+@@ -147,7 +212,7 @@
+     name: 合并并严格核对多架构 manifest
+     runs-on: ubuntu-24.04
+     timeout-minutes: 15
+-    needs: [build]
++    needs: [build_amd64, build_arm64]
+     permissions:
+       contents: read
+       packages: write
+@@ -187,26 +252,15 @@
+           retention-days: 30
+           if-no-files-found: error
+ 
+-  install:
+-    name: 匿名全新安装 ${{ matrix.platform }}
++  install_amd64:
++    name: 匿名全新安装 linux/amd64
+     needs: [merge]
+-    runs-on: ${{ matrix.runner }}
++    runs-on: ubuntu-24.04
+     timeout-minutes: 15
+     permissions:
+       contents: read
+-    strategy:
+-      fail-fast: false
+-      max-parallel: 1
+-      matrix:
+-        include:
+-          - platform: linux/amd64
+-            arch: amd64
+-            runner: ubuntu-24.04
+-          - platform: linux/arm64
+-            arch: arm64
+-            runner: ubuntu-24.04-arm
+     env:
+-      PLATFORM: ${{ matrix.platform }}
++      PLATFORM: linux/amd64
+       DOCKER_CONTEXT: ""
+     steps:
+       - name: 初始化安装证据与匿名 Docker 路径
+@@ -284,7 +338,98 @@
+       - uses: actions/upload-artifact@v4
+         if: always()
+         with:
+-          name: gate4-install-${{ matrix.arch }}
++          name: gate4-install-amd64
++          path: ${{ runner.temp }}/gate4-install/
++          retention-days: 30
++          if-no-files-found: error
++
++  install_arm64:
++    name: 匿名全新安装 linux/arm64
++    needs: [merge, install_amd64]
++    runs-on: ubuntu-24.04-arm
++    timeout-minutes: 15
++    permissions:
++      contents: read
++    env:
++      PLATFORM: linux/arm64
++      DOCKER_CONTEXT: ""
++    steps:
++      - name: 初始化安装证据与匿名 Docker 路径
++        shell: bash
++        run: |
++          set -euo pipefail
++          printf '%s\n' \
++            "EVIDENCE=$RUNNER_TEMP/gate4-install" \
++            "DOCKER_HOST=unix://$RUNNER_TEMP/gate4-docker/docker.sock" \
++            "DOCKER_CONFIG=$RUNNER_TEMP/gate4-anonymous" >> "$GITHUB_ENV"
++      - uses: actions/checkout@v4
++        with:
++          ref: ${{ github.sha }}
++          persist-credentials: false
++      - uses: actions/setup-node@v4
++        with:
++          node-version: 22
++      - uses: actions/download-artifact@v4
++        with:
++          name: gate4-manifest
++          path: ${{ runner.temp }}/gate4-manifest
++      - name: 启动专用空 Docker 存储
++        id: daemon
++        run: |
++          set -euo pipefail
++          daemon="$RUNNER_TEMP/gate4-docker"
++          test ! -e "$daemon"
++          test ! -e "$DOCKER_CONFIG"
++          mkdir -p "$daemon" "$DOCKER_CONFIG" "$EVIDENCE"
++          printf '{}\n' > "$DOCKER_CONFIG/config.json"
++          printf '{}\n' > "$daemon/config.json"
++          echo "owned=true" >> "$GITHUB_OUTPUT"
++          sudo -n nohup dockerd \
++            --config-file="$daemon/config.json" \
++            --data-root="$daemon/data" --exec-root="$daemon/exec" \
++            --pidfile="$daemon/daemon.pid" --host="$DOCKER_HOST" \
++            --bridge=none --iptables=false --ip6tables=false --ip-masq=false \
++            --storage-driver=overlay2 > "$EVIDENCE/daemon.log" 2>&1 &
++          for attempt in $(seq 1 30); do
++            if docker info > /dev/null 2>&1; then exit 0; fi
++            sleep 1
++          done
++          echo "专用 Docker daemon 未就绪" >&2
++          exit 1
++      - name: 按固定 digest 验收原生模块、登录、数据和 MCP
++        run: node scripts/verify-release-gate4.mjs install --platform "$PLATFORM" --manifest "$RUNNER_TEMP/gate4-manifest/manifest.json" --output "$EVIDENCE"
++      - name: 停止本轮专用 daemon
++        if: always() && steps.daemon.outputs.owned == 'true'
++        run: |
++          mkdir -p "$EVIDENCE"
++          sudo -n python3 - "$RUNNER_TEMP/gate4-docker" "$EVIDENCE/daemon-cleanup.json" <<'PY'
++          import json, pathlib, signal, sys, time, os
++          root, output = map(pathlib.Path, sys.argv[1:])
++          result = {"status": "not_started", "data_root": str(root / "data")}
++          try:
++              pidfile = root / "daemon.pid"
++              if pidfile.exists():
++                  pid = int(pidfile.read_text().strip())
++                  assert pid > 1
++                  command = pathlib.Path(f"/proc/{pid}/cmdline").read_bytes().split(b"\0")
++                  assert os.fsencode(f"--data-root={root / 'data'}") in command, "daemon 归属不匹配"
++                  os.kill(pid, signal.SIGTERM)
++                  for _ in range(30):
++                      if not pathlib.Path(f"/proc/{pid}").exists():
++                          break
++                      time.sleep(1)
++                  else:
++                      raise RuntimeError("daemon 未按时退出")
++                  result["status"] = "passed"
++          except Exception as error:
++              result.update(status="failed", error=str(error))
++          output.write_text(json.dumps(result, indent=2) + "\n")
++          sys.exit(1 if result["status"] == "failed" else 0)
++          PY
++      - uses: actions/upload-artifact@v4
++        if: always()
++        with:
++          name: gate4-install-arm64
+           path: ${{ runner.temp }}/gate4-install/
+           retention-days: 30
+           if-no-files-found: error
+@@ -292,7 +437,7 @@
+   release:
+     name: 创建 GitHub Release
+     runs-on: ubuntu-24.04
+-    needs: [merge, install]
++    needs: [merge, install_amd64, install_arm64]
+     permissions:
+       contents: write
+     steps:
+diff --git a/tests/config/release-gate4.test.ts b/tests/config/release-gate4.test.ts
+--- a/tests/config/release-gate4.test.ts
++++ b/tests/config/release-gate4.test.ts
+@@ -162,35 +162,53 @@
+     }
+   });
+ 
+-  it.each(["build", "install"])("%s 在任何使用者之前初始化证据路径", (name) => {
++  it.each([["build_amd64", "build"], ["build_arm64", "build"], ["install_amd64", "install"], ["install_arm64", "install"]])("%s 在任何使用者之前初始化证据路径", (name, phase) => {
+     const job = workflow.jobs[name];
+     const init: Step = job.steps[0];
+     expect(job.env.EVIDENCE).toBeUndefined();
+     expect(init.shell).toBe("bash");
+     expect(init.if).toBeUndefined();
+-    expect(init.run).toContain(`"EVIDENCE=$RUNNER_TEMP/gate4-${name}"`);
++    expect(init.run).toContain(`"EVIDENCE=$RUNNER_TEMP/gate4-${phase}"`);
+     expect(init.run).toContain('>> "$GITHUB_ENV"');
+     const upload = job.steps.find((step: Step) => step.uses?.startsWith("actions/upload-artifact"));
+     // 初始化失败时也固定上传目录，避免空 EVIDENCE 将路径变成根目录。
+-    expect(upload.with.path).toBe(`\${{ runner.temp }}/gate4-${name}/`);
++    expect(upload.with.path).toBe(`\${{ runner.temp }}/gate4-${phase}/`);
+   });
+ 
+   it("tag 仍是唯一入口，GitHub Release 等待两种原生架构的安装和清理", () => {
+     expect(Object.keys(workflow.on)).toEqual(["push"]);
+     expect(workflow.on.push.tags).toEqual(["v*.*.*"]);
+-    expect(workflow.jobs.release.needs).toEqual(expect.arrayContaining(["merge", "install"]));
+-    for (const name of ["build", "install"]) {
++    const dependencies: Record<string, string[]> = {
++      build_amd64: ["validate"], build_arm64: ["validate", "build_amd64"],
++      merge: ["build_amd64", "build_arm64"],
++      install_amd64: ["merge"], install_arm64: ["merge", "install_amd64"],
++      release: ["merge", "install_amd64", "install_arm64"],
++    };
++    for (const [name, needs] of Object.entries(dependencies)) {
+       const job = workflow.jobs[name];
+-      expect(job.strategy["max-parallel"]).toBe(1);
+-      expect(job.strategy.matrix.include.map((item: { platform: string; runner: string }) => [item.platform, item.runner])).toEqual([
+-        ["linux/amd64", "ubuntu-24.04"], ["linux/arm64", "ubuntu-24.04-arm"],
+-      ]);
++      expect(job.needs).toEqual(needs);
++      // 保留默认成功条件，禁止 always 或容错绕过前置失败。
++      expect(job.if).toBeUndefined();
+       expect(job["continue-on-error"]).toBeUndefined();
+-    }
+-    const stop = workflow.jobs.install.steps.find((step: Step) => step.run?.includes("SIGTERM"));
+-    expect(stop.if).toBe("always() && steps.daemon.outputs.owned == 'true'");
+-    expect(stop.run).toContain("daemon 归属不匹配");
+-    expect(stop.run).toContain('sys.exit(1 if result["status"] == "failed" else 0)');
++      expect(job.strategy).toBeUndefined();
++      for (const step of job.steps) expect(step["continue-on-error"]).toBeUndefined();
++    }
++    for (const phase of ["build", "install"]) {
++      for (const [arch, runner] of [["amd64", "ubuntu-24.04"], ["arm64", "ubuntu-24.04-arm"]]) {
++        const job = workflow.jobs[`${phase}_${arch}`];
++        expect(job["runs-on"]).toBe(runner);
++        expect(job.env.PLATFORM).toBe(`linux/${arch}`);
++        expect(job["timeout-minutes"]).toBe(phase === "build" ? 60 : 15);
++        const upload = job.steps.find((step: Step) => step.uses?.startsWith("actions/upload-artifact"));
++        expect(upload.with.name).toBe(`gate4-${phase}-${arch}`);
++      }
++    }
++    for (const name of ["install_amd64", "install_arm64"]) {
++      const stop = workflow.jobs[name].steps.find((step: Step) => step.run?.includes("SIGTERM"));
++      expect(stop.if).toBe("always() && steps.daemon.outputs.owned == 'true'");
++      expect(stop.run).toContain("daemon 归属不匹配");
++      expect(stop.run).toContain('sys.exit(1 if result["status"] == "failed" else 0)');
++    }
+   });
+ 
+   it("构建不恢复应用缓存且记录 provenance，失败仍上传证据", () => {
+@@ -203,17 +221,19 @@
+       if (step.uses?.startsWith("actions/setup-node")) expect(step.with?.cache).toBeUndefined();
+       if (step.uses?.startsWith("actions/checkout")) expect(step.with?.ref).toBe("${{ github.sha }}");
+     }
+-    const build = steps.find((step) => step.uses?.startsWith("docker/build-push-action"));
+-    expect(build?.with).toMatchObject({ "no-cache": true, pull: true, provenance: "mode=max" });
+-    for (const name of ["build", "merge", "install"]) {
++    for (const arch of ["amd64", "arm64"]) {
++      const build = workflow.jobs[`build_${arch}`].steps.find((step: Step) => step.uses?.startsWith("docker/build-push-action"));
++      expect(build?.with).toMatchObject({ "no-cache": true, pull: true, provenance: "mode=max", platforms: `linux/${arch}` });
++    }
++    for (const name of ["build_amd64", "build_arm64", "merge", "install_amd64", "install_arm64"]) {
+       const upload = workflow.jobs[name].steps.find((step: Step) => step.uses?.startsWith("actions/upload-artifact"));
+       expect(upload.if).toBe("always()");
+       expect(upload.with["if-no-files-found"]).toBe("error");
+     }
+   });
+ 
+-  it("安装 job 不登录 registry，专用 daemon 与空配置不接触宿主已有存储", () => {
+-    const job = workflow.jobs.install;
++  it.each(["install_amd64", "install_arm64"])("%s 不登录 registry，专用 daemon 与空配置不接触宿主已有存储", (name) => {
++    const job = workflow.jobs[name];
+     expect(job.permissions).toEqual({ contents: "read" });
+     expect(job.steps.some((step: Step) => step.uses?.includes("login-action"))).toBe(false);
+     expect(job.env.DOCKER_HOST).toBeUndefined();
+diff --git a/tests/config/release-version.test.ts b/tests/config/release-version.test.ts
+--- a/tests/config/release-version.test.ts
++++ b/tests/config/release-version.test.ts
+@@ -150,12 +150,13 @@
+ 
+   it("发布构建等待版本校验，原四条门禁和双架构保留", () => {
+     const release = YAML.parse(fs.readFileSync(path.join(repository, ".github/workflows/release.yml"), "utf8"));
+-    expect(release.jobs.build.needs).toContain("validate");
+-    expect(release.jobs.merge.needs).toContain("build");
++    for (const name of ["build_amd64", "build_arm64"]) expect(release.jobs[name].needs).toContain("validate");
++    expect(release.jobs.build_arm64.needs).toContain("build_amd64");
++    expect(release.jobs.merge.needs).toEqual(["build_amd64", "build_arm64"]);
+     expect(release.jobs.release.needs).toContain("merge");
+     const validationRuns = release.jobs.validate.steps.map((step: { run?: string }) => step.run).filter(Boolean);
+     expect(validationRuns).toContain('npm run check:version -- --tag "$GITHUB_REF_NAME"');
+-    expect(release.jobs.build.strategy.matrix.include.map((entry: { platform: string }) => entry.platform)).toEqual(["linux/amd64", "linux/arm64"]);
++    expect([release.jobs.build_amd64.env.PLATFORM, release.jobs.build_arm64.env.PLATFORM]).toEqual(["linux/amd64", "linux/arm64"]);
+     const ci = YAML.parse(fs.readFileSync(path.join(repository, ".github/workflows/ci.yml"), "utf8"));
+     const commands = ci.jobs.build.steps.map((step: { run?: string }) => step.run).filter(Boolean);
+     expect(commands).toEqual(["npm ci", "npm run check:version", "npm run check:design", "npm run lint", "npm test", "npm run build"]);
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -2,9 +2,9 @@
+ 
+ 本项目遵循 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/) 与[语义化版本](https://semver.org/lang/zh-CN/)。
+ 
+-## [未发布] - 0.6.1 候选
+-
+-目标版本已确定为 0.6.1，尚未发布；最终源码四条门禁已通过，发布提交、分发镜像与 RC 等验收仍待完成。候选说明见 [v0.6.1 草稿](docs/releases/v0.6.1.md)，下列历史记录保留原日期范围。
++## [0.6.1] - 2026-09-29
++
++目标版本为 0.6.1。本节日期为 RC 前材料定稿日期，不是正式发布日期；正式可用状态、实际发布时间与镜像 digest 以对应 GitHub Release 和验收记录为准。共用说明见 [v0.6.1 发布说明](docs/releases/v0.6.1.md)。以下历史记录保留原日期范围，其中“正式发布时回填”是旧阶段要求；当前在 RC 前定稿，RC 与正式 tag 之间不为改日期插入新提交。
+ - 候选定稿（2026-09-28）：候选源码提交 `7d40ee83508e6b418e450f041e312c20c2c71772`（分支 `candidate/0.6.1-baseline`，未推送、未打 tag），构建输入为 276 个文件的清单 `0a2819f376993fafa61b27f57a9a978ff7ef1c7635d88e8485bee7c0655c7baf`，本机镜像 `zhiliao-r2:0.6.1-0a2819f37699`（image ID `sha256:f262652592dd2bd32d00aae44f60d4c98caa2c89ca0942254f77918f57aacb4a`，非 GHCR digest）。`npm run check:version` 与 `v0.6.1` / `v0.6.1-rc1` 干跑通过。275 个输入可由提交复现，`next-env.d.ts` 为 Git 忽略的生成文件，限制见[候选定稿](docs/0.6.1候选定稿-2026-09-28.md)。**标题与日期保持「未发布」，正式发布时回填。**
+ 
+ ### 验收
+diff --git a/docs/releases/v0.6.1.md b/docs/releases/v0.6.1.md
+--- a/docs/releases/v0.6.1.md
++++ b/docs/releases/v0.6.1.md
+@@ -1,8 +1,8 @@
+-# v0.6.1：版本一致、Demo 修复与依赖补丁（草稿，未发布）
++# v0.6.1：版本一致、Demo 修复与依赖补丁
+ 
+-目标版本：**0.6.1**。本页是候选材料，未创建 tag、Release 或发布镜像；已构建供本机验收使用的独立候选，最终发布提交与镜像 digest 尚未确定。可用的历史发布仍为 [v0.6.0](v0.6.0.md)，不能把本页当成发布成功记录。
++目标版本：**0.6.1**。本说明供 RC 与正式版本共用，材料定稿日期为 2026-09-29；是否已发布、实际日期与固定镜像 digest 以对应 GitHub Release 和验收记录为准。预发布不表示正式版可用。下方验收状态均为 RC 前基线，不能单凭本页认定发布成功。历史发布 [v0.6.0](v0.6.0.md) 的说明继续保留。
+ 
+-## 候选身份（未发布）
++## RC 前候选身份与证据基线
+ 
+ 候选的构建输入、镜像与证据适用范围见[0.6.1 候选定稿](../0.6.1候选定稿-2026-09-28.md)。以下是已用于本机运行验收的旧镜像身份，后续源码门禁身份单独列出：
+ 
+@@ -13,11 +13,11 @@
+ 
+ 2026-09-29 [最终源码门禁](../验收证据/release-gates-061-20260929-a/README.md)通过：基线 `6e79059ff825bb2f0ae5c76d6cb818e6da497d04` 加四文件验证配置/测试补丁，已保存为本地源码提交 `75eeb32b1943c7e54c32e20b416bc7fb8a61f178`；275 项源码清单 SHA-256 为 `0c3dd6fecf14eb53218e85e061ad51737b612e886e5114243320cf49495c1d10`。Windows 隔离副本上的设计检查、完整 lint、全量测试和构建全部成功，测试 858 项通过、26 项按原专项开关跳过；应用源码、依赖和运行配置未改。生成文件 `next-env.d.ts` 单独记录，不再列入可复现源码输入。未生成新 Docker 镜像，旧镜像与历史证据不改记为这份新输入。
+ 
+-最新候选 CI：V3 已按授权完成：61 路径提交为 `b2bae00d4a0e91ef43a0cb41f70f75ebc38ec592` 并一次推送；自动 PR CI `36580449536` 的版本及四条完整门禁通过，881 项通过、28 项原条件跳过，11 个预览用例全部通过。旧 V2 失败保持，未重跑或发布，R 和门禁 4–6 仍未完成。 见[V3 归档](../验收证据/r3-gate4-v3-061-36580449536/README.md)。仍为未发布草稿，下方旧轮次状态按各自输入解释。
++最新候选 CI：V3 已按授权完成：61 路径提交为 `b2bae00d4a0e91ef43a0cb41f70f75ebc38ec592` 并一次推送；自动 PR CI `36580449536` 的版本及四条完整门禁通过，881 项通过、28 项原条件跳过，11 个预览用例全部通过。旧 V2 失败保持，未重跑或发布，R 和门禁 4–6 仍未完成。 见[V3 归档](../验收证据/r3-gate4-v3-061-36580449536/README.md)。这是 RC 前的候选 CI 结果，下方旧轮次状态按各自输入解释。
+ 
+ ## 仍声明支持的路径与证据边界
+ 
+-当前仅准备[最终候选收口与 RC 执行单](../R3门禁4最终候选收口与RC执行单-2026-09-29.md)。共用发布说明的定稿方案尚未应用，main/RC 身份和镜像 digest 尚未产生；本页继续保持草稿。Git tag、GHCR 可见性和远端引用须在执行前实时核对，旧查询不代表本轮重新确认。
++执行身份与后续安排见[最终候选收口与 RC 执行单](../R3门禁4最终候选收口与RC执行单-2026-09-29.md)。本页共用文字定稿不表示 main/RC 身份已锁定，也不表示镜像已发布。Git tag、GHCR 可见性和远端引用须在执行前实时核对；旧查询不代表重新确认。
+ 
+ V2 失败后的[预览测试局部修复](../验收证据/r3-gate4-preview-timeout-20260929-a/README.md)仅将 11 个 PowerShell 预览用例的外层预算设为 15 秒，子进程上限和原断言保留；已随 V3 提交并通过完整 CI，不修改下方 V2 的失败结论。
+ 
+diff --git a/CONTRIBUTING.md b/CONTRIBUTING.md
+--- a/CONTRIBUTING.md
++++ b/CONTRIBUTING.md
+@@ -63,7 +63,7 @@
+ 
+ ## 发布流程（维护者）
+ 
+-0.6.1 当前接续见[最终候选收口与 RC 执行单](docs/R3门禁4最终候选收口与RC执行单-2026-09-29.md)，本轮只准备。下方“两个架构顺序执行”描述单组并发为一；现有矩阵不保证 amd64 先行，`fail-fast: false` 也不保证首次失败停止另一个平台。执行单要求先解决这一差异，再锁定最终提交并申请 R；不把 V3 PR CI 成功视为 RC 可直接发布。
++0.6.1 当前接续见[最终候选收口与 RC 执行单](docs/R3门禁4最终候选收口与RC执行单-2026-09-29.md)。发布链通过显式成功依赖保证 amd64 构建先于 arm64 构建、amd64 安装先于 arm64 安装；前置 job 失败时后续阶段跳过。实际 job 内仍尽力清理和上传失败证据，强制取消不保证收尾成功。此配置不替代运行证据，V3 PR CI 成功不表示 RC 已通过。
+ 
+ 1. 以 `package.json` 为应用版本来源，同步 `package-lock.json` 顶层和 `packages[""].version`、主 Compose 与 Demo app/mockllm 的固定镜像。`src/lib/version.ts` 静态导入包版本供 MCP 握手使用，不使用 `npm_package_version` 或运行目录中的包文件。Windows Compose 继承主文件。
+ 2. 候选阶段将 `CHANGELOG.md` 首个版本段写为 `## [未发布] - X.Y.Z 候选`，新增 `docs/releases/vX.Y.Z.md` 草稿；进入 RC 前完成审查、定稿并补正式版本标题/日期，不覆盖旧发布记录。RC 与正式版本共用同一基础版本说明；已发布安装和恢复样例保留其历史版本含义。
+@@ -82,7 +82,7 @@
+ 
+ 校验覆盖 package/lockfile 根版本、主/Demo/Windows Compose 镜像、Release Notes 标题、CHANGELOG 首个版本段及可选 tag。支持 `vX.Y.Z` 和 `-rc1`、`-rc.1` 形式的 rc/beta/alpha tag；预发布后缀不写入应用基础版本。脚本只核对本地文件，不执行 Git、Docker 或网络操作；通过不代表镜像可获取、安装/恢复已通过或发布获批。
+ 
+-CI 在原四条门禁前增加版本核对。Release 的 `validate` job 使用 Node.js 22 和独立空 npm 缓存执行 `npm ci --ignore-scripts`，核对 `GITHUB_REF_NAME` 后才允许构建。构建使用 `ubuntu-24.04`、`ubuntu-24.04-arm` 原生 runner，两个架构顺序执行；启用 `no-cache`、`pull` 和最大 provenance，不恢复 GHA 构建缓存。记录干净 checkout 的完整提交、文件哈希和生成文件排除项，并从实际构建元数据记录 Node 基础镜像 digest。这里的无缓存指客户端依赖/构建缓存边界，不宣称 registry/CDN 没有缓存。
++CI 在原四条门禁前增加版本核对。Release 的 `validate` job 使用 Node.js 22 和独立空 npm 缓存执行 `npm ci --ignore-scripts`，核对 `GITHUB_REF_NAME` 后才允许构建。构建使用 `ubuntu-24.04`、`ubuntu-24.04-arm` 原生 runner，通过 `build_amd64` → `build_arm64` 成功依赖串行执行；启用 `no-cache`、`pull` 和最大 provenance，不恢复 GHA 构建缓存。记录干净 checkout 的完整提交、文件哈希和生成文件排除项，并从实际构建元数据记录 Node 基础镜像 digest。这里的无缓存指客户端依赖/构建缓存边界，不宣称 registry/CDN 没有缓存。
+ 
+ `scripts/verify-release-gate4.mjs` 负责构建身份、OCI 索引和安装检查。索引必须含两种运行架构，子 digest 与原生构建对应，配置中的 OCI revision 与最终提交相同；attestation 单列。安装任务使用本轮独立空 Docker 存储与空登录配置，匿名按索引 digest 拉取镜像；应用容器无外部网络，通过容器内回环 HTTP 检查健康、登录、真实 PNG 上传、合成笔记、中文搜索、Markdown、容器重建持久化和 MCP 应用版本。SQLite、Jieba 和 Sharp 也在目标平台实际执行。此安装矩阵不验证浏览器交互、外部模型效果、MCP 公网鉴权或异地恢复。
+ 

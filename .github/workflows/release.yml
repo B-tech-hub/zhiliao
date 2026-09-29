@@ -56,28 +56,17 @@ jobs:
           retention-days: 30
           if-no-files-found: error
 
-  build:
+  build_amd64:
     needs: [validate]
-    # 双平台使用原生 runner；arm64 不可用时保留失败，不降级为单架构。
-    name: 无缓存构建 ${{ matrix.platform }}
+    # 原生平台按成功依赖串行；失败时跳过后续阶段，不降级为单架构。
+    name: 无缓存构建 linux/amd64
     timeout-minutes: 60
-    strategy:
-      fail-fast: false
-      max-parallel: 1
-      matrix:
-        include:
-          - platform: linux/amd64
-            arch: amd64
-            runner: ubuntu-24.04
-          - platform: linux/arm64
-            arch: arm64
-            runner: ubuntu-24.04-arm
-    runs-on: ${{ matrix.runner }}
+    runs-on: ubuntu-24.04
     permissions:
       contents: read
       packages: write
     env:
-      PLATFORM: ${{ matrix.platform }}
+      PLATFORM: linux/amd64
       BUILDX_METADATA_PROVENANCE: max
       DOCKER_BUILD_RECORD_RETENTION_DAYS: 30
     steps:
@@ -122,7 +111,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          platforms: ${{ matrix.platform }}
+          platforms: linux/amd64
           labels: ${{ steps.meta.outputs.labels }}
           outputs: type=image,name=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }},push-by-digest=true,name-canonical=true,push=true
           no-cache: true
@@ -138,7 +127,83 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: gate4-build-${{ matrix.arch }}
+          name: gate4-build-amd64
+          path: ${{ runner.temp }}/gate4-build/
+          if-no-files-found: error
+          retention-days: 30
+
+  build_arm64:
+    needs: [validate, build_amd64]
+    # 原生平台按成功依赖串行；失败时跳过后续阶段，不降级为单架构。
+    name: 无缓存构建 linux/arm64
+    timeout-minutes: 60
+    runs-on: ubuntu-24.04-arm
+    permissions:
+      contents: read
+      packages: write
+    env:
+      PLATFORM: linux/arm64
+      BUILDX_METADATA_PROVENANCE: max
+      DOCKER_BUILD_RECORD_RETENTION_DAYS: 30
+    steps:
+      - name: 初始化构建证据路径
+        shell: bash
+        run: |
+          set -euo pipefail
+          printf '%s\n' "EVIDENCE=$RUNNER_TEMP/gate4-build" >> "$GITHUB_ENV"
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - uses: docker/setup-buildx-action@v3
+      - name: 核对原生架构、源码与缓存初态
+        run: node scripts/verify-release-gate4.mjs preflight --platform "$PLATFORM" --output "$EVIDENCE"
+
+      - name: 登录 ghcr.io
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 镜像元数据（OCI 标签）
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          labels: |
+            org.opencontainers.image.title=zhiliao
+            org.opencontainers.image.description=知了：随手记笔记，AI 自动归类到主题的个人知识库
+            org.opencontainers.image.licenses=MIT
+            org.opencontainers.image.revision=${{ github.sha }}
+
+      - name: 无缓存构建并按 digest 推送
+        id: build
+        timeout-minutes: 45
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          platforms: linux/arm64
+          labels: ${{ steps.meta.outputs.labels }}
+          outputs: type=image,name=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }},push-by-digest=true,name-canonical=true,push=true
+          no-cache: true
+          pull: true
+          provenance: mode=max
+
+      - name: 保存并核对实际构建身份
+        env:
+          BUILD_DIGEST: ${{ steps.build.outputs.digest }}
+          BUILD_METADATA: ${{ steps.build.outputs.metadata }}
+        run: node scripts/verify-release-gate4.mjs record-build --platform "$PLATFORM" --digest "$BUILD_DIGEST" --output "$EVIDENCE"
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: gate4-build-arm64
           path: ${{ runner.temp }}/gate4-build/
           if-no-files-found: error
           retention-days: 30
@@ -147,7 +212,7 @@ jobs:
     name: 合并并严格核对多架构 manifest
     runs-on: ubuntu-24.04
     timeout-minutes: 15
-    needs: [build]
+    needs: [build_amd64, build_arm64]
     permissions:
       contents: read
       packages: write
@@ -187,26 +252,15 @@ jobs:
           retention-days: 30
           if-no-files-found: error
 
-  install:
-    name: 匿名全新安装 ${{ matrix.platform }}
+  install_amd64:
+    name: 匿名全新安装 linux/amd64
     needs: [merge]
-    runs-on: ${{ matrix.runner }}
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     permissions:
       contents: read
-    strategy:
-      fail-fast: false
-      max-parallel: 1
-      matrix:
-        include:
-          - platform: linux/amd64
-            arch: amd64
-            runner: ubuntu-24.04
-          - platform: linux/arm64
-            arch: arm64
-            runner: ubuntu-24.04-arm
     env:
-      PLATFORM: ${{ matrix.platform }}
+      PLATFORM: linux/amd64
       DOCKER_CONTEXT: ""
     steps:
       - name: 初始化安装证据与匿名 Docker 路径
@@ -284,7 +338,98 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: gate4-install-${{ matrix.arch }}
+          name: gate4-install-amd64
+          path: ${{ runner.temp }}/gate4-install/
+          retention-days: 30
+          if-no-files-found: error
+
+  install_arm64:
+    name: 匿名全新安装 linux/arm64
+    needs: [merge, install_amd64]
+    runs-on: ubuntu-24.04-arm
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    env:
+      PLATFORM: linux/arm64
+      DOCKER_CONTEXT: ""
+    steps:
+      - name: 初始化安装证据与匿名 Docker 路径
+        shell: bash
+        run: |
+          set -euo pipefail
+          printf '%s\n' \
+            "EVIDENCE=$RUNNER_TEMP/gate4-install" \
+            "DOCKER_HOST=unix://$RUNNER_TEMP/gate4-docker/docker.sock" \
+            "DOCKER_CONFIG=$RUNNER_TEMP/gate4-anonymous" >> "$GITHUB_ENV"
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/download-artifact@v4
+        with:
+          name: gate4-manifest
+          path: ${{ runner.temp }}/gate4-manifest
+      - name: 启动专用空 Docker 存储
+        id: daemon
+        run: |
+          set -euo pipefail
+          daemon="$RUNNER_TEMP/gate4-docker"
+          test ! -e "$daemon"
+          test ! -e "$DOCKER_CONFIG"
+          mkdir -p "$daemon" "$DOCKER_CONFIG" "$EVIDENCE"
+          printf '{}\n' > "$DOCKER_CONFIG/config.json"
+          printf '{}\n' > "$daemon/config.json"
+          echo "owned=true" >> "$GITHUB_OUTPUT"
+          sudo -n nohup dockerd \
+            --config-file="$daemon/config.json" \
+            --data-root="$daemon/data" --exec-root="$daemon/exec" \
+            --pidfile="$daemon/daemon.pid" --host="$DOCKER_HOST" \
+            --bridge=none --iptables=false --ip6tables=false --ip-masq=false \
+            --storage-driver=overlay2 > "$EVIDENCE/daemon.log" 2>&1 &
+          for attempt in $(seq 1 30); do
+            if docker info > /dev/null 2>&1; then exit 0; fi
+            sleep 1
+          done
+          echo "专用 Docker daemon 未就绪" >&2
+          exit 1
+      - name: 按固定 digest 验收原生模块、登录、数据和 MCP
+        run: node scripts/verify-release-gate4.mjs install --platform "$PLATFORM" --manifest "$RUNNER_TEMP/gate4-manifest/manifest.json" --output "$EVIDENCE"
+      - name: 停止本轮专用 daemon
+        if: always() && steps.daemon.outputs.owned == 'true'
+        run: |
+          mkdir -p "$EVIDENCE"
+          sudo -n python3 - "$RUNNER_TEMP/gate4-docker" "$EVIDENCE/daemon-cleanup.json" <<'PY'
+          import json, pathlib, signal, sys, time, os
+          root, output = map(pathlib.Path, sys.argv[1:])
+          result = {"status": "not_started", "data_root": str(root / "data")}
+          try:
+              pidfile = root / "daemon.pid"
+              if pidfile.exists():
+                  pid = int(pidfile.read_text().strip())
+                  assert pid > 1
+                  command = pathlib.Path(f"/proc/{pid}/cmdline").read_bytes().split(b"\0")
+                  assert os.fsencode(f"--data-root={root / 'data'}") in command, "daemon 归属不匹配"
+                  os.kill(pid, signal.SIGTERM)
+                  for _ in range(30):
+                      if not pathlib.Path(f"/proc/{pid}").exists():
+                          break
+                      time.sleep(1)
+                  else:
+                      raise RuntimeError("daemon 未按时退出")
+                  result["status"] = "passed"
+          except Exception as error:
+              result.update(status="failed", error=str(error))
+          output.write_text(json.dumps(result, indent=2) + "\n")
+          sys.exit(1 if result["status"] == "failed" else 0)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: gate4-install-arm64
           path: ${{ runner.temp }}/gate4-install/
           retention-days: 30
           if-no-files-found: error
@@ -292,7 +437,7 @@ jobs:
   release:
     name: 创建 GitHub Release
     runs-on: ubuntu-24.04
-    needs: [merge, install]
+    needs: [merge, install_amd64, install_arm64]
     permissions:
       contents: write
     steps:

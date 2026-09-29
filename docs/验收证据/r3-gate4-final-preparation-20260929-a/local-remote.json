@@ -1,0 +1,63 @@
+{
+  "captured_at": "2026-09-29T14:39:13.634916+00:00",
+  "local_head": "b2bae00d4a0e91ef43a0cb41f70f75ebc38ec592",
+  "local_tree": "d454fb7fd60c30e156a898be38a0d05b06c5da0a",
+  "branch": "candidate/0.6.1-baseline",
+  "author_ident": "BAIBAI <BAIBAI2024826@outlook.com> 1790692753 +0800",
+  "committer_ident": "BAIBAI <BAIBAI2024826@outlook.com> 1790692753 +0800",
+  "push_urls": [
+    "https://github.com/B-tech-hub/zhiliao.git"
+  ],
+  "mirror": "unset",
+  "hooks_directory": "D:\\ClaudeProjects\\ai_acknowladge\\.git\\hooks",
+  "active_hooks": [],
+  "remote_refs": "b2bae00d4a0e91ef43a0cb41f70f75ebc38ec592\trefs/heads/candidate/0.6.1-baseline\n6ee67532deed37fda6cc98962e8df76c98659890\trefs/heads/main",
+  "github_actor": {
+    "id": 216397715,
+    "login": "B-tech-hub"
+  },
+  "repository": {
+    "full_name": "B-tech-hub/zhiliao",
+    "permissions": {
+      "admin": true,
+      "maintain": true,
+      "pull": true,
+      "push": true,
+      "triage": true
+    },
+    "private": false
+  },
+  "pr": {
+    "baseRefName": "main",
+    "baseRefOid": "6ee67532deed37fda6cc98962e8df76c98659890",
+    "headRefName": "candidate/0.6.1-baseline",
+    "headRefOid": "b2bae00d4a0e91ef43a0cb41f70f75ebc38ec592",
+    "headRepository": {
+      "id": "R_kgDOT3PzZw",
+      "name": "zhiliao",
+      "nameWithOwner": "B-tech-hub/zhiliao"
+    },
+    "headRepositoryOwner": {
+      "id": "U_kgDODOX3kw",
+      "name": "BAIBAI",
+      "login": "B-tech-hub"
+    },
+    "isDraft": false,
+    "mergeable": "MERGEABLE",
+    "state": "OPEN",
+    "statusCheckRollup": [
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-09-29T14:11:03Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/B-tech-hub/zhiliao/actions/runs/36580449536/job/109446912384",
+        "name": "Lint、测试与构建",
+        "startedAt": "2026-09-29T14:08:51Z",
+        "status": "COMPLETED",
+        "workflowName": "CI"
+      }
+    ],
+    "url": "https://github.com/B-tech-hub/zhiliao/pull/12"
+  },
+  "boundary": "read-only preparation; no push, CI run or release"
+}

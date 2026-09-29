@@ -1,0 +1,315 @@
+{
+  "sha": "b2bae00d4a0e91ef43a0cb41f70f75ebc38ec592",
+  "tree": "d454fb7fd60c30e156a898be38a0d05b06c5da0a",
+  "parents": [
+    "82b1e5a1b98d4b687d8604a84c47c8ec416bf818"
+  ],
+  "files": [
+    {
+      "path": "CONTRIBUTING.md",
+      "sha256": "13d4de52eaeddf4e4831632108bb3be5adb43edeae22690cdd13e4ae956f701a",
+      "blob": "8b3f8a3bd366340cd42bb055a213ab54a78823e9"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/spec-r3-gate4-distribution.md",
+      "sha256": "8573bd4460bdf8d7363d8380e95b1cfe6f50cefa2911afb656122f67d1b86986",
+      "blob": "2ff6669efce1fd79ab403b3aea8b58bbb6b4958e"
+    },
+    {
+      "path": "docs/0.6.1候选定稿-2026-09-28.md",
+      "sha256": "6230613ed05abb061b5a71184c11c5fa10f5ee604557ae9a8c4088f08e4753ca",
+      "blob": "30fd61f787c9ea71c0ef84f463e76d4f899c3335"
+    },
+    {
+      "path": "docs/R3门禁4修复后候选推送与PR-CI执行单-2026-09-29.md",
+      "sha256": "4479c7481a9948b7370cb9fbe94e52220659a2fa1ed169ff39a8ba3ddb0235d6",
+      "blob": "6eefd7e316536390186697ffe180df1ee021ea94"
+    },
+    {
+      "path": "docs/R3门禁4候选推送与PR-CI执行单-2026-09-29.md",
+      "sha256": "724fa72718bce9210233add7581c06f13e70050a70499dc7369b3fb3a95a76cb",
+      "blob": "832db1e2b76460b27f169ab889f4b9d72fa5b8ce"
+    },
+    {
+      "path": "docs/R3门禁4环境调查与验收计划-2026-09-29.md",
+      "sha256": "3644137a277b29e78e3e9d1c3bff10a81a769f35d2711d823bb4bdd7b161f4de",
+      "blob": "ff4be7aa58f851abe0249e1e94538d998c40ba83"
+    },
+    {
+      "path": "docs/R3门禁4预览预算修复后候选推送与PR-CI执行单-2026-09-29.md",
+      "sha256": "3c3755b253ba9e9fe8c5eadfdbe9d1d56162a93961c4f108b2a94dd98c5daf74",
+      "blob": "594eba9c61a9eccdff8748512a33ffc84c9af2b4"
+    },
+    {
+      "path": "docs/README.md",
+      "sha256": "8532cac2713bf527aee899b89cc5f6690a169cc50c23c0db5fff517137e6ef9c",
+      "blob": "30eeb0e867a309b2562b332b69429c382174fa5a"
+    },
+    {
+      "path": "docs/releases/v0.6.1.md",
+      "sha256": "971f9ba543be58d895fe679bef278454b9bfbbc0e0c7027fb28ab4832b654051",
+      "blob": "bd97669146bfa48f9b76503aa2a9c105438187a3"
+    },
+    {
+      "path": "docs/产品规划/开源发布范围与执行清单-2026-09-13.md",
+      "sha256": "164430e9d05dc1ce9680e2277e15c90bb8a0af13f710aafbf0556be20ef56ea9",
+      "blob": "c6550f7eb9d1584d980f7182ff9a294b66370145"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-preview-timeout-20260929-a/README.md",
+      "sha256": "c13cba82bc1009e9e3aa579f5c69f5a99909a5c961be87da8fa8d5d7153a2cb2",
+      "blob": "720241358a1a3ff8571965629320fa5fc36160a0"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-preview-timeout-20260929-a/before.json",
+      "sha256": "a9be0255f58972d15002acbe5ed59ec010263d617e6a9cfdef8f23e41654b874",
+      "blob": "9ed9a1f3cb043dd3489d1b88b609547f91a4e063"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-preview-timeout-20260929-a/checks.json",
+      "sha256": "1694a3ec4c92a01b2d4121a1834bb9c87d9d1a2d8560b1b11dd38d422a94c0da",
+      "blob": "7221bcfeb67ea4fa351f1b6878a8203fe1938a23"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-preview-timeout-20260929-a/eslint-output.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-preview-timeout-20260929-a/files.sha256.json",
+      "sha256": "bf2b80bf9046876e6e8a8bdf37115543e9377d01b12f0eb470bcc4d002cdb3ca",
+      "blob": "1301b6cb24d81c45eeb30408642b0296fddb3212"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-preview-timeout-20260929-a/inputs.json",
+      "sha256": "170d8a5406883fa883235514a07dc4bcdd0f86a39e738129f1fef03bbb29e37e",
+      "blob": "4408e797f69f986b85accfc99a7b483055c179da"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-preview-timeout-20260929-a/observe-preview.cjs",
+      "sha256": "f6094029ba558308ed7cc63b098004566bdc6400de51b94dc6fcaa6f70d75e9a",
+      "blob": "973c8059cedcae502ab83946dd4ae13eed2e66f2"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-preview-timeout-20260929-a/preservation.json",
+      "sha256": "7dd053aa398474c8a8156030246c9cc2b25fd96070acd69e6747f86819962c8b",
+      "blob": "d31e0951d446e3c06688d9b8937add0b3102639e"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-preview-timeout-20260929-a/preview-processes.jsonl",
+      "sha256": "4549ac15e4ae9647b30f0313bcb348aea493e1d8cfa526b5928aefced490332c",
+      "blob": "54d3a117e915f5b9956bc8a4e0350d0e54ad898d"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-preview-timeout-20260929-a/test-change.patch",
+      "sha256": "1cb86b17743ea2bd8211eb1507473241a7be4bdc508f7d5fd012343b98c10e70",
+      "blob": "fb930a78952c9d628745989ee031f104a854f49e"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-preview-timeout-20260929-a/tests-after.json",
+      "sha256": "bb9233155a080686c68cf26d88d5a577574a646827ede8d21a2f3e480777db01",
+      "blob": "003cd9c851ce4c29d5f25a7b3414ef41c9687733"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-preview-timeout-20260929-a/tests-output.txt",
+      "sha256": "e47f0783c46f2ccf7153ac0a5ce231b372fc97e8aa4bdf996ceb1734d43a6a29",
+      "blob": "5490435b4574f3a9051079f955bd56f7443b66c6"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v2-061-36574616627/README.md",
+      "sha256": "d7267559a6728750deb1bc9fd8e424a3e4733faeeaed516a00b0a55dede842a6",
+      "blob": "e4d61d0425ee8efb4835ed30cd48e683c4a2bc39"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v2-061-36574616627/archive-review.json",
+      "sha256": "1aa268c43564b91b855910ae84beb7ebd7757e75bd15dfa3f36b7eebb1a807bc",
+      "blob": "64a289d90087ddc6f63dd882d33cda3c3a8d5eda"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v2-061-36574616627/artifacts.json",
+      "sha256": "244563f989470892c537c9a4622920af0d228ee4528f7d00c64a06d6cd95856c",
+      "blob": "ccd036f15290ec2e42695f742d9edf63354be932"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v2-061-36574616627/attributes-applied.json",
+      "sha256": "cdbad7158194abf43a91718277ee07c523bf55ec6d6d7729567c4e1534ed08d1",
+      "blob": "cc374b523948c1b63e41eed59db3da8daaf01389"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v2-061-36574616627/candidate.json",
+      "sha256": "68d984e9110c1b2f44337838ee1a5e10978b5c7a911d32ed0122853a7f402f72",
+      "blob": "35eedd89e0f09f740185b47675544e5be002b592"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v2-061-36574616627/checkout-commit.json",
+      "sha256": "6b8dd2b688159f8bc2c5c74dba217ba89ff235f70c6f1cdae81a9f8df56f130c",
+      "blob": "d412f441d042de05a55649d8d777057cb2e49058"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v2-061-36574616627/ci-log.txt",
+      "sha256": "dcc06101e168474e8025495aa1ca0c2dd6093cdcab8d82460120fe56902a37f3",
+      "blob": "64426238615262e4474d4cf1e359de69d680c74e"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v2-061-36574616627/closeout-checks.json",
+      "sha256": "7e0fe2268e7af59a5dce97391ffd963877a8135c6ab28e6c52234f2bcf922212",
+      "blob": "42dc6d2afca1067e83ecd6ee789e939c216d44e0"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v2-061-36574616627/failure-analysis.json",
+      "sha256": "d1a3fd4fe1a128f55ee94972e6b6be4d4393c92fe009874d15a93d344ea2e279",
+      "blob": "d29bed1d315a6cc39e827a8bcf47d8cfaa690337"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v2-061-36574616627/files.sha256.json",
+      "sha256": "b5917278d9e2ff3dea1f19acba8e9b5c0b881a234c897601669ab93065079d37",
+      "blob": "8133f3d68a32d86a528bd390103cbf0910b6f556"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v2-061-36574616627/final-jobs.json",
+      "sha256": "0d341403c7edb69c7c20ae1c2d40432e4d773b38f8c3cbb9e3f0a7b634e76303",
+      "blob": "e391ea0eefb4c3d3037ced2541de647f99c8bf76"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v2-061-36574616627/final-run.json",
+      "sha256": "0799b61783e242850bfe3ea1cc0616b870012c8439a9a08e9f2188c944a7b5ca",
+      "blob": "de966cdfccece373304ee5810759dd45f0cd61e6"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v2-061-36574616627/final-runs.json",
+      "sha256": "d9e494763ca07f39a76bf01ac36cdcec9326df6f6a410c22a5eb93345d979385",
+      "blob": "6b0579f1a5f96706f8dc5bff25c61a5c1c8e2f6b"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v2-061-36574616627/git-tree.txt",
+      "sha256": "9ca7313b589cfe34a4c43551f4a04101c8b28a9bc8ba28c8ae9bbceb4816c539",
+      "blob": "256e91c889eead84bd260cdb3c21a42b9cc9454f"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v2-061-36574616627/initial-jobs.json",
+      "sha256": "78b6b71b2faaf3760bee4b57930c5f903802ef1527a4fd8dcbb60bbbb3094f64",
+      "blob": "3d12f3002b93051d64789712756fa83d6958a4f8"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v2-061-36574616627/initial-run.json",
+      "sha256": "6bd4c6f11676c99bbe757108dbbf583793a4e7526d4c816e9dc71d9ea264c211",
+      "blob": "7ad734fe414ea78379cadfca5e85118b3f474e01"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v2-061-36574616627/initial-runs.json",
+      "sha256": "b98eacfa69f5a0e3cd25a0d27da648c1fdc1023c5325909a07597f36a054cba0",
+      "blob": "79c1f470c154024f1fbd822e50514bfe16f2956d"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v2-061-36574616627/jobs.json",
+      "sha256": "0d341403c7edb69c7c20ae1c2d40432e4d773b38f8c3cbb9e3f0a7b634e76303",
+      "blob": "e391ea0eefb4c3d3037ced2541de647f99c8bf76"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v2-061-36574616627/local-before.json",
+      "sha256": "a8740104e752b791509b0cbad89ce5f05aa4be27f3327fdd6ede7da4587c1057",
+      "blob": "417fdf943edd3217425064e579c56219c0de5b60"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v2-061-36574616627/log-excerpts.json",
+      "sha256": "a66cc2a4f699493680abcb81186c26109e243c61b01c8c3a672f678586957218",
+      "blob": "8dbea3eaf8cbeb543fb0d9317508b20bfa26f390"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v2-061-36574616627/log-integrity.json",
+      "sha256": "0c46d97e6f12c5df1ec686bcf223e648b22c8c21e1810a7a25aa56f28fc24b9b",
+      "blob": "f88e209fdceadf1549bbe6bf6c175243047a5aed"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v2-061-36574616627/poll-01-jobs.json",
+      "sha256": "0f92987e9001247a9069c12e55c3a8df4bd5739646746751be90bd5f27ecc838",
+      "blob": "8ce52481e15caf15078546259b555a062bcedcb6"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v2-061-36574616627/poll-01-run.json",
+      "sha256": "52de994af64c8883507cbef8ac4148936106ffa51ecb1d5a61f2374e7dab3b56",
+      "blob": "90437fb1593ef6fafae9b75fa8ed85467e3f835b"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v2-061-36574616627/poll-01-runs.json",
+      "sha256": "e20850a4b5776eb97f9866314779a79ce119e4e92740db6267c19db87ca42034",
+      "blob": "fc20fdddd731bf7c92cb081b1941b00d482ff8c3"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v2-061-36574616627/poll-02-jobs.json",
+      "sha256": "0d341403c7edb69c7c20ae1c2d40432e4d773b38f8c3cbb9e3f0a7b634e76303",
+      "blob": "e391ea0eefb4c3d3037ced2541de647f99c8bf76"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v2-061-36574616627/poll-02-run.json",
+      "sha256": "0799b61783e242850bfe3ea1cc0616b870012c8439a9a08e9f2188c944a7b5ca",
+      "blob": "de966cdfccece373304ee5810759dd45f0cd61e6"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v2-061-36574616627/poll-02-runs.json",
+      "sha256": "d9e494763ca07f39a76bf01ac36cdcec9326df6f6a410c22a5eb93345d979385",
+      "blob": "6b0579f1a5f96706f8dc5bff25c61a5c1c8e2f6b"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v2-061-36574616627/preservation-before.json",
+      "sha256": "866267039dce01ec5bdf761f67a088e4482c105f536397a5880fe308dd88b964",
+      "blob": "57131e4067dfcd4f072c7faf8fe65ba01a3132fa"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v2-061-36574616627/push.json",
+      "sha256": "82398e90a76aa8141988efda938aab404789800a7d3bd908e64b42d8b6ccbf12",
+      "blob": "ea1412e0757f78d8941a36444449d74736f9d7c1"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v2-061-36574616627/remote-after.json",
+      "sha256": "771d0cd60cd7603cc5ad228fd3e0d50378a0dee46b333bd0e9ae9e4b3598092f",
+      "blob": "715b94d991979e814722084d4c1335649e432a90"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v2-061-36574616627/remote-before.json",
+      "sha256": "d57bfbc8bd11012b9139c5f997397d91cc0b62a32350bfe5122420901e7f13ae",
+      "blob": "70f68a2a344231f537a4817c8759ce8add361e8c"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v2-061-36574616627/remote-final.json",
+      "sha256": "24b0820defb11a4c9e45b6263449720c4a9144a3c692360e772a173b2994974f",
+      "blob": "38603e18d6aee821f91d43b4e226e53c62595fe0"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v2-061-36574616627/remote-prepush.json",
+      "sha256": "dd884709ba69fd4af1026282339222bdc07d14796d061d28898fa61e98b074b2",
+      "blob": "24e15cb0c63c7008eac54401ac0c666e54355a6f"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v2-061-36574616627/run.json",
+      "sha256": "0799b61783e242850bfe3ea1cc0616b870012c8439a9a08e9f2188c944a7b5ca",
+      "blob": "de966cdfccece373304ee5810759dd45f0cd61e6"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v2-061-36574616627/staged-inputs.json",
+      "sha256": "232b7c870d3bb938f1acb723a4098317e0aca6b0ef86fe021f2637002bf4c562",
+      "blob": "46bd54d8867ccae6185a58dbecbd70d5456fa168"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v2-061-36574616627/summary.json",
+      "sha256": "3a16562b15c38f4b89f2180c4d18f7fd2c80ac4fa69b8d9f6fb9a0ae3391a77d",
+      "blob": "a0d0ec09c354a28e2426572d7a4e35845c749b95"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v3-preparation-20260929-a/README.md",
+      "sha256": "e45f5719ec4052d3452204b3486d4d4121762f52fce74b3bd76780b776230854",
+      "blob": "a0ab0afabd155f29c5f6d03869ddcd01c835ccbf"
+    },
+    {
+      "path": "tests/config/smoke-fresh-install.test.ts",
+      "sha256": "e11145af92dcecf3a34699fca2d9e5774497c36e7392b2b42ff06675b2f5b6cc",
+      "blob": "c43beb7fdc59ee6dbc959d40172a4646f8ff300d"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-v3-preparation-20260929-a/inputs.json",
+      "sha256": "6dde7e25adf9c06a3d61fb8b62b8a35511379fb62cc56c28907af55f93efeaa5",
+      "blob": "0ee2fdf93ed75c5ababbf490b081c391e7fadc4b"
+    }
+  ],
+  "recorded_at": "2026-09-29T14:08:15.179254+00:00"
+}
