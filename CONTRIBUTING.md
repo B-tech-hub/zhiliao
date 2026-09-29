@@ -66,9 +66,9 @@ node node_modules/vitest/vitest.mjs run tests/config/release-version.test.ts tes
 1. 以 `package.json` 为应用版本来源，同步 `package-lock.json` 顶层和 `packages[""].version`、主 Compose 与 Demo app/mockllm 的固定镜像。`src/lib/version.ts` 静态导入包版本供 MCP 握手使用，不使用 `npm_package_version` 或运行目录中的包文件。Windows Compose 继承主文件。
 2. 候选阶段将 `CHANGELOG.md` 首个版本段写为 `## [未发布] - X.Y.Z 候选`，新增 `docs/releases/vX.Y.Z.md` 草稿；进入 RC 前完成审查、定稿并补正式版本标题/日期，不覆盖旧发布记录。RC 与正式版本共用同一基础版本说明；已发布安装和恢复样例保留其历史版本含义。
 3. 执行 `npm run check:design`、`npm run lint`、`npm test`、`npm run build`，全部通过后按已确认范围提交并推送 `main`；运行构建、全量测试及发布仍遵循项目确认规则。
-4. 推送预发布标签彩排：`git tag v0.x.y-rc1 && git push origin v0.x.y-rc1`。等待 CI、amd64/arm64 镜像构建、manifest 合并校验与预发布 Release 全部成功。
+4. 获准后推送预发布标签彩排：`git tag v0.x.y-rc1 && git push origin v0.x.y-rc1`。等待 CI、原生 amd64/arm64 无缓存镜像构建、manifest 严格校验、两平台匿名全新安装及清理、预发布 Release 全部成功。arm64 不可用时保留失败，不改成单架构通过。
 5. RC 全绿后，在同一提交上推送正式标签：`git tag v0.x.y && git push origin v0.x.y`。不要在 RC 与正式标签之间夹带未经彩排的提交。
-6. Release 工作流会自动构建多架构镜像并推送至 ghcr.io，同时创建 GitHub Release。发布后确认 `x.y.z`、`x.y` 与 `latest`（正式版本）指向同一多架构 manifest。
+6. Release 工作流会先推送平台 digest、合并 GHCR 标签，再在独立原生 runner 验收安装；全部通过后才创建 GitHub Release。安装失败可能已留下远端镜像或 RC tag，须保留失败记录并人工决定后续，不自动覆盖或删除。发布后确认 `x.y.z`、`x.y` 与 `latest`（正式版本）指向同一多架构 manifest；预发布只生成自身固定标签。
 7. 首次发布后需到 GitHub Packages 将包设为 public 并关联仓库（一次性操作）。
 
 版本维护后先执行只读校验：
@@ -80,6 +80,12 @@ npm run check:version -- --tag v0.6.1-rc1
 
 校验覆盖 package/lockfile 根版本、主/Demo/Windows Compose 镜像、Release Notes 标题、CHANGELOG 首个版本段及可选 tag。支持 `vX.Y.Z` 和 `-rc1`、`-rc.1` 形式的 rc/beta/alpha tag；预发布后缀不写入应用基础版本。脚本只核对本地文件，不执行 Git、Docker 或网络操作；通过不代表镜像可获取、安装/恢复已通过或发布获批。
 
-CI 在原四条门禁前增加版本核对。Release 的 `validate` job 使用 Node.js 22 和 `npm ci --ignore-scripts` 安装现有校验依赖，核对 `GITHUB_REF_NAME` 后才允许构建；不替代原门禁、升级/恢复彩排、RC 冒烟及双架构 manifest 核验。当前目标 0.6.1 仍未发布，状态见 [候选说明](docs/releases/v0.6.1.md)。
+CI 在原四条门禁前增加版本核对。Release 的 `validate` job 使用 Node.js 22 和独立空 npm 缓存执行 `npm ci --ignore-scripts`，核对 `GITHUB_REF_NAME` 后才允许构建。构建使用 `ubuntu-24.04`、`ubuntu-24.04-arm` 原生 runner，两个架构顺序执行；启用 `no-cache`、`pull` 和最大 provenance，不恢复 GHA 构建缓存。记录干净 checkout 的完整提交、文件哈希和生成文件排除项，并从实际构建元数据记录 Node 基础镜像 digest。这里的无缓存指客户端依赖/构建缓存边界，不宣称 registry/CDN 没有缓存。
+
+`scripts/verify-release-gate4.mjs` 负责构建身份、OCI 索引和安装检查。索引必须含两种运行架构，子 digest 与原生构建对应，配置中的 OCI revision 与最终提交相同；attestation 单列。安装任务使用本轮独立空 Docker 存储与空登录配置，匿名按索引 digest 拉取镜像；应用容器无外部网络，通过容器内回环 HTTP 检查健康、登录、真实 PNG 上传、合成笔记、中文搜索、Markdown、容器重建持久化和 MCP 应用版本。SQLite、Jieba 和 Sharp 也在目标平台实际执行。此安装矩阵不验证浏览器交互、外部模型效果、MCP 公网鉴权或异地恢复。
+
+构建 job 上限 60 分钟（构建步骤 45 分钟），安装 job 上限 15 分钟。资源按本轮标签核对归属后清理；专用 daemon 只在本轮成功建立所有权标记后停止，不清理 runner 的默认 Docker 存储。失败、超时或清理失败不能放行 GitHub Release。`gate4-validate`、`gate4-build-*`、`gate4-manifest`、`gate4-install-*` artifact 保留 30 天，构建阶段的 npm/build 日志与耗时另见该次 Actions 日志及 Docker build record。维护者在过期前归档到新的门禁 4 证据目录，不把 artifacts 的存在等同于全部检查通过。
+
+上述工作流补强目前只有本地准备和局部验证证据，远端构建、GHCR 取用与安装尚未执行。详见 [R3 门禁 4 计划](docs/R3门禁4环境调查与验收计划-2026-09-29.md)。原完整门禁、升级/恢复彩排、RC 和正式发布要求保留；当前目标 0.6.1 仍未发布，状态见 [候选说明](docs/releases/v0.6.1.md)。
 
 安装冒烟默认读取脚本所属仓库的包版本。`-PrintConfig` 仅预览；需验证实际 RC 或复用旧版时，用 `-Image ghcr.io/b-tech-hub/zhiliao:0.6.1-rc1` 或明确的固定版本/digest。拒绝 `latest`、`0.6` 等浮动引用；真正运行容器仍按项目验证规则另行安排。

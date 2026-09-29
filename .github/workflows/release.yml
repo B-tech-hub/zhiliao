@@ -1,12 +1,19 @@
 name: Release
 
-# 推送版本 tag（如 v0.1.1）时：构建多架构镜像推送 ghcr.io 并创建 GitHub Release。
-# 发布流程见 CONTRIBUTING.md「发布流程」。
+# 推送版本 tag 会写入 GHCR，安装验收通过后才创建 GitHub Release。
+# tag、推送及重验证仍按 CONTRIBUTING 和项目确认规则执行。
 # 注意：首次发布后需到 GitHub Packages 把包设为 public 并关联仓库，否则匿名 docker pull 会 401。
 
 on:
   push:
     tags: ["v*.*.*"]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
 
 env:
   REGISTRY: ghcr.io
@@ -16,46 +23,76 @@ env:
 jobs:
   validate:
     name: 核对发布版本
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
     permissions:
       contents: read
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
+      - name: 准备空 npm 缓存
+        run: |
+          cache_dir="$(mktemp -d "$RUNNER_TEMP/gate4-npm.XXXXXX")"
+          echo "npm_config_cache=$cache_dir" >> "$GITHUB_ENV"
+          mkdir -p "$RUNNER_TEMP/gate4-validate"
+          date -u +%FT%TZ > "$RUNNER_TEMP/gate4-validate/npm-start.txt"
       - name: 安装校验依赖
-        run: npm ci --ignore-scripts
+        run: |
+          set -o pipefail
+          npm ci --ignore-scripts 2>&1 | tee "$RUNNER_TEMP/gate4-validate/npm-ci.log"
+          date -u +%FT%TZ > "$RUNNER_TEMP/gate4-validate/npm-end.txt"
       - name: 核对 tag、版本与发布材料
         run: npm run check:version -- --tag "$GITHUB_REF_NAME"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: gate4-validate
+          path: ${{ runner.temp }}/gate4-validate/
+          retention-days: 30
+          if-no-files-found: error
 
   build:
     needs: [validate]
-    # 双平台均用原生 runner，不用 QEMU：next build 的 SWC 与原生模块（better-sqlite3/@node-rs/jieba）
-    # 在 QEMU 模拟下极慢且有崩溃前科。若 ubuntu-24.04-arm 排队异常，可临时删除 arm64 条目单平台发布。
-    name: 构建镜像 ${{ matrix.platform }}
+    # 双平台使用原生 runner；arm64 不可用时保留失败，不降级为单架构。
+    name: 无缓存构建 ${{ matrix.platform }}
+    timeout-minutes: 60
     strategy:
       fail-fast: false
+      max-parallel: 1
       matrix:
         include:
           - platform: linux/amd64
-            runner: ubuntu-latest
+            arch: amd64
+            runner: ubuntu-24.04
           - platform: linux/arm64
+            arch: arm64
             runner: ubuntu-24.04-arm
     runs-on: ${{ matrix.runner }}
     permissions:
       contents: read
       packages: write
+    env:
+      PLATFORM: ${{ matrix.platform }}
+      EVIDENCE: ${{ runner.temp }}/gate4-build
+      BUILDX_METADATA_PROVENANCE: max
+      DOCKER_BUILD_RECORD_RETENTION_DAYS: 30
     steps:
       - uses: actions/checkout@v4
-
-      - name: 准备平台标识
-        run: |
-          platform="${{ matrix.platform }}"
-          echo "PLATFORM_PAIR=${platform//\//-}" >> "$GITHUB_ENV"
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
 
       - uses: docker/setup-buildx-action@v3
+      - name: 核对原生架构、源码与缓存初态
+        run: node scripts/verify-release-gate4.mjs preflight --platform "$PLATFORM" --output "$EVIDENCE"
 
       - name: 登录 ghcr.io
         uses: docker/login-action@v3
@@ -73,56 +110,60 @@ jobs:
             org.opencontainers.image.title=zhiliao
             org.opencontainers.image.description=知了：随手记笔记，AI 自动归类到主题的个人知识库
             org.opencontainers.image.licenses=MIT
+            org.opencontainers.image.revision=${{ github.sha }}
 
-      - name: 构建并按 digest 推送
+      - name: 无缓存构建并按 digest 推送
         id: build
+        timeout-minutes: 45
         uses: docker/build-push-action@v6
         with:
           context: .
           platforms: ${{ matrix.platform }}
           labels: ${{ steps.meta.outputs.labels }}
           outputs: type=image,name=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }},push-by-digest=true,name-canonical=true,push=true
-          cache-from: type=gha,scope=${{ env.PLATFORM_PAIR }}
-          cache-to: type=gha,mode=max,scope=${{ env.PLATFORM_PAIR }}
+          no-cache: true
+          pull: true
+          provenance: mode=max
 
-      - name: 导出 digest
-        run: |
-          mkdir -p "${{ runner.temp }}/digests"
-          digest="${{ steps.build.outputs.digest }}"
-          touch "${{ runner.temp }}/digests/${digest#sha256:}"
+      - name: 保存并核对实际构建身份
+        env:
+          BUILD_DIGEST: ${{ steps.build.outputs.digest }}
+          BUILD_METADATA: ${{ steps.build.outputs.metadata }}
+        run: node scripts/verify-release-gate4.mjs record-build --platform "$PLATFORM" --digest "$BUILD_DIGEST" --output "$EVIDENCE"
 
-      - name: 上传 digest
-        uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4
+        if: always()
         with:
-          name: digests-${{ env.PLATFORM_PAIR }}
-          path: ${{ runner.temp }}/digests/*
+          name: gate4-build-${{ matrix.arch }}
+          path: ${{ env.EVIDENCE }}/
           if-no-files-found: error
-          retention-days: 1
+          retention-days: 30
 
   merge:
-    name: 合并多架构 manifest
-    runs-on: ubuntu-latest
+    name: 合并并严格核对多架构 manifest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
     needs: [build]
     permissions:
+      contents: read
       packages: write
+    outputs:
+      digest: ${{ steps.manifest.outputs.digest }}
     steps:
-      - name: 下载 digests
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: 下载平台构建记录
         uses: actions/download-artifact@v4
         with:
-          path: ${{ runner.temp }}/digests
-          pattern: digests-*
-          merge-multiple: true
+          path: ${{ runner.temp }}/gate4-records
+          pattern: gate4-build-*
 
       - uses: docker/setup-buildx-action@v3
-
-      - name: 镜像元数据（tag 规则：语义化版本 + latest）
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          tags: |
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
 
       - name: 登录 ghcr.io
         uses: docker/login-action@v3
@@ -131,24 +172,125 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: 创建 manifest 并推送
-        working-directory: ${{ runner.temp }}/digests
-        run: |
-          docker buildx imagetools create \
-            $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
-            $(printf '${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@sha256:%s ' *)
+      - name: 合并并校验架构、子 digest 与 revision
+        id: manifest
+        run: node scripts/verify-release-gate4.mjs merge --records "$RUNNER_TEMP/gate4-records" --tag "$GITHUB_REF_NAME" --output "$RUNNER_TEMP/gate4-manifest"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: gate4-manifest
+          path: ${{ runner.temp }}/gate4-manifest/
+          retention-days: 30
+          if-no-files-found: error
 
-      - name: 校验多架构清单
-        run: docker buildx imagetools inspect ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.version }}
+  install:
+    name: 匿名全新安装 ${{ matrix.platform }}
+    needs: [merge]
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        include:
+          - platform: linux/amd64
+            arch: amd64
+            runner: ubuntu-24.04
+          - platform: linux/arm64
+            arch: arm64
+            runner: ubuntu-24.04-arm
+    env:
+      PLATFORM: ${{ matrix.platform }}
+      EVIDENCE: ${{ runner.temp }}/gate4-install
+      DOCKER_HOST: unix://${{ runner.temp }}/gate4-docker/docker.sock
+      DOCKER_CONFIG: ${{ runner.temp }}/gate4-anonymous
+      DOCKER_CONTEXT: ""
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/download-artifact@v4
+        with:
+          name: gate4-manifest
+          path: ${{ runner.temp }}/gate4-manifest
+      - name: 启动专用空 Docker 存储
+        id: daemon
+        run: |
+          set -euo pipefail
+          daemon="$RUNNER_TEMP/gate4-docker"
+          test ! -e "$daemon"
+          test ! -e "$DOCKER_CONFIG"
+          mkdir -p "$daemon" "$DOCKER_CONFIG" "$EVIDENCE"
+          printf '{}\n' > "$DOCKER_CONFIG/config.json"
+          printf '{}\n' > "$daemon/config.json"
+          echo "owned=true" >> "$GITHUB_OUTPUT"
+          sudo -n nohup dockerd \
+            --config-file="$daemon/config.json" \
+            --data-root="$daemon/data" --exec-root="$daemon/exec" \
+            --pidfile="$daemon/daemon.pid" --host="$DOCKER_HOST" \
+            --bridge=none --iptables=false --ip6tables=false --ip-masq=false \
+            --storage-driver=overlay2 > "$EVIDENCE/daemon.log" 2>&1 &
+          for attempt in $(seq 1 30); do
+            if docker info > /dev/null 2>&1; then exit 0; fi
+            sleep 1
+          done
+          echo "专用 Docker daemon 未就绪" >&2
+          exit 1
+      - name: 按固定 digest 验收原生模块、登录、数据和 MCP
+        run: node scripts/verify-release-gate4.mjs install --platform "$PLATFORM" --manifest "$RUNNER_TEMP/gate4-manifest/manifest.json" --output "$EVIDENCE"
+      - name: 停止本轮专用 daemon
+        if: always() && steps.daemon.outputs.owned == 'true'
+        run: |
+          mkdir -p "$EVIDENCE"
+          sudo -n python3 - "$RUNNER_TEMP/gate4-docker" "$EVIDENCE/daemon-cleanup.json" <<'PY'
+          import json, pathlib, signal, sys, time, os
+          root, output = map(pathlib.Path, sys.argv[1:])
+          result = {"status": "not_started", "data_root": str(root / "data")}
+          try:
+              pidfile = root / "daemon.pid"
+              if pidfile.exists():
+                  pid = int(pidfile.read_text().strip())
+                  assert pid > 1
+                  command = pathlib.Path(f"/proc/{pid}/cmdline").read_bytes().split(b"\0")
+                  assert os.fsencode(f"--data-root={root / 'data'}") in command, "daemon 归属不匹配"
+                  os.kill(pid, signal.SIGTERM)
+                  for _ in range(30):
+                      if not pathlib.Path(f"/proc/{pid}").exists():
+                          break
+                      time.sleep(1)
+                  else:
+                      raise RuntimeError("daemon 未按时退出")
+                  result["status"] = "passed"
+          except Exception as error:
+              result.update(status="failed", error=str(error))
+          output.write_text(json.dumps(result, indent=2) + "\n")
+          sys.exit(1 if result["status"] == "failed" else 0)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: gate4-install-${{ matrix.arch }}
+          path: ${{ env.EVIDENCE }}/
+          retention-days: 30
+          if-no-files-found: error
 
   release:
     name: 创建 GitHub Release
-    runs-on: ubuntu-latest
-    needs: [merge]
+    runs-on: ubuntu-24.04
+    needs: [merge, install]
     permissions:
       contents: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
 
       - name: 选择 Release Notes
         id: release-notes
