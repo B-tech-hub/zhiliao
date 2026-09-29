@@ -1,0 +1,53 @@
+{
+  "recorded_at": "2026-09-29T13:54:05.857711+00:00",
+  "head": "82b1e5a1b98d4b687d8604a84c47c8ec416bf818",
+  "branch": "candidate/0.6.1-baseline",
+  "scope": "安装预览测试局部预算修复，工作树未提交；Windows 本机定向验证。",
+  "input_files": {
+    "tests/config/smoke-fresh-install.test.ts": {
+      "before_sha256": "72eb1bc1b8d211c012cee6e47174044a8b13c26591d0f80cce5f72684463a0ab",
+      "after_sha256": "e11145af92dcecf3a34699fca2d9e5774497c36e7392b2b42ff06675b2f5b6cc"
+    },
+    "scripts/smoke-fresh-install.ps1": {
+      "before_sha256": "9bb09cfd1da7ee570108bcda51691c4e82134e64f2aac6a3e50934f4ef5ca454",
+      "after_sha256": "9bb09cfd1da7ee570108bcda51691c4e82134e64f2aac6a3e50934f4ef5ca454"
+    },
+    "vitest.config.mts": {
+      "before_sha256": "386c7045e405d0855313ad030d87e72394cea3926ff1c2a80a2285895524c4d3",
+      "after_sha256": "386c7045e405d0855313ad030d87e72394cea3926ff1c2a80a2285895524c4d3"
+    },
+    ".github/workflows/ci.yml": {
+      "before_sha256": "7428f5cac57922f89d33332118190d3936d332001d53e2533f9184de723c7f17",
+      "after_sha256": "7428f5cac57922f89d33332118190d3936d332001d53e2533f9184de723c7f17"
+    },
+    ".github/workflows/release.yml": {
+      "before_sha256": "e9bd788ebc06d6ecf82c6f29ae1ed8b93d18cc616d2d1b8d2103db58d2be1076",
+      "after_sha256": "e9bd788ebc06d6ecf82c6f29ae1ed8b93d18cc616d2d1b8d2103db58d2be1076"
+    },
+    "package.json": {
+      "before_sha256": "c7264a2aa0b60f44d7991982049b8fe946228f9a2b99aea07122741765367629",
+      "after_sha256": "c7264a2aa0b60f44d7991982049b8fe946228f9a2b99aea07122741765367629"
+    },
+    "package-lock.json": {
+      "before_sha256": "ec7fc3bd5aae1c8cec50723eb69678bfc360c998b154d4d9c6d723a0cfe1564a",
+      "after_sha256": "ec7fc3bd5aae1c8cec50723eb69678bfc360c998b154d4d9c6d723a0cfe1564a"
+    }
+  },
+  "test_budget_ms": 15000,
+  "child_process_timeout_ms": 10000,
+  "tests": {
+    "passed": 11,
+    "failed": 0,
+    "skipped": 0
+  },
+  "test_command_duration_seconds": 4.969,
+  "eslint_command_duration_seconds": 2.469,
+  "child_process_duration_ms": {
+    "min": 322.8835,
+    "max": 397.9431,
+    "default_version": 389.2411
+  },
+  "observer": "临时 NODE_OPTIONS --require；返回原 spawnSync 结果，仅记录 preview.ps1 元数据。计时包含读取参数 JSON 的少量开销。",
+  "output_capture": "tests-output.txt 与 eslint-output.txt 为各命令 stdout 字节后接 stderr 字节，非交错时序日志；按字节复制。",
+  "limits": "未复现 Linux 原超时，未提交、推送或运行新远端 CI；旧失败和门禁 4–6 状态保持。"
+}

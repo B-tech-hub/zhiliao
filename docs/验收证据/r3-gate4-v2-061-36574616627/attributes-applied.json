@@ -1,0 +1,28 @@
+{
+  "captured_at": "2026-09-29T13:18:57.806570+00:00",
+  "attribute_sha256": "ef627801675bf3a290d7634b312ba92ebdeebd34e67add9332e076663f2b3bd9",
+  "target_matches": true,
+  "raw_files": [
+    {
+      "path": "docs/验收证据/r3-gate4-runner-context-20260929-a/bash-init.json",
+      "text": "unset",
+      "worktree_blob": "fc0ff07d9e8680f643e5735b6ee94b789826b72a",
+      "filtered_blob": "fc0ff07d9e8680f643e5735b6ee94b789826b72a",
+      "sha256": "77763b2fb7e3bfba2863365d646d00ab2ecd3512fee72e4610cac7d6dd4452ca"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-runner-context-20260929-a/checks.json",
+      "text": "unset",
+      "worktree_blob": "118d3abc9bf2b92873cf21771fd2351d5b2f91ab",
+      "filtered_blob": "118d3abc9bf2b92873cf21771fd2351d5b2f91ab",
+      "sha256": "8e61037068f4694b459368fe053e987a35dc8c3d5e7a0d13a17e14963453c4c1"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-runner-context-20260929-a/tool.json",
+      "text": "unset",
+      "worktree_blob": "abb8d885b7310366c6e8e9c9cd9fc2215ee1695e",
+      "filtered_blob": "abb8d885b7310366c6e8e9c9cd9fc2215ee1695e",
+      "sha256": "3e72595f46307e7db340599144ac26dd6b3034ffc1bc0d796f8e7b75b9707847"
+    }
+  ]
+}

@@ -90,4 +90,8 @@ CI 在原四条门禁前增加版本核对。Release 的 `validate` job 使用 N
 
 修改此类路径时，先运行 `release-gate4.test.ts`、`release-version.test.ts` 的串行局部回归，并用理解 Actions 上下文的校验器复核；普通 YAML 解析不能替代。该次使用校验过下载哈希的 `actionlint 1.7.7 -shellcheck= -pyflakes= -no-color .github/workflows/release.yml`，另对初始化片段做 Bash 语法及临时环境验证，见[修复证据](docs/验收证据/r3-gate4-runner-context-20260929-a/README.md)。这是本地验证，尚未提交或推送；新的候选 CI 与 [R 阶段](docs/R3门禁4环境调查与验收计划-2026-09-29.md)另行确认。真实镜像构建、GHCR 取用、双架构安装、RC 和正式发布仍未完成，当前目标 0.6.1 仍未发布。
 
+后续 [V2](docs/验收证据/r3-gate4-v2-061-36574616627/README.md) 已获准执行：修复、旧证据和准备材料共 55 路径提交为 `82b1e5a1b98d4b687d8604a84c47c8ec416bf818` 并一次推送；三份原始 JSON 通过精确 `-text` 规则保留 Git 字节。新 CI 的 gate4/版本测试通过，但安装预览用例超过 5000 ms，使全量测试为 880/1/28，构建未执行。未自动重跑；后续超时预算修复与 CI 按新范围确认。上段“尚未提交”只描述本地修复当轮状态，不代表 V2 当前状态，R 仍未执行。
+
 安装冒烟默认读取脚本所属仓库的包版本。`-PrintConfig` 仅预览；需验证实际 RC 或复用旧版时，用 `-Image ghcr.io/b-tech-hub/zhiliao:0.6.1-rc1` 或明确的固定版本/digest。拒绝 `latest`、`0.6` 等浮动引用；真正运行容器仍按项目验证规则另行安排。
+
+安装预览配置测试会启动 PowerShell 子进程，其进程上限为 10 秒；对应 11 个用例单独采用 15 秒外层预算，为进程启动、快照和断言保留开销，不修改全局 Vitest 超时或加入重试。该修复已在本机通过 11 项定向回归，见[局部记录](docs/验收证据/r3-gate4-preview-timeout-20260929-a/README.md)；尚未提交或推送，不将其改记为旧 V2 CI 成功。

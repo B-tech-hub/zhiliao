@@ -1,0 +1,60 @@
+{
+  "status": "failed",
+  "phase": "V2",
+  "captured_at": "2026-09-29T13:30:02.268754+00:00",
+  "candidate": "82b1e5a1b98d4b687d8604a84c47c8ec416bf818",
+  "tree": "324efa98630217a18b019f9dc6d2f1dd4be81a9e",
+  "parent": "321f770b523773e3f93a56dcf4fd2b1f78213ca5",
+  "pr": 12,
+  "pr_base": "6ee67532deed37fda6cc98962e8df76c98659890",
+  "ci_run_id": 36574616627,
+  "ci_run_attempt": 1,
+  "ci_checkout": "a3390562caa032aabe893a34321131060540705f",
+  "checkout_parents": [
+    "6ee67532deed37fda6cc98962e8df76c98659890",
+    "82b1e5a1b98d4b687d8604a84c47c8ec416bf818"
+  ],
+  "checkout_tree_equals_candidate": true,
+  "commits_created": 1,
+  "pushes_executed": 1,
+  "approved_paths": 55,
+  "git_raw_evidence_preserved": true,
+  "tests": {
+    "passed": 880,
+    "failed": 1,
+    "skipped": 28,
+    "files_passed": 64,
+    "files_failed": 1,
+    "files_skipped": 3
+  },
+  "checks": {
+    "install": "success",
+    "version": "success",
+    "design": "success",
+    "lint": "success",
+    "tests": "failure",
+    "build": "skipped"
+  },
+  "job_started_at": "2026-09-29T13:23:04Z",
+  "job_completed_at": "2026-09-29T13:24:04Z",
+  "platform": {
+    "os": "Ubuntu 24.04.5 LTS",
+    "runner_image": "20260920.314.1",
+    "architecture": "x64，由 setup-node 工具路径与缓存 key 佐证",
+    "node": "22.23.2",
+    "npm": "10.9.8",
+    "npm_cache": "restored"
+  },
+  "local_regressions": "复用旧 64/0/0；本轮未重跑",
+  "remote_release_observation": "同候选查询未发现 Release run，不等于 Release 验证通过。",
+  "failure": "安装预览默认版本用例 5244 ms，触发 5000 ms 测试超时。",
+  "rerun": false,
+  "cancel": false,
+  "merge_main": false,
+  "tag": false,
+  "release": false,
+  "gate4": "open",
+  "gate5": "open",
+  "gate6": "open",
+  "scope_notes": "仅提交/推送/观察与失败归档；失败后没有修改测试或追加提交。"
+}

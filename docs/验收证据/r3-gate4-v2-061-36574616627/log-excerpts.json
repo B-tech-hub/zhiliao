@@ -1,0 +1,94 @@
+{
+  "checkout": {
+    "sha": "a3390562caa032aabe893a34321131060540705f",
+    "command_line": 121,
+    "lines": [
+      "Lint、测试与构建\tRun actions/checkout@v4\t2026-09-29T13:23:08.2118370Z [command]/usr/bin/git log -1 --format=%H",
+      "Lint、测试与构建\tRun actions/checkout@v4\t2026-09-29T13:23:08.2141056Z a3390562caa032aabe893a34321131060540705f",
+      "Lint、测试与构建\tRun actions/setup-node@v4\t﻿2026-09-29T13:23:08.2437618Z ##[group]Run actions/setup-node@v4"
+    ],
+    "tree": "324efa98630217a18b019f9dc6d2f1dd4be81a9e",
+    "parents": [
+      "6ee67532deed37fda6cc98962e8df76c98659890",
+      "82b1e5a1b98d4b687d8604a84c47c8ec416bf818"
+    ]
+  },
+  "observations": [
+    {
+      "line": 4,
+      "text": "Lint、测试与构建\tSet up job\t2026-09-29T13:23:05.1994598Z Version: 20260828.587"
+    },
+    {
+      "line": 10,
+      "text": "Lint、测试与构建\tSet up job\t2026-09-29T13:23:05.1999229Z ##[group]Operating System"
+    },
+    {
+      "line": 11,
+      "text": "Lint、测试与构建\tSet up job\t2026-09-29T13:23:05.1999802Z Ubuntu"
+    },
+    {
+      "line": 16,
+      "text": "Lint、测试与构建\tSet up job\t2026-09-29T13:23:05.2002490Z Image: ubuntu-24.04"
+    },
+    {
+      "line": 17,
+      "text": "Lint、测试与构建\tSet up job\t2026-09-29T13:23:05.2003065Z Version: 20260920.314.1"
+    },
+    {
+      "line": 18,
+      "text": "Lint、测试与构建\tSet up job\t2026-09-29T13:23:05.2004456Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260920.314/images/ubuntu/Ubuntu2404-Readme.md"
+    },
+    {
+      "line": 132,
+      "text": "Lint、测试与构建\tRun actions/setup-node@v4\t2026-09-29T13:23:08.3842954Z (node:2267) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead."
+    },
+    {
+      "line": 135,
+      "text": "Lint、测试与构建\tRun actions/setup-node@v4\t2026-09-29T13:23:08.7535900Z node: v22.23.2"
+    },
+    {
+      "line": 136,
+      "text": "Lint、测试与构建\tRun actions/setup-node@v4\t2026-09-29T13:23:08.7537638Z npm: 10.9.8"
+    },
+    {
+      "line": 141,
+      "text": "Lint、测试与构建\tRun actions/setup-node@v4\t2026-09-29T13:23:09.0426928Z Cache hit for: node-cache-Linux-x64-npm-a80d524b827bf84fc72ed3d4dc708a032dcf4069998ffc465b83a90e03c197e2"
+    },
+    {
+      "line": 142,
+      "text": "Lint、测试与构建\tRun actions/setup-node@v4\t2026-09-29T13:23:09.0517700Z (node:2267) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities."
+    },
+    {
+      "line": 149,
+      "text": "Lint、测试与构建\tRun actions/setup-node@v4\t2026-09-29T13:23:12.7585894Z Cache restored successfully"
+    },
+    {
+      "line": 150,
+      "text": "Lint、测试与构建\tRun actions/setup-node@v4\t2026-09-29T13:23:12.7694508Z Cache restored from key: node-cache-Linux-x64-npm-a80d524b827bf84fc72ed3d4dc708a032dcf4069998ffc465b83a90e03c197e2"
+    },
+    {
+      "line": 161,
+      "text": "Lint、测试与构建\t安装依赖\t2026-09-29T13:23:24.9596845Z 33 moderate severity vulnerabilities"
+    },
+    {
+      "line": 206,
+      "text": "Lint、测试与构建\t单元测试（Vitest）\t2026-09-29T13:23:30.6966213Z   REQUIRE_DOCKER_COMPOSE: 1"
+    },
+    {
+      "line": 344,
+      "text": "Lint、测试与构建\t单元测试（Vitest）\t2026-09-29T13:24:02.0958191Z ^[[31m⎯⎯⎯⎯⎯⎯⎯^[[39m^[[1m^[[41m Failed Tests 1 ^[[49m^[[22m^[[31m⎯⎯⎯⎯⎯⎯⎯^[[39m"
+    },
+    {
+      "line": 360,
+      "text": "Lint、测试与构建\t单元测试（Vitest）\t2026-09-29T13:24:02.1020838Z ^[[2m Test Files ^[[22m ^[[1m^[[31m1 failed^[[39m^[[22m^[[2m | ^[[22m^[[1m^[[32m64 passed^[[39m^[[22m^[[2m | ^[[22m^[[33m3 skipped^[[39m^[[90m (68)^[[39m"
+    },
+    {
+      "line": 361,
+      "text": "Lint、测试与构建\t单元测试（Vitest）\t2026-09-29T13:24:02.1025278Z ^[[2m      Tests ^[[22m ^[[1m^[[31m1 failed^[[39m^[[22m^[[2m | ^[[22m^[[1m^[[32m880 passed^[[39m^[[22m^[[2m | ^[[22m^[[33m28 skipped^[[39m^[[90m (909)^[[39m"
+    },
+    {
+      "line": 363,
+      "text": "Lint、测试与构建\t单元测试（Vitest）\t2026-09-29T13:24:02.1027322Z ^[[2m   Duration ^[[22m 30.97s^[[2m (transform 3.35s, setup 669ms, import 28.34s, tests 40.90s, environment 6.58s)^[[22m"
+    }
+  ]
+}

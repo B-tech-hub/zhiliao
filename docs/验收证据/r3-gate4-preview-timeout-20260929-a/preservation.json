@@ -1,0 +1,157 @@
+{
+  "recorded_at": "2026-09-29T13:55:46.088782+00:00",
+  "snapshot": "before.json",
+  "original_files_checked": 1752,
+  "changed_existing_files": {
+    "CONTRIBUTING.md": {
+      "before_sha256": "e16a0dd02a022510c8e6c5e135b903c5eb62e59163db56a09dedfebbb6b49ded",
+      "after_sha256": "13d4de52eaeddf4e4831632108bb3be5adb43edeae22690cdd13e4ae956f701a"
+    },
+    "_bmad-output/implementation-artifacts/spec-r3-gate4-distribution.md": {
+      "before_sha256": "35af7f74bf2d3b4f08a8989b67b0c2fc9a2f41aa50d3f5a8b6d92901f85ab736",
+      "after_sha256": "b5a2ebaf4e3c1a48cc4693d550a4736444eca92a9a21b3dddbd64b08f0024571"
+    },
+    "docs/0.6.1候选定稿-2026-09-28.md": {
+      "before_sha256": "5a83f695d025259acba9a2089a708f3689d58e3b44e69cfc928e61ae72444602",
+      "after_sha256": "6230613ed05abb061b5a71184c11c5fa10f5ee604557ae9a8c4088f08e4753ca"
+    },
+    "docs/R3门禁4修复后候选推送与PR-CI执行单-2026-09-29.md": {
+      "before_sha256": "65f05732a0fc050b3541be581a944c40596b6e78eed98237cf510332ad1cea75",
+      "after_sha256": "bba4c5e02b8b99056d207349798bce2a2cae07b94da1b0b78b27a0f9be6803cc"
+    },
+    "docs/R3门禁4环境调查与验收计划-2026-09-29.md": {
+      "before_sha256": "6025d2157820b591371d52e9a1f62e4a065a1ab8cea946bff22ccd420f97dc37",
+      "after_sha256": "4a97c1b0155e6b0a2d6bf9d11e3af65aabff8c091eeb0c1881e7ace1b7b52d8f"
+    },
+    "docs/README.md": {
+      "before_sha256": "c3acf54e66742d0856de765b3ed0e421bfd74ea4272daafc75270ca9cf650711",
+      "after_sha256": "dda64300fe0caaad675980932477cd820c09f931fe596b6c530486d7b5b04320"
+    },
+    "docs/releases/v0.6.1.md": {
+      "before_sha256": "9c9f1a9f1cb2ec2214b37c72067ee70de180f334f24c4838776a79f4e3569c95",
+      "after_sha256": "971f9ba543be58d895fe679bef278454b9bfbbc0e0c7027fb28ab4832b654051"
+    },
+    "docs/产品规划/开源发布范围与执行清单-2026-09-13.md": {
+      "before_sha256": "f7ad36c3df8aaa741ec0a45fe5be18f59550018d79a5e32c41e93fd9b761778c",
+      "after_sha256": "c541fc69ee4c101b617e3cc654954822078335ff71175f8cb6789f25879d5d83"
+    },
+    "tests/config/smoke-fresh-install.test.ts": {
+      "before_sha256": "72eb1bc1b8d211c012cee6e47174044a8b13c26591d0f80cce5f72684463a0ab",
+      "after_sha256": "e11145af92dcecf3a34699fca2d9e5774497c36e7392b2b42ff06675b2f5b6cc"
+    }
+  },
+  "missing_original_files": [],
+  "unexpected_changes": [],
+  "all_new_paths_within": "docs/验收证据/r3-gate4-preview-timeout-20260929-a/",
+  "old_evidence_files_checked": 1050,
+  "old_evidence_unchanged": true,
+  "old_ci_log_sha256": "dcc06101e168474e8025495aa1ca0c2dd6093cdcab8d82460120fe56902a37f3",
+  "head": "82b1e5a1b98d4b687d8604a84c47c8ec416bf818",
+  "head_unchanged": true,
+  "index_sha256": "5dc9809431b89ec36ec86a726e7d09cef21d01be6071b919810ba6fe94cc5c9b",
+  "index_unchanged": true,
+  "staged_paths": [],
+  "baseline_commit": "549f45200081f9c50b3d658e4c8d1a7c695bde04",
+  "frozen_sha256": "e5b55957c1cb5577da612a30348600df27b94db28aeb0327bad081ac80eac3d6",
+  "frozen_unchanged": true,
+  "spec_status": "in-progress",
+  "only_test_changes": "新增局部 15000 ms 常量及两处 it.each 超时参数；移除这三处差异后与修改前字节完全一致。",
+  "changed_source_and_docs_utf8_lf": true,
+  "new_comment_gb2312_encodable": true,
+  "copied_raw_files_sha256": {
+    "tests-after.json": "bb9233155a080686c68cf26d88d5a577574a646827ede8d21a2f3e480777db01",
+    "tests-output.txt": "e47f0783c46f2ccf7153ac0a5ce231b372fc97e8aa4bdf996ceb1734d43a6a29",
+    "eslint-output.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "checks.json": "1694a3ec4c92a01b2d4121a1834bb9c87d9d1a2d8560b1b11dd38d422a94c0da",
+    "preview-processes.jsonl": "4549ac15e4ae9647b30f0313bcb348aea493e1d8cfa526b5928aefced490332c",
+    "observe-preview.cjs": "f6094029ba558308ed7cc63b098004566bdc6400de51b94dc6fcaa6f70d75e9a",
+    "before.json": "a9be0255f58972d15002acbe5ed59ec010263d617e6a9cfdef8f23e41654b874"
+  },
+  "local_links_checked": [
+    {
+      "from": "CONTRIBUTING.md",
+      "target": "docs/验收证据/r3-gate4-preview-timeout-20260929-a/README.md"
+    },
+    {
+      "from": "_bmad-output/implementation-artifacts/spec-r3-gate4-distribution.md",
+      "target": "../../docs/验收证据/r3-gate4-preview-timeout-20260929-a/README.md"
+    },
+    {
+      "from": "docs/0.6.1候选定稿-2026-09-28.md",
+      "target": "验收证据/r3-gate4-preview-timeout-20260929-a/README.md"
+    },
+    {
+      "from": "docs/R3门禁4修复后候选推送与PR-CI执行单-2026-09-29.md",
+      "target": "验收证据/r3-gate4-preview-timeout-20260929-a/README.md"
+    },
+    {
+      "from": "docs/R3门禁4环境调查与验收计划-2026-09-29.md",
+      "target": "验收证据/r3-gate4-preview-timeout-20260929-a/README.md"
+    },
+    {
+      "from": "docs/README.md",
+      "target": "验收证据/r3-gate4-preview-timeout-20260929-a/README.md"
+    },
+    {
+      "from": "docs/releases/v0.6.1.md",
+      "target": "../验收证据/r3-gate4-preview-timeout-20260929-a/README.md"
+    },
+    {
+      "from": "docs/产品规划/开源发布范围与执行清单-2026-09-13.md",
+      "target": "../验收证据/r3-gate4-preview-timeout-20260929-a/README.md"
+    },
+    {
+      "from": "docs/验收证据/r3-gate4-preview-timeout-20260929-a/README.md",
+      "target": "inputs.json"
+    },
+    {
+      "from": "docs/验收证据/r3-gate4-preview-timeout-20260929-a/README.md",
+      "target": "../r3-gate4-v2-061-36574616627/README.md"
+    },
+    {
+      "from": "docs/验收证据/r3-gate4-preview-timeout-20260929-a/README.md",
+      "target": "../../../tests/config/smoke-fresh-install.test.ts"
+    },
+    {
+      "from": "docs/验收证据/r3-gate4-preview-timeout-20260929-a/README.md",
+      "target": "test-change.patch"
+    },
+    {
+      "from": "docs/验收证据/r3-gate4-preview-timeout-20260929-a/README.md",
+      "target": "checks.json"
+    },
+    {
+      "from": "docs/验收证据/r3-gate4-preview-timeout-20260929-a/README.md",
+      "target": "tests-after.json"
+    },
+    {
+      "from": "docs/验收证据/r3-gate4-preview-timeout-20260929-a/README.md",
+      "target": "tests-output.txt"
+    },
+    {
+      "from": "docs/验收证据/r3-gate4-preview-timeout-20260929-a/README.md",
+      "target": "eslint-output.txt"
+    },
+    {
+      "from": "docs/验收证据/r3-gate4-preview-timeout-20260929-a/README.md",
+      "target": "observe-preview.cjs"
+    },
+    {
+      "from": "docs/验收证据/r3-gate4-preview-timeout-20260929-a/README.md",
+      "target": "preview-processes.jsonl"
+    },
+    {
+      "from": "docs/验收证据/r3-gate4-preview-timeout-20260929-a/README.md",
+      "target": "before.json"
+    },
+    {
+      "from": "docs/验收证据/r3-gate4-preview-timeout-20260929-a/README.md",
+      "target": "preservation.json"
+    },
+    {
+      "from": "docs/验收证据/r3-gate4-preview-timeout-20260929-a/README.md",
+      "target": "files.sha256.json"
+    }
+  ],
+  "verification_scope": "本次仅文件收尾核对，复用已有 11 项及 ESLint 结果，没有重跑测试。"
+}

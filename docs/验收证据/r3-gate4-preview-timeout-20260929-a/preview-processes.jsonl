@@ -1,0 +1,11 @@
+{"image":"default","executable":"powershell.exe","duration_ms":389.2411,"timeout_ms":10000,"status":0,"signal":null,"error_code":null}
+{"image":"ghcr.io/b-tech-hub/zhiliao:0.6.0","executable":"powershell.exe","duration_ms":324.2215,"timeout_ms":10000,"status":0,"signal":null,"error_code":null}
+{"image":"ghcr.io/b-tech-hub/zhiliao:1.2.3-rc1","executable":"powershell.exe","duration_ms":322.8835,"timeout_ms":10000,"status":0,"signal":null,"error_code":null}
+{"image":"ghcr.io/b-tech-hub/zhiliao:1.2.3-rc.1","executable":"powershell.exe","duration_ms":331.3254,"timeout_ms":10000,"status":0,"signal":null,"error_code":null}
+{"image":"ghcr.io/b-tech-hub/zhiliao@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","executable":"powershell.exe","duration_ms":331.2218,"timeout_ms":10000,"status":0,"signal":null,"error_code":null}
+{"image":"ghcr.io/b-tech-hub/zhiliao:latest","executable":"powershell.exe","duration_ms":397.9431,"timeout_ms":10000,"status":1,"signal":null,"error_code":null}
+{"image":"ghcr.io/b-tech-hub/zhiliao:0.6","executable":"powershell.exe","duration_ms":365.5565,"timeout_ms":10000,"status":1,"signal":null,"error_code":null}
+{"image":"ghcr.io/another/zhiliao:1.2.3","executable":"powershell.exe","duration_ms":348.9865,"timeout_ms":10000,"status":1,"signal":null,"error_code":null}
+{"image":"ghcr.io/b-tech-hub/zhiliao@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","executable":"powershell.exe","duration_ms":355.205,"timeout_ms":10000,"status":1,"signal":null,"error_code":null}
+{"image":"ghcr.io/b-tech-hub/zhiliao:1.2.3-rc01","executable":"powershell.exe","duration_ms":367.0431,"timeout_ms":10000,"status":1,"signal":null,"error_code":null}
+{"image":"ghcr.io/b-tech-hub/zhiliao:1.2.3\n","executable":"powershell.exe","duration_ms":371.468,"timeout_ms":10000,"status":1,"signal":null,"error_code":null}
