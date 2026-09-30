@@ -5,12 +5,13 @@ import { ControlledReporter, ControlledSequencer } from "./scripts/pwsh-preview-
 
 const group = process.env.ZHILIAO_PREVIEW_GROUP;
 const output = process.env.ZHILIAO_PREVIEW_CONTROL_DIR;
-if (!group || !["A", "B", "C", "D"].includes(group) || !output || !path.isAbsolute(output)) {
+if (!group || !["A", "B", "D"].includes(group) || !output || !path.isAbsolute(output)) {
   throw new Error("缺少受控实验身份或仓库外的诊断目录");
 }
 
 export default defineConfig({
   ...base,
+  cacheDir: path.join(output, "vite-cache"),
   test: {
     ...base.test,
     ...(group === "D" ? {} : { include: ["tests/config/smoke-fresh-install.test.ts"], maxWorkers: 1, fileParallelism: false }),
