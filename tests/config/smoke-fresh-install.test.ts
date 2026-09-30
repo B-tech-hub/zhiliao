@@ -37,20 +37,62 @@ function snapshotTree(root: string) {
 // 本机可明确跳过缺少 PowerShell 的环境；CI 必须执行，不能静默丢失这组门禁。
 describe.skipIf(!powershell && !process.env.CI)("安装冒烟预览：参数与零部署副作用", () => {
   let directory = "";
+  let traceFile: string | undefined;
+  let traceSequence = 0;
+
+  function trace(entry: Record<string, unknown>) {
+    if (!traceFile) return;
+    fs.appendFileSync(traceFile, JSON.stringify({ probe: "DEBUG-pwsh-20260930", utc: new Date().toISOString(), ...entry }) + "\n");
+  }
 
   beforeEach(() => {
     if (!powershell) throw new Error(`预览回归需要 ${shellName}；CI 不允许跳过，请安装 PowerShell 并加入 PATH`);
     directory = fs.mkdtempSync(path.join(os.tmpdir(), "zhiliao-smoke-preview-"));
+    const traceRoot = process.env.ZHILIAO_PREVIEW_TRACE_DIR;
+    traceFile = undefined;
+    if (traceRoot) {
+      const resolvedTrace = path.resolve(traceRoot);
+      const relative = path.relative(repository, resolvedTrace);
+      if (!path.isAbsolute(traceRoot) || (!relative.startsWith(`..${path.sep}`) && relative !== ".." && !path.isAbsolute(relative))) {
+        throw new Error("诊断目录必须是仓库外的绝对路径");
+      }
+      fs.mkdirSync(resolvedTrace, { recursive: true });
+      traceFile = path.join(resolvedTrace, `preview-${process.pid}-${++traceSequence}.jsonl`);
+      if (fs.existsSync(traceFile)) throw new Error("诊断记录已存在，拒绝覆盖");
+    }
     const checkout = path.join(directory, "checkout with spaces");
     for (const folder of ["scripts", "docs"]) fs.mkdirSync(path.join(checkout, folder), { recursive: true });
     fs.mkdirSync(path.join(directory, "outside"));
     fs.mkdirSync(path.join(directory, "temp"));
     fs.copyFileSync(path.join(repository, "scripts/smoke-fresh-install.ps1"), path.join(checkout, "scripts/smoke-fresh-install.ps1"));
+    if (traceFile) {
+      const temporaryTarget = path.join(checkout, "scripts/smoke-fresh-install.ps1");
+      let targetText = fs.readFileSync(temporaryTarget, "utf8");
+      for (const [anchor, marked] of [
+        ['$repoRoot = (Resolve-Path', "Write-DiagnosticStage 'target-enter'\n$repoRoot = (Resolve-Path"],
+        ['$packageVersion = (Get-Content', "Write-DiagnosticStage 'package-read-before'\n$packageVersion = (Get-Content"],
+        ["$stableVersionPattern = '", "Write-DiagnosticStage 'package-read-after'\n$stableVersionPattern = '"],
+        ['if ($PrintConfig) {', "if ($PrintConfig) {\n  Write-DiagnosticStage 'print-config-enter'"],
+        ['  exit 0', "  Write-DiagnosticStage 'print-config-exit'\n  exit 0"],
+      ]) {
+        if (targetText.indexOf(anchor) < 0 || targetText.indexOf(anchor) !== targetText.lastIndexOf(anchor)) {
+          throw new Error(`诊断锚点不唯一：${anchor}`);
+        }
+        targetText = targetText.replace(anchor, marked);
+      }
+      fs.writeFileSync(temporaryTarget, targetText);
+    }
     fs.writeFileSync(path.join(checkout, "package.json"), JSON.stringify({ version: fixtureVersion }));
     fs.writeFileSync(path.join(directory, "outside/package.json"), JSON.stringify({ version: "98.0.0" }));
     // 在独立进程中拦截 Docker，即使预览提前退出失效，也不会接触真实容器。
     fs.writeFileSync(path.join(directory, "preview.ps1"), [
       "param([string]$TargetScript, [string]$ArgumentsFile, [string]$DockerLog)",
+      "function Write-DiagnosticStage([string]$Stage) {",
+      "  if ([string]::IsNullOrEmpty($env:ZHILIAO_PREVIEW_TRACE_FILE)) { return }",
+      "  $record = '{\"probe\":\"DEBUG-pwsh-20260930\",\"stage\":\"' + $Stage + '\",\"ticks\":' + [Diagnostics.Stopwatch]::GetTimestamp() + ',\"frequency\":' + [Diagnostics.Stopwatch]::Frequency + ',\"utc\":\"' + [DateTime]::UtcNow.ToString('o') + '\"}'",
+      "  [IO.File]::AppendAllText($env:ZHILIAO_PREVIEW_TRACE_FILE, $record + [Environment]::NewLine)",
+      "}",
+      "Write-DiagnosticStage 'wrapper-enter'",
       '$ErrorActionPreference = "Stop"',
       "[Console]::OutputEncoding = [Text.UTF8Encoding]::new($false)",
       "$global:PreviewDockerLog = $DockerLog",
@@ -59,8 +101,11 @@ describe.skipIf(!powershell && !process.env.CI)("安装冒烟预览：参数与�
       '  throw "Docker is forbidden in preview tests."',
       "}",
       "$parameters = @{}",
+      "Write-DiagnosticStage 'arguments-read-before'",
       "$config = Get-Content -Raw -Encoding UTF8 -LiteralPath $ArgumentsFile | ConvertFrom-Json",
+      "Write-DiagnosticStage 'arguments-read-after'",
       "foreach ($property in $config.PSObject.Properties) { $parameters[$property.Name] = $property.Value }",
+      "Write-DiagnosticStage 'target-call-before'",
       "& $TargetScript @parameters",
       "exit $LASTEXITCODE",
       "",
@@ -82,6 +127,10 @@ describe.skipIf(!powershell && !process.env.CI)("安装冒烟预览：参数与�
     const argumentsFile = path.join(directory, "arguments.json");
     fs.writeFileSync(argumentsFile, JSON.stringify({ PrintConfig: true, KeepResources: true, Port: port, ...(image === undefined ? {} : { Image: image }) }));
     const before = snapshotTree(directory);
+    const started = performance.now();
+    trace({ stage: "parent-before-spawn", image: image ?? "default", timeout_ms: 10_000,
+      executable: powershell, loadavg: os.loadavg(), totalmem: os.totalmem(), freemem: os.freemem(),
+      available_parallelism: os.availableParallelism() });
     const result = spawnSync(powershell, [
       "-NoLogo", "-NoProfile", "-NonInteractive", "-ExecutionPolicy", "Bypass",
       "-File", path.join(directory, "preview.ps1"),
@@ -95,8 +144,14 @@ describe.skipIf(!powershell && !process.env.CI)("安装冒烟预览：参数与�
         TEMP: path.join(directory, "temp"), TMP: path.join(directory, "temp"), TMPDIR: path.join(directory, "temp"),
         npm_package_version: "99.0.0", APP_VERSION: "97.0.0",
         POWERSHELL_TELEMETRY_OPTOUT: "1", POWERSHELL_UPDATECHECK: "Off",
+        ...(traceFile ? { ZHILIAO_PREVIEW_TRACE_FILE: traceFile } : {}),
       },
     });
+    trace({ stage: "parent-after-spawn", duration_ms: performance.now() - started, status: result.status,
+      signal: result.signal, error_code: (result.error as NodeJS.ErrnoException | undefined)?.code ?? null, child_pid: result.pid,
+      stdout_bytes: Buffer.byteLength(result.stdout ?? ""), stderr_bytes: Buffer.byteLength(result.stderr ?? ""),
+      stdout_excerpt: (result.stdout ?? "").slice(0, 8192), stderr_excerpt: (result.stderr ?? "").slice(0, 8192),
+      loadavg: os.loadavg(), freemem: os.freemem() });
     expect(result.error).toBeUndefined();
     expect(fs.existsSync(path.join(directory, "docker-calls.txt")), "预览不得调用 Docker").toBe(false);
     expect(snapshotTree(directory), "预览不得创建资源或改写输入文件").toEqual(before);

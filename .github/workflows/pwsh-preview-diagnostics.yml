@@ -1,0 +1,50 @@
+name: PowerShell 预览定向诊断
+
+on:
+  push:
+    branches: [diagnostics/0.6.1-pwsh-preview-a]
+
+permissions:
+  contents: read
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: 准备诊断目录
+        shell: bash
+        run: mkdir -p "$RUNNER_TEMP/pwsh-preview-diagnostics"
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: 安装锁定依赖
+        timeout-minutes: 5
+        run: npm ci --no-audit --no-fund
+      - name: 现有 11 项预览测试与阶段计时
+        timeout-minutes: 5
+        env:
+          ZHILIAO_PREVIEW_TRACE_DIR: ${{ runner.temp }}/pwsh-preview-diagnostics
+        run: >-
+          node node_modules/vitest/vitest.mjs run tests/config/smoke-fresh-install.test.ts
+          --maxWorkers=1 --no-file-parallelism --reporter=json
+          --outputFile="$RUNNER_TEMP/pwsh-preview-diagnostics/vitest.json"
+      - name: 运行后读取 PowerShell 版本
+        if: ${{ always() }}
+        timeout-minutes: 1
+        shell: bash
+        run: >-
+          pwsh -NoLogo -NoProfile -NonInteractive -Command '$PSVersionTable | ConvertTo-Json -Compress'
+          > "$RUNNER_TEMP/pwsh-preview-diagnostics/powershell-version.json"
+      - name: 保留首次诊断资料
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: pwsh-preview-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/pwsh-preview-diagnostics
+          if-no-files-found: error
+          retention-days: 14
