@@ -1,0 +1,55 @@
+[
+  {
+    "label": "application-usage",
+    "argv": [
+      "rg",
+      "-n",
+      "-i",
+      "\\b(undici|jsdom|WebSocket|WebSocketStream|BalancedPool|setGlobalDispatcher|RetryAgent)\\b",
+      "src",
+      "tests",
+      "scripts",
+      "vitest.config.mts"
+    ],
+    "exit_code": 0,
+    "stdout": "tests\\components\\settings-panel-hydration.test.tsx:1:// @vitest-environment jsdom\ntests\\components\\quick-capture.test.tsx:1:// @vitest-environment jsdom\ntests\\components\\nav.test.tsx:1:// @vitest-environment jsdom\ntests\\components\\nav.test.tsx:64:    // jsdom 不跑 Tailwind，这里验的是\"没有把 label 写成 {!collapsed && ...}\"——\ntests\\components\\markdown-editor-security.test.tsx:1:// @vitest-environment jsdom\ntests\\components\\markdown-editor-security.test.tsx:105:    // jsdom 没有布局坐标；仅固定落点，不替换拖放解析、事务或内容过滤。\ntests\\components\\command-palette.test.tsx:1:// @vitest-environment jsdom\ntests\\components\\api-token-section.test.tsx:1:// @vitest-environment jsdom\ntests\\lib\\mermaid.test.ts:1:// @vitest-environment jsdom\ntests\\lib\\tiptap-security.test.ts:1:// @vitest-environment jsdom\n",
+    "stderr": ""
+  },
+  {
+    "label": "jsdom-websocket",
+    "argv": [
+      "rg",
+      "-n",
+      "undici|new WebSocket",
+      "node_modules/jsdom/lib/jsdom/living/websockets/WebSocket-impl.js"
+    ],
+    "exit_code": 0,
+    "stdout": "2:const { WebSocket } = require(\"undici\");\n54:      return new WebSocket(serializeURL(urlRecord), wsOptions);\n69:    // Set up event forwarding. We use `setTimeout()` to work around https://github.com/nodejs/undici/issues/4741 where\n70:    // undici fires events synchronously during `close()`, but the spec requires them to fire asynchronously.\n76:      // Capture readyState now, before setTimeout, because undici may transition to CLOSED before our setTimeout fires,\n93:        // Set readyState to CLOSED when firing the close event. We manage this ourselves because undici has bugs with\n94:        // readyState during close: https://github.com/nodejs/undici/issues/4742.\n130:    // Use captured readyState if available (workaround for undici bug #4742)\n156:      // Set readyState to CLOSING before calling undici's close(). We manage this ourselves because\n157:      // undici has bugs with readyState during close - see https://github.com/nodejs/undici/issues/4742\n182:      // Close without a code - undici doesn't allow reserved codes like 1001\n",
+    "stderr": ""
+  },
+  {
+    "label": "jsdom-balancedpool",
+    "argv": [
+      "rg",
+      "-n",
+      "BalancedPool",
+      "node_modules/jsdom/lib"
+    ],
+    "exit_code": 1,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "label": "ci-times",
+    "argv": [
+      "rg",
+      "-n",
+      "node:|npm:|audited .*packages|severity vulnerabilities|34 vulnerabilities",
+      "docs/验收证据/r3-gate4-final-061-36585198727/ci-log.txt",
+      "docs/验收证据/r3-gate4-main-061-36647162597/ci-log.stdout"
+    ],
+    "exit_code": 0,
+    "stdout": "docs/验收证据/r3-gate4-final-061-36585198727/ci-log.txt:132:Lint、测试与构建\tRun actions/setup-node@v4\t2026-09-29T14:46:43.2917669Z (node:2145) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.\ndocs/验收证据/r3-gate4-final-061-36585198727/ci-log.txt:135:Lint、测试与构建\tRun actions/setup-node@v4\t2026-09-29T14:46:43.6833002Z node: v22.23.2\ndocs/验收证据/r3-gate4-final-061-36585198727/ci-log.txt:136:Lint、测试与构建\tRun actions/setup-node@v4\t2026-09-29T14:46:43.6833794Z npm: 10.9.8\ndocs/验收证据/r3-gate4-final-061-36585198727/ci-log.txt:142:Lint、测试与构建\tRun actions/setup-node@v4\t2026-09-29T14:46:43.9692155Z (node:2145) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.\ndocs/验收证据/r3-gate4-final-061-36585198727/ci-log.txt:154:Lint、测试与构建\t安装依赖\t2026-09-29T14:47:01.1054024Z added 762 packages, and audited 763 packages in 15s\ndocs/验收证据/r3-gate4-final-061-36585198727/ci-log.txt:159:Lint、测试与构建\t安装依赖\t2026-09-29T14:47:01.2062963Z 33 moderate severity vulnerabilities\ndocs/验收证据/r3-gate4-final-061-36585198727/ci-log.txt:492:Lint、测试与构建\tPost Run actions/setup-node@v4\t2026-09-29T14:48:53.3356742Z (node:3598) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.\ndocs/验收证据/r3-gate4-main-061-36647162597/ci-log.stdout:116:Lint、测试与构建\tRun actions/setup-node@v4\t2026-09-29T23:49:00.9656918Z (node:2370) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.\ndocs/验收证据/r3-gate4-main-061-36647162597/ci-log.stdout:119:Lint、测试与构建\tRun actions/setup-node@v4\t2026-09-29T23:49:03.7065543Z node: v22.23.2\ndocs/验收证据/r3-gate4-main-061-36647162597/ci-log.stdout:120:Lint、测试与构建\tRun actions/setup-node@v4\t2026-09-29T23:49:03.7066237Z npm: 10.9.8\ndocs/验收证据/r3-gate4-main-061-36647162597/ci-log.stdout:131:Lint、测试与构建\t安装依赖\t2026-09-29T23:49:23.1442192Z added 762 packages, and audited 763 packages in 19s\ndocs/验收证据/r3-gate4-main-061-36647162597/ci-log.stdout:136:Lint、测试与构建\t安装依赖\t2026-09-29T23:49:23.2304778Z 34 vulnerabilities (33 moderate, 1 high)\ndocs/验收证据/r3-gate4-main-061-36647162597/ci-log.stdout:466:Lint、测试与构建\tPost Run actions/setup-node@v4\t2026-09-29T23:50:58.4344769Z (node:3775) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.\ndocs/验收证据/r3-gate4-main-061-36647162597/ci-log.stdout:469:Lint、测试与构建\tPost Run actions/setup-node@v4\t2026-09-29T23:50:59.1644835Z (node:3775) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.\n",
+    "stderr": ""
+  }
+]

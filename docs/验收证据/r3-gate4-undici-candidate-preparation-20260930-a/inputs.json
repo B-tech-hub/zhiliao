@@ -1,0 +1,1783 @@
+{
+  "purpose": "本轮待批准新候选的唯一精确输入，不包含未来运行结果",
+  "local_source_head": "41cf296d1d1ccc38d1b2f1b3335cc5b8ac4a4b81",
+  "new_commit_parent": "2ae66f5f3df6b0e7afa3bfa09bf601b18ea96a11",
+  "new_branch": "candidate/0.6.1-undici-7.29.1",
+  "path_count_including_self": 254,
+  "listed_file_count": 253,
+  "self_path": "docs/验收证据/r3-gate4-undici-candidate-preparation-20260930-a/inputs.json",
+  "self_hash_policy": "执行时单独哈希并记入外部记录；不写回自身",
+  "files": [
+    {
+      "path": "CHANGELOG.md",
+      "bytes": 40639,
+      "sha256": "91633789458166c3f718816846e99ae862111458a56fe33c064670aeec1d7dbf",
+      "raw_git_blob": "29b21857aad5a325de42fe5b5efc37001c1c6733",
+      "filtered_git_blob": "29b21857aad5a325de42fe5b5efc37001c1c6733"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/spec-r3-gate4-distribution.md",
+      "bytes": 24499,
+      "sha256": "58a8b1ef9a85633774e37ccf27dbee39532e21138aa53913f0de5565febd5041",
+      "raw_git_blob": "5154a405003476d66ab7628513f3874e5cec23b9",
+      "filtered_git_blob": "5154a405003476d66ab7628513f3874e5cec23b9"
+    },
+    {
+      "path": "docs/0.6.1候选定稿-2026-09-28.md",
+      "bytes": 12309,
+      "sha256": "1b5eb68b0614b1f7f403b6cf9d2da9a78e166c176ff2f88ca7c20203b7cfbad1",
+      "raw_git_blob": "2c805a9df678b92d0edfddbe27d602b973570905",
+      "filtered_git_blob": "2c805a9df678b92d0edfddbe27d602b973570905"
+    },
+    {
+      "path": "docs/R3主线新增high依赖调查-2026-09-30.md",
+      "bytes": 8186,
+      "sha256": "bb18136ad1be7385967ab975cd2654c0e884aa86374f5e976a5e85b29192058d",
+      "raw_git_blob": "b2f85084fb3eef910274f6cdf150b74e8df6aa72",
+      "filtered_git_blob": "b2f85084fb3eef910274f6cdf150b74e8df6aa72"
+    },
+    {
+      "path": "docs/R3门禁4Undici补丁候选与PR-CI执行单-2026-09-30.md",
+      "bytes": 11524,
+      "sha256": "969d3dca0b8472cf53629bf2c4b49ae23d83b69bc15a4bbc3c22adbce6c55a42",
+      "raw_git_blob": "67cd00649595ddc9a1803392f92f2e2a2c410f57",
+      "filtered_git_blob": "67cd00649595ddc9a1803392f92f2e2a2c410f57"
+    },
+    {
+      "path": "docs/R3门禁4合并main与CI执行单-2026-09-30.md",
+      "bytes": 12268,
+      "sha256": "7d056e1260251a84c10f333c0395b21b0475d786f5e2e625f9b9788cd5ddb4c6",
+      "raw_git_blob": "33f13e7a2395d346a24fdd56d04afbfcb3b3e4fa",
+      "filtered_git_blob": "33f13e7a2395d346a24fdd56d04afbfcb3b3e4fa"
+    },
+    {
+      "path": "docs/R3门禁4最终候选提交与PR-CI执行单-2026-09-29.md",
+      "bytes": 11415,
+      "sha256": "6534fd8a9a8ca3e3224fafc0d15cd00e8bdd8e9134ffd5fab85225bb21392e24",
+      "raw_git_blob": "1eddec9567cf95e13950deb3f3915c257722384e",
+      "filtered_git_blob": "1eddec9567cf95e13950deb3f3915c257722384e"
+    },
+    {
+      "path": "docs/R3门禁4最终候选收口与RC执行单-2026-09-29.md",
+      "bytes": 23198,
+      "sha256": "858aa8cc09c77b3963c37a1eff6a0c6ce2097815d7f83ab2b1a119ee18d25da9",
+      "raw_git_blob": "3cc640b83d6c7b4e6f4beccca4a1d4b33b223166",
+      "filtered_git_blob": "3cc640b83d6c7b4e6f4beccca4a1d4b33b223166"
+    },
+    {
+      "path": "docs/R3门禁4环境调查与验收计划-2026-09-29.md",
+      "bytes": 25380,
+      "sha256": "ae986be55ab0f06c960cff020dba829ce101037a98c496cb8db55117a5661293",
+      "raw_git_blob": "862169ce4d494832b9e7ff25d84d7b9c014aa098",
+      "filtered_git_blob": "862169ce4d494832b9e7ff25d84d7b9c014aa098"
+    },
+    {
+      "path": "docs/README.md",
+      "bytes": 21844,
+      "sha256": "82d8f3f233350e86489ff2177db8bbe18ce595cdb2dae0069980a8db87959ea8",
+      "raw_git_blob": "e55b6df174a17345e87a8f5c88a7cd2dd46e6682",
+      "filtered_git_blob": "e55b6df174a17345e87a8f5c88a7cd2dd46e6682"
+    },
+    {
+      "path": "docs/releases/v0.6.1.md",
+      "bytes": 19999,
+      "sha256": "9c75ce8ff25bfea293b43d5f583783db83a3cea0be8f3f5d38b42538808e55cb",
+      "raw_git_blob": "a20d811bd4ddc2aa938e20757dbc1630a5c80d6a",
+      "filtered_git_blob": "a20d811bd4ddc2aa938e20757dbc1630a5c80d6a"
+    },
+    {
+      "path": "docs/产品规划/开源发布范围与执行清单-2026-09-13.md",
+      "bytes": 53276,
+      "sha256": "5906eb966cbe1f1206eb3225d0fecd834f57f3ead2501f594303d099c66e5a37",
+      "raw_git_blob": "0560f2462ea51b328cd3ca079547c9c3c5f487c4",
+      "filtered_git_blob": "0560f2462ea51b328cd3ca079547c9c3c5f487c4"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-final-061-36585198727/README.md",
+      "bytes": 4853,
+      "sha256": "53ba77cfb35d1144ba5bb9b04c72f02fd77865fdabe88b7b1184e48aedafacb1",
+      "raw_git_blob": "66d08122fb8588130b195b3649f3af482e1ef62f",
+      "filtered_git_blob": "66d08122fb8588130b195b3649f3af482e1ef62f"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-final-061-36585198727/archive-review.json",
+      "bytes": 301,
+      "sha256": "a8d45bcd7693426b86da5b19aee32be472ed1e96a7a11737e49c0d51eb33b7e7",
+      "raw_git_blob": "b0ca67bb581ea01bbe1a7efda3fd3dad3cfdd485",
+      "filtered_git_blob": "b0ca67bb581ea01bbe1a7efda3fd3dad3cfdd485"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-final-061-36585198727/artifacts.json",
+      "bytes": 42,
+      "sha256": "f7417e1fb877d3f5934f143cc38ad9e2905476e8f5ac6776507d09441efcd6f6",
+      "raw_git_blob": "0674b39d4f87fa0cff7027660aeb481bb61b871f",
+      "filtered_git_blob": "0674b39d4f87fa0cff7027660aeb481bb61b871f"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-final-061-36585198727/candidate.json",
+      "bytes": 9871,
+      "sha256": "a008561ae59377fd2c5d1d7a958b51f385d3b1268c752f129f8f70a2d230d373",
+      "raw_git_blob": "32a29a864eb255f807ce7d533128fb59c91add28",
+      "filtered_git_blob": "32a29a864eb255f807ce7d533128fb59c91add28"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-final-061-36585198727/checkout-commit.json",
+      "bytes": 2814,
+      "sha256": "ac4eaf86d6c95e0ad2b72ba3dfca4376cf1c1a49a027b3c6cd7465d87938929f",
+      "raw_git_blob": "5c2a1a02da23d1a181cb1efe28c9ddee4fc67331",
+      "filtered_git_blob": "5c2a1a02da23d1a181cb1efe28c9ddee4fc67331"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-final-061-36585198727/ci-log.txt",
+      "bytes": 73961,
+      "sha256": "9f1679b1aa4641608766ecbc231d292744b91388ffe2044897b00bcadae3ab1e",
+      "raw_git_blob": "3b7b8e3b2546f75ae30a5b1697c0f63618b96e23",
+      "filtered_git_blob": "3b7b8e3b2546f75ae30a5b1697c0f63618b96e23"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-final-061-36585198727/closeout-checks.json",
+      "bytes": 330,
+      "sha256": "6b3653372babe8dd0ac73266b1d561ab58f20d167caf0fe131156520ad719a7b",
+      "raw_git_blob": "61bd8b5eae33c15580796739fd49ae21725a0052",
+      "filtered_git_blob": "61bd8b5eae33c15580796739fd49ae21725a0052"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-final-061-36585198727/commit-output.txt",
+      "bytes": 6824,
+      "sha256": "b3a37ba98d51e9a5da48c8691662bfabd0844bad8a46c96b0be25a8a91ab969e",
+      "raw_git_blob": "8405c2b42f88f4a4934e53c3201b15d1e1537911",
+      "filtered_git_blob": "8405c2b42f88f4a4934e53c3201b15d1e1537911"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-final-061-36585198727/files.sha256.json",
+      "bytes": 5084,
+      "sha256": "eb63de9c8f8fb074c2d540ea2039ff9ab4b26fb3c352e267fdcf67f93d2a2394",
+      "raw_git_blob": "0f7f7a2267df2df3ad942eea2d5e320dbd64b589",
+      "filtered_git_blob": "0f7f7a2267df2df3ad942eea2d5e320dbd64b589"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-final-061-36585198727/final-document-checks.json",
+      "bytes": 907,
+      "sha256": "4d3d86d2042c28348ede779e8d41e0e8fbca6448c6722f06340659e09b9f28f5",
+      "raw_git_blob": "f82f86de1be97c31db0dba6eeaadde60022c4a80",
+      "filtered_git_blob": "f82f86de1be97c31db0dba6eeaadde60022c4a80"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-final-061-36585198727/final-jobs.json",
+      "bytes": 4203,
+      "sha256": "7ac06fb5243e5550f3b93d355c416cf875227e503c385ec45369b7b27a645b77",
+      "raw_git_blob": "1218085daacf3c5633053184a8f599596b7ff764",
+      "filtered_git_blob": "1218085daacf3c5633053184a8f599596b7ff764"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-final-061-36585198727/final-run.json",
+      "bytes": 14318,
+      "sha256": "2e4b1ee1a95826327b257a1379d6fcde758fd14d5d2272f7bc9747ce83aa8f53",
+      "raw_git_blob": "e0e40d46d33fbec9f38922406407b50a8c14e97e",
+      "filtered_git_blob": "e0e40d46d33fbec9f38922406407b50a8c14e97e"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-final-061-36585198727/final-runs.json",
+      "bytes": 14818,
+      "sha256": "9616d4345967d6022a88d4238c23766af2f2ba9a7e9aa64e14aeb5e78379b77f",
+      "raw_git_blob": "17736611e265d1262f0387bf0ecf1eee7143a4f5",
+      "filtered_git_blob": "17736611e265d1262f0387bf0ecf1eee7143a4f5"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-final-061-36585198727/git-tree.txt",
+      "bytes": 256235,
+      "sha256": "e5544c34723eaea194a2a2bb5ba7c6efb045c6801c6866589498cb8e70449614",
+      "raw_git_blob": "daa07fc034189780690a7e193163bb6943f1ba3f",
+      "filtered_git_blob": "daa07fc034189780690a7e193163bb6943f1ba3f"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-final-061-36585198727/jobs-initial.json",
+      "bytes": 3616,
+      "sha256": "653964f3325741e557eeb827c7331f9cf9e867ddc7e3311413959b24b7246321",
+      "raw_git_blob": "244d1cdfb3a47ddd70b2152ae57c7d7460354a23",
+      "filtered_git_blob": "244d1cdfb3a47ddd70b2152ae57c7d7460354a23"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-final-061-36585198727/local-before.json",
+      "bytes": 9909,
+      "sha256": "d364cf87f258e288e0df70ae6bc3908fb8720bf9dbfbfac680041f6d68fd88c5",
+      "raw_git_blob": "efa107692d17b0f90e5463c4731a73449d6760c2",
+      "filtered_git_blob": "efa107692d17b0f90e5463c4731a73449d6760c2"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-final-061-36585198727/log-excerpts.json",
+      "bytes": 2841,
+      "sha256": "2b46b0e76519c3dcc4e95cbba22e40384b82d82386861f6d32b49f72b779be51",
+      "raw_git_blob": "cd6bf17680e3f2c2c6e5437680a31d0eede55556",
+      "filtered_git_blob": "cd6bf17680e3f2c2c6e5437680a31d0eede55556"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-final-061-36585198727/log-integrity.json",
+      "bytes": 147,
+      "sha256": "c3c7e874bfaa50dc418e22d1e5b9213905310899f7c40882d2d7f022f2625625",
+      "raw_git_blob": "d42041e23f10e6aed1961af0f6b39988048464a3",
+      "filtered_git_blob": "d42041e23f10e6aed1961af0f6b39988048464a3"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-final-061-36585198727/poll-01-jobs.json",
+      "bytes": 3831,
+      "sha256": "e1779930e5904317c1db1c987025200f2d18cfe1dc19070cc9cc5d488d7701de",
+      "raw_git_blob": "453fa539c7f65b435f175321a877c7ca55f922a4",
+      "filtered_git_blob": "453fa539c7f65b435f175321a877c7ca55f922a4"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-final-061-36585198727/poll-01-pr.json",
+      "bytes": 130,
+      "sha256": "6a826176a5a366eff915ef379c3b467427793b8af5521f0c50f8b237586068e1",
+      "raw_git_blob": "4dca10ff0ac4767f212430eb6999672ca02afb76",
+      "filtered_git_blob": "4dca10ff0ac4767f212430eb6999672ca02afb76"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-final-061-36585198727/poll-01-run.json",
+      "bytes": 14315,
+      "sha256": "02ea523e97a1c98aa9d64bf0f38c9f3e0e9930d05f06905a5a91673fc1369686",
+      "raw_git_blob": "9deb826e9438502bd443299e2d43fb051a0cdd28",
+      "filtered_git_blob": "9deb826e9438502bd443299e2d43fb051a0cdd28"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-final-061-36585198727/poll-01-runs.json",
+      "bytes": 15356,
+      "sha256": "a8eec1bfb2f6def597e38b53f9bf7da451eb6a5d0f31e6518418b14507a5d6e9",
+      "raw_git_blob": "4e98737f1ed91c2ff931f2b348a390a93f46a1c8",
+      "filtered_git_blob": "4e98737f1ed91c2ff931f2b348a390a93f46a1c8"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-final-061-36585198727/poll-02-jobs.json",
+      "bytes": 4203,
+      "sha256": "7ac06fb5243e5550f3b93d355c416cf875227e503c385ec45369b7b27a645b77",
+      "raw_git_blob": "1218085daacf3c5633053184a8f599596b7ff764",
+      "filtered_git_blob": "1218085daacf3c5633053184a8f599596b7ff764"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-final-061-36585198727/poll-02-run.json",
+      "bytes": 14318,
+      "sha256": "2e4b1ee1a95826327b257a1379d6fcde758fd14d5d2272f7bc9747ce83aa8f53",
+      "raw_git_blob": "e0e40d46d33fbec9f38922406407b50a8c14e97e",
+      "filtered_git_blob": "e0e40d46d33fbec9f38922406407b50a8c14e97e"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-final-061-36585198727/preservation-before.json",
+      "bytes": 164840,
+      "sha256": "25961518945e5431daa8c753c260fc2f14f476fcdf9060c62cd7b73c9f799080",
+      "raw_git_blob": "06dfca12cc46596d4e384fbd8b5715c599a29cef",
+      "filtered_git_blob": "06dfca12cc46596d4e384fbd8b5715c599a29cef"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-final-061-36585198727/push.json",
+      "bytes": 664,
+      "sha256": "d73309ed76cba8ffec115eeb2494cdca6bfda30a0769dd278ca5986089b4c7c4",
+      "raw_git_blob": "ed2512045fdee891cadff3941dd79fdd7a7b5404",
+      "filtered_git_blob": "ed2512045fdee891cadff3941dd79fdd7a7b5404"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-final-061-36585198727/remote-after.json",
+      "bytes": 218,
+      "sha256": "f1ea4d368fbb395e5048a5ca6429e6a25e142e0e72576588280a2925ac6adb66",
+      "raw_git_blob": "5cc99da0cf23e1283d800bf3c9002e17c07ca364",
+      "filtered_git_blob": "5cc99da0cf23e1283d800bf3c9002e17c07ca364"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-final-061-36585198727/remote-before.json",
+      "bytes": 1228,
+      "sha256": "23d6f4a6267b95692be93e1119fee1395a8daf5aa41075b34db81a0e70c5af65",
+      "raw_git_blob": "1c5a5bcab85c3719317330dd96bbcb9db2ddba93",
+      "filtered_git_blob": "1c5a5bcab85c3719317330dd96bbcb9db2ddba93"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-final-061-36585198727/remote-final.json",
+      "bytes": 845,
+      "sha256": "8344ee44d5e4ebcd24725f97977b8464828941b5f2145eef0754d04f841adec6",
+      "raw_git_blob": "ae26c9f4048c183d522b05c20e5f8d30a5271f2d",
+      "filtered_git_blob": "ae26c9f4048c183d522b05c20e5f8d30a5271f2d"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-final-061-36585198727/remote-prepush.json",
+      "bytes": 429,
+      "sha256": "8b1e32dc9b0409e97169025daddca6d853dc10f14b39a1ec64a27a88bd63969c",
+      "raw_git_blob": "734ce97ed867040ee0ea3d469a048d81cfc81b65",
+      "filtered_git_blob": "734ce97ed867040ee0ea3d469a048d81cfc81b65"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-final-061-36585198727/run.json",
+      "bytes": 14315,
+      "sha256": "02ea523e97a1c98aa9d64bf0f38c9f3e0e9930d05f06905a5a91673fc1369686",
+      "raw_git_blob": "9deb826e9438502bd443299e2d43fb051a0cdd28",
+      "filtered_git_blob": "9deb826e9438502bd443299e2d43fb051a0cdd28"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-final-061-36585198727/runs-initial.json",
+      "bytes": 14815,
+      "sha256": "77534a96e08284ad36525f9d7fc7e071bc4d5bd8166e829571f81cf78de08a9d",
+      "raw_git_blob": "fb0b8a2af4f4bdb55e88e1cb239ffc7b57a4d6e9",
+      "filtered_git_blob": "fb0b8a2af4f4bdb55e88e1cb239ffc7b57a4d6e9"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-final-061-36585198727/staged-inputs.json",
+      "bytes": 16660,
+      "sha256": "2be94c0a919090c62327c4aff9aaf156c172f8e733391cd623f4db755ba03f86",
+      "raw_git_blob": "72f30e22a76cdb29c919bbc93933d35237f1503e",
+      "filtered_git_blob": "72f30e22a76cdb29c919bbc93933d35237f1503e"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-final-061-36585198727/test-results.json",
+      "bytes": 3971,
+      "sha256": "de77158a83eb6079ac1a15c535d41cdc75be05bcc35f9c5438e17223468d4e30",
+      "raw_git_blob": "85ef84d0f57832e9ca567e60b3301ad41f5b669a",
+      "filtered_git_blob": "85ef84d0f57832e9ca567e60b3301ad41f5b669a"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-high-triage-20260930-a/GHSA-rfgv-xxqx-mfg5.json",
+      "bytes": 6265,
+      "sha256": "f3b491512218cf68ff95d08f2662c6f202a127073595a9620c0b64c592cc1e49",
+      "raw_git_blob": "1ec7df81f5e2e6a8ab7f962c279e0882a8885578",
+      "filtered_git_blob": "1ec7df81f5e2e6a8ab7f962c279e0882a8885578"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-high-triage-20260930-a/GHSA-w293-vg96-wgc3.json",
+      "bytes": 6267,
+      "sha256": "9d671e100faf7f4871002b8e2a173c1d4de5666fed6260cd57d224b117972d0d",
+      "raw_git_blob": "5c91e84ce0feeb982b8b2783144c755791fd9631",
+      "filtered_git_blob": "5c91e84ce0feeb982b8b2783144c755791fd9631"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-high-triage-20260930-a/README.md",
+      "bytes": 4540,
+      "sha256": "2fb06dfe5e52e92d31a148a2f189a8d283ff82cc59e7174ca4f1589b4512f8ce",
+      "raw_git_blob": "8aa3004d0d5dfc88051546f5b44f744d2698f3eb",
+      "filtered_git_blob": "8aa3004d0d5dfc88051546f5b44f744d2698f3eb"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-high-triage-20260930-a/audit-all.command.json",
+      "bytes": 603,
+      "sha256": "dead0728bf42a4fa304f016f41c6f51fccea555e4eb3fa974b775ab3caff62ac",
+      "raw_git_blob": "122776215480ceec568d88a2829858bd36e960d1",
+      "filtered_git_blob": "122776215480ceec568d88a2829858bd36e960d1"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-high-triage-20260930-a/audit-all.stderr.txt",
+      "bytes": 208,
+      "sha256": "370097c0cce87d329fcba52d1bd38b8934e7386b5874dfb00e6b0f98eed2fa1d",
+      "raw_git_blob": "41a2c5aacc6d1b6db91c6043f48ab279e9bf1422",
+      "filtered_git_blob": "41a2c5aacc6d1b6db91c6043f48ab279e9bf1422"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-high-triage-20260930-a/audit-all.stdout.json",
+      "bytes": 22522,
+      "sha256": "e12b1aacb3b6d3c1da74033367fea96622c558affb74e4a4414587168812c662",
+      "raw_git_blob": "7de79cfa3bcbdb4636e50c7b574c6d12042dbb89",
+      "filtered_git_blob": "7de79cfa3bcbdb4636e50c7b574c6d12042dbb89"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-high-triage-20260930-a/audit-preservation.json",
+      "bytes": 252,
+      "sha256": "a67d46207d270ad358af3b868e7e68d15c7a8396444a3fdeb39cb158c82a082d",
+      "raw_git_blob": "186c131c35f517097460ed14f966891fc6b66d85",
+      "filtered_git_blob": "186c131c35f517097460ed14f966891fc6b66d85"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-high-triage-20260930-a/audit-production.command.json",
+      "bytes": 600,
+      "sha256": "8335df34082e907a0ee180df351533a26a779e416a5b16ec953dab6a99ed6f03",
+      "raw_git_blob": "ea020a595b312619252280e1ae557b5f15797252",
+      "filtered_git_blob": "ea020a595b312619252280e1ae557b5f15797252"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-high-triage-20260930-a/audit-production.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "filtered_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-high-triage-20260930-a/audit-production.stdout.json",
+      "bytes": 16712,
+      "sha256": "8af4f9ea3ca27965a781c01d6d1a1f802370f2e5ef13a8be0033e7b611b251eb",
+      "raw_git_blob": "f2cd5709856c372392a4a9475e1315366099e289",
+      "filtered_git_blob": "f2cd5709856c372392a4a9475e1315366099e289"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-high-triage-20260930-a/audit-summary.json",
+      "bytes": 5891,
+      "sha256": "6a631cb9e29ba629a71c1e750d26615bc6014d052dd37413fbec798e12906848",
+      "raw_git_blob": "e92132137ff5df192a64ba62a4127c0ef49884bb",
+      "filtered_git_blob": "e92132137ff5df192a64ba62a4127c0ef49884bb"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-high-triage-20260930-a/closeout-checks.json",
+      "bytes": 965,
+      "sha256": "c51d2416ba9203c85d9f4c2d0f991ba6f3029289de1416f340d4a7f15cab95f2",
+      "raw_git_blob": "a31ea740f5603190f4f0a2d8e9eec50a8e34676b",
+      "filtered_git_blob": "a31ea740f5603190f4f0a2d8e9eec50a8e34676b"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-high-triage-20260930-a/dependency-inventory.json",
+      "bytes": 1615,
+      "sha256": "27968ad3c21d96bab4be1ce57f053005e7ea61b6a55593917c284d56d45e351f",
+      "raw_git_blob": "cafc51669dea00bdc72cfa4f4e98116185ceb63a",
+      "filtered_git_blob": "cafc51669dea00bdc72cfa4f4e98116185ceb63a"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-high-triage-20260930-a/files.sha256.json",
+      "bytes": 3243,
+      "sha256": "83f5773dc9f83f4924a3f51f55439a8300520827a4e84daed02dc9ba4e651322",
+      "raw_git_blob": "41feaa59d618ef2a9eb2cc8321e3758b7fe89a83",
+      "filtered_git_blob": "41feaa59d618ef2a9eb2cc8321e3758b7fe89a83"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-high-triage-20260930-a/harness/investigate.py.txt",
+      "bytes": 3840,
+      "sha256": "45c07406a1291f892859c561b56b288e71e9f05c013a2b8760aeb7f3694f400f",
+      "raw_git_blob": "659b7cff084ab5ccb9de43dbd53101ee17481cd5",
+      "filtered_git_blob": "659b7cff084ab5ccb9de43dbd53101ee17481cd5"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-high-triage-20260930-a/harness/sources.py.txt",
+      "bytes": 2075,
+      "sha256": "4135ec0ed0a00ff617075daa0e528193eed9574d7b4aa6c4528b8e8dfeb963a6",
+      "raw_git_blob": "2e10e6879ca3288e4641d7555f358bcfeb5d3fbd",
+      "filtered_git_blob": "2e10e6879ca3288e4641d7555f358bcfeb5d3fbd"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-high-triage-20260930-a/harness/static_evidence.py.txt",
+      "bytes": 2607,
+      "sha256": "d127e88d29c7eaec794c77d19f22e44aca838abda0154803d065eb87958c5425",
+      "raw_git_blob": "1813ca196d16f137f87b9f54e09348952d05d404",
+      "filtered_git_blob": "1813ca196d16f137f87b9f54e09348952d05d404"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-high-triage-20260930-a/input-identity.json",
+      "bytes": 21556,
+      "sha256": "fa2b79bc3fefe88d8bf0974f46783232ed189b184f65dd9c4d5911576498f349",
+      "raw_git_blob": "c086c2637109f484b2c6f286cd4ade44a6f6b4e1",
+      "filtered_git_blob": "c086c2637109f484b2c6f286cd4ade44a6f6b4e1"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-high-triage-20260930-a/installed-versions.json",
+      "bytes": 46,
+      "sha256": "baa4622eccebe4bcfe5ed7d88893edb69fed946237b3b1a5ce304950347d9939",
+      "raw_git_blob": "60e185b7d1b8d89f762a7828637a0b907c1334cf",
+      "filtered_git_blob": "60e185b7d1b8d89f762a7828637a0b907c1334cf"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-high-triage-20260930-a/node-22.23.2-undici.json",
+      "bytes": 6290,
+      "sha256": "f529aa8b145f6e270a72700ceb6c8dd3b87f742313078ea9f774a9d2ce8c865d",
+      "raw_git_blob": "cd46deca24486ae83df9048a604f3d43dffbe28b",
+      "filtered_git_blob": "cd46deca24486ae83df9048a604f3d43dffbe28b"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-high-triage-20260930-a/preservation-before.json",
+      "bytes": 349944,
+      "sha256": "40eb1821d859479708dc301ce2f3c3234efbbef787d50d66aff4ffcd808d98fa",
+      "raw_git_blob": "bc679f4be7fe150f8d4da6f41d8b6306c494638a",
+      "filtered_git_blob": "bc679f4be7fe150f8d4da6f41d8b6306c494638a"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-high-triage-20260930-a/source-queries.json",
+      "bytes": 1102,
+      "sha256": "88dc11779a23bf13f445af649dff233631d8ef1bb88553453f8e02c08b61a4a2",
+      "raw_git_blob": "1556344a13c103c8fd4c99e47797f85cbbcf2453",
+      "filtered_git_blob": "1556344a13c103c8fd4c99e47797f85cbbcf2453"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-high-triage-20260930-a/static-inputs.json",
+      "bytes": 1240,
+      "sha256": "5d2b99a783b967169e2b9ad693e1216181ad87119a1248962a8f16b27263d9bd",
+      "raw_git_blob": "f5d221463c0f8353d9e0ccec7d6cb3f51ecb5f79",
+      "filtered_git_blob": "f5d221463c0f8353d9e0ccec7d6cb3f51ecb5f79"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-high-triage-20260930-a/static-searches.json",
+      "bytes": 6259,
+      "sha256": "be7b549c47dc0ea29b13539bdfc783e01e8efcd10d5f28b4188e469adb0990bb",
+      "raw_git_blob": "fee972df641cf19197e5b3ca900bad6575fcdbde",
+      "filtered_git_blob": "fee972df641cf19197e5b3ca900bad6575fcdbde"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-high-triage-20260930-a/undici-7.29.1.json",
+      "bytes": 6822,
+      "sha256": "685384f6b29949d971a2b3fe0a5460f7c87ee30bdc01471ec81d58d237dfab7f",
+      "raw_git_blob": "43f16fed15d36d36ae846a27cb7704195c52f16a",
+      "filtered_git_blob": "43f16fed15d36d36ae846a27cb7704195c52f16a"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/README.md",
+      "bytes": 6105,
+      "sha256": "d83d13bed18a61dac8f1dfd86ca7bb965d5e9b2c559ebbdf72616fe68ba7cde7",
+      "raw_git_blob": "2ebe8c3190a327e93681dab5a848686da08d4899",
+      "filtered_git_blob": "2ebe8c3190a327e93681dab5a848686da08d4899"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/actions.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "filtered_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/actions.stdout",
+      "bytes": 69,
+      "sha256": "0bffee97e4ad52676c0127aacb5b4b304a2675f5c524de641acf1326e0b0e857",
+      "raw_git_blob": "4ebf8dcd8f5d39d118413a405c9ded74ec81eebc",
+      "filtered_git_blob": "4ebf8dcd8f5d39d118413a405c9ded74ec81eebc"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/archive-review.json",
+      "bytes": 288,
+      "sha256": "688f0c03d810fe586b8cdae457e144c8c78ba347fe854e60bbffcc0829a5e405",
+      "raw_git_blob": "e241216eac8cdc3ef49eaabd2040c845ffcdf4a6",
+      "filtered_git_blob": "e241216eac8cdc3ef49eaabd2040c845ffcdf4a6"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/archive-scan.json",
+      "bytes": 144,
+      "sha256": "e9a0083e07baeef660e44fe01ab58ffd10d84b57b13cdd5ce39ee156b0df436a",
+      "raw_git_blob": "d6a84a0f66f732063ec750245131ab55af265b51",
+      "filtered_git_blob": "d6a84a0f66f732063ec750245131ab55af265b51"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/artifacts.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "filtered_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/artifacts.stdout",
+      "bytes": 34,
+      "sha256": "af3c25b59e7048d2e4b6ea03a688b2eced4e1786b5ae40f71516bc3ce0d4149e",
+      "raw_git_blob": "8cf43b99baa146fd6d443c5d4a12bd6b37c2dd5a",
+      "filtered_git_blob": "8cf43b99baa146fd6d443c5d4a12bd6b37c2dd5a"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/branch.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "filtered_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/branch.stdout",
+      "bytes": 193,
+      "sha256": "03cd0e85bcd97987b7118379f0d7167bc80405f2a0e1a5cfe088c3198a429c47",
+      "raw_git_blob": "1ad60012c4359bd52f83f9dfe1963682d1e823b4",
+      "filtered_git_blob": "1ad60012c4359bd52f83f9dfe1963682d1e823b4"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/checkout-check.json",
+      "bytes": 327,
+      "sha256": "12a96d15e5b13c5baa67847716c2d30fbe2d649b6542b2736fdd7af74c249221",
+      "raw_git_blob": "70ca553f2820c452ae3c8dd6b01fcf9b9f7d122b",
+      "filtered_git_blob": "70ca553f2820c452ae3c8dd6b01fcf9b9f7d122b"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/ci-log.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "filtered_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/ci-log.stdout",
+      "bytes": 71015,
+      "sha256": "43b8283d5dee1ad983a7b4dc0d197ebe0e5a37512bef8f19fcf66b3d2796f4f9",
+      "raw_git_blob": "53e2558da16749709c9067219b6190184afb605b",
+      "filtered_git_blob": "53e2558da16749709c9067219b6190184afb605b"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/ci-workflow.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "filtered_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/ci-workflow.stdout",
+      "bytes": 80,
+      "sha256": "98f10a843576a95eaeb7430c7e572afec89d325678440116b1ef070598803787",
+      "raw_git_blob": "4a5ea7a417a20823bb4805327c92432b94d6b259",
+      "filtered_git_blob": "4a5ea7a417a20823bb4805327c92432b94d6b259"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/closeout-checks.json",
+      "bytes": 369,
+      "sha256": "718628ba4b71bba8f37508dfd608c2ca16115c81a9d4378585146569fc135249",
+      "raw_git_blob": "16589b4e81f1ae521b092b2975820b76939502eb",
+      "filtered_git_blob": "16589b4e81f1ae521b092b2975820b76939502eb"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/environment-and-warnings.json",
+      "bytes": 4008,
+      "sha256": "9cbd240dcb0841a3475bc6b5809778952e5216de741b42598bb9596dd5ff6030",
+      "raw_git_blob": "cfd5082000be3bda76dea61e5d96b887e842e22a",
+      "filtered_git_blob": "cfd5082000be3bda76dea61e5d96b887e842e22a"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/f-run.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "filtered_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/f-run.stdout",
+      "bytes": 190,
+      "sha256": "79319bcb5d0a7b4dbdc8a79d9c7fc453abfb2862bc4ad71cff78f79cd97e77f8",
+      "raw_git_blob": "f1df85259e00332fc39176c3e964113828866977",
+      "filtered_git_blob": "f1df85259e00332fc39176c3e964113828866977"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/files.sha256.json",
+      "bytes": 11994,
+      "sha256": "94bb18fe2ea669c00da277bbc5dbd01e3072a0d1297493bd152aff26e411445e",
+      "raw_git_blob": "46172d02339aa86249b4df74a9182a3a4fa19fcc",
+      "filtered_git_blob": "46172d02339aa86249b4df74a9182a3a4fa19fcc"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/final-document-checks.json",
+      "bytes": 2193,
+      "sha256": "150854a0d35cc1aa5eb1fd601649feded6d6b3c9dbe4e01128d6066db91f2597",
+      "raw_git_blob": "d81e42a0dcc39ee7380acc86f1e9637bb1bcaa18",
+      "filtered_git_blob": "d81e42a0dcc39ee7380acc86f1e9637bb1bcaa18"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/final-jobs.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "filtered_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/final-jobs.stdout",
+      "bytes": 2875,
+      "sha256": "490dad752d39751ae27075cb75fab16dcfadf8703ff392d48295356744136957",
+      "raw_git_blob": "3423d310bf1844085502792e3b8f27b8d80df975",
+      "filtered_git_blob": "3423d310bf1844085502792e3b8f27b8d80df975"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/final-pr.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "filtered_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/final-pr.stdout",
+      "bytes": 431,
+      "sha256": "643bcbfa01858b21a08fee3c37444cbac038e0f30836a3ff7a6534d6611b6d11",
+      "raw_git_blob": "fabf50ef8a9fa45d350878e37d225ac63650f509",
+      "filtered_git_blob": "fabf50ef8a9fa45d350878e37d225ac63650f509"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/final-queries.json",
+      "bytes": 1907,
+      "sha256": "67983d78683158f9cf020908ddb9215dbe42ce05cee78a221bc9738fb62780a0",
+      "raw_git_blob": "79da86eb674ac05fc91c3f2517cc694b6ffcef61",
+      "filtered_git_blob": "79da86eb674ac05fc91c3f2517cc694b6ffcef61"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/final-refs.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "filtered_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/final-refs.stdout",
+      "bytes": 134,
+      "sha256": "3a5f21ac0997310ca43487d9853a50fc8d478e6b93c30a8d9b818db54d9b116c",
+      "raw_git_blob": "3bf17e7be16f5c6a345d8958f61b3e250b15f6e2",
+      "filtered_git_blob": "3bf17e7be16f5c6a345d8958f61b3e250b15f6e2"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/final-run.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "filtered_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/final-run.stdout",
+      "bytes": 12824,
+      "sha256": "addca43e3140d202abfa66621b06b2a88e23dd87b507b69e93498afdf399755f",
+      "raw_git_blob": "a837bdf4bfe397328c91237d92c4990e4e85d2ce",
+      "filtered_git_blob": "a837bdf4bfe397328c91237d92c4990e4e85d2ce"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/final-runs.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "filtered_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/final-runs.stdout",
+      "bytes": 12862,
+      "sha256": "de010741ab6a828c1f55b323de7adeeff59f3d623d246f0482e15a363e9dc2fd",
+      "raw_git_blob": "55580b4a65fb002066f2b9d31b56e6db6ff237f2",
+      "filtered_git_blob": "55580b4a65fb002066f2b9d31b56e6db6ff237f2"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/local-before.json",
+      "bytes": 8565,
+      "sha256": "34d9319dc8c41a9e10f69aeaa62cf93effccf47fdb092f9cb3456c8c612d26b3",
+      "raw_git_blob": "658899f8e03b337a4a31af5bca40e4e7e97e7586",
+      "filtered_git_blob": "658899f8e03b337a4a31af5bca40e4e7e97e7586"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/log-excerpts.json",
+      "bytes": 4421,
+      "sha256": "e8ab23d01230f0ab94f6dd4ab2b23981624df6ae75829fe7e039e254813df16d",
+      "raw_git_blob": "657a7175ba186dddf94557762688a80fbf57f7ef",
+      "filtered_git_blob": "657a7175ba186dddf94557762688a80fbf57f7ef"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/log-integrity.json",
+      "bytes": 147,
+      "sha256": "83b5e106366e3e80c613fa073347571f4169bf5b8da226027a2ef3dcdf077a59",
+      "raw_git_blob": "2523ffe298725428dbfbf3b0e4fb0725b312b37c",
+      "filtered_git_blob": "2523ffe298725428dbfbf3b0e4fb0725b312b37c"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/merge-attempt.json",
+      "bytes": 555,
+      "sha256": "0d9b83af1937387ee0f66efd61fbe84ccbc005453cbee3043eae941142fd900c",
+      "raw_git_blob": "c8bd259ee1c25222f24f42ed1f3aaa3b77069772",
+      "filtered_git_blob": "c8bd259ee1c25222f24f42ed1f3aaa3b77069772"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/merge-commit.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "filtered_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/merge-commit.stdout",
+      "bytes": 3639,
+      "sha256": "c93eec944453263d0e5daf1aa9bf7b4e1668ace63a2aa0e9c221017d55a0161d",
+      "raw_git_blob": "1acb60cc0bc7b95b94289fae5d5a2f71cd846221",
+      "filtered_git_blob": "1acb60cc0bc7b95b94289fae5d5a2f71cd846221"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/merge-identity.json",
+      "bytes": 2594,
+      "sha256": "0301d2a84029dadb28820aa4527064225d9de191cec3b755d32ad07c80204e1a",
+      "raw_git_blob": "b73df0879ece1225ef3399edc8067f042b256327",
+      "filtered_git_blob": "b73df0879ece1225ef3399edc8067f042b256327"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/merge-result.json",
+      "bytes": 78,
+      "sha256": "bbeb5f2603730d3e3d27061cd81bed3f760b26649260a1f91e4e2aaf38e46e8b",
+      "raw_git_blob": "0d2d01c983ee50274fe34c11c1147b9778ce0bd5",
+      "filtered_git_blob": "0d2d01c983ee50274fe34c11c1147b9778ce0bd5"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/merge.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "filtered_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/merge.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "filtered_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/operator.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "filtered_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/operator.stdout",
+      "bytes": 52,
+      "sha256": "1b473a73e6bb3edf4d129bf7ce66b486984469dc05f423f9e948dc0f9e34b824",
+      "raw_git_blob": "05abc7bf0e572d57e59ca92870620bbfe46ee2cb",
+      "filtered_git_blob": "05abc7bf0e572d57e59ca92870620bbfe46ee2cb"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/poll-01-jobs.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "filtered_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/poll-01-jobs.stdout",
+      "bytes": 2548,
+      "sha256": "ea6898e1416190c2b0bc73f3335bcd85011d1cd237e909bd8229f114eb8c8e65",
+      "raw_git_blob": "8416f8d5180b161728fa1fb13dbfdc15b21cecb0",
+      "filtered_git_blob": "8416f8d5180b161728fa1fb13dbfdc15b21cecb0"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/poll-01-runs.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "filtered_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/poll-01-runs.stdout",
+      "bytes": 12859,
+      "sha256": "f58dfc3fd5e1c00b9c75738b746dbc91ad17beb5d49c1b82dafffefee6d008e6",
+      "raw_git_blob": "78dde25d410a371d0ffb0cdc85be3737eeb4a02f",
+      "filtered_git_blob": "78dde25d410a371d0ffb0cdc85be3737eeb4a02f"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/poll-02-jobs.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "filtered_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/poll-02-jobs.stdout",
+      "bytes": 2593,
+      "sha256": "2c31db20e58e4c34d5855d4a79290eaf703330f763c88700d950e6c335871096",
+      "raw_git_blob": "28815c2c9ed8c0ff783d98849c76c18e2edb7c02",
+      "filtered_git_blob": "28815c2c9ed8c0ff783d98849c76c18e2edb7c02"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/poll-02-runs.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "filtered_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/poll-02-runs.stdout",
+      "bytes": 12859,
+      "sha256": "f58dfc3fd5e1c00b9c75738b746dbc91ad17beb5d49c1b82dafffefee6d008e6",
+      "raw_git_blob": "78dde25d410a371d0ffb0cdc85be3737eeb4a02f",
+      "filtered_git_blob": "78dde25d410a371d0ffb0cdc85be3737eeb4a02f"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/poll-03-jobs.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "filtered_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/poll-03-jobs.stdout",
+      "bytes": 2875,
+      "sha256": "490dad752d39751ae27075cb75fab16dcfadf8703ff392d48295356744136957",
+      "raw_git_blob": "3423d310bf1844085502792e3b8f27b8d80df975",
+      "filtered_git_blob": "3423d310bf1844085502792e3b8f27b8d80df975"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/poll-03-runs.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "filtered_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/poll-03-runs.stdout",
+      "bytes": 12862,
+      "sha256": "de010741ab6a828c1f55b323de7adeeff59f3d623d246f0482e15a363e9dc2fd",
+      "raw_git_blob": "55580b4a65fb002066f2b9d31b56e6db6ff237f2",
+      "filtered_git_blob": "55580b4a65fb002066f2b9d31b56e6db6ff237f2"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/postmerge-pr.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "filtered_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/postmerge-pr.stdout",
+      "bytes": 431,
+      "sha256": "643bcbfa01858b21a08fee3c37444cbac038e0f30836a3ff7a6534d6611b6d11",
+      "raw_git_blob": "fabf50ef8a9fa45d350878e37d225ac63650f509",
+      "filtered_git_blob": "fabf50ef8a9fa45d350878e37d225ac63650f509"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/postmerge-refs.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "filtered_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/postmerge-refs.stdout",
+      "bytes": 134,
+      "sha256": "3a5f21ac0997310ca43487d9853a50fc8d478e6b93c30a8d9b818db54d9b116c",
+      "raw_git_blob": "3bf17e7be16f5c6a345d8958f61b3e250b15f6e2",
+      "filtered_git_blob": "3bf17e7be16f5c6a345d8958f61b3e250b15f6e2"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/pr.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "filtered_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/pr.stdout",
+      "bytes": 799,
+      "sha256": "c0dbbccb230843cb9863a413343abc5e22f571351f4313efd2048369de1d1ab2",
+      "raw_git_blob": "fd2623d0b4c3da222438d0725bfe5c3906fb3db0",
+      "filtered_git_blob": "fd2623d0b4c3da222438d0725bfe5c3906fb3db0"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/preflight-queries.json",
+      "bytes": 2969,
+      "sha256": "ee3bfe90fea85e831fa179c3b6d339fc6be17263a2522f94eb77c9e6d1408963",
+      "raw_git_blob": "4145daec6f30aa3e95f3a227240fc24ea509fdf7",
+      "filtered_git_blob": "4145daec6f30aa3e95f3a227240fc24ea509fdf7"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/preflight-result.json",
+      "bytes": 274,
+      "sha256": "5b27c49f452736cbd32daaa53f744c16fc64b99168b154f1880366126916a013",
+      "raw_git_blob": "c97779d56bc6c61aa6ff7f6d81038e7fb16c46d8",
+      "filtered_git_blob": "c97779d56bc6c61aa6ff7f6d81038e7fb16c46d8"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/premerge-f-runs.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "filtered_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/premerge-f-runs.stdout",
+      "bytes": 12810,
+      "sha256": "455e8f6ebe95fb59d7574f95ac9012ef29ea0d7be30af0c0c230e3c56832485a",
+      "raw_git_blob": "4dd957ecfe019b3a269ca57df3603e2f59bac896",
+      "filtered_git_blob": "4dd957ecfe019b3a269ca57df3603e2f59bac896"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/premerge-pr.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "filtered_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/premerge-pr.stdout",
+      "bytes": 531,
+      "sha256": "4944f1a3d77295b5e5a4cca102e70bf77a7e1e567f9958ffd97f32231eed1565",
+      "raw_git_blob": "e3322ad4bc6cb247e92a5876c97fe0e29ceacb17",
+      "filtered_git_blob": "e3322ad4bc6cb247e92a5876c97fe0e29ceacb17"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/premerge-refs.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "filtered_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/premerge-refs.stdout",
+      "bytes": 134,
+      "sha256": "e31c16a822120dd57a90182fa439416a51c6079619dbe0e1e02e92789f243e16",
+      "raw_git_blob": "7283716c3801e1bfea5c7b376dadbdca7f6a5960",
+      "filtered_git_blob": "7283716c3801e1bfea5c7b376dadbdca7f6a5960"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/preservation-before.json",
+      "bytes": 174632,
+      "sha256": "53687be4422ab98608baf7e6f092f31e61db58b20d70dcdb5fa990fdaba9ce08",
+      "raw_git_blob": "3d1e499cc193bf0bb3dab5f7b1158c50f8faad66",
+      "filtered_git_blob": "3d1e499cc193bf0bb3dab5f7b1158c50f8faad66"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/refs.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "filtered_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/refs.stdout",
+      "bytes": 134,
+      "sha256": "e31c16a822120dd57a90182fa439416a51c6079619dbe0e1e02e92789f243e16",
+      "raw_git_blob": "7283716c3801e1bfea5c7b376dadbdca7f6a5960",
+      "filtered_git_blob": "7283716c3801e1bfea5c7b376dadbdca7f6a5960"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/repository.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "filtered_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/repository.stdout",
+      "bytes": 257,
+      "sha256": "287257d72774077dd4f1f1f21d05ee90b0ee95284c092c047a5fc8d00e00aa24",
+      "raw_git_blob": "7cdad74bf7beb9a7bd5e4472c8be6b9c80d593eb",
+      "filtered_git_blob": "7cdad74bf7beb9a7bd5e4472c8be6b9c80d593eb"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/rules.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "filtered_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/rules.stdout",
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "raw_git_blob": "0637a088a01e8ddab3bf3fa98dbe804cbde1a0dc",
+      "filtered_git_blob": "0637a088a01e8ddab3bf3fa98dbe804cbde1a0dc"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/run-identity.json",
+      "bytes": 225,
+      "sha256": "a76138f61d8589dae6174fead7ed3f702a33f773c245185a52ef5f17ae792397",
+      "raw_git_blob": "7b5888c7f37129888627fb830831c9e0e24efefb",
+      "filtered_git_blob": "7b5888c7f37129888627fb830831c9e0e24efefb"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/runs-initial.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "filtered_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/runs-initial.stdout",
+      "bytes": 38,
+      "sha256": "f2aa3f2f9ea19c33f16347ee49859287a9b12cde87a89f7d6927ecb020c6b673",
+      "raw_git_blob": "e3b25bd8bcf3656a0eb6388adede24d5db553b31",
+      "filtered_git_blob": "e3b25bd8bcf3656a0eb6388adede24d5db553b31"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-061-36647162597/test-results.json",
+      "bytes": 3750,
+      "sha256": "ecedc18b177d8d7662fdb27c015b953f3f4b6d1223d0865642f59d4c49d4b14e",
+      "raw_git_blob": "11c4be9f1fe4182e30efb764a1ef0fdd445b8b72",
+      "filtered_git_blob": "11c4be9f1fe4182e30efb764a1ef0fdd445b8b72"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-preparation-20260930-a/README.md",
+      "bytes": 2769,
+      "sha256": "51452cf996af8d3714dc01184411da74a62c8080bdeb1530c2d37ed280bd08bc",
+      "raw_git_blob": "952a29b51e054016941c614d7859baa5f426babc",
+      "filtered_git_blob": "952a29b51e054016941c614d7859baa5f426babc"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-preparation-20260930-a/actions.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "filtered_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-preparation-20260930-a/actions.stdout",
+      "bytes": 69,
+      "sha256": "0bffee97e4ad52676c0127aacb5b4b304a2675f5c524de641acf1326e0b0e857",
+      "raw_git_blob": "4ebf8dcd8f5d39d118413a405c9ded74ec81eebc",
+      "filtered_git_blob": "4ebf8dcd8f5d39d118413a405c9ded74ec81eebc"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-preparation-20260930-a/base-to-candidate.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "filtered_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-preparation-20260930-a/base-to-candidate.stdout",
+      "bytes": 46351,
+      "sha256": "abdc78a3dc7c8887661c1213574b2fdc113cce127c85c51810ddb9fd6d8b16c3",
+      "raw_git_blob": "7ac8e6e3e2c776ae13e641a4cc937f299cc850d0",
+      "filtered_git_blob": "7ac8e6e3e2c776ae13e641a4cc937f299cc850d0"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-preparation-20260930-a/branch.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "filtered_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-preparation-20260930-a/branch.stdout",
+      "bytes": 193,
+      "sha256": "03cd0e85bcd97987b7118379f0d7167bc80405f2a0e1a5cfe088c3198a429c47",
+      "raw_git_blob": "1ad60012c4359bd52f83f9dfe1963682d1e823b4",
+      "filtered_git_blob": "1ad60012c4359bd52f83f9dfe1963682d1e823b4"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-preparation-20260930-a/candidate-log.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "filtered_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-preparation-20260930-a/candidate-log.stdout",
+      "bytes": 3873,
+      "sha256": "69b613f1396ae5f6e30b366bebb4ad8698bb82c49dfb8e3382521eab4726a1da",
+      "raw_git_blob": "53df29ae18b5bafb9f616bbf8953cce0d41cd1ae",
+      "filtered_git_blob": "53df29ae18b5bafb9f616bbf8953cce0d41cd1ae"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-preparation-20260930-a/candidate-tree.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "filtered_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-preparation-20260930-a/candidate-tree.stdout",
+      "bytes": 256235,
+      "sha256": "e5544c34723eaea194a2a2bb5ba7c6efb045c6801c6866589498cb8e70449614",
+      "raw_git_blob": "daa07fc034189780690a7e193163bb6943f1ba3f",
+      "filtered_git_blob": "daa07fc034189780690a7e193163bb6943f1ba3f"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-preparation-20260930-a/ci-workflow.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "filtered_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-preparation-20260930-a/ci-workflow.stdout",
+      "bytes": 80,
+      "sha256": "98f10a843576a95eaeb7430c7e572afec89d325678440116b1ef070598803787",
+      "raw_git_blob": "4a5ea7a417a20823bb4805327c92432b94d6b259",
+      "filtered_git_blob": "4a5ea7a417a20823bb4805327c92432b94d6b259"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-preparation-20260930-a/document-checks.json",
+      "bytes": 558,
+      "sha256": "0020d66912c06f9dfb852ed03eb228815f5adc7a3f5314aee1c041ef5e31bca8",
+      "raw_git_blob": "2a9d40b4b6a17a5932aa33d7a0a26a5c32f29865",
+      "filtered_git_blob": "2a9d40b4b6a17a5932aa33d7a0a26a5c32f29865"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-preparation-20260930-a/document-inputs.json",
+      "bytes": 1639,
+      "sha256": "9a9709efb109de8958440d2e5a1388d1d15483fc684eefa1b91dba424d0e4fbf",
+      "raw_git_blob": "702f37121d575af6029355f6a77a61b53d3c6d79",
+      "filtered_git_blob": "702f37121d575af6029355f6a77a61b53d3c6d79"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-preparation-20260930-a/f-run.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "filtered_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-preparation-20260930-a/f-run.stdout",
+      "bytes": 862,
+      "sha256": "cd2cff575126ba6fbfc588371cb3ca8169a98c23663b5592d9aff8380d94a32a",
+      "raw_git_blob": "09a2111ebb15f377d60f4a39f59a4c7e94de667b",
+      "filtered_git_blob": "09a2111ebb15f377d60f4a39f59a4c7e94de667b"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-preparation-20260930-a/f-runs.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "filtered_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-preparation-20260930-a/f-runs.stdout",
+      "bytes": 12810,
+      "sha256": "455e8f6ebe95fb59d7574f95ac9012ef29ea0d7be30af0c0c230e3c56832485a",
+      "raw_git_blob": "4dd957ecfe019b3a269ca57df3603e2f59bac896",
+      "filtered_git_blob": "4dd957ecfe019b3a269ca57df3603e2f59bac896"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-preparation-20260930-a/files.sha256.json",
+      "bytes": 5156,
+      "sha256": "4a15e307526770a78992129c28431b58d82192acf0b4cd21345536e483713d12",
+      "raw_git_blob": "2e6a5884ce57332ff2a309a8f16a6ddf10b75ff1",
+      "filtered_git_blob": "2e6a5884ce57332ff2a309a8f16a6ddf10b75ff1"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-preparation-20260930-a/local-before.json",
+      "bytes": 1148,
+      "sha256": "265e58bc1f965f73965ce4dae129120aa6f0ea9ffe5791c4b0fdf9c3b56ce00b",
+      "raw_git_blob": "693e32cdc7eb0a5ac79d885984fb23fcc6828cff",
+      "filtered_git_blob": "693e32cdc7eb0a5ac79d885984fb23fcc6828cff"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-preparation-20260930-a/merge-body.txt",
+      "bytes": 536,
+      "sha256": "f2b4e49b9aabf25e54cf102fa2e74393d1f36931fd2a8be8d2dc9c70b8100de8",
+      "raw_git_blob": "2c61854ff5965c638f43a9de019702c456249650",
+      "filtered_git_blob": "2c61854ff5965c638f43a9de019702c456249650"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-preparation-20260930-a/operator.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "filtered_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-preparation-20260930-a/operator.stdout",
+      "bytes": 52,
+      "sha256": "1b473a73e6bb3edf4d129bf7ce66b486984469dc05f423f9e948dc0f9e34b824",
+      "raw_git_blob": "05abc7bf0e572d57e59ca92870620bbfe46ee2cb",
+      "filtered_git_blob": "05abc7bf0e572d57e59ca92870620bbfe46ee2cb"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-preparation-20260930-a/pr.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "filtered_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-preparation-20260930-a/pr.stdout",
+      "bytes": 935,
+      "sha256": "e99ee91adfb3ff04a6401a1461251ad55568718d3455d3990654d04aeaa231e6",
+      "raw_git_blob": "f0ed9db9dc9645faddc4f3257df8f58e3ffafe4f",
+      "filtered_git_blob": "f0ed9db9dc9645faddc4f3257df8f58e3ffafe4f"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-preparation-20260930-a/preservation-before.json",
+      "bytes": 169575,
+      "sha256": "3f49ca895f3b032a9ab0bcd3cf86b9c5003ce1dff965a1e4bb5051bc2394bd16",
+      "raw_git_blob": "3b2d4f6d275f1ff31967cf9dc114e0a7c2435db5",
+      "filtered_git_blob": "3b2d4f6d275f1ff31967cf9dc114e0a7c2435db5"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-preparation-20260930-a/queries.json",
+      "bytes": 3993,
+      "sha256": "c0e30cacc9260844e31af42d9a742a3f78487a5f3e30b16471565e1f02220a5a",
+      "raw_git_blob": "8d0ac6366ac579577cc0cc1810917aa228dd860d",
+      "filtered_git_blob": "8d0ac6366ac579577cc0cc1810917aa228dd860d"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-preparation-20260930-a/refs.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "filtered_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-preparation-20260930-a/refs.stdout",
+      "bytes": 134,
+      "sha256": "e31c16a822120dd57a90182fa439416a51c6079619dbe0e1e02e92789f243e16",
+      "raw_git_blob": "7283716c3801e1bfea5c7b376dadbdca7f6a5960",
+      "filtered_git_blob": "7283716c3801e1bfea5c7b376dadbdca7f6a5960"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-preparation-20260930-a/repository.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "filtered_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-preparation-20260930-a/repository.stdout",
+      "bytes": 380,
+      "sha256": "41cf07292e673e2ea82807e7e9a62d967ec28d10cc30a961f8ae9baf94e8873b",
+      "raw_git_blob": "81c996aab53a3593ac7ac293240f0a02ffb9c16e",
+      "filtered_git_blob": "81c996aab53a3593ac7ac293240f0a02ffb9c16e"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-preparation-20260930-a/review.json",
+      "bytes": 938,
+      "sha256": "c169c59c7e0d77e7ffeba8351aba750aee45d915bb0e40cbb5253e269c21abee",
+      "raw_git_blob": "d126854787c4cbfb7ceaeb762bded653815fbf29",
+      "filtered_git_blob": "d126854787c4cbfb7ceaeb762bded653815fbf29"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-preparation-20260930-a/rules.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "filtered_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-main-preparation-20260930-a/rules.stdout",
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "raw_git_blob": "0637a088a01e8ddab3bf3fa98dbe804cbde1a0dc",
+      "filtered_git_blob": "0637a088a01e8ddab3bf3fa98dbe804cbde1a0dc"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-candidate-preparation-20260930-a/README.md",
+      "bytes": 2953,
+      "sha256": "0530a8e3cac5179f54c478d111f67c1dcbf0d3fa63287f113e109ec7a6754a2e",
+      "raw_git_blob": "6193e48bede46259190611f81cc959b38add3321",
+      "filtered_git_blob": "6193e48bede46259190611f81cc959b38add3321"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-candidate-preparation-20260930-a/closeout-checks.json",
+      "bytes": 1108,
+      "sha256": "32dc163a9738dbe3d6fc7d232f3f61308f42d21004615268c6be177b6bb25cd6",
+      "raw_git_blob": "078192d2a8a145c967a98f92a86becd62536f2bf",
+      "filtered_git_blob": "078192d2a8a145c967a98f92a86becd62536f2bf"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-candidate-preparation-20260930-a/local-before.json",
+      "bytes": 1657,
+      "sha256": "13700e4ff022c567b01f501100298f84f7513f073eea471f078fb2d21bf04f37",
+      "raw_git_blob": "8b2d210b7ce2815d5265e8b231623bb20801f922",
+      "filtered_git_blob": "8b2d210b7ce2815d5265e8b231623bb20801f922"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-candidate-preparation-20260930-a/main-ci.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "filtered_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-candidate-preparation-20260930-a/main-ci.stdout",
+      "bytes": 262,
+      "sha256": "30f230afed70db2dabc43afdb31f71a0a4ba3634f13b57f93eef0f319f10c445",
+      "raw_git_blob": "37c52666df9c9cbc66aeee999553b96749807f5a",
+      "filtered_git_blob": "37c52666df9c9cbc66aeee999553b96749807f5a"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-candidate-preparation-20260930-a/main-commit.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "filtered_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-candidate-preparation-20260930-a/main-commit.stdout",
+      "bytes": 3639,
+      "sha256": "c93eec944453263d0e5daf1aa9bf7b4e1668ace63a2aa0e9c221017d55a0161d",
+      "raw_git_blob": "1acb60cc0bc7b95b94289fae5d5a2f71cd846221",
+      "filtered_git_blob": "1acb60cc0bc7b95b94289fae5d5a2f71cd846221"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-candidate-preparation-20260930-a/new-pr-search.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "filtered_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-candidate-preparation-20260930-a/new-pr-search.stdout",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "raw_git_blob": "fe51488c7066f6687ef680d6bfaa4f7768ef205c",
+      "filtered_git_blob": "fe51488c7066f6687ef680d6bfaa4f7768ef205c"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-candidate-preparation-20260930-a/old-pr.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "filtered_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-candidate-preparation-20260930-a/old-pr.stdout",
+      "bytes": 302,
+      "sha256": "965ab0b04a2a29006e962e9a51c54d6d2b244229045dc24d1bd023c43270999c",
+      "raw_git_blob": "3df255a5e56d075f92bca9be5aff3e84de87996d",
+      "filtered_git_blob": "3df255a5e56d075f92bca9be5aff3e84de87996d"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-candidate-preparation-20260930-a/operator.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "filtered_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-candidate-preparation-20260930-a/operator.stdout",
+      "bytes": 1232,
+      "sha256": "259f71c38958ee44530bfce29d0c73e25af3a2db9f3854026092fee8b96ea206",
+      "raw_git_blob": "1aadc3b96e9ecbe539b92d35a11508625dcf2f14",
+      "filtered_git_blob": "1aadc3b96e9ecbe539b92d35a11508625dcf2f14"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-candidate-preparation-20260930-a/pending-before-preparation.json",
+      "bytes": 87739,
+      "sha256": "3aeae910552955d78cef5bee7e242b34de89de278bdf93e339c91d818ddd7766",
+      "raw_git_blob": "d9a92ec70bb0462172ec5f49c5927304611ee10e",
+      "filtered_git_blob": "d9a92ec70bb0462172ec5f49c5927304611ee10e"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-candidate-preparation-20260930-a/pr-body.md",
+      "bytes": 834,
+      "sha256": "155cb3dbb97b6b39a21db13c5fe62f503ea4e2a7254a94b74a0c90a11dcc03df",
+      "raw_git_blob": "efb74841b5f80de4a186b6c0720ac75b9de1a2c9",
+      "filtered_git_blob": "efb74841b5f80de4a186b6c0720ac75b9de1a2c9"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-candidate-preparation-20260930-a/preservation-before.json",
+      "bytes": 362930,
+      "sha256": "275624f63bb2f225dfb6e96a65edca983df5d38f7fc7e3f900bc8a05233fc3b6",
+      "raw_git_blob": "dec1bf66c9da7b9649fe1a24415313ed1266742d",
+      "filtered_git_blob": "dec1bf66c9da7b9649fe1a24415313ed1266742d"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-candidate-preparation-20260930-a/queries.json",
+      "bytes": 2214,
+      "sha256": "3aa5875e00c6f3829033850eba1f25df8a928f101a8115c00ef974cc6505f2f1",
+      "raw_git_blob": "d5914c2b36139b986aee0e9741ba263dfa9ee49d",
+      "filtered_git_blob": "d5914c2b36139b986aee0e9741ba263dfa9ee49d"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-candidate-preparation-20260930-a/remote-heads.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "filtered_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-candidate-preparation-20260930-a/remote-heads.stdout",
+      "bytes": 210,
+      "sha256": "ff6f1c25b532dc9938edaa99a9ef06b56b83b27725d05a9d84943adaea86d556",
+      "raw_git_blob": "d1d2e05c7cd4646563201dce12f1f5fe4fba9d60",
+      "filtered_git_blob": "d1d2e05c7cd4646563201dce12f1f5fe4fba9d60"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-candidate-preparation-20260930-a/remote-summary.json",
+      "bytes": 1537,
+      "sha256": "db6399333b3f8a035a72b0aae03743c187065f1d01b138f8c046f7f48b899d7e",
+      "raw_git_blob": "1d2289f89cc52d8345dacb3dd68ab6c36153e99c",
+      "filtered_git_blob": "1d2289f89cc52d8345dacb3dd68ab6c36153e99c"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-candidate-preparation-20260930-a/repository.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "filtered_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-candidate-preparation-20260930-a/repository.stdout",
+      "bytes": 6141,
+      "sha256": "e4ebf5f2beeb3a78ce167f3eeaaf415617259a13a7e1b4e6a7b918e565b26985",
+      "raw_git_blob": "5b345f94c32841eedcf1f2b868861b414cf6be3c",
+      "filtered_git_blob": "5b345f94c32841eedcf1f2b868861b414cf6be3c"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-patch-20260930-a/README.md",
+      "bytes": 6670,
+      "sha256": "52d28f47f7c231bfb4ebc6b942c58b0891a906c7e080c2aed17cd0fb3848f7fc",
+      "raw_git_blob": "967d3346386e54dfafc06f298db3409f3b0faa65",
+      "filtered_git_blob": "967d3346386e54dfafc06f298db3409f3b0faa65"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-patch-20260930-a/audit-all-after.command.json",
+      "bytes": 629,
+      "sha256": "53c20be411f7c6674713e1e1e432d6e419a5e1781a5125c55e120904fd763d39",
+      "raw_git_blob": "b47220539ea37cafda98ad087a422a2720cbdc52",
+      "filtered_git_blob": "b47220539ea37cafda98ad087a422a2720cbdc52"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-patch-20260930-a/audit-all-after.stderr",
+      "bytes": 208,
+      "sha256": "370097c0cce87d329fcba52d1bd38b8934e7386b5874dfb00e6b0f98eed2fa1d",
+      "raw_git_blob": "41a2c5aacc6d1b6db91c6043f48ab279e9bf1422",
+      "filtered_git_blob": "41a2c5aacc6d1b6db91c6043f48ab279e9bf1422"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-patch-20260930-a/audit-all-after.stdout",
+      "bytes": 16706,
+      "sha256": "20aa75eee4455749d7f9baf4853c33570e55fd32011372de5ea4d5661bea417d",
+      "raw_git_blob": "264a800cf0ba06613e34fb4d49b68b91c81949c9",
+      "filtered_git_blob": "264a800cf0ba06613e34fb4d49b68b91c81949c9"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-patch-20260930-a/audit-all-after.summary.json",
+      "bytes": 174,
+      "sha256": "03f9bfb445cff273130cd9a2581815967eb34b4117e4af60be3eb832123cc163",
+      "raw_git_blob": "a8c33c6378bccecccbe7f1cf2f02020bf1f02cbd",
+      "filtered_git_blob": "a8c33c6378bccecccbe7f1cf2f02020bf1f02cbd"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-patch-20260930-a/audit-comparison.json",
+      "bytes": 1836,
+      "sha256": "056f5a6826b1321dd8f5d06fa30f29b8b53194fc5e5f68aac7f57ce96d9d6499",
+      "raw_git_blob": "db8513446c0b1d2426f9c2e7d969e7ca8d679915",
+      "filtered_git_blob": "db8513446c0b1d2426f9c2e7d969e7ca8d679915"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-patch-20260930-a/audit-production-after.command.json",
+      "bytes": 626,
+      "sha256": "f52285bcca27c46b6ad3f6e6c53fd3a55d13b7d125d6521333940a60e8214478",
+      "raw_git_blob": "c4848092c7f4bd276953e5fccc4ab43d17136908",
+      "filtered_git_blob": "c4848092c7f4bd276953e5fccc4ab43d17136908"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-patch-20260930-a/audit-production-after.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "filtered_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-patch-20260930-a/audit-production-after.stdout",
+      "bytes": 16712,
+      "sha256": "9f6a523e5cdcd43b99fcba959ee8cb59208aea197a35ac83f9fa6c9f7201672a",
+      "raw_git_blob": "e90ade81953689c0ec003fc870159c62f67e0ea1",
+      "filtered_git_blob": "e90ade81953689c0ec003fc870159c62f67e0ea1"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-patch-20260930-a/audit-production-after.summary.json",
+      "bytes": 174,
+      "sha256": "03f9bfb445cff273130cd9a2581815967eb34b4117e4af60be3eb832123cc163",
+      "raw_git_blob": "a8c33c6378bccecccbe7f1cf2f02020bf1f02cbd",
+      "filtered_git_blob": "a8c33c6378bccecccbe7f1cf2f02020bf1f02cbd"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-patch-20260930-a/closeout-checks.json",
+      "bytes": 1773,
+      "sha256": "571682857ce9324e6039cbffc3d9b80aeea1cdac070eebc28bbb9dff7a8a654f",
+      "raw_git_blob": "7f2192f8f03aa0c4da3c1d4d9b09e0d9ccd11e7a",
+      "filtered_git_blob": "7f2192f8f03aa0c4da3c1d4d9b09e0d9ccd11e7a"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-patch-20260930-a/download-integrity.json",
+      "bytes": 403,
+      "sha256": "6ece9fa3cb70f04b8e3068c647872f7ae6e559d66d2a79d8bbb8ea33b6191ca1",
+      "raw_git_blob": "ff718c29d1def5e81a5b6a575aaccb5c5738de1b",
+      "filtered_git_blob": "ff718c29d1def5e81a5b6a575aaccb5c5738de1b"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-patch-20260930-a/files.sha256.json",
+      "bytes": 5833,
+      "sha256": "2e0e37c6e5ca2cce0f40eab87f03ae1b58efb22104948efed353e06ca87e8bdb",
+      "raw_git_blob": "9afa82cbb3a0976a02856dcbe27acd64788e2aa3",
+      "filtered_git_blob": "9afa82cbb3a0976a02856dcbe27acd64788e2aa3"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-patch-20260930-a/focused-baseline.command.json",
+      "bytes": 664,
+      "sha256": "f6f50504b774a75a363e82221ababce47b15dc62dcceec95f795412271872b8a",
+      "raw_git_blob": "6ee349e002c1ecd4e7c2eba6a97d713b0e0ae345",
+      "filtered_git_blob": "6ee349e002c1ecd4e7c2eba6a97d713b0e0ae345"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-patch-20260930-a/focused-baseline.identity.json",
+      "bytes": 62,
+      "sha256": "56619192c1249b734faf69aa76db33404e8fdec3b50416d67e5d2524a24c9e8c",
+      "raw_git_blob": "de2a5f807997ab37058d0d02f3bad8eb7a8845cc",
+      "filtered_git_blob": "de2a5f807997ab37058d0d02f3bad8eb7a8845cc"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-patch-20260930-a/focused-baseline.results.json",
+      "bytes": 8513,
+      "sha256": "19c834de50303b4c538448a18e03a877723df25dda6d9969ba6b1857bf2277fe",
+      "raw_git_blob": "daa9caed3b3d48203c36e2d06f4f397da71254da",
+      "filtered_git_blob": "daa9caed3b3d48203c36e2d06f4f397da71254da"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-patch-20260930-a/focused-baseline.stderr",
+      "bytes": 978,
+      "sha256": "c0f981c04704e32953f03c025be18813505d80c314fcb81d5b24cb3ef4ccef85",
+      "raw_git_blob": "7384bf732dc5006264de30e4345bb323021a0464",
+      "filtered_git_blob": "7384bf732dc5006264de30e4345bb323021a0464"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-patch-20260930-a/focused-baseline.stdout",
+      "bytes": 484,
+      "sha256": "dddb84e9eb58a396796bc722aeb993c8c4268cb09f03f9ffa9cad08fcd56ab7f",
+      "raw_git_blob": "be473c1081ad6933923cf0a98b0be2d77e7fb47b",
+      "filtered_git_blob": "be473c1081ad6933923cf0a98b0be2d77e7fb47b"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-patch-20260930-a/focused-patched.command.json",
+      "bytes": 663,
+      "sha256": "dc7a5604dc8e7752be3dddc77ea0d3f33a6c4b944defbf009b7526dac58e2172",
+      "raw_git_blob": "bbd896211fc8506d3951f8ccb373a52df3cb41fe",
+      "filtered_git_blob": "bbd896211fc8506d3951f8ccb373a52df3cb41fe"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-patch-20260930-a/focused-patched.identity.json",
+      "bytes": 62,
+      "sha256": "1b4fdabec1dfa44e4f65afca88b84128bbf31a35b07df1ef8642f3e4165d5545",
+      "raw_git_blob": "6a90b504481faf9ff853fade8d3e9e368b4aade1",
+      "filtered_git_blob": "6a90b504481faf9ff853fade8d3e9e368b4aade1"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-patch-20260930-a/focused-patched.results.json",
+      "bytes": 8513,
+      "sha256": "1d57080fbc6dd546fbbf82bdec18d236d698055ba76e2b8d13395dfb6e6084f7",
+      "raw_git_blob": "48275ec4a4f9a2c9f99206089f4eff5b575174e0",
+      "filtered_git_blob": "48275ec4a4f9a2c9f99206089f4eff5b575174e0"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-patch-20260930-a/focused-patched.stderr",
+      "bytes": 978,
+      "sha256": "c0f981c04704e32953f03c025be18813505d80c314fcb81d5b24cb3ef4ccef85",
+      "raw_git_blob": "7384bf732dc5006264de30e4345bb323021a0464",
+      "filtered_git_blob": "7384bf732dc5006264de30e4345bb323021a0464"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-patch-20260930-a/focused-patched.stdout",
+      "bytes": 483,
+      "sha256": "a1937595831beccb33bb1422c86ccdaef68e6f282067ea564b5241fdf93d61e6",
+      "raw_git_blob": "3e73862b1577697357b07afe23f7ac3c192563aa",
+      "filtered_git_blob": "3e73862b1577697357b07afe23f7ac3c192563aa"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-patch-20260930-a/focused-summary.json",
+      "bytes": 190,
+      "sha256": "58750a79e206b70db2d566bc62412d578f9a0ea636c61a8da4015be349e4c77e",
+      "raw_git_blob": "65154f51c42832c98e044eaacfd1dc81d3400b29",
+      "filtered_git_blob": "65154f51c42832c98e044eaacfd1dc81d3400b29"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-patch-20260930-a/harness/focused.py.txt",
+      "bytes": 4737,
+      "sha256": "3c9afb41044c450dd1f4ed08edfef8dcb2f9ddf69693af6f96a1813b8528c0da",
+      "raw_git_blob": "974a4c7565255499c4e2a2ea6e41dc29274e0797",
+      "filtered_git_blob": "974a4c7565255499c4e2a2ea6e41dc29274e0797"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-patch-20260930-a/harness/prepare.py.txt",
+      "bytes": 4472,
+      "sha256": "dce8cf0d3dbb28b1bbd01dd9a7fd1a29dc14fcc45ad03346b4b4955d039dd312",
+      "raw_git_blob": "f86a96947df756b9d624a52e717ec398cf3b128f",
+      "filtered_git_blob": "f86a96947df756b9d624a52e717ec398cf3b128f"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-patch-20260930-a/harness/summarize.py.txt",
+      "bytes": 1896,
+      "sha256": "c5802fbf38ce688785a2193cd399fd38162369bfc800c08fef08421d2aef508b",
+      "raw_git_blob": "48eb5e0c0711a560a2f70dc1a43f995d7f3a26d5",
+      "filtered_git_blob": "48eb5e0c0711a560a2f70dc1a43f995d7f3a26d5"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-patch-20260930-a/harness/verify.py.txt",
+      "bytes": 5822,
+      "sha256": "4cb61d5a80d71c9e21f823ef65ce7014f2ddabc62817a438d055596d8450f2de",
+      "raw_git_blob": "39a93f081c3e04951d2da4e6b5f2683387375cd8",
+      "filtered_git_blob": "39a93f081c3e04951d2da4e6b5f2683387375cd8"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-patch-20260930-a/identity-before.json",
+      "bytes": 1457,
+      "sha256": "5712aa417d0e5ecbd9d9424ff88fe27a85e336e956f6e8d735f22aaf2d4f580c",
+      "raw_git_blob": "ba92d94edd0479becf0bdd6dfd9add77755a1314",
+      "filtered_git_blob": "ba92d94edd0479becf0bdd6dfd9add77755a1314"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-patch-20260930-a/isolation.json",
+      "bytes": 420,
+      "sha256": "a7c0c01a082933703b25c725230646d5ac7525acc51061ee75be501c857b021a",
+      "raw_git_blob": "e367df6d548094e9e72cd0444bf9dd8162fcc3d0",
+      "filtered_git_blob": "e367df6d548094e9e72cd0444bf9dd8162fcc3d0"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-patch-20260930-a/jsdom-tests.command.json",
+      "bytes": 892,
+      "sha256": "469e8bc20f583dfde982b40a8c417f1b989e2501bf6d5a203dd44ea89d1efbfb",
+      "raw_git_blob": "9f1fffdfca5a6904304f00d73ab5331fb2803b0d",
+      "filtered_git_blob": "9f1fffdfca5a6904304f00d73ab5331fb2803b0d"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-patch-20260930-a/jsdom-tests.stderr",
+      "bytes": 2015,
+      "sha256": "d99d07c5bd9047c6d2f550e632e7aeeb0bd9bdd5f97c18a88798154cb2f86fd5",
+      "raw_git_blob": "855f3c2e9f3edeacaf0d704766afc464aa149072",
+      "filtered_git_blob": "855f3c2e9f3edeacaf0d704766afc464aa149072"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-patch-20260930-a/jsdom-tests.stdout",
+      "bytes": 2854,
+      "sha256": "d129882bd6eb0f08060abe06f4e74cfa4698827203e61ea349a86cf0d2b5f216",
+      "raw_git_blob": "cc4e75a6f15bbdf8c6da08af00e3a6035f366664",
+      "filtered_git_blob": "cc4e75a6f15bbdf8c6da08af00e3a6035f366664"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-patch-20260930-a/lock-change.json",
+      "bytes": 718,
+      "sha256": "0ca6e5b6bc1143d82922b0bc5d9e06268448dbc5e8e4f3fd5804ee0dbafd2bb6",
+      "raw_git_blob": "d0f8acbe5195039dfe912dbe6cce4fef02de293c",
+      "filtered_git_blob": "d0f8acbe5195039dfe912dbe6cce4fef02de293c"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-patch-20260930-a/preservation-before.json",
+      "bytes": 354726,
+      "sha256": "b8db129c383af7bcca4a5421fa6b73c8340269897d183c563edbc36b3fee0813",
+      "raw_git_blob": "53f2c98d0d978257f9a9a1aa9f4be08bb7671436",
+      "filtered_git_blob": "53f2c98d0d978257f9a9a1aa9f4be08bb7671436"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-patch-20260930-a/resolution.command.json",
+      "bytes": 296,
+      "sha256": "25a29ba14783c23ecbc96e2cacb493b7f4026def8d994571d4242e91d425847f",
+      "raw_git_blob": "8ea32bfad889072da85dbfe78e2df54a0671c2c2",
+      "filtered_git_blob": "8ea32bfad889072da85dbfe78e2df54a0671c2c2"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-patch-20260930-a/resolution.json",
+      "bytes": 366,
+      "sha256": "42296e0b2bb816d557b1dae58860968d11231a7e3285ba37850ac5d036c04a59",
+      "raw_git_blob": "526081a54cf8c3883c2ee6296244d2225a9f79fc",
+      "filtered_git_blob": "526081a54cf8c3883c2ee6296244d2225a9f79fc"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-patch-20260930-a/resolution.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "filtered_git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-patch-20260930-a/resolution.stdout",
+      "bytes": 341,
+      "sha256": "b612b7a4b6fbad4ea57a14ff89cbbc7ff584e597a6990aad427f1a0b70036b8e",
+      "raw_git_blob": "835781ab0ecb8ab85b1c2d4ea0e6014471d72721",
+      "filtered_git_blob": "835781ab0ecb8ab85b1c2d4ea0e6014471d72721"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-patch-20260930-a/test-analysis.json",
+      "bytes": 7574,
+      "sha256": "722e3c958b94c026ffcc684dea5f883456cdb5c7f871f32a7cba657c0586bf08",
+      "raw_git_blob": "4aad98561732391764ce36fdda3ddafeaa8d108b",
+      "filtered_git_blob": "4aad98561732391764ce36fdda3ddafeaa8d108b"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-patch-20260930-a/test-inputs.json",
+      "bytes": 34622,
+      "sha256": "ea826034a312f278f8a3e168ee033f5025b15d602b938595d642e346106629ba",
+      "raw_git_blob": "2bddec63f23c922ce18543fa191f7f968db47d86",
+      "filtered_git_blob": "2bddec63f23c922ce18543fa191f7f968db47d86"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-patch-20260930-a/verification-preservation.json",
+      "bytes": 141,
+      "sha256": "887ee946e6258f92659412216c6a61aa65b7afed8f026bea69d19ddcd6e7f1e9",
+      "raw_git_blob": "4a5294c88f802f62e2fd50bf4644acb42041f211",
+      "filtered_git_blob": "4a5294c88f802f62e2fd50bf4644acb42041f211"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-patch-20260930-a/vitest-results.json",
+      "bytes": 31942,
+      "sha256": "fef448b211928d935d839782712c9879db515e9dfb3873d4e8415168c9031757",
+      "raw_git_blob": "3ddcb528e86f4288d3078d43bcf2e6b5417d4b76",
+      "filtered_git_blob": "3ddcb528e86f4288d3078d43bcf2e6b5417d4b76"
+    },
+    {
+      "path": "docs/验收证据/r3-gate4-undici-patch-20260930-a/workspace-installed-before.json",
+      "bytes": 145813,
+      "sha256": "3c809d06f74faf6b129178bfc5b0cf7d470b2e900c30a51f96bb53b7116dfb06",
+      "raw_git_blob": "44612522990a6d7364b819975d4b8228a9d243b1",
+      "filtered_git_blob": "44612522990a6d7364b819975d4b8228a9d243b1"
+    },
+    {
+      "path": "package-lock.json",
+      "bytes": 450273,
+      "sha256": "347f5fda89ca590091ba62211c2cd40e845abaa93d4e1d79a3e0c8395424813e",
+      "raw_git_blob": "8b170a4f2bd0eba49e2d2abcef71785744335976",
+      "filtered_git_blob": "8b170a4f2bd0eba49e2d2abcef71785744335976"
+    }
+  ]
+}

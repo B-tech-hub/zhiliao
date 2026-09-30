@@ -1,0 +1,7 @@
+{
+  "utc": "2026-09-29T14:46:29.605788+00:00",
+  "refs": {
+    "refs/heads/candidate/0.6.1-baseline": "41cf296d1d1ccc38d1b2f1b3335cc5b8ac4a4b81",
+    "refs/heads/main": "6ee67532deed37fda6cc98962e8df76c98659890"
+  }
+}

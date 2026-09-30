@@ -1,0 +1,53 @@
+{
+  "finished_utc": "2026-09-30T00:18:49.359177+00:00",
+  "changed_files": [
+    "CHANGELOG.md",
+    "_bmad-output/implementation-artifacts/spec-r3-gate4-distribution.md",
+    "docs/0.6.1候选定稿-2026-09-28.md",
+    "docs/R3主线新增high依赖调查-2026-09-30.md",
+    "docs/R3门禁4最终候选收口与RC执行单-2026-09-29.md",
+    "docs/R3门禁4环境调查与验收计划-2026-09-29.md",
+    "docs/README.md",
+    "docs/releases/v0.6.1.md",
+    "docs/产品规划/开源发布范围与执行清单-2026-09-13.md",
+    "package-lock.json"
+  ],
+  "old_evidence_files_unchanged": 1293,
+  "existing_files_unchanged": 2022,
+  "workspace_jsdom_undici_files_unchanged": 862,
+  "head_refs_index_unchanged": true,
+  "package_json_unchanged": true,
+  "only_undici_three_lock_fields_changed": true,
+  "package_tarball_and_registry_integrity_match": true,
+  "other_audit_packages_severities_advisories_ranges_nodes_unchanged": true,
+  "other_audit_effects_fix_suggestions_changed": [
+    "@tiptap/extension-bubble-menu",
+    "@tiptap/extension-dropcursor",
+    "@tiptap/extension-floating-menu",
+    "@tiptap/extension-history"
+  ],
+  "first_test_result": {
+    "passed": 95,
+    "failed": 1,
+    "skipped": 0
+  },
+  "focused_patched": {
+    "passed": 2,
+    "failed": 0,
+    "filtered": 24
+  },
+  "focused_baseline": {
+    "passed": 2,
+    "failed": 0,
+    "filtered": 24
+  },
+  "unique_patched_cases_with_pass_evidence": 96,
+  "initial_timeout_root_cause": "未确定，不声称已修复或整组全绿",
+  "spec_baseline_frozen_status_preserved": true,
+  "source_artifacts_byte_identical": true,
+  "document_links_checked": 10,
+  "git_diff_check_exit": 0,
+  "archive_crlf_files": [],
+  "credential_pattern_hits": [],
+  "full_gates_git_write_release": "未执行"
+}

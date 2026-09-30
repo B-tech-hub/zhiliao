@@ -1,0 +1,21 @@
+{
+  "argv": [
+    "D:\\node.js\\npm.cmd",
+    "audit",
+    "--json",
+    "--package-lock-only",
+    "--omit=dev",
+    "--include=optional",
+    "--include=peer",
+    "--ignore-scripts",
+    "--registry=https://registry.npmjs.org",
+    "--fetch-retries=0",
+    "--fetch-timeout=20000",
+    "--cache=C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-undici-patch-318d11dc\\npm-cache"
+  ],
+  "cwd": "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-undici-patch-318d11dc\\work",
+  "started_utc": "2026-09-30T00:13:10.753849+00:00",
+  "finished_utc": "2026-09-30T00:13:12.706994+00:00",
+  "exit_code": 1,
+  "timeout_seconds": 60
+}

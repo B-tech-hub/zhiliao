@@ -1,0 +1,11 @@
+
+ RUN  v4.1.11 C:/Users/BAIBAI/AppData/Local/Temp/zhiliao-undici-patch-318d11dc/work
+
+ ✓ tests/components/markdown-editor-security.test.tsx (26 tests | 24 skipped) 185ms
+
+ Test Files  1 passed (1)
+      Tests  2 passed | 24 skipped (26)
+   Start at  08:12:54
+   Duration  2.53s (transform 101ms, setup 25ms, import 747ms, tests 185ms, environment 1.31s)
+
+JSON report written to C:/Users/BAIBAI/AppData/Local/Temp/zhiliao-undici-patch-318d11dc/evidence/focused-patched.results.json

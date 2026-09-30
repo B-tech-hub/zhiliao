@@ -1,0 +1,8 @@
+{
+  "node": "v22.19.0",
+  "builtinUndici": "6.21.2",
+  "jsdomEntry": "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-undici-patch-318d11dc\\work\\node_modules\\jsdom\\lib\\api.js",
+  "undiciEntry": "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-undici-patch-318d11dc\\work\\node_modules\\undici\\index.js",
+  "undici": "7.29.1",
+  "jsdomRangeSatisfied": true
+}

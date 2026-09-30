@@ -1,0 +1,24 @@
+{
+  "argv": [
+    "node",
+    "node_modules/vitest/vitest.mjs",
+    "run",
+    "tests/components/api-token-section.test.tsx",
+    "tests/components/command-palette.test.tsx",
+    "tests/components/markdown-editor-security.test.tsx",
+    "tests/components/nav.test.tsx",
+    "tests/components/quick-capture.test.tsx",
+    "tests/components/settings-panel-hydration.test.tsx",
+    "tests/lib/mermaid.test.ts",
+    "tests/lib/tiptap-security.test.ts",
+    "--maxWorkers=1",
+    "--reporter=default",
+    "--reporter=json",
+    "--outputFile.json=C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-undici-patch-318d11dc\\evidence\\vitest-results.json"
+  ],
+  "cwd": "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-undici-patch-318d11dc\\work",
+  "started_utc": "2026-09-30T00:09:24.194532+00:00",
+  "finished_utc": "2026-09-30T00:11:52.684083+00:00",
+  "exit_code": 1,
+  "timeout_seconds": 180
+}

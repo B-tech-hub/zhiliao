@@ -1,0 +1,10 @@
+{
+  "actual_checkout_from_log": "2ae66f5f3df6b0e7afa3bfa09bf601b18ea96a11",
+  "merge_commit": "2ae66f5f3df6b0e7afa3bfa09bf601b18ea96a11",
+  "matches": true,
+  "parents": [
+    "6ee67532deed37fda6cc98962e8df76c98659890",
+    "41cf296d1d1ccc38d1b2f1b3335cc5b8ac4a4b81"
+  ],
+  "tree": "d0f16de6459461315c0b0274a8a0f44bc483e84d"
+}

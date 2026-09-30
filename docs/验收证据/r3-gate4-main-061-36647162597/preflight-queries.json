@@ -1,0 +1,118 @@
+[
+  {
+    "name": "operator",
+    "args": [
+      "gh",
+      "api",
+      "user",
+      "--jq",
+      "{login,id,type}"
+    ],
+    "started_at_utc": "2026-09-29T23:48:13.197508+00:00",
+    "finished_at_utc": "2026-09-29T23:48:13.908363+00:00",
+    "exit_code": 0
+  },
+  {
+    "name": "repository",
+    "args": [
+      "gh",
+      "api",
+      "repos/B-tech-hub/zhiliao",
+      "--jq",
+      "{full_name,private,archived,default_branch,permissions,allow_merge_commit,allow_auto_merge,delete_branch_on_merge}"
+    ],
+    "started_at_utc": "2026-09-29T23:48:13.908836+00:00",
+    "finished_at_utc": "2026-09-29T23:48:14.688801+00:00",
+    "exit_code": 0
+  },
+  {
+    "name": "branch",
+    "args": [
+      "gh",
+      "api",
+      "repos/B-tech-hub/zhiliao/branches/main",
+      "--jq",
+      "{name,protected,sha:.commit.sha,protection}"
+    ],
+    "started_at_utc": "2026-09-29T23:48:14.689171+00:00",
+    "finished_at_utc": "2026-09-29T23:48:15.455579+00:00",
+    "exit_code": 0
+  },
+  {
+    "name": "rules",
+    "args": [
+      "gh",
+      "api",
+      "repos/B-tech-hub/zhiliao/rules/branches/main"
+    ],
+    "started_at_utc": "2026-09-29T23:48:15.455976+00:00",
+    "finished_at_utc": "2026-09-29T23:48:16.179925+00:00",
+    "exit_code": 0
+  },
+  {
+    "name": "actions",
+    "args": [
+      "gh",
+      "api",
+      "repos/B-tech-hub/zhiliao/actions/permissions"
+    ],
+    "started_at_utc": "2026-09-29T23:48:16.180241+00:00",
+    "finished_at_utc": "2026-09-29T23:48:17.007258+00:00",
+    "exit_code": 0
+  },
+  {
+    "name": "ci-workflow",
+    "args": [
+      "gh",
+      "api",
+      "repos/B-tech-hub/zhiliao/actions/workflows/ci.yml",
+      "--jq",
+      "{id,name,path,state}"
+    ],
+    "started_at_utc": "2026-09-29T23:48:17.007746+00:00",
+    "finished_at_utc": "2026-09-29T23:48:17.770602+00:00",
+    "exit_code": 0
+  },
+  {
+    "name": "f-run",
+    "args": [
+      "gh",
+      "api",
+      "repos/B-tech-hub/zhiliao/actions/runs/36585198727",
+      "--jq",
+      "{id,path,event,head_sha,status,conclusion,run_attempt}"
+    ],
+    "started_at_utc": "2026-09-29T23:48:17.770969+00:00",
+    "finished_at_utc": "2026-09-29T23:48:18.554827+00:00",
+    "exit_code": 0
+  },
+  {
+    "name": "pr",
+    "args": [
+      "gh",
+      "pr",
+      "view",
+      "12",
+      "--repo",
+      "B-tech-hub/zhiliao",
+      "--json",
+      "number,state,isDraft,headRefName,headRefOid,headRepository,headRepositoryOwner,baseRefName,baseRefOid,mergeable,mergeStateStatus,reviewDecision,statusCheckRollup,autoMergeRequest"
+    ],
+    "started_at_utc": "2026-09-29T23:48:18.555377+00:00",
+    "finished_at_utc": "2026-09-29T23:48:19.660515+00:00",
+    "exit_code": 0
+  },
+  {
+    "name": "refs",
+    "args": [
+      "git",
+      "ls-remote",
+      "origin",
+      "refs/heads/main",
+      "refs/heads/candidate/0.6.1-baseline"
+    ],
+    "started_at_utc": "2026-09-29T23:48:19.660888+00:00",
+    "finished_at_utc": "2026-09-29T23:48:20.694288+00:00",
+    "exit_code": 0
+  }
+]

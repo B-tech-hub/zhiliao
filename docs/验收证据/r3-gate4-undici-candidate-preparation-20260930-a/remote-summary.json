@@ -1,0 +1,50 @@
+{
+  "heads": {
+    "refs/heads/candidate/0.6.1-baseline": "41cf296d1d1ccc38d1b2f1b3335cc5b8ac4a4b81",
+    "refs/heads/feat/ui-redesign-tokens": "95fd8472d6b373e2f619c282b3f5a7a2cae0035c",
+    "refs/heads/main": "2ae66f5f3df6b0e7afa3bfa09bf601b18ea96a11"
+  },
+  "old_pr": {
+    "baseRefName": "main",
+    "headRefName": "candidate/0.6.1-baseline",
+    "headRefOid": "41cf296d1d1ccc38d1b2f1b3335cc5b8ac4a4b81",
+    "mergeCommit": {
+      "oid": "2ae66f5f3df6b0e7afa3bfa09bf601b18ea96a11"
+    },
+    "mergedAt": "2026-09-29T23:48:50Z",
+    "number": 12,
+    "state": "MERGED",
+    "url": "https://github.com/B-tech-hub/zhiliao/pull/12"
+  },
+  "new_pr_matches": [],
+  "main_commit": {
+    "sha": "2ae66f5f3df6b0e7afa3bfa09bf601b18ea96a11",
+    "tree": "d0f16de6459461315c0b0274a8a0f44bc483e84d",
+    "parents": [
+      "6ee67532deed37fda6cc98962e8df76c98659890",
+      "41cf296d1d1ccc38d1b2f1b3335cc5b8ac4a4b81"
+    ]
+  },
+  "main_ci": {
+    "attempt": 1,
+    "conclusion": "success",
+    "databaseId": 36647162597,
+    "event": "push",
+    "headBranch": "main",
+    "headSha": "2ae66f5f3df6b0e7afa3bfa09bf601b18ea96a11",
+    "status": "completed",
+    "url": "https://github.com/B-tech-hub/zhiliao/actions/runs/36647162597",
+    "workflowName": "CI"
+  },
+  "operator": "B-tech-hub",
+  "repository_permissions": {
+    "admin": true,
+    "maintain": true,
+    "push": true,
+    "triage": true,
+    "pull": true
+  },
+  "repository_archived": false,
+  "repository_default_branch": "main",
+  "recorded_utc": "2026-09-30T00:22:33.649584+00:00"
+}

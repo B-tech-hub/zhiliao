@@ -1,0 +1,19 @@
+{
+  "argv": [
+    "node",
+    "node_modules/vitest/vitest.mjs",
+    "run",
+    "tests/components/markdown-editor-security.test.tsx",
+    "-t",
+    "外部正文同步通过实际 setContent 路径过滤属性",
+    "--maxWorkers=1",
+    "--reporter=default",
+    "--reporter=json",
+    "--outputFile.json=C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-undici-patch-318d11dc\\evidence\\focused-patched.results.json"
+  ],
+  "cwd": "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-undici-patch-318d11dc\\work",
+  "started_utc": "2026-09-30T00:12:54.195611+00:00",
+  "finished_utc": "2026-09-30T00:12:57.321174+00:00",
+  "exit_code": 0,
+  "timeout_seconds": 100
+}

@@ -1,0 +1,5 @@
+{
+  "source": "gh run view --log stdout bytes",
+  "bytes": 71015,
+  "sha256": "43b8283d5dee1ad983a7b4dc0d197ebe0e5a37512bef8f19fcf66b3d2796f4f9"
+}

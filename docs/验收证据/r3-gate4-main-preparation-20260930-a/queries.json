@@ -1,0 +1,162 @@
+[
+  {
+    "name": "refs",
+    "args": [
+      "git",
+      "ls-remote",
+      "origin",
+      "refs/heads/main",
+      "refs/heads/candidate/0.6.1-baseline"
+    ],
+    "started_at_utc": "2026-09-29T23:43:28.826051+00:00",
+    "finished_at_utc": "2026-09-29T23:43:31.775456+00:00",
+    "exit_code": 0
+  },
+  {
+    "name": "pr",
+    "args": [
+      "gh",
+      "pr",
+      "view",
+      "12",
+      "--repo",
+      "B-tech-hub/zhiliao",
+      "--json",
+      "number,title,state,isDraft,headRefName,headRefOid,headRepository,headRepositoryOwner,baseRefName,baseRefOid,mergeable,mergeStateStatus,reviewDecision,statusCheckRollup,autoMergeRequest,url"
+    ],
+    "started_at_utc": "2026-09-29T23:43:31.775488+00:00",
+    "finished_at_utc": "2026-09-29T23:43:32.924705+00:00",
+    "exit_code": 0
+  },
+  {
+    "name": "repository",
+    "args": [
+      "gh",
+      "api",
+      "repos/B-tech-hub/zhiliao",
+      "--jq",
+      "{full_name,private,archived,default_branch,permissions,allow_merge_commit,allow_squash_merge,allow_rebase_merge,allow_auto_merge,delete_branch_on_merge,merge_commit_title,merge_commit_message}"
+    ],
+    "started_at_utc": "2026-09-29T23:43:32.924755+00:00",
+    "finished_at_utc": "2026-09-29T23:43:34.323233+00:00",
+    "exit_code": 0
+  },
+  {
+    "name": "operator",
+    "args": [
+      "gh",
+      "api",
+      "user",
+      "--jq",
+      "{login,id,type}"
+    ],
+    "started_at_utc": "2026-09-29T23:43:34.323265+00:00",
+    "finished_at_utc": "2026-09-29T23:43:35.020062+00:00",
+    "exit_code": 0
+  },
+  {
+    "name": "branch",
+    "args": [
+      "gh",
+      "api",
+      "repos/B-tech-hub/zhiliao/branches/main",
+      "--jq",
+      "{name,protected,sha:.commit.sha,protection}"
+    ],
+    "finished_at_utc": "2026-09-29T23:43:59.600485+00:00",
+    "exit_code": 0
+  },
+  {
+    "name": "rules",
+    "args": [
+      "gh",
+      "api",
+      "repos/B-tech-hub/zhiliao/rules/branches/main"
+    ],
+    "finished_at_utc": "2026-09-29T23:44:01.265440+00:00",
+    "exit_code": 0
+  },
+  {
+    "name": "actions",
+    "args": [
+      "gh",
+      "api",
+      "repos/B-tech-hub/zhiliao/actions/permissions"
+    ],
+    "finished_at_utc": "2026-09-29T23:44:02.566140+00:00",
+    "exit_code": 0
+  },
+  {
+    "name": "ci-workflow",
+    "args": [
+      "gh",
+      "api",
+      "repos/B-tech-hub/zhiliao/actions/workflows/ci.yml",
+      "--jq",
+      "{id,name,path,state}"
+    ],
+    "finished_at_utc": "2026-09-29T23:44:03.792055+00:00",
+    "exit_code": 0
+  },
+  {
+    "name": "f-run",
+    "args": [
+      "gh",
+      "api",
+      "repos/B-tech-hub/zhiliao/actions/runs/36585198727",
+      "--jq",
+      "{id,name,path,event,head_sha,head_branch,status,conclusion,run_attempt,created_at,updated_at,html_url,pull_requests}"
+    ],
+    "finished_at_utc": "2026-09-29T23:44:04.923213+00:00",
+    "exit_code": 0
+  },
+  {
+    "name": "f-runs",
+    "args": [
+      "gh",
+      "api",
+      "--paginate",
+      "--slurp",
+      "repos/B-tech-hub/zhiliao/actions/runs?head_sha=41cf296d1d1ccc38d1b2f1b3335cc5b8ac4a4b81&per_page=100"
+    ],
+    "finished_at_utc": "2026-09-29T23:44:05.858973+00:00",
+    "exit_code": 0
+  },
+  {
+    "name": "candidate-log",
+    "args": [
+      "git",
+      "log",
+      "--format=%H %P %s",
+      "6ee67532deed37fda6cc98962e8df76c98659890..41cf296d1d1ccc38d1b2f1b3335cc5b8ac4a4b81"
+    ],
+    "finished_at_utc": "2026-09-29T23:44:06.254890+00:00",
+    "exit_code": 0
+  },
+  {
+    "name": "candidate-tree",
+    "args": [
+      "git",
+      "ls-tree",
+      "-r",
+      "--full-tree",
+      "41cf296d1d1ccc38d1b2f1b3335cc5b8ac4a4b81"
+    ],
+    "finished_at_utc": "2026-09-29T23:44:06.378195+00:00",
+    "exit_code": 0
+  },
+  {
+    "name": "base-to-candidate",
+    "args": [
+      "git",
+      "-c",
+      "core.quotepath=false",
+      "diff",
+      "--name-status",
+      "6ee67532deed37fda6cc98962e8df76c98659890",
+      "41cf296d1d1ccc38d1b2f1b3335cc5b8ac4a4b81"
+    ],
+    "finished_at_utc": "2026-09-29T23:44:08.068432+00:00",
+    "exit_code": 0
+  }
+]

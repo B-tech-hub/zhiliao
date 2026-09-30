@@ -1,0 +1,12 @@
+{
+  "exit_code": 1,
+  "vulnerabilities": {
+    "info": 0,
+    "low": 0,
+    "moderate": 33,
+    "high": 0,
+    "critical": 0,
+    "total": 33
+  },
+  "undici_finding": null
+}

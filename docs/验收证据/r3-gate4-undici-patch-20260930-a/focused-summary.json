@@ -1,0 +1,8 @@
+{
+  "patched_exit": 0,
+  "baseline_exit": 0,
+  "restored_isolated_undici": "7.29.1",
+  "test_timeout_changed": false,
+  "source_tests_changed": false,
+  "original_failure_preserved": true
+}

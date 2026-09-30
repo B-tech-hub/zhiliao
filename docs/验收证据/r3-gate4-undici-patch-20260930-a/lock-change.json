@@ -1,0 +1,22 @@
+{
+  "changes": {
+    "version": {
+      "before": "7.29.0",
+      "after": "7.29.1"
+    },
+    "resolved": {
+      "before": "https://registry.npmjs.org/undici/-/undici-7.29.0.tgz",
+      "after": "https://registry.npmjs.org/undici/-/undici-7.29.1.tgz"
+    },
+    "integrity": {
+      "before": "sha512-IDxfleLmmbSskfWSUATiN1nfn2rDuvnMOqb5CWR92iIfojA0Ud+ulOAAEQ57LPr9rWmsreUyf5lwyao+7GNNVw==",
+      "after": "sha512-RYONW2MeafgYlkVOKYKkA/Ag7BmXqgIWCa8t1m0JcxrQg9pI9lEqRhAOruOBCbAohOa/gkCF+iPi9hrgvTzu6Q=="
+    }
+  },
+  "only_one_package_entry_changed": true,
+  "package_json_unchanged": true,
+  "new_lock": {
+    "bytes": 450273,
+    "sha256": "347f5fda89ca590091ba62211c2cd40e845abaa93d4e1d79a3e0c8395424813e"
+  }
+}

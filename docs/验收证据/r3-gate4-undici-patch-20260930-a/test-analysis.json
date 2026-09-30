@@ -1,0 +1,111 @@
+{
+  "current": {
+    "vitest-results": {
+      "numTotalTests": 96,
+      "numPassedTests": 95,
+      "numFailedTests": 1,
+      "numPendingTests": 0,
+      "success": false,
+      "failed": [
+        {
+          "ancestorTitles": [
+            "真实编辑器安全边界：Mermaid=true"
+          ],
+          "fullName": "真实编辑器安全边界：Mermaid=true 外部正文同步通过实际 setContent 路径过滤属性",
+          "status": "failed",
+          "title": "外部正文同步通过实际 setContent 路径过滤属性",
+          "duration": 72083.7558,
+          "failureMessages": [
+            "Error: STACK_TRACE_ERROR\n    at task (file:///C:/Users/BAIBAI/AppData/Local/Temp/zhiliao-undici-patch-318d11dc/work/node_modules/@vitest/runner/dist/chunk-artifact.js:1784:27)\n    at Object.<anonymous> (file:///C:/Users/BAIBAI/AppData/Local/Temp/zhiliao-undici-patch-318d11dc/work/node_modules/@vitest/runner/dist/chunk-artifact.js:1817:16)\n    at Object.<anonymous> (file:///C:/Users/BAIBAI/AppData/Local/Temp/zhiliao-undici-patch-318d11dc/work/node_modules/@vitest/runner/dist/chunk-artifact.js:1563:28)\n    at chain (file:///C:/Users/BAIBAI/AppData/Local/Temp/zhiliao-undici-patch-318d11dc/work/node_modules/@vitest/runner/dist/chunk-artifact.js:599:14)\n    at C:/Users/BAIBAI/AppData/Local/Temp/zhiliao-undici-patch-318d11dc/work/tests/components/markdown-editor-security.test.tsx:84:3\n    at file:///C:/Users/BAIBAI/AppData/Local/Temp/zhiliao-undici-patch-318d11dc/work/node_modules/@vitest/runner/dist/chunk-artifact.js:1971:61\n    at file:///C:/Users/BAIBAI/AppData/Local/Temp/zhiliao-undici-patch-318d11dc/work/node_modules/@vitest/runner/dist/chunk-artifact.js:1889:40\n    at runWithSuite (file:///C:/Users/BAIBAI/AppData/Local/Temp/zhiliao-undici-patch-318d11dc/work/node_modules/@vitest/runner/dist/chunk-artifact.js:2258:8)\n    at Object.collect (file:///C:/Users/BAIBAI/AppData/Local/Temp/zhiliao-undici-patch-318d11dc/work/node_modules/@vitest/runner/dist/chunk-artifact.js:1889:10)\n    at Object.collect (file:///C:/Users/BAIBAI/AppData/Local/Temp/zhiliao-undici-patch-318d11dc/work/node_modules/@vitest/runner/dist/chunk-artifact.js:1893:54)"
+          ],
+          "meta": {},
+          "tags": []
+        }
+      ],
+      "setContent": [
+        {
+          "fullName": "真实编辑器安全边界：Mermaid=false 外部正文同步通过实际 setContent 路径过滤属性",
+          "status": "passed",
+          "duration": 52.358100000001286
+        },
+        {
+          "fullName": "真实编辑器安全边界：Mermaid=true 外部正文同步通过实际 setContent 路径过滤属性",
+          "status": "failed",
+          "duration": 72083.7558
+        }
+      ],
+      "files": [
+        "C:/Users/BAIBAI/AppData/Local/Temp/zhiliao-undici-patch-318d11dc/work/tests/components/api-token-section.test.tsx",
+        "C:/Users/BAIBAI/AppData/Local/Temp/zhiliao-undici-patch-318d11dc/work/tests/components/command-palette.test.tsx",
+        "C:/Users/BAIBAI/AppData/Local/Temp/zhiliao-undici-patch-318d11dc/work/tests/components/markdown-editor-security.test.tsx",
+        "C:/Users/BAIBAI/AppData/Local/Temp/zhiliao-undici-patch-318d11dc/work/tests/components/nav.test.tsx",
+        "C:/Users/BAIBAI/AppData/Local/Temp/zhiliao-undici-patch-318d11dc/work/tests/components/quick-capture.test.tsx",
+        "C:/Users/BAIBAI/AppData/Local/Temp/zhiliao-undici-patch-318d11dc/work/tests/components/settings-panel-hydration.test.tsx",
+        "C:/Users/BAIBAI/AppData/Local/Temp/zhiliao-undici-patch-318d11dc/work/tests/lib/mermaid.test.ts",
+        "C:/Users/BAIBAI/AppData/Local/Temp/zhiliao-undici-patch-318d11dc/work/tests/lib/tiptap-security.test.ts"
+      ]
+    },
+    "focused-patched.results": {
+      "numTotalTests": 26,
+      "numPassedTests": 2,
+      "numFailedTests": 0,
+      "numPendingTests": 24,
+      "success": true,
+      "failed": [],
+      "setContent": [
+        {
+          "fullName": "真实编辑器安全边界：Mermaid=false 外部正文同步通过实际 setContent 路径过滤属性",
+          "status": "passed",
+          "duration": 139.6823000000004
+        },
+        {
+          "fullName": "真实编辑器安全边界：Mermaid=true 外部正文同步通过实际 setContent 路径过滤属性",
+          "status": "passed",
+          "duration": 44.280599999999595
+        }
+      ],
+      "files": [
+        "C:/Users/BAIBAI/AppData/Local/Temp/zhiliao-undici-patch-318d11dc/work/tests/components/markdown-editor-security.test.tsx"
+      ]
+    },
+    "focused-baseline.results": {
+      "numTotalTests": 26,
+      "numPassedTests": 2,
+      "numFailedTests": 0,
+      "numPendingTests": 24,
+      "success": true,
+      "failed": [],
+      "setContent": [
+        {
+          "fullName": "真实编辑器安全边界：Mermaid=false 外部正文同步通过实际 setContent 路径过滤属性",
+          "status": "passed",
+          "duration": 138.53979999999956
+        },
+        {
+          "fullName": "真实编辑器安全边界：Mermaid=true 外部正文同步通过实际 setContent 路径过滤属性",
+          "status": "passed",
+          "duration": 44.54939999999988
+        }
+      ],
+      "files": [
+        "C:/Users/BAIBAI/AppData/Local/Temp/zhiliao-undici-patch-318d11dc/work/tests/components/markdown-editor-security.test.tsx"
+      ]
+    }
+  },
+  "historical_editor_failures": [
+    {
+      "file": "docs/验收证据/release-gates-061-20260929-a/test-results.json",
+      "sha256": "345ce763ad09f79c365e7eb677ecdd5ba1ac1462fc93b21c420db7fd2398ffac",
+      "failures": [
+        {
+          "fullName": "真实编辑器安全边界：Mermaid=true 初次加载不保留危险属性，正常内容完整",
+          "status": "failed",
+          "duration": 71116.9468,
+          "failureMessages": [
+            "Error: STACK_TRACE_ERROR\n    at task (file:///C:/Users/BAIBAI/AppData/Local/Temp/zhiliao-release-gates-061-20260929-a/candidate/node_modules/@vitest/runner/dist/chunk-artifact.js:1784:27)\n    at Object.<anonymous> (file:///C:/Users/BAIBAI/AppData/Local/Temp/zhiliao-release-gates-061-20260929-a/candidate/node_modules/@vitest/runner/dist/chunk-artifact.js:1817:16)\n    at Object.<anonymous> (file:///C:/Users/BAIBAI/AppData/Local/Temp/zhiliao-release-gates-061-20260929-a/candidate/node_modules/@vitest/runner/dist/chunk-artifact.js:1563:28)\n    at chain (file:///C:/Users/BAIBAI/AppData/Local/Temp/zhiliao-release-gates-061-20260929-a/candidate/node_modules/@vitest/runner/dist/chunk-artifact.js:599:14)\n    at C:/Users/BAIBAI/AppData/Local/Temp/zhiliao-release-gates-061-20260929-a/candidate/tests/components/markdown-editor-security.test.tsx:79:3\n    at file:///C:/Users/BAIBAI/AppData/Local/Temp/zhiliao-release-gates-061-20260929-a/candidate/node_modules/@vitest/runner/dist/chunk-artifact.js:1971:61\n    at file:///C:/Users/BAIBAI/AppData/Local/Temp/zhiliao-release-gates-061-20260929-a/candidate/node_modules/@vitest/runner/dist/chunk-artifact.js:1889:40\n    at runWithSuite (file:///C:/Users/BAIBAI/AppData/Local/Temp/zhiliao-release-gates-061-20260929-a/candidate/node_modules/@vitest/runner/dist/chunk-artifact.js:2258:8)\n    at Object.collect (file:///C:/Users/BAIBAI/AppData/Local/Temp/zhiliao-release-gates-061-20260929-a/candidate/node_modules/@vitest/runner/dist/chunk-artifact.js:1889:10)\n    at Object.collect (file:///C:/Users/BAIBAI/AppData/Local/Temp/zhiliao-release-gates-061-20260929-a/candidate/node_modules/@vitest/runner/dist/chunk-artifact.js:1893:54)"
+          ]
+        }
+      ]
+    }
+  ]
+}

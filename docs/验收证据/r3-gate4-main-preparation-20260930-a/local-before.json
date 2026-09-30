@@ -1,0 +1,17 @@
+{
+  "head": "41cf296d1d1ccc38d1b2f1b3335cc5b8ac4a4b81",
+  "branch": "candidate/0.6.1-baseline",
+  "tree": "d0f16de6459461315c0b0274a8a0f44bc483e84d",
+  "base_ancestor_exit": 0,
+  "commit_count": 28,
+  "index_paths": "",
+  "tracked_local_documents": {
+    "_bmad-output/implementation-artifacts/spec-r3-gate4-distribution.md": "8103ac079ec8efecc954b84eed6500b080052395d20366cb4d1274a4bc380dff",
+    "docs/0.6.1候选定稿-2026-09-28.md": "ea5ff2e0a5f16857819bba54a9c26c73951252d709a7602e08d9fc670f087052",
+    "docs/R3门禁4最终候选提交与PR-CI执行单-2026-09-29.md": "6534fd8a9a8ca3e3224fafc0d15cd00e8bdd8e9134ffd5fab85225bb21392e24",
+    "docs/R3门禁4最终候选收口与RC执行单-2026-09-29.md": "d54d89674b82b5a3ad70f29cc626bedaffcbffaa909a027fbc44e94e060dbd10",
+    "docs/R3门禁4环境调查与验收计划-2026-09-29.md": "992c08b29274f20dd941824f6cf534abfe0cbe0d6de4ceb86b210548182ab999",
+    "docs/README.md": "ef582ca4be148f2fa10b487196fdd66e95a7a44e0801f31186918854057030dd",
+    "docs/产品规划/开源发布范围与执行清单-2026-09-13.md": "3b5c1bf9c3c8c4ff765cb395f1e6613dc98979e768316d4fb993aeee89cc2bb9"
+  }
+}
