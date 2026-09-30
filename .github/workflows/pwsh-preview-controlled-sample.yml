@@ -1,0 +1,75 @@
+name: PowerShell 预览受控对照单样本
+
+on:
+  workflow_call:
+    inputs:
+      sample:
+        required: true
+        type: string
+      group:
+        required: true
+        type: string
+      previous:
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  sample:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      ZHILIAO_PREVIEW_SAMPLE: ${{ inputs.sample }}
+      ZHILIAO_PREVIEW_GROUP: ${{ inputs.group }}
+      REQUIRE_DOCKER_COMPOSE: "1"
+    steps:
+      - name: 初始化仓库外记录目录
+        shell: bash
+        run: |
+          set -euo pipefail
+          case "$ZHILIAO_PREVIEW_SAMPLE" in A1|B1|C1|D1|D2|C2|B2|A2) ;; *) exit 1 ;; esac
+          record_dir="$RUNNER_TEMP/pwsh-preview-controlled/$ZHILIAO_PREVIEW_SAMPLE"
+          mkdir -p "$record_dir"
+          printf 'ZHILIAO_PREVIEW_CONTROL_DIR=%s\n' "$record_dir" >> "$GITHUB_ENV"
+          printf 'ZHILIAO_PREVIEW_PREVIOUS_DIR=%s\n' "$RUNNER_TEMP/pwsh-preview-previous" >> "$GITHUB_ENV"
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.23.2
+      - name: 获取前一有效样本
+        if: ${{ inputs.previous != '' }}
+        uses: actions/download-artifact@v4
+        with:
+          name: pwsh-controlled-${{ github.run_id }}-${{ github.run_attempt }}-${{ inputs.previous }}
+          path: ${{ runner.temp }}/pwsh-preview-previous
+      - name: 安装同一锁定依赖
+        timeout-minutes: 5
+        run: npm ci --no-audit --no-fund
+      - name: 等时准备与受控测量
+        id: measure
+        timeout-minutes: 5
+        run: node scripts/pwsh-preview-controlled.mjs run
+      - name: 测量后读取 PowerShell 版本
+        if: ${{ always() && steps.measure.outcome != 'skipped' }}
+        timeout-minutes: 1
+        shell: bash
+        run: >-
+          pwsh -NoLogo -NoProfile -NonInteractive -Command
+          '@{ version=$PSVersionTable.PSVersion.ToString(); edition=$PSEdition } | ConvertTo-Json -Compress'
+          > "$ZHILIAO_PREVIEW_CONTROL_DIR/powershell-version.json"
+      - name: 核对完整性并决定是否继续
+        if: ${{ always() && steps.measure.outcome != 'skipped' }}
+        run: node scripts/pwsh-preview-controlled.mjs finalize
+      - name: 保留首次结果
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: pwsh-controlled-${{ github.run_id }}-${{ github.run_attempt }}-${{ inputs.sample }}
+          path: ${{ runner.temp }}/pwsh-preview-controlled/${{ inputs.sample }}
+          if-no-files-found: error
+          retention-days: 14

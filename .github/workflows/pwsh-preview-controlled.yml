@@ -1,0 +1,69 @@
+name: PowerShell 预览受控对照
+
+on:
+  push:
+    branches: [diagnostics/0.6.1-pwsh-controlled-a]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pwsh-controlled-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  a1:
+    uses: ./.github/workflows/pwsh-preview-controlled-sample.yml
+    with:
+      sample: A1
+      group: A
+      previous: ""
+  b1:
+    needs: a1
+    uses: ./.github/workflows/pwsh-preview-controlled-sample.yml
+    with:
+      sample: B1
+      group: B
+      previous: "A1"
+  c1:
+    needs: b1
+    uses: ./.github/workflows/pwsh-preview-controlled-sample.yml
+    with:
+      sample: C1
+      group: C
+      previous: "B1"
+  d1:
+    needs: c1
+    uses: ./.github/workflows/pwsh-preview-controlled-sample.yml
+    with:
+      sample: D1
+      group: D
+      previous: "C1"
+  d2:
+    needs: d1
+    uses: ./.github/workflows/pwsh-preview-controlled-sample.yml
+    with:
+      sample: D2
+      group: D
+      previous: "D1"
+  c2:
+    needs: d2
+    uses: ./.github/workflows/pwsh-preview-controlled-sample.yml
+    with:
+      sample: C2
+      group: C
+      previous: "D2"
+  b2:
+    needs: c2
+    uses: ./.github/workflows/pwsh-preview-controlled-sample.yml
+    with:
+      sample: B2
+      group: B
+      previous: "C2"
+  a2:
+    needs: b2
+    uses: ./.github/workflows/pwsh-preview-controlled-sample.yml
+    with:
+      sample: A2
+      group: A
+      previous: "B2"

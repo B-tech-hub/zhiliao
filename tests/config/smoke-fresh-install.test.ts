@@ -129,6 +129,7 @@ describe.skipIf(!powershell && !process.env.CI)("安装冒烟预览：参数与�
     const before = snapshotTree(directory);
     const started = performance.now();
     trace({ stage: "parent-before-spawn", image: image ?? "default", timeout_ms: 10_000,
+      sample: process.env.ZHILIAO_PREVIEW_SAMPLE, worker_pid: process.pid,
       executable: powershell, loadavg: os.loadavg(), totalmem: os.totalmem(), freemem: os.freemem(),
       available_parallelism: os.availableParallelism() });
     const result = spawnSync(powershell, [
@@ -158,13 +159,18 @@ describe.skipIf(!powershell && !process.env.CI)("安装冒烟预览：参数与�
     return result;
   }
 
-  it.each([
+  const positiveCases: Array<[string, string | undefined]> = [
     ["默认包版本", undefined],
     ["历史固定版本", `${imagePrefix}:0.6.0`],
     ["RC", `${imagePrefix}:1.2.3-rc1`],
     ["点分 RC", `${imagePrefix}:1.2.3-rc.1`],
     ["digest", `${imagePrefix}@sha256:${"a".repeat(64)}`],
-  ])("%s：输出正确镜像，且不依赖运行目录或环境版本", (_name, image) => {
+  ];
+  // 仅在受控诊断 B 组交换前两项，其余输入、断言和预算不变。
+  if (process.env.ZHILIAO_PREVIEW_GROUP === "B") {
+    [positiveCases[0], positiveCases[1]] = [positiveCases[1], positiveCases[0]];
+  }
+  it.each(positiveCases)("%s：输出正确镜像，且不依赖运行目录或环境版本", (_name, image) => {
     const result = preview(image);
     expect(result.status, result.stderr).toBe(0);
     expect(result.stderr).toBe("");
