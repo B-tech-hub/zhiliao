@@ -2,7 +2,7 @@ name: PowerShell 预览受控对照
 
 on:
   push:
-    branches: [diagnostics/0.6.1-pwsh-controlled-a]
+    branches: [diagnostics/0.6.1-pwsh-controlled-b]
 
 permissions:
   contents: read

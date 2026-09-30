@@ -7,8 +7,8 @@ import { execFileSync, spawn, spawnSync } from "node:child_process";
 import { setTimeout as delay } from "node:timers/promises";
 
 // 仅供本批诊断使用；不接入正式 CI 或安装入口。
-const base = "7e567d7847fee142d8cccd86e24f5665eb23c00f";
-const branch = "refs/heads/diagnostics/0.6.1-pwsh-controlled-a";
+const base = "b30a6c94ef30516e864d762b3df4e4e02583e865";
+const branch = "refs/heads/diagnostics/0.6.1-pwsh-controlled-b";
 const samples = ["A1", "B1", "C1", "D1", "D2", "C2", "B2", "A2"];
 const target = "tests/config/smoke-fresh-install.test.ts";
 const coreHashes = {
@@ -239,13 +239,16 @@ async function run() {
     kernel: os.release(), arch: process.arch, cpu_model: os.cpus()[0]?.model, parallelism: os.availableParallelism(), totalmem: os.totalmem(),
     node: process.version, npm: execFileSync("npm", ["--version"], { encoding: "utf8" }).trim(),
     pwsh_sha256: hash(fs.readFileSync(fs.realpathSync(powershell))), core_hashes: coreHashes };
+  const fingerprint = hash(JSON.stringify(stable));
+  // 先保存已采集字段，守卫失败也保留本次环境；stable 与指纹算法不变。
+  write("environment.json", { stable, fingerprint, commit: process.env.GITHUB_SHA, parent: base,
+    batch_started_ms: prior?.batch_started_ms ?? Date.now(), historical_image: "20260920.314.1", test_files: testFiles,
+    sample, group, run_id: process.env.GITHUB_RUN_ID, run_attempt: 1,
+    previous_fingerprint: prior?.fingerprint ?? null });
   assert.ok(stable.image_os && stable.image_version && stable.cpu_model);
   assert.equal(stable.node, "v22.23.2");
   assert.equal(stable.npm, "10.9.8");
-  const fingerprint = hash(JSON.stringify(stable));
   if (prior) assert.equal(fingerprint, prior.fingerprint, "环境漂移，停止配对");
-  write("environment.json", { stable, fingerprint, commit: process.env.GITHUB_SHA, parent: base,
-    batch_started_ms: prior?.batch_started_ms ?? Date.now(), historical_image: "20260920.314.1", test_files: testFiles });
   fs.mkdirSync(file("traces"));
   for (const name of ["events.jsonl", "process-samples.jsonl"]) fs.writeFileSync(file(name), "", { flag: "wx" });
   await prelude(powershell);
@@ -336,8 +339,28 @@ function overlap(traces, events, observations) {
 
 function finalize() {
   let environment;
-  const summary = { sample, group, status: "stop", run_id: process.env.GITHUB_RUN_ID, run_attempt: 1, commit: process.env.GITHUB_SHA };
+  const summary = { sample, group, status: "stop", run_id: process.env.GITHUB_RUN_ID, run_attempt: 1, commit: process.env.GITHUB_SHA,
+    primary_error: null, secondary_errors: [] };
+  let evidenceSource = "fatal-run.json";
   try {
+    // 优先保留 run 首次异常，其次保留已记录的子进程失败；后续收口错误单列。
+    if (fs.existsSync(file("fatal-run.json"))) {
+      const fatal = read("fatal-run.json");
+      assert.equal(fatal.sample, sample);
+      assert.equal(typeof fatal.error, "string");
+      assert.ok(fatal.error.length > 0);
+      summary.primary_error = { source: evidenceSource, message: fatal.error };
+      summary.error = fatal.error;
+    } else if (fs.existsSync(file("process-result.json"))) {
+      evidenceSource = "process-result.json";
+      const result = read("process-result.json");
+      if (result.code !== 0 || result.signal !== null || result.monitor_error !== null) {
+        const message = `受控测量进程失败：${JSON.stringify(result)}`;
+        summary.primary_error = { source: evidenceSource, message };
+        summary.error = message;
+      }
+    }
+    evidenceSource = "finalize";
     const prior = previous();
     environment = read("environment.json");
     Object.assign(summary, { fingerprint: environment.fingerprint, batch_started_ms: environment.batch_started_ms });
@@ -377,12 +400,18 @@ function finalize() {
     write("overlap.json", load);
     if (group === "D") assert.equal(load.valid, true, "D 组首项缺少实际负载重叠");
     if (group !== "D") assert.equal(load.observed_peak_workers, 1);
-    summary.status = "valid";
+    // 即使其余记录完整，已有 run 失败也不能转为有效样本。
+    if (summary.primary_error === null) summary.status = "valid";
+    else process.exitCode = 1;
     summary.counts = { total: report.numTotalTests, passed: report.numPassedTests, skipped: report.numPendingTests };
     summary.observed_peak_workers = load.observed_peak_workers;
     summary.load_valid = group === "D" ? load.valid : null;
   } catch (error) {
-    summary.error = String(error);
+    const failure = { source: evidenceSource, message: String(error) };
+    if (summary.primary_error === null) {
+      summary.primary_error = failure;
+      summary.error = failure.message;
+    } else summary.secondary_errors.push(failure);
     process.exitCode = 1;
   }
   write("summary.json", summary);
