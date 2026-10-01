@@ -1,0 +1,83 @@
+name: PowerShell 前置分段观测
+
+on:
+  push:
+    branches: [diagnostics/0.6.1-pwsh-prelude-a]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pwsh-prelude-stage-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  prelude-stage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.23.2
+      - name: 固定输入与环境
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir "$RUNNER_TEMP/pwsh-prelude-a"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import os from 'node:os';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import { createHash } from 'node:crypto';
+          import { execFileSync } from 'node:child_process';
+          const git = (...args) => execFileSync('git', args, {encoding:'utf8', env:{...process.env,GIT_OPTIONAL_LOCKS:'0'}}).trim();
+          assert.equal(process.version,'v22.23.2');
+          assert.equal(process.env.GITHUB_REF,'refs/heads/diagnostics/0.6.1-pwsh-prelude-a');
+          assert.equal(process.env.GITHUB_RUN_ATTEMPT,'1');
+          assert.equal(git('rev-parse','HEAD'),process.env.GITHUB_SHA);
+          assert.deepEqual(git('cat-file','-p','HEAD').split('\n').filter(x=>x.startsWith('parent ')),['parent ac57587e513663f87d60643c45d75a06b06a0e2b']);
+          assert.equal(git('status','--porcelain'),'');
+          const files=Object.fromEntries(git('ls-files','-z').split('\0').filter(Boolean).map(n=>[n,createHash('sha256').update(fs.readFileSync(n)).digest('hex')]));
+          const output=path.join(process.env.RUNNER_TEMP,'pwsh-prelude-a');
+          fs.writeFileSync(path.join(output,'input-before.json'),JSON.stringify(files,null,2),{flag:'wx'});
+          fs.writeFileSync(path.join(output,'environment.json'),JSON.stringify({protocol:'prelude-stage-v1',commit:process.env.GITHUB_SHA,run_id:process.env.GITHUB_RUN_ID,run_attempt:1,node:process.version,image_os:process.env.ImageOS,image_version:process.env.ImageVersion,runner:process.env.RUNNER_NAME,kernel:os.release(),cpus:os.cpus(),totalmem:os.totalmem(),os_release:fs.readFileSync('/etc/os-release','utf8'),boot_id:fs.readFileSync('/proc/sys/kernel/random/boot_id','utf8').trim()},null,2),{flag:'wx'});
+          NODE
+      - name: 一次前置观测
+        timeout-minutes: 1
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/pwsh-prelude-stage.mjs --run-prelude "$RUNNER_TEMP/pwsh-prelude-a/P1" /usr/bin/pwsh
+      - name: 核对测后输入
+        if: ${{ always() }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import { createHash } from 'node:crypto';
+          import { execFileSync } from 'node:child_process';
+          const output=path.join(process.env.RUNNER_TEMP,'pwsh-prelude-a');
+          const before=JSON.parse(fs.readFileSync(path.join(output,'input-before.json'),'utf8'));
+          const git=(...args)=>execFileSync('git',args,{encoding:'utf8',env:{...process.env,GIT_OPTIONAL_LOCKS:'0'}}).trim();
+          const after=Object.fromEntries(git('ls-files','-z').split('\0').filter(Boolean).map(n=>[n,createHash('sha256').update(fs.readFileSync(n)).digest('hex')]));
+          const changed=[...new Set([...Object.keys(before),...Object.keys(after)])].filter(n=>before[n]!==after[n]);
+          const status=git('status','--porcelain','--untracked-files=all');
+          fs.writeFileSync(path.join(output,'input-after.json'),JSON.stringify({files:after,changed,status},null,2),{flag:'wx'});
+          assert.deepEqual(changed,[]);assert.equal(status,'');
+          NODE
+      - name: 保留首次证据
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: pwsh-prelude-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/pwsh-prelude-a
+          if-no-files-found: error
+          retention-days: 14
