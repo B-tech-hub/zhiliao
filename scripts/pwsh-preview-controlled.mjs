@@ -6,13 +6,55 @@ import { createHash } from "node:crypto";
 import { execFileSync, spawn, spawnSync } from "node:child_process";
 import { setTimeout as delay } from "node:timers/promises";
 
+// BEGIN SEND VALIDATOR
+export function validateSendEvidence(events, expected, targetFile, identity) {
+  const rows = events.filter((entry) => entry.event.startsWith("send-"));
+  assert.ok(rows.length >= 4, "缺少发送证据");
+  assert.equal(rows[0].event, "send-hook-installed");
+  assert.equal(rows.at(-1).event, "send-hook-restored");
+  let lastTime = -1n;
+  for (const entry of rows) {
+    for (const key of ["sample", "protocol", "parent_pid"]) assert.equal(entry[key], identity[key], `发送身份不符：${key}`);
+    assert.match(entry.monotonic_ns, /^\d+$/);
+    const time = BigInt(entry.monotonic_ns);
+    assert.ok(time >= lastTime, "发送时钟倒退");
+    lastTime = time;
+  }
+  const sentFiles = [];
+  const requests = rows.slice(1, -1);
+  assert.equal(requests.length % 2, 0, "发送记录未配对");
+  for (let index = 0; index < requests.length; index += 2) {
+    const begin = requests[index];
+    const end = requests[index + 1];
+    assert.equal(begin.event, "send-begin");
+    assert.equal(end.event, "send-end");
+    assert.equal(begin.sequence, index / 2 + 1, "发送序号不连续");
+    assert.equal(end.sequence, begin.sequence);
+    assert.ok(Number.isInteger(begin.worker_id) && begin.worker_id >= 0);
+    assert.equal(end.worker_id, begin.worker_id);
+    assert.ok(Array.isArray(begin.files) && begin.files.length > 0);
+    assert.ok(begin.files.every((file) => typeof file === "string" && file.length > 0));
+    assert.deepEqual(end.files, begin.files);
+    assert.equal(end.outcome, "returned", "原发送调用失败");
+    sentFiles.push(...begin.files);
+  }
+  assert.equal(rows.at(-1).calls, requests.length / 2);
+  assert.equal(new Set(sentFiles).size, sentFiles.length, "重复发送文件");
+  assert.deepEqual([...sentFiles].sort(), [...expected].sort(), "发送文件覆盖不符");
+  assert.equal(sentFiles[0], targetFile, "目标未被首先发送");
+  return { calls: requests.length / 2, files: sentFiles, identity };
+}
+// END SEND VALIDATOR
+
 // 仅供本批诊断使用；不接入正式 CI 或安装入口。
-const base = "0a5ae9ad2e213cbe79b0c7f89815c6c879e94f6a";
-const branch = "refs/heads/diagnostics/0.6.1-pwsh-hosted-warm-d";
+const base = "4c5c3c8fd6ca54c3a40ec7ae55b1bb7a1afb2091";
+const branch = "refs/heads/diagnostics/0.6.1-pwsh-hosted-warm-e";
 const samples = ["O1", "O2", "O3", "O4", "L1", "L2", "L3", "L4"];
 const conditions = ["A", "B", "B", "A", "A", "D", "D", "A"];
 const target = "tests/config/smoke-fresh-install.test.ts";
 const coreHashes = {
+  "scripts/pwsh-preview-observer.mjs": "3504bbb4f7ed626f39c75769059cf717cae9f4f685e089458c2939e5749664f4",
+  "node_modules/vitest/dist/chunks/cli-api.CnMVyzaz.js": "a236001d048380e2c67d05423fc9ea3f26b07ee019ba8d6e622082f29d49102e",
   "package.json": "c7264a2aa0b60f44d7991982049b8fe946228f9a2b99aea07122741765367629",
   "package-lock.json": "347f5fda89ca590091ba62211c2cd40e845abaa93d4e1d79a3e0c8395424813e",
   "vitest.config.mts": "386c7045e405d0855313ad030d87e72394cea3926ff1c2a80a2285895524c4d3",
@@ -98,7 +140,7 @@ const expectedFiles = [
   "tests/lib/weekly-review.test.ts"
 ];
 const warmWrapper = "param([string]$TargetScript, [string]$ArgumentsFile, [string]$DockerLog)\nfunction Write-DiagnosticStage([string]$Stage) {\n  if ([string]::IsNullOrEmpty($env:ZHILIAO_PREVIEW_TRACE_FILE)) { return }\n  $record = '{\"probe\":\"DEBUG-pwsh-20260930\",\"stage\":\"' + $Stage + '\",\"ticks\":' + [Diagnostics.Stopwatch]::GetTimestamp() + ',\"frequency\":' + [Diagnostics.Stopwatch]::Frequency + ',\"utc\":\"' + [DateTime]::UtcNow.ToString('o') + '\"}'\n  [IO.File]::AppendAllText($env:ZHILIAO_PREVIEW_TRACE_FILE, $record + [Environment]::NewLine)\n}\nWrite-DiagnosticStage 'wrapper-enter'\n$ErrorActionPreference = \"Stop\"\n[Console]::OutputEncoding = [Text.UTF8Encoding]::new($false)\n$global:PreviewDockerLog = $DockerLog\nfunction global:docker {\n  [IO.File]::AppendAllText($global:PreviewDockerLog, \"called\")\n  throw \"Docker is forbidden in preview tests.\"\n}\n$parameters = @{}\nWrite-DiagnosticStage 'arguments-read-before'\n$config = Get-Content -Raw -Encoding UTF8 -LiteralPath $ArgumentsFile | ConvertFrom-Json\nWrite-DiagnosticStage 'arguments-read-after'\nforeach ($property in $config.PSObject.Properties) { $parameters[$property.Name] = $property.Value }\nWrite-DiagnosticStage 'target-call-before'\n& $TargetScript @parameters\nexit $LASTEXITCODE\n";
-const protocol = "hosted-warm-v2-export-isolation";
+const protocol = "hosted-warm-v3-send-evidence";
 const root = fs.realpathSync(process.cwd());
 const command = process.argv[2];
 const sample = process.env.ZHILIAO_PREVIEW_SAMPLE;
@@ -621,7 +663,9 @@ function finalize() {
     assert.equal(completed.length, 1);
     assert.equal(completed[0].unhandled_errors, 0);
     assert.equal(completed[0].reason, "passed");
-    assert.equal(events.find((entry) => entry.event === "module-queued")?.module, target, "目标未被首先派发");
+    summary.send_evidence = validateSendEvidence(events, reportPaths, target, {
+      sample, protocol, parent_pid: read("process-exit.json").vitest_pid,
+    });
     const observations = lines("process-samples.jsonl");
     assert.ok(observations.length > 1 && observations.some((entry) => entry.workers.some((worker) => worker.pid === traces[0].before.worker_pid)), "worker 采样不可用");
     const load = overlap(traces, events, observations);
