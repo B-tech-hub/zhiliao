@@ -7,8 +7,8 @@ import { execFileSync, spawn, spawnSync } from "node:child_process";
 import { setTimeout as delay } from "node:timers/promises";
 
 // 仅供本批诊断使用；不接入正式 CI 或安装入口。
-const base = "15e295ceb69c7e26b109107b837a09036667f772";
-const branch = "refs/heads/diagnostics/0.6.1-pwsh-hosted-warm-c";
+const base = "0a5ae9ad2e213cbe79b0c7f89815c6c879e94f6a";
+const branch = "refs/heads/diagnostics/0.6.1-pwsh-hosted-warm-d";
 const samples = ["O1", "O2", "O3", "O4", "L1", "L2", "L3", "L4"];
 const conditions = ["A", "B", "B", "A", "A", "D", "D", "A"];
 const target = "tests/config/smoke-fresh-install.test.ts";
@@ -16,10 +16,15 @@ const coreHashes = {
   "package.json": "c7264a2aa0b60f44d7991982049b8fe946228f9a2b99aea07122741765367629",
   "package-lock.json": "347f5fda89ca590091ba62211c2cd40e845abaa93d4e1d79a3e0c8395424813e",
   "vitest.config.mts": "386c7045e405d0855313ad030d87e72394cea3926ff1c2a80a2285895524c4d3",
-  "tests/setup.ts": "29d62c420def381503d81d400c35cb6a7ba67bd208f30c07f8b6c3f4d275c419",
+  "tests/setup.ts": "469753e859a55a9b485cb8c7aa99847acd1166cfc9bf477c075edc9c9b70c377",
   "scripts/smoke-fresh-install.ps1": "9bb09cfd1da7ee570108bcda51691c4e82134e64f2aac6a3e50934f4ef5ca454",
   ".github/workflows/ci.yml": "7428f5cac57922f89d33332118190d3936d332001d53e2533f9184de723c7f17",
-  ".github/workflows/release.yml": "ca617b85b1c4d35c0939a5be96413732b3ad77e760a9dfbf3ef2585d5e987507"
+  ".github/workflows/release.yml": "ca617b85b1c4d35c0939a5be96413732b3ad77e760a9dfbf3ef2585d5e987507",
+  "tests/helpers/markdown-export.ts": "6f08531178bc3eb4d522a442ba350e64dfb7736985b7e07c32f5fc2eb7ceee10",
+  "tests/lib/markdown-export.test.ts": "6a29090200a962c22957c2325d631542af34833ecdf1acd41d27efbe22825eb0",
+  "tests/api/import.test.ts": "65eadd84205ff02e5b82705264aac67415ed4786dc71f0786f8f0f8ca285aba9",
+  "tests/lib/import.test.ts": "aeef9b09a79b51f622fce26fa4cab569c22af4beeea3e9c71ca5a3a7467e5dfd",
+  "tests/lib/markdown-export-isolation.test.ts": "01c4a68b4d10d6db7a3ea7e874a619287e2912e977d04c2c0adf2360fc8dbd0d"
 };
 const expectedFiles = [
   "tests/api/demo-boundary.test.ts",
@@ -71,6 +76,7 @@ const expectedFiles = [
   "tests/lib/import.test.ts",
   "tests/lib/llm-config.test.ts",
   "tests/lib/llm.test.ts",
+  "tests/lib/markdown-export-isolation.test.ts",
   "tests/lib/markdown-export.test.ts",
   "tests/lib/math.test.ts",
   "tests/lib/mermaid.test.ts",
@@ -92,7 +98,7 @@ const expectedFiles = [
   "tests/lib/weekly-review.test.ts"
 ];
 const warmWrapper = "param([string]$TargetScript, [string]$ArgumentsFile, [string]$DockerLog)\nfunction Write-DiagnosticStage([string]$Stage) {\n  if ([string]::IsNullOrEmpty($env:ZHILIAO_PREVIEW_TRACE_FILE)) { return }\n  $record = '{\"probe\":\"DEBUG-pwsh-20260930\",\"stage\":\"' + $Stage + '\",\"ticks\":' + [Diagnostics.Stopwatch]::GetTimestamp() + ',\"frequency\":' + [Diagnostics.Stopwatch]::Frequency + ',\"utc\":\"' + [DateTime]::UtcNow.ToString('o') + '\"}'\n  [IO.File]::AppendAllText($env:ZHILIAO_PREVIEW_TRACE_FILE, $record + [Environment]::NewLine)\n}\nWrite-DiagnosticStage 'wrapper-enter'\n$ErrorActionPreference = \"Stop\"\n[Console]::OutputEncoding = [Text.UTF8Encoding]::new($false)\n$global:PreviewDockerLog = $DockerLog\nfunction global:docker {\n  [IO.File]::AppendAllText($global:PreviewDockerLog, \"called\")\n  throw \"Docker is forbidden in preview tests.\"\n}\n$parameters = @{}\nWrite-DiagnosticStage 'arguments-read-before'\n$config = Get-Content -Raw -Encoding UTF8 -LiteralPath $ArgumentsFile | ConvertFrom-Json\nWrite-DiagnosticStage 'arguments-read-after'\nforeach ($property in $config.PSObject.Properties) { $parameters[$property.Name] = $property.Value }\nWrite-DiagnosticStage 'target-call-before'\n& $TargetScript @parameters\nexit $LASTEXITCODE\n";
-const protocol = "hosted-warm-v1";
+const protocol = "hosted-warm-v2-export-isolation";
 const root = fs.realpathSync(process.cwd());
 const command = process.argv[2];
 const sample = process.env.ZHILIAO_PREVIEW_SAMPLE;
@@ -599,9 +605,9 @@ function finalize() {
     assert.equal(report.success, true);
     assert.equal(report.numFailedTests, 0);
     assert.equal(report.numTodoTests, 0);
-    assert.equal(report.numTotalTests, group === "D" ? 912 : 11);
+    assert.equal(report.numTotalTests, group === "D" ? 914 : 11);
     assert.equal(report.numPendingTests, group === "D" ? 28 : 0);
-    assert.equal(report.numPassedTests, group === "D" ? 884 : 11);
+    assert.equal(report.numPassedTests, group === "D" ? 886 : 11);
     const reportPaths = report.testResults.map((entry) => path.relative(root, entry.name).split(path.sep).join("/")).sort();
     assert.deepEqual(reportPaths, group === "D" ? expectedFiles : [target]);
     const previewReport = report.testResults.find((entry) => entry.name.replaceAll("\\", "/").endsWith(`/${target}`));

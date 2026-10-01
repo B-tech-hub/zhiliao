@@ -1,3 +1,4 @@
+import { drainPendingMarkdownExports, restoreTestNotesExportDir } from "../helpers/markdown-export";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -8,7 +9,12 @@ import { exportNoteMarkdown } from "@/lib/markdown-export";
 import { insertTopic, wipeData } from "../helpers/db";
 
 const dirs: string[] = [];
-afterEach(() => { wipeData(); delete process.env.NOTES_EXPORT_DIR; for (const dir of dirs.splice(0)) fs.rmSync(dir, { recursive: true, force: true }); });
+afterEach(async () => {
+  await drainPendingMarkdownExports();
+  wipeData();
+  restoreTestNotesExportDir();
+  for (const dir of dirs.splice(0)) fs.rmSync(dir, { recursive: true, force: true });
+});
 
 describe("markdown export", () => {
   it("writes frontmatter and removes old title path", () => {

@@ -1,3 +1,15 @@
+import { afterAll, afterEach } from "vitest";
+import { drainPendingMarkdownExports, removeTestNotesExportDir, restoreTestNotesExportDir } from "./helpers/markdown-export";
+
+restoreTestNotesExportDir();
+afterEach(async () => {
+  await drainPendingMarkdownExports();
+});
+afterAll(async () => {
+  await drainPendingMarkdownExports();
+  removeTestNotesExportDir();
+});
+
 // 测试环境注入：setupFiles 在任何被测模块加载前执行。
 // vitest 不加载 .env 文件，本机真实配置不会泄入测试。
 process.env.DATABASE_PATH = ":memory:";

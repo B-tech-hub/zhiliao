@@ -2,7 +2,7 @@ name: PowerShell 托管同机筛查
 
 on:
   push:
-    branches: [diagnostics/0.6.1-pwsh-hosted-warm-c]
+    branches: [diagnostics/0.6.1-pwsh-hosted-warm-d]
 
 permissions:
   contents: read
@@ -18,7 +18,7 @@ jobs:
     timeout-minutes: 15
     env:
       REQUIRE_DOCKER_COMPOSE: "1"
-      ZHILIAO_PREVIEW_PROTOCOL: hosted-warm-v1
+      ZHILIAO_PREVIEW_PROTOCOL: hosted-warm-v2-export-isolation
     steps:
       - name: 初始化记录根目录
         shell: bash

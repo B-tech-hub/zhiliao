@@ -1,3 +1,4 @@
+import { drainPendingMarkdownExports, restoreTestNotesExportDir } from "../helpers/markdown-export";
 /* 导入接口的这一层只做三件事：把请求体流式落到临时文件、挡住超大包、
    把 ImportError 翻成 400。逻辑本身由 tests/lib/import.test.ts 覆盖，
    这里只验证「不经过 formData 也能正确收到 zip」这条路。 */
@@ -58,10 +59,11 @@ beforeEach(() => {
   process.env.NOTES_EXPORT_DIR = tempDir();
 });
 
-afterEach(() => {
+afterEach(async () => {
+  await drainPendingMarkdownExports();
   wipeData();
   delete process.env.UPLOAD_DIR;
-  delete process.env.NOTES_EXPORT_DIR;
+  restoreTestNotesExportDir();
   for (const dir of dirs.splice(0)) fs.rmSync(dir, { recursive: true, force: true });
 });
 
