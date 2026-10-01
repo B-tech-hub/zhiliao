@@ -1,3 +1,4 @@
+import { drainPendingMarkdownExports, restoreTestNotesExportDir } from "../helpers/markdown-export";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -66,10 +67,11 @@ beforeEach(() => {
   process.env.NOTES_EXPORT_DIR = tempDir("zhiliao-notes-");
 });
 
-afterEach(() => {
+afterEach(async () => {
+  await drainPendingMarkdownExports();
   wipeData();
   delete process.env.UPLOAD_DIR;
-  delete process.env.NOTES_EXPORT_DIR;
+  restoreTestNotesExportDir();
   for (const dir of dirs.splice(0)) fs.rmSync(dir, { recursive: true, force: true });
 });
 
