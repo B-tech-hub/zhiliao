@@ -1,0 +1,341 @@
+name: PowerShell 托管同机筛查
+
+on:
+  push:
+    branches: [diagnostics/0.6.1-pwsh-hosted-warm-c]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pwsh-hosted-warm-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  hosted-warm:
+    name: hosted-warm
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      REQUIRE_DOCKER_COMPOSE: "1"
+      ZHILIAO_PREVIEW_PROTOCOL: hosted-warm-v1
+    steps:
+      - name: 初始化记录根目录
+        shell: bash
+        run: |
+          set -euo pipefail
+          record_root="$RUNNER_TEMP/pwsh-hosted-warm"
+          mkdir "$record_root"
+          echo "ZHILIAO_PREVIEW_BATCH_DIR=$record_root" >> "$GITHUB_ENV"
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.23.2
+      - name: 安装同一锁定依赖
+        timeout-minutes: 5
+        run: npm ci --no-audit --no-fund
+      - name: 固定同机输入
+        id: init
+        run: node scripts/pwsh-preview-controlled.mjs init
+      - name: O1 测量
+        id: measure_o1
+        if: ${{ success() && steps.init.outcome == 'success' }}
+        timeout-minutes: 5
+        env:
+          ZHILIAO_PREVIEW_SAMPLE: O1
+          ZHILIAO_PREVIEW_GROUP: A
+          ZHILIAO_PREVIEW_CONTROL_DIR: ${{ runner.temp }}/pwsh-hosted-warm/O1
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir "$ZHILIAO_PREVIEW_CONTROL_DIR"
+          node scripts/pwsh-preview-controlled.mjs run
+      - name: O1 测后版本
+        id: version_o1
+        if: ${{ always() && steps.measure_o1.outcome != 'skipped' }}
+        timeout-minutes: 1
+        env:
+          ZHILIAO_PREVIEW_SAMPLE: O1
+          ZHILIAO_PREVIEW_GROUP: A
+          ZHILIAO_PREVIEW_CONTROL_DIR: ${{ runner.temp }}/pwsh-hosted-warm/O1
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/pwsh-preview-controlled.mjs version-start
+          pwsh -NoLogo -NoProfile -NonInteractive -Command '@{ version=$PSVersionTable.PSVersion.ToString(); edition=$PSEdition } | ConvertTo-Json -Compress' > "$ZHILIAO_PREVIEW_CONTROL_DIR/powershell-version.json"
+      - name: O1 收口
+        id: finalize_o1
+        if: ${{ always() && steps.measure_o1.outcome != 'skipped' }}
+        env:
+          ZHILIAO_PREVIEW_SAMPLE: O1
+          ZHILIAO_PREVIEW_GROUP: A
+          ZHILIAO_PREVIEW_CONTROL_DIR: ${{ runner.temp }}/pwsh-hosted-warm/O1
+          ZHILIAO_MEASURE_OUTCOME: ${{ steps.measure_o1.outcome }}
+          ZHILIAO_VERSION_OUTCOME: ${{ steps.version_o1.outcome }}
+        run: node scripts/pwsh-preview-controlled.mjs finalize
+      - name: O2 测量
+        id: measure_o2
+        if: ${{ success() && steps.finalize_o1.outcome == 'success' }}
+        timeout-minutes: 5
+        env:
+          ZHILIAO_PREVIEW_SAMPLE: O2
+          ZHILIAO_PREVIEW_GROUP: B
+          ZHILIAO_PREVIEW_CONTROL_DIR: ${{ runner.temp }}/pwsh-hosted-warm/O2
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir "$ZHILIAO_PREVIEW_CONTROL_DIR"
+          node scripts/pwsh-preview-controlled.mjs run
+      - name: O2 测后版本
+        id: version_o2
+        if: ${{ always() && steps.measure_o2.outcome != 'skipped' }}
+        timeout-minutes: 1
+        env:
+          ZHILIAO_PREVIEW_SAMPLE: O2
+          ZHILIAO_PREVIEW_GROUP: B
+          ZHILIAO_PREVIEW_CONTROL_DIR: ${{ runner.temp }}/pwsh-hosted-warm/O2
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/pwsh-preview-controlled.mjs version-start
+          pwsh -NoLogo -NoProfile -NonInteractive -Command '@{ version=$PSVersionTable.PSVersion.ToString(); edition=$PSEdition } | ConvertTo-Json -Compress' > "$ZHILIAO_PREVIEW_CONTROL_DIR/powershell-version.json"
+      - name: O2 收口
+        id: finalize_o2
+        if: ${{ always() && steps.measure_o2.outcome != 'skipped' }}
+        env:
+          ZHILIAO_PREVIEW_SAMPLE: O2
+          ZHILIAO_PREVIEW_GROUP: B
+          ZHILIAO_PREVIEW_CONTROL_DIR: ${{ runner.temp }}/pwsh-hosted-warm/O2
+          ZHILIAO_MEASURE_OUTCOME: ${{ steps.measure_o2.outcome }}
+          ZHILIAO_VERSION_OUTCOME: ${{ steps.version_o2.outcome }}
+        run: node scripts/pwsh-preview-controlled.mjs finalize
+      - name: O3 测量
+        id: measure_o3
+        if: ${{ success() && steps.finalize_o2.outcome == 'success' }}
+        timeout-minutes: 5
+        env:
+          ZHILIAO_PREVIEW_SAMPLE: O3
+          ZHILIAO_PREVIEW_GROUP: B
+          ZHILIAO_PREVIEW_CONTROL_DIR: ${{ runner.temp }}/pwsh-hosted-warm/O3
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir "$ZHILIAO_PREVIEW_CONTROL_DIR"
+          node scripts/pwsh-preview-controlled.mjs run
+      - name: O3 测后版本
+        id: version_o3
+        if: ${{ always() && steps.measure_o3.outcome != 'skipped' }}
+        timeout-minutes: 1
+        env:
+          ZHILIAO_PREVIEW_SAMPLE: O3
+          ZHILIAO_PREVIEW_GROUP: B
+          ZHILIAO_PREVIEW_CONTROL_DIR: ${{ runner.temp }}/pwsh-hosted-warm/O3
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/pwsh-preview-controlled.mjs version-start
+          pwsh -NoLogo -NoProfile -NonInteractive -Command '@{ version=$PSVersionTable.PSVersion.ToString(); edition=$PSEdition } | ConvertTo-Json -Compress' > "$ZHILIAO_PREVIEW_CONTROL_DIR/powershell-version.json"
+      - name: O3 收口
+        id: finalize_o3
+        if: ${{ always() && steps.measure_o3.outcome != 'skipped' }}
+        env:
+          ZHILIAO_PREVIEW_SAMPLE: O3
+          ZHILIAO_PREVIEW_GROUP: B
+          ZHILIAO_PREVIEW_CONTROL_DIR: ${{ runner.temp }}/pwsh-hosted-warm/O3
+          ZHILIAO_MEASURE_OUTCOME: ${{ steps.measure_o3.outcome }}
+          ZHILIAO_VERSION_OUTCOME: ${{ steps.version_o3.outcome }}
+        run: node scripts/pwsh-preview-controlled.mjs finalize
+      - name: O4 测量
+        id: measure_o4
+        if: ${{ success() && steps.finalize_o3.outcome == 'success' }}
+        timeout-minutes: 5
+        env:
+          ZHILIAO_PREVIEW_SAMPLE: O4
+          ZHILIAO_PREVIEW_GROUP: A
+          ZHILIAO_PREVIEW_CONTROL_DIR: ${{ runner.temp }}/pwsh-hosted-warm/O4
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir "$ZHILIAO_PREVIEW_CONTROL_DIR"
+          node scripts/pwsh-preview-controlled.mjs run
+      - name: O4 测后版本
+        id: version_o4
+        if: ${{ always() && steps.measure_o4.outcome != 'skipped' }}
+        timeout-minutes: 1
+        env:
+          ZHILIAO_PREVIEW_SAMPLE: O4
+          ZHILIAO_PREVIEW_GROUP: A
+          ZHILIAO_PREVIEW_CONTROL_DIR: ${{ runner.temp }}/pwsh-hosted-warm/O4
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/pwsh-preview-controlled.mjs version-start
+          pwsh -NoLogo -NoProfile -NonInteractive -Command '@{ version=$PSVersionTable.PSVersion.ToString(); edition=$PSEdition } | ConvertTo-Json -Compress' > "$ZHILIAO_PREVIEW_CONTROL_DIR/powershell-version.json"
+      - name: O4 收口
+        id: finalize_o4
+        if: ${{ always() && steps.measure_o4.outcome != 'skipped' }}
+        env:
+          ZHILIAO_PREVIEW_SAMPLE: O4
+          ZHILIAO_PREVIEW_GROUP: A
+          ZHILIAO_PREVIEW_CONTROL_DIR: ${{ runner.temp }}/pwsh-hosted-warm/O4
+          ZHILIAO_MEASURE_OUTCOME: ${{ steps.measure_o4.outcome }}
+          ZHILIAO_VERSION_OUTCOME: ${{ steps.version_o4.outcome }}
+        run: node scripts/pwsh-preview-controlled.mjs finalize
+      - name: L1 测量
+        id: measure_l1
+        if: ${{ success() && steps.finalize_o4.outcome == 'success' }}
+        timeout-minutes: 5
+        env:
+          ZHILIAO_PREVIEW_SAMPLE: L1
+          ZHILIAO_PREVIEW_GROUP: A
+          ZHILIAO_PREVIEW_CONTROL_DIR: ${{ runner.temp }}/pwsh-hosted-warm/L1
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir "$ZHILIAO_PREVIEW_CONTROL_DIR"
+          node scripts/pwsh-preview-controlled.mjs run
+      - name: L1 测后版本
+        id: version_l1
+        if: ${{ always() && steps.measure_l1.outcome != 'skipped' }}
+        timeout-minutes: 1
+        env:
+          ZHILIAO_PREVIEW_SAMPLE: L1
+          ZHILIAO_PREVIEW_GROUP: A
+          ZHILIAO_PREVIEW_CONTROL_DIR: ${{ runner.temp }}/pwsh-hosted-warm/L1
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/pwsh-preview-controlled.mjs version-start
+          pwsh -NoLogo -NoProfile -NonInteractive -Command '@{ version=$PSVersionTable.PSVersion.ToString(); edition=$PSEdition } | ConvertTo-Json -Compress' > "$ZHILIAO_PREVIEW_CONTROL_DIR/powershell-version.json"
+      - name: L1 收口
+        id: finalize_l1
+        if: ${{ always() && steps.measure_l1.outcome != 'skipped' }}
+        env:
+          ZHILIAO_PREVIEW_SAMPLE: L1
+          ZHILIAO_PREVIEW_GROUP: A
+          ZHILIAO_PREVIEW_CONTROL_DIR: ${{ runner.temp }}/pwsh-hosted-warm/L1
+          ZHILIAO_MEASURE_OUTCOME: ${{ steps.measure_l1.outcome }}
+          ZHILIAO_VERSION_OUTCOME: ${{ steps.version_l1.outcome }}
+        run: node scripts/pwsh-preview-controlled.mjs finalize
+      - name: L2 测量
+        id: measure_l2
+        if: ${{ success() && steps.finalize_l1.outcome == 'success' }}
+        timeout-minutes: 5
+        env:
+          ZHILIAO_PREVIEW_SAMPLE: L2
+          ZHILIAO_PREVIEW_GROUP: D
+          ZHILIAO_PREVIEW_CONTROL_DIR: ${{ runner.temp }}/pwsh-hosted-warm/L2
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir "$ZHILIAO_PREVIEW_CONTROL_DIR"
+          node scripts/pwsh-preview-controlled.mjs run
+      - name: L2 测后版本
+        id: version_l2
+        if: ${{ always() && steps.measure_l2.outcome != 'skipped' }}
+        timeout-minutes: 1
+        env:
+          ZHILIAO_PREVIEW_SAMPLE: L2
+          ZHILIAO_PREVIEW_GROUP: D
+          ZHILIAO_PREVIEW_CONTROL_DIR: ${{ runner.temp }}/pwsh-hosted-warm/L2
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/pwsh-preview-controlled.mjs version-start
+          pwsh -NoLogo -NoProfile -NonInteractive -Command '@{ version=$PSVersionTable.PSVersion.ToString(); edition=$PSEdition } | ConvertTo-Json -Compress' > "$ZHILIAO_PREVIEW_CONTROL_DIR/powershell-version.json"
+      - name: L2 收口
+        id: finalize_l2
+        if: ${{ always() && steps.measure_l2.outcome != 'skipped' }}
+        env:
+          ZHILIAO_PREVIEW_SAMPLE: L2
+          ZHILIAO_PREVIEW_GROUP: D
+          ZHILIAO_PREVIEW_CONTROL_DIR: ${{ runner.temp }}/pwsh-hosted-warm/L2
+          ZHILIAO_MEASURE_OUTCOME: ${{ steps.measure_l2.outcome }}
+          ZHILIAO_VERSION_OUTCOME: ${{ steps.version_l2.outcome }}
+        run: node scripts/pwsh-preview-controlled.mjs finalize
+      - name: L3 测量
+        id: measure_l3
+        if: ${{ success() && steps.finalize_l2.outcome == 'success' }}
+        timeout-minutes: 5
+        env:
+          ZHILIAO_PREVIEW_SAMPLE: L3
+          ZHILIAO_PREVIEW_GROUP: D
+          ZHILIAO_PREVIEW_CONTROL_DIR: ${{ runner.temp }}/pwsh-hosted-warm/L3
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir "$ZHILIAO_PREVIEW_CONTROL_DIR"
+          node scripts/pwsh-preview-controlled.mjs run
+      - name: L3 测后版本
+        id: version_l3
+        if: ${{ always() && steps.measure_l3.outcome != 'skipped' }}
+        timeout-minutes: 1
+        env:
+          ZHILIAO_PREVIEW_SAMPLE: L3
+          ZHILIAO_PREVIEW_GROUP: D
+          ZHILIAO_PREVIEW_CONTROL_DIR: ${{ runner.temp }}/pwsh-hosted-warm/L3
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/pwsh-preview-controlled.mjs version-start
+          pwsh -NoLogo -NoProfile -NonInteractive -Command '@{ version=$PSVersionTable.PSVersion.ToString(); edition=$PSEdition } | ConvertTo-Json -Compress' > "$ZHILIAO_PREVIEW_CONTROL_DIR/powershell-version.json"
+      - name: L3 收口
+        id: finalize_l3
+        if: ${{ always() && steps.measure_l3.outcome != 'skipped' }}
+        env:
+          ZHILIAO_PREVIEW_SAMPLE: L3
+          ZHILIAO_PREVIEW_GROUP: D
+          ZHILIAO_PREVIEW_CONTROL_DIR: ${{ runner.temp }}/pwsh-hosted-warm/L3
+          ZHILIAO_MEASURE_OUTCOME: ${{ steps.measure_l3.outcome }}
+          ZHILIAO_VERSION_OUTCOME: ${{ steps.version_l3.outcome }}
+        run: node scripts/pwsh-preview-controlled.mjs finalize
+      - name: L4 测量
+        id: measure_l4
+        if: ${{ success() && steps.finalize_l3.outcome == 'success' }}
+        timeout-minutes: 5
+        env:
+          ZHILIAO_PREVIEW_SAMPLE: L4
+          ZHILIAO_PREVIEW_GROUP: A
+          ZHILIAO_PREVIEW_CONTROL_DIR: ${{ runner.temp }}/pwsh-hosted-warm/L4
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir "$ZHILIAO_PREVIEW_CONTROL_DIR"
+          node scripts/pwsh-preview-controlled.mjs run
+      - name: L4 测后版本
+        id: version_l4
+        if: ${{ always() && steps.measure_l4.outcome != 'skipped' }}
+        timeout-minutes: 1
+        env:
+          ZHILIAO_PREVIEW_SAMPLE: L4
+          ZHILIAO_PREVIEW_GROUP: A
+          ZHILIAO_PREVIEW_CONTROL_DIR: ${{ runner.temp }}/pwsh-hosted-warm/L4
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/pwsh-preview-controlled.mjs version-start
+          pwsh -NoLogo -NoProfile -NonInteractive -Command '@{ version=$PSVersionTable.PSVersion.ToString(); edition=$PSEdition } | ConvertTo-Json -Compress' > "$ZHILIAO_PREVIEW_CONTROL_DIR/powershell-version.json"
+      - name: L4 收口
+        id: finalize_l4
+        if: ${{ always() && steps.measure_l4.outcome != 'skipped' }}
+        env:
+          ZHILIAO_PREVIEW_SAMPLE: L4
+          ZHILIAO_PREVIEW_GROUP: A
+          ZHILIAO_PREVIEW_CONTROL_DIR: ${{ runner.temp }}/pwsh-hosted-warm/L4
+          ZHILIAO_MEASURE_OUTCOME: ${{ steps.measure_l4.outcome }}
+          ZHILIAO_VERSION_OUTCOME: ${{ steps.version_l4.outcome }}
+        run: node scripts/pwsh-preview-controlled.mjs finalize
+      - name: 汇总同机批次
+        if: ${{ always() && steps.init.outcome == 'success' }}
+        run: node scripts/pwsh-preview-controlled.mjs batch
+      - name: 保留首次结果
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: pwsh-hosted-warm-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/pwsh-hosted-warm
+          if-no-files-found: error
+          retention-days: 14
