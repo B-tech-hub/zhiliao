@@ -1,0 +1,6 @@
+{
+  "credential_pattern_matches": 0,
+  "actions_masking_and_control_sequences_preserved": true,
+  "raw_log_sha256": "9f1679b1aa4641608766ecbc231d292744b91388ffe2044897b00bcadae3ab1e",
+  "boundary": "pattern scan and selected human-readable log review; no absolute guarantee of exhaustive detection"
+}

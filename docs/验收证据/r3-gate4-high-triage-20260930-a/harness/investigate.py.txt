@@ -1,0 +1,61 @@
+import hashlib
+import json
+import os
+from pathlib import Path
+import shutil
+import subprocess
+import sys
+from datetime import datetime, timezone
+
+sys.stdout.reconfigure(encoding='utf-8')
+root = Path('D:/ClaudeProjects/ai_acknowladge')
+out = Path(__file__).parent
+work = out / 'input'
+evidence = out / 'evidence'
+work.mkdir(exist_ok=True)
+evidence.mkdir(exist_ok=True)
+
+def now():
+    return datetime.now(timezone.utc).isoformat()
+
+def write(name, value):
+    (evidence / name).write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n', encoding='utf-8', newline='\n')
+
+def fingerprint(path):
+    data = path.read_bytes()
+    return {'bytes': len(data), 'sha256': hashlib.sha256(data).hexdigest()}
+
+def git(*args):
+    return subprocess.check_output(['git', *args], cwd=root)
+
+paths = set(git('ls-files', '-z').decode('utf-8').split('\0')) - {''}
+paths.update(p.relative_to(root).as_posix() for p in (root / 'docs/验收证据').rglob('*') if p.is_file())
+paths.update(git('ls-files', '--others', '--exclude-standard', '-z').decode('utf-8').split('\0'))
+paths.discard('')
+before = {p: fingerprint(root / p) for p in sorted(paths) if (root / p).is_file()}
+write('preservation-before.json', before)
+identity = {'started_utc': now(), 'head': git('rev-parse', 'HEAD').decode().strip(), 'tree': git('rev-parse', 'HEAD^{tree}').decode().strip(), 'refs': git('show-ref').decode(), 'status': git('status', '--porcelain=v1', '-uall').decode('utf-8'), 'index_sha256': fingerprint(root / '.git/index')['sha256'], 'node': subprocess.check_output(['node', '--version']).decode().strip(), 'npm': subprocess.check_output([shutil.which('npm.cmd'), '--version']).decode().strip(), 'platform': sys.platform, 'input': {}}
+for name in ('package.json', 'package-lock.json'):
+    data = (root / name).read_bytes()
+    committed = git('show', 'HEAD:' + name)
+    assert data == committed, name + ' differs from candidate'
+    (work / name).write_bytes(data)
+    identity['input'][name] = {**fingerprint(root / name), 'git_blob': git('rev-parse', 'HEAD:' + name).decode().strip(), 'matches_head_bytes': True}
+write('input-identity.json', identity)
+npm = shutil.which('npm.cmd')
+for name, selection in [('audit-all', '--include=dev'), ('audit-production', '--omit=dev')]:
+    args = [npm, 'audit', '--json', '--package-lock-only', selection, '--include=optional', '--include=peer', '--ignore-scripts', '--registry=https://registry.npmjs.org', '--fetch-retries=0', '--fetch-timeout=20000', '--cache=' + str(out / 'npm-cache')]
+    started = now()
+    result = subprocess.run(args, cwd=work, capture_output=True, timeout=60)
+    (evidence / (name + '.stdout.json')).write_bytes(result.stdout)
+    (evidence / (name + '.stderr.txt')).write_bytes(result.stderr)
+    write(name + '.command.json', {'argv': args, 'cwd': str(work), 'started_utc': started, 'finished_utc': now(), 'exit_code': result.returncode})
+    report = json.loads(result.stdout)
+    print(json.dumps({'audit': name, 'exit': result.returncode, 'counts': report.get('metadata'), 'high': {k:v for k,v in report.get('vulnerabilities', {}).items() if v.get('severity') in ('high','critical')}, 'error':report.get('error')}, ensure_ascii=False), flush=True)
+    if report.get('error'):
+        raise RuntimeError(report['error'])
+assert all(fingerprint(root / p) == data for p, data in before.items())
+assert identity['refs'] == git('show-ref').decode()
+assert identity['index_sha256'] == fingerprint(root / '.git/index')['sha256']
+assert all((work / name).read_bytes() == (root / name).read_bytes() for name in ('package.json', 'package-lock.json'))
+write('audit-preservation.json', {'finished_utc': now(), 'existing_files_unchanged': len(before), 'refs_unchanged': True, 'index_unchanged': True, 'input_copy_unchanged': True, 'installed_dependencies': False, 'ran_fix_build_test_release': False})

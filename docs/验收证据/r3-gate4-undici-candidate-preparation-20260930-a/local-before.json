@@ -1,0 +1,17 @@
+{
+  "head": "41cf296d1d1ccc38d1b2f1b3335cc5b8ac4a4b81",
+  "branch": "candidate/0.6.1-baseline",
+  "tree": "d0f16de6459461315c0b0274a8a0f44bc483e84d",
+  "refs": "41cf296d1d1ccc38d1b2f1b3335cc5b8ac4a4b81 refs/heads/candidate/0.6.1-baseline\n95fd8472d6b373e2f619c282b3f5a7a2cae0035c refs/heads/feat/ui-redesign-tokens\n6ee67532deed37fda6cc98962e8df76c98659890 refs/heads/main\n6ee67532deed37fda6cc98962e8df76c98659890 refs/remotes/origin/HEAD\n41cf296d1d1ccc38d1b2f1b3335cc5b8ac4a4b81 refs/remotes/origin/candidate/0.6.1-baseline\n95fd8472d6b373e2f619c282b3f5a7a2cae0035c refs/remotes/origin/feat/ui-redesign-tokens\n6ee67532deed37fda6cc98962e8df76c98659890 refs/remotes/origin/main\n0f0072d7d55aa85afaa2790c8988ff7320bf73b9 refs/tags/v0.1.0\n4fb8b7aa9b8b0374cef90222e5262a8a41e5f899 refs/tags/v0.1.1\nd39697d03795529c74db44c834832dd6c545b61d refs/tags/v0.2.0\n5cad822971129186357497ae0f8e43b54371737e refs/tags/v0.3.0\n608957a654b86d6b1d002f1669fe0b5eb4a5aeeb refs/tags/v0.3.1\nc17e283337c858dff31f24ac2abfe4ed715a9d07 refs/tags/v0.4.0\n0d1cfae5e40e408b5577e403fe5357efb6005d8b refs/tags/v0.5.0\n0d1cfae5e40e408b5577e403fe5357efb6005d8b refs/tags/v0.5.0-rc1\nd22ce2b2ad19d460a67d73b2ca83abda224a883a refs/tags/v0.6.0\nd22ce2b2ad19d460a67d73b2ca83abda224a883a refs/tags/v0.6.0-rc1\n",
+  "index": {
+    "bytes": 245087,
+    "sha256": "1ca772d129f95824ec97887c079069ced47f3781c181f74f583924a06530ba5f"
+  },
+  "author": "BAIBAI <BAIBAI2024826@outlook.com> 1790727746 +0800",
+  "committer": "BAIBAI <BAIBAI2024826@outlook.com> 1790727746 +0800",
+  "push_urls": [
+    "https://github.com/B-tech-hub/zhiliao.git"
+  ],
+  "active_hooks": [],
+  "core_hooks_path": ""
+}

@@ -1,0 +1,25 @@
+{
+  "recorded_utc": "2026-09-30T00:28:12.272235+00:00",
+  "mode": "准备，未执行候选发布动作",
+  "old_evidence_files_preserved": 1337,
+  "unchanged_existing_files": 2069,
+  "changed_existing_documents": [
+    "_bmad-output/implementation-artifacts/spec-r3-gate4-distribution.md",
+    "docs/0.6.1候选定稿-2026-09-28.md",
+    "docs/R3主线新增high依赖调查-2026-09-30.md",
+    "docs/R3门禁4最终候选收口与RC执行单-2026-09-29.md",
+    "docs/R3门禁4环境调查与验收计划-2026-09-29.md",
+    "docs/README.md",
+    "docs/产品规划/开源发布范围与执行清单-2026-09-13.md"
+  ],
+  "code_dependency_workflow_files_unchanged_this_turn": true,
+  "head_refs_index_unchanged": true,
+  "spec_baseline_frozen_status_preserved": true,
+  "source_queries_byte_identical": true,
+  "reused_patch_audits_and_local_test_evidence": true,
+  "reran_audit_tests_build": false,
+  "candidate_input_paths_including_manifest": 254,
+  "git_diff_check_exit": 0,
+  "git_filter_byte_conversion_risks": [],
+  "remote_actions": "仅 7 次只读查询；无 fetch/提交/推送/PR/CI/发布"
+}

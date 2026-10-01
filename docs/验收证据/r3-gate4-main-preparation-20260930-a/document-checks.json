@@ -1,0 +1,17 @@
+{
+  "checked_at_utc": "2026-09-29T23:47:12.587567+00:00",
+  "head": "41cf296d1d1ccc38d1b2f1b3335cc5b8ac4a4b81",
+  "index_empty": true,
+  "old_files_unchanged": 1158,
+  "spec_baseline_frozen_and_status_unchanged": true,
+  "utf8_lf_documents": true,
+  "diff_check": "passed",
+  "local_links_checked": 61,
+  "tracked_changes_only_prior_result_documents": true,
+  "remote_mutations_or_tests_builds_run": false,
+  "m_status": "prepared-awaiting-authorization",
+  "limitations": [
+    "只读准备不保证合并时的远端状态",
+    "未执行 M 或 R"
+  ]
+}

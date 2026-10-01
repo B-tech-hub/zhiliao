@@ -1,0 +1,71 @@
+{
+  "remaining_package_names_severities_advisories_ranges_nodes_unchanged": true,
+  "changed_effects_and_fix_suggestions": {
+    "@tiptap/extension-bubble-menu": {
+      "effects": {
+        "before": [
+          "@tiptap/react"
+        ],
+        "after": []
+      },
+      "fixAvailable": {
+        "before": {
+          "name": "@tiptap/react",
+          "version": "3.31.3",
+          "isSemVerMajor": true
+        },
+        "after": true
+      }
+    },
+    "@tiptap/extension-dropcursor": {
+      "effects": {
+        "before": [
+          "@tiptap/starter-kit"
+        ],
+        "after": []
+      },
+      "fixAvailable": {
+        "before": {
+          "name": "@tiptap/starter-kit",
+          "version": "3.31.3",
+          "isSemVerMajor": true
+        },
+        "after": true
+      }
+    },
+    "@tiptap/extension-floating-menu": {
+      "effects": {
+        "before": [],
+        "after": [
+          "@tiptap/react"
+        ]
+      },
+      "fixAvailable": {
+        "before": true,
+        "after": {
+          "name": "@tiptap/react",
+          "version": "3.31.3",
+          "isSemVerMajor": true
+        }
+      }
+    },
+    "@tiptap/extension-history": {
+      "effects": {
+        "before": [],
+        "after": [
+          "@tiptap/starter-kit"
+        ]
+      },
+      "fixAvailable": {
+        "before": true,
+        "after": {
+          "name": "@tiptap/starter-kit",
+          "version": "3.31.3",
+          "isSemVerMajor": true
+        }
+      }
+    }
+  },
+  "interpretation": "四项 TipTap 的 effects/fixAvailable 归因变化，包名、severity、via、range、nodes 相同；未应用这些修复建议。",
+  "first_closeout_check": "最初要求剩余漏洞对象逐字段相同的静态核对失败；读取已保存两份报告后修正为区分漏洞事实与修复归因，不重跑审计。"
+}

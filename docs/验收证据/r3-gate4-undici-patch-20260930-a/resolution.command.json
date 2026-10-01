@@ -1,0 +1,11 @@
+{
+  "argv": [
+    "node",
+    "resolve-undici.cjs"
+  ],
+  "cwd": "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-undici-patch-318d11dc\\work",
+  "started_utc": "2026-09-30T00:09:22.667435+00:00",
+  "finished_utc": "2026-09-30T00:09:24.181665+00:00",
+  "exit_code": 0,
+  "timeout_seconds": 30
+}

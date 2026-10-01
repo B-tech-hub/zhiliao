@@ -1,0 +1,9 @@
+{
+  "url": "https://registry.npmjs.org/undici/-/undici-7.29.1.tgz",
+  "queried_utc": "2026-09-30T00:07:54.443450+00:00",
+  "bytes": 400243,
+  "sha256": "93b3abe22a9d2858938b5f3829a9fd8952392348ffed9057662ae846e2e46d54",
+  "sha1_matches_registry": true,
+  "sha512_matches_registry": true,
+  "integrity": "sha512-RYONW2MeafgYlkVOKYKkA/Ag7BmXqgIWCa8t1m0JcxrQg9pI9lEqRhAOruOBCbAohOa/gkCF+iPi9hrgvTzu6Q=="
+}

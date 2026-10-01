@@ -1,0 +1,58 @@
+{
+  "checked_at_utc": "2026-09-29T23:55:24.413480+00:00",
+  "local_head": "41cf296d1d1ccc38d1b2f1b3335cc5b8ac4a4b81",
+  "main_from_final_query": "2ae66f5f3df6b0e7afa3bfa09bf601b18ea96a11",
+  "old_files_unchanged": 1193,
+  "raw_execution_files_byte_identical": 77,
+  "local_refs_unchanged": true,
+  "index_empty": true,
+  "tracked_changes_only_prior_result_documents": true,
+  "spec_baseline_frozen_and_in_progress_unchanged": true,
+  "diff_check": "passed",
+  "local_links_checked": 72,
+  "utf8_lf_documents": true,
+  "no_tests_builds_or_remote_mutations_during_document_closeout": true,
+  "documents": [
+    {
+      "path": "_bmad-output/implementation-artifacts/spec-r3-gate4-distribution.md",
+      "bytes": 18710,
+      "sha256": "4f0c23935098eaffff6c7e483a77dc732616c5a531eefdf2a1c238f162454a5a"
+    },
+    {
+      "path": "docs/0.6.1候选定稿-2026-09-28.md",
+      "bytes": 11128,
+      "sha256": "5549d22a001110d2b71fc5c43ddec98c1d9f82acc63e203cb1988e4b40c1cc8c"
+    },
+    {
+      "path": "docs/R3门禁4最终候选提交与PR-CI执行单-2026-09-29.md",
+      "bytes": 11415,
+      "sha256": "6534fd8a9a8ca3e3224fafc0d15cd00e8bdd8e9134ffd5fab85225bb21392e24"
+    },
+    {
+      "path": "docs/R3门禁4最终候选收口与RC执行单-2026-09-29.md",
+      "bytes": 21567,
+      "sha256": "85f19fddc6a07515081f5ffc7b4f2c1f6ffcecef9a32bafeafc69336b5887d98"
+    },
+    {
+      "path": "docs/R3门禁4环境调查与验收计划-2026-09-29.md",
+      "bytes": 24070,
+      "sha256": "71da1a64ca41a11890f4c7c3b8156a14f305655335e7ad6933e9aca74a74a1af"
+    },
+    {
+      "path": "docs/README.md",
+      "bytes": 20794,
+      "sha256": "14f558363a18653908b0faa66fc9d83a3c8584434e5280511de7983bdbd0b223"
+    },
+    {
+      "path": "docs/产品规划/开源发布范围与执行清单-2026-09-13.md",
+      "bytes": 51959,
+      "sha256": "367b926a393624940f46452fb527b55dc692e56b95ed1ec58acc90d260c0c56a"
+    },
+    {
+      "path": "docs/R3门禁4合并main与CI执行单-2026-09-30.md",
+      "bytes": 12268,
+      "sha256": "7d056e1260251a84c10f333c0395b21b0475d786f5e2e625f9b9788cd5ddb4c6"
+    }
+  ],
+  "outcome": "M merge and CI passed; R not executed; new high summary unresolved"
+}

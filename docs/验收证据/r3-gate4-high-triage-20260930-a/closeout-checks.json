@@ -1,0 +1,23 @@
+{
+  "finished_utc": "2026-09-30T00:05:57.301052+00:00",
+  "existing_files": 2006,
+  "unchanged_existing_files": 2000,
+  "changed_existing_documents": [
+    "_bmad-output/implementation-artifacts/spec-r3-gate4-distribution.md",
+    "docs/0.6.1候选定稿-2026-09-28.md",
+    "docs/R3门禁4最终候选收口与RC执行单-2026-09-29.md",
+    "docs/R3门禁4环境调查与验收计划-2026-09-29.md",
+    "docs/README.md",
+    "docs/产品规划/开源发布范围与执行清单-2026-09-13.md"
+  ],
+  "old_evidence_files_preserved": 1268,
+  "package_and_lock_unchanged": true,
+  "head_refs_index_unchanged": true,
+  "baseline_status_frozen_block_preserved": true,
+  "source_evidence_copied_byte_for_byte": true,
+  "new_document_links_checked": 6,
+  "git_diff_check_exit": 0,
+  "credential_pattern_hits": [],
+  "credential_scan_scope": "归档内 GitHub Token 和私钥头常见模式；不等于全面秘密扫描",
+  "runtime_tests_build_release": "未执行"
+}

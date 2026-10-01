@@ -1,0 +1,38 @@
+{
+  "package.json": {
+    "bytes": 2836,
+    "sha256": "c7264a2aa0b60f44d7991982049b8fe946228f9a2b99aea07122741765367629"
+  },
+  "package-lock.json": {
+    "bytes": 450273,
+    "sha256": "ec7fc3bd5aae1c8cec50723eb69678bfc360c998b154d4d9c6d723a0cfe1564a"
+  },
+  "vitest.config.mts": {
+    "bytes": 759,
+    "sha256": "386c7045e405d0855313ad030d87e72394cea3926ff1c2a80a2285895524c4d3"
+  },
+  "Dockerfile": {
+    "bytes": 2112,
+    "sha256": "19b26ee235928d6d360edc9b5c803427302eb90d9a8dc8d231482ba6380e6668"
+  },
+  "next.config.ts": {
+    "bytes": 801,
+    "sha256": "9109fce04503dfd0418039f7f979789e6b4c723adbad1ad815766753132ce63a"
+  },
+  ".github/workflows/ci.yml": {
+    "bytes": 728,
+    "sha256": "7428f5cac57922f89d33332118190d3936d332001d53e2533f9184de723c7f17"
+  },
+  "node_modules/jsdom/package.json": {
+    "bytes": 4121,
+    "sha256": "def961b4c0a5fe3c37f68fb2b35fc80707975a1c0ff4f8d39ff5b7106c387e5c"
+  },
+  "node_modules/undici/package.json": {
+    "bytes": 6333,
+    "sha256": "d2fb5736b5adad6a74c3fba9345d756258e1e953a3a2a13c03fca1bd6c9f6c52"
+  },
+  "node_modules/jsdom/lib/jsdom/living/websockets/WebSocket-impl.js": {
+    "bytes": 7356,
+    "sha256": "8b779dddcfb753fb88645f9d64e8240a53f7845aae8f8704bb217330a770a342"
+  }
+}

@@ -1,0 +1,68 @@
+from datetime import datetime, timezone
+import hashlib
+import json
+import os
+from pathlib import Path
+import shutil
+import subprocess
+import sys
+
+sys.stdout.reconfigure(encoding='utf-8')
+task=Path(__file__).parent.resolve()
+root=Path('D:/ClaudeProjects/ai_acknowladge')
+work=task/'work'
+evidence=task/'evidence'
+def write(name,value):
+    (evidence/name).write_text(json.dumps(value,ensure_ascii=False,indent=2)+'\n',encoding='utf-8',newline='\n')
+env={k:v for k,v in os.environ.items() if not k.upper().startswith(('LLM_','EMBEDDING_','VISION_','IMAGE_','REASONING_','DEMO_')) and k.upper() not in {'DATABASE_PATH','UPLOAD_DIR','NOTES_EXPORT_DIR','APP_PASSWORD','SESSION_SECRET','NODE_OPTIONS','NODE_PATH','FORCE_COLOR'}}
+env.update({'NODE_ENV':'test','NO_COLOR':'1','NOTES_EXPORT_DIR':str(work/'test-data/notes'),'UPLOAD_DIR':str(work/'test-data/uploads')})
+def run(label,args,timeout):
+    started=datetime.now(timezone.utc).isoformat()
+    try:
+        result=subprocess.run(args,cwd=work,env=env,capture_output=True,timeout=timeout)
+        code=result.returncode
+        stdout,stderr=result.stdout,result.stderr
+    except subprocess.TimeoutExpired as error:
+        code=124
+        stdout,stderr=error.stdout or b'',error.stderr or b''
+    (evidence/(label+'.stdout')).write_bytes(stdout)
+    (evidence/(label+'.stderr')).write_bytes(stderr)
+    write(label+'.command.json',{'argv':args,'cwd':str(work),'started_utc':started,'finished_utc':datetime.now(timezone.utc).isoformat(),'exit_code':code,'timeout_seconds':timeout})
+    return code,stdout,stderr
+def focused(label):
+    version=json.loads((work/'node_modules/undici/package.json').read_bytes())['version']
+    write(label+'.identity.json',{'installed_undici':version,'lock_undici':json.loads((work/'package-lock.json').read_bytes())['packages']['node_modules/undici']['version']})
+    args=['node','node_modules/vitest/vitest.mjs','run','tests/components/markdown-editor-security.test.tsx','-t','外部正文同步通过实际 setContent 路径过滤属性','--maxWorkers=1','--reporter=default','--reporter=json','--outputFile.json='+str(evidence/(label+'.results.json'))]
+    code,stdout,stderr=run(label,args,100)
+    print(label+' / undici '+version+' / exit '+str(code),flush=True)
+    print(stdout.decode('utf-8',errors='replace'),flush=True)
+    return code
+new_result=focused('focused-patched')
+target=(work/'node_modules/undici').resolve()
+saved=(task/'patched-undici').resolve()
+old=(task/'baseline-undici').resolve()
+assert all(p.is_relative_to(task) for p in [target,saved,old])
+assert not saved.exists() and not old.exists()
+target.rename(saved)
+try:
+    shutil.copytree(root/'node_modules/undici',target)
+    (work/'package-lock.json').write_bytes((task/'package-lock.before.json').read_bytes())
+    old_result=focused('focused-baseline')
+finally:
+    target.rename(old)
+    saved.rename(target)
+    (work/'package-lock.json').write_bytes((root/'package-lock.json').read_bytes())
+write('focused-summary.json',{'patched_exit':new_result,'baseline_exit':old_result,'restored_isolated_undici':json.loads((target/'package.json').read_bytes())['version'],'test_timeout_changed':False,'source_tests_changed':False,'original_failure_preserved':True})
+for label,selection in [('audit-all-after','--include=dev'),('audit-production-after','--omit=dev')]:
+    code,stdout,stderr=run(label,[shutil.which('npm.cmd'),'audit','--json','--package-lock-only',selection,'--include=optional','--include=peer','--ignore-scripts','--registry=https://registry.npmjs.org','--fetch-retries=0','--fetch-timeout=20000','--cache='+str(task/'npm-cache')],60)
+    report=json.loads(stdout)
+    assert 'error' not in report,report.get('error')
+    write(label+'.summary.json',{'exit_code':code,'vulnerabilities':report['metadata']['vulnerabilities'],'undici_finding':report['vulnerabilities'].get('undici')})
+    print(json.dumps({'audit':label,'counts':report['metadata']['vulnerabilities'],'undici_finding':report['vulnerabilities'].get('undici')},ensure_ascii=False),flush=True)
+    assert report['metadata']['vulnerabilities']['high']==0
+    assert report['metadata']['vulnerabilities']['critical']==0
+    assert 'undici' not in report['vulnerabilities']
+assert new_result==old_result==0,'定向对照未全部通过，保留结果'
+inputs=json.loads((evidence/'test-inputs.json').read_text(encoding='utf-8'))
+assert all(hashlib.sha256((work/name).read_bytes()).hexdigest()==value['sha256'] for name,value in inputs.items())
+write('verification-preservation.json',{'source_test_config_files_unchanged':len(inputs),'test_lock_matches_workspace':(work/'package-lock.json').read_bytes()==(root/'package-lock.json').read_bytes(),'finished_utc':datetime.now(timezone.utc).isoformat()})
