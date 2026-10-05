@@ -10,6 +10,12 @@ import type { NodeView } from "@tiptap/pm/view";
 
 let seq = 0;
 
+/* 所有 mermaid 代码块共用同一次动态导入：mermaid 依赖图很大（core + chunks + d3 等），
+   每个 NodeView 各自发起导入不仅重复走模块解析，还会在测试中让 vi.mock 因多次请求
+   共享调用栈被判为自导入，转而加载真实包并拖垮清理钩子预算。 */
+let mermaidPromise: Promise<(typeof import("mermaid"))["default"]> | null = null;
+const loadMermaid = () => (mermaidPromise ??= import("mermaid").then((module) => module.default));
+
 export function mermaidBlockMode(state: {
   language: string | null;
   editing: boolean;
@@ -118,7 +124,7 @@ function createMermaidNodeView({ node, editor, getPos }: NodeViewRendererProps):
 
     void (async () => {
       try {
-        const mermaid = (await import("mermaid")).default;
+        const mermaid = await loadMermaid();
         mermaid.initialize({
           startOnLoad: false,
           securityLevel: "strict",

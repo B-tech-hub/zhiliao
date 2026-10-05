@@ -1,0 +1,117 @@
+{
+  "passed": true,
+  "positive_cases": 2,
+  "negative_cases": [
+    {
+      "case": "其他反向影响目标",
+      "passed": true,
+      "rejection": "unapproved report difference"
+    },
+    {
+      "case": "第三包反向影响变化",
+      "passed": true,
+      "rejection": "unapproved report difference"
+    },
+    {
+      "case": "只完成一半重排",
+      "passed": true,
+      "rejection": "unapproved report difference"
+    },
+    {
+      "case": "未批准的修复建议",
+      "passed": true,
+      "rejection": "unapproved report difference"
+    },
+    {
+      "case": "新增空值字段",
+      "passed": true,
+      "rejection": "unapproved report difference"
+    },
+    {
+      "case": "单包严重度变化",
+      "passed": true,
+      "rejection": "unapproved report difference"
+    },
+    {
+      "case": "既有中危适用性变化:via",
+      "passed": true,
+      "rejection": "unapproved report difference"
+    },
+    {
+      "case": "既有中危适用性变化:range",
+      "passed": true,
+      "rejection": "unapproved report difference"
+    },
+    {
+      "case": "既有中危适用性变化:nodes",
+      "passed": true,
+      "rejection": "unapproved report difference"
+    },
+    {
+      "case": "同计数不同公告",
+      "passed": true,
+      "rejection": "unapproved report difference"
+    },
+    {
+      "case": "生产出现开发例外链",
+      "passed": true,
+      "rejection": "vulnerability package set changed"
+    },
+    {
+      "case": "生产新增级别:low",
+      "passed": true,
+      "rejection": "unexpected severity summary"
+    },
+    {
+      "case": "生产新增级别:high",
+      "passed": true,
+      "rejection": "unexpected severity summary"
+    },
+    {
+      "case": "生产新增级别:critical",
+      "passed": true,
+      "rejection": "unexpected severity summary"
+    },
+    {
+      "case": "锁字段变化:version",
+      "passed": true,
+      "rejection": "complete dependency identity changed"
+    },
+    {
+      "case": "锁字段变化:dev",
+      "passed": true,
+      "rejection": "complete dependency identity changed"
+    },
+    {
+      "case": "锁路径变化",
+      "passed": true,
+      "rejection": "complete dependency identity changed"
+    },
+    {
+      "case": "新增 TipTap 父依赖",
+      "passed": true,
+      "rejection": "complete dependency identity changed"
+    },
+    {
+      "case": "配置身份变化",
+      "passed": true,
+      "rejection": "configuration identity changed"
+    },
+    {
+      "case": "例外到期",
+      "passed": true,
+      "rejection": "exception expired"
+    },
+    {
+      "case": "官方快照跨日",
+      "passed": true,
+      "rejection": "official snapshot is not same-day"
+    },
+    {
+      "case": "合成官方修复已发布",
+      "passed": true,
+      "rejection": "official patch available"
+    }
+  ],
+  "network_calls": 0
+}

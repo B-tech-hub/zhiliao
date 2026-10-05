@@ -176,10 +176,14 @@ describe("Demo Nginx 代理空闲时限验收工具", () => {
   });
 
   it("GET 请求读完后专用夹具仍持续发送心跳并支持查询标识", async () => {
-    const server = createProxyUpstream({ heartbeatIntervalMs: 15, heartbeatDurationMs: 120 });
+    /* 夹具是先写心跳再判断是否到时，所以心跳次数约等于 ceil(持续时长 / 实际间隔)。
+       setInterval 在全量并行下会漂移（本机实测由 15 ms 漂到 25–30 ms，120 ms 窗口
+       只剩 4–5 次而误判失败）。窗口放到 600 ms：间隔漂到 100 ms 仍有 6 次，
+       余量由 1.3 倍升到 6.7 倍；断言保持 6 次不放宽。 */
+    const server = createProxyUpstream({ heartbeatIntervalMs: 15, heartbeatDurationMs: 600 });
     expect(server.requestTimeout).toBe(0);
     await withServer(server, async (url) => {
-      const result = await probeProxyRequest(url + "/heartbeat?probe=test", { timeoutMs: 1500 });
+      const result = await probeProxyRequest(url + "/heartbeat?probe=test", { timeoutMs: 3000 });
       expect(result).toMatchObject({ statusCode: 200, endedNormally: true, done: true, budgetExhausted: false });
       expect(result.heartbeatEvents).toBeGreaterThanOrEqual(6);
     });

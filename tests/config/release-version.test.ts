@@ -116,6 +116,8 @@ describe("当前仓库的发布接线", () => {
     expect(checkReleaseVersion().version).toBe(workspaceVersion);
   });
 
+  /* 预算 30 秒：这个 TS 程序单独跑只要约 1 秒，但全量并行时 lib 与 @types 的加载
+     会被资源争抢放大约 11 倍（本机实测 12.0 秒），10 秒会被误判成超时；CI 上约 1 秒。 */
   it("TypeScript 调用可传入 tag，导出参数类型与运行契约一致", () => {
     const config = ts.readConfigFile(path.join(repository, "tsconfig.json"), ts.sys.readFile);
     expect(config.error).toBeUndefined();
@@ -131,7 +133,7 @@ describe("当前仓库的发布接线", () => {
       return `${line}: TS${item.code} ${ts.flattenDiagnosticMessageText(item.messageText, " ")}`;
     });
     expect(diagnostics).toEqual([]);
-  }, 10_000);
+  }, 30_000);
 
   it("从仓库外启动 CLI 也使用脚本所属仓库，并返回正确退出码", () => {
     const script = path.join(repository, "scripts/check-release-version.mjs");

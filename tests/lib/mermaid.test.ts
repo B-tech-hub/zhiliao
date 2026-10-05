@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { Editor, type Extensions } from "@tiptap/core";
 import StarterKit from "@tiptap/starter-kit";
 import { Markdown } from "tiptap-markdown";
@@ -8,6 +8,15 @@ import {
   mermaidBlockMode,
   shouldIgnoreMermaidMutation,
 } from "@/components/mermaid-code-block";
+
+/* NodeView 一创建就会动态导入 mermaid，但本文件只验 schema 与序列化契约，
+   不需要真实绘图器：它的依赖图很大（core + chunks + d3），加载会把清理钩子的等待拖过预算。 */
+vi.mock("mermaid", () => ({
+  default: {
+    initialize: vi.fn(),
+    render: vi.fn().mockResolvedValue({ svg: "<svg/>" }),
+  },
+}));
 
 /* 编辑器里的 mermaid 块最终要以原生 ```mermaid 代码块存回笔记正文——
    导出打包后能被 Obsidian 直接读，靠的就是这条。语言标记一旦在
