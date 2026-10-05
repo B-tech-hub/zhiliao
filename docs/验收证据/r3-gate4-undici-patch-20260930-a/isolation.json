@@ -1,0 +1,10 @@
+{
+  "work": "C:\\Users\\BAIBAI\\AppData\\Local\\Temp\\zhiliao-undici-patch-318d11dc\\work",
+  "dependency_source": "本机 node_modules 独立复制，排除缓存与旧 undici；仅安装官方 7.29.1 tarball",
+  "shared_node_modules_links": false,
+  "copied_business_data": false,
+  "copied_dotenv": false,
+  "lifecycle_scripts_run": false,
+  "undici": "7.29.1",
+  "prepared_utc": "2026-09-30T00:08:27.282828+00:00"
+}

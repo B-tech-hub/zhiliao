@@ -1,0 +1,11 @@
+{
+  "preserved_files": 1124,
+  "preservation_mismatches": [],
+  "head": "41cf296d1d1ccc38d1b2f1b3335cc5b8ac4a4b81",
+  "main_unchanged": true,
+  "worktree_clean_before_result_documents": true,
+  "same_commit_runs": 1,
+  "new_release_run_found": false,
+  "no_rerun": true,
+  "scope": "F only; no main merge, tag, GHCR or Release"
+}

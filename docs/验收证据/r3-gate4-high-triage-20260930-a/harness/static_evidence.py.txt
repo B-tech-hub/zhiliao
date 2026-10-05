@@ -1,0 +1,31 @@
+import hashlib
+import json
+from pathlib import Path
+import subprocess
+import sys
+
+sys.stdout.reconfigure(encoding='utf-8')
+root=Path('D:/ClaudeProjects/ai_acknowladge')
+base=Path(__file__).parent/'evidence'
+def write(name,obj):
+    (base/name).write_text(json.dumps(obj,ensure_ascii=False,indent=2)+'\n',encoding='utf-8',newline='\n')
+checks=[]
+for label,args in [
+ ('application-usage',['rg','-n','-i',r'\b(undici|jsdom|WebSocket|WebSocketStream|BalancedPool|setGlobalDispatcher|RetryAgent)\b','src','tests','scripts','vitest.config.mts']),
+ ('jsdom-websocket',['rg','-n',r'undici|new WebSocket','node_modules/jsdom/lib/jsdom/living/websockets/WebSocket-impl.js']),
+ ('jsdom-balancedpool',['rg','-n','BalancedPool','node_modules/jsdom/lib']),
+ ('ci-times',['rg','-n',r'node:|npm:|audited .*packages|severity vulnerabilities|34 vulnerabilities','docs/验收证据/r3-gate4-final-061-36585198727/ci-log.txt','docs/验收证据/r3-gate4-main-061-36647162597/ci-log.stdout']),
+]:
+    result=subprocess.run(args,cwd=root,capture_output=True)
+    assert result.returncode in (0,1)
+    checks.append({'label':label,'argv':args,'exit_code':result.returncode,'stdout':result.stdout.decode('utf-8'),'stderr':result.stderr.decode('utf-8')})
+write('static-searches.json',checks)
+files=['package.json','package-lock.json','vitest.config.mts','Dockerfile','next.config.ts','.github/workflows/ci.yml','node_modules/jsdom/package.json','node_modules/undici/package.json','node_modules/jsdom/lib/jsdom/living/websockets/WebSocket-impl.js']
+write('static-inputs.json',{p:{'bytes':len((root/p).read_bytes()),'sha256':hashlib.sha256((root/p).read_bytes()).hexdigest()} for p in files})
+write('installed-versions.json',{name:json.loads((root/'node_modules'/name/'package.json').read_text(encoding='utf-8'))['version'] for name in ['jsdom','undici']})
+reports={name:json.loads((base/(name+'.stdout.json')).read_bytes()) for name in ['audit-all','audit-production']}
+high=reports['audit-all']['vulnerabilities']['undici']
+assert high['nodes']==['node_modules/undici']
+assert reports['audit-production']['metadata']['vulnerabilities']['high']==0
+write('audit-summary.json',{'counts':{k:v['metadata']['vulnerabilities'] for k,v in reports.items()},'high_package':high,'via_severities':{s:sum(v['severity']==s for v in high['via']) for s in ['high','moderate','low']},'production_contains_undici_finding':'undici' in reports['audit-production']['vulnerabilities']})
+print(json.dumps({'installed':json.loads((base/'installed-versions.json').read_text()),'searches':[(c['label'],c['exit_code']) for c in checks]},ensure_ascii=False))

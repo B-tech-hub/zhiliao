@@ -1,0 +1,55 @@
+{
+  "passed": true,
+  "before": "347f5fda89ca590091ba62211c2cd40e845abaa93d4e1d79a3e0c8395424813e",
+  "after": "4432a15f29eeedba0c43971afe93dc8f26e59106b2eae2ede40ee05b5a0744ba",
+  "changed_records": 3,
+  "changed_fields": 9,
+  "changes": {
+    "node_modules/@typescript-eslint/typescript-estree/node_modules/brace-expansion": {
+      "version": {
+        "before": "5.0.9",
+        "after": "5.0.12"
+      },
+      "resolved": {
+        "before": "https://registry.npmjs.org/brace-expansion/-/brace-expansion-5.0.9.tgz",
+        "after": "https://registry.npmjs.org/brace-expansion/-/brace-expansion-5.0.12.tgz"
+      },
+      "integrity": {
+        "before": "sha512-ScQ4IuvIEF1TMlP7Zt+vjJ//9zlPb2SDcxWxM3bk8s6t6GGdJ7KO1dCcTidOPJKePW30LE/2cT7wCyPho9/Wxg==",
+        "after": "sha512-YovQ3rzhaLMIrDjNDMkNS01tea93qhEhG5xy8f6+R0l+dw3Ki+5sCoIoI942iuLZTHWogWktgwVDhU09iNEimQ=="
+      }
+    },
+    "node_modules/brace-expansion": {
+      "version": {
+        "before": "1.1.18",
+        "after": "1.1.21"
+      },
+      "resolved": {
+        "before": "https://registry.npmjs.org/brace-expansion/-/brace-expansion-1.1.18.tgz",
+        "after": "https://registry.npmjs.org/brace-expansion/-/brace-expansion-1.1.21.tgz"
+      },
+      "integrity": {
+        "before": "sha512-Edep/X9fGqVNmzKBVsDYIOtD+z1tuezV70LBjdCst9Tqu76lsnvRiZ6oTic1n+/BIwX6QDGAO94PN4N2SADvtw==",
+        "after": "sha512-9zeA+KLZNNzglF2TPKRQEDyx6Yby7daAkuy8MiPzpXPsYDWi/DRM8jmwUDxokQjYqBpv5DgPiwD4h4ZZSy1Ujw=="
+      }
+    },
+    "node_modules/dompurify": {
+      "version": {
+        "before": "3.4.13",
+        "after": "3.4.16"
+      },
+      "resolved": {
+        "before": "https://registry.npmjs.org/dompurify/-/dompurify-3.4.13.tgz",
+        "after": "https://registry.npmjs.org/dompurify/-/dompurify-3.4.16.tgz"
+      },
+      "integrity": {
+        "before": "sha512-2vmYIoqjze2d+kakP8S/nS5shfsl587kzwEjcGlTdiksUVgFHnFCsLYDVj/JNqJVOQZGSYBTmuycv0PodwmnMQ==",
+        "after": "sha512-sqo+pNp3qRhCIpbgRi1y8Tgk27Bo2Ry7w0dC1NBeNTdZChWjz9Xb/KOoZbRP/R6pQZ80Qw8YhXw13hWWBbMRnQ=="
+      }
+    }
+  },
+  "main_node_modules_updated": false,
+  "git_write": false,
+  "stage_a_complete": true,
+  "gate4_passed": false
+}

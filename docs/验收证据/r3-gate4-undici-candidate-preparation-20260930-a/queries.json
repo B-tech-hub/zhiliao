@@ -1,0 +1,98 @@
+[
+  {
+    "name": "remote-heads",
+    "argv": [
+      "git",
+      "ls-remote",
+      "--heads",
+      "origin"
+    ],
+    "started_utc": "2026-09-30T00:22:27.034899+00:00",
+    "finished_utc": "2026-09-30T00:22:28.242356+00:00",
+    "exit_code": 0
+  },
+  {
+    "name": "old-pr",
+    "argv": [
+      "gh",
+      "pr",
+      "view",
+      "12",
+      "--repo",
+      "B-tech-hub/zhiliao",
+      "--json",
+      "number,state,headRefName,headRefOid,baseRefName,mergeCommit,mergedAt,url"
+    ],
+    "started_utc": "2026-09-30T00:22:28.242356+00:00",
+    "finished_utc": "2026-09-30T00:22:29.082134+00:00",
+    "exit_code": 0
+  },
+  {
+    "name": "new-pr-search",
+    "argv": [
+      "gh",
+      "pr",
+      "list",
+      "--repo",
+      "B-tech-hub/zhiliao",
+      "--state",
+      "all",
+      "--head",
+      "candidate/0.6.1-undici-7.29.1",
+      "--json",
+      "number,state,headRefName,headRefOid,baseRefName,url"
+    ],
+    "started_utc": "2026-09-30T00:22:29.082134+00:00",
+    "finished_utc": "2026-09-30T00:22:29.918899+00:00",
+    "exit_code": 0
+  },
+  {
+    "name": "main-commit",
+    "argv": [
+      "gh",
+      "api",
+      "repos/B-tech-hub/zhiliao/git/commits/2ae66f5f3df6b0e7afa3bfa09bf601b18ea96a11"
+    ],
+    "started_utc": "2026-09-30T00:22:29.918899+00:00",
+    "finished_utc": "2026-09-30T00:22:30.748393+00:00",
+    "exit_code": 0
+  },
+  {
+    "name": "main-ci",
+    "argv": [
+      "gh",
+      "run",
+      "view",
+      "36647162597",
+      "--repo",
+      "B-tech-hub/zhiliao",
+      "--json",
+      "databaseId,headSha,headBranch,status,conclusion,event,attempt,url,workflowName"
+    ],
+    "started_utc": "2026-09-30T00:22:30.748393+00:00",
+    "finished_utc": "2026-09-30T00:22:31.995149+00:00",
+    "exit_code": 0
+  },
+  {
+    "name": "repository",
+    "argv": [
+      "gh",
+      "api",
+      "repos/B-tech-hub/zhiliao"
+    ],
+    "started_utc": "2026-09-30T00:22:31.995149+00:00",
+    "finished_utc": "2026-09-30T00:22:32.796248+00:00",
+    "exit_code": 0
+  },
+  {
+    "name": "operator",
+    "argv": [
+      "gh",
+      "api",
+      "user"
+    ],
+    "started_utc": "2026-09-30T00:22:32.796248+00:00",
+    "finished_utc": "2026-09-30T00:22:33.648526+00:00",
+    "exit_code": 0
+  }
+]

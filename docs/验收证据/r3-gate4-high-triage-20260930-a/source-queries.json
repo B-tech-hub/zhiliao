@@ -1,0 +1,30 @@
+[
+  {
+    "file": "GHSA-rfgv-xxqx-mfg5.json",
+    "url": "https://api.github.com/advisories/GHSA-rfgv-xxqx-mfg5",
+    "queried_utc": "2026-09-30T00:01:27.762541+00:00",
+    "bytes": 6265,
+    "sha256": "f3b491512218cf68ff95d08f2662c6f202a127073595a9620c0b64c592cc1e49"
+  },
+  {
+    "file": "GHSA-w293-vg96-wgc3.json",
+    "url": "https://api.github.com/advisories/GHSA-w293-vg96-wgc3",
+    "queried_utc": "2026-09-30T00:01:28.558798+00:00",
+    "bytes": 6267,
+    "sha256": "9d671e100faf7f4871002b8e2a173c1d4de5666fed6260cd57d224b117972d0d"
+  },
+  {
+    "file": "undici-7.29.1.json",
+    "url": "https://registry.npmjs.org/undici/7.29.1",
+    "queried_utc": "2026-09-30T00:01:29.180924+00:00",
+    "bytes": 6822,
+    "sha256": "685384f6b29949d971a2b3fe0a5460f7c87ee30bdc01471ec81d58d237dfab7f"
+  },
+  {
+    "file": "node-22.23.2-undici.json",
+    "url": "https://raw.githubusercontent.com/nodejs/node/v22.23.2/deps/undici/src/package.json",
+    "queried_utc": "2026-09-30T00:01:30.274955+00:00",
+    "bytes": 6290,
+    "sha256": "f529aa8b145f6e270a72700ceb6c8dd3b87f742313078ea9f774a9d2ce8c865d"
+  }
+]

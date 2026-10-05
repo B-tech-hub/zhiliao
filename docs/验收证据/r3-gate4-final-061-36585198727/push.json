@@ -1,0 +1,15 @@
+{
+  "utc": "2026-09-29T14:46:28.241812+00:00",
+  "command": [
+    "git",
+    "-c",
+    "push.followTags=false",
+    "push",
+    "--no-follow-tags",
+    "origin",
+    "41cf296d1d1ccc38d1b2f1b3335cc5b8ac4a4b81:refs/heads/candidate/0.6.1-baseline"
+  ],
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": "remote: \nremote: GitHub found 1 vulnerability on B-tech-hub/zhiliao's default branch (1 moderate). To find out more, visit:        \nremote:      https://github.com/B-tech-hub/zhiliao/security/dependabot/7        \nremote: \nTo https://github.com/B-tech-hub/zhiliao.git\n   b2bae00..41cf296  41cf296d1d1ccc38d1b2f1b3335cc5b8ac4a4b81 -> candidate/0.6.1-baseline\n"
+}

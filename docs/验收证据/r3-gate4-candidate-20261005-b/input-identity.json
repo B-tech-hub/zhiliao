@@ -1,0 +1,141 @@
+{
+  "date": "2026-10-05",
+  "base_commit": "8bde2debb5960a8fc31dd5b912dc7d31d4463b55",
+  "base_tree": "1af55b39c1e39a2744dd17b5c5fc04159527d6e1",
+  "fix_source_commit": "1ad51b31f8d97eecfc8e3061e1a5698cf367578c",
+  "lock_sha256": "4432a15f29eeedba0c43971afe93dc8f26e59106b2eae2ede40ee05b5a0744ba",
+  "fixed_files_sha256": {
+    "src/components/mermaid-code-block.tsx": "7e78d1ea2ab8eae0c3eb28c95df6ad9abd28484f95f7ce8640888cb458a13f0e",
+    "tests/lib/mermaid.test.ts": "79b182f86b572a5eab8f15cfc94a9327018a5113d61c5a138c9c21e2652ab00e",
+    "tests/config/release-version.test.ts": "ded7a1f88396f745d8d6118cb22badf2126b09e297924727e5ae82e7f88f6007",
+    "tests/config/demo-proxy-timeouts.test.ts": "c325d7b63e86ca0aa82322c1509b65491735ec0e99f088ccc4f4374fe658d6f2",
+    "package-lock.json": "4432a15f29eeedba0c43971afe93dc8f26e59106b2eae2ede40ee05b5a0744ba"
+  },
+  "materials": {
+    "exception.json": {
+      "source": "docs/验收证据/r3-gate4-local-closeout-20261004-h/exception.json",
+      "sha256": "4d1cffec5b593031b633c45ee82fc6a1cee2eece5310283ffb02a699c04b42db"
+    },
+    "audit-all.json": {
+      "source": "docs/验收证据/r3-gate4-local-closeout-20261004-g/audit-all.stdout",
+      "sha256": "90941b91825e516145d5cbcaec7fd5580b725ae26964efdfdb9d379a1b95c91b"
+    },
+    "audit-production.json": {
+      "source": "docs/验收证据/r3-gate4-local-closeout-20261004-h/audit-production.stdout",
+      "sha256": "8653835ceb152cae75270312e57b21abaf4b981e02d935d46117f8e10b501cba"
+    },
+    "offline-checks.json": {
+      "source": "docs/验收证据/r3-gate4-local-closeout-20261004-i/offline-checks.json",
+      "sha256": "bf135d36edd6109667de9eceb4196b61e3fa1b32c6e9b1d4620d339fcab0fd2b"
+    },
+    "lock-applied.json": {
+      "source": "docs/验收证据/r3-gate4-local-closeout-20261004-i/lock-applied.json",
+      "sha256": "457a59d2b6bb2d5578715bebfc27e3950cc9825402b6c3184526883f6868cd1c"
+    },
+    "README.md": {
+      "source": "本批仓库外生成",
+      "sha256": "4e38da3e990ddd32b5ff8a9eed01cb019649b78eb1115cc5acf9fe3a318cb6c7"
+    },
+    "official-fields.json": {
+      "source": "本批仓库外生成",
+      "sha256": "675ce5f771a86f2ce33937e94c555c27f002ee7f512bc741acae91c117730b42"
+    }
+  },
+  "reused_checks": {
+    "eslint": {
+      "source": "docs/验收证据/r3-gate4-local-closeout-20261004-e/diagnostic-complete.json",
+      "sha256": "ea97fe288c0472a3b6885f95ac7dcd404a9c4300a087fbab70fe3e721353d72f",
+      "record": {
+        "passed": true,
+        "following_steps_started": false
+      },
+      "new_execution": false
+    },
+    "vitest": {
+      "source": "docs/验收证据/r3-gate4-local-closeout-20261004-f/vitest-complete.json",
+      "sha256": "f34c7d68728196984540dd1a8ed6dda61a7dca0dadffa717fe8a600298d49a93",
+      "record": {
+        "passed": true,
+        "tests": 34,
+        "cases": {
+          "markdown-editor-security.test.tsx": 26,
+          "mermaid.test.ts": 8
+        },
+        "real_mermaid": false
+      },
+      "new_execution": false
+    },
+    "dompurify": {
+      "source": "docs/验收证据/r3-gate4-local-closeout-20261004-g/dompurify-complete.json",
+      "sha256": "e5132fd8a6575ab3165a648925b3b6119f47a8da4acaf976eb65385c198bb90b",
+      "record": {
+        "passed": true,
+        "scenarios": 3,
+        "blocker_selfcheck": true,
+        "network_attempts": 0,
+        "real_browser": false
+      },
+      "new_execution": false
+    }
+  },
+  "audit_original_commands": {
+    "all": {
+      "argv": [
+        "D:/node.js/node.exe",
+        "D:/node.js/node_modules/npm/bin/npm-cli.js",
+        "audit",
+        "--include=dev",
+        "--json",
+        "--package-lock-only",
+        "--ignore-scripts",
+        "--include=optional",
+        "--include=peer",
+        "--registry=https://registry.npmjs.org",
+        "--replace-registry-host=never",
+        "--fetch-retries=0",
+        "--fetch-timeout=20000",
+        "--cache=D:\\ClaudeProjects\\zhiliao-gate4-closeout-20261004-c\\audit-cache"
+      ],
+      "cwd": "D:\\ClaudeProjects\\zhiliao-gate4-closeout-20261004-c\\source",
+      "pid": 18036,
+      "start": "2026-10-04T11:22:32.155781+00:00",
+      "end": "2026-10-04T11:22:53.541852+00:00",
+      "elapsed_seconds": 21.38607020000927,
+      "timeout_seconds": 60,
+      "timed_out": false,
+      "exit_code": 1
+    },
+    "production": {
+      "argv": [
+        "D:/node.js/node.exe",
+        "D:/node.js/node_modules/npm/bin/npm-cli.js",
+        "audit",
+        "--omit=dev",
+        "--json",
+        "--package-lock-only",
+        "--ignore-scripts",
+        "--include=optional",
+        "--include=peer",
+        "--registry=https://registry.npmjs.org",
+        "--replace-registry-host=never",
+        "--fetch-retries=0",
+        "--fetch-timeout=20000",
+        "--cache=D:\\ClaudeProjects\\zhiliao-gate4-closeout-20261004-c\\audit-cache-h"
+      ],
+      "cwd": "D:\\ClaudeProjects\\zhiliao-gate4-closeout-20261004-c\\source",
+      "pid": 55608,
+      "start": "2026-10-04T13:18:39.627389+00:00",
+      "end": "2026-10-04T13:18:58.741466+00:00",
+      "elapsed_seconds": 19.114083799999207,
+      "timeout_seconds": 60,
+      "timed_out": false,
+      "exit_code": 1
+    }
+  },
+  "stage_a_passed": true,
+  "new_audit": false,
+  "candidate_ci_passed": false,
+  "h_stop_preserved": true,
+  "exception_expires_at": "2026-10-18T00:00:00Z",
+  "final_candidate_identity": "实际新提交与 tree 保存在仓库外执行记录，不进入自身输入"
+}

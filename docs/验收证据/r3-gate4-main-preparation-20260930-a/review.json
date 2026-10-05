@@ -1,0 +1,27 @@
+{
+  "candidate": "41cf296d1d1ccc38d1b2f1b3335cc5b8ac4a4b81",
+  "base": "6ee67532deed37fda6cc98962e8df76c98659890",
+  "tree": "d0f16de6459461315c0b0274a8a0f44bc483e84d",
+  "commit_count": 28,
+  "changed_paths": 704,
+  "groups": {
+    "配置与锁文件": 5,
+    "文档与规划": 67,
+    "验收证据与补丁附件": 607,
+    "验证脚本": 2,
+    "业务源码": 7,
+    "测试": 16
+  },
+  "prior_evidence_unchanged": 1158,
+  "f_archive_manifest_verified": 33,
+  "f_current_run_count": 1,
+  "merge_executed": false,
+  "main_ci_executed": false,
+  "merge_subject": "merge: 合入 0.6.1 候选修复、验收与分发准备 (#12)",
+  "merge_body_sha256": "f2b4e49b9aabf25e54cf102fa2e74393d1f36931fd2a8be8d2dc9c70b8100de8",
+  "limitations": [
+    "合并命令仅锁定 head，base 需前后核对",
+    "main 无保护规则，必须由执行者核对完整 CI",
+    "准备查询不代表执行时状态；GHCR 与 R 未检查"
+  ]
+}

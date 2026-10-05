@@ -1,0 +1,7 @@
+合入候选 41cf296d1d1ccc38d1b2f1b3335cc5b8ac4a4b81，保留其相对 main 的 28 个提交历史。
+
+包含来源问答与图片读取等候选修复、R1/R2 和升级回退验收资料，以及原生双架构分发工作流准备。
+
+PR CI https://github.com/B-tech-hub/zhiliao/actions/runs/36585198727 已通过版本、设计、lint、测试和构建；884 通过、0 失败、28 项原条件跳过。
+
+本次仅合并并执行自动 main CI；RC tag、GHCR、原生双架构无缓存构建、匿名安装及发布另行验收。

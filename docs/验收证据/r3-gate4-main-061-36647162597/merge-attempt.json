@@ -1,0 +1,20 @@
+{
+  "started_at_utc": "2026-09-29T23:48:48.835395+00:00",
+  "args": [
+    "gh",
+    "pr",
+    "merge",
+    "12",
+    "--repo",
+    "B-tech-hub/zhiliao",
+    "--merge",
+    "--match-head-commit",
+    "41cf296d1d1ccc38d1b2f1b3335cc5b8ac4a4b81",
+    "--subject",
+    "merge: 合入 0.6.1 候选修复、验收与分发准备 (#12)",
+    "--body-file",
+    "docs/验收证据/r3-gate4-main-preparation-20260930-a/merge-body.txt"
+  ],
+  "attempt": 1,
+  "approved_scope": "M: one merge, automatic main CI, targeted cancellation if needed, local archive only"
+}

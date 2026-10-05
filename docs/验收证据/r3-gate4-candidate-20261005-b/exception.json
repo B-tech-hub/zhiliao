@@ -1,0 +1,34 @@
+{
+  "advisory": "GHSA-vfj7-8cjw-p6xm",
+  "cve": "CVE-2026-93687",
+  "approved_scope": "仅当前固定开发依赖链；生产侧不豁免，不代表漏洞已修复",
+  "expires_at": "2026-10-18T00:00:00Z",
+  "candidate_lock_sha256": "4432a15f29eeedba0c43971afe93dc8f26e59106b2eae2ede40ee05b5a0744ba",
+  "all_audit_sha256": "90941b91825e516145d5cbcaec7fd5580b725ae26964efdfdb9d379a1b95c91b",
+  "versions": {
+    "eslint-config-next": "15.5.24",
+    "@next/eslint-plugin-next": "15.5.24",
+    "fast-glob": "3.3.1",
+    "micromatch": "4.0.8",
+    "braces": "3.0.3"
+  },
+  "config_hashes": {
+    "eslint.config.mjs": "1e37ccce9d7032ebdd7513b4d69ba602f63d0ba3e2dbc58a09ddba7be5c6b233",
+    "node_modules/@next/eslint-plugin-next/dist/utils/get-root-dirs.js": "886677432990a735e5ebdfb345ff1cbd40e264f9947a8432eeeb254b3a926bde",
+    "node_modules/eslint-config-next/index.js": "fc5621f4477dd51f2042252b7dab5e7b4798fa728b619506972a8709ebd5d658"
+  },
+  "early_invalidation": [
+    "官方修复版发布",
+    "相关版本、锁路径、依赖关系、dev 标记、配置或调用输入变化",
+    "生产集合命中该公告或出现新增公告",
+    "任何新的候选或发布决策尚未完成有效性复核"
+  ],
+  "original_all_audit": {"high": 5, "moderate": 33, "low": 0, "critical": 0},
+  "required_production_audit": {"high": 0, "moderate": 33, "low": 0, "critical": 0},
+  "limitations": [
+    "全依赖结果复用 g 批时间快照，不宣称本批重新审计",
+    "开发构建工具仍含真实漏洞，不隐藏原始 high 告警",
+    "生产集合审计不代替最终 RC 镜像依赖与运行时核对",
+    "例外不能自动续期，不自动关闭门禁 4–6"
+  ]
+}

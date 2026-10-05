@@ -1,0 +1,28 @@
+import hashlib
+import json
+from pathlib import Path
+import sys
+
+sys.stdout.reconfigure(encoding='utf-8')
+root=Path('D:/ClaudeProjects/ai_acknowladge')
+evidence=Path(__file__).parent/'evidence'
+summaries={}
+for name in ['vitest-results','focused-patched.results','focused-baseline.results']:
+    report=json.loads((evidence/(name+'.json')).read_bytes())
+    cases=[a for result in report['testResults'] for a in result['assertionResults']]
+    summaries[name]={k:report.get(k) for k in ['numTotalTests','numPassedTests','numFailedTests','numPendingTests','success']}
+    summaries[name]['failed']=[a for a in cases if a['status']=='failed']
+    summaries[name]['setContent']=[{k:a.get(k) for k in ['fullName','status','duration']} for a in cases if 'setContent' in a['fullName']]
+    summaries[name]['files']=[r['name'] for r in report['testResults']]
+old=[]
+for path in (root/'docs/验收证据/release-gates-061-20260929-a').glob('*.json'):
+    report=json.loads(path.read_text(encoding='utf-8-sig'))
+    if not isinstance(report,dict) or not isinstance(report.get('testResults'),list): continue
+    cases=[a for result in report['testResults'] for a in result.get('assertionResults',[])]
+    failures=[{k:a.get(k) for k in ['fullName','status','duration','failureMessages']} for a in cases if a.get('status')=='failed' and '真实编辑器' in a.get('fullName','')]
+    if failures:
+        old.append({'file':path.relative_to(root).as_posix(),'sha256':hashlib.sha256(path.read_bytes()).hexdigest(),'failures':failures})
+result={'current':summaries,'historical_editor_failures':old}
+(evidence/'test-analysis.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n',encoding='utf-8',newline='\n')
+print(json.dumps({name:{k:v for k,v in value.items() if k not in ['files','failed']} for name,value in summaries.items()},ensure_ascii=False))
+print(json.dumps(old,ensure_ascii=False))

@@ -28,8 +28,12 @@ context: []
 
 ## Code Map
 
+- `docs/R3门禁4Undici补丁候选与PR-CI执行单-2026-09-30.md`：新候选准备已完成；以固定 M 为父提交建立独立分支/checkout，清单、一次提交/推送/新 PR 与完整 CI 待确认，不复用已合并 PR #12。
+- `docs/R3主线新增high依赖调查-2026-09-30.md`：已获准应用 Undici 7.29.1 最小锁文件补丁；两次审计均 0 high，局部首次 95/1 与新旧版本定向对照各 2 项通过分别留证，Node 内置副本及 R 边界保留。
+- `package-lock.json`：仅 node_modules/undici 的 version、resolved、integrity 三字段更新；package.json、源码、测试和工作流不变。
+- `docs/R3门禁4合并main与CI执行单-2026-09-30.md`：M 已确认执行，一次普通合并及 main CI 通过；原方案保留，归档时 high 待定位，后续结论见独立调查，不含 R。
 - `docs/验收证据/r3-gate4-rc-local-20260929-a/README.md`：六文件补丁已确认应用；67 项局部测试、目标 ESLint、actionlint 和版本校验通过，未提交或运行 R。
-- `docs/R3门禁4最终候选收口与RC执行单-2026-09-29.md`：当前 F/M/R 入口；本地顺序约束与材料定稿已通过局部检查，最终提交/main/RC、GHCR 与真实 R 仍待确认执行。
+- `docs/R3门禁4最终候选收口与RC执行单-2026-09-29.md`：当前 F/M/R 入口；F/M 旧 tree 成绩保持，新增 high 最小补丁已本地应用，新候选完整 CI、RC/GHCR 与真实 R 仍待确认。
 - `docs/R3门禁4预览预算修复后候选推送与PR-CI执行单-2026-09-29.md`：V3 已获准执行，61 路径一次提交/推送及自动完整 CI 通过；原方案保留。
 - `docs/R3门禁4环境调查与验收计划-2026-09-29.md`：环境、完整身份、命令语义、矩阵和资源边界，执行前必读。
 - `docs/R3门禁4候选推送与PR-CI执行单-2026-09-29.md`：V 的待提交路径、推送命令、PR head/merge 身份、监控阈值和确认边界。
@@ -45,6 +49,9 @@ context: []
 ## Tasks & Acceptance
 
 **Execution:**
+- [x] Undici 新候选准备：只读核对 main=M、旧 PR #12 已合并、目标新分支/PR 不存在；复用补丁局部结果，生成精确输入及新执行单，无 Git 字节转换风险。未 fetch、暂存、提交、推送、新建 PR、审计、测试或发布；新候选执行及后续合并/R 分别确认。
+- [x] Undici 最小补丁：用户确认后仅更新锁文件三字段到 7.29.1；校验官方产物并在独立副本验证实际 jsdom 解析。8 文件首轮 95/1，失败场景新旧版各 2 项通过，原超时及未定原因保留；两次修复后审计均 33 moderate、0 high。未修改测试时限、断言、工作流或工作区 node_modules，未提交/推送/完整 CI/R。
+- [x] M 后 high 调查：单 Agent 复用 F/M，通过两次只读锁文件审计定位 Undici 7.29.0；全依赖 33 moderate + 1 high，排除开发依赖 33 moderate、0 high。公告、触发条件、Node 内置副本和最小处理方案独立归档；未改依赖或执行提交/推送/完整门禁/R。
 - [x] P：新增 `scripts/verify-release-gate4.mjs` 和 `tests/config/release-gate4.test.ts`；补强 `release.yml`，同步 `CONTRIBUTING.md` 与配套计划，局部验证后呈交 diff。
 - [x] V：已获准同步候选 `321f770`，PR CI `36567105695` 通过并归档实际 checkout；同时记录 Release 工作流解析阻断，不能进入 R。
 - [x] V 后修复：四个临时路径移到 build/install 首个初始化步骤，补上下文与初始化顺序回归，固定初始化失败时的上传目录；64 项局部回归通过并独立留证。
@@ -56,6 +63,9 @@ context: []
 - [ ] R：另获发布授权后完成双架构无缓存构建、manifest 与匿名安装；归档到 `docs/验收证据/r3-gate4-061-<run-id>/`，同步执行清单、候选定稿、Release Notes 和索引。
 - [x] R 前准备：串行审阅未提交 V3 结果文档，形成最终候选收口与 RC 执行单；发布材料定稿方案、Git 身份、main/RC、GHCR、匿名安装、资源和失败边界已列出，未执行提交、推送、重验证或发布。
 - [x] R 前本地实施：用户确认后精确应用六文件补丁；显式原生平台成功依赖与材料定稿完成，67 项局部测试、目标 ESLint、actionlint、版本校验通过并独立归档；未执行 F/M/R。
+- [x] F：70 路径一次提交/推送，PR CI `36585198727` 全绿，884/0/28；旧证据保持，M/main CI 与真实 R 未执行。
+- [x] M 准备：只读核对 C/B、PR、F 状态与仓库合并设置，固定完整 28 提交/704 路径范围，形成 2026-09-30 执行单；未合并或重验证。
+- [x] M：用户确认后一次普通 merge，M `2ae66f5f3df6b0e7afa3bfa09bf601b18ea96a11`；main CI `36647162597` 884/0/28、构建通过，parents/tree/checkout 相符。1193 份旧证据保持，结果仅本地；新增 1 high 摘要待定位，R 未执行。
 
 **Acceptance Criteria:**
 - Given 固定候选，When 干净获取和安装，Then 输入可追溯，缓存边界与生成文件单列。
@@ -64,6 +74,17 @@ context: []
 - Given 失败或缺证，When 汇总，Then 如实保留未通过项及清理结果，不扩大既有证据。
 
 ## Spec Change Log
+
+- 2026-09-30：用户要求继续，本轮完成 Undici 补丁后的候选准备。main 仍为 `2ae66f5f3df6b0e7afa3bfa09bf601b18ea96a11`、tree 与本地 C 相同；PR #12 已合并，现有 CI 不响应普通候选分支 push，故拟从 M 新建 `candidate/0.6.1-undici-7.29.1` 和新 PR。只做远端只读查询、输入/过滤核对和文档准备，复用两次 0 high 与局部首轮 95/1、定向对照各 2 项通过，未重验证或写 Git。新执行单固定独立 checkout、精确清单、一次提交/推送/PR/完整 CI、失败停止及后续合并/R 边界；旧证据、原 baseline、冻结块、in-progress 和 Story/Sprint 保持。
+
+- 2026-09-30：用户“可以”确认上轮 7.29.1 最小方案及局部验证。本轮仅修改 Undici 锁条目的 version/resolved/integrity，并同步相关文档；官方 tarball 的 SHA-512/SHA-1 与已存证元数据相符。隔离副本 8 份 jsdom 测试首次 95/1，Mermaid=true 正文同步在原 5 秒时限下记录约 72 秒超时；仅该场景新旧版本对照各 2 项通过，首次失败不回填、原因未定，未修改测试或放宽时限。全依赖/生产锁文件审计均 33 moderate、0 high、0 critical。旧证据、工作区 node_modules、refs/index、baseline、冻结块和 in-progress 保持；BMad 多 Agent、自动提交/完成规格要求服从单 Agent 与本轮局部边界，不同步 Story/Sprint，不执行完整门禁或发布。
+
+- 2026-09-30：用户限定本轮仅调查 main 新增 high；提前说明两次锁文件审计范围后，在仓库外原字节副本查询官方 registry，并核对两条 high 公告及修复元数据。定位为开发依赖 `jsdom@29.1.1 → undici@7.29.0`，7.29.1 可兼容修复；Node 22.23.2 上游内置 6.28.0 另落入 WebSocket 公告范围，未发现业务直接触发路径。新增独立报告和证据，旧归档保持；未修改依赖、代码、工作流或运行测试/构建/发布。BMad 通用子 Agent 和全规格完成要求服从本轮单 Agent 调查范围；原 baseline、冻结块、`in-progress` 及 Story/Sprint 保持。
+
+- 2026-09-30：用户明确确认 M 执行单，已一次普通合并 PR #12，main 为 `2ae66f5f3df6b0e7afa3bfa09bf601b18ea96a11`；CI `36647162597` 全绿，884/0/28，实际 checkout=M，parents=[B,C]、tree 与 F 相同。安装摘要 33 moderate + 1 high，未预判包/原因或追加审计，R 前待定位复评。旧 1193 份证据/附件保留；单 Agent，无本地提交/推送/rerun/tag/GHCR/Release，原 baseline、冻结块、`in-progress` 与 Story/Sprint 保持。
+
+- 2026-09-30：用户要求继续，按 F/M/R 分段边界完成 M 准备。C `41cf296d1d1ccc38d1b2f1b3335cc5b8ac4a4b81` 与 B `6ee67532deed37fda6cc98962e8df76c98659890` 未变，PR 可合并、F 全绿；main 无保护规则，执行单要求人工核对门禁及合并前后身份。单 Agent，复用 F，1158 份旧证据及准备附件原字节保留；未合并、提交、推送、运行新 CI 或发布，M 待确认，原 baseline、冻结块、`in-progress` 和 Story/Sprint 保持。
+- 2026-09-29：用户批准按 F 推荐执行，已应用 V3 原始 JSON 的单路径字节保护；70 路径提交为 `41cf296d1d1ccc38d1b2f1b3335cc5b8ac4a4b81` 并普通推送一次。CI `36585198727` 版本及四条门禁通过，884/0/28，实际 checkout `4548fe4c1be2f6dcea52501bfd2a559244a68174` 与候选 tree 一致；1124 份旧证据及准备文件保持。单 Agent，无本机重验证/rerun/main/tag/GHCR/Release；结果仅本地归档，原 baseline、冻结块和 `in-progress` 保持，M/R 待具体授权。
 
 - 2026-09-29 F 准备补充：发现 V3 原始 `run.json` 含一个 CRLF，直接暂存会改变归档哈希；新增单路径 `.gitattributes -text` 补丁方案及隔离属性对照，真实文件未改。F 清单纳入该待应用项，共 70 路径；旧证据原样保留，执行时须先应用已列明规则再逐项核对暂存字节。
 
@@ -85,9 +106,19 @@ context: []
 
 ## Design Notes
 
-当前 V3 候选为 `b2bae00d4a0e91ef43a0cb41f70f75ebc38ec592`，完整 PR CI 已通过；此前 V2 安装预览超时失败保持历史原义。本规格为独立 R3 工作包，不同步 Story/Sprint。Release 的真实双架构构建与安装仍未执行；最新 R 前准备见[收口与 RC 执行单](../../docs/R3门禁4最终候选收口与RC执行单-2026-09-29.md)，最终发布提交不能预填为 V3 HEAD。原单架构退让注释的冲突处理见配套计划第 4 节，现有矩阵调度与严格失败停止的差异见新执行单第 2 节。
+当前接续为[Undici 新候选执行单](../../docs/R3门禁4Undici补丁候选与PR-CI执行单-2026-09-30.md)，仅准备完成；原 PR #12 已合并，新分支、新 PR 和新 CI 尚未创建。不能将本轮“继续”当作完整 CI 或 Git 写入授权，具体执行须按最终清单确认。
+
+当前已归档 M 为 `2ae66f5f3df6b0e7afa3bfa09bf601b18ea96a11`，main CI `36647162597` 通过，884/0/28。其后本地已应用 Undici 7.29.1 最小锁文件补丁、两次审计均 0 high；局部首次超时与新旧版本对照见[补丁证据](../../docs/验收证据/r3-gate4-undici-patch-20260930-a/README.md)。修改尚未提交，M 的完整 CI 不能归给新锁文件；新候选与 R 仍待具体安排，Node 内置副本未修复。所有准备与 F 状态段落保留其历史时点。
+
+F 候选为 `41cf296d1d1ccc38d1b2f1b3335cc5b8ac4a4b81`，完整 CI `36585198727` 通过，884/0/28；随后 M 已完成，R 未执行。下方 V3 与更早记录保留历史身份。
+
+此前 V3 候选为 `b2bae00d4a0e91ef43a0cb41f70f75ebc38ec592`，完整 PR CI 已通过；此前 V2 安装预览超时失败保持历史原义。本规格为独立 R3 工作包，不同步 Story/Sprint。Release 的真实双架构构建与安装仍未执行；最新 R 前准备见[收口与 RC 执行单](../../docs/R3门禁4最终候选收口与RC执行单-2026-09-29.md)，最终发布提交不能预填为 V3 HEAD。原单架构退让注释的冲突处理见配套计划第 4 节，现有矩阵调度与严格失败停止的差异见新执行单第 2 节。
 
 ## Verification
+
+Undici 补丁：官方包哈希与实际解析通过；8 文件首轮 95 通过、1 超时，失败场景新旧版本各 2 项通过；跨运行有 96 项通过证据，不声明一次整组全绿。仅新增两次修复后锁文件审计，均 33 moderate、0 high；源码/测试/工作流及旧证据不变，完整 CI/R 未运行。具体限制见[归档](../../docs/验收证据/r3-gate4-undici-patch-20260930-a/README.md)。
+
+M 后调查仅新增两次官方源只读锁文件审计和静态核对，未重跑测试或构建；[新证据](../../docs/验收证据/r3-gate4-high-triage-20260930-a/README.md)不回填 F/M 的安装摘要。旧通过成绩继续按原 tree 复用。
 
 P 仅运行新增配置的定向测试、目标脚本语法/ESLint、版本校验与文档检查；不运行 build 或全量测试。V/R 的命令、时限、证据和停止条件见配套计划第 5–7 节；执行前提交具体确认单。
 
@@ -107,9 +138,15 @@ V 后[本地修复证据](../../docs/验收证据/r3-gate4-runner-context-202609
 
 ## Suggested Review Order
 
+最新先读[新候选执行单](../../docs/R3门禁4Undici补丁候选与PR-CI执行单-2026-09-30.md)与[精确输入](../../docs/验收证据/r3-gate4-undici-candidate-preparation-20260930-a/inputs.json)，核对从 M 建独立分支、新 PR 的 CI 触发及失败边界；再回溯下列补丁和历史证据。
+
+当前先核对[锁文件三个字段](../../package-lock.json#L11616)，再读[补丁证据](../../docs/验收证据/r3-gate4-undici-patch-20260930-a/README.md)，重点区分首次 95/1、定向对照与两次 0 high 审计；最后核对 Node 内置副本和新候选 CI/R 边界。以下顺序保留历史轮次含义。
+
+当前先读[M 执行单](../../docs/R3门禁4合并main与CI执行单-2026-09-30.md)与[准备记录](../../docs/验收证据/r3-gate4-main-preparation-20260930-a/README.md)，再按下列入口回溯 F 与历史证据。M 已按后续确认执行，实际身份见[M 归档](../../docs/验收证据/r3-gate4-main-061-36647162597/README.md)；原准备记录不回写。
+
 最新先读[RC 前本地验收](../../docs/验收证据/r3-gate4-rc-local-20260929-a/README.md)，再审阅显式 job 依赖与两平台配置守卫。此前矩阵顺序/失败停止差异已在本地修复，RC 共用文字采用 2026-09-29 材料日期；下方旧轮次顺序仅供回溯，F/M/R 仍另行确认。
 
-先读[V3 结果](../../docs/验收证据/r3-gate4-v3-061-36580449536/README.md)，再读[最终候选收口与 RC 执行单](../../docs/R3门禁4最终候选收口与RC执行单-2026-09-29.md)及本次文档差异。预览测试预算修复已随 V3 提交并通过完整 CI，不再列为待提交。下列路径仅供回溯原上下文修复；全规格保持 `in-progress`，未来实现、提交/推送/完整 CI 与 R 按具体范围确认。
+先读[F 结果](../../docs/验收证据/r3-gate4-final-061-36585198727/README.md)及本次文档差异，再回溯[V3 结果](../../docs/验收证据/r3-gate4-v3-061-36580449536/README.md)，再读[最终候选收口与 RC 执行单](../../docs/R3门禁4最终候选收口与RC执行单-2026-09-29.md)及本次文档差异。预览测试预算修复已随 V3 提交并通过完整 CI，不再列为待提交。下列路径仅供回溯原上下文修复；全规格保持 `in-progress`，未来实现、提交/推送/完整 CI 与 R 按具体范围确认。
 
 - 先看前置初始化，确认四个路径只供后续步骤使用。
   [release.yml:84](../../.github/workflows/release.yml#L84)

@@ -1,0 +1,74 @@
+import base64
+from datetime import datetime, timezone
+import hashlib
+import io
+import json
+from pathlib import Path
+import shutil
+import subprocess
+import sys
+import tarfile
+import urllib.request
+
+sys.stdout.reconfigure(encoding='utf-8')
+root=Path('D:/ClaudeProjects/ai_acknowladge')
+task=Path(__file__).parent
+evidence=task/'evidence'
+work=task/'work'
+evidence.mkdir()
+work.mkdir()
+def fp(path):
+    data=path.read_bytes()
+    return {'bytes':len(data),'sha256':hashlib.sha256(data).hexdigest()}
+def write(name,value):
+    (evidence/name).write_text(json.dumps(value,ensure_ascii=False,indent=2)+'\n',encoding='utf-8',newline='\n')
+def git(*args):
+    return subprocess.check_output(['git',*args],cwd=root)
+names=set(git('ls-files','-z').decode('utf-8').split('\0'))
+names.update(git('ls-files','--others','--exclude-standard','-z').decode('utf-8').split('\0'))
+names.discard('')
+names.update(p.relative_to(root).as_posix() for p in (root/'docs/验收证据').rglob('*') if p.is_file())
+write('preservation-before.json',{p:fp(root/p) for p in sorted(names) if (root/p).is_file()})
+installed={p.relative_to(root).as_posix():fp(p) for name in ['undici','jsdom'] for p in (root/'node_modules'/name).rglob('*') if p.is_file()}
+write('workspace-installed-before.json',installed)
+write('identity-before.json',{'started_utc':datetime.now(timezone.utc).isoformat(),'head':git('rev-parse','HEAD').decode().strip(),'tree':git('rev-parse','HEAD^{tree}').decode().strip(),'refs':git('show-ref').decode(),'index':fp(root/'.git/index'),'node':subprocess.check_output(['node','--version']).decode().strip(),'npm':subprocess.check_output([shutil.which('npm.cmd'),'--version']).decode().strip()})
+original=(root/'package-lock.json').read_bytes()
+assert hashlib.sha256(original).hexdigest()=='ec7fc3bd5aae1c8cec50723eb69678bfc360c998b154d4d9c6d723a0cfe1564a'
+(task/'package-lock.before.json').write_bytes(original)
+metadata=json.loads((root/'docs/验收证据/r3-gate4-high-triage-20260930-a/undici-7.29.1.json').read_bytes())
+url=metadata['dist']['tarball']
+assert url=='https://registry.npmjs.org/undici/-/undici-7.29.1.tgz'
+with urllib.request.urlopen(url,timeout=25) as response:
+    data=response.read()
+assert base64.b64encode(hashlib.sha512(data).digest()).decode()==metadata['dist']['integrity'].split('-',1)[1]
+assert hashlib.sha1(data).hexdigest()==metadata['dist']['shasum']
+(task/'undici-7.29.1.tgz').write_bytes(data)
+write('download-integrity.json',{'url':url,'queried_utc':datetime.now(timezone.utc).isoformat(),'bytes':len(data),'sha256':hashlib.sha256(data).hexdigest(),'sha1_matches_registry':True,'sha512_matches_registry':True,'integrity':metadata['dist']['integrity']})
+print('官方 Undici 7.29.1 包已下载，SHA-512 与 SHA-1 均匹配；开始串行复制隔离测试依赖。',flush=True)
+def ignore(path,entries):
+    excluded={'.vite','.cache','.vite-temp'}
+    if Path(path)==root/'node_modules': excluded.add('undici')
+    return [e for e in entries if e in excluded]
+shutil.copytree(root/'node_modules',work/'node_modules',ignore=ignore)
+target=work/'node_modules/undici'
+target.mkdir()
+with tarfile.open(fileobj=io.BytesIO(data),mode='r:gz') as tar:
+    for item in tar.getmembers():
+        parts=Path(item.name).parts
+        assert parts and parts[0]=='package'
+        relative=Path(*parts[1:])
+        destination=(target/relative).resolve()
+        assert destination.is_relative_to(target.resolve())
+        if item.isdir():
+            destination.mkdir(parents=True,exist_ok=True)
+        elif item.isfile():
+            destination.parent.mkdir(parents=True,exist_ok=True)
+            destination.write_bytes(tar.extractfile(item).read())
+        else:
+            raise RuntimeError('不接受归档链接或特殊文件：'+item.name)
+for name in ['src','tests']:
+    shutil.copytree(root/name,work/name)
+for name in ['package.json','package-lock.json','tsconfig.json','vitest.config.mts','next-env.d.ts']:
+    shutil.copy2(root/name,work/name)
+write('isolation.json',{'work':str(work),'dependency_source':'本机 node_modules 独立复制，排除缓存与旧 undici；仅安装官方 7.29.1 tarball','shared_node_modules_links':False,'copied_business_data':False,'copied_dotenv':False,'lifecycle_scripts_run':False,'undici':json.loads((target/'package.json').read_bytes())['version'],'prepared_utc':datetime.now(timezone.utc).isoformat()})
+print('隔离副本准备完成；无业务数据、无 .env、无生命周期脚本。',flush=True)

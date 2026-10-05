@@ -1,0 +1,47 @@
+
+ RUN  v4.1.11 C:/Users/BAIBAI/AppData/Local/Temp/zhiliao-undici-patch-318d11dc/work
+
+ ✓ tests/components/api-token-section.test.tsx (10 tests) 464ms
+ ❯ tests/components/markdown-editor-security.test.tsx (26 tests | 1 failed) 73387ms
+     ✓ 初次加载不保留危险属性，正常内容完整 140ms
+     ✓ 外部正文同步通过实际 setContent 路径过滤属性 52ms
+     ✓ text 粘贴通过真实事件和 schema 42ms
+     ✓ html 粘贴通过真实事件和 schema 37ms
+     ✓ context 粘贴通过真实事件和 schema 28ms
+     ✓ text 拖放通过真实事件和 schema 40ms
+     ✓ html 拖放通过真实事件和 schema 34ms
+     ✓ 图片属性、公式、表格、链接及围栏保存重开后保真 71ms
+     ✓ 图片直接相邻表格时保存重开不破坏表格 53ms
+     ✓ 普通图片保持 Markdown，并与相邻图片和表格分隔 49ms
+     ✓ '仅对齐' 的图片保留属性，说明与标题正确转义 49ms
+     ✓ '仅宽度' 的图片保留属性，说明与标题正确转义 39ms
+     ✓ 无表头表格退回 HTML 后仍可往返 36ms
+     ✓ 初次加载不保留危险属性，正常内容完整 33ms
+     × 外部正文同步通过实际 setContent 路径过滤属性 72084ms
+     ✓ text 粘贴通过真实事件和 schema 45ms
+     ✓ html 粘贴通过真实事件和 schema 28ms
+     ✓ context 粘贴通过真实事件和 schema 28ms
+     ✓ text 拖放通过真实事件和 schema 36ms
+     ✓ html 拖放通过真实事件和 schema 35ms
+     ✓ 图片属性、公式、表格、链接及围栏保存重开后保真 93ms
+     ✓ 图片直接相邻表格时保存重开不破坏表格 96ms
+     ✓ 普通图片保持 Markdown，并与相邻图片和表格分隔 72ms
+     ✓ '仅对齐' 的图片保留属性，说明与标题正确转义 51ms
+     ✓ '仅宽度' 的图片保留属性，说明与标题正确转义 52ms
+     ✓ 无表头表格退回 HTML 后仍可往返 60ms
+ ✓ tests/components/settings-panel-hydration.test.tsx (13 tests) 858ms
+ ✓ tests/components/quick-capture.test.tsx (15 tests) 1031ms
+     ✓ 保存成功后刷新列表、不跳转，并收起浮层清掉草稿  732ms
+ ✓ tests/components/command-palette.test.tsx (7 tests) 1862ms
+     ✓ 输入搜索词后展示 API 笔记并可回车打开  332ms
+     ✓ 改词后旧请求被中断，不覆盖新结果  1315ms
+ ✓ tests/lib/mermaid.test.ts (8 tests) 97ms
+ ✓ tests/components/nav.test.tsx (5 tests) 148ms
+ ✓ tests/lib/tiptap-security.test.ts (12 tests) 10ms
+
+ Test Files  1 failed | 7 passed (8)
+      Tests  1 failed | 95 passed (96)
+   Start at  08:09:32
+   Duration  140.10s (transform 468ms, setup 77ms, import 20.67s, tests 77.86s, environment 37.89s)
+
+JSON report written to C:/Users/BAIBAI/AppData/Local/Temp/zhiliao-undici-patch-318d11dc/evidence/vitest-results.json

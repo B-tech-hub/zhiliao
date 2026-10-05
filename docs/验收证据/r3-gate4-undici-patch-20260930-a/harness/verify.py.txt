@@ -1,0 +1,78 @@
+from datetime import datetime, timezone
+import hashlib
+import json
+import os
+from pathlib import Path
+import shutil
+import subprocess
+import sys
+
+sys.stdout.reconfigure(encoding='utf-8')
+root=Path('D:/ClaudeProjects/ai_acknowladge')
+task=Path(__file__).parent
+work=task/'work'
+evidence=task/'evidence'
+def write(name,value):
+    (evidence/name).write_text(json.dumps(value,ensure_ascii=False,indent=2)+'\n',encoding='utf-8',newline='\n')
+def fp(path):
+    data=path.read_bytes()
+    return {'bytes':len(data),'sha256':hashlib.sha256(data).hexdigest()}
+before=json.loads((task/'package-lock.before.json').read_bytes())
+after=json.loads((root/'package-lock.json').read_bytes())
+old=before['packages']['node_modules/undici']
+new=after['packages']['node_modules/undici']
+changes={k:{'before':old[k],'after':new[k]} for k in old if old[k]!=new[k]}
+assert set(changes)=={'version','resolved','integrity'}
+before['packages']['node_modules/undici']=new
+assert before==after
+write('lock-change.json',{'changes':changes,'only_one_package_entry_changed':True,'package_json_unchanged':fp(root/'package.json')==json.loads((evidence/'preservation-before.json').read_text(encoding='utf-8'))['package.json'],'new_lock':fp(root/'package-lock.json')})
+shutil.copy2(root/'package-lock.json',work/'package-lock.json')
+inputs={p.relative_to(work).as_posix():fp(p) for directory in ['src','tests'] for p in (work/directory).rglob('*') if p.is_file()}
+inputs.update({p:fp(work/p) for p in ['package.json','package-lock.json','tsconfig.json','vitest.config.mts','next-env.d.ts']})
+assert all(fp(root/name)==value for name,value in inputs.items())
+write('test-inputs.json',inputs)
+env={k:v for k,v in os.environ.items() if not k.upper().startswith(('LLM_','EMBEDDING_','VISION_','IMAGE_','REASONING_','DEMO_')) and k.upper() not in {'DATABASE_PATH','UPLOAD_DIR','NOTES_EXPORT_DIR','APP_PASSWORD','SESSION_SECRET','NODE_OPTIONS','NODE_PATH'}}
+env.update({'NODE_ENV':'test','NO_COLOR':'1','NOTES_EXPORT_DIR':str(work/'test-data/notes'),'UPLOAD_DIR':str(work/'test-data/uploads')})
+env.pop('FORCE_COLOR',None)
+def run(label,args,timeout):
+    start=datetime.now(timezone.utc).isoformat()
+    result=subprocess.run(args,cwd=work,env=env,capture_output=True,timeout=timeout)
+    (evidence/(label+'.stdout')).write_bytes(result.stdout)
+    (evidence/(label+'.stderr')).write_bytes(result.stderr)
+    write(label+'.command.json',{'argv':args,'cwd':str(work),'started_utc':start,'finished_utc':datetime.now(timezone.utc).isoformat(),'exit_code':result.returncode,'timeout_seconds':timeout})
+    return result
+probe="""const fs = require('node:fs');
+const path = require('node:path');
+const { createRequire } = require('node:module');
+const jsdomEntry = require.resolve('jsdom');
+const fromJsdom = createRequire(jsdomEntry);
+const undiciEntry = fromJsdom.resolve('undici');
+const metadata = JSON.parse(fs.readFileSync(path.join(path.dirname(undiciEntry), 'package.json'), 'utf8'));
+if (metadata.version !== '7.29.1' || !undiciEntry.startsWith(process.cwd() + path.sep)) throw new Error('隔离依赖解析错误');
+if (!require('semver').satisfies(metadata.version, '^7.25.0')) throw new Error('版本范围不兼容');
+console.log(JSON.stringify({ node: process.version, builtinUndici: process.versions.undici, jsdomEntry, undiciEntry, undici: metadata.version, jsdomRangeSatisfied: true }));
+"""
+(work/'resolve-undici.cjs').write_text(probe,encoding='utf-8',newline='\n')
+result=run('resolution',['node','resolve-undici.cjs'],30)
+assert result.returncode==0,result.stderr.decode('utf-8')
+write('resolution.json',json.loads(result.stdout))
+print(result.stdout.decode('utf-8'),flush=True)
+tests=sorted(p.relative_to(work).as_posix() for p in (work/'tests').rglob('*.test.*') if '@vitest-environment jsdom' in p.read_text(encoding='utf-8'))
+assert len(tests)==8,tests
+result=run('jsdom-tests',['node','node_modules/vitest/vitest.mjs','run',*tests,'--maxWorkers=1','--reporter=default','--reporter=json','--outputFile.json='+str(evidence/'vitest-results.json')],180)
+print(result.stdout.decode('utf-8',errors='replace'),flush=True)
+print(result.stderr.decode('utf-8',errors='replace'),flush=True)
+assert result.returncode==0,'局部测试失败，保留首次结果后停止'
+results=json.loads((evidence/'vitest-results.json').read_bytes())
+write('test-summary.json',{k:results.get(k) for k in ['success','numTotalTests','numPassedTests','numFailedTests','numPendingTests','numTotalTestSuites','numPassedTestSuites','numFailedTestSuites']})
+for label,selection in [('audit-all-after','--include=dev'),('audit-production-after','--omit=dev')]:
+    result=run(label,[shutil.which('npm.cmd'),'audit','--json','--package-lock-only',selection,'--include=optional','--include=peer','--ignore-scripts','--registry=https://registry.npmjs.org','--fetch-retries=0','--fetch-timeout=20000','--cache='+str(task/'npm-cache')],60)
+    report=json.loads(result.stdout)
+    assert 'error' not in report,report.get('error')
+    write(label+'.summary.json',{'exit_code':result.returncode,'vulnerabilities':report['metadata']['vulnerabilities'],'undici_finding':report['vulnerabilities'].get('undici')})
+    print(json.dumps({'audit':label,'counts':report['metadata']['vulnerabilities'],'undici_finding':report['vulnerabilities'].get('undici')},ensure_ascii=False),flush=True)
+    assert report['metadata']['vulnerabilities']['high']==0
+    assert report['metadata']['vulnerabilities']['critical']==0
+    assert 'undici' not in report['vulnerabilities']
+assert all(fp(work/name)==value for name,value in inputs.items())
+write('verification-preservation.json',{'source_test_config_files_unchanged':len(inputs),'test_lock_matches_workspace':(work/'package-lock.json').read_bytes()==(root/'package-lock.json').read_bytes(),'finished_utc':datetime.now(timezone.utc).isoformat()})

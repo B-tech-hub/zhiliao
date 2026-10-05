@@ -1,0 +1,22 @@
+{
+  "checked_at_utc": "2026-09-29T14:58:03.676108+00:00",
+  "head": "41cf296d1d1ccc38d1b2f1b3335cc5b8ac4a4b81",
+  "old_files_unchanged": 1124,
+  "raw_archive_files_byte_identical": 31,
+  "spec_baseline_and_frozen_block_unchanged": true,
+  "spec_status": "in-progress",
+  "index_empty": true,
+  "diff_check": "passed",
+  "changed_documents": [
+    "_bmad-output/implementation-artifacts/spec-r3-gate4-distribution.md",
+    "docs/0.6.1候选定稿-2026-09-28.md",
+    "docs/R3门禁4最终候选提交与PR-CI执行单-2026-09-29.md",
+    "docs/R3门禁4最终候选收口与RC执行单-2026-09-29.md",
+    "docs/R3门禁4环境调查与验收计划-2026-09-29.md",
+    "docs/README.md",
+    "docs/产品规划/开源发布范围与执行清单-2026-09-13.md"
+  ],
+  "local_link_targets_checked": 44,
+  "result_archive_only_untracked": true,
+  "tests_build_or_remote_operations_in_document_closeout": false
+}
